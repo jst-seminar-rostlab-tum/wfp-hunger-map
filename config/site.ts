@@ -1,14 +1,14 @@
-export type SiteConfig = typeof siteConfig;
-
 export const siteConfig = {
-  name: "WFP HungerMap",
-  description: "TODO",
+  name: 'WFP HungerMap',
+  description: 'TODO',
   navItems: [
     {
-      label: "Home",
-      href: "/",
+      label: 'Home',
+      href: '/',
     },
   ],
   navMenuItems: [],
   links: {},
 };
+
+export type SiteConfig = typeof siteConfig;

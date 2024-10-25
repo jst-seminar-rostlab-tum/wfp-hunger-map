@@ -6,8 +6,10 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint . --ext .ts,.tsx -c .eslintrc.json --fix",
-    "format": "prettier --write ."
+    "lint": "eslint . --ext .ts,.tsx -c .eslintrc.json",
+    "lint:fix": "eslint . --ext .ts,.tsx -c .eslintrc.json --fix",
+    "format": "prettier --write .",
+    "format:fix": "prettier ."
   },
   "dependencies": {
     "@nextui-org/button": "2.0.38",

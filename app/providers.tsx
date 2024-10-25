@@ -1,9 +1,9 @@
 'use client';
 
 import { NextUIProvider } from '@nextui-org/system';
+import { useRouter } from 'next/navigation';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import type { ThemeProviderProps } from 'next-themes/dist/types.d.ts';
-import { useRouter } from 'next/navigation';
 import * as React from 'react';
 
 export interface ProvidersProps {

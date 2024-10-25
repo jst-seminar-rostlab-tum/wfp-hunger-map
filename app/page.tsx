@@ -1,4 +1,4 @@
-import { Code } from '@nextui-org/code'
+import { Code } from '@nextui-org/code';
 import { Snippet } from '@nextui-org/snippet';
 
 import { subtitle, title } from '@/components/primitives.ts';

@@ -9,6 +9,6 @@ const LazyMap = dynamic(() => import('@/components/Map/Map'), {
   loading: () => <MapSkeleton />,
 });
 
-export default async function Home() {
+export default function Home() {
   return <LazyMap />;
 }

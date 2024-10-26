@@ -9,7 +9,8 @@
     "lint": "eslint . --ext .ts,.tsx -c .eslintrc.json",
     "lint:fix": "eslint . --ext .ts,.tsx -c .eslintrc.json --fix",
     "format": "prettier --write .",
-    "format:fix": "prettier ."
+    "format:fix": "prettier .",
+    "prepare": "husky"
   },
   "dependencies": {
     "@nextui-org/button": "2.0.38",
@@ -59,16 +60,9 @@
     "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "husky": "^9.1.6",
-    "lint-staged": "^15.2.10",
     "postcss": "8.4.38",
     "prettier": "^3.3.3",
     "tailwindcss": "3.4.3",
     "typescript": "5.0.4"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
-    ]
   }
 }

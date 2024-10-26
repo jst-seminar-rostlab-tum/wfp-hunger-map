@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --ext .ts,.tsx -c .eslintrc.json",
@@ -19,6 +19,7 @@
     "@nextui-org/link": "2.0.35",
     "@nextui-org/listbox": "2.1.27",
     "@nextui-org/navbar": "2.0.37",
+    "@nextui-org/skeleton": "^2.0.32",
     "@nextui-org/snippet": "2.0.43",
     "@nextui-org/switch": "2.0.34",
     "@nextui-org/system": "2.2.6",
@@ -31,11 +32,13 @@
     "highcharts-react-official": "^3.2.1",
     "intl-messageformat": "^10.5.0",
     "leaflet": "^1.9.4",
-    "next": "15.0.1",
+    "leaflet-defaulticon-compatibility": "^0.1.2",
+    "leaflet-geosearch": "^4.0.0",
+    "next": "14.2.4",
     "next-themes": "^0.2.1",
-    "react": "19.0.0-rc-69d4b800-20241021",
-    "react-dom": "19.0.0-rc-69d4b800-20241021",
-    "react-leaflet": "^5.0.0-rc.1",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-leaflet": "^4.2.1",
     "tailwind-variants": "0.1.20"
   },
   "devDependencies": {
@@ -63,8 +66,8 @@
     "typescript": "5.0.4"
   },
   "resolutions": {
-    "@types/react": "npm:types-react@19.0.0-rc.1",
-    "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1"
+    "@types/react": "npm:types-react@18.3.1",
+    "@types/react-dom": "npm:types-react-dom@18.3.1"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

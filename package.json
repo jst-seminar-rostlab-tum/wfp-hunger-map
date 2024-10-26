@@ -66,7 +66,7 @@
     "typescript": "5.0.4"
   },
   "resolutions": {
-    "@types/react": "npm:types-react@18.3.1",
+    "@types/react": "npm:types-react@18.3.3",
     "@types/react-dom": "npm:types-react-dom@18.3.1"
   },
   "lint-staged": {

@@ -1,14 +1,5 @@
-'use client';
-
-import dynamic from 'next/dynamic';
-
-import MapSkeleton from '@/components/Map/MapSkeleton';
-
-const LazyMap = dynamic(() => import('@/components/Map/Map'), {
-  ssr: false,
-  loading: () => <MapSkeleton />,
-});
+import MapLoader from '@/components/Map/MapLoader';
 
 export default function Home() {
-  return <LazyMap />;
+  return <MapLoader />;
 }

@@ -43,7 +43,7 @@
     },
     "import/resolver": {
       "alias": {
-        "map": [["@", "./"]],
+        "map": [["@", "./src/"]],
         "extensions": [".ts", ".tsx", ""]
       }
     }

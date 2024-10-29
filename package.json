@@ -29,6 +29,7 @@
     "@react-aria/visually-hidden": "3.8.12",
     "clsx": "2.1.1",
     "framer-motion": "~11.1.1",
+    "geojson": "^0.5.0",
     "highcharts": "^11.4.8",
     "highcharts-react-official": "^3.2.1",
     "intl-messageformat": "^10.5.0",
@@ -43,6 +44,7 @@
     "tailwind-variants": "0.1.20"
   },
   "devDependencies": {
+    "@types/geojson": "^7946.0.14",
     "@types/leaflet": "^1.9.14",
     "@types/node": "20.5.7",
     "@types/react": "^18.3.12",

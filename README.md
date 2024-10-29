@@ -24,6 +24,8 @@ This is the repository for the World Food Program's HungerMap.
 yarn install
 ```
 
+test
+
 ### Run the development server
 
 ```bash

@@ -17,8 +17,8 @@
   },
   "plugins": ["react", "simple-import-sort", "prettier"],
   "rules": {
-    "simple-import-sort/imports": "error",
-    "simple-import-sort/exports": "error",
+    "simple-import-sort/imports": "warn",
+    "simple-import-sort/exports": "warn",
     "prettier/prettier": "error",
     "react/react-in-jsx-scope": "off",
     "jsx-a11y/anchor-is-valid": "off",

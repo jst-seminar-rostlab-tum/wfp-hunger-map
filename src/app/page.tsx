@@ -1,5 +1,9 @@
-import MapLoader from '@/components/Map/MapLoader';
+import Chatbot from '@/components/Chatbot/Chatbot';
 
 export default function Home() {
-  return <MapLoader />;
+  return (
+    <div className="relative">
+      <Chatbot />
+    </div>
+  );
 }

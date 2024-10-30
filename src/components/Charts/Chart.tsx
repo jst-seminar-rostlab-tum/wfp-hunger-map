@@ -4,71 +4,9 @@ import * as Highcharts from 'highcharts';
 import { HighchartsReact } from 'highcharts-react-official';
 
 import ChartProps from '@/domain/props/ChartProps';
+import ChartOperations from '@/operations/charts/ChartOperations';
 
 export function Chart({ chartData }: ChartProps) {
-  const options: Highcharts.Options = {
-    title: {
-      text: 'FCS Chart',
-    },
-    xAxis: {
-      type: 'datetime',
-      labels: {
-        format: '{value:%b %d}',
-      },
-      categories: chartData.map((item) => item.x),
-    },
-    yAxis: {
-      title: {
-        text: 'FCS Value',
-      },
-    },
-    series: [
-      {
-        name: 'FCS',
-        type: 'line',
-        data: chartData.map((item) => item.fcs),
-        zIndex: 1,
-        marker: {
-          fillColor: 'white',
-          lineWidth: 2,
-          lineColor: 'orange',
-        },
-      },
-      {
-        name: 'High',
-        type: 'line',
-        data: chartData.map((item) => item.fcsHigh),
-        linkedTo: ':previous',
-        color: 'orange',
-        opacity: 0.3,
-        showInLegend: false,
-      },
-      {
-        name: 'Low',
-        type: 'line',
-        data: chartData.map((item) => item.fcsLow),
-        linkedTo: ':previous',
-        color: 'orange',
-        opacity: 0.3,
-        showInLegend: false,
-      },
-    ],
-    plotOptions: {
-      line: {
-        animation: true,
-        marker: {
-          enabled: true,
-        },
-      },
-      arearange: {
-        animation: true,
-        fillOpacity: 0.1,
-        lineWidth: 0,
-        marker: {
-          enabled: false,
-        },
-      },
-    },
-  };
+  const options: Highcharts.Options = ChartOperations.getChartData(chartData);
   return <HighchartsReact highcharts={Highcharts} options={options} />;
 }

@@ -8,5 +8,5 @@ import CountryRepository from '@/domain/repositories/CountryRepository';
  */
 export default async function Elements() {
   const countryData = await container.resolve<CountryRepository>('CountryRepository').getCountryData(50);
-  return <Chart data={countryData.fcsGraph} />;
+  return <Chart chartData={countryData.fcsGraph} />;
 }

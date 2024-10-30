@@ -55,6 +55,8 @@ What this means for a React application, is that instead of using one global sta
 - The domain folder contains all the entities and repositories. (Types, Interfaces, etc.)
 - The infrastructure folder contains the implementations of the interfaces. (API calls, etc.)
 - The application folder contains the services that use the infrastructure to implement the business logic.
+- The operations folder contains the business logic that is not related to a specific entity.
+- Bigger files and functions should be placed in the operations folder
 
 ### Dependency Injection
 

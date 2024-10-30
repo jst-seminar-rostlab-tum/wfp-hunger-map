@@ -52,8 +52,15 @@ DDD is a software design approach that is against the idea of having a single un
 
 What this means for a React application, is that instead of using one global state with, for example Redux, we will have a React context for each of our entities that will store all the data and offer all the methods related to that domain.
 
+- The domain folder contains all the entities and repositories. (Types, Interfaces, etc.)
+- The infrastructure folder contains the implementations of the interfaces. (API calls, etc.)
+- The application folder contains the services that use the infrastructure to implement the business logic.
+
 ### Dependency Injection
 
 The point of DI is that the dependencies of services should not be hardcoded, instead they should receive them as parameters, where the type of the parameter is an interface. This makes testing easier and the code more reusable, since the same service can be used with different implementations of the same interface (for example mock implementations for testing).
 
 For a React application, the most common depeendency that needs mocking is the one that makes the HTTP call to the API. Thus contexts or hooks that call the backend should receive the HTTP library implementation as a prop or from a higher-order context.
+
+- Example of how to use the container to resolve a dependency can be found in `src/app/elements/page.tsx`.
+- A list of all dependencies and their implementations can be found in `src/container.tsx`.

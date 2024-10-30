@@ -3,9 +3,9 @@
 import * as Highcharts from 'highcharts';
 import { HighchartsReact } from 'highcharts-react-official';
 
-import { FcsChartData } from '@/domain/entities/charts/FcsChartData';
+import ChartProps from '@/domain/props/ChartProps';
 
-export function Chart({ data }: { data: FcsChartData[] }) {
+export function Chart({ chartData }: ChartProps) {
   const options: Highcharts.Options = {
     title: {
       text: 'FCS Chart',
@@ -15,7 +15,7 @@ export function Chart({ data }: { data: FcsChartData[] }) {
       labels: {
         format: '{value:%b %d}',
       },
-      categories: data.map((item) => item.x),
+      categories: chartData.map((item) => item.x),
     },
     yAxis: {
       title: {
@@ -26,7 +26,7 @@ export function Chart({ data }: { data: FcsChartData[] }) {
       {
         name: 'FCS',
         type: 'line',
-        data: data.map((item) => item.fcs),
+        data: chartData.map((item) => item.fcs),
         zIndex: 1,
         marker: {
           fillColor: 'white',
@@ -37,7 +37,7 @@ export function Chart({ data }: { data: FcsChartData[] }) {
       {
         name: 'High',
         type: 'line',
-        data: data.map((item) => item.fcsHigh),
+        data: chartData.map((item) => item.fcsHigh),
         linkedTo: ':previous',
         color: 'orange',
         opacity: 0.3,
@@ -46,7 +46,7 @@ export function Chart({ data }: { data: FcsChartData[] }) {
       {
         name: 'Low',
         type: 'line',
-        data: data.map((item) => item.fcsLow),
+        data: chartData.map((item) => item.fcsLow),
         linkedTo: ':previous',
         color: 'orange',
         opacity: 0.3,

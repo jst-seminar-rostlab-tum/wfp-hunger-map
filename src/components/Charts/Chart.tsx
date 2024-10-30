@@ -1,5 +1,3 @@
-/* eslint-disable react/destructuring-assignment */
-
 'use client';
 
 import * as Highcharts from 'highcharts';
@@ -7,7 +5,7 @@ import { HighchartsReact } from 'highcharts-react-official';
 
 import { FcsChartData } from '@/domain/entities/charts/FcsChartData';
 
-export function Chart(data: { data: FcsChartData[] }) {
+export function Chart({ data }: { data: FcsChartData[] }) {
   const options: Highcharts.Options = {
     title: {
       text: 'FCS Chart',
@@ -17,7 +15,7 @@ export function Chart(data: { data: FcsChartData[] }) {
       labels: {
         format: '{value:%b %d}',
       },
-      categories: data.data.map((item) => item.x),
+      categories: data.map((item) => item.x),
     },
     yAxis: {
       title: {
@@ -28,7 +26,7 @@ export function Chart(data: { data: FcsChartData[] }) {
       {
         name: 'FCS',
         type: 'line',
-        data: data.data.map((item) => item.fcs),
+        data: data.map((item) => item.fcs),
         zIndex: 1,
         marker: {
           fillColor: 'white',
@@ -39,7 +37,7 @@ export function Chart(data: { data: FcsChartData[] }) {
       {
         name: 'High',
         type: 'line',
-        data: data.data.map((item) => item.fcsHigh),
+        data: data.map((item) => item.fcsHigh),
         linkedTo: ':previous',
         color: 'orange',
         opacity: 0.3,
@@ -48,7 +46,7 @@ export function Chart(data: { data: FcsChartData[] }) {
       {
         name: 'Low',
         type: 'line',
-        data: data.data.map((item) => item.fcsLow),
+        data: data.map((item) => item.fcsLow),
         linkedTo: ':previous',
         color: 'orange',
         opacity: 0.3,

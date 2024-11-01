@@ -2,7 +2,7 @@ import Chatbot from '@/components/Chatbot/Chatbot';
 
 export default function Home() {
   return (
-    <div className="relative">
+    <div className="relative bg-white h-full w-full">
       <Chatbot />
     </div>
   );

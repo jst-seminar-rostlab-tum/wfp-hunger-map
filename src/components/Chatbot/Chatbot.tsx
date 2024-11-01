@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { Bot, Maximize2, Minimize2, X, PlusCircle, Send, Menu } from 'lucide-react';
-import { Avatar, Button, Card, CardBody, CardHeader, CardFooter, Tooltip } from '@nextui-org/react';
+import { Avatar, Button, Card, CardBody, CardHeader, CardFooter, Divider, Tooltip } from '@nextui-org/react';
 
 const examplePrompts = [
   'What is the current hunger situation in Africa?',
@@ -143,7 +143,7 @@ export default function HungerMapChatbot() {
     <Card
       className={`
     absolute top-0 left-0 h-full
-    ${isFullScreen ? 'w-[215px]' : isMobile ? 'w-3/4' : 'w-[179px]'}
+    ${isFullScreen ? 'w-[215px]' : isMobile ? 'w-[3/4]' : 'w-[179px]'}
     ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
     transition-transform duration-300 ease-in-out
     z-20 
@@ -160,7 +160,7 @@ export default function HungerMapChatbot() {
         w-full h-[40px] mb-4
         flex justify-center items-center gap-2
         rounded-[12px] border border-black
-        ${isDarkMode ? 'bg-gray-700 hover:bg-gray-600 text-white' : 'bg-white hover:bg-gray-100 text-black'}
+        ${isDarkMode ? 'bg-gray-700 hover:bg-gray-600 text-white' : 'bg-light-side-bar hover:bg-gray-100 text-black'}
       `}
         >
           <PlusCircle className="h-4 w-4" />
@@ -202,20 +202,24 @@ export default function HungerMapChatbot() {
             <Bot className="h-6 w-6" />
           </Button>
         )}
+        {/* chatbot interface */}
         {isOpen && (
           <Card
-            className={`shadow-xl ${
-              isFullScreen ? 'w-screen h-screen' : isMobile ? 'w-[636px] h-[657px]' : 'w-[500px] h-[600px]'
-            } ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white'} overflow-hidden`}
             style={{
-              strokeWidth: '2px',
-              stroke: '#161616',
-              opacity: 1,
+              borderColor: '#000000',
+              borderWidth: '1px',
+              borderStyle: 'solid',
+              opacity: 0.8,
             }}
+            className={`${
+              isFullScreen ? 'w-screen h-screen' : isMobile ? 'w-[636px] h-[657px]' : 'w-[500px] h-[600px]'
+            } ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white opacity-80 text-black'} overflow-hidden`}
           >
             <CardBody className="p-0 h-full">
               <div className="relative h-full flex flex-col overflow-hidden">
+                {/* side bar area */}
                 {isSidebarOpen && renderSidebar()}
+                {/* overlay area in mobile version */}
                 {isMobile && isSidebarOpen && (
                   // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
                   <div
@@ -223,11 +227,12 @@ export default function HungerMapChatbot() {
                     onClick={toggleSidebar}
                   />
                 )}
+                {/* chat area */}
                 <div
                   className={`flex-1 flex flex-col transition-all duration-300 ease-in-out ${isSidebarOpen ? (isFullScreen ? 'ml-[215px]' : 'ml-[179px]') : 'ml-0'}`}
                 >
                   <CardHeader
-                    className={`flex items-center justify-between p-4 border-b ${isDarkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'}`}
+                    className={`flex items-center justify-between p-4 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}
                   >
                     <div className="flex items-center space-x-2">
                       <Button variant="light" isIconOnly onClick={toggleSidebar}>
@@ -251,20 +256,21 @@ export default function HungerMapChatbot() {
                       </Tooltip>
                     </div>
                   </CardHeader>
+                  <Divider style={{ backgroundColor: '#292d32' }} />
                   <div className={`flex-1 p-4 overflow-y-auto ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
                     {chats[currentChatIndex].messages.length === 1 &&
                     chats[currentChatIndex].messages[0].sender === 'ai' ? (
                       <div className="flex flex-col items-center justify-center h-full space-y-4">
-                        <p className="text-center text-lg max-w-[80%]">
+                        <p className="text-center text-lg max-w-[80%] mb-2">
                           Welcome to HungerMap ChatBot! How can I assist you today?
                         </p>
-                        <div className="flex flex-col space-y-2 w-full max-w-md">
+                        <div className="flex flex-col items-center space-y-2 w-full max-w-md">
                           {examplePrompts.map((prompt, index) => (
                             <Button
                               key={index}
                               variant="bordered"
                               onClick={(e) => handleSubmit(e, prompt)}
-                              className={`truncate w-full ${isMobile ? 'max-w-[250px]' : 'max-w-[400px]'}`}
+                              className={`truncate w-full mb-2 ${isMobile ? 'max-w-[250px]' : 'max-w-[400px]'}`}
                               title={prompt}
                             >
                               <span className="truncate">{prompt}</span>
@@ -321,11 +327,8 @@ export default function HungerMapChatbot() {
                     )}
                     <div ref={chatEndRef} />
                   </div>
-                  <CardFooter
-                    className={`border-t p-4 ${
-                      isDarkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'
-                    }`}
-                  >
+                  <Divider style={{ backgroundColor: '#292d32' }} />
+                  <CardFooter className={`border-t-2 p-4 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
                     <form onSubmit={handleSubmit} className="w-full">
                       <div className="flex space-x-2">
                         <textarea

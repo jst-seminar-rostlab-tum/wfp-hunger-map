@@ -1,12 +1,8 @@
 import { ConflictType } from '@/domain/enums/ConflictType';
 
-import { Geometry } from '../common/Geometry';
+import { Feature } from '../common/Feature';
 
-export interface Conflict {
-  type: string;
-  geometry: Geometry;
-  properties: {
-    count: number;
-    event_type: ConflictType;
-  };
-}
+export type Conflict = Feature<{
+  count: number;
+  event_type: ConflictType;
+}>;

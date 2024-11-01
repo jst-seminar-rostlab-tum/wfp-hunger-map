@@ -1,4 +1,4 @@
-import { Geometry } from '../common/Geometry';
+import { Feature } from '../common/Feature';
 import { RegionProperties } from '../region/RegionProperties';
 
 export interface AdditionalCountryData {
@@ -6,11 +6,8 @@ export interface AdditionalCountryData {
   'hc-transform': {
     crs: string;
   };
-  features: {
-    // One region of the country (in this case)
-    type: string;
-    geometry: Geometry;
-    properties: RegionProperties;
+  // One region of the country
+  features: (Feature<RegionProperties> & {
     id: string;
-  }[];
+  })[];
 }

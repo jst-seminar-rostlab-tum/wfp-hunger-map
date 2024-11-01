@@ -1,4 +1,5 @@
 import CountryRepositoryImpl from './infrastructure/repositories/CountryRepositoryImpl';
+import IpcRepositoryImpl from './infrastructure/repositories/IpcRepositoryImpl';
 
 class Container {
   private dependencies: { [key: string]: unknown } = {};
@@ -18,5 +19,6 @@ class Container {
 const container = new Container();
 
 container.register('CountryRepository', new CountryRepositoryImpl());
+container.register('IpcRepository', new IpcRepositoryImpl());
 
 export default container;

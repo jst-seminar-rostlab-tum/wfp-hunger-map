@@ -68,6 +68,7 @@ export default function HungerMapChatbot() {
   };
 
   const toggleSidebar = () => {
+    console.log('toggleSidebar');
     setIsSidebarOpen(!isSidebarOpen);
   };
 
@@ -141,26 +142,26 @@ export default function HungerMapChatbot() {
   const renderSidebar = () => (
     <Card
       className={`
-        absolute top-0 left-0 h-full
-        ${isFullScreen ? 'w-[215px]' : isMobile ? 'w-3/4' : 'w-[179px]'}
-        transform transition-transform duration-300 ease-in-out
-        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-        z-20 
-        ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}
-        ${isMobile ? 'shadow-lg' : ''}
-        rounded-[12px_0_0_12px]
-      `}
+    absolute top-0 left-0 h-full
+    ${isFullScreen ? 'w-[215px]' : isMobile ? 'w-3/4' : 'w-[179px]'}
+    ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+    transition-transform duration-300 ease-in-out
+    z-20 
+    ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}
+    ${isMobile ? 'shadow-lg' : ''}
+    rounded-[12px_0_0_12px]
+  `}
       ref={sidebarRef}
     >
       <CardBody className="p-4">
         <Button
           onClick={startNewChat}
           className={`
-            w-full h-[40px] mb-4
-            flex justify-center items-center gap-2
-            rounded-[12px] border border-black
-            ${isDarkMode ? 'bg-gray-700 hover:bg-gray-600 text-white' : 'bg-white hover:bg-gray-100 text-black'}
-          `}
+        w-full h-[40px] mb-4
+        flex justify-center items-center gap-2
+        rounded-[12px] border border-black
+        ${isDarkMode ? 'bg-gray-700 hover:bg-gray-600 text-white' : 'bg-white hover:bg-gray-100 text-black'}
+      `}
         >
           <PlusCircle className="h-4 w-4" />
           <span className="truncate">New Chat</span>
@@ -171,20 +172,19 @@ export default function HungerMapChatbot() {
               key={chat.id}
               onClick={() => selectChat(index)}
               className={`
-                w-full h-[40px] mb-2
-                flex items-center gap-2
-                rounded-[12px]
-                ${
-                  // eslint-disable-next-line no-nested-ternary
-                  currentChatIndex === index
-                    ? isDarkMode
-                      ? 'bg-gray-700 text-white'
-                      : 'bg-[#D9E2EA] text-black'
-                    : isDarkMode
-                      ? 'bg-gray-800 hover:bg-gray-700 text-white'
-                      : 'bg-transparent hover:bg-[#D9E2EA] text-black'
-                }
-              `}
+            w-full h-[40px] mb-2
+            flex items-center gap-2
+            rounded-[12px]
+            ${
+              currentChatIndex === index
+                ? isDarkMode
+                  ? 'bg-gray-700 text-white'
+                  : 'bg-[#D9E2EA] text-black'
+                : isDarkMode
+                  ? 'bg-gray-800 hover:bg-gray-700 text-white'
+                  : 'bg-transparent hover:bg-[#D9E2EA] text-black'
+            }
+          `}
             >
               <span className="truncate">{chat.title}</span>
             </Button>
@@ -215,7 +215,7 @@ export default function HungerMapChatbot() {
           >
             <CardBody className="p-0 h-full">
               <div className="relative h-full flex flex-col overflow-hidden">
-                {renderSidebar()}
+                {isSidebarOpen && renderSidebar()}
                 {isMobile && isSidebarOpen && (
                   // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
                   <div
@@ -233,7 +233,7 @@ export default function HungerMapChatbot() {
                       <Button variant="light" isIconOnly onClick={toggleSidebar}>
                         <Menu className="h-4 w-4" />
                       </Button>
-                      <img src="/wfp-logo.svg" alt="WFP Logo" className="h-8 w-8" />
+                      <img src="/wfp-logo.png" alt="WFP Logo" className="h-8 w-8 mr-2" />
                       <h2 className="text-lg font-semibold truncate">HungerMap ChatBot</h2>
                     </div>
                     <div className="flex items-center space-x-2">

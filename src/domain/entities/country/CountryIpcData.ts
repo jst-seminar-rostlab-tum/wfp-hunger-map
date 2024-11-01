@@ -14,8 +14,3 @@ export interface CountryIpcData {
   longitude: number;
   latitude: number;
 }
-
-export interface IpcDataWrapper {
-  statusCode: string;
-  body: CountryIpcData[];
-}

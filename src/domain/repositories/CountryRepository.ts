@@ -4,6 +4,7 @@ import { CountryData } from '../entities/country/CountryData';
 import { CountryIso3Data } from '../entities/country/CountryIso3Data';
 import { CountryIso3Notes } from '../entities/country/CountryIso3Notes';
 import { CountryMimiData } from '../entities/country/CountryMimiData';
+import { RegionIpc } from '../entities/region/RegionIpc';
 
 export default interface CountryRepository {
   getCountryCodes(): Promise<CountryCodesData[]>;
@@ -12,4 +13,5 @@ export default interface CountryRepository {
   getCountryIso3Data(countryCode: string): Promise<CountryIso3Data>;
   getCountryIso3Notes(countryCode: string): Promise<CountryIso3Notes>; // probably unused
   getRegionNutritionData(countryId: number): Promise<CountryMimiData>; // probably unused
+  getRegionIpcData(countryId: number): Promise<RegionIpc>;
 }

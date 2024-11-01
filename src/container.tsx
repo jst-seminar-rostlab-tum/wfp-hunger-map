@@ -1,5 +1,6 @@
+import { AlertRepositoryImpl } from './infrastructure/repositories/AlertRepositoryImpl';
 import CountryRepositoryImpl from './infrastructure/repositories/CountryRepositoryImpl';
-import IpcRepositoryImpl from './infrastructure/repositories/IpcRepositoryImpl';
+import GlobalDataRepositoryImpl from './infrastructure/repositories/GlobalDataRepositoryImpl';
 
 class Container {
   private dependencies: { [key: string]: unknown } = {};
@@ -19,6 +20,7 @@ class Container {
 const container = new Container();
 
 container.register('CountryRepository', new CountryRepositoryImpl());
-container.register('IpcRepository', new IpcRepositoryImpl());
+container.register('AlertRepository', new AlertRepositoryImpl());
+container.register('GlobalDataRepository', new GlobalDataRepositoryImpl());
 
 export default container;

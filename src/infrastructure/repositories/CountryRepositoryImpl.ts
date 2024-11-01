@@ -4,6 +4,7 @@ import { CountryData } from '@/domain/entities/country/CountryData';
 import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data';
 import { CountryIso3Notes } from '@/domain/entities/country/CountryIso3Notes';
 import { CountryMimiData } from '@/domain/entities/country/CountryMimiData';
+import { RegionIpc } from '@/domain/entities/region/RegionIpc';
 import CountryRepository from '@/domain/repositories/CountryRepository';
 
 export default class CountryRepositoryImpl implements CountryRepository {
@@ -34,6 +35,11 @@ export default class CountryRepositoryImpl implements CountryRepository {
 
   async getRegionNutritionData(countryId: number): Promise<CountryMimiData> {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/adm0Id/${countryId}/mimiAdm1CountryData.json`);
+    return response.json();
+  }
+
+  async getRegionIpcData(countryId: number): Promise<RegionIpc> {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/adm0/${countryId}/ipc.geojson`);
     return response.json();
   }
 }

@@ -40,7 +40,11 @@ Linting and styling is based on [Airbnb's React style guide](https://airbnb.io/j
 
 ### Git and GitHub
 
-Always work on a separate branch, never commit to main! When you're creating a branch, you should use the branchname provided by Linear. Click the branch icon in the upper right corner of issue's page on Linear to copy the branchname. It should have the following format: `feature/<issue no.>-<concise description of issue>`. Also use meaningful, but concise commit messages. After you're done with your task, create a Pull Request and share it with your teammates, ask your team lead and/or TPL for a review. Use squash merge when the PR is approved.
+Always work on a separate branch, never commit to main! When you're creating a branch, you should use the branchname provided by Linear. Click the branch icon in the upper right corner of issue's page on Linear to copy the branchname. It should have the following format: `feature/<issue no.>-<concise description of issue>`.
+
+Commit messages are also linted using husky and commitlint, so make sure to start each commit message with `feat:`, `fix:` or `docs:` depending on the type of work implemented in that commit.
+
+After you're done with your task, create a Pull Request and share it with your teammates, ask your team lead and/or TPL for a review. Use squash merge when the PR is approved.
 
 ### Project Structure
 

@@ -3,27 +3,12 @@
 
 'use client';
 
-import { Avatar, Button, Card, CardBody, CardFooter, CardHeader, Divider, Tooltip } from '@nextui-org/react';
+import { Button, Card, CardBody, CardFooter, CardHeader, Divider, Tooltip } from '@nextui-org/react';
 import { Bot, Maximize2, Minimize2, PanelLeftClose, PanelLeftOpen, PlusCircle, Send, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
 import { DEFAULT_PROMPT, IChat } from '@/types/chatbot';
-
-function useMediaQuery(query: string): boolean {
-  const [matches, setMatches] = useState(false);
-
-  useEffect(() => {
-    const media = window.matchMedia(query);
-    if (media.matches !== matches) {
-      setMatches(media.matches);
-    }
-    const listener = () => setMatches(media.matches);
-    window.addEventListener('resize', listener);
-    return () => window.removeEventListener('resize', listener);
-  }, [matches, query]);
-
-  return matches;
-}
+import { useMediaQuery } from '@/utils/resolution';
 
 export default function HungerMapChatbot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,7 +19,7 @@ export default function HungerMapChatbot() {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   // const [isDarkMode, setIsDarkMode] = useState(false);
-  const isDarkMode = false;
+  const isDarkMode = true;
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const sidebarRef = useRef<HTMLDivElement>(null);
@@ -281,13 +266,29 @@ export default function HungerMapChatbot() {
                         >
                           <p className="break-words">{message.text}</p>
                           {message.dataSources && (
-                            <div className={`mt-2 text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                              <p className="truncate !text-gray-500">Data Sources:</p>
-                              <ul className="list-disc list-inside !text-gray-500">
+                            <div
+                              className="mt-2 text-xs"
+                              style={{ color: isDarkMode ? '#9CA3AF' : '#4B5563', fontSize: '12px' }} // text-gray-400 and text-gray-600
+                            >
+                              <p
+                                style={{
+                                  color: '#6B7280',
+                                  whiteSpace: 'nowrap',
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                }}
+                              >
+                                Data Sources:
+                              </p>
+                              <ul
+                                style={{
+                                  color: '#6B7280',
+                                  listStyleType: 'disc',
+                                  paddingInlineStart: '1rem',
+                                }}
+                              >
                                 {message.dataSources.map((source, i) => (
-                                  <li key={i} className="truncate">
-                                    {source}
-                                  </li>
+                                  <li key={i}>{source}</li>
                                 ))}
                               </ul>
                             </div>
@@ -299,14 +300,13 @@ export default function HungerMapChatbot() {
 
                   {isTyping && (
                     <div className="flex justify-start mb-4">
-                      <Avatar src="/wfp-logo.svg" alt="AI" className="mr-2" />
-                      <div className={`${isDarkMode ? 'bg-gray-700' : 'bg-white'} rounded-lg p-3 shadow`}>
-                        <div className="typing-animation">
-                          <span className="dot" />
-                          <span className="dot" />
-                          <span className="dot" />
-                          {/* to delete */}
-                        </div>
+                      <div className="relative chat-ai-message">
+                        <Bot className="w-6 h-6 fill-current text-black" />
+                      </div>
+                      <div className="chat-typing-animation">
+                        <span className="dot mr-2" />
+                        <span className="dot mr-2" />
+                        <span className="dot" />
                       </div>
                     </div>
                   )}
@@ -342,7 +342,7 @@ export default function HungerMapChatbot() {
                     rows={1}
                   />
                   <Tooltip content="Submit">
-                    <Button type="submit" variant="light" isIconOnly>
+                    <Button type="submit" variant="light" isIconOnly disabled={isTyping}>
                       <Send className="h-4 w-4" />
                     </Button>
                   </Tooltip>

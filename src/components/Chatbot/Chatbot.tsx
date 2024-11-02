@@ -195,12 +195,15 @@ export default function HungerMapChatbot() {
   );
 
   return (
-    <div>
-      <div className={`absolute ${isFullScreen ? 'inset-0' : 'top-4 right-4'} z-50`}>
+    <>
+      <div style={isFullScreen ? { inset: 0 } : { top: '1rem', right: '1rem' }} className={`absolute z-50`}>
         {!isOpen && (
-          <Button onClick={toggleChat} className="rounded-full p-2 shadow-lg" variant="light">
-            <Bot className="h-6 w-6" />
-          </Button>
+          <div
+            onClick={toggleChat}
+            className="relative flex items-center justify-center w-12 h-12 rounded-full border-2 bg-white"
+          >
+            <Bot className="w-6 h-6 fill-current text-black" />
+          </div>
         )}
         {/* chatbot interface */}
         {isOpen && (
@@ -211,9 +214,10 @@ export default function HungerMapChatbot() {
               borderStyle: 'solid',
               opacity: 0.8,
             }}
-            className={`${
-              isFullScreen ? 'w-screen h-screen' : isMobile ? 'w-[636px] h-[657px]' : 'w-[500px] h-[600px]'
-            } ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white opacity-80 text-black'} overflow-hidden`}
+            className={`${isFullScreen || isMobile ? 'rounded-none' : ''}
+              ${
+                isFullScreen ? 'w-screen h-screen' : isMobile ? 'w-screen h-screen' : 'w-[500px] h-[600px]'
+              } ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white opacity-80 text-black'} overflow-hidden`}
           >
             <CardBody className="p-0 h-full">
               <div className="relative h-full flex flex-col overflow-hidden">
@@ -229,7 +233,7 @@ export default function HungerMapChatbot() {
                 )}
                 {/* chat area */}
                 <div
-                  className={`flex-1 flex flex-col transition-all duration-300 ease-in-out ${isSidebarOpen ? (isFullScreen ? 'ml-[215px]' : 'ml-[179px]') : 'ml-0'}`}
+                  className={`flex-1 flex flex-col transition-all duration-300 ease-in-out ${isSidebarOpen && !isMobile ? (isFullScreen ? 'ml-[215px]' : 'ml-[179px]') : 'ml-0'}`}
                 >
                   <CardHeader
                     className={`flex items-center justify-between p-4 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}
@@ -260,17 +264,15 @@ export default function HungerMapChatbot() {
                   <div className={`flex-1 p-4 overflow-y-auto ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
                     {chats[currentChatIndex].messages.length === 1 &&
                     chats[currentChatIndex].messages[0].sender === 'ai' ? (
-                      <div className="flex flex-col items-center justify-center h-full space-y-4">
-                        <p className="text-center text-lg max-w-[80%] mb-2">
-                          Welcome to HungerMap ChatBot! How can I assist you today?
-                        </p>
+                      <div className="flex flex-col items-center mt-4 h-full space-y-4">
+                        <p className="text-center text-xl max-w-[80%] mb-2">Welcome to HungerMap ChatBot!</p>
+                        <p className="text-center text-md max-w-[80%] mb-2">How can I assist you today?</p>
                         <div className="flex flex-col items-center space-y-2 w-full max-w-md">
                           {examplePrompts.map((prompt, index) => (
                             <Button
                               key={index}
-                              variant="bordered"
                               onClick={(e) => handleSubmit(e, prompt)}
-                              className={`truncate w-full mb-2 ${isMobile ? 'max-w-[250px]' : 'max-w-[400px]'}`}
+                              className={`chatbot-default-prompt-button truncate w-full mb-2 ${isMobile ? 'max-w-[250px]' : 'max-w-[400px]'}`}
                               title={prompt}
                             >
                               <span className="truncate">{prompt}</span>
@@ -284,7 +286,11 @@ export default function HungerMapChatbot() {
                           key={index}
                           className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'} mb-4`}
                         >
-                          {message.sender === 'ai' && <Avatar src="/wfp-logo.svg" alt="AI" className="mr-2" />}
+                          {message.sender === 'ai' && (
+                            <div className="relative flex items-center justify-center w-12 h-12 rounded-full border-2 bg-white">
+                              <Bot className="w-6 h-6 fill-current text-black" />
+                            </div>
+                          )}
                           <div
                             className={`${
                               message.sender === 'user'
@@ -342,16 +348,23 @@ export default function HungerMapChatbot() {
                             }
                           }}
                           placeholder="Type your message..."
-                          className={`flex-grow px-3 py-2 ${
-                            isDarkMode ? 'bg-gray-700 text-white' : 'bg-gray-100 text-gray-800'
-                          } border ${
-                            isDarkMode ? 'border-gray-600' : 'border-gray-300'
-                          } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none overflow-hidden`}
+                          style={{
+                            backgroundColor: isDarkMode ? '#252529' : '#E6F1FE',
+                            borderColor: isDarkMode ? '#4B5563' : '#000000',
+                            borderWidth: '1px',
+                            borderStyle: 'solid',
+                            borderRadius: '12px',
+                          }}
+                          className={`flex-grow px-3 py-2 mr-2 ${
+                            isDarkMode ? 'text-white' : 'text-gray-800'
+                          } focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none overflow-hidden`}
                           rows={1}
                         />
-                        <Button type="submit" color="primary" isIconOnly>
-                          <Send className="h-4 w-4" />
-                        </Button>
+                        <Tooltip content="Submit">
+                          <Button type="submit" variant="light" isIconOnly>
+                            <Send className="h-4 w-4" />
+                          </Button>
+                        </Tooltip>
                       </div>
                     </form>
                   </CardFooter>
@@ -361,6 +374,6 @@ export default function HungerMapChatbot() {
           </Card>
         )}
       </div>
-    </div>
+    </>
   );
 }

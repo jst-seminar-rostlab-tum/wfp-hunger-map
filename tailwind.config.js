@@ -42,10 +42,6 @@ module.exports = {
         '12px': '12px',
       },
       colors: {
-        'custom-gray': '#D9E2EA',
-        'light-side-bar': '#71717a',
-      },
-      colors: {
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",

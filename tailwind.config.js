@@ -6,7 +6,7 @@ module.exports = {
     'w-[215px]', 'w-3/4', 'w-[179px]', 'w-[636px]', 'w-[500px]',
     'h-[657px]', 'h-[600px]', 'bg-[#D9E2EA]', 'rounded-[12px_0_0_12px]',
     'max-w-[80%]', 'max-w-[250px]', 'max-w-[400px]', 'ml-[215px]',
-    'ml-[179px]', 'h-[40px]'
+    'ml-[179px]', 'h-[40px]', 'pl-[215px]', 'pl-[179px]', 'bg-[#D9E2EA]'
   ],
   content: [
     './components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -35,6 +35,10 @@ module.exports = {
         '600px': '600px',
       },
       margin: {
+        '179px': '179px',
+        '215px': '215px',
+      },
+      padding: {
         '179px': '179px',
         '215px': '215px',
       },

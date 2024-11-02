@@ -130,13 +130,12 @@ export default function HungerMapChatbot() {
       style={{
         backgroundColor: isDarkMode ? '#252529' : '#71717A',
         opacity: isFullScreen || isMobile ? 1 : 0.8,
+        transition: 'all 0.3s ease-in-out',
+        transform: isSidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
       }}
       className={`
     absolute top-0 left-0 h-full
-    ${isFullScreen ? 'w-[215px]' : isMobile ? 'w-[3/4]' : 'w-[179px]'}
-    ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-    transition-transform duration-300 ease-in-out
-    z-20
+    ${isFullScreen ? 'w-[215px]' : isMobile ? 'w-[3/4]' : 'w-[179px]'} z-20
     ${isMobile ? 'shadow-lg' : ''}
     ${isFullScreen || isMobile ? 'rounded-none' : 'rounded-[12px_0_0_12px]'}
   `}
@@ -192,60 +191,59 @@ export default function HungerMapChatbot() {
       )}
       {/* chatbot interface */}
       {isOpen && (
-        <Card
-          style={{
-            borderColor: '#000000',
-            borderWidth: '1px',
-            borderStyle: 'solid',
-            opacity: 0.8,
-          }}
-          className={`${isFullScreen || isMobile ? 'rounded-none' : ''}
+        <>
+          {isSidebarOpen && renderSidebar()}
+          <Card
+            style={{
+              borderColor: '#000000',
+              borderWidth: '1px',
+              borderStyle: 'solid',
+              opacity: 0.8,
+              transition: 'all 0.3s ease-in-out',
+            }}
+            className={`${isFullScreen || isMobile ? 'rounded-none' : ''}
               ${
                 isFullScreen ? 'w-screen h-screen' : isMobile ? 'w-screen h-screen' : 'w-[500px] h-[600px]'
-              } ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white opacity-80 text-black'} overflow-hidden`}
-        >
-          <CardBody className="p-0 h-full">
-            <div className="relative h-full flex flex-col overflow-hidden">
-              {/* side bar area */}
-              {isSidebarOpen && renderSidebar()}
-              {/* overlay area in mobile version */}
-              {isMobile && isSidebarOpen && (
-                // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-                <div
-                  className={`fixed inset-0 z-10 ${isDarkMode ? 'bg-black/50' : 'bg-white/50'} backdrop-blur-sm`}
-                  onClick={toggleSidebar}
-                />
-              )}
-              {/* chat area */}
-              <div
-                className={`flex-1 flex flex-col transition-all duration-300 ease-in-out ${isSidebarOpen && !isMobile ? (isFullScreen ? 'ml-[215px]' : 'ml-[179px]') : 'ml-0'}`}
-              >
-                <CardHeader
-                  className={`flex items-center justify-between p-4 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}
-                >
-                  <div className="flex items-center space-x-2">
-                    <Button variant="light" isIconOnly onClick={toggleSidebar}>
-                      {isSidebarOpen ? <PanelLeftClose className="h-4 w-4" /> : <PanelLeftOpen className="h-4 w-4" />}
+              } ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white opacity-80 text-black'} 
+              ${isSidebarOpen && !isMobile ? (isFullScreen ? 'pl-[215px]' : 'pl-[179px]') : 'pl-0'}
+              overflow-hidden flex-1 flex flex-col transition-all duration-300 ease-in-out`}
+          >
+            <CardHeader className={`flex items-center justify-between p-4 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+              <div className="flex items-center space-x-2">
+                <Button variant="light" isIconOnly onClick={toggleSidebar}>
+                  {isSidebarOpen ? <PanelLeftClose className="h-4 w-4" /> : <PanelLeftOpen className="h-4 w-4" />}
+                </Button>
+                <img src="/wfp-logo.png" alt="WFP Logo" className="h-8 w-8 mr-2" />
+                <h2 className="text-lg font-semibold truncate">HungerMap ChatBot</h2>
+              </div>
+              <div className="flex items-center space-x-2">
+                {!isMobile && (
+                  <Tooltip content={isFullScreen ? 'Exit Full Screen' : 'Full Screen'}>
+                    <Button variant="light" isIconOnly onClick={toggleFullScreen}>
+                      {isFullScreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
                     </Button>
-                    <img src="/wfp-logo.png" alt="WFP Logo" className="h-8 w-8 mr-2" />
-                    <h2 className="text-lg font-semibold truncate">HungerMap ChatBot</h2>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    {!isMobile && (
-                      <Tooltip content={isFullScreen ? 'Exit Full Screen' : 'Full Screen'}>
-                        <Button variant="light" isIconOnly onClick={toggleFullScreen}>
-                          {isFullScreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
-                        </Button>
-                      </Tooltip>
-                    )}
-                    <Tooltip content="Close Chat">
-                      <Button variant="light" isIconOnly onClick={toggleChat}>
-                        <X className="h-4 w-4" />
-                      </Button>
-                    </Tooltip>
-                  </div>
-                </CardHeader>
-                <Divider style={{ backgroundColor: '#292d32' }} />
+                  </Tooltip>
+                )}
+                <Tooltip content="Close Chat">
+                  <Button variant="light" isIconOnly onClick={toggleChat}>
+                    <X className="h-4 w-4" />
+                  </Button>
+                </Tooltip>
+              </div>
+            </CardHeader>
+            <Divider style={{ backgroundColor: '#292d32' }} />
+            <CardBody className="p-0 h-full">
+              <div className="relative h-full flex flex-col">
+                {/* overlay area in mobile version */}
+                {isMobile && isSidebarOpen && (
+                  // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+                  <div
+                    className={`fixed inset-0 z-10 ${isDarkMode ? 'bg-black/50' : 'bg-white/50'} backdrop-blur-sm`}
+                    onClick={toggleSidebar}
+                  />
+                )}
+                {/* chat area */}
+
                 <div className={`flex-1 p-4 overflow-y-auto ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
                   {chats[currentChatIndex].messages.length === 1 &&
                   chats[currentChatIndex].messages[0].sender === 'ai' ? (
@@ -314,45 +312,45 @@ export default function HungerMapChatbot() {
                   )}
                   <div ref={chatEndRef} />
                 </div>
-                <Divider style={{ backgroundColor: '#292d32' }} />
-                <CardFooter className={`border-t-2 p-4 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
-                  <form onSubmit={handleSubmit} className="w-full">
-                    <div className="flex space-x-2">
-                      <textarea
-                        ref={inputRef}
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' && !e.shiftKey) {
-                            e.preventDefault();
-                            handleSubmit(e);
-                          }
-                        }}
-                        placeholder="Type your message..."
-                        style={{
-                          backgroundColor: isDarkMode ? '#252529' : '#E6F1FE',
-                          borderColor: isDarkMode ? '#4B5563' : '#000000',
-                          borderWidth: '1px',
-                          borderStyle: 'solid',
-                          borderRadius: '12px',
-                        }}
-                        className={`flex-grow px-3 py-2 mr-2 ${
-                          isDarkMode ? 'text-white' : 'text-gray-800'
-                        } focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none overflow-hidden`}
-                        rows={1}
-                      />
-                      <Tooltip content="Submit">
-                        <Button type="submit" variant="light" isIconOnly>
-                          <Send className="h-4 w-4" />
-                        </Button>
-                      </Tooltip>
-                    </div>
-                  </form>
-                </CardFooter>
               </div>
-            </div>
-          </CardBody>
-        </Card>
+            </CardBody>
+            <Divider style={{ backgroundColor: '#292d32' }} />
+            <CardFooter className={`border-t-2 p-4 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+              <form onSubmit={handleSubmit} className="w-full">
+                <div className="flex space-x-2">
+                  <textarea
+                    ref={inputRef}
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        handleSubmit(e);
+                      }
+                    }}
+                    placeholder="Type your message..."
+                    style={{
+                      backgroundColor: isDarkMode ? '#252529' : '#E6F1FE',
+                      borderColor: isDarkMode ? '#4B5563' : '#000000',
+                      borderWidth: '1px',
+                      borderStyle: 'solid',
+                      borderRadius: '12px',
+                    }}
+                    className={`flex-grow px-3 py-2 mr-2 ${
+                      isDarkMode ? 'text-white' : 'text-gray-800'
+                    } focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none overflow-hidden`}
+                    rows={1}
+                  />
+                  <Tooltip content="Submit">
+                    <Button type="submit" variant="light" isIconOnly>
+                      <Send className="h-4 w-4" />
+                    </Button>
+                  </Tooltip>
+                </div>
+              </form>
+            </CardFooter>
+          </Card>
+        </>
       )}
     </div>
   );

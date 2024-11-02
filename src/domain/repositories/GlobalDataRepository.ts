@@ -1,6 +1,6 @@
-import { Adm0Data } from '../entities/Adm0Data';
 import { ChangeLogItem } from '../entities/ChangeLogItem';
 import { CountryIpcData } from '../entities/country/CountryIpcData';
+import { CountryMapData } from '../entities/country/CountryMapData';
 import { DisputedAreas } from '../entities/DisputedAreas';
 import { YearInReview } from '../entities/YearInReview';
 
@@ -11,9 +11,10 @@ export interface GlobalDataRepository {
   getIpcData(): Promise<CountryIpcData[]>;
 
   /**
-   * Not sure what this returns :/
+   * Returns the polygons for the countries and whether any alerts are active in the country
+   * (The alerts shown on the Current Food Consuption map, e.g. countries with >=1 fatality...)
    */
-  getAdm0Data(): Promise<Adm0Data[]>;
+  getMapDataForCountries(): Promise<CountryMapData>;
 
   /**
    * Returns all the disputed areas around the world

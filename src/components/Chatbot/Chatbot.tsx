@@ -113,14 +113,23 @@ export default function HungerMapChatbot() {
   const renderSidebar = () => (
     <Card
       style={{
-        backgroundColor: isDarkMode ? '#252529' : '#71717A',
-        opacity: isFullScreen || isMobile ? 1 : 0.8,
+        backgroundColor: isFullScreen
+          ? isMobile
+            ? isDarkMode
+              ? 'rgba(41, 41, 41, 1)'
+              : 'rgba(216, 216, 216, 1)'
+            : isDarkMode
+              ? 'rgba(41, 41, 41, 1)'
+              : 'rgba(113, 113, 122, 0.4)'
+          : isDarkMode
+            ? 'rgba(64, 64, 64, 0.58)'
+            : 'rgba(113, 113, 122, 0.4)',
         transition: 'all 0.3s ease-in-out',
         transform: isSidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
       }}
       className={`
     absolute top-0 left-0 h-full
-    ${isFullScreen ? 'w-[215px]' : isMobile ? 'w-[3/4]' : 'w-[179px]'} z-20
+    ${isFullScreen ? 'w-[215px]' : 'w-[179px]'} z-20
     ${isMobile ? 'shadow-lg' : ''}
     ${isFullScreen || isMobile ? 'rounded-none' : 'rounded-[12px_0_0_12px]'}
   `}
@@ -132,10 +141,11 @@ export default function HungerMapChatbot() {
           className={`chatbot-side-bar-add-new-chat-button
         w-full h-[40px]
         flex justify-center items-center gap-2
+        ${isDarkMode ? 'dark' : 'light'}
       `}
         >
-          <PlusCircle className="h-4 w-4" />
-          <span className="truncate">New Chat</span>
+          <PlusCircle className={`h-4 w-4 ${isDarkMode ? 'text-white' : 'text-black'}`} />
+          <span className={`truncate ${isDarkMode ? 'text-white' : 'text-black'}`}>New Chat</span>
         </Button>
         <div className="h-[calc(100%-60px)] overflow-y-auto">
           {chats.map((chat, index) => (
@@ -145,15 +155,7 @@ export default function HungerMapChatbot() {
               className={`chatbot-side-bar-select-chat-button
             w-full h-[40px]
             flex gap-2
-            ${
-              currentChatIndex === index
-                ? isDarkMode
-                  ? 'bg-gray-700 text-white'
-                  : 'bg-[#D9E2EA] text-black'
-                : isDarkMode
-                  ? 'bg-gray-800 hover:bg-gray-700 text-white'
-                  : 'bg-transparent hover:bg-[#D9E2EA] text-black'
-            }
+            ${currentChatIndex === index ? (isDarkMode ? 'select-dark' : 'select-light') : isDarkMode ? 'dark' : 'light'}
           `}
             >
               <span className="truncate">{chat.title}</span>
@@ -169,9 +171,9 @@ export default function HungerMapChatbot() {
       {!isOpen && (
         <Button
           onClick={toggleChat}
-          className="relative flex items-center justify-center min-w-12 h-12 px-1 rounded-full border-2 bg-white"
+          className={`relative flex items-center justify-center min-w-12 h-12 px-1 rounded-full border-2 ${isDarkMode ? 'bg-black' : 'bg-white'}`}
         >
-          <Bot className="w-6 h-6 fill-current text-black" />
+          <Bot className={`w-6 h-6 fill-current ${isDarkMode ? 'text-white' : 'text-black'} `} />
         </Button>
       )}
       {/* chatbot interface */}
@@ -223,7 +225,8 @@ export default function HungerMapChatbot() {
                 {isMobile && isSidebarOpen && (
                   // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
                   <div
-                    className={`fixed inset-0 z-10 ${isDarkMode ? 'bg-black/50' : 'bg-white/50'} backdrop-blur-sm`}
+                    style={{ backgroundColor: isDarkMode ? 'rgba(0, 0, 0, 0.8)' : 'rgba(0, 0, 0, 0.4)' }}
+                    className="fixed inset-0 z-10"
                     onClick={toggleSidebar}
                   />
                 )}
@@ -240,7 +243,7 @@ export default function HungerMapChatbot() {
                           <Button
                             key={prompt.id}
                             onClick={(e) => handleSubmit(e, prompt.value)}
-                            className={`chatbot-default-prompt-button truncate w-full mb-2 ${isMobile ? 'max-w-[250px]' : 'max-w-[400px]'}`}
+                            className={`chatbot-default-prompt-button ${isDarkMode ? 'dark' : 'light'} truncate w-full mb-2 ${isMobile ? 'max-w-[250px]' : 'max-w-[400px]'}`}
                             title={prompt.value}
                           >
                             <span className="truncate">{prompt.value}</span>
@@ -256,12 +259,16 @@ export default function HungerMapChatbot() {
                       >
                         {message.sender === 'ai' && (
                           <div className="relative chat-ai-message">
-                            <Bot className="w-6 h-6 fill-current text-black" />
+                            <Bot className={`w-6 h-6 fill-current ${isDarkMode ? 'text-white' : 'text-black'} `} />
                           </div>
                         )}
                         <div
                           className={`${
-                            message.sender === 'user' ? 'chat-user-message' : 'chat-ai-message'
+                            message.sender === 'user'
+                              ? isDarkMode
+                                ? 'chat-user-message-dark'
+                                : 'chat-user-message-light'
+                              : 'chat-ai-message'
                           } rounded-lg p-3 max-w-[80%] ${message.sender === 'user' ? 'ml-12' : ''}`}
                         >
                           <p className="break-words">{message.text}</p>
@@ -301,7 +308,7 @@ export default function HungerMapChatbot() {
                   {isTyping && (
                     <div className="flex justify-start mb-4">
                       <div className="relative chat-ai-message">
-                        <Bot className="w-6 h-6 fill-current text-black" />
+                        <Bot className={`w-6 h-6 fill-current ${isDarkMode ? 'text-white' : 'text-black'} `} />
                       </div>
                       <div className="chat-typing-animation">
                         <span className="dot mr-2" />
@@ -331,7 +338,7 @@ export default function HungerMapChatbot() {
                     placeholder="Type your message..."
                     style={{
                       backgroundColor: isDarkMode ? '#252529' : '#E6F1FE',
-                      borderColor: isDarkMode ? '#4B5563' : '#000000',
+                      borderColor: isDarkMode ? 'black' : '#000000',
                       borderWidth: '1px',
                       borderStyle: 'solid',
                       borderRadius: '12px',

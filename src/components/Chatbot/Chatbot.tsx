@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Bot, Maximize2, Minimize2, X, PlusCircle, Send, Menu } from 'lucide-react';
+import { Bot, Maximize2, Minimize2, X, PlusCircle, Send, PanelLeftOpen, PanelLeftClose } from 'lucide-react';
 import { Avatar, Button, Card, CardBody, CardHeader, CardFooter, Divider, Tooltip } from '@nextui-org/react';
 
 const examplePrompts = [
@@ -141,26 +141,27 @@ export default function HungerMapChatbot() {
 
   const renderSidebar = () => (
     <Card
+      style={{
+        backgroundColor: isDarkMode ? '#252529' : '#71717A',
+        opacity: isFullScreen || isMobile ? 1 : 0.8,
+      }}
       className={`
     absolute top-0 left-0 h-full
     ${isFullScreen ? 'w-[215px]' : isMobile ? 'w-[3/4]' : 'w-[179px]'}
     ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
     transition-transform duration-300 ease-in-out
-    z-20 
-    ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}
+    z-20
     ${isMobile ? 'shadow-lg' : ''}
-    rounded-[12px_0_0_12px]
+    ${isFullScreen || isMobile ? 'rounded-none' : 'rounded-[12px_0_0_12px]'}
   `}
       ref={sidebarRef}
     >
       <CardBody className="p-4">
         <Button
           onClick={startNewChat}
-          className={`
-        w-full h-[40px] mb-4
+          className={`chatbot-side-bar-add-new-chat-button
+        w-full h-[40px]
         flex justify-center items-center gap-2
-        rounded-[12px] border border-black
-        ${isDarkMode ? 'bg-gray-700 hover:bg-gray-600 text-white' : 'bg-light-side-bar hover:bg-gray-100 text-black'}
       `}
         >
           <PlusCircle className="h-4 w-4" />
@@ -171,10 +172,9 @@ export default function HungerMapChatbot() {
             <Button
               key={chat.id}
               onClick={() => selectChat(index)}
-              className={`
-            w-full h-[40px] mb-2
-            flex items-center gap-2
-            rounded-[12px]
+              className={`chatbot-side-bar-select-chat-button
+            w-full h-[40px]
+            flex gap-2
             ${
               currentChatIndex === index
                 ? isDarkMode
@@ -240,7 +240,7 @@ export default function HungerMapChatbot() {
                   >
                     <div className="flex items-center space-x-2">
                       <Button variant="light" isIconOnly onClick={toggleSidebar}>
-                        <Menu className="h-4 w-4" />
+                        {isSidebarOpen ? <PanelLeftClose className="h-4 w-4" /> : <PanelLeftOpen className="h-4 w-4" />}
                       </Button>
                       <img src="/wfp-logo.png" alt="WFP Logo" className="h-8 w-8 mr-2" />
                       <h2 className="text-lg font-semibold truncate">HungerMap ChatBot</h2>
@@ -287,24 +287,20 @@ export default function HungerMapChatbot() {
                           className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'} mb-4`}
                         >
                           {message.sender === 'ai' && (
-                            <div className="relative flex items-center justify-center w-12 h-12 rounded-full border-2 bg-white">
+                            <div className="relative chat-ai-message">
                               <Bot className="w-6 h-6 fill-current text-black" />
                             </div>
                           )}
                           <div
                             className={`${
-                              message.sender === 'user'
-                                ? 'bg-blue-500 text-white'
-                                : isDarkMode
-                                  ? 'bg-gray-700 text-white'
-                                  : 'bg-white text-gray-800'
-                            } rounded-lg p-3 max-w-[80%] ${message.sender === 'user' ? 'ml-12' : ''} shadow`}
+                              message.sender === 'user' ? 'chat-user-message' : 'chat-ai-message'
+                            } rounded-lg p-3 max-w-[80%] ${message.sender === 'user' ? 'ml-12' : ''}`}
                           >
                             <p className="break-words">{message.text}</p>
                             {message.dataSources && (
                               <div className={`mt-2 text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                                <p className="truncate">Data Sources:</p>
-                                <ul className="list-disc list-inside">
+                                <p className="truncate !text-gray-500">Data Sources:</p>
+                                <ul className="list-disc list-inside !text-gray-500">
                                   {message.dataSources.map((source, i) => (
                                     <li key={i} className="truncate">
                                       {source}

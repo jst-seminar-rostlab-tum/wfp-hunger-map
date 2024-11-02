@@ -19,7 +19,7 @@ export default function HungerMapChatbot() {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   // const [isDarkMode, setIsDarkMode] = useState(false);
-  const isDarkMode = true;
+  const isDarkMode = false;
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const sidebarRef = useRef<HTMLDivElement>(null);
@@ -126,10 +126,11 @@ export default function HungerMapChatbot() {
             : 'rgba(113, 113, 122, 0.4)',
         transition: 'all 0.3s ease-in-out',
         transform: isSidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
+        zIndex: '9999',
       }}
       className={`
     absolute top-0 left-0 h-full
-    ${isFullScreen ? 'w-[215px]' : 'w-[179px]'} z-20
+    ${isFullScreen ? 'w-[215px]' : 'w-[179px]'}
     ${isMobile ? 'shadow-lg' : ''}
     ${isFullScreen || isMobile ? 'rounded-none' : 'rounded-[12px_0_0_12px]'}
   `}
@@ -167,7 +168,10 @@ export default function HungerMapChatbot() {
   );
 
   return (
-    <div style={isFullScreen ? { inset: 0 } : { top: '1rem', right: '1rem' }} className="absolute z-50">
+    <div
+      style={isFullScreen ? { inset: 0, zIndex: '9000' } : { top: '1rem', right: '1rem', zIndex: '9000' }}
+      className="absolute z-50"
+    >
       {!isOpen && (
         <Button
           onClick={toggleChat}

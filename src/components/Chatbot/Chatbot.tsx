@@ -207,7 +207,7 @@ export default function HungerMapChatbot() {
             }}
             className={`${isFullScreen || isMobile ? 'rounded-none' : ''}
               ${
-                isFullScreen ? 'w-screen h-screen' : isMobile ? 'w-screen h-screen' : 'w-[500px] h-[600px]'
+                isFullScreen ? 'w-screen h-screen' : isMobile ? 'w-screen h-screen' : 'w-[636px] h-[657px]'
               } ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white opacity-80 text-black'} 
               ${isSidebarOpen && !isMobile ? (isFullScreen ? 'pl-[215px]' : 'pl-[179px]') : 'pl-0'}
               overflow-hidden flex-1 flex flex-col transition-all duration-300 ease-in-out`}

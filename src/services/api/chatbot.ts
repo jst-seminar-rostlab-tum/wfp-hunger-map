@@ -1,22 +1,22 @@
 // @author: Ahmet Selman Güclü
 // IMPORTANT: chatbot requests work only when back-end is running locally since the back-end is not deployed yet
 
+import { IMessage } from '@/types/chatbot';
+
 // Types according to the back-end are like this:
-/*
 export interface QueryRequest {
   query: string;
   version?: number;
   chatbot_type?: string;
   limit?: number;
-  previous_messages?: any[];
-  }
-  
-  export interface QueryResponse {
-    response: string;
-    prompt_tokens: number;
-    total_tokens: number;
-    }
-    */
+  previous_messages?: IMessage[];
+}
+
+export interface QueryResponse {
+  response: string;
+  prompt_tokens: number;
+  total_tokens: number;
+}
 
 const API_BASE_URL = 'http://127.0.0.1:5000'; // Adjust this when back-end is deployed and in production
 

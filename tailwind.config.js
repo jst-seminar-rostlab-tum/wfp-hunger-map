@@ -3,10 +3,9 @@ import { nextui } from '@nextui-org/theme';
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   safelist: [
-    'w-[215px]', 'w-3/4', 'w-[179px]', 'w-[636px]', 'w-[500px]',
+    'w-[215px]', 'w-[179px]', 'w-[636px]', 'w-[500px]',
     'h-[657px]', 'h-[600px]', 'bg-[#D9E2EA]', 'rounded-[12px_0_0_12px]',
-    'max-w-[80%]', 'max-w-[250px]', 'max-w-[400px]', 'ml-[215px]',
-    'ml-[179px]', 'h-[40px]', 'pl-[215px]', 'pl-[179px]', 'bg-[#D9E2EA]'
+    'max-w-[80%]', 'max-w-[250px]', 'max-w-[400px]', 'h-[40px]', 'pl-[215px]', 'pl-[179px]', 'bg-[#D9E2EA]'
   ],
   content: [
     './components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -20,7 +19,6 @@ module.exports = {
         mono: ['var(--font-mono)'],
       },
       width: {
-        '3/4': '75%',
         '215px': '215px',
         '179px': '179px',
         '636px': '636px',
@@ -34,10 +32,6 @@ module.exports = {
         '657px': '657px',
         '600px': '600px',
       },
-      margin: {
-        '179px': '179px',
-        '215px': '215px',
-      },
       padding: {
         '179px': '179px',
         '215px': '215px',
@@ -45,41 +39,6 @@ module.exports = {
       borderRadius: {
         '12px_0_0_12px': '12px 0 0 12px',
         '12px': '12px',
-      },
-      colors: {
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
-        },
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
-        },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
-        },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
-        },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-        },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
-        },
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
-        },
-        chat: '#e6f1fe'
       },
     },
   },

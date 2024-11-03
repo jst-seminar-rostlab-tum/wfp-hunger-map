@@ -35,7 +35,7 @@
     "leaflet": "^1.9.4",
     "leaflet-defaulticon-compatibility": "^0.1.2",
     "leaflet-geosearch": "^4.0.0",
-    "next": "14.2.4",
+    "next": "14.2.10",
     "next-themes": "^0.2.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
@@ -43,6 +43,8 @@
     "tailwind-variants": "0.1.20"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
     "@types/leaflet": "^1.9.14",
     "@types/node": "20.5.7",
     "@types/react": "^18.3.12",
@@ -64,5 +66,22 @@
     "prettier": "^3.3.3",
     "tailwindcss": "3.4.3",
     "typescript": "5.0.4"
+  },
+  "commitlint": {
+    "rules": {
+      "type-enum": [
+        2,
+        "always",
+        [
+          "feat",
+          "docs",
+          "fix"
+        ]
+      ],
+      "type-empty": [
+        2,
+        "never"
+      ]
+    }
   }
 }

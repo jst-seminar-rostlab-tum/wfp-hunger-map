@@ -10,6 +10,8 @@ import { useEffect, useRef, useState } from 'react';
 import { DEFAULT_PROMPT, IChat } from '@/types/chatbot';
 import { useMediaQuery } from '@/utils/resolution';
 
+import TypingText from './TypingText';
+
 export default function HungerMapChatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -19,7 +21,7 @@ export default function HungerMapChatbot() {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   // const [isDarkMode, setIsDarkMode] = useState(false);
-  const isDarkMode = false;
+  const isDarkMode = false; // TODO: get dark mode from context later
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const sidebarRef = useRef<HTMLDivElement>(null);
@@ -87,17 +89,6 @@ export default function HungerMapChatbot() {
       }, 2000);
     }
   };
-
-  useEffect(() => {
-    if (isOpen && chats[currentChatIndex].messages.length === 0) {
-      const updatedChats = [...chats];
-      updatedChats[currentChatIndex].messages.push({
-        text: "Hello! I'm the HungerMap ChatBot. How can I assist you today?",
-        sender: 'ai',
-      });
-      setChats(updatedChats);
-    }
-  }, [isOpen, currentChatIndex, chats]);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -237,8 +228,7 @@ export default function HungerMapChatbot() {
                 {/* chat area */}
 
                 <div className={`flex-1 p-4 overflow-y-auto ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
-                  {chats[currentChatIndex].messages.length === 1 &&
-                  chats[currentChatIndex].messages[0].sender === 'ai' ? (
+                  {chats[currentChatIndex].messages.length === 0 ? (
                     <div className="flex flex-col items-center mt-4 h-full space-y-4">
                       <p className="text-center text-xl max-w-[80%] mb-2">Welcome to HungerMap ChatBot!</p>
                       <p className="text-center text-md max-w-[80%] mb-2">How can I assist you today?</p>
@@ -275,7 +265,11 @@ export default function HungerMapChatbot() {
                               : 'chat-ai-message'
                           } rounded-lg p-3 max-w-[80%] ${message.sender === 'user' ? 'ml-12' : ''}`}
                         >
-                          <p className="break-words">{message.text}</p>
+                          {message.sender === 'user' ? (
+                            <p className="break-words">{message.text}</p>
+                          ) : (
+                            <TypingText text={message.text} speed={100} />
+                          )}
                           {message.dataSources && (
                             <div
                               className="mt-2 text-xs"

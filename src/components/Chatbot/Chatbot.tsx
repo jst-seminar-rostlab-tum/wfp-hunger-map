@@ -178,9 +178,9 @@ export default function HungerMapChatbot() {
           <Card
             style={{
               borderColor: '#000000',
-              borderWidth: '1px',
+              borderWidth: isFullScreen ? '0px' : '1px',
               borderStyle: 'solid',
-              opacity: 0.8,
+              opacity: isFullScreen ? 1 : 0.8,
               transition: 'all 0.3s ease-in-out',
             }}
             className={`${isFullScreen || isMobile ? 'rounded-none' : ''}

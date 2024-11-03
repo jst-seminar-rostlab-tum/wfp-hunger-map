@@ -7,6 +7,7 @@ import { Button, Card, CardBody, CardFooter, CardHeader, Divider, Tooltip } from
 import { Bot, Maximize2, Minimize2, PanelLeftClose, PanelLeftOpen, PlusCircle, Send, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
+import { chatService, formatChatResponse } from '@/services/api/chatbot';
 import { DEFAULT_PROMPT, IChat } from '@/types/chatbot';
 import { useMediaQuery } from '@/utils/resolution';
 
@@ -60,24 +61,30 @@ export default function HungerMapChatbot() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent, promptText: string | null = null) => {
+  const handleSubmit = async (e: React.FormEvent, promptText: string | null = null) => {
     e.preventDefault();
     const text = promptText || input;
     if (text.trim()) {
       const updatedChats = [...chats];
-      updatedChats[currentChatIndex].messages.push({ text, sender: 'user' });
+      updatedChats[currentChatIndex].messages.push({ content: text, role: 'user' });
       if (updatedChats[currentChatIndex].title === `New Chat ${updatedChats[currentChatIndex].id}`) {
         updatedChats[currentChatIndex].title = text.slice(0, 30) + (text.length > 30 ? '...' : '');
       }
       setChats(updatedChats);
       setInput('');
       setIsTyping(true);
-      // Simulate AI response TODO: integration with backend
-      setTimeout(() => {
-        const aiResponse = 'This is a simulated AI response based on the HungerMap data.';
+      // Simulate AI response
+      setTimeout(async () => {
+        // Get previous messages from current chat for context
+        const previousMessages = chats[currentChatIndex].messages;
+
+        // request to get AI response
+        const response = await chatService.sendMessage(text, { previous_messages: previousMessages });
+        const aiResponse = formatChatResponse(response).text;
+
         const dataSources = ['HungerMap Live', 'WFP Country Reports', 'FAO Statistics'];
         const updatedChatsWithAI = [...updatedChats];
-        updatedChatsWithAI[currentChatIndex].messages.push({ text: aiResponse, sender: 'ai', dataSources });
+        updatedChatsWithAI[currentChatIndex].messages.push({ content: aiResponse, role: 'assistant', dataSources });
         setChats(updatedChatsWithAI);
         setIsTyping(false);
       }, 2000);
@@ -244,26 +251,26 @@ export default function HungerMapChatbot() {
                     chats[currentChatIndex].messages.map((message, index) => (
                       <div
                         key={index}
-                        className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'} mb-4`}
+                        className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'} mb-4`}
                       >
-                        {message.sender === 'ai' && (
+                        {message.role === 'assistant' && (
                           <div className="relative chat-ai-message">
                             <Bot className={`w-6 h-6 fill-current ${isDarkMode ? 'text-white' : 'text-black'} `} />
                           </div>
                         )}
                         <div
                           className={`${
-                            message.sender === 'user'
+                            message.role === 'user'
                               ? isDarkMode
                                 ? 'chat-user-message-dark'
                                 : 'chat-user-message-light'
                               : 'chat-ai-message'
-                          } rounded-lg p-3 max-w-[80%] ${message.sender === 'user' ? 'ml-12' : ''}`}
+                          } rounded-lg p-3 max-w-[80%] ${message.role === 'user' ? 'ml-12' : ''}`}
                         >
-                          {message.sender === 'user' ? (
-                            <p className="break-words">{message.text}</p>
+                          {message.role === 'user' ? (
+                            <p className="break-words">{message.content}</p>
                           ) : (
-                            <TypingText text={message.text} speed={100} />
+                            <TypingText text={message.content} speed={100} />
                           )}
                           {message.dataSources && (
                             <div

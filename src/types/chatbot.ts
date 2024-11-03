@@ -1,6 +1,6 @@
 export interface IMessage {
-  text: string;
-  sender: 'user' | 'ai';
+  content: string;
+  role: 'user' | 'assistant';
   dataSources?: string[];
 }
 

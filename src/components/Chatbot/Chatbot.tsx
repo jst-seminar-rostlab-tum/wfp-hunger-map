@@ -82,7 +82,10 @@ export default function HungerMapChatbot() {
     const updatedChatsWithAI = [...chats];
     updatedChatsWithAI[currentChatIndex].messages.push({ content: aiResponse, role: 'assistant', dataSources });
     setChats(updatedChatsWithAI);
-    setIsTyping(false);
+  };
+
+  const handleTypingComplete = () => {
+    setIsTyping(false); // set isTyping to false when typing is complete
   };
 
   /**
@@ -93,6 +96,7 @@ export default function HungerMapChatbot() {
   const handleSubmit = async (e: React.FormEvent, promptText: string | null = null) => {
     e.preventDefault();
     const text = promptText || input;
+    if (isTyping) return; // prevent multiple submission
     if (text.trim()) {
       const updatedChats = [...chats];
       updatedChats[currentChatIndex].messages.push({ content: text, role: 'user' });
@@ -284,9 +288,14 @@ export default function HungerMapChatbot() {
                           } rounded-lg p-3 max-w-[80%] ${message.role === 'user' ? 'ml-12' : ''}`}
                         >
                           {message.role === 'user' ? (
-                            <p className="break-words">{message.content}</p>
+                            <p className="break-words text-justify">{message.content}</p>
                           ) : (
-                            <TypingText text={message.content} speed={100} />
+                            <TypingText
+                              text={message.content}
+                              speed={100}
+                              endSentencePause={500}
+                              onTypingComplete={handleTypingComplete}
+                            />
                           )}
                           {message.dataSources && (
                             <div
@@ -348,6 +357,7 @@ export default function HungerMapChatbot() {
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' && !e.shiftKey) {
                         e.preventDefault();
+                        if (isTyping) return; // prevent multiple submission
                         handleSubmit(e);
                       }
                     }}

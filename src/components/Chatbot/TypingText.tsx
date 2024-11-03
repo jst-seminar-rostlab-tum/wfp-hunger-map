@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 type TypingTextProps = {
   text: string;
   speed?: number;
+  endSentencePause?: number;
+  onTypingComplete?: () => void;
 };
 
 /**
@@ -11,25 +13,44 @@ type TypingTextProps = {
  * @param param0 is a component that displays text as if it is being typed out
  * @returns typing text animation component
  */
-export default function TypingText({ text, speed = 100 }: TypingTextProps) {
+export default function TypingText({ text, speed = 50, endSentencePause = 500, onTypingComplete }: TypingTextProps) {
   const [displayedText, setDisplayedText] = useState<string>('');
 
-  const getRandomSpeed = () => Math.floor(Math.random() * (speed + 1));
+  // Generate random speed for each character
+  // TBD: since we get all text from backend and show animation in front-end,is it really necessary to generate random speed for each character?
+  const getCharacterSpeed = (char: string) => {
+    if (['.', '?', '!'].includes(char)) {
+      return endSentencePause; // set more pause for end of sentence
+    }
+    return Math.floor(Math.random() * speed); // random speed for each character
+  };
 
   useEffect(() => {
     let index = 0;
 
-    const intervalId = setInterval(() => {
+    const typeCharacter = () => {
       if (index < text.length - 1) {
+        const currentChar = text[index];
         setDisplayedText((prev) => prev + text[index]);
         index += 1;
-      } else {
-        clearInterval(intervalId);
+        setTimeout(typeCharacter, getCharacterSpeed(currentChar)); // Generate a new timeout with random speed
+      } else if (onTypingComplete) {
+        onTypingComplete(); // Call onTypingComplete callback when typing is complete
       }
-    }, getRandomSpeed());
+    };
 
-    return () => clearInterval(intervalId);
+    typeCharacter(); // Start typing
+
+    return () => {
+      index = text.length; // Cleanup function to stop typing when component unmounts
+    };
   }, [text, speed]);
 
-  return <p className="break-words">{displayedText}</p>;
+  return (
+    <p className="break-words text-justify">
+      {displayedText}
+      {/* show typing cursor */}
+      {displayedText.length < text.length && <span className="blinking-cursor">|</span>}
+    </p>
+  );
 }

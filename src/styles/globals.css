@@ -115,19 +115,59 @@
   height: 8px;
   background-color: currentColor;
   border-radius: 50%;
-  animation: pulse 1.5s ease-in-out infinite;
+  animation: typing 1.5s steps(3, end) infinite, pulse 1.5s ease-in-out infinite;
+}
+
+/* 控制每个点出现的顺序 */
+.chat-typing-animation .dot:nth-child(1) {
+  animation-delay: 0s;
+}
+.chat-typing-animation .dot:nth-child(2) {
+  animation-delay: 0.3s;
+}
+.chat-typing-animation .dot:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+@keyframes typing {
+  0% {
+    opacity: 0;
+  }
+  33% {
+    opacity: 1;
+  }
+  66% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 @keyframes pulse {
-
   0%,
   100% {
     transform: scale(1);
     opacity: 0.6;
   }
-
   50% {
     transform: scale(1.3);
     opacity: 1;
+  }
+}
+
+/* typing blinking cursor */
+.blinking-cursor {
+  display: inline-block;
+  animation: blink 1s step-end infinite;
+}
+
+.text-justify {
+  text-align: justify;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
   }
 }

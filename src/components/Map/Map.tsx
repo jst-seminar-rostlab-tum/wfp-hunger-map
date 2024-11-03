@@ -2,9 +2,11 @@
 
 import 'leaflet/dist/leaflet.css';
 
-import { MapContainer, Polygon, TileLayer } from 'react-leaflet';
+import { MapContainer, TileLayer } from 'react-leaflet';
 
 import { MapProps } from '@/domain/props/MapProps';
+
+import { CountryPolygon } from './CountryPolygon';
 
 export default function Map({ countries }: MapProps) {
   return (
@@ -16,8 +18,8 @@ export default function Map({ countries }: MapProps) {
       {countries.features
         .filter((c) => c.properties.interactive)
         .map((c) => (
-          <Polygon pathOptions={{ color: 'purple' }} positions={c.geometry.coordinates} />
-          // TODO fix this, this is just an example
+          // TODO fix the layout, this is just an example
+          <CountryPolygon country={c} key={c.properties.adm0_id} />
         ))}
     </MapContainer>
   );

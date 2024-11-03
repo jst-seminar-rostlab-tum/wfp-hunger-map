@@ -1,12 +1,18 @@
 import { ChangeLogItem } from '@/domain/entities/ChangeLogItem';
 import { ResponseWrapper } from '@/domain/entities/common/ResponseWrapper';
+import { CountryCodesData } from '@/domain/entities/country/CountryCodesData';
 import { CountryIpcData } from '@/domain/entities/country/CountryIpcData';
-import { CountryMapData } from '@/domain/entities/country/CountryMapData';
+import { CountryMapDataWrapper } from '@/domain/entities/country/CountryMapData';
 import { DisputedAreas } from '@/domain/entities/DisputedAreas';
 import { YearInReview } from '@/domain/entities/YearInReview';
 import { GlobalDataRepository } from '@/domain/repositories/GlobalDataRepository';
 
 export default class GlobalDataRepositoryImpl implements GlobalDataRepository {
+  async getCountryCodes(): Promise<CountryCodesData[]> {
+    const response = await fetch(`https://static.hungermapdata.org/insight-reports/latest/country.json`);
+    return response.json();
+  }
+
   async getYearInReviews(): Promise<YearInReview[]> {
     const response = await fetch(`https://static.hungermapdata.org/year-in-review/config.json`);
     return response.json();
@@ -25,11 +31,11 @@ export default class GlobalDataRepositoryImpl implements GlobalDataRepository {
     return response.json();
   }
 
-  async getMapDataForCountries(): Promise<CountryMapData> {
+  async getMapDataForCountries(): Promise<CountryMapDataWrapper> {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/adm0data.json`, {
       next: { revalidate: 3600 * 12 }, // Next can't actually cache this, because the response is larger than 2MB
     });
-    const data: ResponseWrapper<CountryMapData> = await response.json();
+    const data: ResponseWrapper<CountryMapDataWrapper> = await response.json();
     return data.body;
   }
 

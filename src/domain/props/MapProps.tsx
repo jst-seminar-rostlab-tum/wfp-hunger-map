@@ -1,7 +1,7 @@
-import { CountryMapData } from '../entities/country/CountryMapData';
+import { CountryMapDataWrapper } from '../entities/country/CountryMapData';
 import { DisputedAreas } from '../entities/DisputedAreas';
 
 export interface MapProps {
-  countries: CountryMapData;
+  countries: CountryMapDataWrapper;
   disputedAreas: DisputedAreas;
 }

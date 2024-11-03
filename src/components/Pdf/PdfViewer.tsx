@@ -3,6 +3,8 @@
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 
+import { Button } from '@nextui-org/button';
+import { Chip } from '@nextui-org/chip';
 import { useEffect, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 
@@ -37,7 +39,6 @@ export function PdfViewer() {
     window.addEventListener('scroll', handleScroll);
   }
 
-  // Clean up the event listener on unmount
   useEffect(() => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -45,22 +46,27 @@ export function PdfViewer() {
   }, []);
 
   return (
-    <div className="bg-gray-900 min-h-screen flex flex-col items-center justify-start text-white">
+    <div className="min-h-screen flex flex-col items-center justify-start">
       {/* Top Bar */}
-      <div className="w-full bg-gray-800 py-4 flex items-center justify-between px-6 sticky top-0">
-        <h1 className="text-lg font-semibold">Preview</h1>
-        <p className="text-sm">
-          {pageNumber} / {totalPages}
-        </p>
+      <div className="w-full py-4 flex items-center justify-between px-6 sticky top-0 z-10">
+        <h1 color="secondary" className="text-lg font-semibold">
+          Preview
+        </h1>
+        <Chip color="secondary" size="md">
+          <p className="text-sm">
+            {pageNumber} / {totalPages}
+          </p>
+        </Chip>
+        <Button color="secondary">Download</Button>
       </div>
 
       {/* PDF Viewer */}
-      <div className="flex-grow flex justify-center items-center py-10">
-        <div className="bg-gray-700 p-4 rounded-lg shadow-lg w-full max-w-3xl">
-          <Document file="/report.pdf" onLoadSuccess={onDocumentLoadSuccess} className="flex flex-col items-center">
+      <div className="flex-grow flex justify-center items-center py-10 z-0">
+        <div className="p-4 rounded-lg shadow-lg w-full max-w-3xl">
+          <Document file="/report.pdf" onLoadSuccess={onDocumentLoadSuccess} className="flex-col items-center">
             {Array.from(new Array(totalPages), (el, index) => (
               <Page
-                canvasBackground="bg-gray-900"
+                canvasBackground="transparent"
                 key={`page_${index + 1}`}
                 pageNumber={index + 1}
                 className="rounded-lg"

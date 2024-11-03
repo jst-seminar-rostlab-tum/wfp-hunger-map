@@ -8,7 +8,7 @@ import { Bot, Maximize2, Minimize2, PanelLeftClose, PanelLeftOpen, PlusCircle, S
 import { useEffect, useRef, useState } from 'react';
 
 import { chatService, formatChatResponse } from '@/services/api/chatbot';
-import { DEFAULT_PROMPT, IChat } from '@/types/chatbot';
+import { DATA_SOURCES, DEFAULT_DATA_SOURCES, DEFAULT_PROMPT, IChat } from '@/types/chatbot';
 import { useMediaQuery } from '@/utils/resolution';
 
 import TypingText from './TypingText';
@@ -54,6 +54,10 @@ export default function HungerMapChatbot() {
     }
   };
 
+  /**
+   * Select chat in side bar
+   * @param index is the index of the chat to select
+   */
   const selectChat = (index: number) => {
     setCurrentChatIndex(index);
     if (isMobile) {
@@ -61,6 +65,31 @@ export default function HungerMapChatbot() {
     }
   };
 
+  /**
+   * Handle AI response
+   * @param text is user input text
+   */
+  const handleAIResponse = async (text: string) => {
+    // Get previous messages from current chat for context
+    const previousMessages = chats[currentChatIndex].messages;
+
+    // request to get AI response
+    const response = await chatService.sendMessage(text, { previous_messages: previousMessages });
+    const aiResponse = formatChatResponse(response).text;
+
+    // TODO: get data sources from response later
+    const dataSources = DEFAULT_DATA_SOURCES;
+    const updatedChatsWithAI = [...chats];
+    updatedChatsWithAI[currentChatIndex].messages.push({ content: aiResponse, role: 'assistant', dataSources });
+    setChats(updatedChatsWithAI);
+    setIsTyping(false);
+  };
+
+  /**
+   * Handle form submit
+   * @param e is form event
+   * @param promptText is requested text from user
+   */
   const handleSubmit = async (e: React.FormEvent, promptText: string | null = null) => {
     e.preventDefault();
     const text = promptText || input;
@@ -74,20 +103,7 @@ export default function HungerMapChatbot() {
       setInput('');
       setIsTyping(true);
       // Simulate AI response
-      setTimeout(async () => {
-        // Get previous messages from current chat for context
-        const previousMessages = chats[currentChatIndex].messages;
-
-        // request to get AI response
-        const response = await chatService.sendMessage(text, { previous_messages: previousMessages });
-        const aiResponse = formatChatResponse(response).text;
-
-        const dataSources = ['HungerMap Live', 'WFP Country Reports', 'FAO Statistics'];
-        const updatedChatsWithAI = [...updatedChats];
-        updatedChatsWithAI[currentChatIndex].messages.push({ content: aiResponse, role: 'assistant', dataSources });
-        setChats(updatedChatsWithAI);
-        setIsTyping(false);
-      }, 2000);
+      await handleAIResponse(text);
     }
   };
 
@@ -96,7 +112,7 @@ export default function HungerMapChatbot() {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chats, currentChatIndex]);
 
-  // used to auto resize the input textarea
+  // used to auto resize the input textarea when input is too long
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.style.height = 'auto';
@@ -285,7 +301,7 @@ export default function HungerMapChatbot() {
                                   textOverflow: 'ellipsis',
                                 }}
                               >
-                                Data Sources:
+                                {DATA_SOURCES}
                               </p>
                               <ul
                                 style={{

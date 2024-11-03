@@ -20,12 +20,11 @@ export default function HungerMapChatbot() {
   const [currentChatIndex, setCurrentChatIndex] = useState(0);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  // const [isDarkMode, setIsDarkMode] = useState(false);
-  const isDarkMode = false; // TODO: get dark mode from context later
+  // TODO: get dark mode from context later
+  const isDarkMode = false;
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
-  const sidebarRef = useRef<HTMLDivElement>(null);
-
+  // TODO: get isMobile from context later
   const isMobile = useMediaQuery('(max-width: 600px)');
 
   const toggleChat = () => {
@@ -44,11 +43,6 @@ export default function HungerMapChatbot() {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-
-  // const toggleDarkMode = () => {
-  //   setIsDarkMode(!isDarkMode);
-  //   document.documentElement.classList.toggle('dark');
-  // };
 
   const startNewChat = () => {
     const newChat: IChat = { id: chats.length + 1, title: `New Chat ${chats.length + 1}`, messages: [] };
@@ -78,7 +72,7 @@ export default function HungerMapChatbot() {
       setChats(updatedChats);
       setInput('');
       setIsTyping(true);
-      // Simulate AI response
+      // Simulate AI response TODO: integration with backend
       setTimeout(() => {
         const aiResponse = 'This is a simulated AI response based on the HungerMap data.';
         const dataSources = ['HungerMap Live', 'WFP Country Reports', 'FAO Statistics'];
@@ -90,10 +84,12 @@ export default function HungerMapChatbot() {
     }
   };
 
+  // use to scroll to the end of the chat when new messages are added
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chats, currentChatIndex]);
 
+  // used to auto resize the input textarea
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.style.height = 'auto';
@@ -125,7 +121,6 @@ export default function HungerMapChatbot() {
     ${isMobile ? 'shadow-lg' : ''}
     ${isFullScreen || isMobile ? 'rounded-none' : 'rounded-[12px_0_0_12px]'}
   `}
-      ref={sidebarRef}
     >
       <CardBody className="p-4">
         <Button

@@ -7,7 +7,7 @@ import { Button, Card, CardBody, CardFooter, CardHeader, Divider, Tooltip } from
 import { Bot, Maximize2, Minimize2, PanelLeftClose, PanelLeftOpen, PlusCircle, Send, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-import { chatService, formatChatResponse } from '@/services/api/chatbot';
+import { APIError, chatService, formatChatResponse } from '@/services/api/chatbot';
 import { DATA_SOURCES, DEFAULT_DATA_SOURCES, DEFAULT_PROMPT, IChat } from '@/types/chatbot';
 import { useMediaQuery } from '@/utils/resolution';
 
@@ -70,13 +70,16 @@ export default function HungerMapChatbot() {
    * @param text is user input text
    */
   const handleAIResponse = async (text: string) => {
-    // Get previous messages from current chat for context
     const previousMessages = chats[currentChatIndex].messages;
-
-    // request to get AI response
-    const response = await chatService.sendMessage(text, { previous_messages: previousMessages });
-    const aiResponse = formatChatResponse(response).text;
-
+    let aiResponse = '';
+    try {
+      const response = await chatService.sendMessage(text, { previous_messages: previousMessages });
+      aiResponse = formatChatResponse(response).text;
+    } catch (err) {
+      if (err instanceof APIError) {
+        aiResponse = `Ups! Unfortunately, it seems like there was a problem connecting to the server...\n ${err.status}: ${err.message}`;
+      }
+    }
     // TODO: get data sources from response later
     const dataSources = DEFAULT_DATA_SOURCES;
     const updatedChatsWithAI = [...chats];

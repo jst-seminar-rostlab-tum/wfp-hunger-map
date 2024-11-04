@@ -1,3 +1,5 @@
+/* eslint-disable react/destructuring-assignment */
+
 'use client';
 
 import * as Highcharts from 'highcharts';

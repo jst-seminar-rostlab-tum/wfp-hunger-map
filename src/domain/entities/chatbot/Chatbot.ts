@@ -1,6 +1,8 @@
+import { SenderRole } from '@/domain/enums/SenderRole';
+
 export interface IMessage {
   content: string;
-  role: 'user' | 'assistant';
+  role: SenderRole.USER | SenderRole.ASSISTANT;
   dataSources?: string[];
 }
 
@@ -20,3 +22,11 @@ export const DEFAULT_PROMPT = [
 export const DEFAULT_DATA_SOURCES = ['HungerMap Live', 'WFP Country Reports', 'FAO Statistics'];
 
 export const DATA_SOURCES = 'Data sources:';
+
+export const WELCOME_MESSAGE = 'Welcome to HungerMap ChatBot!';
+
+export const SUB_WELCOME_MESSAGE = 'How can I assist you today?';
+
+export const NEW_CHAT_BUTTON = 'New Chat';
+
+export const CHAT_TITLE = 'HungerMap ChatBot';

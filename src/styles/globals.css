@@ -118,7 +118,6 @@
   animation: typing 1.5s steps(3, end) infinite, pulse 1.5s ease-in-out infinite;
 }
 
-/* 控制每个点出现的顺序 */
 .chat-typing-animation .dot:nth-child(1) {
   animation-delay: 0s;
 }

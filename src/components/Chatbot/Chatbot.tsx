@@ -7,7 +7,17 @@ import clsx from 'clsx';
 import { Bot, Maximize2, Minimize2, PanelLeftClose, PanelLeftOpen, PlusCircle, Send, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-import { DATA_SOURCES, DEFAULT_DATA_SOURCES, DEFAULT_PROMPT, IChat } from '@/domain/entities/chatbot/Chatbot';
+import {
+  CHAT_TITLE,
+  DATA_SOURCES,
+  DEFAULT_DATA_SOURCES,
+  DEFAULT_PROMPT,
+  IChat,
+  NEW_CHAT_BUTTON,
+  SUB_WELCOME_MESSAGE,
+  WELCOME_MESSAGE,
+} from '@/domain/entities/chatbot/Chatbot';
+import { SenderRole } from '@/domain/enums/SenderRole';
 import { APIError, chatService, formatChatResponse } from '@/services/api/chatbot';
 import { useMediaQuery } from '@/utils/resolution';
 
@@ -86,7 +96,11 @@ export default function HungerMapChatbot() {
     // TODO: get data sources from response later
     const dataSources = DEFAULT_DATA_SOURCES;
     const updatedChatsWithAI = [...chats];
-    updatedChatsWithAI[currentChatIndex].messages.push({ content: aiResponse, role: 'assistant', dataSources });
+    updatedChatsWithAI[currentChatIndex].messages.push({
+      content: aiResponse,
+      role: SenderRole.ASSISTANT,
+      dataSources,
+    });
     setChats(updatedChatsWithAI);
   };
 
@@ -105,7 +119,7 @@ export default function HungerMapChatbot() {
     if (isTyping) return; // prevent multiple submission
     if (text.trim()) {
       const updatedChats = [...chats];
-      updatedChats[currentChatIndex].messages.push({ content: text, role: 'user' });
+      updatedChats[currentChatIndex].messages.push({ content: text, role: SenderRole.USER });
       if (updatedChats[currentChatIndex].title === `Chat ${updatedChats[currentChatIndex].id}`) {
         updatedChats[currentChatIndex].title = text.slice(0, 30) + (text.length > 30 ? '...' : '');
       }
@@ -164,7 +178,7 @@ export default function HungerMapChatbot() {
           )}
         >
           <PlusCircle className={`h-4 w-4 ${isDarkMode ? 'text-white' : 'text-black'}`} />
-          <span className={clsx('truncate', isDarkMode ? 'text-white' : 'text-black')}>New Chat</span>
+          <span className={clsx('truncate', isDarkMode ? 'text-white' : 'text-black')}>{NEW_CHAT_BUTTON}</span>
         </Button>
         <div className="h-[calc(100%-60px)] overflow-y-auto">
           {chats.map((chat, index) => (
@@ -231,15 +245,13 @@ export default function HungerMapChatbot() {
               'overflow-hidden flex-1 flex flex-col transition-all duration-300 ease-in-out'
             )}
           >
-            <CardHeader
-              className={clsx('flex items-center justify-between p-4', isDarkMode ? 'bg-gray-800' : 'bg-white')}
-            >
+            <CardHeader className="flex items-center justify-between p-4">
               <div className="flex items-center space-x-2">
                 <Button variant="light" isIconOnly onClick={toggleSidebar}>
                   {isSidebarOpen ? <PanelLeftClose className="h-4 w-4" /> : <PanelLeftOpen className="h-4 w-4" />}
                 </Button>
                 <img src="/wfp-logo.png" alt="WFP Logo" className="h-8 w-8 mr-2" />
-                <h2 className="text-lg font-semibold truncate">HungerMap ChatBot</h2>
+                <h2 className="text-lg font-semibold truncate">{CHAT_TITLE}</h2>
               </div>
               <div className="flex items-center space-x-2">
                 {!isMobile && (
@@ -273,8 +285,8 @@ export default function HungerMapChatbot() {
                 <div className={clsx('flex-1 p-4 overflow-y-auto', isDarkMode ? 'bg-gray-900' : 'bg-gray-100')}>
                   {chats[currentChatIndex].messages.length === 0 ? (
                     <div className="flex flex-col items-center mt-4 h-full space-y-4">
-                      <p className="text-center text-xl max-w-[80%] mb-2">Welcome to HungerMap ChatBot!</p>
-                      <p className="text-center text-md max-w-[80%] mb-2">How can I assist you today?</p>
+                      <p className="text-center text-xl max-w-[80%] mb-2">{WELCOME_MESSAGE}</p>
+                      <p className="text-center text-md max-w-[80%] mb-2">{SUB_WELCOME_MESSAGE}</p>
                       <div className="flex flex-col items-center space-y-2 w-full max-w-md">
                         {DEFAULT_PROMPT.map((prompt) => (
                           <Button
@@ -375,7 +387,7 @@ export default function HungerMapChatbot() {
               </div>
             </CardBody>
             <Divider style={{ backgroundColor: '#292d32' }} />
-            <CardFooter className={clsx('border-t-2 p-4', isDarkMode ? 'bg-gray-800' : 'bg-white')}>
+            <CardFooter className="border-t-2 p-4">
               <form onSubmit={handleSubmit} className="w-full">
                 <div className="flex space-x-2">
                   <textarea

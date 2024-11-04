@@ -2,43 +2,125 @@
 
 import { Button } from '@nextui-org/button';
 import { Image } from '@nextui-org/image';
-import clsx from 'clsx';
+import { Popover, PopoverContent, PopoverTrigger } from '@nextui-org/popover';
+import { useMemo } from 'react';
 
 import { useSidebar } from '../Sidebar/SidebarContext';
 
-type AlertsMenuProps = {
-  variant: 'outside' | 'inside';
-  className?: string;
+export type AlertKey = 'hunger' | 'conflicts1' | 'conflicts2' | 'hazards';
+
+export type AlertTypeKey = 'conflicts';
+
+type Alert = {
+  key: AlertKey;
+  label: string;
+  icon: string;
 };
 
-export default function AlertsMenu({ variant, className }: AlertsMenuProps) {
-  const { isSidebarOpen } = useSidebar();
+type AlertType = {
+  key: AlertTypeKey;
+  label: string;
+  icon: string;
+  subalerts: Alert[];
+};
 
-  const alertTypes = [
-    {
-      key: 'conflicts',
-      label: 'Conflicts',
-      icon: '/menu_conflicts.png',
-    },
-    {
-      key: 'hazards',
-      label: 'Hazards',
-      icon: '/menu_hazards.png',
-    },
-  ];
+const alertTypes: (Alert | AlertType)[] = [
+  {
+    key: 'hunger',
+    label: 'Hunger Alert',
+    icon: '/menu_fcs.png',
+  },
+  {
+    key: 'conflicts',
+    label: 'Conflicts',
+    icon: '/menu_conflicts.png',
+    subalerts: [
+      {
+        key: 'conflicts1',
+        label: 'Conflicts 1',
+        icon: '/menu_conflicts.png',
+      },
+      {
+        key: 'conflicts2',
+        label: 'Conflicts 2',
+        icon: '/menu_conflicts.png',
+      },
+    ],
+  },
+  {
+    key: 'hazards',
+    label: 'Hazards',
+    icon: '/menu_hazards.png',
+  },
+];
 
-  if (variant === 'outside' && isSidebarOpen) {
-    return null;
-  }
+type AlertsMenuProps = {
+  variant: 'outside' | 'inside';
+};
+
+export default function AlertsMenu({ variant }: AlertsMenuProps) {
+  const { isAlertSelected, toggleAlert } = useSidebar();
+
+  const isSubAlertClicked = useMemo(
+    () => (mainAlert: AlertTypeKey) => {
+      const alert = alertTypes.find((a) => a.key === mainAlert) as AlertType;
+      return alert.subalerts.some((subalert) => isAlertSelected(subalert.key)) ?? false;
+    },
+    [isAlertSelected]
+  );
+
   return (
-    <div className={clsx('flex gap-1', className)}>
-      {alertTypes.map((item) => (
-        <Button isIconOnly radius="full" className="bg-background" key={item.key}>
-          <div className="w-6 h-6 flex items-center justify-center">
-            <Image src={item.icon} alt={item.label} className="object-contain w-auto h-auto max-w-full max-h-full" />
-          </div>
-        </Button>
-      ))}
+    <div className="flex gap-1">
+      {alertTypes.map((item) =>
+        'subalerts' in item ? (
+          <Popover placement={variant === 'inside' ? 'bottom' : 'top'} key={item.key}>
+            <PopoverTrigger>
+              <Button isIconOnly radius="full" className={isSubAlertClicked(item.key) ? 'bg-primary' : 'bg-background'}>
+                <div className="w-6 h-6 flex items-center justify-center">
+                  <Image
+                    src={item.icon}
+                    alt={item.label}
+                    className="object-contain w-auto h-auto max-w-full max-h-full"
+                  />
+                </div>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent>
+              <div className="gap-1 flex">
+                {item.subalerts.map((subalert) => (
+                  <Button
+                    key={subalert.key}
+                    isIconOnly
+                    radius="full"
+                    className={isAlertSelected(subalert.key) ? 'bg-primary' : 'bg-background'}
+                    onClick={() => toggleAlert(subalert.key)}
+                  >
+                    <div className="w-6 h-6 flex items-center justify-center">
+                      <Image
+                        src={subalert.icon}
+                        alt={subalert.label}
+                        className="object-contain w-auto h-auto max-w-full max-h-full"
+                      />
+                    </div>
+                  </Button>
+                ))}
+              </div>
+            </PopoverContent>
+          </Popover>
+        ) : (
+          <Button
+            isIconOnly
+            radius="full"
+            className={isAlertSelected(item.key) ? 'bg-primary' : 'bg-background'}
+            onClick={() => toggleAlert(item.key)}
+            key={item.key}
+          >
+            <div className="w-6 h-6 flex items-center justify-center">
+              <Image src={item.icon} alt={item.label} className="object-contain w-auto h-auto max-w-full max-h-full" />
+            </div>
+          </Button>
+        )
+      )}
     </div>
   );
 }

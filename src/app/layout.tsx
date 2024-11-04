@@ -3,7 +3,7 @@ import '@/styles/globals.css';
 import clsx from 'clsx';
 import { Metadata, Viewport } from 'next';
 
-import AlertsMenu from '@/components/AlertsMenu/AlertsMenu';
+import AlertsMenuWrapper from '@/components/AlertsMenu/AlertsMenuWrapper';
 import Sidebar from '@/components/Sidebar/Sidebar';
 import { fontSans } from '@/config/fonts';
 import { siteConfig } from '@/config/site';
@@ -36,7 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Providers themeProps={{ attribute: 'class', defaultTheme: 'dark' }}>
           <div className="relative h-screen">
             <Sidebar />
-            <AlertsMenu variant="outside" className="absolute bottom-0 left-0 z-50 p-4" />
+            <AlertsMenuWrapper />
             <main className="h-full w-full">{children}</main>
           </div>
         </Providers>

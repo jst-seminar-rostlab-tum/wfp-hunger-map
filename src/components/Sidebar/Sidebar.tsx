@@ -3,11 +3,49 @@
 import { Button } from '@nextui-org/button';
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
 import { Image } from '@nextui-org/image';
+import { Input } from '@nextui-org/input';
 import { Listbox, ListboxItem, ListboxSection } from '@nextui-org/listbox';
 import { SquareChevronLeft, SquareChevronRight } from 'lucide-react';
+import NextImage from 'next/image';
 
 import AlertsMenu from '../AlertsMenu/AlertsMenu';
 import { useSidebar } from './SidebarContext';
+
+export type MapKey = 'food' | 'nutr' | 'vege' | 'rain' | 'ipc';
+
+type MapType = {
+  key: MapKey;
+  label: string;
+  icon: string;
+};
+
+const mapTypes: MapType[] = [
+  {
+    key: 'food',
+    label: 'Food consumption',
+    icon: '/menu_fcs.png',
+  },
+  {
+    key: 'nutr',
+    label: 'Nutrition',
+    icon: '/menu_nutri.png',
+  },
+  {
+    key: 'vege',
+    label: 'Vegetation',
+    icon: '/menu_ndvi.png',
+  },
+  {
+    key: 'rain',
+    label: 'Rainfall',
+    icon: '/menu_rainfall.png',
+  },
+  {
+    key: 'ipc',
+    label: 'IPC/CH',
+    icon: '/menu_ipc.png',
+  },
+];
 
 export default function Sidebar() {
   const { isSidebarOpen, toggleSidebar, selectedMapType, setSelectedMapType } = useSidebar();
@@ -15,39 +53,11 @@ export default function Sidebar() {
   const handleSelectionChange = (key: 'all' | Set<string | number>) => {
     if (key instanceof Set) {
       const firstValue = Array.from(key)[0];
-      setSelectedMapType(String(firstValue));
+      setSelectedMapType(String(firstValue) as MapKey);
     } else {
-      setSelectedMapType(key);
+      setSelectedMapType(key as MapKey);
     }
   };
-
-  const mapTypes = [
-    {
-      key: 'food',
-      label: 'Food consumption',
-      icon: '/menu_fcs.png',
-    },
-    {
-      key: 'nutr',
-      label: 'Nutrition',
-      icon: '/menu_nutri.png',
-    },
-    {
-      key: 'vege',
-      label: 'Vegetation',
-      icon: '/menu_ndvi.png',
-    },
-    {
-      key: 'rain',
-      label: 'Rainfall',
-      icon: '/menu_rainfall.png',
-    },
-    {
-      key: 'ipc',
-      label: 'IPC/CH',
-      icon: '/menu_ipc.png',
-    },
-  ];
 
   if (!isSidebarOpen) {
     return (
@@ -88,12 +98,23 @@ export default function Sidebar() {
 
   return (
     <div className="absolute top-0 left-0 z-50 h-screen p-4">
-      <Card className="h-full">
+      <Card
+        classNames={{
+          base: 'h-full',
+          header: 'flex flex-col gap-4',
+        }}
+      >
         <CardHeader>
-          <p>HungerMap LIVE</p>
-          <Button isIconOnly variant="light" onClick={toggleSidebar} aria-label="Close sidebar">
-            <SquareChevronLeft size={18} />
-          </Button>
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <NextImage src="/wfp_logo.svg" alt="HungerMap" width={45} height={45} />
+              <p className="text-lg font-medium">HungerMap LIVE</p>
+            </div>
+            <Button isIconOnly variant="light" onClick={toggleSidebar} aria-label="Close sidebar">
+              <SquareChevronLeft size={18} />
+            </Button>
+          </div>
+          <Input className="w-full" color="primary" />
         </CardHeader>
         <CardBody>
           <Listbox

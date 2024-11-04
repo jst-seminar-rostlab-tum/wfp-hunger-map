@@ -1,8 +1,17 @@
 import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
 
-interface SelectedMapType {
-  selectedMapType: string;
-  setSelectedMapType: (value: string) => void;
+import { MapKey } from './Sidebar';
+
+interface SelectedMapTypeState {
+  selectedMapType: MapKey;
+  setSelectedMapType: (value: MapKey) => void;
+}
+
+interface SelectedAlertsState {
+  selectedAlert: string;
+  setSelectedAlert: (value: string) => void;
+  isAlertSelected: (alertType: string) => boolean;
+  toggleAlert: (alertType: string) => void;
 }
 
 interface SidebarState {
@@ -12,28 +21,37 @@ interface SidebarState {
   closeSidebar: () => void;
 }
 
-interface SidebarContextType extends SidebarState, SelectedMapType {}
+interface SidebarContextType extends SidebarState, SelectedMapTypeState, SelectedAlertsState {}
 
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 
 export function SidebarProvider({ children }: { children: ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [selectedMapType, setSelectedMapType] = useState<string>('food');
+  const [selectedMapType, setSelectedMapType] = useState<MapKey>('food');
+  const [selectedAlert, setSelectedAlert] = useState<string>('hunger');
 
   const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
   const openSidebar = () => setIsSidebarOpen(true);
   const closeSidebar = () => setIsSidebarOpen(false);
 
+  const isAlertSelected = (alertType: string) => selectedAlert === alertType;
+  const toggleAlert = (alertType: string) =>
+    isAlertSelected(alertType) ? setSelectedAlert('') : setSelectedAlert(alertType);
+
   const value = useMemo(
     () => ({
       isSidebarOpen,
       selectedMapType,
+      selectedAlert,
       toggleSidebar,
       openSidebar,
       closeSidebar,
       setSelectedMapType,
+      setSelectedAlert,
+      isAlertSelected,
+      toggleAlert,
     }),
-    [isSidebarOpen, selectedMapType] // Only re-create when isOpen changes
+    [isSidebarOpen, selectedMapType, selectedAlert]
   );
 
   return <SidebarContext.Provider value={value}>{children}</SidebarContext.Provider>;

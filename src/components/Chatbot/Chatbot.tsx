@@ -17,7 +17,7 @@ export default function HungerMapChatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [chats, setChats] = useState<IChat[]>([{ id: 1, title: 'New Chat', messages: [] }]);
+  const [chats, setChats] = useState<IChat[]>([{ id: 1, title: 'Chat 1', messages: [] }]);
   const [currentChatIndex, setCurrentChatIndex] = useState(0);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -46,7 +46,7 @@ export default function HungerMapChatbot() {
   };
 
   const startNewChat = () => {
-    const newChat: IChat = { id: chats.length + 1, title: `New Chat ${chats.length + 1}`, messages: [] };
+    const newChat: IChat = { id: chats.length + 1, title: `Chat ${chats.length + 1}`, messages: [] };
     setChats([...chats, newChat]);
     setCurrentChatIndex(chats.length);
     if (isMobile) {
@@ -100,7 +100,7 @@ export default function HungerMapChatbot() {
     if (text.trim()) {
       const updatedChats = [...chats];
       updatedChats[currentChatIndex].messages.push({ content: text, role: 'user' });
-      if (updatedChats[currentChatIndex].title === `New Chat ${updatedChats[currentChatIndex].id}`) {
+      if (updatedChats[currentChatIndex].title === `Chat ${updatedChats[currentChatIndex].id}`) {
         updatedChats[currentChatIndex].title = text.slice(0, 30) + (text.length > 30 ? '...' : '');
       }
       setChats(updatedChats);

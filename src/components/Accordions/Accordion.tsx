@@ -7,7 +7,7 @@ import { Accordion, AccordionItem } from '@nextui-org/accordion';
 interface AccordionItemProps {
   title: string;
   iconSrc?: string;
-  content: React.ReactNode;
+  content: React.ReactNode | string;
 }
 
 interface AccordionsProps {
@@ -29,7 +29,7 @@ export default function Accordions({ items }: AccordionsProps) {
               </div>
             }
           >
-            {item.content}
+            {typeof item.content === 'string' ? <p>{item.content}</p> : (item.content)}
           </AccordionItem>
         ))}
       </Accordion>

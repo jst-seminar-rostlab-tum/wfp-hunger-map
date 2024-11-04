@@ -1,5 +1,4 @@
 import { AdditionalCountryData } from '../entities/country/AdditionalCountryData';
-import { CountryCodesData } from '../entities/country/CountryCodesData';
 import { CountryData } from '../entities/country/CountryData';
 import { CountryIso3Data } from '../entities/country/CountryIso3Data';
 import { CountryIso3Notes } from '../entities/country/CountryIso3Notes';
@@ -7,11 +6,6 @@ import { CountryMimiData } from '../entities/country/CountryMimiData';
 import { RegionIpc } from '../entities/region/RegionIpc';
 
 export default interface CountryRepository {
-  /**
-   * Returns the ID and ISO codes of all the countries, plus a summary report for each.
-   */
-  getCountryCodes(): Promise<CountryCodesData[]>;
-
   /**
    * Returns the population, FCS and RCS data and news about a country
    * @param countryId

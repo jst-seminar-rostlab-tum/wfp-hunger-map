@@ -1,5 +1,4 @@
 import { AdditionalCountryData } from '@/domain/entities/country/AdditionalCountryData';
-import { CountryCodesData } from '@/domain/entities/country/CountryCodesData';
 import { CountryData } from '@/domain/entities/country/CountryData';
 import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data';
 import { CountryIso3Notes } from '@/domain/entities/country/CountryIso3Notes';
@@ -8,11 +7,6 @@ import { RegionIpc } from '@/domain/entities/region/RegionIpc';
 import CountryRepository from '@/domain/repositories/CountryRepository';
 
 export default class CountryRepositoryImpl implements CountryRepository {
-  async getCountryCodes(): Promise<CountryCodesData[]> {
-    const response = await fetch(`https://static.hungermapdata.org/insight-reports/latest/country.json`);
-    return response.json();
-  }
-
   async getCountryData(countryId: number): Promise<CountryData> {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/adm0/${countryId}/countryData.json`);
     return response.json();

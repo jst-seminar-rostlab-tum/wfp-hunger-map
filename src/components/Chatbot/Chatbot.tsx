@@ -193,7 +193,11 @@ export default function HungerMapChatbot() {
 
   return (
     <div
-      style={isFullScreen ? { inset: 0, zIndex: '9000' } : { top: '1rem', right: '1rem', zIndex: '9000' }}
+      style={
+        (isFullScreen || isMobile) && isOpen
+          ? { inset: 0, zIndex: '9000' }
+          : { top: '1rem', right: '1rem', zIndex: '9000' }
+      }
       className="absolute"
     >
       {!isOpen && (
@@ -218,11 +222,12 @@ export default function HungerMapChatbot() {
               borderStyle: 'solid',
               opacity: isFullScreen ? 1 : 0.8,
               transition: 'all 0.3s ease-in-out',
+              backgroundColor: isDarkMode ? 'black' : 'white',
             }}
             className={clsx(
               isFullScreen || isMobile ? 'rounded-none' : '',
               isFullScreen ? 'w-screen h-screen' : isMobile ? 'w-screen h-screen' : 'w-[636px] h-[657px]',
-              isDarkMode ? 'bg-gray-800 text-white' : 'bg-white opacity-80 text-black',
+              isDarkMode ? 'text-white' : 'text-black',
               isSidebarOpen && !isMobile ? (isFullScreen ? 'pl-[215px]' : 'pl-[179px]') : 'pl-0',
               'overflow-hidden flex-1 flex flex-col transition-all duration-300 ease-in-out'
             )}

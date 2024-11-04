@@ -2,11 +2,14 @@
 
 'use client';
 
+import './chatbot.css';
+
 import { Button, Card, CardBody, CardFooter, CardHeader, Divider, Tooltip } from '@nextui-org/react';
 import clsx from 'clsx';
 import { Bot, Maximize2, Minimize2, PanelLeftClose, PanelLeftOpen, PlusCircle, Send, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
+import TypingText from '@/components/TypingText/TypingText';
 import {
   CHAT_TITLE,
   DATA_SOURCES,
@@ -20,8 +23,6 @@ import {
 import { SenderRole } from '@/domain/enums/SenderRole';
 import { APIError, chatService, formatChatResponse } from '@/services/api/chatbot';
 import { useMediaQuery } from '@/utils/resolution';
-
-import TypingText from './TypingText';
 
 export default function HungerMapChatbot() {
   const [isOpen, setIsOpen] = useState(false);

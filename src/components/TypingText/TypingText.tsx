@@ -1,3 +1,5 @@
+import './typingText.css';
+
 import React, { useEffect, useState } from 'react';
 
 import TypingTextProps from '@/domain/props/TypingTextProps';

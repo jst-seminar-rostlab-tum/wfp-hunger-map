@@ -1,0 +1,106 @@
+/* ------------------ Chatbot component custom CSS ------------------ */
+/* default prompt button */
+.chatbot-default-prompt-button.light {
+  border: 1px solid black !important;
+  background-color: transparent;
+}
+
+.chatbot-default-prompt-button.light:hover {
+  background-color: rgba(217, 226, 234, 1) !important;
+}
+
+.chatbot-default-prompt-button.dark {
+  border: 1px solid white !important;
+  background-color: transparent;
+}
+
+.chatbot-default-prompt-button.dark:hover {
+  background-color: rgba(132, 142, 152, 0.63) !important;
+}
+
+/* add new chat button */
+.chatbot-side-bar-add-new-chat-button.light {
+  background-color: transparent;
+  border: 1px solid black !important;
+  color: black !important;
+  justify-content: start;
+  margin-bottom: 15px;
+}
+
+.chatbot-side-bar-add-new-chat-button.light:hover {
+  background-color: #d9e1e9 !important;
+}
+
+.chatbot-side-bar-add-new-chat-button.dark {
+  background-color: transparent;
+  border: 1px solid white !important;
+  color: white !important;
+  justify-content: start;
+  margin-bottom: 15px;
+}
+
+.chatbot-side-bar-add-new-chat-button.dark:hover {
+  background-color: #848e98 !important;
+}
+
+/* select other chat button */
+.chatbot-side-bar-select-chat-button.light {
+  justify-content: start;
+  margin-bottom: 11px;
+  color: black;
+  background-color: transparent;
+}
+
+.chatbot-side-bar-select-chat-button.select-light {
+  justify-content: start;
+  margin-bottom: 11px;
+  color: black;
+  background-color: rgba(217, 226, 234, 1);
+}
+
+.chatbot-side-bar-select-chat-button.light:hover {
+  background-color: #d9e1e9 !important;
+}
+
+.chatbot-side-bar-select-chat-button.dark {
+  justify-content: start;
+  margin-bottom: 11px;
+  background-color: transparent;
+  color: white;
+}
+
+.chatbot-side-bar-select-chat-button.select-dark {
+  justify-content: start;
+  margin-bottom: 11px;
+  background-color: rgba(132, 142, 152, 0.63);
+  color: white;
+}
+
+.chatbot-side-bar-select-chat-button.dark:hover {
+  background-color: #848e98 !important;
+}
+
+/* chat message */
+.chat-user-message-light {
+  background-color: rgba(230, 241, 254, 1) !important;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 19px;
+}
+
+.chat-user-message-dark {
+  background-color: rgba(38, 38, 42, 1) !important;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 19px;
+}
+
+.chat-ai-message {
+  background-color: transparent;
+  padding: 16px;
+  margin-bottom: 19px;
+}
+
+.chat-typing-animation {
+  margin-top: 12px;
+}

@@ -1,4 +1,3 @@
-/* eslint-disable react/no-array-index-key */
 /* eslint-disable no-nested-ternary */
 
 'use client';
@@ -8,8 +7,8 @@ import clsx from 'clsx';
 import { Bot, Maximize2, Minimize2, PanelLeftClose, PanelLeftOpen, PlusCircle, Send, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
+import { DATA_SOURCES, DEFAULT_DATA_SOURCES, DEFAULT_PROMPT, IChat } from '@/domain/entities/chatbot/Chatbot';
 import { APIError, chatService, formatChatResponse } from '@/services/api/chatbot';
-import { DATA_SOURCES, DEFAULT_DATA_SOURCES, DEFAULT_PROMPT, IChat } from '@/types/chatbot';
 import { useMediaQuery } from '@/utils/resolution';
 
 import TypingText from './TypingText';
@@ -295,9 +294,9 @@ export default function HungerMapChatbot() {
                       </div>
                     </div>
                   ) : (
-                    chats[currentChatIndex].messages.map((message, index) => (
+                    chats[currentChatIndex].messages.map((message) => (
                       <div
-                        key={index}
+                        key={message.role + Math.random()}
                         className={clsx('flex mb-4', message.role === 'user' ? 'justify-end' : 'justify-start')}
                       >
                         {message.role === 'assistant' && (
@@ -348,8 +347,8 @@ export default function HungerMapChatbot() {
                                   paddingInlineStart: '1rem',
                                 }}
                               >
-                                {message.dataSources.map((source, i) => (
-                                  <li key={i}>{source}</li>
+                                {message.dataSources.map((source) => (
+                                  <li key={source}>{source}</li>
                                 ))}
                               </ul>
                             </div>

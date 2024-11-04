@@ -1,7 +1,7 @@
 // @author: Ahmet Selman Güclü
 // IMPORTANT: chatbot requests work only when back-end is running locally since the back-end is not deployed yet
 
-import { IMessage } from '@/types/chatbot';
+import { IMessage } from '@/domain/entities/chatbot/Chatbot';
 
 // Types according to the back-end are like this:
 export interface QueryRequest {

@@ -10,12 +10,13 @@ export interface IChat {
   messages: IMessage[];
 }
 
+// static data for the chatbot
 export const DEFAULT_PROMPT = [
   { id: 1, value: 'What is the current hunger situation in Africa?' },
   { id: 2, value: 'How does climate change affect food security?' },
   { id: 3, value: "What are WFP's main initiatives to combat hunger?" },
 ];
 
-export const DATA_SOURCES = 'Data sources:';
-
 export const DEFAULT_DATA_SOURCES = ['HungerMap Live', 'WFP Country Reports', 'FAO Statistics'];
+
+export const DATA_SOURCES = 'Data sources:';

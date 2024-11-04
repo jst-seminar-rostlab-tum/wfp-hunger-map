@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-// TypingTextProps is a type that defines the props for the TypingText component
-type TypingTextProps = {
-  text: string;
-  speed?: number;
-  endSentencePause?: number;
-  onTypingComplete?: () => void;
-};
+import TypingTextProps from '@/domain/props/TypingTextProps';
 
 /**
  * TypingText component displays text as if it is being typed out

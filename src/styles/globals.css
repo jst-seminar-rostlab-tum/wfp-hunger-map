@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    main {
+        @apply max-w-screen-lg mx-auto
+    }
+
+    main h1 {
+        @apply text-4xl sm:text-5xl lg:text-7xl font-black
+    }
+
+    main p {
+        @apply text-large leading-relaxed pb-6
+    }
+}

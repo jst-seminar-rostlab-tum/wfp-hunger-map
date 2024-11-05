@@ -5,8 +5,7 @@ module.exports = {
   safelist: [
     'w-[215px]', 'w-[179px]', 'w-[636px]', 'w-[500px]',
     'h-[657px]', 'h-[600px]', 'rounded-[12px_0_0_12px]',
-    'max-w-[80%]', 'max-w-[250px]', 'max-w-[400px]', 'pl-[215px]', 'pl-[179px]', 'z-[9999]',
-    'mb-[16px]', 'mb-3', 'mb-4', 'border-black', 'border-white'
+    'max-w-[80%]', 'max-w-[250px]', 'max-w-[400px]', 'pl-[215px]', 'pl-[179px]', 'z-[9999]'
   ],
   content: [
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -40,9 +39,6 @@ module.exports = {
         '179px': '179px',
         '215px': '215px',
       },
-      margin: {
-        '16px': '16px',
-      },
       borderRadius: {
         '12px_0_0_12px': '12px 0 0 12px',
       },
@@ -69,7 +65,10 @@ module.exports = {
             clusterOrange: '#FFB74D',
             clusterRed: '#FF5252',
             default: '#157DBC',
-            chat: '#e6f1fe'
+            chat: '#e6f1fe',
+            chatbotFullscreen: '#d8d8d8',
+            chatbot: '#71717a',
+            chatbotSidebarBtnHover: '#d9e1e9'
           },
         },
         dark: {
@@ -86,6 +85,9 @@ module.exports = {
             clusterOrange: '#FFB74D',
             clusterRed: '#FF5252',
             default: '#157DBC',
+            chatbotFullscreen: '#292929',
+            chatbot: '#404040',
+            chatbotSidebarBtnHover: '#848e98'
           },
         },
       },

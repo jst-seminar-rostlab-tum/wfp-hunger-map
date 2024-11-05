@@ -148,36 +148,20 @@ export default function HungerMapChatbot() {
 
   const renderSidebar = () => (
     <Card
-      style={{
-        backgroundColor: isFullScreen
-          ? isMobile
-            ? isDarkMode
-              ? '#292929'
-              : '#d8d8d8'
-            : isDarkMode
-              ? '#292929'
-              : '#71717a40'
-          : isDarkMode
-            ? '#40404050'
-            : '#71717a40',
-      }}
       className={clsx(
-        'absolute top-0 left-0 h-full z-[9999]',
-        isFullScreen ? 'w-[215px]' : 'w-[179px]',
-        'shadow-none',
-        isFullScreen || isMobile ? 'rounded-none' : 'rounded-[12px_0_0_12px]'
+        'absolute top-0 left-0 h-full z-[9999] shadow-none',
+        isFullScreen
+          ? 'w-[215px] rounded-none bg-chatbotFullscreen dark:bg-chatbotFullscreen'
+          : 'w-[179px] rounded-[12px_0_0_12px] opacity-50 bg-chatbot dark:bg-chatbot'
       )}
     >
       <CardBody className="p-4">
         <Button
           onClick={startNewChat}
-          className={clsx(
-            'bg-transparent w-full h-10 mb-4 flex justify-center items-center gap-2 border border-solid hover:bg-black',
-            isDarkMode ? 'hover:bg-white text-white border-white' : 'hover:bg-black text-black border-black'
-          )}
+          className="bg-transparent w-full h-10 mb-4 flex justify-center items-center gap-2 border-2 border-solid border-black dark:border-white text-black dark:text-white hover:bg-chatbotSidebarBtnHover dark:hover:bg-chatbotSidebarBtnHover"
         >
-          <PlusCircle className={clsx('h-4 w-4', isDarkMode ? 'text-white' : 'text-black')} />
-          <span className={clsx('truncate', isDarkMode ? 'text-white' : 'text-black')}>{NEW_CHAT_BUTTON}</span>
+          <PlusCircle className="h-4 w-4 text-black dark:text-white" />
+          <span className="truncate text-black dark:text-white">{NEW_CHAT_BUTTON}</span>
         </Button>
         <div className="h-[calc(100%-60px)] overflow-y-auto">
           {chats.map((chat, index) => (
@@ -185,14 +169,8 @@ export default function HungerMapChatbot() {
               key={chat.id}
               onClick={() => selectChat(index)}
               className={clsx(
-                'chatbot-side-bar-select-chat-button justify-start w-full h-10 mb-3 flex gap-2',
-                currentChatIndex === index
-                  ? isDarkMode
-                    ? 'select-dark'
-                    : 'select-light'
-                  : isDarkMode
-                    ? 'dark'
-                    : 'light'
+                'text-black dark:text-white bg-transparent hover:bg-chatbotSidebarBtnHover dark:hover:bg-chatbotSidebarBtnHover justify-start w-full h-10 mb-3 flex gap-2',
+                currentChatIndex === index ? 'bg-chatbotSidebarBtnHover dark:bg-chatbotSidebarBtnHover' : ''
               )}
             >
               <span className="truncate">{chat.title}</span>
@@ -204,19 +182,14 @@ export default function HungerMapChatbot() {
   );
 
   return (
-    <div
-      style={(isFullScreen || isMobile) && isOpen ? { inset: 0 } : { top: '1rem', right: '1rem' }}
-      className="absolute z-[9999]"
-    >
+    <div className={clsx('absolute z-[9999]', isFullScreen && isOpen ? 'inset-0' : 'top-4 right-4')}>
       {!isOpen && (
         <Button
           onClick={toggleChat}
-          className={clsx(
-            'relative flex items-center justify-center min-w-12 h-12 px-1 rounded-full border-2',
-            isDarkMode ? 'bg-black' : 'bg-white'
-          )}
+          className="
+            relative flex items-center justify-center min-w-12 h-12 px-1 rounded-full border-2 border-black dark:border-white bg-white dark:bg-transparent"
         >
-          <Bot className={clsx('w-6 h-6 fill-current', isDarkMode ? 'text-white' : 'text-black')} />
+          <Bot className="stroke-black dark:stroke-white w-6 h-6" />
         </Button>
       )}
       {/* chatbot interface */}
@@ -225,19 +198,14 @@ export default function HungerMapChatbot() {
           {isSidebarOpen && renderSidebar()}
           <Card
             style={{
-              borderColor: '#000000',
-              borderWidth: isFullScreen ? '0px' : '1px',
-              borderStyle: 'solid',
-              opacity: isFullScreen ? 1 : 0.8,
               transition: 'all 0.3s ease-in-out',
-              backgroundColor: isDarkMode ? 'black' : 'white',
             }}
             className={clsx(
-              isFullScreen || isMobile ? 'rounded-none' : '',
-              isFullScreen ? 'w-screen h-screen' : isMobile ? 'w-screen h-screen' : 'w-[636px] h-[657px]',
-              isDarkMode ? 'text-white' : 'text-black',
+              isFullScreen
+                ? 'w-screen h-screen rounded-none opacity-100 border-0'
+                : 'w-[636px] h-[657px] opacity-80 border-1',
               isSidebarOpen && !isMobile ? (isFullScreen ? 'pl-[215px]' : 'pl-[179px]') : 'pl-0',
-              'overflow-hidden flex-1 flex flex-col transition-all duration-300 ease-in-out'
+              'border-solid border-black bg-white dark:bg-black overflow-hidden flex-1 flex flex-col transition-all duration-300 ease-in-out text-black dark:text-white'
             )}
           >
             <CardHeader className="flex items-center justify-between p-4">
@@ -263,21 +231,17 @@ export default function HungerMapChatbot() {
                 </Tooltip>
               </div>
             </CardHeader>
-            <Divider style={{ backgroundColor: '#292d32' }} />
+            <Divider className="bg-divider dark:bg-divider" />
             <CardBody className="p-0 h-full">
               <div className="relative h-full flex flex-col">
                 {/* overlay area in mobile version */}
                 {isMobile && isSidebarOpen && (
                   // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-                  <div
-                    style={{ backgroundColor: isDarkMode ? 'rgba(0, 0, 0, 0.8)' : 'rgba(0, 0, 0, 0.4)' }}
-                    className="fixed inset-0 z-10"
-                    onClick={toggleSidebar}
-                  />
+                  <div className="fixed inset-0 z-10" onClick={toggleSidebar} />
                 )}
                 {/* chat area */}
 
-                <div className={clsx('flex-1 p-4 overflow-y-auto', isDarkMode ? 'bg-gray-900' : 'bg-gray-100')}>
+                <div className={clsx('flex-1 p-4 overflow-y-auto')}>
                   {chats[currentChatIndex].messages.length === 0 ? (
                     <div className="flex flex-col items-center mt-4 h-full space-y-4">
                       <p className="text-center text-xl max-w-[80%] mb-2">{WELCOME_MESSAGE}</p>
@@ -303,7 +267,7 @@ export default function HungerMapChatbot() {
                   ) : (
                     chats[currentChatIndex].messages.map((message) => (
                       <div
-                        key={message.role + Math.random()}
+                        key={message.id}
                         className={clsx('flex mb-4', message.role === 'user' ? 'justify-end' : 'justify-start')}
                       >
                         {message.role === 'assistant' && (
@@ -381,8 +345,8 @@ export default function HungerMapChatbot() {
                 </div>
               </div>
             </CardBody>
-            <Divider style={{ backgroundColor: '#292d32' }} />
-            <CardFooter className="border-t-2 p-4">
+            <Divider className="bg-divider dark:bg-divider" />
+            <CardFooter className="p-4">
               <form onSubmit={handleSubmit} className="w-full">
                 <div className="flex space-x-2">
                   <textarea
@@ -404,11 +368,7 @@ export default function HungerMapChatbot() {
                       borderStyle: 'solid',
                       borderRadius: '12px',
                     }}
-                    className={clsx(
-                      'flex-grow px-3 py-2 mr-2',
-                      isDarkMode ? 'text-white' : 'text-gray-800',
-                      'focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none overflow-hidden'
-                    )}
+                    className="flex-grow px-3 py-2 mr-2 dark:text-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none overflow-hidden"
                     rows={1}
                   />
                   <Tooltip content="Submit">

@@ -1,6 +1,7 @@
 import { SenderRole } from '@/domain/enums/SenderRole';
 
 export interface IMessage {
+  id: string;
   content: string;
   role: SenderRole.USER | SenderRole.ASSISTANT;
   dataSources?: string[];

@@ -98,6 +98,7 @@ export default function HungerMapChatbot() {
     const dataSources = DEFAULT_DATA_SOURCES;
     const updatedChatsWithAI = [...chats];
     updatedChatsWithAI[currentChatIndex].messages.push({
+      id: crypto.randomUUID(),
       content: aiResponse,
       role: SenderRole.ASSISTANT,
       dataSources,
@@ -120,7 +121,7 @@ export default function HungerMapChatbot() {
     if (isTyping) return; // prevent multiple submission
     if (text.trim()) {
       const updatedChats = [...chats];
-      updatedChats[currentChatIndex].messages.push({ content: text, role: SenderRole.USER });
+      updatedChats[currentChatIndex].messages.push({ id: crypto.randomUUID(), content: text, role: SenderRole.USER });
       if (updatedChats[currentChatIndex].title === `Chat ${updatedChats[currentChatIndex].id}`) {
         updatedChats[currentChatIndex].title = text.slice(0, 30) + (text.length > 30 ? '...' : '');
       }

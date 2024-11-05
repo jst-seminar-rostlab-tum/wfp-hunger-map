@@ -87,7 +87,6 @@ export function PdfViewer({ onTooltipClick, file, onDownloadPdf, onDownloadJson,
             {pageNumber} / {totalPages}
           </p>
         </Chip>
-        {/* <Button onClick={onDownloadClick} color="secondary">Download</Button> */}
         <Dropdown>
           <DropdownTrigger>
             <Button color="secondary">Download As</Button>
@@ -104,13 +103,8 @@ export function PdfViewer({ onTooltipClick, file, onDownloadPdf, onDownloadJson,
       <div className="flex-grow flex justify-center items-center pb-10 z-0">
         <div className="w-full max-w-3xl">
           <Document file={file} onLoadSuccess={onDocumentLoadSuccess} className="flex-col items-center">
-            {Array.from(new Array(totalPages), (el, index) => (
-              <Page
-                canvasBackground="transparent"
-                key={`page_${index + 1}`}
-                pageNumber={index + 1}
-                // className="rounded-lg"
-              />
+            {Array.from(new Array(totalPages), (_, index) => (
+              <Page canvasBackground="transparent" key={`page_${index + 1}`} pageNumber={index + 1} />
             ))}
           </Document>
         </div>

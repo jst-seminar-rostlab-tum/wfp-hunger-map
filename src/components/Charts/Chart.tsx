@@ -1,19 +1,14 @@
+/* eslint-disable react/destructuring-assignment */
+
 'use client';
 
 import * as Highcharts from 'highcharts';
 import { HighchartsReact } from 'highcharts-react-official';
 
-export function Chart() {
-  const options: Highcharts.Options = {
-    title: {
-      text: 'Food',
-    },
-    series: [
-      {
-        type: 'line',
-        data: [1, 2, 3],
-      },
-    ],
-  };
+import ChartProps from '@/domain/props/ChartProps';
+import ChartOperations from '@/operations/charts/ChartOperations';
+
+export function Chart({ chartData }: ChartProps) {
+  const options: Highcharts.Options = ChartOperations.getChartData(chartData);
   return <HighchartsReact highcharts={Highcharts} options={options} />;
 }

@@ -152,22 +152,19 @@ export default function HungerMapChatbot() {
         backgroundColor: isFullScreen
           ? isMobile
             ? isDarkMode
-              ? 'rgba(41, 41, 41, 1)'
-              : 'rgba(216, 216, 216, 1)'
+              ? '#292929'
+              : '#d8d8d8'
             : isDarkMode
-              ? 'rgba(41, 41, 41, 1)'
-              : 'rgba(113, 113, 122, 0.4)'
+              ? '#292929'
+              : '#71717a40'
           : isDarkMode
-            ? 'rgba(64, 64, 64, 0.58)'
-            : 'rgba(113, 113, 122, 0.4)',
-        transition: 'all 0.3s ease-in-out',
-        transform: isSidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
-        zIndex: '9999',
+            ? '#40404050'
+            : '#71717a40',
       }}
       className={clsx(
-        'absolute top-0 left-0 h-full',
+        'absolute top-0 left-0 h-full z-[9999]',
         isFullScreen ? 'w-[215px]' : 'w-[179px]',
-        isMobile && 'shadow-lg',
+        'shadow-none',
         isFullScreen || isMobile ? 'rounded-none' : 'rounded-[12px_0_0_12px]'
       )}
     >
@@ -175,11 +172,11 @@ export default function HungerMapChatbot() {
         <Button
           onClick={startNewChat}
           className={clsx(
-            'chatbot-side-bar-add-new-chat-button w-full h-[40px] flex justify-center items-center gap-2',
-            isDarkMode ? 'dark' : 'light'
+            'bg-transparent w-full h-10 mb-4 flex justify-center items-center gap-2 border border-solid hover:bg-black',
+            isDarkMode ? 'hover:bg-white text-white border-white' : 'hover:bg-black text-black border-black'
           )}
         >
-          <PlusCircle className={`h-4 w-4 ${isDarkMode ? 'text-white' : 'text-black'}`} />
+          <PlusCircle className={clsx('h-4 w-4', isDarkMode ? 'text-white' : 'text-black')} />
           <span className={clsx('truncate', isDarkMode ? 'text-white' : 'text-black')}>{NEW_CHAT_BUTTON}</span>
         </Button>
         <div className="h-[calc(100%-60px)] overflow-y-auto">
@@ -188,7 +185,7 @@ export default function HungerMapChatbot() {
               key={chat.id}
               onClick={() => selectChat(index)}
               className={clsx(
-                'chatbot-side-bar-select-chat-button w-full h-[40px] flex gap-2',
+                'chatbot-side-bar-select-chat-button justify-start w-full h-10 mb-3 flex gap-2',
                 currentChatIndex === index
                   ? isDarkMode
                     ? 'select-dark'
@@ -208,12 +205,8 @@ export default function HungerMapChatbot() {
 
   return (
     <div
-      style={
-        (isFullScreen || isMobile) && isOpen
-          ? { inset: 0, zIndex: '9000' }
-          : { top: '1rem', right: '1rem', zIndex: '9000' }
-      }
-      className="absolute"
+      style={(isFullScreen || isMobile) && isOpen ? { inset: 0 } : { top: '1rem', right: '1rem' }}
+      className="absolute z-[9999]"
     >
       {!isOpen && (
         <Button

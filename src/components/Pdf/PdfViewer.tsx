@@ -5,17 +5,16 @@ import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 
 import { Button } from '@nextui-org/button';
 import { Chip } from '@nextui-org/chip';
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react';
 import { Tooltip } from '@nextui-org/tooltip';
 import { useEffect, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 
+import { PdfViewerProps } from '@/domain/props/PdfViewerProps';
+
 pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url).toString();
 
-interface PdfViewerProps {
-  onTooltipClick: (selectionText: string) => void;
-}
-
-export function PdfViewer({ onTooltipClick }: PdfViewerProps) {
+export function PdfViewer({ onTooltipClick, file, onDownloadPdf, onDownloadJson, onDownloadCsv }: PdfViewerProps) {
   const [totalPages, setTotalPages] = useState<number>();
   const [pageNumber, setPageNumber] = useState(1);
   const [selectionText, setSelectionText] = useState<string | null>(null);
@@ -81,28 +80,36 @@ export function PdfViewer({ onTooltipClick }: PdfViewerProps) {
   return (
     <div className="min-h-screen flex flex-col items-center justify-start relative">
       {/* Top Bar */}
-      <div className="w-full py-4 flex items-center justify-between px-6 sticky top-0 z-10">
-        <h1 color="secondary" className="text-lg font-semibold">
-          Preview
-        </h1>
+      <div className="bg-background w-full py-4 flex items-center justify-between px-6 sticky top-0 z-10">
+        <h1 className="text-lg font-semibold">Preview</h1>
         <Chip color="secondary" size="md">
           <p className="text-sm">
             {pageNumber} / {totalPages}
           </p>
         </Chip>
-        <Button color="secondary">Download</Button>
+        {/* <Button onClick={onDownloadClick} color="secondary">Download</Button> */}
+        <Dropdown>
+          <DropdownTrigger>
+            <Button color="secondary">Download As</Button>
+          </DropdownTrigger>
+          <DropdownMenu color="secondary">
+            <DropdownItem onClick={onDownloadPdf}>Pdf</DropdownItem>
+            <DropdownItem onClick={onDownloadJson}>Json</DropdownItem>
+            <DropdownItem onClick={onDownloadCsv}>Csv</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
       </div>
 
       {/* PDF Viewer */}
-      <div className="flex-grow flex justify-center items-center py-10 z-0">
-        <div className="p-4 rounded-lg shadow-lg w-full max-w-3xl">
-          <Document file="/report.pdf" onLoadSuccess={onDocumentLoadSuccess} className="flex-col items-center">
+      <div className="flex-grow flex justify-center items-center pb-10 z-0">
+        <div className="w-full max-w-3xl">
+          <Document file={file} onLoadSuccess={onDocumentLoadSuccess} className="flex-col items-center">
             {Array.from(new Array(totalPages), (el, index) => (
               <Page
                 canvasBackground="transparent"
                 key={`page_${index + 1}`}
                 pageNumber={index + 1}
-                className="rounded-lg"
+                // className="rounded-lg"
               />
             ))}
           </Document>

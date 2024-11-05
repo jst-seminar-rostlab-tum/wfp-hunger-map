@@ -9,8 +9,8 @@ module.exports = {
     'mb-[16px]', 'mb-3', 'mb-4', 'border-black', 'border-white'
   ],
   content: [
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
     './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
@@ -18,6 +18,10 @@ module.exports = {
       fontFamily: {
         sans: ['var(--font-sans)'],
         mono: ['var(--font-mono)'],
+      },
+      colors: {
+        brand: '#157DBC',
+        brandHover: '#0F6396',
       },
       width: {
         '215px': '215px',

@@ -3841,6 +3841,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/query-core@npm:5.59.17":
+  version: 5.59.17
+  resolution: "@tanstack/query-core@npm:5.59.17"
+  checksum: 10c0/e867b2e5e6a9ff4dd77064ee53645f0c547f55f1d8e1e214860b2a0433606d8d00455b310a03db7df676a99fae06332c1af80fe05546badfa0d851bb259e6ef7
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-query@npm:^5.59.17":
+  version: 5.59.19
+  resolution: "@tanstack/react-query@npm:5.59.19"
+  dependencies:
+    "@tanstack/query-core": "npm:5.59.17"
+  peerDependencies:
+    react: ^18 || ^19
+  checksum: 10c0/1640320168efaa5d9af5f770b654e01b5c35140435e43038391bbf8be7fb8e643b2e5cce0a2970b61fed327701808a1d01fcefe926a031b6c83a8b90cc3950ad
+  languageName: node
+  linkType: hard
+
 "@types/conventional-commits-parser@npm:^5.0.0":
   version: 5.0.0
   resolution: "@types/conventional-commits-parser@npm:5.0.0"
@@ -7092,6 +7110,7 @@ __metadata:
     "@nextui-org/theme": "npm:2.2.11"
     "@react-aria/ssr": "npm:3.9.4"
     "@react-aria/visually-hidden": "npm:3.8.12"
+    "@tanstack/react-query": "npm:^5.59.17"
     "@types/leaflet": "npm:^1.9.14"
     "@types/node": "npm:20.5.7"
     "@types/react": "npm:^18.3.12"

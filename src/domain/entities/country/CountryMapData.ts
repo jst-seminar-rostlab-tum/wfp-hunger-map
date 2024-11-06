@@ -1,10 +1,7 @@
-import { Coordinate } from './common/Coordinate';
-import { Feature } from './common/Feature';
+import { Coordinate } from '../common/Coordinate';
+import { Feature } from '../common/Feature';
 
-/**
- * Not really sure what this represents...
- */
-export type Adm0Data = Feature<{
+export type CountryMapData = Feature<{
   OBJECTID: number;
   adm0_name: string;
   map_lab: string;
@@ -39,3 +36,7 @@ export type Adm0Data = Feature<{
   centroid: Coordinate;
   dataType?: string;
 }>;
+export interface CountryMapDataWrapper {
+  type: string;
+  features: CountryMapData[];
+}

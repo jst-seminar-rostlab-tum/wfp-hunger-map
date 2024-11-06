@@ -13,6 +13,7 @@ This is the repository for the World Food Program's HungerMap.
 - [next-themes](https://github.com/pacocoursey/next-themes)
 - [leaflet](https://leafletjs.com/), [react-leaflet](https://react-leaflet.js.org/)
 - [Highcharts](https://www.highcharts.com/), [highcharts-react](https://github.com/highcharts/highcharts-react)
+- [Tanstack Query](https://tanstack.com/query/latest)
 
 ## How to Use
 
@@ -64,8 +65,6 @@ What this means for a React application, is that instead of using one global sta
 ### Dependency Injection
 
 The point of DI is that the dependencies of services should not be hardcoded, instead they should receive them as parameters, where the type of the parameter is an interface. This makes testing easier and the code more reusable, since the same service can be used with different implementations of the same interface (for example mock implementations for testing).
-
-For a React application, the most common depeendency that needs mocking is the one that makes the HTTP call to the API. Thus contexts or hooks that call the backend should receive the HTTP library implementation as a prop or from a higher-order context.
 
 - Example of how to use the container to resolve a dependency can be found in `src/app/elements/page.tsx`.
 - A list of all dependencies and their implementations can be found in `src/container.tsx`.

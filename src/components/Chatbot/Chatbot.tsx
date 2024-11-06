@@ -4,7 +4,7 @@
 
 import { Button, Card, CardBody, CardFooter, CardHeader, Divider, Tooltip } from '@nextui-org/react';
 import clsx from 'clsx';
-import { Bot, Maximize2, Minimize2, PanelLeftClose, PanelLeftOpen, PlusCircle, Send, X } from 'lucide-react';
+import { Bot, Maximize2, Minimize2, PanelLeftClose, PanelLeftOpen, Send, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
 import TypingText from '@/components/TypingText/TypingText';
@@ -13,16 +13,19 @@ import {
   DATA_SOURCES,
   DEFAULT_DATA_SOURCES,
   DEFAULT_PROMPT,
-  IChat,
-  NEW_CHAT_BUTTON,
+  ENTER_FULL_SCREEN,
+  EXIT_FULL_SCREEN,
   SUB_WELCOME_MESSAGE,
+  TYPING_PLACEHOLDER,
   WELCOME_MESSAGE,
-} from '@/domain/entities/chatbot/Chatbot';
+} from '@/domain/constant/chatbot/Chatbot';
+import { IChat } from '@/domain/entities/chatbot/Chatbot';
 import { SenderRole } from '@/domain/enums/SenderRole';
 import { APIError, chatService, formatChatResponse } from '@/services/api/chatbot';
 import { useMediaQuery } from '@/utils/resolution';
 
 import TypingDots from '../TypingText/TypingDot';
+import ChatbotSidebar from './ChatbotSidebar';
 
 export default function HungerMapChatbot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -136,6 +139,13 @@ export default function HungerMapChatbot() {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chats, currentChatIndex]);
 
+  // listen to isOpen and isMobile to set isFullScreen
+  useEffect(() => {
+    if (isMobile && isOpen) {
+      setIsFullScreen(true);
+    }
+  }, [isMobile, isOpen]);
+
   // used to auto resize the input textarea when input is too long
   useEffect(() => {
     if (inputRef.current) {
@@ -143,41 +153,6 @@ export default function HungerMapChatbot() {
       inputRef.current.style.height = `${inputRef.current.scrollHeight}px`;
     }
   }, [input]);
-
-  const renderSidebar = () => (
-    <Card
-      className={clsx(
-        'absolute top-0 left-0 h-full z-[9999] shadow-none',
-        isFullScreen
-          ? 'w-[215px] rounded-none bg-chatbotFullscreen dark:bg-chatbotFullscreen'
-          : 'w-[179px] rounded-[12px_0_0_12px] bg-opacity-50 bg-chatbotSidebar dark:bg-chatbotSidebar'
-      )}
-    >
-      <CardBody className="p-4">
-        <Button
-          onClick={startNewChat}
-          className="bg-transparent w-full h-10 mb-4 flex justify-center items-center gap-2 border-2 border-solid border-black dark:border-white text-black dark:text-white hover:bg-chatbotSidebarBtnHover dark:hover:bg-chatbotSidebarBtnHover"
-        >
-          <PlusCircle className="h-4 w-4 text-black dark:text-white" />
-          <span className="truncate text-black dark:text-white">{NEW_CHAT_BUTTON}</span>
-        </Button>
-        <div className="h-[calc(100%-60px)] overflow-y-auto">
-          {chats.map((chat, index) => (
-            <Button
-              key={chat.id}
-              onClick={() => selectChat(index)}
-              className={clsx(
-                'text-black dark:text-white bg-transparent hover:bg-chatbotSidebarBtnHover dark:hover:bg-chatbotSidebarBtnHover justify-start w-full h-10 mb-3 flex gap-2',
-                currentChatIndex === index ? 'bg-chatbotSidebarBtnHover dark:bg-chatbotSidebarBtnHover' : ''
-              )}
-            >
-              <span className="truncate">{chat.title}</span>
-            </Button>
-          ))}
-        </div>
-      </CardBody>
-    </Card>
-  );
 
   return (
     <div className={clsx('absolute z-[9999]', isFullScreen && isOpen ? 'inset-0' : 'top-4 right-4')}>
@@ -193,7 +168,15 @@ export default function HungerMapChatbot() {
       {/* chatbot interface */}
       {isOpen && (
         <>
-          {isSidebarOpen && renderSidebar()}
+          {isSidebarOpen && (
+            <ChatbotSidebar
+              isFullScreen={isFullScreen}
+              chats={chats}
+              currentChatIndex={currentChatIndex}
+              onSelectChat={selectChat}
+              onStartNewChat={startNewChat}
+            />
+          )}
           <Card
             className={clsx(
               isFullScreen
@@ -213,7 +196,7 @@ export default function HungerMapChatbot() {
               </div>
               <div className="flex items-center space-x-2">
                 {!isMobile && (
-                  <Tooltip content={isFullScreen ? 'Exit full screen mode' : 'Enter full screen mode'}>
+                  <Tooltip content={isFullScreen ? EXIT_FULL_SCREEN : ENTER_FULL_SCREEN}>
                     <Button variant="light" isIconOnly onClick={toggleFullScreen}>
                       {isFullScreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
                     </Button>
@@ -331,7 +314,7 @@ export default function HungerMapChatbot() {
                         handleSubmit(e);
                       }
                     }}
-                    placeholder="Type your message..."
+                    placeholder={TYPING_PLACEHOLDER}
                     className="rounded-xl border border-solid border-black bg-chatbotInputArea dark:bg-chatbotInputArea flex-grow px-3 py-2 mr-2 dark:text-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none overflow-hidden"
                     rows={1}
                   />

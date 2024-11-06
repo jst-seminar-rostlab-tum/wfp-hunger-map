@@ -65,10 +65,12 @@ module.exports = {
             clusterOrange: '#FFB74D',
             clusterRed: '#FF5252',
             default: '#157DBC',
-            chat: '#e6f1fe',
             chatbotFullscreen: '#d8d8d8',
             chatbot: '#71717a',
-            chatbotSidebarBtnHover: '#d9e1e9'
+            chatbotSidebarBtnHover: '#d9e1e9',
+            chatbotInputArea: '#E6F1FE',
+            chatbotDefaultPromptHover: '#D9E2EA',
+            chatbotUserMsg: '#E6F1FE'
           },
         },
         dark: {
@@ -87,7 +89,10 @@ module.exports = {
             default: '#157DBC',
             chatbotFullscreen: '#292929',
             chatbot: '#404040',
-            chatbotSidebarBtnHover: '#848e98'
+            chatbotSidebarBtnHover: '#848e98',
+            chatbotInputArea: '#252529',
+            chatbotDefaultPromptHover: '#848E98',
+            chatbotUserMsg: '#26262A'
           },
         },
       },

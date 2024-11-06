@@ -1,5 +1,3 @@
-import './typingText.css';
-
 import React, { useEffect, useState } from 'react';
 
 import TypingTextProps from '@/domain/props/TypingTextProps';
@@ -13,7 +11,9 @@ export default function TypingText({ text, speed = 50, endSentencePause = 500, o
   const [displayedText, setDisplayedText] = useState<string>('');
 
   // Generate random speed for each character
-  // TBD: since we get all text from backend and show animation in front-end,is it really necessary to generate random speed for each character?
+  // TBD: since we get all text from backend and show animation in front-end,
+  // Is it really necessary to generate random speed for each character?
+  // This component could be removed when text rendering is done from markdown
   const getCharacterSpeed = (char: string) => {
     if (['.', '?', '!'].includes(char)) {
       return endSentencePause; // set more pause for end of sentence
@@ -46,7 +46,7 @@ export default function TypingText({ text, speed = 50, endSentencePause = 500, o
     <p className="break-words text-justify">
       {displayedText}
       {/* show typing cursor */}
-      {displayedText.length < text.length && <span className="blinking-cursor">|</span>}
+      {displayedText.length < text.length && <span className="inline-block animate-blink">|</span>}
     </p>
   );
 }

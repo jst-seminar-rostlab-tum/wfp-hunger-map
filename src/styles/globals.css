@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Define custom classes for animation delay */
+.dot-delay-1 {
+  animation-delay: 0s;
+}
+
+.dot-delay-2 {
+  animation-delay: 0.3s;
+}
+
+.dot-delay-3 {
+  animation-delay: 0.6s;
+}

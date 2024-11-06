@@ -45,6 +45,19 @@ module.exports = {
       zIndex: {
         '9999': '9999',
       },
+      animation: {
+        blink: 'blink 1s step-end infinite',
+        pulse: 'pulse 1.5s ease-in-out infinite',
+      },
+      keyframes: {
+        blink: {
+          '50%': { opacity: '0' },
+        },
+        pulse: {
+          '0%, 100%': { transform: 'scale(1)', opacity: '0.6' },
+          '50%': { transform: 'scale(1.3)', opacity: '1' },
+        }
+      },
     },
   },
   darkMode: 'class',
@@ -66,7 +79,7 @@ module.exports = {
             clusterRed: '#FF5252',
             default: '#157DBC',
             chatbotFullscreen: '#d8d8d8',
-            chatbot: '#71717a',
+            chatbotSidebar: '#71717a50',
             chatbotSidebarBtnHover: '#d9e1e9',
             chatbotInputArea: '#E6F1FE',
             chatbotDefaultPromptHover: '#D9E2EA',
@@ -88,7 +101,7 @@ module.exports = {
             clusterRed: '#FF5252',
             default: '#157DBC',
             chatbotFullscreen: '#292929',
-            chatbot: '#404040',
+            chatbotSidebar: '#40404050',
             chatbotSidebarBtnHover: '#848e98',
             chatbotInputArea: '#252529',
             chatbotDefaultPromptHover: '#848E98',

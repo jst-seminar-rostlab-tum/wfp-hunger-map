@@ -22,6 +22,8 @@ import { SenderRole } from '@/domain/enums/SenderRole';
 import { APIError, chatService, formatChatResponse } from '@/services/api/chatbot';
 import { useMediaQuery } from '@/utils/resolution';
 
+import TypingDots from '../TypingText/TypingDot';
+
 export default function HungerMapChatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -32,8 +34,8 @@ export default function HungerMapChatbot() {
   const [isTyping, setIsTyping] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
-  // TODO: get isMobile from context later
-  const isMobile = useMediaQuery('(max-width: 600px)');
+  // TODO: get isMobile from context later?
+  const isMobile = useMediaQuery('(max-width: 640px)');
 
   const toggleChat = () => {
     if (isMobile) {
@@ -99,7 +101,10 @@ export default function HungerMapChatbot() {
       role: SenderRole.ASSISTANT,
       dataSources,
     });
-    setChats(updatedChatsWithAI);
+    setTimeout(() => {
+      setChats(updatedChatsWithAI);
+    }, 100000);
+    //  setChats(updatedChatsWithAI);
   };
 
   const handleTypingComplete = () => {
@@ -148,7 +153,7 @@ export default function HungerMapChatbot() {
         'absolute top-0 left-0 h-full z-[9999] shadow-none',
         isFullScreen
           ? 'w-[215px] rounded-none bg-chatbotFullscreen dark:bg-chatbotFullscreen'
-          : 'w-[179px] rounded-[12px_0_0_12px] opacity-50 bg-chatbot dark:bg-chatbot'
+          : 'w-[179px] rounded-[12px_0_0_12px] bg-opacity-50 bg-chatbotSidebar dark:bg-chatbotSidebar'
       )}
     >
       <CardBody className="p-4">
@@ -197,8 +202,8 @@ export default function HungerMapChatbot() {
               isFullScreen
                 ? 'w-screen h-screen rounded-none opacity-100 border-0'
                 : 'w-[636px] h-[657px] opacity-80 border-1',
-              isSidebarOpen && !isMobile ? (isFullScreen ? 'pl-[215px]' : 'pl-[179px]') : 'pl-0',
-              'border-solid border-black bg-white dark:bg-black overflow-hidden flex-1 flex flex-col transition-all duration-300 ease-in-out text-black dark:text-white'
+              isSidebarOpen ? (isFullScreen ? 'sm:pl-[215px] pl-0' : 'sm:pl-[179px] pl-0') : 'pl-0',
+              'border-solid border-black bg-white dark:bg-black overflow-hidden flex-1 flex flex-col text-black dark:text-white'
             )}
           >
             <CardHeader className="flex items-center justify-between p-4">
@@ -231,7 +236,7 @@ export default function HungerMapChatbot() {
                 {isMobile && isSidebarOpen && (
                   /* since it has been show as overlay style here, once click this area then close side panel better not use button here */
                   // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-                  <div className="fixed inset-0 z-10" onClick={toggleSidebar} />
+                  <div className="fixed inset-0 z-10 opacity-50 bg-white dark:bg-black" onClick={toggleSidebar} />
                 )}
                 {/* chat area */}
 
@@ -264,9 +269,9 @@ export default function HungerMapChatbot() {
                           message.role === SenderRole.USER ? 'justify-end' : 'justify-start'
                         )}
                       >
-                        {message.role === 'assistant' && (
-                          <div className="relative bg-transparent p-4 mb-5">
-                            <Bot className="w-6 h-6 fill-current text-black dark:text-white" />
+                        {message.role === SenderRole.ASSISTANT && (
+                          <div className="relative flex items-center justify-center bg-transparent w-12 h-12 rounded-full border-2 border-black dark:border-white bg-white dark:bg-black">
+                            <Bot className="w-6 h-6 stroke-black dark:stroke-white" />
                           </div>
                         )}
                         <div
@@ -304,14 +309,10 @@ export default function HungerMapChatbot() {
 
                   {isTyping && (
                     <div className="flex justify-start mb-4">
-                      <div className="relative bg-transparent p-4 mb-5">
-                        <Bot className="w-6 h-6 fill-current text-black dark:text-white" />
+                      <div className="relative flex items-center justify-center bg-transparent w-12 h-12 rounded-full border-2 border-black dark:border-white bg-white dark:bg-black">
+                        <Bot className="w-6 h-6 stroke-black dark:stroke-white" />
                       </div>
-                      <div className="mt-3">
-                        <span className="dot mr-2" />
-                        <span className="dot mr-2" />
-                        <span className="dot" />
-                      </div>
+                      <TypingDots />
                     </div>
                   )}
                   <div ref={chatEndRef} />

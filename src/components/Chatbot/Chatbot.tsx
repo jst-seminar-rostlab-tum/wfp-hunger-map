@@ -101,10 +101,7 @@ export default function HungerMapChatbot() {
       role: SenderRole.ASSISTANT,
       dataSources,
     });
-    setTimeout(() => {
-      setChats(updatedChatsWithAI);
-    }, 100000);
-    //  setChats(updatedChatsWithAI);
+    setChats(updatedChatsWithAI);
   };
 
   const handleTypingComplete = () => {

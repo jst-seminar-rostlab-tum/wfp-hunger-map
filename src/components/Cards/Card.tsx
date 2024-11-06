@@ -3,7 +3,6 @@
 import { Card, CardBody, CardHeader, Image } from '@nextui-org/react';
 import { commonColors } from '@nextui-org/theme';
 import { useTheme } from 'next-themes';
-
 import { CardProps } from '@/domain/props/CardProps';
 
 export default function CustomCard({ title, content }: CardProps) {

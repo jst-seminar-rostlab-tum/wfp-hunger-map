@@ -31,12 +31,14 @@ export default function Sandbox() {
       </div>
       <div className="w-full h-fit min-h-60 p-4 border-b border-gray-800">
         <Tooltip text="example text" title="example title">
-          <div className="w-fit bg-gray-200"> hover for simple tooltip</div>
+          <div className="w-fit bg-gray-200">
+            <p>hover for simple tooltip</p>
+          </div>
         </Tooltip>
-        <Tooltip text="example text" title="example title">
-          <div className="w-fit bg-gray-200"> hover for complex tooltip</div>
+        <Tooltip text="example text">This text will be larger.</Tooltip>
+        <Tooltip text="example text" warning>
+          This text will be larger.
         </Tooltip>
-        Sandbox 1
       </div>
       <div className="w-full h-fit min-h-60 p-4 border-b border-gray-800"> Sandbox 2</div>
     </>

@@ -26,7 +26,7 @@
     "@nextui-org/popover": "^2.1.29",
     "@nextui-org/skeleton": "^2.0.32",
     "@nextui-org/snippet": "2.0.43",
-    "@nextui-org/switch": "2.0.34",
+    "@nextui-org/switch": "^2.0.34",
     "@nextui-org/system": "2.2.6",
     "@nextui-org/theme": "2.2.11",
     "@react-aria/ssr": "3.9.4",
@@ -36,11 +36,11 @@
     "framer-motion": "~11.1.1",
     "highcharts": "^11.4.8",
     "highcharts-react-official": "^3.2.1",
+    "iconsax-react": "^0.0.8",
     "intl-messageformat": "^10.5.0",
     "leaflet": "^1.9.4",
     "leaflet-defaulticon-compatibility": "^0.1.2",
     "leaflet-geosearch": "^4.0.0",
-    "lucide-react": "^0.454.0",
     "next": "14.2.10",
     "next-themes": "^0.2.1",
     "react": "18.3.1",
@@ -89,6 +89,5 @@
         "never"
       ]
     }
-  },
-  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
+  }
 }

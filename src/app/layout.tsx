@@ -3,8 +3,8 @@ import '@/styles/globals.css';
 import clsx from 'clsx';
 import { Metadata, Viewport } from 'next';
 
-import AlertsMenuWrapper from '@/components/AlertsMenu/AlertsMenuWrapper';
-import Sidebar from '@/components/Sidebar/Sidebar';
+import { AlertsMenuWrapper } from '@/components/AlertsMenu/AlertsMenuWrapper';
+import { Sidebar } from '@/components/Sidebar/Sidebar';
 import { fontSans } from '@/config/fonts';
 import { siteConfig } from '@/config/site';
 

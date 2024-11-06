@@ -1,9 +1,10 @@
 'use client';
 
-import { useSidebar } from '../Sidebar/SidebarContext';
-import AlertsMenu from './AlertsMenu';
+import { AlertsMenu } from '@/components/AlertsMenu/AlertsMenu';
+import { useSidebar } from '@/domain/contexts/SidebarContext';
+import { AlertsMenuVariant } from '@/domain/enums/AlertsMenuVariant';
 
-export default function AlertsMenuWrapper() {
+export function AlertsMenuWrapper() {
   const { isSidebarOpen } = useSidebar();
 
   if (isSidebarOpen) {
@@ -11,7 +12,7 @@ export default function AlertsMenuWrapper() {
   }
   return (
     <div className="absolute bottom-0 left-0 z-50 p-4">
-      <AlertsMenu variant="outside" />
+      <AlertsMenu variant={AlertsMenuVariant.Outside} />
     </div>
   );
 }

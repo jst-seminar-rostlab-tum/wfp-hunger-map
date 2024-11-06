@@ -137,9 +137,11 @@ export default function Sidebar() {
               ))}
             </ListboxSection>
           </Listbox>
-          <div className="px-2 pt-2">
-            <span className="text-xs font-medium text-foreground-500">Alerts</span>
-            <AlertsMenu variant="inside" />
+          <div className="p-1 w-full">
+            <span className="text-xs text-foreground-500 pl-1">Alerts</span>
+            <div className="pt-1">
+              <AlertsMenu variant="inside" />
+            </div>
           </div>
         </CardBody>
         <CardFooter className="flex flex-col items-start">

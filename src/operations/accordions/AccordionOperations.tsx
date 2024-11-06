@@ -61,7 +61,7 @@ export default class AccordionOperations {
       {
         title: 'Test',
         iconSrc: '/Images/InfoIcon.svg',
-        content: 'Test paragraph',
+        content: 'Test paragraph ',
       },
     ];
   }

@@ -10,28 +10,26 @@ export default function CustomAccordion({ items }: AccordionsProps) {
   const { theme } = useTheme();
   const lightThemeBg = commonColors.zinc;
   const darkThemeBg = commonColors.black;
+
   return (
-    <div className="accordion-wrapper">
-      <Accordion variant="splitted" className="accordion-container">
+    <div className="w-full flex justify-start items-start max-w-[600px] overflow-hidden p-2 rounded-lg">
+      <Accordion variant="splitted" className="overflow-x-hidden">
         {items.map((item) => (
           <AccordionItem
+            key={item.title}
+            aria-label={item.title}
+            className="last:border-b-[none]"
             style={{
               backgroundColor: theme === 'dark' ? darkThemeBg : lightThemeBg[500],
             }}
-            key={item.title}
-            aria-label={item.title}
             title={
-              <div className="flex items-center justify-between w-full">
+              <div className="flex justify-between w-full">
                 <span>{item.title}</span>
-                {item.iconSrc && <img src={item.iconSrc} alt="info icon" className="info-icon" />}
+                {item.iconSrc && <img src={item.iconSrc} alt="info icon" className="w-[37px] h-[37px] p-[5.5px]" />}
               </div>
             }
           >
-            {typeof item.content === 'string' ? (
-              <div className="accordion-item-content">{item.content}</div>
-            ) : (
-              item.content
-            )}
+            {typeof item.content === 'string' ? <div className="p-4 break-words">{item.content}</div> : item.content}
           </AccordionItem>
         ))}
       </Accordion>

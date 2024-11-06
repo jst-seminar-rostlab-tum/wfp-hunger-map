@@ -12,40 +12,23 @@ export default function CustomCard({ title, content }: CardProps) {
   const darkThemeBg = 'hsl(var(--nextui-content4))';
   return (
     <Card
-      className={`${'card'}`}
+      className="w-['fit-content'] h-auto min-w-[210px] justify-evenly m-2.5 p-['90px']"
       style={{
         backgroundColor: theme === 'dark' ? darkThemeBg : lightThemeBg,
       }}
     >
-      <CardHeader
-        className="cardHeader"
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          overflow: 'hidden',
-        }}
-      >
-        <h2
-          className="text-large"
-          style={{
-            wordWrap: 'break-word',
-            paddingLeft: '19px',
-            paddingRight: '19px',
-          }}
-        >
-          {' '}
-          {title}{' '}
-        </h2>
+      <CardHeader className="flex flex-col items-center p-[5px] overflow-hidden">
+        <h2 className="text-large break.words"> {title} </h2>
       </CardHeader>
-      <CardBody className="cardBody">
-        <div className="cardContentContainer">
+      <CardBody className="flex flex-col items-center justify-center overflow-visible overflow-y-auto max-h-[300px] py-2">
+        <div className="flex flex-row gap-6">
           {content.map((item) => (
-            <div key={item.text} className="cardItem">
+            <div key={item.text} className="flex flex-col gap-[3px] items-center">
               <div className="imageWrapper">
-                <Image alt={item.altText} className="image" src={item.imageSrc} />
+                <Image alt={item.altText} className="w-[102px] h-[75px] rounded-xl" src={item.imageSrc} />
               </div>
-              <h1 className="text">{item.text}</h1>
-              {item.timeText && <h1 className="timeText">{item.timeText}</h1>}
+              <h1 className="text-[auto] text-center mt-2">{item.text}</h1>
+              {item.timeText && <h1 className="text-xs text-[#888888] text-center break-words">{item.timeText}</h1>}
             </div>
           ))}
         </div>

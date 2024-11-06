@@ -1,7 +1,5 @@
 'use client';
 
-import './accordion.css';
-
 import { Accordion, AccordionItem } from '@nextui-org/accordion';
 
 interface AccordionItemProps {
@@ -29,7 +27,7 @@ export default function Accordions({ items }: AccordionsProps) {
               </div>
             }
           >
-            {typeof item.content === 'string' ? <p>{item.content}</p> : (item.content)}
+            {typeof item.content === 'string' ? <p>{item.content}</p> : item.content}
           </AccordionItem>
         ))}
       </Accordion>

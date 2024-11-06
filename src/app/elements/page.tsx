@@ -1,8 +1,6 @@
-import React from 'react';
-
 import Accordions from '@/components/Accordions/Accordion';
 import Cards from '@/components/Cards/Card';
-/* import { Chart } from '@/components/Charts/Chart'; */
+import { Chart } from '@/components/Charts/Chart';
 import { cardsWrapperClass } from '@/utils/primitives';
 
 /**
@@ -44,7 +42,7 @@ const accordionData = [
           title="Chronic Nutrition"
           content={[{ imageSrc: '/Images/Chronic.svg', text: '28.0% of Cereals', altText: ' Icon' }]}
         />
-        </div>
+      </div>
     ),
   },
   {

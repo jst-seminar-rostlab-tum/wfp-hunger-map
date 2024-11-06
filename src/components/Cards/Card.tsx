@@ -1,7 +1,5 @@
 'use client';
 
-import './card.css';
-
 import { Card, CardBody, CardHeader, Image } from '@nextui-org/react';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';

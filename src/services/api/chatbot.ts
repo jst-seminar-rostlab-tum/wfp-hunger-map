@@ -18,9 +18,6 @@ export interface QueryResponse {
   total_tokens: number;
 }
 
-// Adjust this when back-end is deployed and in production, this API_BASE_URL should be move to other file later
-const API_BASE_URL = 'http://127.0.0.1:5000';
-
 // Error type for handling API errors
 export class APIError extends Error {
   constructor(
@@ -37,7 +34,7 @@ export const chatService = {
   // Test the connection to the backend
   testHealth: async (): Promise<boolean> => {
     try {
-      const response = await fetch(`${API_BASE_URL}/health`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_KEY}/health`);
       return response.ok;
     } catch {
       return false;

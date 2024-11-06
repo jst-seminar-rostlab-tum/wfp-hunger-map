@@ -1,3 +1,7 @@
+import { ReactNode } from 'react';
+
 export default interface TooltipProps {
-  data: undefined;
+  children: ReactNode;
+  title?: string;
+  text: string;
 }

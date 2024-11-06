@@ -2,17 +2,9 @@
 
 import { Accordion, AccordionItem } from '@nextui-org/accordion';
 
-interface AccordionItemProps {
-  title: string;
-  iconSrc?: string;
-  content: React.ReactNode | string;
-}
+import { AccordionsProps } from '@/domain/props/AccordionProps';
 
-interface AccordionsProps {
-  items: AccordionItemProps[];
-}
-
-export default function Accordions({ items }: AccordionsProps) {
+export default function CustomAccordion({ items }: AccordionsProps) {
   return (
     <div className="accordion-wrapper">
       <Accordion variant="splitted" className="accordion-container">
@@ -27,7 +19,11 @@ export default function Accordions({ items }: AccordionsProps) {
               </div>
             }
           >
-            {typeof item.content === 'string' ? <p>{item.content}</p> : item.content}
+            {typeof item.content === 'string' ? (
+              <div className="accordion-item-content">{item.content}</div>
+            ) : (
+              item.content
+            )}
           </AccordionItem>
         ))}
       </Accordion>

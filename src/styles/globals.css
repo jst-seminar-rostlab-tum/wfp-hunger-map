@@ -6,33 +6,45 @@
 .accordion-wrapper {
   width: 100%;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
   max-width: 600px;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-  overflow: hidden; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
   padding: 8px;
 }
 
 .accordion-container .nextui-accordion-item {
-  border-bottom: 1px solid #e0e0e0; 
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .accordion-container .nextui-accordion-item:last-child {
   border-bottom: none;
 }
+.accordion-container {
+  overflow-x: hidden;
+}
+.accordion-item-content {
+  padding: 16px;
+
+  word-wrap: break-word;
+}
 
 .info-icon {
   width: 37;
   height: 37;
+  padding: 5.5px;
 }
 
 /* Card */
 .card {
-  width: 100%;
-  max-width: 300px;
+  width: 'fit-content';
+  padding: '90px';
   height: auto;
+  min-width: 210px;
+  margin: 10px;
+  justify-content: space-evenly;
 }
 
 .cards-wrapper {
@@ -43,15 +55,22 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  display: 'flex';
+  overflow: 'hidden';
+  padding: 5px;
+  word-wrap: break-word;
 }
 
 .cardBody {
-  overflow: visible;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  overflow: visible;
+  overflow-y: auto;
+  max-height: 300px;
 }
 
 .cardContentContainer {
@@ -69,8 +88,8 @@
 
 .image {
   border-radius: 0.75rem;
-  width: 52px;
-  height: 47px;
+  width: 102px;
+  height: 75px;
 }
 
 .timeText {
@@ -83,13 +102,5 @@
   font-size: auto;
   text-align: center;
   margin-top: 0.5rem;
-}
-.lightTheme {
-  background-color: #ffffff;
-  color: #333333;
-}
-
-.darkTheme {
-  background-color: #424242;
-  color: #e0e0e0;
+  word-wrap: break-word;
 }

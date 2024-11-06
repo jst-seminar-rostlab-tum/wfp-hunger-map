@@ -1,33 +1,41 @@
 'use client';
 
 import { Card, CardBody, CardHeader, Image } from '@nextui-org/react';
+import { commonColors } from '@nextui-org/theme';
 import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
 
-interface CardContent {
-  imageSrc: string;
-  text: string;
-  timeText?: string;
-  altText: string;
-}
+import { CardProps } from '@/domain/props/CardProps';
 
-interface CardProps {
-  title: string;
-  content: CardContent[];
-}
-
-export default function Cards({ title, content }: CardProps) {
+export default function CustomCard({ title, content }: CardProps) {
   const { theme } = useTheme();
-  const [themeClass, setThemeClass] = useState('lightTheme');
-
-  useEffect(() => {
-    setThemeClass(theme === 'light' ? 'lightTheme' : 'darkTheme');
-  }, [theme]);
-
+  const lightThemeBg = commonColors.white;
+  const darkThemeBg = 'hsl(var(--nextui-content4))';
   return (
-    <Card className={`${'card'} ${themeClass}`}>
-      <CardHeader className="cardHeader">
-        <small>{title}</small>
+    <Card
+      className={`${'card'}`}
+      style={{
+        backgroundColor: theme === 'dark' ? darkThemeBg : lightThemeBg,
+      }}
+    >
+      <CardHeader
+        className="cardHeader"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          overflow: 'hidden',
+        }}
+      >
+        <h2
+          className="text-large"
+          style={{
+            wordWrap: 'break-word',
+            paddingLeft: '19px',
+            paddingRight: '19px',
+          }}
+        >
+          {' '}
+          {title}{' '}
+        </h2>
       </CardHeader>
       <CardBody className="cardBody">
         <div className="cardContentContainer">
@@ -36,8 +44,8 @@ export default function Cards({ title, content }: CardProps) {
               <div className="imageWrapper">
                 <Image alt={item.altText} className="image" src={item.imageSrc} />
               </div>
-              <small className="text">{item.text}</small>
-              {item.timeText && <small className="timeText">{item.timeText}</small>}
+              <h1 className="text">{item.text}</h1>
+              {item.timeText && <h1 className="timeText">{item.timeText}</h1>}
             </div>
           ))}
         </div>

@@ -209,7 +209,7 @@ export default function HungerMapChatbot() {
                 </Tooltip>
               </div>
             </CardHeader>
-            <Divider className="bg-divider dark:bg-divider" />
+            <Divider className="bg-chatbotDivider dark:bg-chatbotDivider" />
             <CardBody className="p-0 h-full">
               <div className="relative h-full flex flex-col">
                 {/* overlay area in mobile version */}
@@ -299,7 +299,7 @@ export default function HungerMapChatbot() {
                 </div>
               </div>
             </CardBody>
-            <Divider className="bg-divider dark:bg-divider" />
+            <Divider className="bg-chatbotDivider dark:bg-chatbotDivider" />
             <CardFooter className="p-4">
               <form onSubmit={handleSubmit} className="w-full">
                 <div className="flex space-x-2">

@@ -13,6 +13,7 @@ This is the repository for the World Food Program's HungerMap.
 - [next-themes](https://github.com/pacocoursey/next-themes)
 - [leaflet](https://leafletjs.com/), [react-leaflet](https://react-leaflet.js.org/)
 - [Highcharts](https://www.highcharts.com/), [highcharts-react](https://github.com/highcharts/highcharts-react)
+- [Tanstack Query](https://tanstack.com/query/latest)
 
 ## How to Use
 
@@ -40,7 +41,11 @@ Linting and styling is based on [Airbnb's React style guide](https://airbnb.io/j
 
 ### Git and GitHub
 
-Always work on a separate branch, never commit to main! When you're creating a branch, you should use the branchname provided by Linear. Click the branch icon in the upper right corner of issue's page on Linear to copy the branchname. It should have the following format: `feature/<issue no.>-<concise description of issue>`. Also use meaningful, but concise commit messages. After you're done with your task, create a Pull Request and share it with your teammates, ask your team lead and/or TPL for a review. Use squash merge when the PR is approved.
+Always work on a separate branch, never commit to main! When you're creating a branch, you should use the branchname provided by Linear. Click the branch icon in the upper right corner of issue's page on Linear to copy the branchname. It should have the following format: `feature/<issue no.>-<concise description of issue>`.
+
+Commit messages are also linted using husky and commitlint, so make sure to start each commit message with `feat:`, `fix:` or `docs:` depending on the type of work implemented in that commit.
+
+After you're done with your task, create a Pull Request and share it with your teammates, ask your team lead and/or TPL for a review. Use squash merge when the PR is approved.
 
 ### Project Structure
 
@@ -52,8 +57,14 @@ DDD is a software design approach that is against the idea of having a single un
 
 What this means for a React application, is that instead of using one global state with, for example Redux, we will have a React context for each of our entities that will store all the data and offer all the methods related to that domain.
 
+- The domain folder contains all the entities and repositories. (Types, Interfaces, etc.)
+- The infrastructure folder contains the implementations of the interfaces. (API calls, etc.)
+- The operations folder contains the business logic that is not related to a specific entity.
+- Bigger files and functions should be placed in the operations folder
+
 ### Dependency Injection
 
 The point of DI is that the dependencies of services should not be hardcoded, instead they should receive them as parameters, where the type of the parameter is an interface. This makes testing easier and the code more reusable, since the same service can be used with different implementations of the same interface (for example mock implementations for testing).
 
-For a React application, the most common depeendency that needs mocking is the one that makes the HTTP call to the API. Thus contexts or hooks that call the backend should receive the HTTP library implementation as a prop or from a higher-order context.
+- Example of how to use the container to resolve a dependency can be found in `src/app/elements/page.tsx`.
+- A list of all dependencies and their implementations can be found in `src/container.tsx`.

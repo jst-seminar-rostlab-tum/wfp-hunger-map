@@ -40,7 +40,7 @@ export default function ChatbotSidebar({
                 currentChatIndex === index ? 'bg-chatbotSidebarBtnHover dark:bg-chatbotSidebarBtnHover' : ''
               )}
             >
-              <span className="truncate">{chat.title}</span>
+              <h2 className="truncate">{chat.title}</h2>
             </Button>
           ))}
         </div>

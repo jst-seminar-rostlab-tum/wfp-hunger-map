@@ -28,7 +28,7 @@ export default function TypingText({ text, speed = 50, endSentencePause = 500, o
       if (index < text.length - 1) {
         const currentChar = text[index];
         setDisplayedText((prev) => prev + text[index]);
-        index += 1;
+        index ++;
         setTimeout(typeCharacter, getCharacterSpeed(currentChar)); // Generate a new timeout with random speed
       } else if (onTypingComplete) {
         onTypingComplete(); // Call onTypingComplete callback when typing is complete

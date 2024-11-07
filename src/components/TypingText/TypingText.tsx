@@ -14,7 +14,7 @@ export default function TypingText({ text, speed = 50, endSentencePause = 500, o
   // TBD: since we get all text from backend and show animation in front-end,
   // Is it really necessary to generate random speed for each character?
   // This component could be removed when text rendering is done from markdown
-  const getCharacterSpeed = (char: string) => {
+  const getCharacterSpeed = (char: string): number => {
     if (['.', '?', '!'].includes(char)) {
       return endSentencePause; // set more pause for end of sentence
     }
@@ -24,7 +24,7 @@ export default function TypingText({ text, speed = 50, endSentencePause = 500, o
   useEffect(() => {
     let index = 0;
 
-    const typeCharacter = () => {
+    const typeCharacter = (): void => {
       if (index < text.length - 1) {
         const currentChar = text[index];
         setDisplayedText((prev) => prev + text[index]);

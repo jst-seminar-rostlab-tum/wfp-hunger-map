@@ -80,8 +80,13 @@ export default function HungerMapChatbot() {
   /**
    * Handle AI response
    * @param text is user input text
+   * @param updatedChats is the updated chats object
+   * since React's setState is asynchronous,
+   * updating the chat state is not immediately reflected in the next line of code.
+   * Import updated chats ensures that handleAIResponse always gets the latest chats state
+   * avoids reading old state when it hasn't been updated yet.
    */
-  const handleAIResponse = async (text: string): Promise<void> => {
+  const handleAIResponse = async (text: string, updatedChats: IChat[]): Promise<void> => {
     const previousMessages = chats[currentChatIndex].messages;
     let aiResponse = '';
     try {
@@ -94,7 +99,7 @@ export default function HungerMapChatbot() {
     }
     // TODO: get data sources from response later
     const dataSources = DEFAULT_DATA_SOURCES;
-    const updatedChatsWithAI = [...chats];
+    const updatedChatsWithAI = structuredClone(updatedChats);
     updatedChatsWithAI[currentChatIndex].messages.push({
       id: crypto.randomUUID(),
       content: aiResponse,
@@ -122,7 +127,7 @@ export default function HungerMapChatbot() {
     const text = promptText || input;
     if (isTyping) return; // prevent multiple submission
     if (text.trim()) {
-      const updatedChats = [...chats];
+      const updatedChats = structuredClone(chats);
       updatedChats[currentChatIndex].messages.push({ id: crypto.randomUUID(), content: text, role: SenderRole.USER });
       if (updatedChats[currentChatIndex].title === `Chat ${updatedChats[currentChatIndex].id}`) {
         updatedChats[currentChatIndex].title = text.slice(0, 30) + (text.length > 30 ? '...' : '');
@@ -130,8 +135,8 @@ export default function HungerMapChatbot() {
       setChats(updatedChats);
       setInput('');
       setIsTyping(true);
-      // Simulate AI response
-      await handleAIResponse(text);
+
+      await handleAIResponse(text, updatedChats);
     }
   };
 

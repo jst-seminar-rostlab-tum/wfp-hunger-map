@@ -15,7 +15,7 @@ export default class AccordionOperations {
               content={[{ imageSrc: '/Images/Population.svg', text: '4.4 Mio', altText: 'Population Icon' }]}
             />
             <CustomCard
-              title="Population with Food Consumption"
+              title="Food Consumption"
               content={[
                 { imageSrc: '/Images/FoodConsumption.svg', text: '11.2 Mio', altText: 'Population Icon' },
                 { imageSrc: '/Images/ArrowRed.svg', text: '+ 0.19 Mio', timeText: '3 Months ago', altText: 'Icon' },

@@ -20,7 +20,11 @@ export default function CustomAccordion({ items }: AccordionsProps) {
               </div>
             }
           >
-            {typeof item.content === 'string' ? <div className="p-4 break-words">{item.content}</div> : item.content}
+            {typeof item.content === 'string' ? (
+              <div className="p-4 break-words text-balance">{item.content}</div>
+            ) : (
+              item.content
+            )}
           </AccordionItem>
         ))}
       </Accordion>

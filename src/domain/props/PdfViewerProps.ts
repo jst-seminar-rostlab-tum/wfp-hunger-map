@@ -1,4 +1,4 @@
-export interface PdfViewerProps {
+export default interface PdfViewerProps {
   onTooltipClick: (selectionText: string) => void;
   onDownloadPdf: () => void;
   onDownloadJson: () => void;

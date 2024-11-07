@@ -10,7 +10,8 @@ import { Tooltip } from '@nextui-org/tooltip';
 import { useEffect, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 
-import { PdfViewerProps } from '@/domain/props/PdfViewerProps';
+import PdfViewerProps from '@/domain/props/PdfViewerProps';
+import PdfViewerOperations from '@/operations/pdf/PdfViewerOperations';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url).toString();
 
@@ -20,34 +21,20 @@ export function PdfViewer({ onTooltipClick, file, onDownloadPdf, onDownloadJson,
   const [selectionText, setSelectionText] = useState<string | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState<{ top: number; left: number } | null>(null);
 
-  const handleScroll = () => {
-    const pages = document.querySelectorAll('.react-pdf__Page');
-    let currentPage = pageNumber;
-
-    pages.forEach((page, index) => {
-      const rect = page.getBoundingClientRect();
-      const pageTop = rect.top;
-      const pageBottom = rect.bottom;
-      const viewportMidpoint = window.innerHeight / 2;
-
-      if (pageTop < viewportMidpoint && pageBottom > viewportMidpoint) {
-        currentPage = index + 1;
-      }
-    });
-
-    setPageNumber(currentPage);
-  };
+  function handleDocumentScroll(): void {
+    PdfViewerOperations.handleDocumentScroll(document, setPageNumber, pageNumber);
+  }
 
   function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
     setTotalPages(numPages);
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleDocumentScroll);
   }
 
-  function onSelectStart() {
+  function onSelectStart(): void {
     setSelectionText(null);
   }
 
-  function onSelectEnd() {
+  function onSelectEnd(): void {
     const activeSelection = document.getSelection();
     const text = activeSelection?.toString();
 
@@ -73,23 +60,25 @@ export function PdfViewer({ onTooltipClick, file, onDownloadPdf, onDownloadJson,
     return () => {
       document.removeEventListener('selectstart', onSelectStart);
       document.removeEventListener('mouseup', onSelectEnd);
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', handleDocumentScroll);
     };
   }, []);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-start relative">
       {/* Top Bar */}
-      <div className="bg-background w-full py-4 flex items-center justify-between px-6 sticky top-0 z-10">
+      <div className="bg-lightGrey dark:bg-darkGrey shadow-md w-full py-4 flex justify-between items-center px-6 sticky top-0 z-10">
         <h1 className="text-lg font-semibold">Preview</h1>
-        <Chip color="secondary" size="md">
-          <p className="text-sm">
+        <Chip className="absolute left-1/2 transform -translate-x-1/2" color="secondary" size="md">
+          <p className="text-sm text-black">
             {pageNumber} / {totalPages}
           </p>
         </Chip>
         <Dropdown>
           <DropdownTrigger>
-            <Button color="secondary">Download As</Button>
+            <Button className="text-black" color="secondary">
+              Download As
+            </Button>
           </DropdownTrigger>
           <DropdownMenu color="secondary">
             <DropdownItem onClick={onDownloadPdf}>Pdf</DropdownItem>
@@ -100,9 +89,9 @@ export function PdfViewer({ onTooltipClick, file, onDownloadPdf, onDownloadJson,
       </div>
 
       {/* PDF Viewer */}
-      <div className="flex-grow flex justify-center items-center pb-10 z-0">
-        <div className="w-full max-w-3xl">
-          <Document file={file} onLoadSuccess={onDocumentLoadSuccess} className="flex-col items-center">
+      <div className="w-full h-full bg-lightGrey dark:bg-darkGrey flex-grow flex justify-center items-center pb-10 z-0">
+        <div className="max-w-3xl">
+          <Document file={file} onLoadSuccess={onDocumentLoadSuccess} className="flex-col items-center mx-auto">
             {Array.from(new Array(totalPages), (_, index) => (
               <Page canvasBackground="transparent" key={`page_${index + 1}`} pageNumber={index + 1} />
             ))}

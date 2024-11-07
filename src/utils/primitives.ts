@@ -44,4 +44,4 @@ export const subtitle = tv({
   },
 });
 
-export const cardsWrapperClass = 'cards-wrapper flex flex-row gap-4 justify-center';
+export const cardsWrapperClass = 'cards-wrapper flex flex-row gap-4 justify-center flex-wrap';

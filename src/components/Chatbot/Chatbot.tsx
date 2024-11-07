@@ -4,7 +4,9 @@
 
 import { Button, Card, CardBody, CardFooter, CardHeader, Divider, Tooltip } from '@nextui-org/react';
 import clsx from 'clsx';
-import { Bot, Maximize2, Minimize2, PanelLeftClose, PanelLeftOpen, Send, X } from 'lucide-react';
+import { CloseCircle, Send2, SidebarLeft, SidebarRight } from 'iconsax-react';
+import { Bot, Maximize2, Minimize2 } from 'lucide-react';
+import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
 import TypingText from '@/components/TypingText/TypingText';
@@ -37,10 +39,9 @@ export default function HungerMapChatbot() {
   const [isTyping, setIsTyping] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
-  // TODO: get isMobile from context later?
   const isMobile = useMediaQuery('(max-width: 640px)');
 
-  const toggleChat = () => {
+  const toggleChat = (): void => {
     if (isMobile) {
       setIsFullScreen(!isOpen);
     } else if (isOpen) {
@@ -50,17 +51,13 @@ export default function HungerMapChatbot() {
     setIsOpen(!isOpen);
   };
 
-  const toggleFullScreen = () => {
+  const toggleFullScreen = (): void => {
     if (!isMobile) {
       setIsFullScreen(!isFullScreen);
     }
   };
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
-  const startNewChat = () => {
+  const startNewChat = (): void => {
     const newChat: IChat = { id: chats.length + 1, title: `Chat ${chats.length + 1}`, messages: [] };
     setChats([...chats, newChat]);
     setCurrentChatIndex(chats.length);
@@ -73,7 +70,7 @@ export default function HungerMapChatbot() {
    * Select chat in side bar
    * @param index is the index of the chat to select
    */
-  const selectChat = (index: number) => {
+  const selectChat = (index: number): void => {
     setCurrentChatIndex(index);
     if (isMobile) {
       setIsSidebarOpen(false);
@@ -84,7 +81,7 @@ export default function HungerMapChatbot() {
    * Handle AI response
    * @param text is user input text
    */
-  const handleAIResponse = async (text: string) => {
+  const handleAIResponse = async (text: string): Promise<void> => {
     const previousMessages = chats[currentChatIndex].messages;
     let aiResponse = '';
     try {
@@ -107,17 +104,21 @@ export default function HungerMapChatbot() {
     setChats(updatedChatsWithAI);
   };
 
-  const handleTypingComplete = () => {
-    setIsTyping(false); // set isTyping to false when typing is complete
+  const handleKeyDown = (keyboardEvent: React.KeyboardEvent<HTMLTextAreaElement>): void => {
+    if (keyboardEvent.key === 'Enter' && !keyboardEvent.shiftKey) {
+      keyboardEvent.preventDefault();
+      if (isTyping) return; // prevent multiple submission
+      handleSubmit(keyboardEvent);
+    }
   };
 
   /**
    * Handle form submit
-   * @param e is form event
+   * @param fromEvent is form event including key down triggered submit
    * @param promptText is requested text from user
    */
-  const handleSubmit = async (e: React.FormEvent, promptText: string | null = null) => {
-    e.preventDefault();
+  const handleSubmit = async (fromEvent: React.FormEvent, promptText: string | null = null) => {
+    fromEvent.preventDefault();
     const text = promptText || input;
     if (isTyping) return; // prevent multiple submission
     if (text.trim()) {
@@ -188,10 +189,10 @@ export default function HungerMapChatbot() {
           >
             <CardHeader className="flex items-center justify-between p-4">
               <div className="flex items-center space-x-2">
-                <Button variant="light" isIconOnly onClick={toggleSidebar}>
-                  {isSidebarOpen ? <PanelLeftClose className="h-4 w-4" /> : <PanelLeftOpen className="h-4 w-4" />}
+                <Button variant="light" isIconOnly onClick={() => setIsSidebarOpen((previousValue) => !previousValue)}>
+                  {isSidebarOpen ? <SidebarLeft className="h-4 w-4" /> : <SidebarRight className="h-4 w-4" />}
                 </Button>
-                <img src="/wfp-logo.png" alt="WFP Logo" className="h-8 w-8 mr-2" />
+                <Image src="/wfp-logo.png" width={32} height={32} alt="WFP Logo" className="mr-2" />
                 <h2 className="text-lg font-semibold truncate">{CHAT_TITLE}</h2>
               </div>
               <div className="flex items-center space-x-2">
@@ -204,7 +205,7 @@ export default function HungerMapChatbot() {
                 )}
                 <Tooltip content="Close Chat">
                   <Button variant="light" isIconOnly onClick={toggleChat}>
-                    <X className="h-4 w-4" />
+                    <CloseCircle className="h-4 w-4" />
                   </Button>
                 </Tooltip>
               </div>
@@ -216,11 +217,14 @@ export default function HungerMapChatbot() {
                 {isMobile && isSidebarOpen && (
                   /* since it has been show as overlay style here, once click this area then close side panel better not use button here */
                   // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-                  <div className="fixed inset-0 z-10 opacity-50 bg-white dark:bg-black" onClick={toggleSidebar} />
+                  <div
+                    className="fixed inset-0 z-10 opacity-50 bg-white dark:bg-black"
+                    onClick={() => setIsSidebarOpen((previousValue) => !previousValue)}
+                  />
                 )}
                 {/* chat area */}
 
-                <div className={clsx('flex-1 p-4 overflow-y-auto')}>
+                <div className="flex-1 p-4 overflow-y-auto">
                   {chats[currentChatIndex].messages.length === 0 ? (
                     <div className="flex flex-col items-center mt-4 h-full space-y-4">
                       <p className="text-center text-xl max-w-[80%] mb-2">{WELCOME_MESSAGE}</p>
@@ -229,7 +233,7 @@ export default function HungerMapChatbot() {
                         {DEFAULT_PROMPT.map((prompt) => (
                           <Button
                             key={prompt.id}
-                            onClick={(e) => handleSubmit(e, prompt.value)}
+                            onClick={(event) => handleSubmit(event, prompt.value)}
                             className="
                               truncate w-full mb-2 max-w-[250px] sm:max-w-[400px] border border-solid border-black dark:border-white bg-transparent hover:bg-chatbotDefaultPromptHover dark:hover:bg-chatbotDefaultPromptHover opacity-100 dark:hover:opacity-60
                               "
@@ -250,7 +254,7 @@ export default function HungerMapChatbot() {
                         )}
                       >
                         {message.role === SenderRole.ASSISTANT && (
-                          <div className="relative flex items-center justify-center bg-transparent w-12 h-12 rounded-full border-2 border-black dark:border-white bg-white dark:bg-black">
+                          <div className="relative flex items-center justify-center bg-transparent w-10 h-10 rounded-full border-2 border-black dark:border-white bg-white dark:bg-black">
                             <Bot className="w-6 h-6 stroke-black dark:stroke-white" />
                           </div>
                         )}
@@ -269,7 +273,7 @@ export default function HungerMapChatbot() {
                               text={message.content}
                               speed={100}
                               endSentencePause={500}
-                              onTypingComplete={handleTypingComplete}
+                              onTypingComplete={() => setIsTyping(false)}
                             />
                           )}
                           {message.dataSources && (
@@ -306,21 +310,15 @@ export default function HungerMapChatbot() {
                   <textarea
                     ref={inputRef}
                     value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        if (isTyping) return; // prevent multiple submission
-                        handleSubmit(e);
-                      }
-                    }}
+                    onChange={(inputEvent) => setInput(inputEvent.target.value)}
+                    onKeyDown={handleKeyDown}
                     placeholder={TYPING_PLACEHOLDER}
                     className="rounded-xl border border-solid border-black bg-chatbotInputArea dark:bg-chatbotInputArea flex-grow px-3 py-2 mr-2 dark:text-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none overflow-hidden"
                     rows={1}
                   />
                   <Tooltip content="Submit">
                     <Button type="submit" variant="light" isIconOnly disabled={isTyping}>
-                      <Send className="h-4 w-4" />
+                      <Send2 className="h-4 w-4" />
                     </Button>
                   </Tooltip>
                 </div>

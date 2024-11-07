@@ -1,16 +1,10 @@
 'use client';
 
 import { Accordion, AccordionItem } from '@nextui-org/accordion';
-import { commonColors } from '@nextui-org/theme';
-import { useTheme } from 'next-themes';
 
 import { AccordionsProps } from '@/domain/props/AccordionProps';
 
 export default function CustomAccordion({ items }: AccordionsProps) {
-  const { theme } = useTheme();
-  const lightThemeBg = commonColors.zinc;
-  const darkThemeBg = commonColors.black;
-
   return (
     <div className="w-full flex justify-start items-start max-w-[600px] overflow-hidden p-2 rounded-lg">
       <Accordion variant="splitted" className="overflow-x-hidden">
@@ -18,10 +12,7 @@ export default function CustomAccordion({ items }: AccordionsProps) {
           <AccordionItem
             key={item.title}
             aria-label={item.title}
-            className="last:border-b-[none]"
-            style={{
-              backgroundColor: theme === 'dark' ? darkThemeBg : lightThemeBg[500],
-            }}
+            className="last:border-b-[none] dark:bg-black white:bg-white"
             title={
               <div className="flex justify-between w-full">
                 <span>{item.title}</span>

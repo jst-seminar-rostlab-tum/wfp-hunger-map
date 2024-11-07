@@ -6070,6 +6070,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"iconsax-react@npm:^0.0.8":
+  version: 0.0.8
+  resolution: "iconsax-react@npm:0.0.8"
+  dependencies:
+    prop-types: "npm:^15.7.2"
+  peerDependencies:
+    react: "*"
+  checksum: 10c0/056532f76b5704428e3d2e20893848f57b002fe4051c7cf4e3de102f744cd56d9115b4c708b3a38c0cffc14fd20df3c0bd2be679fa24fa113b8433072b57dd4d
+  languageName: node
+  linkType: hard
+
 "iconv-lite@npm:^0.6.2":
   version: 0.6.3
   resolution: "iconv-lite@npm:0.6.3"
@@ -7132,6 +7143,7 @@ __metadata:
     highcharts: "npm:^11.4.8"
     highcharts-react-official: "npm:^3.2.1"
     husky: "npm:^9.1.6"
+    iconsax-react: "npm:^0.0.8"
     intl-messageformat: "npm:^10.5.0"
     leaflet: "npm:^1.9.4"
     leaflet-defaulticon-compatibility: "npm:^0.1.2"
@@ -7732,7 +7744,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.8.1":
+"prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:

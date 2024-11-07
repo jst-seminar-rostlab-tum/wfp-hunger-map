@@ -16,8 +16,6 @@ module.exports = {
       colors: {
         brand: '#157DBC',
         brandHover: '#0F6396',
-        lightGrey: '#B0B0B0',
-        darkGrey: '#444444',
       },
     },
   },
@@ -39,6 +37,7 @@ module.exports = {
             clusterOrange: '#FFB74D',
             clusterRed: '#FF5252',
             default: '#157DBC',
+            surfaceGrey: '#B0B0B0',
           },
         },
         dark: {
@@ -55,6 +54,7 @@ module.exports = {
             clusterOrange: '#FFB74D',
             clusterRed: '#FF5252',
             default: '#157DBC',
+            surfaceGrey: '#444444',
           },
         },
       },

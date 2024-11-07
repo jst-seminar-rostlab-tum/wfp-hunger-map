@@ -10,6 +10,7 @@ import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
 import TypingText from '@/components/TypingText/TypingText';
+import container from '@/container';
 import {
   CHAT_TITLE,
   DATA_SOURCES,
@@ -21,15 +22,17 @@ import {
   TYPING_PLACEHOLDER,
   WELCOME_MESSAGE,
 } from '@/domain/constant/chatbot/Chatbot';
+import { APIError } from '@/domain/entities/chatbot/BackendCommunication';
 import { IChat } from '@/domain/entities/chatbot/Chatbot';
 import { SenderRole } from '@/domain/enums/SenderRole';
-import { APIError, chatService, formatChatResponse } from '@/services/api/chatbot';
+import ChatbotRepository from '@/domain/repositories/ChatbotRepository';
 import { useMediaQuery } from '@/utils/resolution';
 
 import TypingDots from '../TypingText/TypingDot';
 import ChatbotSidebar from './ChatbotSidebar';
 
 export default function HungerMapChatbot() {
+  const chatbot = container.resolve<ChatbotRepository>('ChatbotRepository');
   const [isOpen, setIsOpen] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -90,8 +93,8 @@ export default function HungerMapChatbot() {
     const previousMessages = chats[currentChatIndex].messages;
     let aiResponse = '';
     try {
-      const response = await chatService.sendMessage(text, { previous_messages: previousMessages });
-      aiResponse = formatChatResponse(response).text;
+      const response = await chatbot.sendMessage(text, { previous_messages: previousMessages });
+      aiResponse = response.response;
     } catch (err) {
       if (err instanceof APIError) {
         aiResponse = `Ups! Unfortunately, it seems like there was a problem connecting to the server...\n ${err.status}: ${err.message}`;

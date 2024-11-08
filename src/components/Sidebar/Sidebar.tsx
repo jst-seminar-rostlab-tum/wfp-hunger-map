@@ -2,7 +2,6 @@
 
 import { Button } from '@nextui-org/button';
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
-import { Image } from '@nextui-org/image';
 import { Input } from '@nextui-org/input';
 import { Listbox, ListboxItem, ListboxSection } from '@nextui-org/listbox';
 import { SidebarLeft } from 'iconsax-react';
@@ -52,6 +51,7 @@ export function Sidebar() {
               <SidebarLeft size={24} />
             </Button>
           </div>
+
           <ThemeSwitch />
           <Input className="w-full" color="primary" placeholder="Search a country" variant="faded" />
         </CardHeader>
@@ -69,7 +69,7 @@ export function Sidebar() {
               {SidebarOperations.getSidebarMapTypes().map((item) => (
                 <ListboxItem
                   key={item.key}
-                  startContent={item.icon && <Image src={item.icon} alt={item.label} width={24} />}
+                  startContent={item.icon && <NextImage src={item.icon} alt={item.label} width={24} height={24} />}
                 >
                   {item.label}
                 </ListboxItem>

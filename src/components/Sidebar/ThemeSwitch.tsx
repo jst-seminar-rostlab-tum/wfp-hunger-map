@@ -20,8 +20,8 @@ export function ThemeSwitch() {
   if (!mounted) return null;
 
   return (
-    <div className="flex items-center gap-3">
-      <span className="text-sm">Light mode</span>
+    <div className="flex items-center justify-between gap-4 w-full ml-1">
+      <small>Theme</small>
       <Switch
         classNames={{
           wrapper: ['bg-yellow-200', 'group-data-[selected=true]:bg-primary'],
@@ -37,7 +37,6 @@ export function ThemeSwitch() {
           )
         }
       />
-      <span className="text-sm">Dark mode</span>
     </div>
   );
 }

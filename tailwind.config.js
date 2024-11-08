@@ -26,7 +26,7 @@ module.exports = {
         light: {
           colors: {
             primary: { DEFAULT: '#157DBC', foreground: '#F5F5F5' },
-            secondary: '#EEEEEE',
+            secondary: '#666666',
             foreground: '#333333',
             background: '#F5F5F5',
             divider: '#157DBC',
@@ -37,12 +37,13 @@ module.exports = {
             clusterOrange: '#FFB74D',
             clusterRed: '#FF5252',
             default: '#157DBC',
+            surfaceGrey: '#B0B0B0',
           },
         },
         dark: {
           colors: {
             primary: '#157DBC',
-            secondary: '#424242',
+            secondary: '#B0B0B0',
             foreground: '#E0E0E0',
             background: '#121212',
             divider: '#157DBC',
@@ -53,6 +54,7 @@ module.exports = {
             clusterOrange: '#FFB74D',
             clusterRed: '#FF5252',
             default: '#157DBC',
+            surfaceGrey: '#444444',
           },
         },
       },

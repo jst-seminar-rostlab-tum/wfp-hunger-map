@@ -36,6 +36,7 @@ export default function HungerMapChatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isUserMessageSent, setIsUserMessageSent] = useState(false);
   const [chats, setChats] = useState<IChat[]>([{ id: 1, title: 'Chat 1', messages: [] }]);
   const [currentChatIndex, setCurrentChatIndex] = useState(0);
   const [input, setInput] = useState('');
@@ -84,12 +85,8 @@ export default function HungerMapChatbot() {
    * Handle AI response
    * @param text is user input text
    * @param updatedChats is the updated chats object
-   * since React's setState is asynchronous,
-   * updating the chat state is not immediately reflected in the next line of code.
-   * Import updated chats ensures that handleAIResponse always gets the latest chats state
-   * avoids reading old state when it hasn't been updated yet.
    */
-  const handleAIResponse = async (text: string, updatedChats: IChat[]): Promise<void> => {
+  const handleAIResponse = async (text: string): Promise<void> => {
     const previousMessages = chats[currentChatIndex].messages;
     let aiResponse = '';
     try {
@@ -102,7 +99,7 @@ export default function HungerMapChatbot() {
     }
     // TODO: get data sources from response later
     const dataSources = DEFAULT_DATA_SOURCES;
-    const updatedChatsWithAI = structuredClone(updatedChats);
+    const updatedChatsWithAI = structuredClone(chats);
     updatedChatsWithAI[currentChatIndex].messages.push({
       id: crypto.randomUUID(),
       content: aiResponse,
@@ -112,20 +109,12 @@ export default function HungerMapChatbot() {
     setChats(updatedChatsWithAI);
   };
 
-  const handleKeyDown = (keyboardEvent: React.KeyboardEvent<HTMLTextAreaElement>): void => {
-    if (keyboardEvent.key === 'Enter' && !keyboardEvent.shiftKey) {
-      keyboardEvent.preventDefault();
-      if (isTyping) return; // prevent multiple submission
-      handleSubmit(keyboardEvent);
-    }
-  };
-
   /**
    * Handle form submit
    * @param fromEvent is form event including key down triggered submit
    * @param promptText is requested text from user
    */
-  const handleSubmit = async (fromEvent: React.FormEvent, promptText: string | null = null) => {
+  const handleSubmit = (fromEvent: React.FormEvent, promptText: string | null = null): void => {
     fromEvent.preventDefault();
     const text = promptText || input;
     if (isTyping) return; // prevent multiple submission
@@ -137,11 +126,35 @@ export default function HungerMapChatbot() {
       }
       setChats(updatedChats);
       setInput('');
+      setIsUserMessageSent(true);
       setIsTyping(true);
-
-      await handleAIResponse(text, updatedChats);
     }
   };
+
+  const handleKeyDown = (keyboardEvent: React.KeyboardEvent<HTMLTextAreaElement>): void => {
+    if (keyboardEvent.key === 'Enter' && !keyboardEvent.shiftKey) {
+      keyboardEvent.preventDefault();
+      if (isTyping) return; // prevent multiple submission
+      handleSubmit(keyboardEvent);
+    }
+  };
+
+  /**
+   * Since React's setState is asynchronous,
+   * Updating the chat state when handleSubmit is not immediately reflected in the handleAIResponse.
+   * So, we need to clone the chats object to make sure the state is updated before calling handleAIResponse.
+   * And trigger handleAIResponse only when isUserMessageSent is true.
+   */
+  useEffect(() => {
+    if (isUserMessageSent) {
+      const latestMessage = chats[currentChatIndex].messages.slice(-1)[0];
+      if (latestMessage.role === SenderRole.USER) {
+        handleAIResponse(latestMessage.content).then(() => {
+          setIsUserMessageSent(false);
+        });
+      }
+    }
+  }, [isUserMessageSent]);
 
   // use to scroll to the end of the chat when new messages are added
   useEffect(() => {

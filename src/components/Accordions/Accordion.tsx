@@ -14,7 +14,7 @@ export default function CustomAccordion({ items }: AccordionsProps) {
             aria-label={item.title}
             className="last:border-b-[none] dark:bg-black white:bg-white overflow-x-auto"
             title={
-              <div className="flex justify-between w-full">
+              <div className="flex justify-between items-center w-full">
                 <span>{item.title}</span>
                 {item.iconSrc && <img src={item.iconSrc} alt="info icon" className="w-[37px] h-[37px] p-[5.5px]" />}
               </div>

@@ -1,4 +1,5 @@
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/table';
+import clsx from 'clsx';
 import React from 'react';
 
 import GroupedTableProps, { GroupedTableRow } from '@/domain/props/GroupedTableProps';
@@ -16,7 +17,10 @@ function getTableCell(row: GroupedTableRow, columnKey: string) {
 
   return (
     <TableCell
-      className={`${addBottomBorder ? 'border-b-2' : ''} ${columnKey === 'mainColumn' ? 'text-left' : 'text-center'} align-top`}
+      className={clsx('align-top', {
+        'border-b-2': addBottomBorder,
+        'text-center': columnKey !== 'mainColumn',
+      })}
       rowSpan={columnKey === 'mainColumn' ? row.groupLength : 1}
     >
       {cellContent}
@@ -48,7 +52,7 @@ function GroupedTable({ columns, data, ariaLabel }: GroupedTableProps) {
         {({ columnId, label }) => (
           <TableColumn
             key={columnId}
-            className={`border-b-2 ${columnId === 'mainColumn' ? 'text-left' : 'text-center'} text-wrap mb-20`}
+            className={clsx('border-b-2 text-wrap', { 'text-center': columnId !== 'mainColumn' })}
           >
             {label}
           </TableColumn>

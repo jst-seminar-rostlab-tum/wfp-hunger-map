@@ -2,7 +2,7 @@
 
 import 'leaflet/dist/leaflet.css';
 
-import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
+import { MapContainer, TileLayer } from 'react-leaflet';
 
 import { MapProps } from '@/domain/props/MapProps';
 
@@ -12,9 +12,15 @@ export default function Map({ countries }: MapProps) {
   return (
     <MapContainer
       center={[21.505, -0.09]}
-      zoom={4}
-      style={{ height: '100%', width: '100%', zIndex: 40 }}
-      zoomControl={false}
+      zoom={3}
+      maxBounds={[
+        [-90, -180],
+        [90, 180],
+      ]}
+      minZoom={3}
+      maxZoom={8}
+      maxBoundsViscosity={1.0}
+      style={{ height: '100%', width: '100%' }}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -26,7 +32,6 @@ export default function Map({ countries }: MapProps) {
           // TODO fix the layout, this is just an example
           <CountryPolygon country={c} key={c.properties.adm0_id} />
         ))}
-      <ZoomControl position="topright" />
     </MapContainer>
   );
 }

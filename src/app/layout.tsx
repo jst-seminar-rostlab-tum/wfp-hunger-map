@@ -3,6 +3,8 @@ import '@/styles/globals.css';
 import clsx from 'clsx';
 import { Metadata, Viewport } from 'next';
 
+import { AlertsMenuWrapper } from '@/components/AlertsMenu/AlertsMenuWrapper';
+import { Sidebar } from '@/components/Sidebar/Sidebar';
 import { fontSans } from '@/config/fonts';
 import { siteConfig } from '@/config/site';
 
@@ -33,6 +35,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={clsx('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
         <Providers themeProps={{ attribute: 'class', defaultTheme: 'dark' }}>
           <div className="relative h-screen">
+            <Sidebar />
+            <AlertsMenuWrapper />
             <main className="h-full w-full">{children}</main>
           </div>
         </Providers>

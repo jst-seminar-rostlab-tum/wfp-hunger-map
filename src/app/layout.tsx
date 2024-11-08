@@ -7,6 +7,7 @@ import { fontSans } from '@/config/fonts';
 import { siteConfig } from '@/config/site';
 
 import { Providers } from './providers';
+import HungerAlert from '@/components/HungerAlert/HungerAlert';
 
 export const metadata: Metadata = {
   title: {
@@ -34,6 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Providers themeProps={{ attribute: 'class', defaultTheme: 'dark' }}>
           <div className="relative h-screen">
             <main className="h-full w-full">{children}</main>
+            <HungerAlert />
           </div>
         </Providers>
       </body>

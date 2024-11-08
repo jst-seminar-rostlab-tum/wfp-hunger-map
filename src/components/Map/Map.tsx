@@ -2,7 +2,7 @@
 
 import 'leaflet/dist/leaflet.css';
 
-import { MapContainer, TileLayer } from 'react-leaflet';
+import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
 
 import { MapProps } from '@/domain/props/MapProps';
 
@@ -20,12 +20,14 @@ export default function Map({ countries }: MapProps) {
       minZoom={3}
       maxZoom={8}
       maxBoundsViscosity={1.0}
-      style={{ height: '100%', width: '100%' }}
+      zoomControl={false}
+      style={{ height: '100%', width: '100%', zIndex: 40 }}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+      <ZoomControl position="bottomright" />
       {countries.features
         .filter((c) => c.properties.interactive)
         .map((c) => (

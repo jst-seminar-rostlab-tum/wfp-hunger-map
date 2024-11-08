@@ -6,6 +6,8 @@ import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import type { ThemeProviderProps } from 'next-themes/dist/types.d.ts';
 import * as React from 'react';
 
+import { SidebarProvider } from '@/domain/contexts/SidebarContext';
+
 export interface ProvidersProps {
   children: React.ReactNode;
   themeProps?: ThemeProviderProps;
@@ -16,7 +18,9 @@ export function Providers({ children, themeProps }: ProvidersProps) {
 
   return (
     <NextUIProvider navigate={router.push}>
-      <NextThemesProvider {...themeProps}>{children}</NextThemesProvider>
+      <NextThemesProvider defaultTheme="system" {...themeProps}>
+        <SidebarProvider>{children} </SidebarProvider>
+      </NextThemesProvider>
     </NextUIProvider>
   );
 }

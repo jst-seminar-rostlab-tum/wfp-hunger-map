@@ -10,7 +10,18 @@ import { CountryPolygon } from './CountryPolygon';
 
 export default function Map({ countries }: MapProps) {
   return (
-    <MapContainer center={[21.505, -0.09]} zoom={4} style={{ height: '100%', width: '100%' }}>
+    <MapContainer
+      center={[21.505, -0.09]}
+      zoom={3}
+      maxBounds={[
+        [-90, -180],
+        [90, 180],
+      ]}
+      minZoom={3}
+      maxZoom={8}
+      maxBoundsViscosity={1.0}
+      style={{ height: '100%', width: '100%' }}
+    >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

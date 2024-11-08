@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* PdfViewer.css */
+canvas.react-pdf__Page__canvas {
+  margin-bottom: 50px;
+}
+
 /* Define custom classes for animation delay */
 .dot-delay-1 {
   animation-delay: 0s;

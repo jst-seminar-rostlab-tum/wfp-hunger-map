@@ -3,11 +3,13 @@ import '@/styles/globals.css';
 import clsx from 'clsx';
 import { Metadata, Viewport } from 'next';
 
+import { AlertsMenuWrapper } from '@/components/AlertsMenu/AlertsMenuWrapper';
+import Chatbot from '@/components/Chatbot/Chatbot';
+import { Sidebar } from '@/components/Sidebar/Sidebar';
 import { fontSans } from '@/config/fonts';
 import { siteConfig } from '@/config/site';
 
 import { Providers } from './providers';
-import Chatbot from '@/components/Chatbot/Chatbot';
 
 export const metadata: Metadata = {
   title: {
@@ -35,6 +37,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Providers themeProps={{ attribute: 'class', defaultTheme: 'dark' }}>
           <div className="relative h-screen">
             <Chatbot />
+            <Sidebar />
+            <AlertsMenuWrapper />
             <main className="h-full w-full">{children}</main>
           </div>
         </Providers>

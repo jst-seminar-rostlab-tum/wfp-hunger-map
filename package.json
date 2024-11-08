@@ -24,6 +24,7 @@
     "@nextui-org/snippet": "2.0.43",
     "@nextui-org/switch": "2.0.34",
     "@nextui-org/system": "2.2.6",
+    "@nextui-org/table": "^2.0.40",
     "@nextui-org/theme": "2.2.11",
     "@react-aria/ssr": "3.9.4",
     "@react-aria/visually-hidden": "3.8.12",

@@ -1,7 +1,55 @@
+'use client';
+
+// 'use client' is necessary because of an unresolved bug in NextUI Table
+// https://github.com/nextui-org/nextui/issues/1403#issuecomment-1678863519
+
 import { Link } from '@nextui-org/link';
 import React from 'react';
 
 import HungerMapLiveSuperscript from '@/components/About/HungerMapLiveSuperscript';
+import GroupedTable from '@/components/Table/GroupedTable';
+import { GroupedTableColumns, GroupedTableData } from '@/domain/props/GroupedTableProps';
+
+const accuracyTableColumns = [
+  { columnId: 'mainColumn', label: 'Measure' },
+  { columnId: 'withPast', label: 'With past data' },
+  { columnId: 'FCS', label: 'FCS' },
+  { columnId: 'rCSI', label: 'rCSI' },
+] as GroupedTableColumns;
+
+const accuracyTableData = [
+  {
+    groupKey: '1',
+    groupName: (
+      <>
+        {' '}
+        <Link href="#" size="md">
+          Coefficient of determination (R²)
+        </Link>{' '}
+        (higher is better)
+      </>
+    ),
+    attributeRows: [
+      { withPast: true, FCS: 0.75, rCSI: 0.78 },
+      { withPast: false, FCS: 0.63, rCSI: 0.73 },
+    ],
+  },
+  {
+    groupKey: '2',
+    groupName: (
+      <>
+        <Link href="#" size="md">
+          Mean Absolute Error
+        </Link>{' '}
+        (lower is better)
+      </>
+    ),
+    attributeRows: [
+      { withPast: true, FCS: 0.08, rCSI: 0.06 },
+      { withPast: false, FCS: 0.09, rCSI: 0.07 },
+    ],
+  },
+] as GroupedTableData;
 
 export function About() {
   return (
@@ -38,6 +86,13 @@ export function About() {
           </Link>
           .
         </p>
+      </section>
+      <section>
+        <GroupedTable
+          columns={accuracyTableColumns}
+          data={accuracyTableData}
+          ariaLabel="Performance measures of the prediction algorithms"
+        />
       </section>
     </main>
   );

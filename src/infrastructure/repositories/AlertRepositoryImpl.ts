@@ -7,7 +7,7 @@ import { AlertRepository } from '@/domain/repositories/AlertRepository';
 export class AlertRepositoryImpl implements AlertRepository {
   async getHazardData(): Promise<Hazard[]> {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/pdc.json`);
-    const data: ResponseWrapper<Hazard> = await response.json();
+    const data: ResponseWrapper<Hazard[]> = await response.json();
     return data.body;
   }
 

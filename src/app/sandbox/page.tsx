@@ -2,45 +2,50 @@
 
 import { Switch } from '@nextui-org/switch';
 import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
 
 import { Tooltip } from '@/components/Tooltip/Tooltip';
 
 /**
- * todo
- * @constructor
+ * For testing purposes only -> todo: to be deleted after PR
  */
 export default function Sandbox() {
-  /**
-   * mounted...
-   */
-  const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
+  const tooltipTestBox = (
+    <div className="w-full h-fit flex flex-row flex-wrap gap-10 justify-between px-8 pt-40 pb-16 border-b border-gray-800">
+      <Tooltip text="Lorem ipsum dolor">
+        <div className="border-1 p-1">simple tooltip</div>
+      </Tooltip>
+      <Tooltip
+        text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod."
+        title="Lorem ipsum dolor sit ame"
+      >
+        <div className="border-1 p-1">
+          <p>tooltip with</p>
+          title
+        </div>
+      </Tooltip>
+      <Tooltip text="Dolore magna aliquyam erat, sed diam voluptua." warning>
+        <div className="border-1 p-1">tooltip and warning</div>
+      </Tooltip>
+      <Tooltip
+        text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
+        title="dolore magna aliquyam erat"
+        warning
+      >
+        <div className="border-1 p-1">maxed out tooltip</div>
+      </Tooltip>
+    </div>
+  );
 
   return (
     <>
-      <div className="w-full h-10 p-4 flex flex-row items-center gap-4 border-b border-gray-800">
+      <div className="w-full h-10 p-8 flex flex-row items-center gap-4 border-b border-gray-800">
         <p> Change dark/light mode: </p>
         <Switch onChange={() => setTheme(theme === 'light' ? 'dark' : 'light')} aria-label="Toggle theme" size="sm" />
       </div>
-      <div className="w-full h-fit min-h-60 p-4 border-b border-gray-800">
-        <Tooltip text="example text" title="example title">
-          <div className="w-fit bg-gray-200">
-            <p>hover for simple tooltip</p>
-          </div>
-        </Tooltip>
-        <Tooltip text="example text">This text will be larger.</Tooltip>
-        <Tooltip text="example text" warning>
-          This text will be larger.
-        </Tooltip>
-      </div>
-      <div className="w-full h-fit min-h-60 p-4 border-b border-gray-800"> Sandbox 2</div>
+      {tooltipTestBox}
+      <div className="w-full h-fit p-8 border-b border-gray-800"> Sandbox 2</div>
     </>
   );
 }

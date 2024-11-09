@@ -3,11 +3,11 @@ import '@/styles/globals.css';
 import clsx from 'clsx';
 import { Metadata, Viewport } from 'next';
 
+import HungerAlert from '@/components/HungerAlert/HungerAlert';
 import { fontSans } from '@/config/fonts';
 import { siteConfig } from '@/config/site';
 
 import { Providers } from './providers';
-import HungerAlert from '@/components/HungerAlert/HungerAlert';
 
 export const metadata: Metadata = {
   title: {

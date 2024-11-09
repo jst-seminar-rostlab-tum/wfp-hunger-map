@@ -1,14 +1,8 @@
 'use client';
 
-import { Modal, ModalContent, ModalHeader, ModalBody } from '@nextui-org/react';
+import { Modal, ModalBody, ModalContent, ModalHeader } from '@nextui-org/react';
 
-interface PopupModalProps {
-  isModalOpen: boolean;
-  toggleModal: () => void;
-  modalTitle: string;
-  modalSize: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl' | 'full';
-  children: React.ReactNode; // modalBody
-}
+import PopupModalProps from '@/domain/props/PopupModalProps';
 
 export default function PopupModal({ isModalOpen, toggleModal, modalTitle, modalSize, children }: PopupModalProps) {
   return (

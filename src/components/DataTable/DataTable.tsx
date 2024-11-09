@@ -1,17 +1,9 @@
-import React, { useState, useMemo } from 'react';
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination } from '@nextui-org/react';
+import { Pagination, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react';
+import React, { useMemo, useState } from 'react';
 
-interface Column {
-  label: string;
-  key: string;
-}
+import DataTableProps from '@/domain/props/DataTableProps';
 
-interface DataTableProps<T> {
-  rows: T[];
-  columns: Column[];
-}
-
-export default function DataTable<T extends { [key: string]: any }>({ rows = [], columns }: DataTableProps<T>) {
+export default function DataTable<T>({ rows, columns }: DataTableProps<T>) {
   const [page, setPage] = useState(1);
   const rowsPerPage = 10;
 
@@ -47,13 +39,16 @@ export default function DataTable<T extends { [key: string]: any }>({ rows = [],
         ))}
       </TableHeader>
       <TableBody>
-        {paginatedRows.map((row, index) => (
-          <TableRow key={index}>
-            {columns.map((column) => (
-              <TableCell key={column.key}>{row[column.key]}</TableCell>
-            ))}
-          </TableRow>
-        ))}
+        {paginatedRows.map((row, index) => {
+          const uniqueRowKey = `${index}-${String(row[columns[0].key as keyof T])}`;
+          return (
+            <TableRow key={uniqueRowKey}>
+              {columns.map((column) => (
+                <TableCell key={column.key}>{String(row[column.key as keyof T])}</TableCell>
+              ))}
+            </TableRow>
+          );
+        })}
       </TableBody>
     </Table>
   );

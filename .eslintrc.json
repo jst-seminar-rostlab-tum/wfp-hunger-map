@@ -45,6 +45,7 @@
       "version": "detect"
     },
     "import/resolver": {
+      "typescript": {},
       "alias": {
         "map": [["@", "./src/"]],
         "extensions": [".ts", ".tsx", ""]

@@ -3,7 +3,6 @@ import '@/styles/globals.css';
 import clsx from 'clsx';
 import { Metadata, Viewport } from 'next';
 
-import HungerAlert from '@/components/HungerAlert/HungerAlert';
 import { AlertsMenuWrapper } from '@/components/AlertsMenu/AlertsMenuWrapper';
 import Chatbot from '@/components/Chatbot/Chatbot';
 import { Sidebar } from '@/components/Sidebar/Sidebar';
@@ -41,7 +40,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Sidebar />
             <AlertsMenuWrapper />
             <main className="h-full w-full">{children}</main>
-            <HungerAlert />
           </div>
         </Providers>
       </body>

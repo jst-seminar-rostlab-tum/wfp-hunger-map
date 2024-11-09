@@ -3,6 +3,7 @@
 import { Switch } from '@nextui-org/switch';
 import { useTheme } from 'next-themes';
 
+import { InformationPopup } from '@/components/InformationPopup/InformationPopup';
 import { Tooltip } from '@/components/Tooltip/Tooltip';
 
 /**
@@ -37,6 +38,31 @@ export default function Sandbox() {
       </Tooltip>
     </div>
   );
+  const isOpen = true;
+
+  const infoPopupTestBox = (
+    <div className="w-full h-fit flex flex-row flex-wrap gap-10 justify-between px-8 pt-40 pb-16 border-b border-gray-800">
+      <InformationPopup
+        isOpen={isOpen}
+        title="Lorem ipsum dolor"
+        content={[
+          {
+            subtitle: 'Consetetur sadipscing elitr sed diam',
+            text: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.',
+          },
+          {
+            subtitle: 'Lorem ipsum dolor',
+            text: 'Consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.',
+          },
+          {
+            subtitle: 'Sit amet',
+            text: 'Ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.',
+          },
+        ]}
+        warning
+      />
+    </div>
+  );
 
   return (
     <>
@@ -45,7 +71,7 @@ export default function Sandbox() {
         <Switch onChange={() => setTheme(theme === 'light' ? 'dark' : 'light')} aria-label="Toggle theme" size="sm" />
       </div>
       {tooltipTestBox}
-      <div className="w-full h-fit p-8 border-b border-gray-800"> Sandbox 2</div>
+      {infoPopupTestBox}
     </>
   );
 }

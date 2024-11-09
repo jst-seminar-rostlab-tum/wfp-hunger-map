@@ -40,7 +40,7 @@ export function Tooltip({ children, title, text, warning }: TooltipProps) {
       radius={RADIUS}
       shadow={SHADOW}
     >
-      {Array.isArray(children) ? <div> {children} </div> : children}
+      {Array.isArray(children) ? <> {...children} </> : children}
     </NextUITooltip>
   );
 }

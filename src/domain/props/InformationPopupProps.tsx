@@ -1,3 +1,9 @@
 export default interface InformationPopupProps {
-  data: undefined;
+  isOpen: boolean;
+  title: string;
+  content: {
+    subtitle: string;
+    text: string;
+  }[];
+  warning: boolean;
 }

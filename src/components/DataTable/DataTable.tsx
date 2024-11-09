@@ -16,40 +16,30 @@ export default function DataTable<T>({ rows, columns }: DataTableProps<T>) {
   }, [page, rows]);
 
   return (
-    <Table
-      removeWrapper
-      bottomContent={
-        <div className="flex w-full justify-center">
-          <Pagination
-            isCompact
-            showControls
-            color="secondary"
-            page={page}
-            total={totalPages}
-            onChange={(newPage) => setPage(newPage)}
-          />
-        </div>
-      }
-    >
-      <TableHeader>
-        {columns.map((column) => (
-          <TableColumn key={column.key} className="font-bold">
-            {column.label}
-          </TableColumn>
-        ))}
-      </TableHeader>
-      <TableBody>
-        {paginatedRows.map((row, index) => {
-          const uniqueRowKey = `${index}-${String(row[columns[0].key as keyof T])}`;
-          return (
-            <TableRow key={uniqueRowKey}>
-              {columns.map((column) => (
-                <TableCell key={column.key}>{String(row[column.key as keyof T])}</TableCell>
-              ))}
-            </TableRow>
-          );
-        })}
-      </TableBody>
-    </Table>
+    <div className="flex-1 flex flex-col justify-between items-center">
+      <Table removeWrapper>
+        <TableHeader>
+          {columns.map((column) => (
+            <TableColumn key={column.key} className="font-bold">
+              {column.label}
+            </TableColumn>
+          ))}
+        </TableHeader>
+        <TableBody>
+          {paginatedRows.map((row, index) => {
+            const uniqueRowKey = `${index}-${String(row[columns[0].key as keyof T])}`;
+            return (
+              <TableRow key={uniqueRowKey}>
+                {columns.map((column) => (
+                  <TableCell key={column.key}>{String(row[column.key as keyof T])}</TableCell>
+                ))}
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+
+      <Pagination isCompact showControls page={page} total={totalPages} onChange={(newPage) => setPage(newPage)} />
+    </div>
   );
 }

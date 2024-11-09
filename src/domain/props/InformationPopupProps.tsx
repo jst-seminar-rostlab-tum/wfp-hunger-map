@@ -4,7 +4,7 @@ export default interface InformationPopupProps {
   title: string;
   content: {
     subtitle?: string;
-    textSections: string[];
+    paragraphs: string[];
   }[];
   warning?: boolean;
 }

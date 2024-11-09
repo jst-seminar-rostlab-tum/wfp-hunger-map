@@ -3,9 +3,19 @@ import { nextui } from '@nextui-org/theme';
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   safelist: [
-    'w-[215px]', 'w-[179px]', 'w-[636px]', 'w-[500px]',
-    'h-[657px]', 'h-[600px]', 'rounded-[12px_0_0_12px]',
-    'max-w-[80%]', 'max-w-[250px]', 'max-w-[400px]', 'pl-[215px]', 'pl-[179px]', 'z-[9999]'
+    'w-[215px]',
+    'w-[179px]',
+    'w-[636px]',
+    'w-[500px]',
+    'h-[657px]',
+    'h-[600px]',
+    'rounded-[12px_0_0_12px]',
+    'max-w-[80%]',
+    'max-w-[250px]',
+    'max-w-[400px]',
+    'pl-[215px]',
+    'pl-[179px]',
+    'z-[9999]',
   ],
   content: [
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -43,7 +53,7 @@ module.exports = {
         '12px_0_0_12px': '12px 0 0 12px',
       },
       zIndex: {
-        '9999': '9999',
+        9999: '9999',
       },
       animation: {
         blink: 'blink 1s step-end infinite',
@@ -56,12 +66,22 @@ module.exports = {
         pulse: {
           '0%, 100%': { transform: 'scale(1)', opacity: '0.6' },
           '50%': { transform: 'scale(1.3)', opacity: '1' },
-        }
+        },
       },
     },
   },
   darkMode: 'class',
   plugins: [
+    function ({ addBase, theme }) {
+      addBase({
+        ':root': {
+          '--color-hover': theme('colors.hover'),
+          '--color-background': theme('colors.background'),
+          '--color-active-countries': theme('colors.activeCountries'),
+          '--color-inactive-countries': theme('colors.inactiveCountries'),
+        },
+      });
+    },
     nextui({
       themes: {
         light: {
@@ -89,6 +109,8 @@ module.exports = {
             chatbotUserMsg: '#E6F1FE',
             chatbotDivider: '#292d32',
             surfaceGrey: '#B0B0B0',
+            activeCountries: '#82bce0',
+            inactiveCountries: '#a7b3ba',
           },
         },
         dark: {
@@ -116,6 +138,8 @@ module.exports = {
             chatbotUserMsg: '#26262A',
             chatbotDivider: '#556372',
             surfaceGrey: '#444444',
+            activeCountries: '#115884',
+            inactiveCountries: '#85929b',
           },
         },
       },

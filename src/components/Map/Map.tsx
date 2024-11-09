@@ -2,10 +2,12 @@ import 'leaflet/dist/leaflet.css';
 
 import { Feature, FeatureCollection } from 'geojson';
 import { LeafletMouseEvent } from 'leaflet';
-import { GeoJSON, MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
+import { GeoJSON, MapContainer, ZoomControl } from 'react-leaflet';
 
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 import { MapProps } from '@/domain/props/MapProps';
+
+import VectorTileLayer from './VectorTileLayer';
 
 export default function Map({ countries }: MapProps) {
   const countryStyle: L.PathOptions = {
@@ -80,10 +82,7 @@ export default function Map({ countries }: MapProps) {
       zoomControl={false}
       style={{ height: '100%', width: '100%', zIndex: 40 }}
     >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
+      <VectorTileLayer />
       {countries && <GeoJSON data={countries as FeatureCollection} onEachFeature={onEachCountry} />}
       <ZoomControl position="bottomright" />
     </MapContainer>

@@ -1,9 +1,10 @@
 export default interface InformationPopupProps {
-  isOpen: boolean;
+  popupOpen: boolean;
+  closePopup: () => void;
   title: string;
   content: {
-    subtitle: string;
-    text: string;
+    subtitle?: string;
+    textSections: string[];
   }[];
-  warning: boolean;
+  warning?: boolean;
 }

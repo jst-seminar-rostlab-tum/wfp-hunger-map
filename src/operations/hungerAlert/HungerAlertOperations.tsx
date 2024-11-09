@@ -19,8 +19,7 @@ export default class HungerAlertOperations {
           country: countryName,
           fcs: `${Math.floor((fcs as number) * 100)}%`,
         }));
-    } catch (error) {
-      console.error('Error fetching or processing high hunger countries:', error);
+    } catch {
       return [];
     }
   }

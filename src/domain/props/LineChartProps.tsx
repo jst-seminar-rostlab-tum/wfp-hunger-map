@@ -10,6 +10,7 @@ export default interface LineChartProps {
   title?: string;
   description?: string;
   expandable?: boolean;
+  small?: boolean;
   data:
     | LineChartData
     | BalanceOfTradeGraph

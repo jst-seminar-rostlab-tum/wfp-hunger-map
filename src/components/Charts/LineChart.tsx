@@ -10,15 +10,23 @@ import LineChartOperations from '@/operations/charts/LineCharOperations.ts';
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from '@nextui-org/react';
 import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
 
-export function LineChart({ title, description, expandable, data }: LineChartProps) {
+export function LineChart({ title, description, expandable, small, data }: LineChartProps) {
+
+  const TITLE_TEXT_SIZE = small ? 'text-sm' : 'text-md';
+  const DESCRIPTION_TEXT_SIZE = small ? 'text-xs' : 'text-sm';
+  const CHART_HEIGHT = small ? 12 : 16;
+  const ICON_BUTTON_SIZE = small ? 3 : 4;
   const JSON_DOWNLOAD_FILE_NAME = `hunger_map_line_chart_json-${title}.json`;
+
 
   // full screen modal state handling
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
+  // convert data to `LineChartData` and build chart options for 'Highcharts'
   const lineChartData: LineChartData = LineChartOperations.convertToLineChartData(data);
   const chartOptions: Highcharts.Options = LineChartOperations.getHighChartData(lineChartData);
 
+  // trigger download of the given line chart `data` as a json file
   const downloadDataJson = () => {
     // convert data json object to string and encode as URI
     const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(data, null, 2))}`;
@@ -59,7 +67,7 @@ export function LineChart({ title, description, expandable, data }: LineChartPro
   // todo descr
   const fullScreenButton = expandable ? (
     <Button isIconOnly variant="light" size="sm" onClick={onOpen}>
-      <Maximize4 className="h-4 w-4" />
+      <Maximize4 className={`h-${ICON_BUTTON_SIZE} w-${ICON_BUTTON_SIZE}`} />
     </Button>
   ) : null;
 
@@ -67,14 +75,14 @@ export function LineChart({ title, description, expandable, data }: LineChartPro
     <>
       <div className="w-full h-fit flex-col rounded-lg pt-2 bg-background">
         <div className="w-full h-fit flex flex-row justify-between items-start gap-2 px-2">
-          <p className="text-md font-normal pt-1 flex flex-row items-center"> {title} </p>
+          <p className={`${TITLE_TEXT_SIZE} font-normal pt-1 flex flex-row items-center`}> {title} </p>
           {fullScreenButton}
         </div>
-        <p className="w-full h-fit pt-1 pb-3 text-sm font-normal px-2">{description}</p>
+        <p className={`w-full h-fit pt-1 pb-3 ${DESCRIPTION_TEXT_SIZE} px-2`}>{description}</p>
         <HighchartsReact
           highcharts={Highcharts}
           options={chartOptions}
-          containerProps={{ style: { width: '100%', height: '16rem', borderRadius: '0 0 0.5rem 0.5rem' } }}
+          containerProps={{ style: { width: '100%', height: `${CHART_HEIGHT}rem`, borderRadius: '0 0 0.5rem 0.5rem' } }}
         />
       </div>
       {fullScreenModal}

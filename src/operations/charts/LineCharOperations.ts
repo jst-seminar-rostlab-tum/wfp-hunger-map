@@ -2,32 +2,71 @@ import { SeriesOptionsType } from 'highcharts';
 
 import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph.ts';
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph.ts';
-import { FcsChartData } from '@/domain/entities/charts/FcsChartData.ts';
 import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
 import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
-import { RcsiChartData } from '@/domain/entities/charts/RcsiChartData.ts';
-import { RegionFcsChartData } from '@/domain/entities/charts/RegionFcsChartData.ts';
 
 export default class LineChartOperations {
   public static convertToLineChartData(
-    data:
-      | LineChartData
-      | BalanceOfTradeGraph
-      | CurrencyExchangeGraph
-      | InflationGraphs
-      | FcsChartData
-      | RcsiChartData
-      | RegionFcsChartData
+    data: LineChartData | BalanceOfTradeGraph | CurrencyExchangeGraph | InflationGraphs
   ): LineChartData {
     switch (data.type) {
       case 'LineChartData':
         return data;
+
+      case 'BalanceOfTradeGraph':
+        return {
+          type: 'LineChartData',
+          xAxisType: 'datetime',
+          yAxisLabel: '',
+          lines: [
+            {
+              name: 'Balance of Trade',
+              dataPoints: data.data.map((p) => {
+                return { x: p.x, y: p.y };
+              }),
+            },
+          ],
+        };
+      case 'CurrencyExchangeGraph':
+        return {
+          type: 'LineChartData',
+          xAxisType: 'datetime',
+          yAxisLabel: '',
+          lines: [
+            {
+              name: data.name,
+              dataPoints: data.data.map((p) => {
+                return { x: p.x, y: p.y };
+              }),
+            },
+          ],
+        };
+      case 'InflationGraphs':
+        return {
+          type: 'LineChartData',
+          xAxisType: 'datetime',
+          yAxisLabel: '',
+          lines: [
+            {
+              name: 'Headline Inflation',
+              dataPoints: data.headline.data.map((p) => {
+                return { x: p.x, y: p.y };
+              }),
+            },
+            {
+              name: 'Food Inflation',
+              dataPoints: data.food.data.map((p) => {
+                return { x: p.x, y: p.y };
+              }),
+            },
+          ],
+        };
       default:
         return {
           type: 'LineChartData',
           xAxisType: 'linear',
           yAxisLabel: '',
-          line: [],
+          lines: [],
         };
     }
   }
@@ -40,7 +79,7 @@ export default class LineChartOperations {
     // if yes -> implement check
     // todo check eslint shit
     // eslint-disable-next-line no-restricted-syntax
-    for (const lineData of data.line) {
+    for (const lineData of data.lines) {
       categories = lineData.dataPoints.map((p) => p.x); // todo
       series.push({
         name: lineData.name,

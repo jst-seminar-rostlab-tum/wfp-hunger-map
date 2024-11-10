@@ -44,7 +44,7 @@ export function LineChart({ title, description, expandable, small, data }: LineC
   const fullScreenModal = (
     <Modal size="5xl" isOpen={isOpen} backdrop="blur" onOpenChange={onOpenChange}>
       <ModalContent>
-        <ModalHeader className="flex flex-col gap-1">Modal Title</ModalHeader>
+        <ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
         <ModalBody>
           <p className="w-full h-fit text-md font-normal">{description}</p>
           <div className="py-6">

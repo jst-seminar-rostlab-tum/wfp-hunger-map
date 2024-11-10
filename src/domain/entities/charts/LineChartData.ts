@@ -9,10 +9,9 @@ export interface LineChartDataPoint {
 
 export interface LineChartData {
   type: 'LineChartData';
-  title?: string;
   xAxisType: AxisTypeValue; // can be one of linear, logarithmic, datetime or category
   yAxisLabel: string;
-  line: {
+  lines: {
     name: string;
     dataPoints: LineChartDataPoint[];
     showRange?: boolean;

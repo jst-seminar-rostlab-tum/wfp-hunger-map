@@ -1,3 +1,4 @@
+/* eslint-disable */
 import 'leaflet/dist/leaflet.css';
 
 import { Feature, FeatureCollection } from 'geojson';
@@ -78,7 +79,7 @@ export default function Map({ countries }: MapProps) {
       maxZoom={8}
       maxBoundsViscosity={1.0}
       zoomControl={false}
-      style={{ height: '100%', width: '100%', zIndex: 40 }}
+      style={{ height: '100%', width: '100%', zIndex: 1 }}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

@@ -4,6 +4,7 @@ import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGrap
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph.ts';
 import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
 import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
+import { useTheme } from 'next-themes';
 
 export default class LineChartOperations {
   private static COLORS = [
@@ -77,7 +78,7 @@ export default class LineChartOperations {
 
   // it is assumed that all categories are the same ! todo better descr
   public static getHighChartData(data: LineChartData): Highcharts.Options {
-
+    const { theme } = useTheme();
     const series: SeriesOptionsType[] = [];
     let categories: string[] = [];
     // eslint-disable-next-line no-plusplus
@@ -135,14 +136,38 @@ export default class LineChartOperations {
       chart: {
         backgroundColor: 'transparent',
       },
+      legend: {
+        itemStyle: {
+          fontSize: '0.7rem',
+          color: theme === 'light' ? '#4f4f4f' : '#b6b6b6',
+        },
+      },
       xAxis: {
         type: data.xAxisType,
         categories,
+        labels: {
+          style: {
+            color: '#7a7a7a',
+            fontSize: '0.7rem',
+          },
+        },
+        lineColor: '#7a7a7a',
       },
       yAxis: {
         title: {
           text: data.yAxisLabel,
+          style: {
+            color: '#7a7a7a',
+          },
         },
+        labels: {
+          style: {
+            color: '#7a7a7a',
+            fontSize: '0.7rem',
+          },
+        },
+        lineColor: 'transparent',
+        gridLineColor: theme === 'light' ? '#e1e1e1' : '#2a2a2a',
       },
       series,
       plotOptions: {

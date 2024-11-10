@@ -52,15 +52,15 @@ export default function Sandbox() {
     type: 'LineChartData',
     xAxisType: 'linear',
     yAxisLabel: 'yield',
-    roundLines: true,
     lines: [
       {
         name: 'Category A',
+        showRange: true,
         dataPoints: [
-          { x: '0', y: 1 },
-          { x: '1', y: 3 },
-          { x: '2', y: 4 },
-          { x: '3', y: 8 },
+          { x: '0', y: 1, yRangeMin: 0, yRangeMax: 2 },
+          { x: '1', y: 3, yRangeMin: 2, yRangeMax: 4 },
+          { x: '2', y: 4, yRangeMin: 3.5, yRangeMax: 4.5 },
+          { x: '3', y: 8, yRangeMin: 7.5, yRangeMax: 8.5 },
         ],
       },
       {
@@ -178,14 +178,15 @@ export default function Sandbox() {
   const lineChartTestBox = (
     <div className="w-full h-fit flex flex-row flex-wrap gap-10 justify-around px-8 pt-40 pb-16 border-b border-gray-800 bg-white">
       <div className="w-250px h-fit">
-        <LineChart data={simpleAndSmallLineChartData} expandable small />
+        <LineChart data={simpleAndSmallLineChartData} small />
       </div>
       <div className="w-250px h-fit">
         <LineChart
-          title="Simple Line Chart"
+          title="Small Line Chart"
           description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy."
           data={simpleLineChartData}
           expandable
+          small
         />
       </div>
       <div className="w-400px h-fit">

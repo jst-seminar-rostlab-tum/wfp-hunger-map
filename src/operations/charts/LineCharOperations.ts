@@ -1,10 +1,13 @@
-import { SeriesOptionsType } from 'highcharts';
+import Highcharts, { SeriesOptionsType } from 'highcharts';
 
 import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph.ts';
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph.ts';
 import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
 import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
 import { useTheme } from 'next-themes';
+import highchartsMore from 'highcharts/highcharts-more';
+
+highchartsMore(Highcharts);
 
 export default class LineChartOperations {
   private static COLORS = [
@@ -98,33 +101,17 @@ export default class LineChartOperations {
 
       series.push({
         name: lineData.name,
-        type: data.roundLines ? 'line' : 'spline',
+        type: data.roundLines ? 'spline' : 'line',
         data: lineData.dataPoints.map((p) => p.y),
-        zIndex: 1,
         color: lineColor,
-        marker: {
-          enabled: false,
-          radius: 1,
-        },
       });
       if (lineData.showRange) {
         series.push({
-          name: `${lineData.name} - High`,
-          type: 'line',
-          data: lineData.dataPoints.map((p) => p.yRangeMax!),
-          linkedTo: ':previous',
+          name: `${lineData.name} - area range`,
+          type: 'arearange', // Area range type
+          data: lineData.dataPoints.map((p) => [p.yRangeMin!, p.yRangeMax!]),
           color: lineColor,
-          opacity: 0.3,
-          showInLegend: false,
-        });
-        series.push({
-          name: `${lineData.name} - Low`,
-          type: 'line',
-          data: lineData.dataPoints.map((p) => p.yRangeMin!),
           linkedTo: ':previous',
-          color: lineColor,
-          opacity: 0.3,
-          showInLegend: false,
         });
       }
     }
@@ -165,24 +152,34 @@ export default class LineChartOperations {
             color: '#7a7a7a',
             fontSize: '0.7rem',
           },
+          formatter() {
+            return Highcharts.numberFormat(this.value, -1);
+          },
         },
         lineColor: 'transparent',
         gridLineColor: theme === 'light' ? '#e1e1e1' : '#2a2a2a',
+      },
+      tooltip: {
+        shared: true,
       },
       series,
       plotOptions: {
         line: {
           animation: true,
           marker: {
-            enabled: true,
+            enabled: false,
+            radius: 1,
+            animation: true,
           },
         },
         arearange: {
           animation: true,
-          fillOpacity: 0.1,
+          fillOpacity: 0.2,
           lineWidth: 0,
           marker: {
             enabled: false,
+            radius: 0,
+            animation: true,
           },
         },
       },

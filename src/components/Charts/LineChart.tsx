@@ -1,14 +1,15 @@
 'use client';
 
 import { Button } from '@nextui-org/button';
+import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/modal';
 import * as Highcharts from 'highcharts';
 import { HighchartsReact } from 'highcharts-react-official';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { Maximize4 } from 'iconsax-react';
 
+import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
 import LineChartProps from '@/domain/props/LineChartProps';
 import LineChartOperations from '@/operations/charts/LineCharOperations.ts';
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from '@nextui-org/react';
-import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
 
 export function LineChart({ title, description, expandable, small, data }: LineChartProps) {
   const TITLE_TEXT_SIZE = small ? 'text-sm' : 'text-md';
@@ -76,7 +77,7 @@ export function LineChart({ title, description, expandable, small, data }: LineC
 
   return (
     <>
-      <div className="w-full h-fit flex-col rounded-lg bg-background">
+      <div className="w-full h-fit flex-col rounded-md bg-background">
         <div
           className={`w-full h-fit flex flex-row justify-between items-start gap-3 pl-3 pb-${HEADER_BOTTOM_PADDING}`}
         >
@@ -91,7 +92,7 @@ export function LineChart({ title, description, expandable, small, data }: LineC
             style: {
               width: '100%',
               height: `${CHART_HEIGHT}rem`,
-              borderRadius: '0 0 0.5rem 0.5rem',
+              borderRadius: '0 0 0.375rem 0.375rem',
             },
           }}
         />

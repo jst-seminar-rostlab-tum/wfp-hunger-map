@@ -14,6 +14,7 @@ import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { AlertsMenuVariant } from '@/domain/enums/AlertsMenuVariant';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight';
 import { SidebarOperations } from '@/operations/charts/SidebarOperations';
+import { Link } from '@nextui-org/link';
 
 export function Sidebar() {
   const { isSidebarOpen, toggleSidebar, selectedMapType, setSelectedMapType } = useSidebar();
@@ -87,13 +88,33 @@ export function Sidebar() {
           <Button radius="full" onClick={() => alert('Subscribe!')} size="sm">
             SUBSCRIBE
           </Button>
-          <Listbox variant="flat" aria-label="Listbox menu with sections">
-            <ListboxItem key="home">Home</ListboxItem>
-            <ListboxItem key="about">About</ListboxItem>
-            <ListboxItem key="glossary">Glossary</ListboxItem>
-            <ListboxItem key="methodology">Methodology</ListboxItem>
-            <ListboxItem key="disclaimer">Disclaimer</ListboxItem>
-          </Listbox>
+          <ul>
+            <li>
+              <Link href="/" size="sm" color="foreground" className="text-opacity-80">
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link href="/about" size="sm" color="foreground" className="text-opacity-80">
+                About
+              </Link>
+            </li>
+            <li>
+              <Link href="/glossary" size="sm" color="foreground" className="text-opacity-80">
+                Glossary
+              </Link>
+            </li>
+            <li>
+              <Link href="/methodology" size="sm" color="foreground" className="text-opacity-80">
+                Methodology
+              </Link>
+            </li>
+            <li>
+              <Link href="/disclaimer" size="sm" color="foreground" className="text-opacity-80">
+                Disclaimer
+              </Link>
+            </li>
+          </ul>
         </CardFooter>
       </Card>
     </div>

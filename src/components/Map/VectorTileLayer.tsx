@@ -1,13 +1,24 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
-import 'mapbox-gl-leaflet/leaflet-mapbox-gl';
 
 import { useLeafletContext } from '@react-leaflet/core';
+import { FeatureCollection } from 'geojson';
 import mapboxgl from 'mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
+import { useTheme } from 'next-themes';
 import React, { useEffect, useRef } from 'react';
 
-export default function VectorTileLayer() {
+import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
+import { MapProps } from '@/domain/props/MapProps';
+
+export default function VectorTileLayer({ countries }: MapProps) {
   const context = useLeafletContext();
-  const mapContainer = useRef();
+  const mapContainer = useRef<HTMLDivElement>(null);
+
+  const isDark: boolean = useTheme().theme === 'dark';
+  const activeCountries: string = isDark ? '#6890a8' : '#c6d5d8';
+  const inactiveCountries: string = isDark ? '#85929b' : '#a7b3ba';
+  const ocean: string = isDark ? '#143b51' : '#83b9d7';
+  const outline: string = isDark ? '#0e2a3a' : '#306f96';
+
   mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 
   useEffect(() => {
@@ -18,18 +29,45 @@ export default function VectorTileLayer() {
         name: 'HungerMap LIVE',
         metadata: '{metadata}',
         sources: {
-          hungermap: {
-            url: 'https://cdn.hungermapdata.org/vector-tiles/v4/hungermap.json',
-            type: 'vector',
+          countries: {
+            type: 'geojson',
+            data: countries as FeatureCollection,
+            generateId: true,
           },
         },
-        glyphs: 'https://cdn.hungermapdata.org/vector-tiles/fonts/v1/{fontstack}/{range}.pbf',
+        glyphs:
+          'https://api.mapbox.com/styles/v1/mapbox/streets-v11/fonts/{fontstack}/{range}.pbf?access_token={accessToken}',
         layers: [
           {
             id: 'ocean',
             type: 'background',
             paint: {
-              'background-color': 'hsl(175, 45%, 67%)',
+              'background-color': ocean,
+            },
+          },
+          {
+            id: 'country-fills',
+            type: 'fill',
+            source: 'countries',
+            layout: {},
+            paint: {
+              'fill-color': [
+                'case',
+                ['boolean', ['coalesce', ['get', 'interactive'], false]],
+                activeCountries,
+                inactiveCountries,
+              ],
+              'fill-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 1, 0.5],
+            },
+          },
+          {
+            id: 'country-borders',
+            type: 'line',
+            source: 'countries',
+            layout: {},
+            paint: {
+              'line-color': outline,
+              'line-width': 1,
             },
           },
           // {
@@ -84,7 +122,43 @@ export default function VectorTileLayer() {
           // },
         ],
       },
-      interactive: true,
+      interactive: false,
+    });
+
+    let hoveredPolygonId: string | number | undefined;
+
+    baseMap.on('mousemove', 'country-fills', (e) => {
+      if (e.features && e.features.length > 0 && (e.features[0] as unknown as CountryMapData).properties.interactive) {
+        if (hoveredPolygonId) {
+          baseMap.setFeatureState({ source: 'countries', id: hoveredPolygonId }, { hover: false });
+        }
+        hoveredPolygonId = e.features[0].id;
+        if (hoveredPolygonId) {
+          baseMap.setFeatureState({ source: 'countries', id: hoveredPolygonId }, { hover: true });
+        }
+      }
+    });
+
+    baseMap.on('mouseleave', 'country-fills', () => {
+      if (hoveredPolygonId) {
+        baseMap.setFeatureState({ source: 'countries', id: hoveredPolygonId }, { hover: false });
+      }
+      hoveredPolygonId = undefined;
+    });
+
+    let isDragging = false;
+    baseMap.on('mousedown', () => {
+      isDragging = false;
+    });
+
+    baseMap.on('mousemove', () => {
+      isDragging = true;
+    });
+
+    baseMap.on('mouseup', 'country-fills', (e) => {
+      if (!isDragging && e.features && (e.features[0] as unknown as CountryMapData).properties.interactive) {
+        alert(`You clicked on ${(e.features[0] as unknown as CountryMapData).properties.adm0_name}`);
+      }
     });
 
     baseMap.dragRotate.disable();
@@ -147,7 +221,7 @@ export default function VectorTileLayer() {
       baseMap.remove();
       context.map.off('move');
     };
-  }, [context]);
+  }, [context, isDark]);
 
   return <div ref={mapContainer} style={{ width: '100%', height: '100%', zIndex: 2 }} />;
 }

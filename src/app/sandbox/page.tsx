@@ -33,7 +33,7 @@ export default function Sandbox() {
     <div className="w-full h-fit flex flex-row flex-wrap gap-10 justify-around px-8 pt-40 pb-16 border-b border-gray-800">
       <div className="w-400px h-fit">
         <LineChart
-          title="Simple Line Chartt"
+          title="Simple Line Chart"
           description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
           expandable
           data={simpleLineChartData}

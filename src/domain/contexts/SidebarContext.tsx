@@ -29,7 +29,7 @@ interface SidebarContextType extends SidebarState, SelectedMapTypeState, Selecte
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 
 export function SidebarProvider({ children }: { children: ReactNode }) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedMapType, setSelectedMapType] = useState<GlobalInsight>(GlobalInsight.FOOD);
   const [selectedAlert, setSelectedAlert] = useState<AlertType | null>(AlertType.HUNGER);
 

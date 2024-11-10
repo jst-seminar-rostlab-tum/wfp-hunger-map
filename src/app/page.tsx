@@ -1,4 +1,4 @@
-import HungerAlert from '@/components/HungerAlert/HungerAlert';
+import HungerAlertLoader from '@/components/HungerAlert/HungerAlertLoader';
 import MapLoader from '@/components/Map/MapLoader';
 import container from '@/container';
 import { GlobalDataRepository } from '@/domain/repositories/GlobalDataRepository';
@@ -11,7 +11,7 @@ export default async function Home() {
   return (
     <>
       <MapLoader countries={countryMapData} disputedAreas={disputedAreas} />
-      <HungerAlert countryMapData={countryMapData} />
+      <HungerAlertLoader countryMapData={countryMapData} />
     </>
   );
 }

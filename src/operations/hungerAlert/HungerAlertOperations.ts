@@ -1,19 +1,12 @@
-import container from '@/container';
 import { CountryMapDataWrapper } from '@/domain/entities/country/CountryMapData';
 import HungerLevel from '@/domain/entities/HungerLevel';
-import { GlobalDataRepository } from '@/domain/repositories/GlobalDataRepository';
 
 export default class HungerAlertOperations {
-  static async getHungerAlertData(countryMapData?: CountryMapDataWrapper): Promise<HungerLevel[]> {
+  static getHungerAlertData(countryMapData: CountryMapDataWrapper): HungerLevel[] {
     try {
-      let data = countryMapData;
-      if (!data || 'error' in data) {
-        const globalRepo = container.resolve<GlobalDataRepository>('GlobalDataRepository');
-        data = await globalRepo.getMapDataForCountries();
-      }
-      return data.features
+      return countryMapData.features
         .filter(({ properties: { fcs } }) => typeof fcs === 'number' && fcs >= 0.4)
-        .sort((a, b) => (b.properties.fcs as number) - (a.properties.fcs as number))
+        .sort((country1, country2) => (country2.properties.fcs as number) - (country1.properties.fcs as number))
         .map(({ properties: { adm0_name: countryName, fcs } }, index) => ({
           rank: index + 1,
           country: countryName,
@@ -30,5 +23,9 @@ export default class HungerAlertOperations {
       { label: 'Country', key: 'country' },
       { label: 'FCS', key: 'fcs' },
     ];
+  }
+
+  static getPulseClasses(): string {
+    return 'pulse w-48 h-48 rounded-full flex flex-col items-center justify-center text-center bg-white dark:bg-content2 relative p-5';
   }
 }

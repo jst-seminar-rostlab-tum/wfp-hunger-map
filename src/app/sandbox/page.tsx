@@ -18,7 +18,6 @@ export default function Sandbox() {
   const simpleAndSmallLineChartData: LineChartData = {
     type: 'LineChartData',
     xAxisType: 'linear',
-    yAxisLabel: 'yield',
     lines: [
       {
         name: 'Category A',
@@ -53,6 +52,7 @@ export default function Sandbox() {
     type: 'LineChartData',
     xAxisType: 'linear',
     yAxisLabel: 'yield',
+    roundLines: true,
     lines: [
       {
         name: 'Category A',

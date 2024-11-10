@@ -11,13 +11,12 @@ import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure
 import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
 
 export function LineChart({ title, description, expandable, small, data }: LineChartProps) {
-
   const TITLE_TEXT_SIZE = small ? 'text-sm' : 'text-md';
   const DESCRIPTION_TEXT_SIZE = small ? 'text-xs' : 'text-sm';
   const CHART_HEIGHT = small ? 12 : 16;
   const ICON_BUTTON_SIZE = small ? 3 : 4;
+  const HEADER_BOTTOM_PADDING = title ? 3 : 0;
   const JSON_DOWNLOAD_FILE_NAME = `hunger_map_line_chart_json-${title}.json`;
-
 
   // full screen modal state handling
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -57,7 +56,7 @@ export function LineChart({ title, description, expandable, small, data }: LineC
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onPress={downloadDataJson}>
-            Download data as Json
+            Download data as JSON
           </Button>
         </ModalFooter>
       </ModalContent>
@@ -71,18 +70,30 @@ export function LineChart({ title, description, expandable, small, data }: LineC
     </Button>
   ) : null;
 
+  const descriptionText = description ? (
+    <p className={`w-full h-fit pb-4 ${DESCRIPTION_TEXT_SIZE} px-3`}> {description} </p>
+  ) : null;
+
   return (
     <>
-      <div className="w-full h-fit flex-col rounded-lg pt-2 bg-background">
-        <div className="w-full h-fit flex flex-row justify-between items-start gap-2 px-2">
-          <p className={`${TITLE_TEXT_SIZE} font-normal pt-1 flex flex-row items-center`}> {title} </p>
+      <div className="w-full h-fit flex-col rounded-lg bg-background">
+        <div
+          className={`w-full h-fit flex flex-row justify-between items-start gap-3 pl-3 pb-${HEADER_BOTTOM_PADDING}`}
+        >
+          <p className={`${TITLE_TEXT_SIZE} font-normal pt-2 flex flex-row items-center`}> {title} </p>
           {fullScreenButton}
         </div>
-        <p className={`w-full h-fit pt-1 pb-3 ${DESCRIPTION_TEXT_SIZE} px-2`}>{description}</p>
+        {descriptionText}
         <HighchartsReact
           highcharts={Highcharts}
           options={chartOptions}
-          containerProps={{ style: { width: '100%', height: `${CHART_HEIGHT}rem`, borderRadius: '0 0 0.5rem 0.5rem' } }}
+          containerProps={{
+            style: {
+              width: '100%',
+              height: `${CHART_HEIGHT}rem`,
+              borderRadius: '0 0 0.5rem 0.5rem',
+            },
+          }}
         />
       </div>
       {fullScreenModal}

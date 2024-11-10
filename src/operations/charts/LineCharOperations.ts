@@ -10,7 +10,7 @@ export default class LineChartOperations {
     '#FFB74D',
     '#157DBC',
     '#85E77C',
-    '#FF5252'
+    '#FF5252',
     // the first four colors are set todo descr
   ];
 
@@ -25,7 +25,6 @@ export default class LineChartOperations {
         return {
           type: 'LineChartData',
           xAxisType: 'datetime',
-          yAxisLabel: '',
           lines: [
             {
               name: 'Balance of Trade',
@@ -39,7 +38,6 @@ export default class LineChartOperations {
         return {
           type: 'LineChartData',
           xAxisType: 'datetime',
-          yAxisLabel: '',
           lines: [
             {
               name: data.name,
@@ -53,7 +51,6 @@ export default class LineChartOperations {
         return {
           type: 'LineChartData',
           xAxisType: 'datetime',
-          yAxisLabel: '',
           lines: [
             {
               name: 'Headline Inflation',
@@ -73,7 +70,6 @@ export default class LineChartOperations {
         return {
           type: 'LineChartData',
           xAxisType: 'linear',
-          yAxisLabel: '',
           lines: [],
         };
     }
@@ -101,12 +97,13 @@ export default class LineChartOperations {
 
       series.push({
         name: lineData.name,
-        type: 'line',
+        type: data.roundLines ? 'line' : 'spline',
         data: lineData.dataPoints.map((p) => p.y),
         zIndex: 1,
         color: lineColor,
         marker: {
           enabled: false,
+          radius: 1,
         },
       });
       if (lineData.showRange) {

@@ -10,7 +10,8 @@ export interface LineChartDataPoint {
 export interface LineChartData {
   type: 'LineChartData';
   xAxisType: AxisTypeValue; // can be one of linear, logarithmic, datetime or category
-  yAxisLabel: string;
+  yAxisLabel?: string;
+  roundLines?: boolean;
   lines: {
     name: string;
     dataPoints: LineChartDataPoint[];

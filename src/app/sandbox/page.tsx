@@ -5,9 +5,9 @@ import { useTheme } from 'next-themes';
 
 import { LineChart } from '@/components/Charts/LineChart';
 import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph';
-import { LineChartData } from '@/domain/entities/charts/LineChartData';
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph.ts';
 import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
+import { LineChartData } from '@/domain/entities/charts/LineChartData';
 
 /**
  * For testing purposes only -> todo: to be deleted after PR

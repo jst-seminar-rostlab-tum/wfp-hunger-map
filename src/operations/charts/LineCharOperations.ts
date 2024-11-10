@@ -6,6 +6,14 @@ import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
 import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
 
 export default class LineChartOperations {
+  private static COLORS = [
+    '#FFB74D',
+    '#157DBC',
+    '#85E77C',
+    '#FF5252'
+    // the first four colors are set todo descr
+  ];
+
   public static convertToLineChartData(
     data: LineChartData | BalanceOfTradeGraph | CurrencyExchangeGraph | InflationGraphs
   ): LineChartData {
@@ -71,25 +79,34 @@ export default class LineChartOperations {
     }
   }
 
+  // it is assumed that all categories are the same ! todo better descr
   public static getHighChartData(data: LineChartData): Highcharts.Options {
-    let categories: string[] = [];
-    const series: SeriesOptionsType[] = [];
 
-    // todo right assumption ? -> all line data should have a value for all categories
-    // if yes -> implement check
-    // todo check eslint shit
-    // eslint-disable-next-line no-restricted-syntax
-    for (const lineData of data.lines) {
-      categories = lineData.dataPoints.map((p) => p.x); // todo
+    const series: SeriesOptionsType[] = [];
+    let categories: string[] = [];
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < data.lines.length; i++) {
+      const lineData = data.lines[i];
+      // it is assumed that all categories are the same ! todo better descr
+      if (i === 0) {
+        categories = lineData.dataPoints.map((p) => p.x);
+      }
+
+      let lineColor;
+      if (lineData.color) {
+        lineColor = lineData.color;
+      } else if (i < this.COLORS.length) {
+        lineColor = this.COLORS[i];
+      }
+
       series.push({
         name: lineData.name,
         type: 'line',
         data: lineData.dataPoints.map((p) => p.y),
         zIndex: 1,
+        color: lineColor,
         marker: {
-          fillColor: 'white',
-          lineWidth: 2,
-          lineColor: 'orange',
+          enabled: false,
         },
       });
       if (lineData.showRange) {
@@ -98,7 +115,7 @@ export default class LineChartOperations {
           type: 'line',
           data: lineData.dataPoints.map((p) => p.yRangeMax!),
           linkedTo: ':previous',
-          color: 'orange',
+          color: lineColor,
           opacity: 0.3,
           showInLegend: false,
         });
@@ -107,7 +124,7 @@ export default class LineChartOperations {
           type: 'line',
           data: lineData.dataPoints.map((p) => p.yRangeMin!),
           linkedTo: ':previous',
-          color: 'orange',
+          color: lineColor,
           opacity: 0.3,
           showInLegend: false,
         });

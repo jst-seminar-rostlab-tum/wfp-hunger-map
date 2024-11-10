@@ -19,7 +19,6 @@ export default class LineChartOperations {
       | RcsiChartData
       | RegionFcsChartData
   ): Highcharts.Options {
-    let title = '';
     let xAxisType: AxisTypeValue | undefined;
     let yAxisLabel = '';
     let categories: string[] = [];
@@ -28,7 +27,6 @@ export default class LineChartOperations {
     // eslint-disable-next-line default-case
     switch (data.type) {
       case 'LineChartData':
-        title = data.title || '';
         xAxisType = data.xAxisType;
         yAxisLabel = data.yAxisLabel;
 
@@ -53,7 +51,7 @@ export default class LineChartOperations {
             series.push({
               name: `${lineData.name} - High`,
               type: 'line',
-              data: lineData.dataPoints.map((p) => p.yRangeMax),
+              data: lineData.dataPoints.map((p) => p.yRangeMax!),
               linkedTo: ':previous',
               color: 'orange',
               opacity: 0.3,
@@ -62,7 +60,7 @@ export default class LineChartOperations {
             series.push({
               name: `${lineData.name} - Low`,
               type: 'line',
-              data: lineData.dataPoints.map((p) => p.yRangeMin),
+              data: lineData.dataPoints.map((p) => p.yRangeMin!),
               linkedTo: ':previous',
               color: 'orange',
               opacity: 0.3,
@@ -75,7 +73,10 @@ export default class LineChartOperations {
 
     return {
       title: {
-        text: title,
+        text: '',
+      },
+      chart: {
+        backgroundColor: 'transparent',
       },
       xAxis: {
         type: xAxisType,

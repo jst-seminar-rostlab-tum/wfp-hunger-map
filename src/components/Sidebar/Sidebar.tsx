@@ -38,7 +38,7 @@ export function Sidebar() {
     <div className="absolute top-0 left-0 z-50 h-screen p-4">
       <Card
         classNames={{
-          base: 'h-full',
+          base: 5,
           header: 'flex flex-col gap-4 w-full items-start',
           footer: 'flex flex-col items-start',
         }}

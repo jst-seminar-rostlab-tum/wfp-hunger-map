@@ -5,4 +5,5 @@ export default interface GradientLegendProps {
   title: string | null;
   startLabel: string;
   endLabel: string;
+  tooltipInfo: string | null;
 }

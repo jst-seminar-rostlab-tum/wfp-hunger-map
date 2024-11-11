@@ -42,7 +42,7 @@ export function LineChart({ title, description, expandable, small, data }: LineC
    */
 
   const fullScreenModal = (
-    <Modal size="5xl" isOpen={isOpen} backdrop="blur" onOpenChange={onOpenChange}>
+    <Modal size="5xl" isOpen={isOpen} backdrop="blur" scrollBehavior="inside" onOpenChange={onOpenChange}>
       <ModalContent>
         <ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
         <ModalBody>
@@ -51,7 +51,7 @@ export function LineChart({ title, description, expandable, small, data }: LineC
             <HighchartsReact
               highcharts={Highcharts}
               options={chartOptions}
-              containerProps={{ style: { width: '100%', height: '40rem', borderRadius: '0 0 0.5rem 0.5rem' } }}
+              containerProps={{ style: { width: '100%', height: '40vh', borderRadius: '0 0 0.5rem 0.5rem' } }}
             />
           </div>
         </ModalBody>

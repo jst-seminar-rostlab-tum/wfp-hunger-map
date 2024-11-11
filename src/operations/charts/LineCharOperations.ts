@@ -172,6 +172,14 @@ export default class LineChartOperations {
             animation: true,
           },
         },
+        spline: {
+          animation: true,
+          marker: {
+            enabled: false,
+            radius: 1,
+            animation: true,
+          },
+        },
         arearange: {
           animation: true,
           fillOpacity: 0.2,

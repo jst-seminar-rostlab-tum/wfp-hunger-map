@@ -35,6 +35,7 @@ export default function Sandbox() {
     type: 'LineChartData',
     xAxisType: 'linear',
     yAxisLabel: 'yield',
+    roundLines: true,
     lines: [
       {
         name: 'Category A',
@@ -182,7 +183,7 @@ export default function Sandbox() {
       </div>
       <div className="w-250px h-fit">
         <LineChart
-          title="Small Line Chart"
+          title="Small Rounded Line Chart"
           description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy."
           data={simpleLineChartData}
           expandable

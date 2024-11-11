@@ -19,7 +19,7 @@ export default function Map({ countries, disputedAreas }: MapProps) {
       maxZoom={8}
       maxBoundsViscosity={1.0}
       zoomControl={false}
-      style={{ height: '100%', width: '100%', zIndex: 40 }}
+      style={{ height: '100%', width: '100%', zIndex: 1 }}
     >
       {countries && <VectorTileLayer countries={countries} disputedAreas={disputedAreas} />}
       <ZoomControl position="bottomright" />

@@ -20,10 +20,12 @@
     "simple-import-sort/imports": "error",
     "simple-import-sort/exports": "error",
     "prettier/prettier": "error",
+    "no-nested-ternary": "warn",
     "react/react-in-jsx-scope": "off",
     "jsx-a11y/anchor-is-valid": "off",
     "react/require-default-props": "off",
     "react/jsx-props-no-spreading": "off",
+    "react/jsx-no-bind": "off",
     "import/prefer-default-export": "off",
     "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".jsx"] }],
     "class-methods-use-this": "off",
@@ -43,6 +45,7 @@
       "version": "detect"
     },
     "import/resolver": {
+      "typescript": {},
       "alias": {
         "map": [["@", "./src/"]],
         "extensions": [".ts", ".tsx", ""]

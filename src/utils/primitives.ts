@@ -43,3 +43,5 @@ export const subtitle = tv({
     fullWidth: true,
   },
 });
+
+export const cardsWrapperClass = 'cards-wrapper flex flex-row gap-4 justify-center flex-wrap';

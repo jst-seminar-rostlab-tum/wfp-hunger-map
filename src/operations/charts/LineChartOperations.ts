@@ -1,23 +1,32 @@
 import Highcharts, { SeriesOptionsType } from 'highcharts';
+import highchartsMore from 'highcharts/highcharts-more';
+import { useTheme } from 'next-themes';
 
 import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph.ts';
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph.ts';
 import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
 import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
-import { useTheme } from 'next-themes';
-import highchartsMore from 'highcharts/highcharts-more';
 
 highchartsMore(Highcharts);
 
+/**
+ * Using LineChartOperations, the LineChart component can convert its received data into LineChartData
+ * and then generate the chart options for Highcharts.
+ */
 export default class LineChartOperations {
-  private static COLORS = [
-    '#FFB74D',
-    '#157DBC',
-    '#85E77C',
-    '#FF5252',
-    // the first four colors are set todo descr
-  ];
+  /**
+   * The first four line colors are fixed; if more than four lines are rendered,
+   * the default Highcharts colors will be used.
+   */
+  private static LINE_COLORS = ['#FFB74D', '#157DBC', '#85E77C', '#FF5252'];
 
+  /**
+   * With this static function, the LineChart component can ensure that the received data for the chart
+   * is converted to the `LineChartData` type.
+   * To support another interface in `LineChartProps.data`, one has to add another switch case here
+   * that converts the new interface into `LineChartData`.
+   * @param data
+   */
   public static convertToLineChartData(
     data: LineChartData | BalanceOfTradeGraph | CurrencyExchangeGraph | InflationGraphs
   ): LineChartData {
@@ -38,6 +47,7 @@ export default class LineChartOperations {
             },
           ],
         };
+
       case 'CurrencyExchangeGraph':
         return {
           type: 'LineChartData',
@@ -51,6 +61,7 @@ export default class LineChartOperations {
             },
           ],
         };
+
       case 'InflationGraphs':
         return {
           type: 'LineChartData',
@@ -70,7 +81,9 @@ export default class LineChartOperations {
             },
           ],
         };
+
       default:
+        // if the given type is not supported yet, an empty `LineChartData` instance is returned
         return {
           type: 'LineChartData',
           xAxisType: 'linear',
@@ -79,24 +92,35 @@ export default class LineChartOperations {
     }
   }
 
-  // it is assumed that all categories are the same ! todo better descr
+  /**
+   * With this static function, the LineChart component can build the HighCharts options,
+   * needed for the HighCharts component, out of a given `LineChartData` instance.
+   * It is expected that all line data in `LineChartData.lines` have the same `x` values and provide
+   * a `y` value for each `x` value. For example, if one line has values for x=1, x=2, and x=3,
+   * the second line must also provide `y` values for these exact `x` values and no more or less.
+   */
   public static getHighChartData(data: LineChartData): Highcharts.Options {
     const { theme } = useTheme();
+
+    // parsing all given line data
     const series: SeriesOptionsType[] = [];
     let categories: string[] = [];
     // eslint-disable-next-line no-plusplus
     for (let i = 0; i < data.lines.length; i++) {
       const lineData = data.lines[i];
-      // it is assumed that all categories are the same ! todo better descr
+      // it is assumed that all `x` values are the same and are given for all lines
+      // therefore we only have to collect the x Axis categories once
       if (i === 0) {
         categories = lineData.dataPoints.map((p) => p.x);
       }
 
+      // the first four line colors are fixed; however, they can also be overridden by the `color` property;
+      // if more than four lines are rendered the default Highcharts colors will be used
       let lineColor;
       if (lineData.color) {
         lineColor = lineData.color;
-      } else if (i < this.COLORS.length) {
-        lineColor = this.COLORS[i];
+      } else if (i < this.LINE_COLORS.length) {
+        lineColor = this.LINE_COLORS[i];
       }
 
       series.push({
@@ -105,6 +129,7 @@ export default class LineChartOperations {
         data: lineData.dataPoints.map((p) => p.y),
         color: lineColor,
       });
+      // checking if area range should be added as well
       if (lineData.showRange) {
         series.push({
           name: `${lineData.name} - area range`,
@@ -116,6 +141,7 @@ export default class LineChartOperations {
       }
     }
 
+    // building the final HighCharts Options
     return {
       title: {
         text: '',
@@ -153,7 +179,7 @@ export default class LineChartOperations {
             fontSize: '0.7rem',
           },
           formatter() {
-            return Highcharts.numberFormat(this.value, -1);
+            return Highcharts.numberFormat(this.value as number, -1);
           },
         },
         lineColor: 'transparent',

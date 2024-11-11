@@ -7,10 +7,29 @@ import { HighchartsReact } from 'highcharts-react-official';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Maximize4 } from 'iconsax-react';
 
-import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
+import { LineChartData } from '@/domain/entities/charts/LineChartData';
 import LineChartProps from '@/domain/props/LineChartProps';
-import LineChartOperations from '@/operations/charts/LineCharOperations.ts';
+import LineChartOperations from '@/operations/charts/LineChartOperations';
 
+/**
+ * The LineChart component is a box that primarily renders a title, description text, and a line chart.
+ * This component has a width of 100%, so it adjusts to the width of its parent element in which it is used.
+ * The height of the line chart box depends on the provided text, while the chart itself has a fixed height.
+ * It also provides the option to open the chart in a full-screen modal, where one can download the data as well.
+ *
+ * The data to be displayed in the chart can be provided in different types (see `LineChartProps.data`).
+ * However, the preferred type is `LineChartData`.
+ *
+ * To enable the LineChart component to support an additional `data` type, the following steps are required:
+ * 1. Define an interface and add it to `LineChartProps.data`.
+ * 2. Add another switch case in `LineChartOperations.convertToLineChartData` to convert the new interface to `LineChartData`.
+ *
+ * @param title chart title (optional)
+ * @param description chart description text (optional)
+ * @param expandable wenn ausgewählt wird dem user die möglichkeit gegebn, den graph in einem großen modal zu öffnen,
+ * @param small wenn ausgewählt, werden alle components in der line chart box etwas kleiner, die text werden kleiner, der chart hat eine gerigere höhe, etc.
+ * @param data tatsächliche daten die im chart angezeigt werden sollen;
+ */
 export function LineChart({ title, description, expandable, small, data }: LineChartProps) {
   const TITLE_TEXT_SIZE = small ? 'text-sm' : 'text-md';
   const DESCRIPTION_TEXT_SIZE = small ? 'text-xs' : 'text-sm';
@@ -37,10 +56,7 @@ export function LineChart({ title, description, expandable, small, data }: LineC
     link.click();
   };
 
-  /**
-   * todo descr
-   */
-
+  // Full screen modal that can be opened if `expandable==true`. Offers a larger chart and a download button.
   const fullScreenModal = (
     <Modal size="5xl" isOpen={isOpen} backdrop="blur" scrollBehavior="inside" onOpenChange={onOpenChange}>
       <ModalContent>
@@ -64,13 +80,14 @@ export function LineChart({ title, description, expandable, small, data }: LineC
     </Modal>
   );
 
-  // todo descr
+  // Button to trigger the full screen modal; rendered if `expandable==true`
   const fullScreenButton = expandable ? (
     <Button isIconOnly variant="light" size="sm" onClick={onOpen}>
       <Maximize4 className={`h-${ICON_BUTTON_SIZE} w-${ICON_BUTTON_SIZE}`} />
     </Button>
   ) : null;
 
+  // Description text element should only be rendered if description is available
   const descriptionText = description ? (
     <p className={`w-full h-fit pb-4 ${DESCRIPTION_TEXT_SIZE} px-3`}> {description} </p>
   ) : null;

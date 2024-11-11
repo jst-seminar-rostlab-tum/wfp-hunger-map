@@ -1,32 +1,9 @@
-import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/table';
+import { Table, TableBody, TableColumn, TableHeader, TableRow } from '@nextui-org/table';
 import clsx from 'clsx';
 import React from 'react';
 
 import GroupedTableProps, { GroupedTableRow } from '@/domain/props/GroupedTableProps';
-
-// This function cannot be converted into a component because TableCell has to be the direct descendant of a TableRow.
-function getTableCell(row: GroupedTableRow, columnKey: string) {
-  if (columnKey === 'mainColumn' && row.index > 0)
-    // don't return null here because TableRow can't deal with that
-    // eslint-disable-next-line react/jsx-no-useless-fragment
-    return <></>;
-
-  let cellContent = row.cellContents[columnKey];
-  if (typeof cellContent === 'boolean') cellContent = cellContent ? '✅' : '❎';
-  const addBottomBorder = row.index === row.groupLength - 1 || columnKey === 'mainColumn';
-
-  return (
-    <TableCell
-      className={clsx('align-top', {
-        'border-b-2': addBottomBorder,
-        'text-center': columnKey !== 'mainColumn',
-      })}
-      rowSpan={columnKey === 'mainColumn' ? row.groupLength : 1}
-    >
-      {cellContent}
-    </TableCell>
-  );
-}
+import { getTableCell } from '@/operations/groupedTable/groupedTableOperations';
 
 /**
  * A table with its rows grouped by the values in the first column.

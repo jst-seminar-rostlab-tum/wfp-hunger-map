@@ -7,7 +7,7 @@ import { Link } from '@nextui-org/link';
 import React from 'react';
 
 import HungerMapLiveSuperscript from '@/components/About/HungerMapLiveSuperscript';
-import GroupedTable from '@/components/Table/GroupedTable';
+import GroupedTable from '@/components/GroupedTable/GroupedTable';
 import { GroupedTableColumns, GroupedTableData } from '@/domain/props/GroupedTableProps';
 
 const accuracyTableColumns = [

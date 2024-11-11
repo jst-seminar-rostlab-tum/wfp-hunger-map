@@ -2,7 +2,7 @@ import { LeafletContextInterface } from '@react-leaflet/core';
 import mapboxgl from 'mapbox-gl';
 import { RefObject } from 'react';
 
-export const setGeneralMapBehavior = (
+export const synchronizeLeafletMapbox = (
   baseMap: mapboxgl.Map,
   mapContainer: RefObject<HTMLDivElement>,
   context: LeafletContextInterface

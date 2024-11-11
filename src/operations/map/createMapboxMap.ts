@@ -50,7 +50,7 @@ export const createMapboxMap = (
               mapColors.activeCountries,
               mapColors.inactiveCountries,
             ],
-            'fill-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 1, 0.5],
+            'fill-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 0.7, 1],
           },
         },
         {

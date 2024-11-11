@@ -5,10 +5,10 @@ import mapboxgl from 'mapbox-gl'; // eslint-disable-line import/no-webpack-loade
 import { useTheme } from 'next-themes';
 import React, { RefObject, useEffect, useRef } from 'react';
 
-import { createMapboxMap } from '@/components/Map/createMapboxMap.ts';
-import { setGeneralMapBehavior } from '@/components/Map/setGeneralMapBehavior.ts';
-import { setMapInteractionFunctionality } from '@/components/Map/setMapInteractionFunctionality.ts';
 import { MapProps } from '@/domain/props/MapProps';
+import { createMapboxMap } from '@/operations/map/createMapboxMap.ts';
+import { setMapInteractionFunctionality } from '@/operations/map/setMapInteractionFunctionality.ts';
+import { synchronizeLeafletMapbox } from '@/operations/map/synchronizeLeafletMapbox.ts';
 
 export default function VectorTileLayer({ countries, disputedAreas }: MapProps) {
   const context: LeafletContextInterface = useLeafletContext();
@@ -21,7 +21,7 @@ export default function VectorTileLayer({ countries, disputedAreas }: MapProps) 
   useEffect(() => {
     const baseMap: mapboxgl.Map = createMapboxMap(isDark, { countries, disputedAreas }, mapContainer);
     setMapInteractionFunctionality(baseMap);
-    setGeneralMapBehavior(baseMap, mapContainer, context);
+    synchronizeLeafletMapbox(baseMap, mapContainer, context);
 
     return () => {
       baseMap.remove();

@@ -17,7 +17,7 @@ export function Tooltip({ children, title, text, warning }: TooltipProps) {
   const OFFSET: number = 10;
   const RADIUS = 'sm';
   const SHADOW = 'md';
-  const COLOR = 'secondary';
+  const COLOR = 'default';
 
   const borderStyle = warning ? 'border-2 border-warning' : '';
 

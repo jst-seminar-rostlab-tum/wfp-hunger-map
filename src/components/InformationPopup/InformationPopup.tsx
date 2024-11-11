@@ -50,8 +50,10 @@ export function InformationPopup({ popupOpen, closePopup, title, content, warnin
     return (
       <>
         <p className="text-small font-bold mt-4"> {c.subtitle} </p>
-        {c.paragraphs.map((t) => (
-          <p className="text-small font-normal"> {t}</p>
+        {c.paragraphs.map((t, idx) => (
+          <p id={t + idx} className="text-small font-normal">
+            {t}
+          </p>
         ))}
       </>
     );

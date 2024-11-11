@@ -3,6 +3,7 @@
 import { Button } from '@nextui-org/button';
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
 import { Input } from '@nextui-org/input';
+import { Link } from '@nextui-org/link';
 import { Listbox, ListboxItem, ListboxSection } from '@nextui-org/listbox';
 import { SidebarLeft } from 'iconsax-react';
 import NextImage from 'next/image';
@@ -13,8 +14,7 @@ import { ThemeSwitch } from '@/components/Sidebar/ThemeSwitch';
 import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { AlertsMenuVariant } from '@/domain/enums/AlertsMenuVariant';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight';
-import { SidebarOperations } from '@/operations/charts/SidebarOperations';
-import { Link } from '@nextui-org/link';
+import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
 
 export function Sidebar() {
   const { isSidebarOpen, toggleSidebar, selectedMapType, setSelectedMapType } = useSidebar();

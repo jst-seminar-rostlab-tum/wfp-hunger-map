@@ -5,7 +5,7 @@ import { Listbox, ListboxItem } from '@nextui-org/listbox';
 import { SidebarRight } from 'iconsax-react';
 
 import { CollapsedSidebarProps } from '@/domain/props/CollapsedSidebarProps';
-import { SidebarOperations } from '@/operations/charts/SidebarOperations';
+import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
 
 export function CollapsedSidebar({ selectedMapType, handleSelectionChange, toggleSidebar }: CollapsedSidebarProps) {
   return (

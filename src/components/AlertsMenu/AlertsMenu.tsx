@@ -7,7 +7,7 @@ import { AlertButton } from '@/components/AlertsMenu/AlertButton';
 import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { AlertType } from '@/domain/enums/AlertType';
 import { AlertsMenuProps } from '@/domain/props/AlertsMenuProps';
-import { SidebarOperations } from '@/operations/charts/SidebarOperations';
+import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
 
 export function AlertsMenu({ variant }: AlertsMenuProps) {
   const { isAlertSelected, toggleAlert } = useSidebar();

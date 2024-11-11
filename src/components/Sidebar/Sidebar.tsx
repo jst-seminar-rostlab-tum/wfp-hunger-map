@@ -16,6 +16,14 @@ import { AlertsMenuVariant } from '@/domain/enums/AlertsMenuVariant';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight';
 import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
 
+const pagesLinks = [
+  { href: '/', label: 'Home' },
+  { href: '/about', label: 'About' },
+  { href: '/glossary', label: 'Glossary' },
+  { href: '/methodology', label: 'Methodology' },
+  { href: '/disclaimer', label: 'Disclaimer' },
+];
+
 export function Sidebar() {
   const { isSidebarOpen, toggleSidebar, selectedMapType, setSelectedMapType } = useSidebar();
 
@@ -41,7 +49,6 @@ export function Sidebar() {
         classNames={{
           base: 'h-full',
           header: 'flex flex-col gap-4 w-full items-start',
-          footer: 'flex flex-col items-start',
         }}
       >
         <CardHeader>
@@ -85,36 +92,20 @@ export function Sidebar() {
           </div>
         </CardBody>
         <CardFooter>
-          <Button radius="full" onClick={() => alert('Subscribe!')} size="sm">
-            SUBSCRIBE
-          </Button>
-          <ul>
-            <li>
-              <Link href="/" size="sm" color="foreground" className="text-opacity-80">
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link href="/about" size="sm" color="foreground" className="text-opacity-80">
-                About
-              </Link>
-            </li>
-            <li>
-              <Link href="/glossary" size="sm" color="foreground" className="text-opacity-80">
-                Glossary
-              </Link>
-            </li>
-            <li>
-              <Link href="/methodology" size="sm" color="foreground" className="text-opacity-80">
-                Methodology
-              </Link>
-            </li>
-            <li>
-              <Link href="/disclaimer" size="sm" color="foreground" className="text-opacity-80">
-                Disclaimer
-              </Link>
-            </li>
-          </ul>
+          <div className="flex flex-col gap-1">
+            <Button radius="full" onClick={() => alert('Subscribe!')} size="sm" className="w-fit">
+              SUBSCRIBE
+            </Button>
+            <ul className="pl-3">
+              {pagesLinks.map((page) => (
+                <li key={page.label}>
+                  <Link href={page.href} size="sm" color="foreground" className="text-opacity-80">
+                    {page.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </CardFooter>
       </Card>
     </div>

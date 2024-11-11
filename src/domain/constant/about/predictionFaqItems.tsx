@@ -2,7 +2,7 @@ import React from 'react';
 
 import ExternalLink from '@/components/About/ExternalLink';
 import GroupedTable from '@/components/GroupedTable/GroupedTable';
-import { accuracyTableColumns, accuracyTableContents } from '@/domain/constant/about/accuracyTableContents';
+import { accuracyTableColumns, accuracyTableData } from '@/domain/constant/about/accuracyTableContents';
 import { AccordionItemProps } from '@/domain/entities/accordions/Accordions';
 
 const generalQuestionItems: AccordionItemProps[] = [
@@ -57,7 +57,7 @@ const generalQuestionItems: AccordionItemProps[] = [
         </p>
         <GroupedTable
           columns={accuracyTableColumns}
-          data={accuracyTableContents}
+          data={accuracyTableData}
           ariaLabel="Performance measures of the prediction algorithms"
         />
       </>

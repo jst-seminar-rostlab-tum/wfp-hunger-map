@@ -8,7 +8,7 @@ export const accuracyTableColumns = [
   { columnId: 'rCSI', label: 'rCSI' },
 ] as GroupedTableColumns;
 
-export const accuracyTableContents = [
+export const accuracyTableData = [
   {
     groupKey: '1',
     groupName: (

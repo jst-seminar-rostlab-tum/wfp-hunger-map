@@ -7,6 +7,7 @@ import { ConflictType } from '@/domain/enums/ConflictType';
 import { useConflictQuery } from '@/domain/hooks/alertHooks';
 import ConflictOperations from '@/operations/ConflictOperations';
 import GeometryOperations from '@/operations/GeometryOperations';
+import { getTailwindColor } from '@/utils/tailwind-util';
 
 export function ConflictLayer({ maxZoom }: { maxZoom: number }) {
   const { data, isPending } = useConflictQuery();
@@ -16,11 +17,10 @@ export function ConflictLayer({ maxZoom }: { maxZoom: number }) {
     return L.divIcon({
       html: `<span
               style="
-                background-color: ${ConflictOperations.getMarkerColor(conflictType)};
                 width: ${Math.min(Math.floor(cluster.getChildCount() / 5) + 20, 40)}px;
                 height: ${Math.min(Math.floor(cluster.getChildCount() / 5) + 20, 40)}px;
               "
-              class="flex items-center justify-center rounded-full border-white border-1 text-white font-bold"
+              class="bg-${ConflictOperations.getMarkerColor(conflictType)} flex items-center justify-center rounded-full border-white border-1 text-white font-bold"
             >${cluster.getChildCount()}</span>`,
       className: '',
       iconSize: L.point(40, 40, true),
@@ -45,8 +45,8 @@ export function ConflictLayer({ maxZoom }: { maxZoom: number }) {
             <CircleMarker
               radius={3}
               color="white"
+              fillColor={getTailwindColor(`--nextui-${ConflictOperations.getMarkerColor(conflictType)}`)}
               weight={1}
-              fillColor={ConflictOperations.getMarkerColor(conflictType)}
               fillOpacity={1}
               key={m.geometry.coordinates.toString()}
               center={GeometryOperations.swapCoords(m.geometry.coordinates)}

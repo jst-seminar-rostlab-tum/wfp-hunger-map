@@ -5,17 +5,17 @@ export default class ConflictOperations {
   static getMarkerColor(conflictType: ConflictType): string {
     switch (conflictType) {
       case ConflictType.PROTESTS:
-        return '#0d657de6';
+        return 'conflictProtest';
       case ConflictType.RIOTS:
-        return '#c95200e6';
+        return 'conflictRiot';
       case ConflictType.BATTLES:
-        return '#7d0631';
+        return 'conflictBattle';
       case ConflictType.CIVIL_VIOLENCE:
-        return '#96badc';
+        return 'conflictCivil';
       case ConflictType.EXPLOSIONS:
-        return '#eaaf75';
+        return 'conflictExplosion';
       default:
-        return '#bec0c1';
+        return 'conflictStrategic';
     }
   }
 

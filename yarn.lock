@@ -1108,7 +1108,7 @@
     "@react-aria/utils" "3.24.1"
     "@react-stately/utils" "3.10.1"
 
-"@nextui-org/table@2.0.40":
+"@nextui-org/table@2.0.40", "@nextui-org/table@^2.0.40":
   version "2.0.40"
   resolved "https://registry.yarnpkg.com/@nextui-org/table/-/table-2.0.40.tgz#2ee8e380402e0cf0eaf468cf1ec931712b5aa12f"
   integrity sha512-qDbSsu6mpWnr1Mt3DYTBzTFtN8Z5Gv7GDqECGcDVradkDVuJFZvkB9Ke392LcVZoXSk99Rpamq4WSWkEewBhWg==

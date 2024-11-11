@@ -1,3 +1,8 @@
+'use client';
+
+// 'use client' is necessary because of an unresolved bug in NextUI (affects Table & Accordion)
+// https://github.com/nextui-org/nextui/issues/1403#issuecomment-1678863519
+
 import { Table, TableBody, TableColumn, TableHeader, TableRow } from '@nextui-org/table';
 import clsx from 'clsx';
 import React from 'react';

@@ -1,11 +1,11 @@
-import { Link } from '@nextui-org/link';
 import React from 'react';
 
+import ExternalLink from '@/components/About/ExternalLink';
 import HungerMapLiveSuperscript from '@/components/About/HungerMapLiveSuperscript';
 
 export function AboutText() {
   return (
-    <section>
+    <>
       <p>
         <b>
           <HungerMapLiveSuperscript /> is the World Food Programme (WFP)’s global hunger monitoring system.
@@ -17,24 +17,20 @@ export function AboutText() {
         timely decisions relating to food security.
       </p>
       <p>
+        WFP’s Hunger Monitoring Unit in the Research, Assessment and Monitoring Division conducts real-time food
+        security monitoring to track the latest food security trends. In areas where limited or no data is available, we
+        use machine learning-based predictive models to estimate the food security situation.
+      </p>
+      <p>
         The platform covers 94 countries, including countries where WFP has operations as well as most{' '}
-        <Link
-          isExternal
-          size="lg"
-          underline="hover"
-          href="https://datahelpdesk.worldbank.org/knowledgebase/articles/906519-world-bank-country-and-lending-groups"
-          className="inline"
-        >
+        <ExternalLink href="https://datahelpdesk.worldbank.org/knowledgebase/articles/906519-world-bank-country-and-lending-groups">
           lower and lower-middle income countries
-        </Link>{' '}
+        </ExternalLink>{' '}
         (as classified by the World Bank). For any questions, comments, or if you would like further information, please
-        get in touch by sending an email to{' '}
-        <Link isExternal size="lg" underline="hover" href="mailto:wfp.mvam@wfp.org" className="inline">
-          wfp.mvam@wfp.org
-        </Link>
+        get in touch by sending an email to <ExternalLink href="mailto:wfp.mvam@wfp.org">wfp.mvam@wfp.org</ExternalLink>
         .
       </p>
-    </section>
+    </>
   );
 }
 

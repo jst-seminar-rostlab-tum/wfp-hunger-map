@@ -1,5 +1,4 @@
-import { Link } from '@nextui-org/link';
-
+import ExternalLink from '@/components/About/ExternalLink';
 import { GroupedTableColumns, GroupedTableData } from '@/domain/props/GroupedTableProps';
 
 export const accuracyTableColumns = [
@@ -8,15 +7,16 @@ export const accuracyTableColumns = [
   { columnId: 'FCS', label: 'FCS' },
   { columnId: 'rCSI', label: 'rCSI' },
 ] as GroupedTableColumns;
-export const accuracyTableData = [
+
+export const accuracyTableContents = [
   {
     groupKey: '1',
     groupName: (
       <>
         {' '}
-        <Link href="https://en.wikipedia.org/wiki/Coefficient_of_determination" size="md">
+        <ExternalLink href="https://en.wikipedia.org/wiki/Coefficient_of_determination" className="text-sm">
           Coefficient of determination (R²)
-        </Link>{' '}
+        </ExternalLink>{' '}
         (higher is better)
       </>
     ),
@@ -28,12 +28,12 @@ export const accuracyTableData = [
   {
     groupKey: '2',
     groupName: (
-      <>
-        <Link href="https://en.wikipedia.org/wiki/Mean_absolute_error" size="md">
+      <span className="text-small">
+        <ExternalLink href="https://en.wikipedia.org/wiki/Mean_absolute_error" className="text-sm">
           Mean Absolute Error
-        </Link>{' '}
+        </ExternalLink>{' '}
         (lower is better)
-      </>
+      </span>
     ),
     attributeRows: [
       { withPast: true, FCS: 0.08, rCSI: 0.06 },

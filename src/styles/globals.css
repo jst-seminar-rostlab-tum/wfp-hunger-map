@@ -8,11 +8,31 @@
     }
 
     main h1 {
-        @apply text-4xl sm:text-5xl lg:text-7xl font-black
+        @apply text-4xl sm:text-5xl lg:text-7xl font-black mb-8
     }
 
-    main p {
+    main h2 {
+        @apply text-2xl lg:text-3xl mb-3
+    }
+
+    main p, ol, ul {
         @apply text-large leading-relaxed pb-6
+    }
+
+    main p:last-child {
+        @apply pb-0
+    }
+
+    main ol, ul {
+        @apply pl-8
+    }
+
+    main ol {
+        @apply list-decimal
+    }
+
+    main ul {
+        @apply list-disc
     }
 }
 

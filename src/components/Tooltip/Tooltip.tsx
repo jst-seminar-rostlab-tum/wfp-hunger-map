@@ -23,7 +23,7 @@ export function Tooltip({ children, title, text, warning }: TooltipProps) {
 
   const tooltipContent = title ? (
     <div>
-      <p className="text-small font-bold mb-1"> {title} </p>
+      <h3 className="text-small font-bold mb-1"> {title} </h3>
       <p className="text-small font-normal"> {text} </p>
     </div>
   ) : (

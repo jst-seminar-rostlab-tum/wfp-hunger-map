@@ -49,7 +49,7 @@ export function InformationPopup({ popupOpen, closePopup, title, content, warnin
   const textContent = content.map((c) => {
     return (
       <>
-        <p className="text-small font-bold mt-4"> {c.subtitle} </p>
+        <h2 className="text-small font-bold mt-4"> {c.subtitle} </h2>
         {c.paragraphs.map((t, idx) => (
           <p id={t + idx} className="text-small font-normal">
             {t}

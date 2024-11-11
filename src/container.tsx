@@ -1,4 +1,5 @@
 import { AlertRepositoryImpl } from './infrastructure/repositories/AlertRepositoryImpl';
+import ChatbotRepositoryImpl from './infrastructure/repositories/ChatbotRepositoryImpl';
 import CountryRepositoryImpl from './infrastructure/repositories/CountryRepositoryImpl';
 import GlobalDataRepositoryImpl from './infrastructure/repositories/GlobalDataRepositoryImpl';
 
@@ -22,5 +23,6 @@ const container = new Container();
 container.register('CountryRepository', new CountryRepositoryImpl());
 container.register('AlertRepository', new AlertRepositoryImpl());
 container.register('GlobalDataRepository', new GlobalDataRepositoryImpl());
+container.register('ChatbotRepository', new ChatbotRepositoryImpl());
 
 export default container;

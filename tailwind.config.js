@@ -15,6 +15,7 @@ module.exports = {
     'max-w-[400px]',
     'pl-[215px]',
     'pl-[179px]',
+    'pl-[320px]',
     'z-[9999]',
   ],
   content: [
@@ -48,6 +49,7 @@ module.exports = {
       padding: {
         '179px': '179px',
         '215px': '215px',
+        '320px': '320px',
       },
       borderRadius: {
         '12px_0_0_12px': '12px 0 0 12px',
@@ -111,6 +113,8 @@ module.exports = {
             surfaceGrey: '#B0B0B0',
             activeCountries: '#82bce0',
             inactiveCountries: '#a7b3ba',
+            subscribeText: '#284366',
+            subscribePage: '#dadee1',
           },
         },
         dark: {
@@ -140,6 +144,8 @@ module.exports = {
             surfaceGrey: '#444444',
             activeCountries: '#115884',
             inactiveCountries: '#85929b',
+            subscribeText: '#284366',
+            subscribePage: '#dadee1',
           },
         },
       },

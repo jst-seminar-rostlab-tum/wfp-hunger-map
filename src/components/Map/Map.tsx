@@ -21,7 +21,7 @@ export default function Map({ countries, disputedAreas }: MapProps) {
       zoomControl={false}
       style={{ height: '100%', width: '100%', zIndex: 40 }}
     >
-      <VectorTileLayer countries={countries} disputedAreas={disputedAreas} />
+      {countries && <VectorTileLayer countries={countries} disputedAreas={disputedAreas} />}
       <ZoomControl position="bottomright" />
     </MapContainer>
   );

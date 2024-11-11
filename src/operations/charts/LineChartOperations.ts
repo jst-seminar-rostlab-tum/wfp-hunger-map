@@ -7,8 +7,6 @@ import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchange
 import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
 import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
 
-highchartsMore(Highcharts);
-
 /**
  * Using LineChartOperations, the LineChart component can convert its received data into LineChartData
  * and then generate the chart options for Highcharts.
@@ -101,6 +99,7 @@ export default class LineChartOperations {
    */
   public static getHighChartData(data: LineChartData): Highcharts.Options {
     const { theme } = useTheme();
+    highchartsMore(Highcharts); // enables the usage of HighCharts 'arearange'
 
     // parsing all given line data
     const series: SeriesOptionsType[] = [];

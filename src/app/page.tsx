@@ -1,4 +1,7 @@
+import { AlertsMenuWrapper } from '@/components/AlertsMenu/AlertsMenuWrapper';
+import HungerAlertLoader from '@/components/HungerAlert/HungerAlertLoader';
 import MapLoader from '@/components/Map/MapLoader';
+import { Sidebar } from '@/components/Sidebar/Sidebar';
 import container from '@/container';
 import { GlobalDataRepository } from '@/domain/repositories/GlobalDataRepository';
 
@@ -7,5 +10,12 @@ export default async function Home() {
   const countryMapDataPromise = globalRepo.getMapDataForCountries();
   const disputedAreasPromise = globalRepo.getDisputedAreas();
   const [countryMapData, disputedAreas] = await Promise.all([countryMapDataPromise, disputedAreasPromise]);
-  return <MapLoader countries={countryMapData} disputedAreas={disputedAreas} />;
+  return (
+    <>
+      <Sidebar />
+      <AlertsMenuWrapper />
+      <MapLoader countries={countryMapData} disputedAreas={disputedAreas} />
+      <HungerAlertLoader countryMapData={countryMapData} />
+    </>
+  );
 }

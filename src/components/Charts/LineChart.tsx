@@ -26,9 +26,9 @@ import LineChartOperations from '@/operations/charts/LineChartOperations';
  *
  * @param title chart title (optional)
  * @param description chart description text (optional)
- * @param expandable wenn ausgewählt wird dem user die möglichkeit gegebn, den graph in einem großen modal zu öffnen,
- * @param small wenn ausgewählt, werden alle components in der line chart box etwas kleiner, die text werden kleiner, der chart hat eine gerigere höhe, etc.
- * @param data tatsächliche daten die im chart angezeigt werden sollen;
+ * @param expandable when selected, the user is given the option to open the chart in a larger modal (optional)
+ * @param small when selected, all components in the line chart box become slightly smaller (optional)
+ * @param data the actual data to be used in the chart
  */
 export function LineChart({ title, description, expandable, small, data }: LineChartProps) {
   const TITLE_TEXT_SIZE = small ? 'text-sm' : 'text-md';

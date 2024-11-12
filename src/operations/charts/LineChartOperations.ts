@@ -1,3 +1,5 @@
+'use client';
+
 import Highcharts, { SeriesOptionsType } from 'highcharts';
 import highchartsMore from 'highcharts/highcharts-more';
 import { useTheme } from 'next-themes';
@@ -6,6 +8,11 @@ import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGrap
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph.ts';
 import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
 import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
+
+// https://stackoverflow.com/questions/55483079/highcharts-cannot-read-property-parts-globals-js-of-undefined
+if (typeof Highcharts === 'object') {
+  highchartsMore(Highcharts); // enables the usage of HighCharts 'arearange'
+}
 
 /**
  * Using LineChartOperations, the LineChart component can convert its received data into LineChartData
@@ -99,7 +106,6 @@ export default class LineChartOperations {
    */
   public static getHighChartData(data: LineChartData): Highcharts.Options {
     const { theme } = useTheme();
-    highchartsMore(Highcharts); // enables the usage of HighCharts 'arearange'
 
     // parsing all given line data
     const series: SeriesOptionsType[] = [];

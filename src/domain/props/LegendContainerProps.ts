@@ -1,6 +1,6 @@
-import { GradientLegendContainerItem } from './GradientLegendItem';
-import PointLegendItem from './PointLegendItem';
+import { GradientLegendContainerItem } from './GradientLegendContainerItem';
+import PointLegendContainerItem from './PointLegendContainerItem';
 
 export default interface LegendContainerProps {
-  items: (PointLegendItem | GradientLegendContainerItem)[];
+  items: (PointLegendContainerItem | GradientLegendContainerItem)[];
 }

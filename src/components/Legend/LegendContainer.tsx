@@ -1,4 +1,4 @@
-import { isGradientLegendContainerItem } from '@/domain/props/GradientLegendItem';
+import { isGradientLegendContainerItem } from '@/domain/props/GradientLegendContainerItem';
 import LegendContainerProps from '@/domain/props/LegendContainerProps';
 
 import CustomAccordion from '../Accordions/Accordion';

@@ -1,11 +1,20 @@
 'use client';
 
 import { Button, Divider, Image, Input, Select, SelectItem } from '@nextui-org/react';
+import { motion } from 'framer-motion';
+import { ChartCircle, CloseCircle, TickCircle } from 'iconsax-react';
 import { useMemo, useState } from 'react';
 
 import container from '@/container';
-import { FOLLOW_US, MANDATORY, SUBSCRIBE_MODAL_SUBTITLE } from '@/domain/constant/subscribe/Subscribe';
-import { SubscribeTopic } from '@/domain/enums/SubscribeTopic';
+import {
+  FOLLOW_US,
+  MANDATORY,
+  SUBSCRIBE,
+  SUBSCRIBE_MODAL_SUBTITLE,
+  SUCCESSFUL_SUBSCRIPTION,
+  UNSUCCESSFUL_SUBSCRIPTION,
+} from '@/domain/constant/subscribe/Subscribe';
+import { SubscribeStatus, SubscribeTopic } from '@/domain/enums/SubscribeTopic';
 import SubscriptionRepository from '@/domain/repositories/SubscriptionRepository';
 
 export default function SubscriptionForm() {
@@ -14,6 +23,7 @@ export default function SubscriptionForm() {
   const [organization, setOrganization] = useState('');
   const [email, setEmail] = useState('');
   const [selectedTopic, setSelectedTopic] = useState<string>('');
+  const [subscribeStatus, setSubscribeStatus] = useState<SubscribeStatus>(SubscribeStatus.Idle);
 
   const validateEmail = (): boolean => !!email.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i);
 
@@ -25,28 +35,34 @@ export default function SubscriptionForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
+    setSubscribeStatus(SubscribeStatus.Loading);
     // Handle form submission here and interact with the backend
     try {
-      const response = await subscribe.subscribe({
+      /* const response = await subscribe.subscribe({
         name,
         email,
         selectedTopic,
         organization,
-      });
+      }); */
+      const response = false;
       if (response) {
-        // Show success message
+        setTimeout(() => {
+          setSubscribeStatus(SubscribeStatus.Success);
+        }, 2000);
       } else {
-        // Show error message
+        setTimeout(() => {
+          setSubscribeStatus(SubscribeStatus.Error);
+        }, 2000);
       }
-    } catch {
-      // show error message
+    } catch (err) {
+      throw new Error(err instanceof Error ? err.message : String(err));
     }
   };
 
   return (
     <div className="flex flex-col items-start">
-      <Divider className="bg-subscribeText" />
-      <p className="mb-6 mt-3  text-justify text-subscribeText">{SUBSCRIBE_MODAL_SUBTITLE}</p>
+      <Divider className="bg-subscribeText dark:bg-subscribeText" />
+      <p className="mb-6 mt-3  text-justify text-subscribeText dark:text-subscribeText">{SUBSCRIBE_MODAL_SUBTITLE}</p>
       <form onSubmit={handleSubmit} className="space-y-4 mb-3">
         <Input
           placeholder="Name*"
@@ -85,14 +101,60 @@ export default function SubscriptionForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <Button type="submit" radius="full" className="bg-subscribeText text-white shadow-lg">
-          Subscribe
+        <p className="text-sm italic text-subscribeText dark:text-subscribeText">{MANDATORY}</p>
+
+        <Button
+          type="submit"
+          radius="full"
+          className="bg-subscribeText dark:bg-subscribeText text-white dark:text-black shadow-lg"
+        >
+          <motion.span initial={{ opacity: 1 }} animate={{ opacity: subscribeStatus === SubscribeStatus.Idle ? 1 : 0 }}>
+            {SUBSCRIBE}
+          </motion.span>
+          <motion.span
+            className="absolute inset-0 flex items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: subscribeStatus === SubscribeStatus.Loading ? 1 : 0 }}
+          >
+            <ChartCircle size={24} className="animate-spin" />
+          </motion.span>
+          <motion.span
+            className="absolute inset-0 flex items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: subscribeStatus === SubscribeStatus.Success ? 1 : 0 }}
+          >
+            <TickCircle size={24} className="text-green-500" />
+          </motion.span>
+          <motion.span
+            className="absolute inset-0 flex items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: subscribeStatus === SubscribeStatus.Error ? 1 : 0 }}
+          >
+            <CloseCircle size={24} className="text-red-500" />
+          </motion.span>
         </Button>
-        <p className="text-sm italic text-subscribeText">{MANDATORY}</p>
+        {subscribeStatus === SubscribeStatus.Success && (
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-green-500 mt-4 text-center"
+          >
+            {SUCCESSFUL_SUBSCRIPTION}
+          </motion.p>
+        )}
+        {subscribeStatus === SubscribeStatus.Error && (
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-red-500 mt-4 text-center"
+          >
+            {UNSUCCESSFUL_SUBSCRIPTION}
+          </motion.p>
+        )}
       </form>
 
       <Divider className="bg-subscribeText" />
-      <p className="text-lg text-subscribeText">{FOLLOW_US}</p>
+      <p className="text-lg text-subscribeText dark:text-subscribeText">{FOLLOW_US}</p>
       <div className="flex gap-4">
         <Button
           isIconOnly

@@ -10,7 +10,7 @@ import realTimeFaqItems from '@/domain/constant/about/realTimeFaqItems';
 
 function Page() {
   return (
-    <main className="flex flex-col gap-6 lg:gap-10 p-5 lg:p-10">
+    <main className="flex flex-col gap-6 lg:gap-10 p-5 lg:p-10 text-content">
       <section>
         <h1>
           About <HungerMapLiveSuperscript />

@@ -4,17 +4,13 @@ import { Feature, FeatureCollection } from 'geojson';
 import L, { LeafletMouseEvent } from 'leaflet';
 import { GeoJSON, MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
 
-import { useSidebar } from '@/domain/contexts/SidebarContext';
+import { MAP_MAX_ZOOM, MAP_MIN_ZOOM } from '@/domain/constant/Map';
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
-import { AlertType } from '@/domain/enums/AlertType';
 import { MapProps } from '@/domain/props/MapProps';
 
-import { ConflictLayer } from './ConflictLayer';
-
-const MAX_ZOOM = 8;
+import { AlertContainer } from './Alerts/AlertContainer';
 
 export default function Map({ countries }: MapProps) {
-  const { selectedAlert } = useSidebar();
   const countryStyle: L.PathOptions = {
     fillColor: 'var(--color-active-countries)',
     weight: 0.5,
@@ -81,8 +77,8 @@ export default function Map({ countries }: MapProps) {
         [-90, -180],
         [90, 180],
       ]}
-      minZoom={3}
-      maxZoom={MAX_ZOOM}
+      minZoom={MAP_MIN_ZOOM}
+      maxZoom={MAP_MAX_ZOOM}
       maxBoundsViscosity={1.0}
       zoomControl={false}
       style={{ height: '100%', width: '100%', zIndex: 40 }}
@@ -91,7 +87,7 @@ export default function Map({ countries }: MapProps) {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {selectedAlert === AlertType.CONFLICTS && <ConflictLayer maxZoom={MAX_ZOOM} />}
+      <AlertContainer />
       {countries && <GeoJSON data={countries as FeatureCollection} onEachFeature={onEachCountry} />}
       <ZoomControl position="bottomright" />
     </MapContainer>

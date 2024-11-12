@@ -1,4 +1,7 @@
+import L, { MarkerCluster } from 'leaflet';
+
 import { Conflict } from '@/domain/entities/alerts/Conflict';
+import { ConflictTypeMap } from '@/domain/entities/alerts/ConflictTypeMap';
 import { ConflictType } from '@/domain/enums/ConflictType';
 
 export default class ConflictOperations {
@@ -19,8 +22,8 @@ export default class ConflictOperations {
     }
   }
 
-  static sortConflictsByType(data?: Conflict[]) {
-    const result: { [K in ConflictType]: Conflict[] } = {
+  static sortConflictsByType(data?: Conflict[]): ConflictTypeMap {
+    const result: ConflictTypeMap = {
       [ConflictType.BATTLES]: [],
       [ConflictType.PROTESTS]: [],
       [ConflictType.RIOTS]: [],
@@ -28,9 +31,23 @@ export default class ConflictOperations {
       [ConflictType.EXPLOSIONS]: [],
       [ConflictType.STRATEGIC]: [],
     };
-    data?.forEach((c) => {
-      result[c.properties.event_type].push(c);
+    data?.forEach((conflict) => {
+      result[conflict.properties.event_type].push(conflict);
     });
     return result;
+  }
+
+  static createClusterCustomIcon(cluster: MarkerCluster, conflictType: ConflictType): L.DivIcon {
+    return L.divIcon({
+      html: `<span
+              style="
+                width: ${Math.min(Math.floor(cluster.getChildCount() / 5) + 20, 40)}px;
+                height: ${Math.min(Math.floor(cluster.getChildCount() / 5) + 20, 40)}px;
+              "
+              class="bg-${ConflictOperations.getMarkerColor(conflictType)} flex items-center justify-center rounded-full border-white border-1 text-white font-bold"
+            >${cluster.getChildCount()}</span>`,
+      className: '',
+      iconSize: L.point(40, 40, true),
+    });
   }
 }

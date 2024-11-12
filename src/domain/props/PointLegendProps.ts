@@ -1,7 +1,5 @@
-import PointLegendItem from './PointLegendItem';
+import PointLegendRecord from './PointLegendRecord';
 
 export interface PointLegendProps {
-  title: string;
-  items: PointLegendItem[];
-  tooltipInfo: string | null;
+  records: PointLegendRecord[];
 }

@@ -1,4 +1,7 @@
+import PointLegendRecord from './PointLegendRecord';
+
 export default interface PointLegendItem {
-  label: string;
-  color: string;
+  title: string;
+  records: PointLegendRecord[];
+  tooltipInfo?: string;
 }

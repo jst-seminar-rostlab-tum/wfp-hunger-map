@@ -4,6 +4,8 @@ import { Accordion, AccordionItem } from '@nextui-org/accordion';
 
 import { AccordionsProps } from '@/domain/props/AccordionProps';
 
+import { Tooltip } from '../Tooltip/Tooltip';
+
 export default function CustomAccordion({ items }: AccordionsProps) {
   return (
     <div className="w-full flex justify-start items-start max-w-[600px] overflow-visible overflow-x-auto p-2 rounded-lg">
@@ -16,7 +18,13 @@ export default function CustomAccordion({ items }: AccordionsProps) {
             title={
               <div className="flex justify-between items-center w-full">
                 <span>{item.title}</span>
-                {item.iconSrc && <img src={item.iconSrc} alt="info icon" className="w-[37px] h-[37px] p-[5.5px]" />}
+                {item.tooltipInfo ? (
+                  <Tooltip text={item.tooltipInfo}>
+                    {item.iconSrc && <img src={item.iconSrc} alt="info icon" className="w-[37px] h-[37px] p-[5.5px]" />}
+                  </Tooltip>
+                ) : (
+                  item.iconSrc && <img src={item.iconSrc} alt="info icon" className="w-[37px] h-[37px] p-[5.5px]" />
+                )}
               </div>
             }
           >

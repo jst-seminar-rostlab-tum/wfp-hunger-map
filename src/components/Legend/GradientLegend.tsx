@@ -1,27 +1,14 @@
-import { Tooltip } from '@nextui-org/tooltip';
-import { InfoCircle } from 'iconsax-react';
-
 import GradientLegendProps from '@/domain/props/GradientLegendProps';
 
 export default function GradientLegend({
   startColor,
   middleColor,
   endColor,
-  title,
   startLabel,
   endLabel,
-  tooltipInfo,
 }: GradientLegendProps) {
   return (
-    <div className="relative flex flex-col items-center w-96 px-4 py-3 bg-surfaceGrey rounded-md">
-      <span className="text-sm font-medium mb-2 self-start">{title}</span>
-      {tooltipInfo && (
-        <Tooltip showArrow content={tooltipInfo}>
-          <div className="absolute top-2 right-2">
-            <InfoCircle className="text-foreground" />
-          </div>
-        </Tooltip>
-      )}
+    <div className="relative flex flex-col items-center w-96 px-4 py-3">
       <div
         className="flex items-center w-full h-2 rounded-full"
         style={{

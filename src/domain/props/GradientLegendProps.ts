@@ -1,9 +1,7 @@
 export default interface GradientLegendProps {
   startColor: string;
-  middleColor: string | null;
+  middleColor?: string;
   endColor: string;
-  title: string;
   startLabel: string;
   endLabel: string;
-  tooltipInfo: string | null;
 }

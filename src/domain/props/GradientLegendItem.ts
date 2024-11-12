@@ -1,4 +1,4 @@
-export interface GradientLegendItem {
+export interface GradientLegendContainerItem {
   startColor: string;
   middleColor?: string;
   endColor: string;
@@ -8,12 +8,12 @@ export interface GradientLegendItem {
   tooltipInfo?: string;
 }
 
-export function isGradientLegendItem(value: unknown): value is GradientLegendItem {
+export function isGradientLegendContainerItem(value: unknown): value is GradientLegendContainerItem {
   if (typeof value !== 'object' || value === null) {
     return false;
   }
 
-  const item = value as GradientLegendItem;
+  const item = value as GradientLegendContainerItem;
   return (
     typeof item.startColor === 'string' &&
     (typeof item.middleColor === 'string' || item.middleColor === undefined) &&

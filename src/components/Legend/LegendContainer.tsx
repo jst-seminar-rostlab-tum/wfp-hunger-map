@@ -1,4 +1,4 @@
-import { isGradientLegendItem } from '@/domain/props/GradientLegendItem';
+import { isGradientLegendContainerItem } from '@/domain/props/GradientLegendItem';
 import LegendContainerProps from '@/domain/props/LegendContainerProps';
 
 import CustomAccordion from '../Accordions/Accordion';
@@ -13,7 +13,7 @@ export default function LegendContainer({ items }: LegendContainerProps) {
           title: item.title,
           iconSrc: '/Images/InfoIcon.svg',
           tooltipInfo: item.tooltipInfo,
-          content: isGradientLegendItem(item) ? <GradientLegend {...item} /> : <PointLegend {...item} />,
+          content: isGradientLegendContainerItem(item) ? <GradientLegend {...item} /> : <PointLegend {...item} />,
         }))}
       />
     </div>

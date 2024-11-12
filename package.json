@@ -59,7 +59,8 @@
     "react-dom": "18.3.1",
     "react-leaflet": "^4.2.1",
     "react-pdf": "^9.1.1",
-    "tailwind-variants": "0.1.20"
+    "tailwind-variants": "0.1.20",
+    "uuid": "^11.0.3"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.5.0",

@@ -1,5 +1,6 @@
 'use client';
 
+import { Skeleton } from '@nextui-org/skeleton';
 import { Switch } from '@nextui-org/switch';
 import { Moon, Sun1 } from 'iconsax-react';
 import { useTheme } from 'next-themes';
@@ -17,7 +18,13 @@ export function ThemeSwitch() {
     setMounted(true);
   }, []);
 
-  if (!mounted) return null;
+  if (!mounted)
+    return (
+      <div className="flex items-center justify-between gap-4 w-full ml-1">
+        <small>Theme</small>
+        <Skeleton className="rounded-full  w-14 h-7" />
+      </div>
+    );
 
   return (
     <div className="flex items-center justify-between gap-4 w-full ml-1">

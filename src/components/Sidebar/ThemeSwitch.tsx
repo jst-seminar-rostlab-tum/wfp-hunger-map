@@ -6,7 +6,9 @@ import { Moon, Sun1 } from 'iconsax-react';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 
-export function ThemeSwitch() {
+import { ThemeSwitchProps } from '@/domain/props/ThemeSwitchProps';
+
+export function ThemeSwitch({ isIconOnly = false }: ThemeSwitchProps) {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
 
@@ -21,14 +23,14 @@ export function ThemeSwitch() {
   if (!mounted)
     return (
       <div className="flex items-center justify-between gap-4 w-full ml-1">
-        <small>Theme</small>
+        {!isIconOnly && <small>Theme</small>}
         <Skeleton className="rounded-full  w-14 h-7" />
       </div>
     );
 
   return (
     <div className="flex items-center justify-between gap-4 w-full ml-1">
-      <small>Theme</small>
+      {!isIconOnly && <small>Theme</small>}
       <Switch
         classNames={{
           wrapper: ['bg-yellow-200', 'group-data-[selected=true]:bg-primary'],

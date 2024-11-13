@@ -10,7 +10,7 @@ import realTimeFaqItems from '@/domain/constant/about/realTimeFaqItems';
 
 function Page() {
   return (
-    <main className="flex flex-col gap-6 lg:gap-10 p-5 lg:p-10 about-page">
+    <>
       <section>
         <h1>
           About <HungerMapLiveSuperscript />
@@ -41,7 +41,7 @@ function Page() {
         </p>
         <Accordion items={predictionFaqItems} />
       </section>
-    </main>
+    </>
   );
 }
 

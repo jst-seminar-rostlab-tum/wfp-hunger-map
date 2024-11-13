@@ -16,6 +16,7 @@ export default async function Home() {
       <Chatbot />
       <Sidebar />
       <AlertsMenuWrapper />
+      <Chatbot />
       <MapLoader countries={countryMapData} disputedAreas={disputedAreas} />
       <HungerAlertLoader countryMapData={countryMapData} />
     </>

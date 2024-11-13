@@ -9,19 +9,13 @@ import { SidebarLeft } from 'iconsax-react';
 import NextImage from 'next/image';
 
 import { AlertsMenu } from '@/components/AlertsMenu/AlertsMenu';
+import { LogoWithText } from '@/components/LogoWithText/LogoWithText';
 import { CollapsedSidebar } from '@/components/Sidebar/CollapsedSidebar';
 import { ThemeSwitch } from '@/components/Sidebar/ThemeSwitch';
+import { pageLinks } from '@/domain/constant/PageLinks';
 import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { AlertsMenuVariant } from '@/domain/enums/AlertsMenuVariant';
 import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
-
-const pagesLinks = [
-  { href: '/', label: 'Home' },
-  { href: '/about', label: 'About' },
-  { href: '/glossary', label: 'Glossary' },
-  { href: '/methodology', label: 'Methodology' },
-  { href: '/disclaimer', label: 'Disclaimer' },
-];
 
 export function Sidebar() {
   const { isSidebarOpen, toggleSidebar, selectedMapType, setSelectedMapType } = useSidebar();
@@ -39,9 +33,8 @@ export function Sidebar() {
         }}
       >
         <CardHeader>
-          <div className="flex items-center w-full gap-4">
-            <NextImage src="/wfp_logo.svg" alt="HungerMap" width={45} height={45} />
-            <p className="text-lg font-medium flex-1">HungerMap LIVE</p>
+          <div className="flex items-center w-full gap-2">
+            <LogoWithText />
             <Button isIconOnly variant="light" onClick={toggleSidebar} aria-label="Close sidebar">
               <SidebarLeft size={24} />
             </Button>
@@ -79,7 +72,7 @@ export function Sidebar() {
               SUBSCRIBE
             </Button>
             <ul className="pl-3">
-              {pagesLinks.map((page) => (
+              {pageLinks.map((page) => (
                 <li key={page.label}>
                   <Link href={page.href} size="sm" color="foreground" className="text-opacity-80">
                     {page.label}

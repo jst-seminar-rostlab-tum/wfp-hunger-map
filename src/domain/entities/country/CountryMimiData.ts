@@ -1,3 +1,5 @@
+import { LatLngExpression } from 'leaflet';
+
 import { Geometry } from '../common/Geometry';
 import { RegionNutritionProperties } from '../region/RegionNutritionProperties';
 
@@ -10,7 +12,7 @@ export interface CountryMimiData {
   };
   features: {
     type: string;
-    geometry: Geometry;
+    geometry: Geometry<LatLngExpression[][][]>;
     properties: RegionNutritionProperties;
     id: string;
   }[];

@@ -16,6 +16,8 @@ import {
 import { SubscribeStatus, SubscribeTopic } from '@/domain/enums/SubscribeTopic';
 import SubscriptionRepository from '@/domain/repositories/SubscriptionRepository';
 
+import { SocialLink } from './SocialLink';
+
 export default function SubscriptionForm() {
   const subscribe = container.resolve<SubscriptionRepository>('SubscriptionRepository');
   const [name, setName] = useState('');
@@ -38,28 +40,37 @@ export default function SubscriptionForm() {
       setSubscribeStatus(SubscribeStatus.Loading);
       // Handle form submission here and interact with the backend
       try {
-        // TODO: backend integration not working rn
-        console.log('>>', { name, email, selectedTopic, organization });
         setIsWaitingSubResponse(true);
-        // let response = await subscribe.subscribe({
-        //   name,
-        //   email,
-        //   selectedTopic,
-        //   organization,
-        // }).then((res) => res.data);
+        // TODO: backend integration not working rn
+        await subscribe
+          .subscribe({
+            name,
+            email,
+            selectedTopic,
+            organization,
+          })
+          .then((res) => {
+            if (res) {
+              setSubscribeStatus(SubscribeStatus.Success);
+              setIsWaitingSubResponse(false);
+            } else {
+              setSubscribeStatus(SubscribeStatus.Error);
+              setIsWaitingSubResponse(false);
+            }
+          });
         // TODO: Mock response to be removed later
-        const response = false;
-        if (response) {
-          setTimeout(() => {
-            setSubscribeStatus(SubscribeStatus.Success);
-            setIsWaitingSubResponse(false);
-          }, 2000);
-        } else {
-          setTimeout(() => {
-            setSubscribeStatus(SubscribeStatus.Error);
-            setIsWaitingSubResponse(false);
-          }, 2000);
-        }
+        // const response = false;
+        // if (response) {
+        //   setTimeout(() => {
+        //     setSubscribeStatus(SubscribeStatus.Success);
+        //     setIsWaitingSubResponse(false);
+        //   }, 2000);
+        // } else {
+        //   setTimeout(() => {
+        //     setSubscribeStatus(SubscribeStatus.Error);
+        //     setIsWaitingSubResponse(false);
+        //   }, 2000);
+        // }
       } catch (err) {
         throw new Error(err instanceof Error ? err.message : String(err));
       }
@@ -194,77 +205,18 @@ export default function SubscriptionForm() {
       </form>
 
       <div className="flex gap-1">
-        <motion.a
-          key={0}
-          href="https://x.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="relative p-2 rounded-full transition-colors"
-          whileHover={{ scale: 1.5, zIndex: 1 }}
-          whileTap={{ scale: 0.95 }}
-          layout
-        >
-          <motion.div
-            className="absolute inset-0 rounded-full opacity-0"
-            whileHover={{ opacity: 1, scale: 1.2 }}
-            transition={{ duration: 0.2 }}
-          />
-          <Twitch size={24} />
-        </motion.a>
-
-        <motion.a
-          key={1}
-          href="https://facebook.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="relative p-2 rounded-full transition-colors"
-          whileHover={{ scale: 1.5, zIndex: 1 }}
-          whileTap={{ scale: 0.95 }}
-          layout
-        >
-          <motion.div
-            className="absolute inset-0 rounded-full opacity-0"
-            whileHover={{ opacity: 1, scale: 1.2 }}
-            transition={{ duration: 0.2 }}
-          />
-          <Facebook size={24} />
-        </motion.a>
-
-        <motion.a
-          key={2}
-          href="https://youtube.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="relative p-2 rounded-full transition-colors"
-          whileHover={{ scale: 1.5, zIndex: 1 }}
-          whileTap={{ scale: 0.95 }}
-          layout
-        >
-          <motion.div
-            className="absolute inset-0 rounded-full opacity-0"
-            whileHover={{ opacity: 1, scale: 1.2 }}
-            transition={{ duration: 0.2 }}
-          />
-          <Youtube size={24} />
-        </motion.a>
-
-        <motion.a
-          key={3}
-          href="https://instagram.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="relative p-2 rounded-full transition-colors"
-          whileHover={{ scale: 1.5, zIndex: 1 }}
-          whileTap={{ scale: 0.95 }}
-          layout
-        >
-          <motion.div
-            className="absolute inset-0 rounded-full opacity-0"
-            whileHover={{ opacity: 1, scale: 1.2 }}
-            transition={{ duration: 0.2 }}
-          />
-          <Instagram size={24} />
-        </motion.a>
+        <SocialLink href="https://twitch.com/">
+          <Twitch size={24} color="#6441A4" />
+        </SocialLink>
+        <SocialLink href="https://facebook.com/">
+          <Facebook size={24} color="#1877F2" />
+        </SocialLink>
+        <SocialLink href="https://youtube.com/">
+          <Youtube size={24} color="#FF0000" />
+        </SocialLink>
+        <SocialLink href="https://instagram.com/">
+          <Instagram size={24} color="#E1306C" />
+        </SocialLink>
       </div>
     </div>
   );

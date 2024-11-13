@@ -4,7 +4,7 @@ import ChatbotRepository from '@/domain/repositories/ChatbotRepository';
 export default class ChatbotRepositoryImpl implements ChatbotRepository {
   async testHealth(): Promise<boolean> {
     try {
-      const response = await fetch(`${process.env.BACKEND_CHATBOT_API_URL}/health`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_CHATBOT_API_URL}/health`);
       return response.ok;
     } catch {
       return false;
@@ -21,7 +21,7 @@ export default class ChatbotRepositoryImpl implements ChatbotRepository {
         previous_messages: options.previous_messages || [],
       };
 
-      const response = await fetch(`${process.env.BACKEND_CHATBOT_API_URL}/query`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_CHATBOT_API_URL}/query`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

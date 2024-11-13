@@ -1,7 +1,7 @@
 {
   "nutrition": [
     {
-      "iso3": "ETH",
+      "iso3": "PER",
       "active": true,
       "va_ai": 3,
       "fo_ai": 1.3,
@@ -10,7 +10,7 @@
       "zn_ai": 5
     },
     {
-      "iso3": "IND",
+      "iso3": "COL",
       "active": true,
       "va_ai": 3,
       "fo_ai": 1.3,

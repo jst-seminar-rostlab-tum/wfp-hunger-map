@@ -1,14 +1,14 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { GeoJSON } from 'react-leaflet/GeoJSON';
-import { useMap } from 'react-leaflet';
+import { GeoJSON, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { createRoot } from 'react-dom/client';
 
-// Importing nutrition data from JSON
 import nutrition from './nutrition.json';
+import CountryRepositoryImpl from '@/infrastructure/repositories/CountryRepositoryImpl';
+import StateChoropleth from './NutritionStateLayer';
 
-console.log("here");
+const CountryRepo = new CountryRepositoryImpl();
 
 const NutritionChoropleth = ({
     selectedNutritionView,
@@ -22,13 +22,34 @@ const NutritionChoropleth = ({
     tooltip,
 }) => {
     const geoJsonRef = useRef();
-    const { map } = useMap();
+    const map = useMap();
+    const [regionData, setRegionData] = useState(null);
+    const [showStateChoropleth, setShowStateChoropleth] = useState(false);
 
-    // Utility to find nutrition data for a country using the iso3 code
     const getCountryNutrition = (iso3) => {
         const countryData = nutrition.nutrition.find((item) => item.iso3 === iso3 && item.active);
-        console.log(nutrition.nutrition);
-        return countryData || null; 
+        return countryData || null;
+    };
+
+    const handleCountryClick = async (feature, bounds) => {
+        const countryId = feature.properties.adm0_id;
+        if (countryId) {
+            try {
+                const regionData = await CountryRepo.getRegionData(countryId);
+                if (regionData && regionData.features) {
+                    console.log("Fetched region data:", regionData);
+                    setRegionData({
+                        type: "FeatureCollection",
+                        features: regionData.features
+                    });
+                    setShowStateChoropleth(true);
+                    map.fitBounds(bounds);
+                }
+            } catch (error) {
+                console.error("Error fetching country data:", error);
+            }
+        }
+        if (handleClick) handleClick(feature, bounds, map);
     };
 
     const features = (feature, layer) => {
@@ -36,8 +57,6 @@ const NutritionChoropleth = ({
             mouseover: (e) => {
                 if (view !== 'nutrition') {
                     e.target.setStyle(hoverStyle);
-                } else {
-                    e.target.setStyle(0);
                 }
                 if (onFeatureMouseOver) onFeatureMouseOver();
             },
@@ -45,7 +64,7 @@ const NutritionChoropleth = ({
                 if (view !== 'nutrition') geoJsonRef.current.resetStyle(e.target);
             },
             click: (e) => {
-                handleClick(e.target.feature, e.target.getBounds(), map);
+                handleCountryClick(e.target.feature, e.target.getBounds());
             },
         });
 
@@ -59,7 +78,6 @@ const NutritionChoropleth = ({
         layer.bindTooltip(div, { sticky: true, className: tooltip ? tooltip.className : 'countryTooltip' });
     };
 
-    // Determine the fill color based on nutrition data
     const nutritionFill = (value) => {
         if (value === null) return 'none';
         if (value <= 1) return '#fde2e1';
@@ -70,11 +88,8 @@ const NutritionChoropleth = ({
         return '#A0A0A0';
     };
 
-    // Define style based on nutrition data if available
     const nutritionAdm1Styles = (feature) => {
-      console.log("style");
         const iso3 = feature.properties.iso3;
-        console.log(iso3);
         const nutritionValue = getCountryNutrition(iso3)?.[selectedNutritionView];
 
         return nutritionValue !== undefined
@@ -110,6 +125,26 @@ const NutritionChoropleth = ({
     return (
         <>
             <GeoJSON ref={geoJsonRef} style={style} data={data} onEachFeature={features} />
+            {showStateChoropleth && regionData && (
+                <StateChoropleth
+                    regionData={regionData}
+                    style={{
+                        fillColor: '#992F7B',
+                        color: '#000',
+                        weight: 1,
+                        fillOpacity: 0.6,
+                    }}
+                    hoverStyle={{
+                        fillColor: '#FFD700',
+                        fillOpacity: 0.8,
+                    }}
+                    handleClick={(feature) => console.log("State clicked:", feature)}
+                    tooltip={{
+                        render: (feature) => `<div>${feature.properties.Name}</div>`,
+                        className: 'state-tooltip',
+                    }}
+                />
+            )}
         </>
     );
 };

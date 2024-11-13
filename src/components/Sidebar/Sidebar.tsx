@@ -6,6 +6,7 @@ import { Input } from '@nextui-org/input';
 import { Listbox, ListboxItem, ListboxSection } from '@nextui-org/listbox';
 import { SidebarLeft } from 'iconsax-react';
 import NextImage from 'next/image';
+import PropTypes from 'prop-types';
 
 import { AlertsMenu } from '@/components/AlertsMenu/AlertsMenu';
 import { CollapsedSidebar } from '@/components/Sidebar/CollapsedSidebar';
@@ -15,10 +16,15 @@ import { AlertsMenuVariant } from '@/domain/enums/AlertsMenuVariant';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight';
 import { SidebarOperations } from '@/operations/charts/SidebarOperations';
 
-export function Sidebar() {
+export function Sidebar({ onMapTypeChange }: { onMapTypeChange: (mapType: string) => void }) {
   const { isSidebarOpen, toggleSidebar, selectedMapType, setSelectedMapType } = useSidebar();
 
   const handleSelectionChange = (key: 'all' | Set<string | number>) => {
+    const newMapType = key instanceof Set ? Array.from(key)[0] : key;
+    setSelectedMapType(newMapType as GlobalInsight);
+    if (onMapTypeChange) {
+      onMapTypeChange(newMapType as GlobalInsight);
+    }
     return key instanceof Set
       ? setSelectedMapType(Array.from(key)[0] as GlobalInsight)
       : setSelectedMapType(key as GlobalInsight);
@@ -99,3 +105,6 @@ export function Sidebar() {
     </div>
   );
 }
+Sidebar.propTypes = {
+  onMapTypeChange: PropTypes.func,
+};

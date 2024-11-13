@@ -1,7 +1,7 @@
-import { nextui } from '@nextui-org/theme';
-
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+const { nextui } = require('@nextui-org/theme')
+
+const config = {
   safelist: [
     'w-[215px]',
     'w-[179px]',
@@ -145,4 +145,6 @@ module.exports = {
       },
     }),
   ],
-};
+}
+
+module.exports = config

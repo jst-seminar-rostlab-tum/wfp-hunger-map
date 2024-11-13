@@ -37,10 +37,10 @@ export default function HungerMapChatbot() {
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isUserMessageSent, setIsUserMessageSent] = useState(false);
-  const [chats, setChats] = useState<IChat[]>([{ id: 1, title: 'Chat 1', messages: [] }]);
+  const [chats, setChats] = useState<IChat[]>([{ id: 1, title: 'Chat 1', messages: [], isTyping: false }]);
   const [currentChatIndex, setCurrentChatIndex] = useState(0);
   const [input, setInput] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
+  const [isResponseAnimated, setIsResponseAnimated] = useState(true);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery('(max-width: 640px)');
@@ -62,11 +62,13 @@ export default function HungerMapChatbot() {
   };
 
   const startNewChat = (): void => {
-    const newChat: IChat = { id: chats.length + 1, title: `Chat ${chats.length + 1}`, messages: [] };
-    setChats([...chats, newChat]);
-    setCurrentChatIndex(chats.length);
-    if (isMobile) {
-      setIsSidebarOpen(false);
+    if (isResponseAnimated) {
+      const newChat: IChat = { id: chats.length + 1, title: `Chat ${chats.length + 1}`, messages: [], isTyping: false };
+      setChats([...chats, newChat]);
+      setCurrentChatIndex(chats.length);
+      if (isMobile) {
+        setIsSidebarOpen(false);
+      }
     }
   };
 
@@ -79,6 +81,13 @@ export default function HungerMapChatbot() {
     if (isMobile) {
       setIsSidebarOpen(false);
     }
+  };
+
+  const setTypingStatus = async (chatIndex: number, isTyping: boolean): Promise<void> => {
+    return new Promise((resolve) => {
+      setChats((prevChats) => prevChats.map((chat, index) => (index === chatIndex ? { ...chat, isTyping } : chat)));
+      resolve();
+    });
   };
 
   /**
@@ -106,6 +115,7 @@ export default function HungerMapChatbot() {
       role: SenderRole.ASSISTANT,
       dataSources,
     });
+    chats[currentChatIndex].isTyping = false;
     setChats(updatedChatsWithAI);
   };
 
@@ -115,26 +125,33 @@ export default function HungerMapChatbot() {
    * @param promptText is requested text from user
    */
   const handleSubmit = (fromEvent: React.FormEvent, promptText: string | null = null): void => {
-    fromEvent.preventDefault();
-    const text = promptText || input;
-    if (isTyping) return; // prevent multiple submission
-    if (text.trim()) {
-      const updatedChats = structuredClone(chats);
-      updatedChats[currentChatIndex].messages.push({ id: crypto.randomUUID(), content: text, role: SenderRole.USER });
-      if (updatedChats[currentChatIndex].title === `Chat ${updatedChats[currentChatIndex].id}`) {
-        updatedChats[currentChatIndex].title = text.slice(0, 30) + (text.length > 30 ? '...' : '');
+    if (isResponseAnimated) {
+      setIsResponseAnimated(false);
+      fromEvent.preventDefault();
+      const text = promptText || input;
+      chats[currentChatIndex].isTyping = true;
+      if (text.trim()) {
+        const updatedChats = structuredClone(chats);
+        updatedChats[currentChatIndex].messages.push({ id: crypto.randomUUID(), content: text, role: SenderRole.USER });
+        if (updatedChats[currentChatIndex].title === `Chat ${updatedChats[currentChatIndex].id}`) {
+          updatedChats[currentChatIndex].title = text.slice(0, 30) + (text.length > 30 ? '...' : '');
+        }
+        setChats(updatedChats);
+        setInput('');
+        setIsUserMessageSent(true);
+        chats[currentChatIndex].isTyping = false;
       }
-      setChats(updatedChats);
-      setInput('');
-      setIsUserMessageSent(true);
-      setIsTyping(true);
     }
   };
 
+  const handleTypingComplete = (): void => {
+    setIsResponseAnimated(true);
+  };
+
   const handleKeyDown = (keyboardEvent: React.KeyboardEvent<HTMLTextAreaElement>): void => {
-    if (keyboardEvent.key === 'Enter' && !keyboardEvent.shiftKey) {
+    if (isResponseAnimated && keyboardEvent.key === 'Enter' && !keyboardEvent.shiftKey) {
       keyboardEvent.preventDefault();
-      if (isTyping) return; // prevent multiple submission
+      chats[currentChatIndex].isTyping = false;
       handleSubmit(keyboardEvent);
     }
   };
@@ -155,11 +172,6 @@ export default function HungerMapChatbot() {
       }
     }
   }, [isUserMessageSent]);
-
-  // use to scroll to the end of the chat when new messages are added
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [chats, currentChatIndex]);
 
   // listen to isOpen and isMobile to set isFullScreen
   useEffect(() => {
@@ -292,9 +304,12 @@ export default function HungerMapChatbot() {
                           ) : (
                             <TypingText
                               text={message.content}
-                              speed={100}
-                              endSentencePause={500}
-                              onTypingComplete={() => setIsTyping(false)}
+                              id={message.content}
+                              chatIndex={currentChatIndex}
+                              onTypingStart={() => setTypingStatus(currentChatIndex, false)}
+                              onTypingComplete={() => {
+                                handleTypingComplete();
+                              }}
                             />
                           )}
                           {message.dataSources && (
@@ -312,7 +327,7 @@ export default function HungerMapChatbot() {
                     ))
                   )}
 
-                  {isTyping && (
+                  {chats[currentChatIndex].isTyping === true && (
                     <div className="flex justify-start mb-4">
                       <div className="relative flex items-center justify-center bg-transparent w-12 h-12 rounded-full border-2 border-black dark:border-white bg-white dark:bg-black">
                         <Bot className="w-6 h-6 stroke-black dark:stroke-white" />
@@ -338,7 +353,7 @@ export default function HungerMapChatbot() {
                     rows={1}
                   />
                   <Tooltip content="Submit">
-                    <Button type="submit" variant="light" isIconOnly disabled={isTyping}>
+                    <Button type="submit" variant="light" isIconOnly disabled={chats[currentChatIndex].isTyping}>
                       <Send2 className="h-4 w-4" />
                     </Button>
                   </Tooltip>

@@ -1,6 +1,6 @@
 import { LeafletContextInterface } from '@react-leaflet/core';
 import { FeatureCollection } from 'geojson';
-import mapboxgl from 'mapbox-gl';
+import mapboxgl, { DataDrivenPropertyValueSpecification } from 'mapbox-gl';
 import { RefObject } from 'react';
 
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
@@ -8,13 +8,40 @@ import { MapColorsType } from '@/domain/entities/map/MapColorsType.ts';
 import { MapProps } from '@/domain/props/MapProps';
 import { getColors } from '@/styles/MapColors.ts';
 
+import { IPCMapOperations } from '../IPC/IpcMapOperations';
+
 export class MapOperations {
   static createMapboxMap(
     isDark: boolean,
-    { countries }: MapProps,
+    { countries, ipcData, selectedMapType }: MapProps,
     mapContainer: RefObject<HTMLDivElement>
   ): mapboxgl.Map {
     const mapColors: MapColorsType = getColors(isDark);
+
+    const getCountryFillPaint = (): DataDrivenPropertyValueSpecification<string> => {
+      switch (selectedMapType) {
+        case 'ipc':
+          return [
+            'case',
+            ['boolean', ['feature-state', 'hover'], false],
+            mapColors.activeCountries,
+            [
+              'match',
+              ['get', 'adm0_name'],
+              ...Object.entries(IPCMapOperations.generateColorMap(ipcData!)).flat(),
+              mapColors.inactiveCountries,
+            ],
+          ];
+        // TODO add nutrition
+        default:
+          return [
+            'case',
+            ['boolean', ['coalesce', ['get', 'interactive'], false]],
+            mapColors.activeCountries,
+            mapColors.inactiveCountries,
+          ];
+      }
+    };
 
     return new mapboxgl.Map({
       container: mapContainer.current as unknown as string | HTMLElement,
@@ -47,12 +74,7 @@ export class MapOperations {
             source: 'countries',
             layout: {},
             paint: {
-              'fill-color': [
-                'case',
-                ['boolean', ['coalesce', ['get', 'interactive'], false]],
-                mapColors.activeCountries,
-                mapColors.inactiveCountries,
-              ],
+              'fill-color': getCountryFillPaint(),
               'fill-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 0.7, 1],
             },
           },
@@ -66,7 +88,6 @@ export class MapOperations {
               'line-width': 0.7,
             },
           },
-
           {
             id: 'mapbox-roads',
             type: 'line',
@@ -118,7 +139,7 @@ export class MapOperations {
 
     baseMap.on('mouseup', 'country-fills', (e) => {
       if (!isDragging && e.features && (e.features[0] as unknown as CountryMapData).properties.interactive) {
-        alert(`You clicked on ${(e.features[0] as unknown as CountryMapData).properties.adm0_name}`);
+        // alert(`You clicked on ${(e.features[0] as unknown as CountryMapData).properties.adm0_name}`);
       }
     });
   }

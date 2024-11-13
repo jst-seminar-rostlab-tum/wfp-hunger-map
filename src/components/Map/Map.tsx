@@ -8,7 +8,7 @@ import { MapProps } from '@/domain/props/MapProps';
 import { AlertContainer } from './Alerts/AlertContainer';
 import VectorTileLayer from './VectorTileLayer';
 
-export default function Map({ countries, disputedAreas }: MapProps) {
+export default function Map({ countries, disputedAreas, ipcData }: MapProps) {
   return (
     <MapContainer
       center={[21.505, -0.09]}
@@ -24,7 +24,7 @@ export default function Map({ countries, disputedAreas }: MapProps) {
       style={{ height: '100%', width: '100%', zIndex: 1 }}
     >
       <AlertContainer />
-      {countries && <VectorTileLayer countries={countries} disputedAreas={disputedAreas} />}
+      {countries && <VectorTileLayer countries={countries} disputedAreas={disputedAreas} ipcData={ipcData} />}
       <ZoomControl position="bottomright" />
     </MapContainer>
   );

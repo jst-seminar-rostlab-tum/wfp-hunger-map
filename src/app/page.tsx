@@ -10,13 +10,19 @@ export default async function Home() {
   const globalRepo = container.resolve<GlobalDataRepository>('GlobalDataRepository');
   const countryMapDataPromise = globalRepo.getMapDataForCountries();
   const disputedAreasPromise = globalRepo.getDisputedAreas();
-  const [countryMapData, disputedAreas] = await Promise.all([countryMapDataPromise, disputedAreasPromise]);
+  const ipcDataPromise = globalRepo.getIpcData();
+  const [countryMapData, disputedAreas, ipcData] = await Promise.all([
+    countryMapDataPromise,
+    disputedAreasPromise,
+    ipcDataPromise,
+  ]);
+
   return (
     <>
       <Sidebar />
       <AlertsMenuWrapper />
       <Chatbot />
-      <MapLoader countries={countryMapData} disputedAreas={disputedAreas} />
+      <MapLoader countries={countryMapData} disputedAreas={disputedAreas} ipcData={ipcData} />
       <HungerAlertLoader countryMapData={countryMapData} />
     </>
   );

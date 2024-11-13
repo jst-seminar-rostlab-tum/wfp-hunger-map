@@ -3,7 +3,7 @@
 import { Button, Divider, Input, Select, SelectItem } from '@nextui-org/react';
 import { motion } from 'framer-motion';
 import { ChartCircle, CloseCircle, Facebook, Instagram, TickCircle, Twitch, Youtube } from 'iconsax-react';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import container from '@/container';
 import {
@@ -22,81 +22,100 @@ export default function SubscriptionForm() {
   const [organization, setOrganization] = useState('');
   const [email, setEmail] = useState('');
   const [selectedTopic, setSelectedTopic] = useState<string>('');
+
+  const [isNameInvalid, setIsNameInvalid] = useState(true);
+  const [isEmailInvalid, setIsEmailInvalid] = useState(true);
+
   const [subscribeStatus, setSubscribeStatus] = useState<SubscribeStatus>(SubscribeStatus.Idle);
-  const [isFormValid, setIsFormValid] = useState(false);
+  const [isWaitingSubResponse, setIsWaitingSubResponse] = useState(false);
 
-  const validateEmail = (): boolean => !!email.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i);
-
-  const isInvalid = useMemo(() => {
-    if (email === '') return false;
-
-    return !validateEmail();
-  }, [email]);
+  const validateEmail = (newEmail: string): boolean => !!newEmail.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     // Validate the form
-    if (email.trim() === '' || name.trim() === '') {
-      setIsFormValid(false);
-      return;
-    }
-    setIsFormValid(true);
-
-    setSubscribeStatus(SubscribeStatus.Loading);
-    // Handle form submission here and interact with the backend
-    try {
-      // TODO: backend integration not working rn
-      let response = await subscribe.subscribe({
-        name,
-        email,
-        selectedTopic,
-        organization,
-      });
-      // TODO: Mock response to be removed later
-      response = false;
-      if (response) {
-        setTimeout(() => {
-          setSubscribeStatus(SubscribeStatus.Success);
-        }, 2000);
-      } else {
-        setTimeout(() => {
-          setSubscribeStatus(SubscribeStatus.Error);
-        }, 2000);
+    if (!isEmailInvalid && !isNameInvalid && !isWaitingSubResponse) {
+      setSubscribeStatus(SubscribeStatus.Loading);
+      // Handle form submission here and interact with the backend
+      try {
+        // TODO: backend integration not working rn
+        console.log('>>', { name, email, selectedTopic, organization });
+        setIsWaitingSubResponse(true);
+        // let response = await subscribe.subscribe({
+        //   name,
+        //   email,
+        //   selectedTopic,
+        //   organization,
+        // }).then((res) => res.data);
+        // TODO: Mock response to be removed later
+        const response = false;
+        if (response) {
+          setTimeout(() => {
+            setSubscribeStatus(SubscribeStatus.Success);
+            setIsWaitingSubResponse(false);
+          }, 2000);
+        } else {
+          setTimeout(() => {
+            setSubscribeStatus(SubscribeStatus.Error);
+            setIsWaitingSubResponse(false);
+          }, 2000);
+        }
+      } catch (err) {
+        throw new Error(err instanceof Error ? err.message : String(err));
       }
-    } catch (err) {
-      throw new Error(err instanceof Error ? err.message : String(err));
+    }
+  };
+
+  const changeName = (newName: string): void => {
+    setName(newName);
+    if (newName) {
+      setIsNameInvalid(false);
+    } else {
+      setIsNameInvalid(true);
+    }
+  };
+
+  const changeEmail = (newEmail: string): void => {
+    setEmail(newEmail);
+    if (newEmail && validateEmail(newEmail)) {
+      setIsEmailInvalid(false);
+    } else {
+      setIsEmailInvalid(true);
     }
   };
 
   return (
     <div className="flex flex-col items-center">
       <Divider className="bg-subscribeText dark:bg-subscribeText" />
-      <p className="mb-6 text-justify text-subscribeText dark:text-subscribeText">{SUBSCRIBE_MODAL_SUBTITLE}</p>
-      <form onSubmit={handleSubmit} className="flex flex-col space-y-4 mb-3 w-full">
+      <p className="mb-12 text-justify text-subscribeText dark:text-subscribeText">{SUBSCRIBE_MODAL_SUBTITLE}</p>
+      <p className="text-sm italic self-start text-subscribeText dark:text-subscribeText">{MANDATORY}</p>
+      <form onSubmit={handleSubmit} className="flex flex-col space-y-2 mb-3 w-full">
         <Input
           placeholder="Name*"
-          color="primary"
+          color={isNameInvalid ? 'danger' : 'primary'}
+          isInvalid={isNameInvalid}
+          errorMessage="Name is required"
           variant="faded"
           isRequired
           classNames={{
             input: ['placeholder:text-black dark:placeholder:text-white'],
           }}
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(changeNameEvent) => changeName(changeNameEvent.target.value)}
         />
         <Input
           placeholder="Email*"
           type="email"
           variant="faded"
           isRequired
-          isInvalid={isInvalid}
-          color={isInvalid ? 'danger' : 'primary'}
+          isInvalid={isEmailInvalid}
+          color={isEmailInvalid ? 'danger' : 'primary'}
           errorMessage="Please enter a valid email"
           classNames={{
             input: ['placeholder:text-black dark:placeholder:text-white'],
           }}
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(changeEmailEvent) => changeEmail(changeEmailEvent.target.value)}
         />
         <Input
           placeholder="Organization/Institution"
@@ -105,7 +124,8 @@ export default function SubscriptionForm() {
           classNames={{
             input: ['placeholder:text-black dark:placeholder:text-white'],
           }}
-          onChange={(e) => setOrganization(e.target.value)}
+          errorMessage="Please enter a valid organization"
+          onChange={(changeOrgEvent) => setOrganization(changeOrgEvent.target.value)}
           value={organization}
         />
         <Select
@@ -114,6 +134,7 @@ export default function SubscriptionForm() {
           onSelectionChange={(keys) => setSelectedTopic(Array.from(keys)[0] as string)}
           color="primary"
           variant="faded"
+          errorMessage="Please select a valid topic"
           value={selectedTopic}
         >
           {Object.entries(SubscribeTopic).map(([key, value]) => (
@@ -122,11 +143,10 @@ export default function SubscriptionForm() {
             </SelectItem>
           ))}
         </Select>
-        <p className="text-sm italic text-subscribeText dark:text-subscribeText">{MANDATORY}</p>
 
         <Button
           type="submit"
-          className="w-40 bg-subscribeText dark:bg-subscribeText text-white dark:text-black shadow-lg self-center"
+          className="w-full bg-subscribeText dark:bg-subscribeText text-white dark:text-black shadow-lg self-center"
         >
           <motion.span initial={{ opacity: 1 }} animate={{ opacity: subscribeStatus === SubscribeStatus.Idle ? 1 : 0 }}>
             {SUBSCRIBE}

@@ -1,7 +1,10 @@
 export enum AlertType {
   HUNGER = 'hunger',
   CONFLICTS = 'conflicts',
-  CONFLICT1 = 'conflict1',
-  CONFLICT2 = 'conflict2',
   HAZARDS = 'hazards',
+  COVID19 = 'covid19',
+  FLOODS = 'floods',
+  DROUGHTS = 'droughts',
+  EARTHQUAKES = 'earthquakes',
+  CYCLONES = 'cyclones',
 }

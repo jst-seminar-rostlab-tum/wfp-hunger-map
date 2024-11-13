@@ -1,11 +1,15 @@
 import CustomAccordion from '@/components/Accordions/Accordion';
 import { CustomButton } from '@/components/Buttons/CustomButton';
 import { LineChart } from '@/components/Charts/LineChart';
+import LegendContainer from '@/components/Legend/LegendContainer';
+import { Tooltip } from '@/components/Tooltip/Tooltip';
 import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph.ts';
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph.ts';
 import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
 import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
 import AccordionsOperations from '@/operations/accordions/AccordionOperations';
+
+import PopupPreview from './PopupPreview';
 
 /**
  * You can use this page to try and show off your components.
@@ -173,12 +177,64 @@ export default async function Elements() {
     },
   };
 
+  const legendItems = [
+    {
+      title: 'Hunger alerts',
+      tooltipInfo: 'Information regarding this legend',
+      records: [
+        {
+          color: 'warning',
+          label: 'Hunger',
+        },
+        {
+          color: 'danger',
+          label: 'Severe Hunger',
+        },
+      ],
+    },
+    {
+      startColor: 'warning',
+      endColor: 'danger',
+      title: 'Prevalence of insufficient food consumption',
+      startLabel: '0%',
+      endLabel: '100%',
+      tooltipInfo: 'Information regarding this legend',
+    },
+  ];
+
+  const tooltipTestBox = (
+    <div className="w-full h-fit flex flex-row flex-wrap gap-10 justify-around px-8 pt-40 pb-16 border-b border-gray-800">
+      <Tooltip text="Lorem ipsum dolor">
+        <div className="border-1 p-2">simple tooltip</div>
+      </Tooltip>
+      <Tooltip
+        text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod."
+        title="Lorem ipsum dolor sit ame"
+      >
+        <div className="border-1 p-2">
+          <p>tooltip with</p>
+          title
+        </div>
+      </Tooltip>
+      <Tooltip text="Dolore magna aliquyam erat, sed diam voluptua." warning>
+        <div className="border-1 p-2">tooltip and warning</div>
+      </Tooltip>
+      <Tooltip
+        text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
+        title="dolore magna aliquyam erat"
+        warning
+      >
+        <div className="border-1 p-2">maxed out tooltip</div>
+      </Tooltip>
+    </div>
+  );
+
   return (
     <div className="w-full flex flex-col items-center justify-center">
       <CustomButton variant="solid">Test</CustomButton>
       <CustomButton variant="bordered">Test</CustomButton>
       <CustomButton variant="flat">Test</CustomButton>
-      <CustomAccordion items={AccordionsOperations.getAccordionData()} />;
+      <CustomAccordion items={AccordionsOperations.getAccordionData()} />
       <div className="w-full h-fit flex flex-row flex-wrap gap-10 justify-around px-8 pt-40 pb-16 border-b border-gray-800">
         <div className="w-250px h-fit">
           <LineChart data={simpleAndSmallLineChartData} small />
@@ -210,6 +266,9 @@ export default async function Elements() {
           <LineChart title="Headline and food inflation" data={inflationGraphsData} expandable />
         </div>
       </div>
+      <LegendContainer items={legendItems} />
+      {tooltipTestBox}
+      <PopupPreview />
     </div>
   );
 }

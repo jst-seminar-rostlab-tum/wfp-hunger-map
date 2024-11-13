@@ -1,4 +1,5 @@
 import { AlertsMenuWrapper } from '@/components/AlertsMenu/AlertsMenuWrapper';
+import Chatbot from '@/components/Chatbot/Chatbot';
 import HungerAlertLoader from '@/components/HungerAlert/HungerAlertLoader';
 import MapLoader from '@/components/Map/MapLoader';
 import { Sidebar } from '@/components/Sidebar/Sidebar';
@@ -12,6 +13,7 @@ export default async function Home() {
   const [countryMapData, disputedAreas] = await Promise.all([countryMapDataPromise, disputedAreasPromise]);
   return (
     <>
+      <Chatbot />
       <Sidebar />
       <AlertsMenuWrapper />
       <MapLoader countries={countryMapData} disputedAreas={disputedAreas} />

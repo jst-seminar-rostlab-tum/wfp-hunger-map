@@ -28,7 +28,7 @@ export class MapOperations {
             [
               'match',
               ['get', 'adm0_name'],
-              ...Object.entries(IPCMapOperations.generateColorMap(ipcData!)).flat(),
+              ...Object.entries(IPCMapOperations.generateColorMap(ipcData!, countries!)).flat(),
               mapColors.inactiveCountries,
             ],
           ];

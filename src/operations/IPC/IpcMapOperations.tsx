@@ -1,4 +1,5 @@
 import { CountryIpcData } from '@/domain/entities/country/CountryIpcData';
+import { CountryMapData, CountryMapDataWrapper } from '@/domain/entities/country/CountryMapData';
 
 export class IPCMapOperations {
   static fillIpc = (ipcPopulation: number | null): string => {
@@ -12,14 +13,23 @@ export class IPCMapOperations {
     return '#710013';
   };
 
-  static generateColorMap = (ipcData: CountryIpcData[]) => {
-    // TODO must be modified it does not depend on phase_4_plus_percent it depend on ipcPopulation which found in countries
-    const colorMap: Record<string, string> = {};
-    ipcData.forEach((data) => {
-      const countryName = data.adm0_name;
-      const ipcPopulation = data.phase_4_plus_percent;
-      colorMap[countryName] = IPCMapOperations.fillIpc(ipcPopulation);
+  static generateColorMap = (ipcData: CountryIpcData[], mapData: CountryMapDataWrapper) => {
+    const ipcDataById: Record<string, CountryIpcData> = {};
+    ipcData.forEach((d) => {
+      ipcDataById[d.adm0_code] = d;
     });
+    const colorMap: Record<string, string> = {};
+    mapData.features.forEach((feature: CountryMapData) => {
+      const ipcDataForFeature = ipcDataById[feature.properties.adm0_id];
+
+      if (ipcDataForFeature) {
+        const countryName = feature.properties.adm0_name;
+        const { ipcPopulation } = feature.properties;
+
+        colorMap[countryName] = IPCMapOperations.fillIpc(ipcPopulation!);
+      }
+    });
+
     return colorMap;
   };
 }

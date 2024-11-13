@@ -88,7 +88,7 @@ export function Sidebar() {
               isModalOpen={isModalOpen}
               toggleModal={() => setIsModalOpen(!isModalOpen)}
               modalTitle={SUBSCRIBE_MODAL_TITLE}
-              modalSize="2xl"
+              modalSize="lg"
               modalHeight="auto"
             >
               <Subscribe />

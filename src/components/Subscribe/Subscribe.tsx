@@ -7,7 +7,6 @@ import { useMemo, useState } from 'react';
 
 import container from '@/container';
 import {
-  FOLLOW_US,
   MANDATORY,
   SUBSCRIBE,
   SUBSCRIBE_MODAL_SUBTITLE,
@@ -18,7 +17,7 @@ import { SubscribeStatus, SubscribeTopic } from '@/domain/enums/SubscribeTopic';
 import SubscriptionRepository from '@/domain/repositories/SubscriptionRepository';
 
 export default function SubscriptionForm() {
-  // const subscribe = container.resolve<SubscriptionRepository>('SubscriptionRepository');
+  const subscribe = container.resolve<SubscriptionRepository>('SubscriptionRepository');
   const [name, setName] = useState('');
   const [organization, setOrganization] = useState('');
   const [email, setEmail] = useState('');
@@ -46,13 +45,15 @@ export default function SubscriptionForm() {
     setSubscribeStatus(SubscribeStatus.Loading);
     // Handle form submission here and interact with the backend
     try {
-      /* const response = await subscribe.subscribe({
+      // TODO: backend integration not working rn
+      let response = await subscribe.subscribe({
         name,
         email,
         selectedTopic,
         organization,
-      }); */
-      const response = false;
+      });
+      // TODO: Mock response to be removed later
+      response = false;
       if (response) {
         setTimeout(() => {
           setSubscribeStatus(SubscribeStatus.Success);
@@ -77,15 +78,33 @@ export default function SubscriptionForm() {
           color="primary"
           variant="faded"
           isRequired
-          className="text-zinc-500"
+          classNames={{
+            input: ['placeholder:text-black dark:placeholder:text-white'],
+          }}
           value={name}
           onChange={(e) => setName(e.target.value)}
+        />
+        <Input
+          placeholder="Email*"
+          type="email"
+          variant="faded"
+          isRequired
+          isInvalid={isInvalid}
+          color={isInvalid ? 'danger' : 'primary'}
+          errorMessage="Please enter a valid email"
+          classNames={{
+            input: ['placeholder:text-black dark:placeholder:text-white'],
+          }}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <Input
           placeholder="Organization/Institution"
           color="primary"
           variant="faded"
-          className="text-zinc-500"
+          classNames={{
+            input: ['placeholder:text-black dark:placeholder:text-white'],
+          }}
           onChange={(e) => setOrganization(e.target.value)}
           value={organization}
         />
@@ -95,7 +114,6 @@ export default function SubscriptionForm() {
           onSelectionChange={(keys) => setSelectedTopic(Array.from(keys)[0] as string)}
           color="primary"
           variant="faded"
-          className="text-zinc-500"
           value={selectedTopic}
         >
           {Object.entries(SubscribeTopic).map(([key, value]) => (
@@ -104,18 +122,6 @@ export default function SubscriptionForm() {
             </SelectItem>
           ))}
         </Select>
-        <Input
-          placeholder="Email*"
-          type="email"
-          variant="faded"
-          isRequired
-          className="text-zinc-500"
-          isInvalid={isInvalid}
-          color={isInvalid ? 'danger' : 'primary'}
-          errorMessage="Please enter a valid email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
         <p className="text-sm italic text-subscribeText dark:text-subscribeText">{MANDATORY}</p>
 
         <Button

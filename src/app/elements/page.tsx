@@ -1,7 +1,6 @@
 import CustomAccordion from '@/components/Accordions/Accordion';
 import { CustomButton } from '@/components/Buttons/CustomButton';
 import { LineChart } from '@/components/Charts/LineChart';
-import { Topbar } from '@/components/Topbar/Topbar';
 import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph.ts';
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph.ts';
 import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
@@ -175,45 +174,42 @@ export default async function Elements() {
   };
 
   return (
-    <>
-      <Topbar />
-      <div className="w-full flex flex-col items-center justify-center">
-        <CustomButton variant="solid">Test</CustomButton>
-        <CustomButton variant="bordered">Test</CustomButton>
-        <CustomButton variant="flat">Test</CustomButton>
-        <CustomAccordion items={AccordionsOperations.getAccordionData()} />;
-        <div className="w-full h-fit flex flex-row flex-wrap gap-10 justify-around px-8 pt-40 pb-16 border-b border-gray-800">
-          <div className="w-250px h-fit">
-            <LineChart data={simpleAndSmallLineChartData} small />
-          </div>
-          <div className="w-250px h-fit">
-            <LineChart
-              title="Small Rounded Line Chart"
-              description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy."
-              data={simpleLineChartData}
-              expandable
-              small
-            />
-          </div>
-          <div className="w-400px h-fit">
-            <LineChart
-              title="Maxed Out Line Chart"
-              description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
-              data={maxedOutLineChartData}
-              expandable
-            />
-          </div>
-          <div className="w-400px h-fit">
-            <LineChart title="Balance of trade" data={balanceOfTradeGraphData} expandable />
-          </div>
-          <div className="w-400px h-fit">
-            <LineChart title="Currency exchange" data={currencyExchangeGraphData} expandable />
-          </div>
-          <div className="w-400px h-fit">
-            <LineChart title="Headline and food inflation" data={inflationGraphsData} expandable />
-          </div>
+    <div className="w-full flex flex-col items-center justify-center">
+      <CustomButton variant="solid">Test</CustomButton>
+      <CustomButton variant="bordered">Test</CustomButton>
+      <CustomButton variant="flat">Test</CustomButton>
+      <CustomAccordion items={AccordionsOperations.getAccordionData()} />;
+      <div className="w-full h-fit flex flex-row flex-wrap gap-10 justify-around px-8 pt-40 pb-16 border-b border-gray-800">
+        <div className="w-250px h-fit">
+          <LineChart data={simpleAndSmallLineChartData} small />
+        </div>
+        <div className="w-250px h-fit">
+          <LineChart
+            title="Small Rounded Line Chart"
+            description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy."
+            data={simpleLineChartData}
+            expandable
+            small
+          />
+        </div>
+        <div className="w-400px h-fit">
+          <LineChart
+            title="Maxed Out Line Chart"
+            description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
+            data={maxedOutLineChartData}
+            expandable
+          />
+        </div>
+        <div className="w-400px h-fit">
+          <LineChart title="Balance of trade" data={balanceOfTradeGraphData} expandable />
+        </div>
+        <div className="w-400px h-fit">
+          <LineChart title="Currency exchange" data={currencyExchangeGraphData} expandable />
+        </div>
+        <div className="w-400px h-fit">
+          <LineChart title="Headline and food inflation" data={inflationGraphsData} expandable />
         </div>
       </div>
-    </>
+    </div>
   );
 }

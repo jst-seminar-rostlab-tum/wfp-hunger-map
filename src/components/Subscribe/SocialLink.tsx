@@ -2,6 +2,11 @@ import { motion } from 'framer-motion';
 
 import { SocialLinkProps } from '@/domain/props/SocialLinkProps';
 
+/**
+ * SocialLink component
+ * @param param0 is an object containing the social media href and Icon component
+ * @returns a styled anchor tag with the social media Icon component
+ */
 export function SocialLink({ href, children }: SocialLinkProps) {
   return (
     <motion.a

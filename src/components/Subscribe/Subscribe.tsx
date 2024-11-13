@@ -3,7 +3,7 @@
 import { Button, Divider, Input, Select, SelectItem } from '@nextui-org/react';
 import { motion } from 'framer-motion';
 import { ChartCircle, CloseCircle, Facebook, Instagram, TickCircle, Twitch, Youtube } from 'iconsax-react';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import container from '@/container';
 import {
@@ -25,18 +25,38 @@ export default function SubscriptionForm() {
   const [email, setEmail] = useState('');
   const [selectedTopic, setSelectedTopic] = useState<string>('');
 
-  const [isNameInvalid, setIsNameInvalid] = useState(true);
-  const [isEmailInvalid, setIsEmailInvalid] = useState(true);
+  const [isNameInvalid, setIsNameInvalid] = useState(false);
+  const [isEmailInvalid, setIsEmailInvalid] = useState(false);
 
   const [subscribeStatus, setSubscribeStatus] = useState<SubscribeStatus>(SubscribeStatus.Idle);
   const [isWaitingSubResponse, setIsWaitingSubResponse] = useState(false);
 
-  const validateEmail = (newEmail: string): boolean => !!newEmail.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i);
+  const validateEmail = useCallback((newEmail: string): boolean => {
+    return !!newEmail.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i);
+  }, []);
+
+  const changeName = useCallback((newName: string): void => {
+    setName(newName);
+    setIsNameInvalid(!newName);
+  }, []);
+
+  const changeEmail = useCallback(
+    (newEmail: string): void => {
+      setEmail(newEmail);
+      setIsEmailInvalid(!validateEmail(newEmail));
+    },
+    [validateEmail]
+  );
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     // Validate the form
-    if (!isEmailInvalid && !isNameInvalid && !isWaitingSubResponse) {
+    const isFormInvalid = !name || !email || !validateEmail(email);
+
+    setIsNameInvalid(!name);
+    setIsEmailInvalid(!validateEmail(email));
+
+    if (!isEmailInvalid && !isNameInvalid && !isWaitingSubResponse && !isFormInvalid) {
       setSubscribeStatus(SubscribeStatus.Loading);
       // Handle form submission here and interact with the backend
       try {
@@ -59,6 +79,12 @@ export default function SubscriptionForm() {
             }
           });
         // TODO: Mock response to be removed later
+        // console.log({
+        //   name,
+        //   email,
+        //   selectedTopic,
+        //   organization,
+        // });
         // const response = false;
         // if (response) {
         //   setTimeout(() => {
@@ -77,24 +103,6 @@ export default function SubscriptionForm() {
     }
   };
 
-  const changeName = (newName: string): void => {
-    setName(newName);
-    if (newName) {
-      setIsNameInvalid(false);
-    } else {
-      setIsNameInvalid(true);
-    }
-  };
-
-  const changeEmail = (newEmail: string): void => {
-    setEmail(newEmail);
-    if (newEmail && validateEmail(newEmail)) {
-      setIsEmailInvalid(false);
-    } else {
-      setIsEmailInvalid(true);
-    }
-  };
-
   return (
     <div className="flex flex-col items-center">
       <Divider className="bg-subscribeText dark:bg-subscribeText" />
@@ -102,48 +110,43 @@ export default function SubscriptionForm() {
       <p className="text-sm italic self-start text-subscribeText dark:text-subscribeText">{MANDATORY}</p>
       <form onSubmit={handleSubmit} className="flex flex-col space-y-2 mb-3 w-full">
         <Input
-          placeholder="Name*"
-          color={isNameInvalid ? 'danger' : 'primary'}
+          label="Name"
+          placeholder="Please enter your name"
+          color={isNameInvalid ? 'danger' : 'default'}
           isInvalid={isNameInvalid}
           errorMessage="Name is required"
           variant="faded"
           isRequired
-          classNames={{
-            input: ['placeholder:text-black dark:placeholder:text-white'],
-          }}
           value={name}
           onChange={(changeNameEvent) => changeName(changeNameEvent.target.value)}
         />
         <Input
-          placeholder="Email*"
+          label="Email"
+          placeholder="please enter your email"
           type="email"
           variant="faded"
           isRequired
           isInvalid={isEmailInvalid}
-          color={isEmailInvalid ? 'danger' : 'primary'}
+          color={isEmailInvalid ? 'danger' : 'default'}
           errorMessage="Please enter a valid email"
-          classNames={{
-            input: ['placeholder:text-black dark:placeholder:text-white'],
-          }}
           value={email}
           onChange={(changeEmailEvent) => changeEmail(changeEmailEvent.target.value)}
         />
         <Input
-          placeholder="Organization/Institution"
-          color="primary"
+          label="Organization/Institution"
+          placeholder="Please enter your organization"
+          color="default"
           variant="faded"
-          classNames={{
-            input: ['placeholder:text-black dark:placeholder:text-white'],
-          }}
           errorMessage="Please enter a valid organization"
           onChange={(changeOrgEvent) => setOrganization(changeOrgEvent.target.value)}
           value={organization}
         />
         <Select
-          placeholder="Select a topic"
+          label="Topic"
+          placeholder="Please select a topic"
           selectedKeys={selectedTopic ? [selectedTopic] : []}
           onSelectionChange={(keys) => setSelectedTopic(Array.from(keys)[0] as string)}
-          color="primary"
+          color="default"
           variant="faded"
           errorMessage="Please select a valid topic"
           value={selectedTopic}

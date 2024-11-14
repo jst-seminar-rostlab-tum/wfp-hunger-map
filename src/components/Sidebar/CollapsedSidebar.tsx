@@ -1,13 +1,14 @@
 import { Button } from '@nextui-org/button';
 import { Card, CardBody, CardHeader } from '@nextui-org/card';
-import { Image } from '@nextui-org/image';
-import { Listbox, ListboxItem } from '@nextui-org/listbox';
 import { SidebarRight } from 'iconsax-react';
+import NextImage from 'next/image';
 
-import { CollapsedSidebarProps } from '@/domain/props/CollapsedSidebarProps';
-import { SidebarOperations } from '@/operations/charts/SidebarOperations';
+import { useSidebar } from '@/domain/contexts/SidebarContext';
+import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
 
-export function CollapsedSidebar({ selectedMapType, handleSelectionChange, toggleSidebar }: CollapsedSidebarProps) {
+export function CollapsedSidebar() {
+  const { toggleSidebar, selectedMapType, setSelectedMapType } = useSidebar();
+
   return (
     <div className="absolute top-0 left-0 z-50 p-4">
       <Card className="h-full">
@@ -17,27 +18,19 @@ export function CollapsedSidebar({ selectedMapType, handleSelectionChange, toggl
           </Button>
         </CardHeader>
         <CardBody>
-          <Listbox
-            variant="flat"
-            aria-label="Listbox menu with sections"
-            selectionMode="single"
-            selectedKeys={new Set(selectedMapType)}
-            onSelectionChange={handleSelectionChange}
-            disallowEmptySelection
-            hideSelectedIcon
-          >
+          <div className="flex flex-col gap-1">
             {SidebarOperations.getSidebarMapTypes().map((item) => (
-              <ListboxItem key={item.key} textValue={item.label}>
-                <div className="w-6 h-6 flex items-center justify-center">
-                  <Image
-                    src={item.icon}
-                    alt={item.label}
-                    className="object-contain w-auto h-auto max-w-full max-h-full"
-                  />
-                </div>
-              </ListboxItem>
+              <Button
+                isIconOnly
+                key={item.key}
+                variant={selectedMapType === item.key ? undefined : 'light'}
+                className={selectedMapType === item.key ? 'bg-primary' : undefined}
+                onClick={() => setSelectedMapType(item.key)}
+              >
+                <NextImage src={item.icon} alt={item.label} width={24} height={24} />
+              </Button>
             ))}
-          </Listbox>
+          </div>
         </CardBody>
       </Card>
     </div>

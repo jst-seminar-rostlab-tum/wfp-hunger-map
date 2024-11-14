@@ -4,11 +4,11 @@ import { Popover, PopoverContent, PopoverTrigger } from '@nextui-org/popover';
 import { useMemo } from 'react';
 
 import { AlertButton } from '@/components/AlertsMenu/AlertButton';
+import { Tooltip } from '@/components/Tooltip/Tooltip';
 import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { AlertType } from '@/domain/enums/AlertType';
 import { AlertsMenuProps } from '@/domain/props/AlertsMenuProps';
 import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
-import { Tooltip } from '@/components/Tooltip/Tooltip';
 
 export function AlertsMenu({ variant }: AlertsMenuProps) {
   const { isAlertSelected, toggleAlert } = useSidebar();

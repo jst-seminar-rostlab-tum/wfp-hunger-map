@@ -9,6 +9,7 @@ import { Bot, Maximize2, Minimize2 } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
+import { Tooltip } from '@/components/Tooltip/Tooltip';
 import TypingText from '@/components/TypingText/TypingText';
 import container from '@/container';
 import {
@@ -28,7 +29,6 @@ import { SenderRole } from '@/domain/enums/SenderRole';
 import ChatbotRepository from '@/domain/repositories/ChatbotRepository';
 import { useMediaQuery } from '@/utils/resolution';
 
-import { Tooltip } from '@/components/Tooltip/Tooltip';
 import TypingDots from '../TypingText/TypingDot';
 import ChatbotSidebar from './ChatbotSidebar';
 

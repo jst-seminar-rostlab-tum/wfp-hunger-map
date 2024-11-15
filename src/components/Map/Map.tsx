@@ -25,6 +25,7 @@ export default function Map({ countries, disputedAreas }: MapProps) {
     >
       <AlertContainer />
       {countries && <VectorTileLayer countries={countries} disputedAreas={disputedAreas} />}
+
       <ZoomControl position="bottomright" />
     </MapContainer>
   );

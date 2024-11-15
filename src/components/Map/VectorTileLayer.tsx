@@ -8,7 +8,7 @@ import React, { RefObject, useEffect, useRef } from 'react';
 import { MapProps } from '@/domain/props/MapProps';
 import { MapOperations } from '@/operations/map/MapOperations.ts';
 
-export default function VectorTileLayer({ countries, disputedAreas }: MapProps) {
+export default function VectorTileLayer({ countries, disputedAreas, onCountryClick }: MapProps) {
   const { theme } = useTheme();
   const context: LeafletContextInterface = useLeafletContext();
   const mapContainer: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
@@ -18,10 +18,10 @@ export default function VectorTileLayer({ countries, disputedAreas }: MapProps) 
   useEffect(() => {
     const baseMap: mapboxgl.Map = MapOperations.createMapboxMap(
       theme === 'dark',
-      { countries, disputedAreas },
+      { countries, disputedAreas, onCountryClick },
       mapContainer
     );
-    MapOperations.setMapInteractionFunctionality(baseMap);
+    MapOperations.setMapInteractionFunctionality(baseMap, onCountryClick);
     MapOperations.synchronizeLeafletMapbox(baseMap, mapContainer, context);
 
     return () => {

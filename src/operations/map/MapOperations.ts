@@ -85,7 +85,10 @@ export class MapOperations {
     });
   }
 
-  static setMapInteractionFunctionality(baseMap: mapboxgl.Map): void {
+  static setMapInteractionFunctionality(
+    baseMap: mapboxgl.Map,
+    onCountryClick?: (country: CountryMapData) => void
+  ): void {
     let hoveredPolygonId: string | number | undefined;
 
     baseMap.on('mousemove', 'country-fills', (e) => {
@@ -119,6 +122,9 @@ export class MapOperations {
     baseMap.on('mouseup', 'country-fills', (e) => {
       if (!isDragging && e.features && (e.features[0] as unknown as CountryMapData).properties.interactive) {
         alert(`You clicked on ${(e.features[0] as unknown as CountryMapData).properties.adm0_name}`);
+        if (onCountryClick) {
+          onCountryClick(e.features[0] as unknown as CountryMapData);
+        }
       }
     });
   }

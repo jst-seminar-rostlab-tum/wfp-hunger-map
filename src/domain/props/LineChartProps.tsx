@@ -8,5 +8,6 @@ export default interface LineChartProps {
   description?: string;
   expandable?: boolean;
   small?: boolean;
+  noBarChartSwitch?: boolean;
   data: LineChartData | BalanceOfTradeGraph | CurrencyExchangeGraph | InflationGraphs;
 }

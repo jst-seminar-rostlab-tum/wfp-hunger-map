@@ -5,11 +5,13 @@ import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure
 import * as Highcharts from 'highcharts';
 import { HighchartsReact } from 'highcharts-react-official';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { Maximize4 } from 'iconsax-react';
+import { Chart, Diagram, Maximize4 } from 'iconsax-react';
+import { Tooltip } from '@/components/Tooltip/Tooltip';
 
 import { LineChartData } from '@/domain/entities/charts/LineChartData';
 import LineChartProps from '@/domain/props/LineChartProps';
 import LineChartOperations from '@/operations/charts/LineChartOperations';
+import { useState } from 'react';
 
 /**
  * The LineChart component is a box that primarily renders a title, description text, and a line chart.
@@ -28,9 +30,10 @@ import LineChartOperations from '@/operations/charts/LineChartOperations';
  * @param description chart description text (optional)
  * @param expandable when selected, the user is given the option to open the chart in a larger modal (optional)
  * @param small when selected, all components in the line chart box become slightly smaller (optional)
+ * @param noBarChartSwitch todo
  * @param data the actual data to be used in the chart
  */
-export function LineChart({ title, description, expandable, small, data }: LineChartProps) {
+export function LineChart({ title, description, expandable, small, noBarChartSwitch, data }: LineChartProps) {
   const TITLE_TEXT_SIZE = small ? 'text-sm' : 'text-md';
   const DESCRIPTION_TEXT_SIZE = small ? 'text-xs' : 'text-sm';
   const CHART_HEIGHT = small ? 12 : 16;
@@ -38,12 +41,17 @@ export function LineChart({ title, description, expandable, small, data }: LineC
   const HEADER_BOTTOM_PADDING = title ? 3 : 0;
   const JSON_DOWNLOAD_FILE_NAME = `hunger_map_line_chart_json-${title}.json`;
 
+  const [showBarChart, setShowBarChart] = useState(false);
+
   // full screen modal state handling
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   // convert data to `LineChartData` and build chart options for 'Highcharts'
   const lineChartData: LineChartData = LineChartOperations.convertToLineChartData(data);
   const chartOptions: Highcharts.Options = LineChartOperations.getHighChartData(lineChartData);
+
+  // check if switching to bar chart should be possibel
+  const switchToBarChartAvailable = !noBarChartSwitch && lineChartData.lines.length >= 2;
 
   // trigger download of the given line chart `data` as a json file
   const downloadDataJson = () => {
@@ -92,14 +100,32 @@ export function LineChart({ title, description, expandable, small, data }: LineC
     <p className={`w-full h-fit pb-4 ${DESCRIPTION_TEXT_SIZE} px-3`}> {description} </p>
   ) : null;
 
+  // todo
+  const barChartSwitchButton = switchToBarChartAvailable ? (
+    <Button isIconOnly variant="light" size="sm" onClick={() => setShowBarChart(!showBarChart)}>
+      {showBarChart ? (
+        <Tooltip text="Switch to Line Chart">
+          <Diagram className={`h-${ICON_BUTTON_SIZE} w-${ICON_BUTTON_SIZE}`} />
+        </Tooltip>
+      ) : (
+        <Tooltip text="Switch to Bar Chart">
+          <Chart className={`h-${ICON_BUTTON_SIZE} w-${ICON_BUTTON_SIZE}`} />
+        </Tooltip>
+      )}
+    </Button>
+  ) : null;
+
   return (
     <>
       <div className="w-full h-fit flex-col rounded-md bg-background">
         <div
-          className={`w-full h-fit flex flex-row justify-between items-start gap-3 pl-3 pb-${HEADER_BOTTOM_PADDING}`}
+          className={`w-full h-fit flex flex-row justify-between items-start gap-1 pl-3 pb-${HEADER_BOTTOM_PADDING}`}
         >
           <p className={`${TITLE_TEXT_SIZE} font-normal pt-2 flex flex-row items-center`}> {title} </p>
-          {fullScreenButton}
+          <div className="flex flex-row gap-1 pt-0.5 pr-0.5">
+            {barChartSwitchButton}
+            {fullScreenButton}
+          </div>
         </div>
         {descriptionText}
         <HighchartsReact

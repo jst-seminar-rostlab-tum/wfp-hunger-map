@@ -11,25 +11,17 @@ import StateChoropleth from './NutritionStateLayer';
 const CountryRepo = new CountryRepositoryImpl();
 
 const NutritionChoropleth = ({
-    selectedNutritionView,
     view,
     data,
     style,
-    hoverStyle,
     handleClick,
     onEachFeature,
-    onFeatureMouseOver,
     tooltip,
 }) => {
     const geoJsonRef = useRef();
     const map = useMap();
     const [regionData, setRegionData] = useState(null);
     const [showStateChoropleth, setShowStateChoropleth] = useState(false);
-
-    const getCountryNutrition = (iso3) => {
-        const countryData = nutrition.nutrition.find((item) => item.iso3 === iso3 && item.active);
-        return countryData || null;
-    };
 
     const handleCountryClick = async (feature, bounds) => {
         const countryId = feature.properties.adm0_id;
@@ -54,15 +46,6 @@ const NutritionChoropleth = ({
 
     const features = (feature, layer) => {
         layer.on({
-            mouseover: (e) => {
-                if (view !== 'nutrition') {
-                    e.target.setStyle(hoverStyle);
-                }
-                if (onFeatureMouseOver) onFeatureMouseOver();
-            },
-            mouseout: (e) => {
-                if (view !== 'nutrition') geoJsonRef.current.resetStyle(e.target);
-            },
             click: (e) => {
                 handleCountryClick(e.target.feature, e.target.getBounds());
             },
@@ -77,51 +60,6 @@ const NutritionChoropleth = ({
 
         layer.bindTooltip(div, { sticky: true, className: tooltip ? tooltip.className : 'countryTooltip' });
     };
-
-    const nutritionFill = (value) => {
-        if (value === null) return 'none';
-        if (value <= 1) return '#fde2e1';
-        if (value <= 2) return '#fcd0ce';
-        if (value <= 3) return '#f88884';
-        if (value <= 4) return '#f5524c';
-        if (value <= 5) return '#f32e27';
-        return '#A0A0A0';
-    };
-
-    const nutritionAdm1Styles = (feature) => {
-        const iso3 = feature.properties.iso3;
-        const nutritionValue = getCountryNutrition(iso3)?.[selectedNutritionView];
-
-        return nutritionValue !== undefined
-            ? {
-                  color: '#fff',
-                  weight: 1,
-                  fillOpacity: 2,
-                  fillColor: nutritionFill(nutritionValue),
-              }
-            : {
-                  color: '#fff',
-                  weight: 1,
-                  fillOpacity: 0,
-                  fillColor: 'none',
-              };
-    };
-
-    useEffect(() => {
-        if (geoJsonRef.current) {
-            geoJsonRef.current.clearLayers();
-            geoJsonRef.current.addData(data);
-
-            if (view === 'nutrition') {
-                geoJsonRef.current.setStyle((feature) =>
-                    getCountryNutrition(feature.properties.iso3) !== null
-                        ? nutritionAdm1Styles(feature)
-                        : { color: '#fff', weight: 1, fillOpacity: 0, fillColor: 'none' }
-                );
-            }
-        }
-    }, [geoJsonRef, data, selectedNutritionView, tooltip, handleClick]);
-
     return (
         <>
             <GeoJSON ref={geoJsonRef} style={style} data={data} onEachFeature={features} />
@@ -129,7 +67,7 @@ const NutritionChoropleth = ({
                 <StateChoropleth
                     regionData={regionData}
                     style={{
-                        fillColor: '#992F7B',
+                        fillColor: '#F9C97C',
                         color: '#000',
                         weight: 1,
                         fillOpacity: 0.6,

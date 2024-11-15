@@ -22,6 +22,7 @@ module.exports = {
     'bg-conflictCivil',
     'bg-conflictExplosion',
     'bg-conflictStrategic',
+    'right-0',
   ],
   content: [
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',

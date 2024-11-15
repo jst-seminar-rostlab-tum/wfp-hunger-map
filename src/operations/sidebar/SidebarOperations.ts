@@ -44,33 +44,6 @@ export class SidebarOperations {
       key: AlertType.HAZARDS,
       label: 'Hazards',
       icon: '/menu_hazards.png',
-      subalerts: [
-        {
-          key: AlertType.COVID19,
-          label: 'COVID-19',
-          icon: '/menu_hazards.png',
-        },
-        {
-          key: AlertType.FLOODS,
-          label: 'Floods',
-          icon: '/menu_hazards.png',
-        },
-        {
-          key: AlertType.DROUGHTS,
-          label: 'Droughts',
-          icon: '/menu_hazards.png',
-        },
-        {
-          key: AlertType.EARTHQUAKES,
-          label: 'Earthquakes',
-          icon: '/menu_hazards.png',
-        },
-        {
-          key: AlertType.CYCLONES,
-          label: 'Cyclones',
-          icon: '/menu_hazards.png',
-        },
-      ],
     },
     {
       key: AlertType.CONFLICTS,

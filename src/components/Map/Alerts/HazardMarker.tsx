@@ -1,3 +1,5 @@
+import './HazardMarker.css';
+
 import L from 'leaflet';
 import { useMemo } from 'react';
 import { Marker, Popup } from 'react-leaflet';
@@ -17,7 +19,23 @@ export function HazardMarker({ hazard }: { hazard: Hazard }) {
   );
   return (
     <Marker position={[hazard.latitude, hazard.longitude]} icon={icon}>
-      <Popup>{hazard.type}</Popup>
+      <Popup className="hazardMarkerPopup">
+        <div className="flex gap-4 items-center">
+          <img
+            className={`rounded-full border-4 border-${HazardOperations.hazardSeverityColors[hazard.severity_id]}`}
+            src={HazardOperations.hazardIconUrls[hazard.type]}
+            alt={hazard.type}
+            width={56}
+            height={56}
+          />
+          <div className="w-full">
+            <h2 className="text-xl text-primary">{hazard.type}</h2>
+            <p>{hazard.hazard_name}</p>
+            <p>Reported: TODO</p>
+            <p>Updated: TODO</p>
+          </div>
+        </div>
+      </Popup>
     </Marker>
   );
 }

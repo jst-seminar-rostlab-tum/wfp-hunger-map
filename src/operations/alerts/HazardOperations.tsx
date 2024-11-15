@@ -1,12 +1,12 @@
 import L, { MarkerCluster } from 'leaflet';
 
 import { Hazard } from '@/domain/entities/alerts/Hazard';
-import { HazardDict } from '@/domain/entities/alerts/HazardDict';
+import { HazardSeverity } from '@/domain/enums/HazardSeverity';
 import { HazardType } from '@/domain/enums/HazardType';
 
 export default class HazardOperations {
-  static sortHazardsByType(data?: Hazard[]): HazardDict<Hazard[]> {
-    const result: HazardDict<Hazard[]> = {
+  static sortHazardsByType(data?: Hazard[]): Record<HazardType, Hazard[]> {
+    const result: Record<HazardType, Hazard[]> = {
       [HazardType.AVALANCHE]: [],
       [HazardType.BIOMEDICAL]: [],
       [HazardType.CYCLONE]: [],
@@ -37,14 +37,14 @@ export default class HazardOperations {
       html: `
         <div class="relative">
           <img src="${HazardOperations.hazardIconUrls[hazardType]}" style="width: 40px; height: 40px" alt="Hazard cluster">
-          <span style="width: 22px; height: 22px; top: -10px; left: 25px" class="absolute flex items-center justify-center font-bold rounded-full bg-primary">${cluster.getChildCount()}</span>
+          <span style="width: 22px; height: 22px; top: -10px; left: 25px" class="absolute flex items-center justify-center font-bold rounded-full bg-primary text-white">${cluster.getChildCount()}</span>
         </div>
       `,
       className: '',
     });
   }
 
-  static hazardIconUrls: HazardDict<string> = {
+  static hazardIconUrls: Record<HazardType, string> = {
     [HazardType.AVALANCHE]: 'https://static.hungermapdata.org/hungermap/img/pdc_Avalanche.png',
     [HazardType.BIOMEDICAL]: 'https://static.hungermapdata.org/hungermap/img/pdc_Biomedical.png',
     [HazardType.CYCLONE]:
@@ -69,5 +69,13 @@ export default class HazardOperations {
     [HazardType.VOLCANO]: 'https://static.hungermapdata.org/hungermap/img/pdc_Volcanic_Activity.png',
     [HazardType.WILDFIRE]: 'https://static.hungermapdata.org/hungermap/img/pdc_Wildfire.png',
     [HazardType.WINTERSTORM]: 'https://static.hungermapdata.org/hungermap/img/pdc_Winter_Storm.png',
+  };
+
+  static hazardSeverityColors: Record<HazardSeverity, string> = {
+    [HazardSeverity.WARNING]: 'hazardWarning',
+    [HazardSeverity.WATCH]: 'hazardWatch',
+    [HazardSeverity.ADVISORY]: 'hazarAdvisory',
+    [HazardSeverity.INFORMATION]: 'hazardInformation',
+    [HazardSeverity.TERMINATION]: 'hazardTermination',
   };
 }

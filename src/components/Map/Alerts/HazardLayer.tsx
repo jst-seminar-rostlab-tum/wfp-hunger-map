@@ -27,7 +27,7 @@ export function HazardLayer() {
           spiderfyOnMaxZoom={false}
         >
           {hazardsByType[hazardType].map((hazard) => (
-            <HazardMarker hazard={hazard} />
+            <HazardMarker key={hazard.create_date + hazard.latitude + hazard.longitude} hazard={hazard} />
           ))}
         </MarkerClusterGroup>
       ))}

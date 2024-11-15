@@ -23,6 +23,11 @@ module.exports = {
     'bg-conflictExplosion',
     'bg-conflictStrategic',
     'right-0',
+    'border-hazardWarning',
+    'border-hazardWatch',
+    'border-hazarAdvisory',
+    'border-hazardInformation',
+    'border-hazardTermination',
   ],
   content: [
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -124,6 +129,11 @@ module.exports = {
             conflictCivil: '#96badc',
             conflictExplosion: '#eaaf75',
             conflictStrategic: '#bec0c1',
+            hazardWarning: '#FF464E',
+            hazardWatch: '#FFDC38',
+            hazarAdvisory: '#57D66F',
+            hazardInformation: '#0098EB',
+            hazardTermination: '#B4B5B7',
           },
         },
         dark: {

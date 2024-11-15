@@ -9,6 +9,7 @@ import { MapProps } from '@/domain/props/MapProps';
 import { getColors } from '@/styles/MapColors.ts';
 
 import { IPCMapOperations } from '../IPC/IpcMapOperations';
+import './style.css';
 
 export class MapOperations {
   static createMapboxMap(
@@ -108,16 +109,34 @@ export class MapOperations {
 
   static setMapInteractionFunctionality(baseMap: mapboxgl.Map): void {
     let hoveredPolygonId: string | number | undefined;
+    const popup = new mapboxgl.Popup({ closeButton: false, closeOnClick: false });
 
-    baseMap.on('mousemove', 'country-fills', (e) => {
-      if (e.features && e.features.length > 0 && (e.features[0] as unknown as CountryMapData).properties.interactive) {
+    const popupElement = popup.getElement();
+    if (popupElement) {
+      popupElement.classList.add('bg-red-100');
+    }
+
+    baseMap.on('mousemove', 'country-fills', (e: any) => {
+      const feature = e.features && (e.features[0] as CountryMapData);
+      if (feature && feature.properties.interactive) {
         if (hoveredPolygonId) {
           baseMap.setFeatureState({ source: 'countries', id: hoveredPolygonId }, { hover: false });
         }
-        hoveredPolygonId = e.features[0].id;
+        hoveredPolygonId = feature.id;
         if (hoveredPolygonId) {
           baseMap.setFeatureState({ source: 'countries', id: hoveredPolygonId }, { hover: true });
         }
+        const coordinates = e.lngLat;
+        const countryName = feature.properties.adm0_name;
+        console.log('featureÖ ', feature);
+
+        const title = `: ${countryName}`;
+        const body = `Date of analysis: 11/11/2024 \n Validity period: 12/12/122`;
+        const conclusion = `People in IPC/CH Phase 3 and above\n(${5}% of people in the analyzed areas)`;
+
+        const popupContent = this.generatePopupContent(countryName, body, conclusion);
+
+        popup.setLngLat(coordinates).setHTML(popupContent).addTo(baseMap);
       }
     });
 
@@ -126,22 +145,31 @@ export class MapOperations {
         baseMap.setFeatureState({ source: 'countries', id: hoveredPolygonId }, { hover: false });
       }
       hoveredPolygonId = undefined;
+      popup.remove();
     });
 
     let isDragging = false;
     baseMap.on('mousedown', () => {
       isDragging = false;
     });
-
     baseMap.on('mousemove', () => {
       isDragging = true;
     });
-
-    baseMap.on('mouseup', 'country-fills', (e) => {
-      if (!isDragging && e.features && (e.features[0] as unknown as CountryMapData).properties.interactive) {
-        // alert(`You clicked on ${(e.features[0] as unknown as CountryMapData).properties.adm0_name}`);
+    baseMap.on('mouseup', 'country-fills', (e: any) => {
+      if (!isDragging && e.features && (e.features[0] as CountryMapData).properties.interactive) {
+        alert(`You clicked on ${(e.features[0] as CountryMapData).properties.adm0_name}`);
       }
     });
+  }
+
+  static generatePopupContent(title?: string, body?: string, conclusion?: string): string {
+    return `
+      <div class="p-4 bg-white dark:bg-black text-black dark:text-white rounded-medium flex flex-col gap-2">
+        <h1 class="text-md font-semibold">${title}</h1>
+        <p class="text-xs">${body}</p>
+        <p class="text-xs">${conclusion}</p>
+      </div>
+    `;
   }
 
   static synchronizeLeafletMapbox(

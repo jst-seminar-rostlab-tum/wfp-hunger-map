@@ -79,16 +79,6 @@ module.exports = {
   },
   darkMode: 'class',
   plugins: [
-    function ({ addBase, theme }) {
-      addBase({
-        ':root': {
-          '--color-hover': theme('colors.hover'),
-          '--color-background': theme('colors.background'),
-          '--color-active-countries': theme('colors.activeCountries'),
-          '--color-inactive-countries': theme('colors.inactiveCountries'),
-        },
-      });
-    },
     nextui({
       themes: {
         light: {
@@ -125,6 +115,9 @@ module.exports = {
             conflictCivil: '#96badc',
             conflictExplosion: '#eaaf75',
             conflictStrategic: '#bec0c1',
+            fcsGreen: '#345d34',
+            fcsOrange: '#ea6a2c',
+            fcsRed: '#fa190e'
           },
         },
         dark: {

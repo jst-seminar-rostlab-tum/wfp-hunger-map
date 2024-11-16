@@ -45,6 +45,7 @@ export default function HungerMapChatbot() {
   const [currentChatIndex, setCurrentChatIndex] = useState(0);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [isResponding, setIsResponding] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery('(max-width: 640px)');
@@ -111,6 +112,7 @@ export default function HungerMapChatbot() {
       dataSources,
     });
     setChats(updatedChatsWithAI);
+    setIsResponding(true);
   };
 
   /**
@@ -141,6 +143,11 @@ export default function HungerMapChatbot() {
       if (isTyping) return; // prevent multiple submission
       handleSubmit(keyboardEvent);
     }
+  };
+
+  const onTypingComplete = (): void => {
+    setIsTyping(false);
+    setIsResponding(false);
   };
 
   /**
@@ -300,7 +307,7 @@ export default function HungerMapChatbot() {
                             text={message.content}
                             speed={100}
                             endSentencePause={500}
-                            onTypingComplete={() => setIsTyping(false)}
+                            onTypingComplete={onTypingComplete}
                           />
                         )}
                         {message.dataSources && (
@@ -318,7 +325,7 @@ export default function HungerMapChatbot() {
                   ))
                 )}
 
-                {isTyping && (
+                {isTyping && !isResponding && (
                   <div className="flex justify-start mb-4">
                     <div className="relative flex items-center justify-center bg-transparent w-10 h-10 rounded-full border-2 border-black dark:border-white bg-white dark:bg-black">
                       <Bot />

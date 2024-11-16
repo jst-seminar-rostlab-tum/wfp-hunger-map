@@ -304,9 +304,9 @@ export default function HungerMapChatbot() {
                           ) : (
                             <TypingText
                               text={message.content}
-                              id={message.content}
+                              textID={message.content}
                               chatIndex={currentChatIndex}
-                              onTypingStart={() => setTypingStatus(currentChatIndex, false)}
+                              onTypingStart={() => setTypingStatus(currentChatIndex, false)} // regarding on how double typing animation is fixed
                               onTypingComplete={() => {
                                 handleTypingComplete();
                               }}

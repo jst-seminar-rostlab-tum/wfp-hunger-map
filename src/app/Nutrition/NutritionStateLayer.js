@@ -39,22 +39,22 @@ const StateChoropleth = ({ regionData, style, hoverStyle, handleClick, tooltip }
                    <div className="absolute w-[350px] box-border">
                     <CustomAccordion items={accordionData} />
                     <div className="mt-4 grid grid-cols-2 gap-4 justify-items-center">
-                            <CustomButton variant="shadow" onClick={() => handleButtonClick("Adequate Ratio") }>
+                            <CustomButton variant="flat" onClick={() => handleButtonClick("Adequate Ratio") } color = "#C4841D">
                                      Adequate Ratio
                              </CustomButton>
-                             <CustomButton variant="shadow" onClick={() => handleButtonClick("Folate") }>
+                             <CustomButton variant="flat" onClick={() => handleButtonClick("Folate") } color = "#C4841D" >
                                          Folate
                             </CustomButton>
-                             <CustomButton variant="shadow" onClick={() => handleButtonClick("Vitamin A") }>
+                             <CustomButton variant="flat" onClick={() => handleButtonClick("Vitamin A") } color = "#C4841D">
                                          Vitamin A
                              </CustomButton>
-                            <CustomButton variant="shadow" onClick={() => handleButtonClick("Iron") }>
+                            <CustomButton variant="flat" onClick={() => handleButtonClick("Iron") } color = "#C4841D">
                                         Iron
                             </CustomButton>
-                            <CustomButton variant="shadow" onClick={() => handleButtonClick("Calcium") }>
+                            <CustomButton variant="flat" onClick={() => handleButtonClick("Calcium") } color = "#C4841D">
                                         Calcium
                             </CustomButton>
-                            <CustomButton variant="shadow" onClick={() => handleButtonClick("Zinc") }>
+                            <CustomButton variant="flat" onClick={() => handleButtonClick("Zinc") } color = "#C4841D">
                                         Zinc
                             </CustomButton>
                         </div>

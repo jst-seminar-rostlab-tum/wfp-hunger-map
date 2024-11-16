@@ -4,7 +4,6 @@ import { GeoJSON, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { createRoot } from 'react-dom/client';
 
-import nutrition from './nutrition.json';
 import CountryRepositoryImpl from '@/infrastructure/repositories/CountryRepositoryImpl';
 import StateChoropleth from './NutritionStateLayer';
 
@@ -29,7 +28,6 @@ const NutritionChoropleth = ({
             try {
                 const regionData = await CountryRepo.getRegionData(countryId);
                 if (regionData && regionData.features) {
-                    console.log("Fetched region data:", regionData);
                     setRegionData({
                         type: "FeatureCollection",
                         features: regionData.features

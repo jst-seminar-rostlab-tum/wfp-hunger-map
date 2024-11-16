@@ -1,20 +1,35 @@
 import 'leaflet/dist/leaflet.css';
 
+import { useState } from 'react';
 import { MapContainer, ZoomControl } from 'react-leaflet';
 
-import nutrition from '@/app/Nutrition/nutrition.json';
 import NutritionChoropleth from '@/app/Nutrition/NutritionLayer';
 import { MAP_MAX_ZOOM, MAP_MIN_ZOOM } from '@/domain/constant/Map';
 import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight';
 import { MapProps } from '@/domain/props/MapProps';
+import GlobalDataRepositoryImpl from '@/infrastructure/repositories/GlobalDataRepositoryImpl';
 
 import { AlertContainer } from './Alerts/AlertContainer';
 import VectorTileLayer from './VectorTileLayer';
 
 export default function Map({ countries, disputedAreas }: MapProps) {
   const { selectedMapType } = useSidebar();
-  const nutritionIso3cODES = new Set(nutrition.nutrition.map((item) => item.iso3));
+  const GlobalRepo = new GlobalDataRepositoryImpl();
+  const [adm0Codes, setAdm0Codes] = useState<number[]>([]);
+  GlobalRepo.getNutritionData()
+    .then((global) => {
+      if (global && Array.isArray(global.body)) {
+        const Codes = global.body.map((item) => item.adm0_code);
+        setAdm0Codes(Codes);
+        console.log(Codes);
+      } else {
+        console.error('Expected an array in global.body');
+      }
+    })
+    .catch((error) => {
+      console.error('Error fetching nutrition data:', error);
+    });
   return (
     <MapContainer
       center={[21.505, -0.09]}
@@ -34,8 +49,10 @@ export default function Map({ countries, disputedAreas }: MapProps) {
       {selectedMapType === GlobalInsight.NUTRITION &&
         countries.features
           .filter((c) => c.properties.interactive)
-          .map((c) =>
-            nutritionIso3cODES.has(c.properties.iso3) ? (
+          .map((c) => {
+            const isCodeInArray = adm0Codes.includes(c.properties.adm0_id);
+
+            return isCodeInArray ? (
               <NutritionChoropleth
                 key={c.properties.adm0_id}
                 data={c}
@@ -44,14 +61,19 @@ export default function Map({ countries, disputedAreas }: MapProps) {
                   color: '#fff',
                   weight: 1,
                   fillOpacity: 0.5,
-                  fillColor: '#C4841D',
+                  fillColor: '#f5a524',
                 })}
+                handleClick={(sourceTarget) => {
+                  console.log('Country clicked:', sourceTarget);
+                }}
                 onEachFeature={(feature, layer) => {
                   layer.bindTooltip(feature.properties.adm0_name, { sticky: true });
                 }}
+                onFeatureMouseOver={() => {}}
               />
-            ) : null
-          )}
+            ) : null;
+          })}
+
       <ZoomControl position="bottomright" />
     </MapContainer>
   );

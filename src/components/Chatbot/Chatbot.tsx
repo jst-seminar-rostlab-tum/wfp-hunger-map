@@ -256,7 +256,7 @@ export default function HungerMapChatbot() {
 
               <ScrollShadow hideScrollBar className="w-full h-full">
                 {chats[currentChatIndex].messages.length === 0 ? (
-                  <div className="flex flex-col items-center mt-4 h-full space-y-4">
+                  <div className="flex flex-col items-center pt-4 space-y-4">
                     <p className="text-center text-xl max-w-[80%] mb-2">{WELCOME_MESSAGE}</p>
                     <p className="text-center text-md max-w-[80%] mb-2">{SUB_WELCOME_MESSAGE}</p>
                     <div className="flex flex-col items-center space-y-2 w-full max-w-md">

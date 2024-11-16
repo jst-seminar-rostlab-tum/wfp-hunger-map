@@ -15,6 +15,7 @@ module.exports = {
     'max-w-[400px]',
     'pl-[215px]',
     'pl-[179px]',
+    'pl-[320px]',
     'z-[9999]',
     'bg-conflictProtest',
     'bg-conflictRiot',
@@ -78,16 +79,6 @@ module.exports = {
   },
   darkMode: 'class',
   plugins: [
-    function ({ addBase, theme }) {
-      addBase({
-        ':root': {
-          '--color-hover': theme('colors.hover'),
-          '--color-background': theme('colors.background'),
-          '--color-active-countries': theme('colors.activeCountries'),
-          '--color-inactive-countries': theme('colors.inactiveCountries'),
-        },
-      });
-    },
     nextui({
       themes: {
         light: {
@@ -117,12 +108,16 @@ module.exports = {
             surfaceGrey: '#B0B0B0',
             activeCountries: '#82bce0',
             inactiveCountries: '#a7b3ba',
+            subscribeText: '#284366',
             conflictProtest: '#0d657de6',
             conflictRiot: '#c95200e6',
             conflictBattle: '#7d0631',
             conflictCivil: '#96badc',
             conflictExplosion: '#eaaf75',
             conflictStrategic: '#bec0c1',
+            fcsGreen: '#345d34',
+            fcsOrange: '#ea6a2c',
+            fcsRed: '#fa190e'
           },
         },
         dark: {
@@ -152,6 +147,7 @@ module.exports = {
             surfaceGrey: '#444444',
             activeCountries: '#115884',
             inactiveCountries: '#85929b',
+            subscribeText: '#ffffff',
             conflictProtest: '#0d657de6',
             conflictRiot: '#c95200e6',
             conflictBattle: '#7d0631',

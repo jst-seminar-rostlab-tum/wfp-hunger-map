@@ -1,3 +1,6 @@
+import './style.css';
+
+/* eslint-disable */
 import { LeafletContextInterface } from '@react-leaflet/core';
 import { FeatureCollection } from 'geojson';
 import mapboxgl, { DataDrivenPropertyValueSpecification } from 'mapbox-gl';
@@ -5,11 +8,11 @@ import { RefObject } from 'react';
 
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 import { MapColorsType } from '@/domain/entities/map/MapColorsType.ts';
+import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
 import { MapProps } from '@/domain/props/MapProps';
 import { getColors } from '@/styles/MapColors.ts';
 
 import { IPCMapOperations } from '../IPC/IpcMapOperations';
-import './style.css';
 
 export class MapOperations {
   static createMapboxMap(
@@ -231,6 +234,25 @@ export class MapOperations {
       const { lat: zoomEndLat, lng: zoomEndLng } = context.map.getCenter();
       baseMap.setCenter([zoomEndLng, zoomEndLat]);
       syncZoom();
+    });
+  }
+
+  static addFCSFunctionality(baseMap: mapboxgl.Map, selectedMapType: GlobalInsight) {
+    baseMap.on('load', () => {
+      baseMap.addSource('fcsRaster', {
+        type: 'raster',
+        tiles: ['https://static.hungermapdata.org/proteus_tiles/{z}/{x}/{y}.png'],
+        tileSize: 256,
+        scheme: 'tms',
+      });
+
+      baseMap.addLayer({
+        id: 'fcsLayer',
+        type: 'raster',
+        source: 'fcsRaster',
+        layout: { visibility: selectedMapType === GlobalInsight.FOOD ? 'visible' : 'none' },
+        paint: {},
+      });
     });
   }
 }

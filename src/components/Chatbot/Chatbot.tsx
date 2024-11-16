@@ -2,13 +2,14 @@
 
 'use client';
 
-import { Button, Card, CardBody, CardFooter, CardHeader, Divider, Tooltip } from '@nextui-org/react';
+import { Button, Card, CardBody, CardFooter, CardHeader, Divider } from '@nextui-org/react';
 import clsx from 'clsx';
 import { CloseCircle, Send2, SidebarLeft, SidebarRight } from 'iconsax-react';
 import { Bot, Maximize2, Minimize2 } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
+import { Tooltip } from '@/components/Tooltip/Tooltip';
 import TypingText from '@/components/TypingText/TypingText';
 import container from '@/container';
 import {
@@ -218,13 +219,13 @@ export default function HungerMapChatbot() {
               </div>
               <div className="flex items-center space-x-2">
                 {!isMobile && (
-                  <Tooltip content={isFullScreen ? EXIT_FULL_SCREEN : ENTER_FULL_SCREEN}>
+                  <Tooltip text={isFullScreen ? EXIT_FULL_SCREEN : ENTER_FULL_SCREEN}>
                     <Button variant="light" isIconOnly onClick={toggleFullScreen}>
                       {isFullScreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
                     </Button>
                   </Tooltip>
                 )}
-                <Tooltip content="Close Chat">
+                <Tooltip text="Close Chat">
                   <Button variant="light" isIconOnly onClick={toggleChat}>
                     <CloseCircle className="h-4 w-4" />
                   </Button>
@@ -337,7 +338,7 @@ export default function HungerMapChatbot() {
                     className="rounded-xl border border-solid border-black bg-chatbotInputArea dark:bg-chatbotInputArea flex-grow px-3 py-2 mr-2 dark:text-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none overflow-hidden"
                     rows={1}
                   />
-                  <Tooltip content="Submit">
+                  <Tooltip text="Submit">
                     <Button type="submit" variant="light" isIconOnly disabled={isTyping}>
                       <Send2 className="h-4 w-4" />
                     </Button>

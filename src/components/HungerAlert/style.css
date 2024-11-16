@@ -7,7 +7,7 @@
   right: 0;
   bottom: 0;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.2);
+  background: #3F3F46;
   z-index: -1;
   animation: pulse-animation 2s infinite ease-out;
 }

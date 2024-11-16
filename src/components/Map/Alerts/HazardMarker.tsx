@@ -1,5 +1,6 @@
 import './HazardMarker.css';
 
+import { formatDistanceToNow } from 'date-fns';
 import L from 'leaflet';
 import { useMemo } from 'react';
 import { Marker, Popup } from 'react-leaflet';
@@ -31,8 +32,8 @@ export function HazardMarker({ hazard }: { hazard: Hazard }) {
           <div className="w-full">
             <h2 className="text-xl text-primary">{hazard.type}</h2>
             <p>{hazard.hazard_name}</p>
-            <p>Reported: TODO</p>
-            <p>Updated: TODO</p>
+            <p>Reported: {formatDistanceToNow(new Date(hazard.create_date), { addSuffix: true })}</p>
+            <p>Updated: {formatDistanceToNow(new Date(hazard.last_update), { addSuffix: true })}</p>
           </div>
         </div>
       </Popup>

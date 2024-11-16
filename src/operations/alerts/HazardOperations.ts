@@ -1,8 +1,10 @@
 import L, { MarkerCluster } from 'leaflet';
 
+import { HazardLegendItem } from '@/components/Map/Alerts/HazardLegendItem';
 import { Hazard } from '@/domain/entities/alerts/Hazard';
 import { HazardSeverity } from '@/domain/enums/HazardSeverity';
 import { HazardType } from '@/domain/enums/HazardType';
+import PointLegendContainerItem from '@/domain/props/PointLegendContainerItem';
 
 export default class HazardOperations {
   static sortHazardsByType(data?: Hazard[]): Record<HazardType, Hazard[]> {
@@ -42,6 +44,24 @@ export default class HazardOperations {
       `,
       className: '',
     });
+  }
+
+  static generateHazardLegend(): PointLegendContainerItem[] {
+    return [
+      {
+        title: 'Severity of hazards',
+        tooltipInfo:
+          'Current hazards information: Active Volcanoes; Active/Forecast Wind Radii (39, 58, 74); Previous, Current and Forecast Storm Positions; 3- and 5-day Potential Track Area of Storms; Recent Earthquakes; MODIS Hotspots; Tsunami Travel Time; GLIDE Events; H1N1 Affected Countries; Country Boundaries and Labels; Global Shaded Relief; Global Population Density; and PDC integrated hazards.',
+        records: [
+          { label: HazardSeverity.WARNING, color: 'hazardWarning' },
+          { label: HazardSeverity.WATCH, color: 'hazardWatch' },
+          { label: HazardSeverity.ADVISORY, color: 'hazarAdvisory' },
+          { label: HazardSeverity.INFORMATION, color: 'hazardInformation' },
+          { label: HazardSeverity.TERMINATION, color: 'hazardTermination' },
+        ],
+        renderItem: HazardLegendItem,
+      },
+    ];
   }
 
   static hazardIconUrls: Record<HazardType, string> = {

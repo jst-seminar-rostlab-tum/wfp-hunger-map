@@ -29,6 +29,11 @@ module.exports = {
     'border-hazarAdvisory',
     'border-hazardInformation',
     'border-hazardTermination',
+    'text-hazardWarning',
+    'text-hazardWatch',
+    'text-hazarAdvisory',
+    'text-hazardInformation',
+    'text-hazardTermination',
   ],
   content: [
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',

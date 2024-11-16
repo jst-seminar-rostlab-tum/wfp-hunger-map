@@ -2,13 +2,14 @@
 
 'use client';
 
-import { Button, Card, CardBody, CardFooter, CardHeader, Divider, ScrollShadow, Tooltip } from '@nextui-org/react';
+import { Button, Card, CardBody, CardFooter, CardHeader, Divider, ScrollShadow } from '@nextui-org/react';
 import clsx from 'clsx';
 import { CloseSquare, Maximize4, Minus, Send2, SidebarLeft, SidebarRight } from 'iconsax-react';
 import { Bot } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
+import { Tooltip } from '@/components/Tooltip/Tooltip';
 import TypingText from '@/components/TypingText/TypingText';
 import container from '@/container';
 import {
@@ -216,13 +217,13 @@ export default function HungerMapChatbot() {
               </div>
               <div className="flex items-center space-x-2">
                 {!isMobile && (
-                  <Tooltip content={isFullScreen ? EXIT_FULL_SCREEN : ENTER_FULL_SCREEN}>
+                  <Tooltip text={isFullScreen ? EXIT_FULL_SCREEN : ENTER_FULL_SCREEN}>
                     <Button variant="light" isIconOnly onClick={toggleFullScreen}>
                       {isFullScreen ? <Minus size={24} /> : <Maximize4 size={24} />}
                     </Button>
                   </Tooltip>
                 )}
-                <Tooltip content="Close Chat">
+                <Tooltip text="Close Chat">
                   <Button variant="light" isIconOnly onClick={toggleChat}>
                     <CloseSquare size={24} />
                   </Button>
@@ -330,9 +331,7 @@ export default function HungerMapChatbot() {
                     className="rounded-xl border border-solid border-black bg-chatbotInputArea dark:bg-chatbotInputArea flex-grow px-3 py-2 dark:text-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none overflow-hidden"
                     rows={1}
                   />
-                  {/*                     className="rounded-xl border-2 border-solid border-black dark:border-white hover:border-blue-500 focus:border-blue-500 dark:hover:border-blue-500 dark:focus:border-blue-500 flex-grow px-3 py-2 dark:text-white text-gray-800 resize-none overflow-hidden"
-                   */}
-                  <Tooltip content="Submit">
+                  <Tooltip text="Submit">
                     <Button type="submit" variant="light" isIconOnly disabled={isTyping}>
                       <Send2 size={24} />
                     </Button>

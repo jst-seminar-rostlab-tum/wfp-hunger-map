@@ -3,11 +3,13 @@ import { Card, CardBody, CardHeader } from '@nextui-org/card';
 import { SidebarRight } from 'iconsax-react';
 import NextImage from 'next/image';
 
+import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
 
 export function CollapsedSidebar() {
-  const { toggleSidebar, selectedMapType, setSelectedMapType } = useSidebar();
+  const { toggleSidebar } = useSidebar();
+  const { selectedMapType, setSelectedMapType } = useSelectedMap();
 
   return (
     <div className="absolute top-0 left-0 z-50 p-4">

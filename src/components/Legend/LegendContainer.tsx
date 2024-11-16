@@ -17,7 +17,7 @@ export default function LegendContainer({ items, loading = false }: LegendContai
           content: LegendOperations.isGradientLegendContainerItem(item) ? (
             <GradientLegend {...item} />
           ) : (
-            <PointLegend {...item}>{(props) => item.renderItem?.(props)}</PointLegend>
+            <PointLegend {...item}>{item.renderItem ? (props) => item.renderItem?.(props) : undefined}</PointLegend>
           ),
         }))}
       />

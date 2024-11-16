@@ -14,12 +14,15 @@ import TypingText from '@/components/TypingText/TypingText';
 import container from '@/container';
 import {
   CHAT_TITLE,
+  CLOSE_SIDE_BAR,
   DATA_SOURCES,
   DEFAULT_DATA_SOURCES,
   DEFAULT_PROMPT,
   ENTER_FULL_SCREEN,
   EXIT_FULL_SCREEN,
+  OPEN_SIDE_BAR,
   SUB_WELCOME_MESSAGE,
+  TRIGGER_CHAT,
   TYPING_PLACEHOLDER,
   WELCOME_MESSAGE,
 } from '@/domain/constant/chatbot/Chatbot';
@@ -180,13 +183,15 @@ export default function HungerMapChatbot() {
   return (
     <div className={clsx('absolute z-[9999]', isFullScreen && isOpen ? 'inset-0' : 'top-4 right-4')}>
       {!isOpen && (
-        <Button
-          onClick={toggleChat}
-          className="
+        <Tooltip text={TRIGGER_CHAT}>
+          <Button
+            onClick={toggleChat}
+            className="
             relative flex items-center justify-center min-w-12 h-12 px-1 rounded-full bg-white dark:bg-black shadow-md"
-        >
-          <Bot size={24} />
-        </Button>
+          >
+            <Bot size={24} />
+          </Button>
+        </Tooltip>
       )}
       {/* chatbot interface */}
       {isOpen && (
@@ -209,10 +214,16 @@ export default function HungerMapChatbot() {
           >
             <CardHeader className="flex items-center justify-between p-4">
               <div className="flex items-center space-x-2">
-                <Button variant="light" isIconOnly onClick={() => setIsSidebarOpen((previousValue) => !previousValue)}>
-                  {isSidebarOpen ? <SidebarLeft size={24} /> : <SidebarRight size={24} />}
-                </Button>
-                <Image src="/wfp-logo.png" width={32} height={32} alt="WFP Logo" className="mr-2" />
+                <Tooltip text={isSidebarOpen ? CLOSE_SIDE_BAR : OPEN_SIDE_BAR}>
+                  <Button
+                    variant="light"
+                    isIconOnly
+                    onClick={() => setIsSidebarOpen((previousValue) => !previousValue)}
+                  >
+                    {isSidebarOpen ? <SidebarLeft size={24} /> : <SidebarRight size={24} />}
+                  </Button>
+                </Tooltip>
+                <Image src="/wfp_logo.svg" width={32} height={32} alt="WFP Logo" className="mr-2" />
                 <h2 className="text-lg font-semibold truncate">{CHAT_TITLE}</h2>
               </div>
               <div className="flex items-center space-x-2">

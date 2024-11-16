@@ -1,10 +1,10 @@
 'use client';
 
 import { Popover, PopoverContent, PopoverTrigger } from '@nextui-org/popover';
-import { Tooltip } from '@nextui-org/tooltip';
 import { useMemo } from 'react';
 
 import { AlertButton } from '@/components/AlertsMenu/AlertButton';
+import { Tooltip } from '@/components/Tooltip/Tooltip';
 import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { AlertType } from '@/domain/enums/AlertType';
 import { AlertsMenuProps } from '@/domain/props/AlertsMenuProps';
@@ -26,7 +26,7 @@ export function AlertsMenu({ variant }: AlertsMenuProps) {
       {SidebarOperations.getSidebarAlertTypes().map((item) =>
         SidebarOperations.hasSubalerts(item) ? (
           <Popover placement={variant === 'inside' ? 'bottom' : 'top'} key={item.key}>
-            <Tooltip content={item.label}>
+            <Tooltip text={item.label}>
               {/* extra element to make tooltip working with the popover */}
               <div className="max-w-fit">
                 <PopoverTrigger>
@@ -37,7 +37,7 @@ export function AlertsMenu({ variant }: AlertsMenuProps) {
             <PopoverContent>
               <div className="gap-1 flex">
                 {item.subalerts.map((subalert) => (
-                  <Tooltip key={subalert.key} content={subalert.label}>
+                  <Tooltip key={subalert.key} text={subalert.label}>
                     <AlertButton
                       icon={subalert.icon}
                       label={subalert.label}
@@ -50,7 +50,7 @@ export function AlertsMenu({ variant }: AlertsMenuProps) {
             </PopoverContent>
           </Popover>
         ) : (
-          <Tooltip key={item.key} content={item.label}>
+          <Tooltip key={item.key} text={item.label}>
             <AlertButton
               icon={item.icon}
               label={item.label}

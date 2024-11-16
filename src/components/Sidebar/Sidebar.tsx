@@ -7,18 +7,24 @@ import { Link } from '@nextui-org/link';
 import clsx from 'clsx';
 import { SidebarLeft } from 'iconsax-react';
 import NextImage from 'next/image';
+import { useState } from 'react';
 
 import { AlertsMenu } from '@/components/AlertsMenu/AlertsMenu';
 import { LogoWithText } from '@/components/LogoWithText/LogoWithText';
 import { CollapsedSidebar } from '@/components/Sidebar/CollapsedSidebar';
 import { ThemeSwitch } from '@/components/Sidebar/ThemeSwitch';
 import { pageLinks } from '@/domain/constant/PageLinks';
+import { SUBSCRIBE_MODAL_TITLE } from '@/domain/constant/subscribe/Subscribe';
 import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { AlertsMenuVariant } from '@/domain/enums/AlertsMenuVariant';
 import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
 
+import PopupModal from '../PopupModal/PopupModal';
+import Subscribe from '../Subscribe/Subscribe';
+
 export function Sidebar() {
   const { isSidebarOpen, toggleSidebar, selectedMapType, setSelectedMapType } = useSidebar();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   if (!isSidebarOpen) {
     return <CollapsedSidebar />;
@@ -68,9 +74,18 @@ export function Sidebar() {
         </CardBody>
         <CardFooter>
           <div className="flex flex-col gap-1">
-            <Button radius="full" onClick={() => alert('Subscribe!')} size="sm" className="w-fit">
+            <Button radius="full" onClick={() => setIsModalOpen(!isModalOpen)} size="sm" className="w-fit">
               SUBSCRIBE
             </Button>
+            <PopupModal
+              isModalOpen={isModalOpen}
+              toggleModal={() => setIsModalOpen(!isModalOpen)}
+              modalTitle={SUBSCRIBE_MODAL_TITLE}
+              modalSize="lg"
+              modalHeight="auto"
+            >
+              <Subscribe />
+            </PopupModal>
             <ul className="pl-3">
               {pageLinks.map((page) => (
                 <li key={page.label}>

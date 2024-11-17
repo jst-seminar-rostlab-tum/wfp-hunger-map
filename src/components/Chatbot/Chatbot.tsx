@@ -122,7 +122,6 @@ export default function HungerMapChatbot() {
         role: SenderRole.ASSISTANT,
         dataSources,
       });
-      updatedChatsWithAI[currentChatIndex].isTyping = false;
       return updatedChatsWithAI;
     });
   };
@@ -147,7 +146,6 @@ export default function HungerMapChatbot() {
         setChats(updatedChats);
         setInput('');
         setIsUserMessageSent(true);
-        chats[currentChatIndex].isTyping = false;
       }
     }
   };
@@ -159,7 +157,6 @@ export default function HungerMapChatbot() {
   const handleKeyDown = (keyboardEvent: React.KeyboardEvent<HTMLTextAreaElement>): void => {
     if (isResponseAnimated && keyboardEvent.key === 'Enter' && !keyboardEvent.shiftKey) {
       keyboardEvent.preventDefault();
-      chats[currentChatIndex].isTyping = false;
       handleSubmit(keyboardEvent);
     }
   };

@@ -233,12 +233,10 @@ export function LineChart({
             }
           </div>
         </div>
-
         {
           // description text element should only be rendered if description is available
           description ? <p className={`w-full h-fit pb-4 ${DESCRIPTION_TEXT_SIZE} px-3`}> {description} </p> : null
         }
-
         {/* the actual chart */}
         <HighchartsReact
           highcharts={Highcharts}

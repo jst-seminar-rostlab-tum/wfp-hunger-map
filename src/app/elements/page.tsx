@@ -5,6 +5,7 @@ import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGrap
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph.ts';
 import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
 import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
+import { LineChartDataType } from '@/domain/enums/LineChartDataType.ts';
 import AccordionsOperations from '@/operations/accordions/AccordionOperations';
 
 /**
@@ -13,7 +14,7 @@ import AccordionsOperations from '@/operations/accordions/AccordionOperations';
  */
 export default async function Elements() {
   const simpleAndSmallLineChartData: LineChartData = {
-    type: 'LineChartData',
+    type: LineChartDataType.LineChartData,
     xAxisType: 'linear',
     lines: [
       {
@@ -29,7 +30,7 @@ export default async function Elements() {
   };
 
   const simpleLineChartData: LineChartData = {
-    type: 'LineChartData',
+    type: LineChartDataType.LineChartData,
     xAxisType: 'linear',
     yAxisLabel: 'yield',
     roundLines: true,
@@ -47,7 +48,7 @@ export default async function Elements() {
   };
 
   const maxedOutLineChartData: LineChartData = {
-    type: 'LineChartData',
+    type: LineChartDataType.LineChartData,
     xAxisType: 'linear',
     yAxisLabel: 'yield',
     lines: [
@@ -83,7 +84,7 @@ export default async function Elements() {
   };
 
   const balanceOfTradeGraphData: BalanceOfTradeGraph = {
-    type: 'BalanceOfTradeGraph',
+    type: LineChartDataType.BalanceOfTradeGraph,
     data: [
       {
         x: '2023-10-01',
@@ -105,7 +106,7 @@ export default async function Elements() {
   };
 
   const currencyExchangeGraphData: CurrencyExchangeGraph = {
-    type: 'CurrencyExchangeGraph',
+    type: LineChartDataType.CurrencyExchangeGraph,
     name: 'Exchange Rate (USD/NGN)',
     source: '',
     updated: '',
@@ -130,7 +131,7 @@ export default async function Elements() {
   };
 
   const inflationGraphsData: InflationGraphs = {
-    type: 'InflationGraphs',
+    type: LineChartDataType.InflationGraphs,
     headline: {
       data: [
         {

@@ -28,6 +28,7 @@ import { APIError } from '@/domain/entities/chatbot/BackendCommunication';
 import { IChat } from '@/domain/entities/chatbot/Chatbot';
 import { SenderRole } from '@/domain/enums/SenderRole';
 import ChatbotRepository from '@/domain/repositories/ChatbotRepository';
+import ChatbotOperations from '@/operations/chatbot/Chatbot';
 import { useMediaQuery } from '@/utils/resolution';
 
 import TypingDots from '../TypingText/TypingDot';
@@ -115,21 +116,15 @@ export default function HungerMapChatbot() {
 
   /**
    * Handle form submit
-   * @param fromEvent is form event including key down triggered submit
+   * @param submitEvent is form event including key down triggered submit
    * @param promptText is requested text from user
    */
-  const handleSubmit = (fromEvent: React.FormEvent, promptText: string | null = null): void => {
+  const handleSubmit = (submitEvent: React.FormEvent, promptText: string | null = null): void => {
     if (isResponseAnimated) {
       setIsResponseAnimated(false);
-      fromEvent.preventDefault();
       const text = promptText || input;
-      if (chats[currentChatIndex].isTyping) return; // prevent multiple submission
+      const updatedChats = ChatbotOperations.processInput(submitEvent, chats, currentChatIndex, text);
       if (text.trim()) {
-        const updatedChats = structuredClone(chats);
-        updatedChats[currentChatIndex].messages.push({ id: crypto.randomUUID(), content: text, role: SenderRole.USER });
-        if (updatedChats[currentChatIndex].title === `Chat ${updatedChats[currentChatIndex].id}`) {
-          updatedChats[currentChatIndex].title = text.slice(0, 30) + (text.length > 30 ? '...' : '');
-        }
         setChats(updatedChats);
         setInput('');
         setIsUserMessageSent(true);
@@ -295,10 +290,10 @@ export default function HungerMapChatbot() {
                       )}
                       <div
                         className={clsx(
-                          'p-2 mb-5 rounded-lg max-w-[80%]',
+                          'mb-5 rounded-lg max-w-[80%]',
                           message.role === SenderRole.USER
-                            ? 'rounded-xl bg-chatbotUserMsg dark:bg-chatbotUserMsg ml-12'
-                            : 'bg-transparent'
+                            ? 'rounded-xl p-2 bg-chatbotUserMsg dark:bg-chatbotUserMsg ml-12'
+                            : 'bg-transparent pl-2 pr-2'
                         )}
                       >
                         {message.role === SenderRole.USER ? (

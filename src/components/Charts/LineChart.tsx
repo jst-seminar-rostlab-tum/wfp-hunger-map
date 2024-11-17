@@ -60,7 +60,7 @@ export function LineChart({
   // todo descr
   const [showBarChart, setShowBarChart] = useState(false); // todo check if necessary
   const [chartOptions, setChartOptions] = useState(lineChartOptions);
-  const [showXAxisSlider, setShowXAxisSlider] = useState(showXAxisSliderOnRender);
+  const [showXAxisSlider, setShowXAxisSlider] = useState(showXAxisSliderOnRender && !noXAxisSlider);
 
   // full screen modal state handling
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
@@ -90,9 +90,11 @@ export function LineChart({
 
   // Button to trigger the full screen modal; rendered if `expandable==true`
   const fullScreenButton = expandable ? (
-    <Button isIconOnly variant="light" size="sm" onClick={onOpen}>
-      <Maximize4 className={`h-${ICON_BUTTON_SIZE} w-${ICON_BUTTON_SIZE}`} />
-    </Button>
+    <Tooltip text="Enlarge Chart">
+      <Button isIconOnly variant="light" size="sm" onClick={onOpen}>
+        <Maximize4 className={`h-${ICON_BUTTON_SIZE} w-${ICON_BUTTON_SIZE}`} />
+      </Button>
+    </Tooltip>
   ) : null;
 
   // Description text element should only be rendered if description is available
@@ -102,20 +104,41 @@ export function LineChart({
 
   // todo
   const barChartSwitchButton = (size: number = 4) => {
-    return noBarChartSwitch ? null : (
-      <Button isIconOnly variant="light" size="sm" onClick={switchChartType}>
-        {showBarChart ? (
-          <Tooltip text="Switch to Line Chart">
-            <Diagram className={`h-${size} w-${size}`} />
-          </Tooltip>
-        ) : (
-          <Tooltip text="Switch to Bar Chart">
-            <Chart className={`h-${size} w-${size}`} />
-          </Tooltip>
-        )}
-      </Button>
+    if (noBarChartSwitch) return null;
+
+    const tooltipText = `Switch to ${showBarChart ? 'Line' : 'Bar'} Chart`;
+    const icon = showBarChart ? (
+      <Diagram className={`h-${size} w-${size}`} />
+    ) : (
+      <Chart className={`h-${size} w-${size}`} />
+    );
+    return (
+      <Tooltip text={tooltipText}>
+        <Button isIconOnly variant="light" size="sm" onClick={switchChartType}>
+          {icon}
+        </Button>
+      </Tooltip>
     );
   };
+
+  const xAxisSliderButton = (size: number = 4) => {
+    return noXAxisSlider ? null : (
+      <Tooltip text="X-Axis Slider">
+        <Button
+          isIconOnly
+          variant="light"
+          size="sm"
+          onPress={() => {
+            setShowXAxisSlider(!showXAxisSlider);
+          }}
+        >
+          <Settings className={`h-${size} w-${size}`} />
+        </Button>
+      </Tooltip>
+    );
+  };
+
+  const xAxisSlider = showXAxisSlider ? <> X-Axis slider will be implemented in another issue (todo)</> : null;
 
   // Full screen modal that can be opened if `expandable==true`. Offers a larger chart and a download button.
   const fullScreenModal = (
@@ -131,13 +154,8 @@ export function LineChart({
         <ModalHeader className="flex flex-col gap-1">
           <div className="flex flex-row justify-between w-full h-full">
             {title}
-
             <div className="flex flex-row w-fit h-full gap-4">
-              <Tooltip text="Download Chart">
-                <Button isIconOnly variant="light" size="sm" onPress={downloadDataJson}>
-                  <Settings className="h-4 w-4" />
-                </Button>
-              </Tooltip>
+              {xAxisSliderButton()}
               {barChartSwitchButton()}
               <Tooltip text="Download Chart">
                 <Button isIconOnly variant="light" size="sm" onPress={downloadDataJson}>
@@ -162,7 +180,7 @@ export function LineChart({
             />
           </div>
         </ModalBody>
-        <ModalFooter></ModalFooter>
+        <ModalFooter>{xAxisSlider}</ModalFooter>
       </ModalContent>
     </Modal>
   );
@@ -174,7 +192,8 @@ export function LineChart({
           className={`w-full h-fit flex flex-row justify-between items-start gap-1 pl-3 pb-${HEADER_BOTTOM_PADDING}`}
         >
           <p className={`${TITLE_TEXT_SIZE} font-normal pt-2 flex flex-row items-center`}> {title} </p>
-          <div className="flex flex-row gap-1 pt-0.5 pr-0.5">
+          <div className="flex flex-row gap-0.5 pt-0.5 pr-0.5">
+            {xAxisSliderButton(ICON_BUTTON_SIZE)}
             {barChartSwitchButton(ICON_BUTTON_SIZE)}
             {fullScreenButton}
           </div>
@@ -191,6 +210,7 @@ export function LineChart({
             },
           }}
         />
+        {xAxisSlider}
       </div>
       {fullScreenModal}
     </>

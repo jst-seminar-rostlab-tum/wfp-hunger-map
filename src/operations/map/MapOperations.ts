@@ -183,7 +183,7 @@ export class MapOperations {
     });
     baseMap.on('mouseup', 'country-fills', (e: any) => {
       if (!isDragging && e.features && (e.features[0] as CountryMapData).properties.interactive) {
-        // alert(`You clicked on ${(e.features[0] as CountryMapData).properties.adm0_name}`);
+        alert(`You clicked on ${(e.features[0] as CountryMapData).properties.adm0_name}`);
       }
     });
   }

@@ -15,6 +15,7 @@ import { CollapsedSidebar } from '@/components/Sidebar/CollapsedSidebar';
 import { ThemeSwitch } from '@/components/Sidebar/ThemeSwitch';
 import { pageLinks } from '@/domain/constant/PageLinks';
 import { SUBSCRIBE_MODAL_TITLE } from '@/domain/constant/subscribe/Subscribe';
+import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { AlertsMenuVariant } from '@/domain/enums/AlertsMenuVariant';
 import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
@@ -23,7 +24,8 @@ import PopupModal from '../PopupModal/PopupModal';
 import Subscribe from '../Subscribe/Subscribe';
 
 export function Sidebar() {
-  const { isSidebarOpen, toggleSidebar, selectedMapType, setSelectedMapType } = useSidebar();
+  const { isSidebarOpen, toggleSidebar } = useSidebar();
+  const { selectedMapType, setSelectedMapType } = useSelectedMap();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   if (!isSidebarOpen) {

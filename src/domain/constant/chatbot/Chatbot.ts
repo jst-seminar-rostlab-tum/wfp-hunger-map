@@ -22,3 +22,9 @@ export const TYPING_PLACEHOLDER = 'Type a message...';
 export const ENTER_FULL_SCREEN = 'Enter full screen';
 
 export const EXIT_FULL_SCREEN = 'Exit Full Screen';
+
+export const OPEN_SIDE_BAR = 'Open chat side bar';
+
+export const CLOSE_SIDE_BAR = 'Close chat side bar';
+
+export const TRIGGER_CHAT = 'Trigger hungermap chatbot';

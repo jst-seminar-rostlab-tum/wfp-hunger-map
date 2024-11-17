@@ -193,6 +193,9 @@ export default class LineChartOperations {
       tooltip: {
         shared: true,
       },
+      exporting: {
+        enabled: false, // disabling export menu icon
+      },
       series,
       plotOptions: {
         line: {
@@ -322,6 +325,9 @@ export default class LineChartOperations {
       },
       tooltip: {
         shared: true,
+      },
+      exporting: {
+        enabled: false, // disabling export menu icon
       },
       series,
       plotOptions: {

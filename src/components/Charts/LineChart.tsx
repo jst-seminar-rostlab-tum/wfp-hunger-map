@@ -2,16 +2,25 @@
 
 import { Button } from '@nextui-org/button';
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/modal';
-import * as Highcharts from 'highcharts';
-import { HighchartsReact } from 'highcharts-react-official';
+import Highcharts from 'highcharts';
+import Exporting from 'highcharts/modules/exporting';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { Chart, Diagram, Maximize4, DocumentDownload, Minus, Settings } from 'iconsax-react';
-import { Tooltip } from '@/components/Tooltip/Tooltip';
+import { Chart, Diagram, DocumentDownload, GalleryImport, Maximize4, Minus, Settings } from 'iconsax-react';
+import { useEffect, useRef, useState } from 'react';
 
+import HighchartsReact from 'highcharts-react-official';
+import OfflineExporting from 'highcharts/modules/offline-exporting';
+
+import { Tooltip } from '@/components/Tooltip/Tooltip';
 import { LineChartData } from '@/domain/entities/charts/LineChartData';
 import LineChartProps from '@/domain/props/LineChartProps';
 import LineChartOperations from '@/operations/charts/LineChartOperations';
-import { useState } from 'react';
+
+// Initialize the exporting module
+if (typeof Highcharts === 'object') {
+  Exporting(Highcharts);
+  OfflineExporting(Highcharts);
+}
 
 /**
  * The LineChart component is a box that primarily renders a title, description text, and a line chart.
@@ -62,8 +71,22 @@ export function LineChart({
   const [chartOptions, setChartOptions] = useState(lineChartOptions);
   const [showXAxisSlider, setShowXAxisSlider] = useState(showXAxisSliderOnRender && !noXAxisSlider);
 
+  const chartRef = useRef(null);
+
   // full screen modal state handling
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
+
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://code.highcharts.com/modules/exporting.js';
+    script.async = true;
+    document.head.appendChild(script);
+
+    return () => {
+      document.head.removeChild(script); // Clean up when the component unmounts
+    };
+  }, []); // Empty dependency array ensures this runs only once on mount
+
 
   // listen to todo descr
   const switchChartType = () => {
@@ -78,7 +101,7 @@ export function LineChart({
   };
 
   // trigger download of the given line chart `data` as a json file
-  const downloadDataJson = () => {
+  const downloadDataJSON = () => {
     // convert data json object to string and encode as URI
     const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(data, null, 2))}`;
     // create a temporary link element and trigger the download
@@ -86,6 +109,16 @@ export function LineChart({
     link.href = jsonString;
     link.download = JSON_DOWNLOAD_FILE_NAME;
     link.click();
+  };
+
+  // trigger download of the given line chart `data` as a json file
+  const downloadChartPNG = () => {
+    if (chartRef.current) {
+      chartRef.current.chart.exportChartLocal({
+        type: 'image/png',
+        filename: 'chart-download',
+      });
+    }
   };
 
   // Button to trigger the full screen modal; rendered if `expandable==true`
@@ -157,9 +190,14 @@ export function LineChart({
             <div className="flex flex-row w-fit h-full gap-4">
               {xAxisSliderButton()}
               {barChartSwitchButton()}
-              <Tooltip text="Download Chart">
-                <Button isIconOnly variant="light" size="sm" onPress={downloadDataJson}>
+              <Tooltip text="Download Data as JSON">
+                <Button isIconOnly variant="light" size="sm" onPress={downloadDataJSON}>
                   <DocumentDownload className="h-4 w-4" />
+                </Button>
+              </Tooltip>
+              <Tooltip text="Download Chart as PNG">
+                <Button isIconOnly variant="light" size="sm" onPress={downloadChartPNG}>
+                  <GalleryImport className="h-4 w-4" />
                 </Button>
               </Tooltip>
               <Tooltip text="Close">
@@ -176,6 +214,7 @@ export function LineChart({
             <HighchartsReact
               highcharts={Highcharts}
               options={chartOptions}
+              ref={chartRef}
               containerProps={{ style: { width: '100%', height: '40vh', borderRadius: '0 0 0.5rem 0.5rem' } }}
             />
           </div>

@@ -13,8 +13,6 @@ import TypingText from '@/components/TypingText/TypingText';
 import container from '@/container';
 import {
   CHAT_TITLE,
-  DATA_SOURCES,
-  DEFAULT_DATA_SOURCES,
   DEFAULT_PROMPT,
   ENTER_FULL_SCREEN,
   EXIT_FULL_SCREEN,
@@ -111,8 +109,6 @@ export default function HungerMapChatbot() {
         aiResponse = `Ups! Unfortunately, it seems like there was a problem connecting to the server...\n ${err.status}: ${err.message}`;
       }
     }
-    // TODO: get data sources from response later
-    const dataSources = DEFAULT_DATA_SOURCES;
 
     setChats((prevChats) => {
       const updatedChatsWithAI = structuredClone(prevChats);
@@ -120,7 +116,6 @@ export default function HungerMapChatbot() {
         id: crypto.randomUUID(),
         content: aiResponse,
         role: SenderRole.ASSISTANT,
-        dataSources,
       });
       return updatedChatsWithAI;
     });
@@ -316,16 +311,6 @@ export default function HungerMapChatbot() {
                                 handleTypingComplete();
                               }}
                             />
-                          )}
-                          {message.dataSources && (
-                            <div className="mt-2 text-xs text-gray-600 dark:text-gray-400">
-                              <p className="truncate">{DATA_SOURCES}</p>
-                              <ul className="list-disc pl-4">
-                                {message.dataSources.map((source) => (
-                                  <li key={source}>{source}</li>
-                                ))}
-                              </ul>
-                            </div>
                           )}
                         </div>
                       </div>

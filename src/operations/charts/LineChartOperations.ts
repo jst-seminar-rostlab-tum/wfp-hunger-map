@@ -9,6 +9,7 @@ import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGrap
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph.ts';
 import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
 import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
+import { LineChartDataType } from '@/domain/enums/LineChartDataType.ts';
 
 if (typeof Highcharts === 'object') {
   highchartsMore(Highcharts); // enables the usage of HighCharts 'arearange'
@@ -39,12 +40,12 @@ export default class LineChartOperations {
     data: LineChartData | BalanceOfTradeGraph | CurrencyExchangeGraph | InflationGraphs
   ): LineChartData {
     switch (data.type) {
-      case 'LineChartData':
+      case LineChartDataType.LineChartData:
         return data;
 
-      case 'BalanceOfTradeGraph':
+      case LineChartDataType.BalanceOfTradeGraph:
         return {
-          type: 'LineChartData',
+          type: LineChartDataType.LineChartData,
           xAxisType: 'datetime',
           lines: [
             {
@@ -56,9 +57,9 @@ export default class LineChartOperations {
           ],
         };
 
-      case 'CurrencyExchangeGraph':
+      case LineChartDataType.CurrencyExchangeGraph:
         return {
-          type: 'LineChartData',
+          type: LineChartDataType.LineChartData,
           xAxisType: 'datetime',
           lines: [
             {
@@ -70,9 +71,9 @@ export default class LineChartOperations {
           ],
         };
 
-      case 'InflationGraphs':
+      case LineChartDataType.InflationGraphs:
         return {
-          type: 'LineChartData',
+          type: LineChartDataType.LineChartData,
           xAxisType: 'datetime',
           lines: [
             {
@@ -93,7 +94,7 @@ export default class LineChartOperations {
       default:
         // if the given type is not supported yet, an empty `LineChartData` instance is returned
         return {
-          type: 'LineChartData',
+          type: LineChartDataType.LineChartData,
           xAxisType: 'linear',
           lines: [],
         };

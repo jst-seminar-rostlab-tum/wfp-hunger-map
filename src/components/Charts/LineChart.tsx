@@ -85,64 +85,6 @@ export function LineChart({
     setShowBarChart(true);
   };
 
-  // --------------
-  // JSX - elements
-  // --------------
-
-  // slider to manipulate the plotted x-axis range of the chart; can be disabled via `xAxisSlider`
-  const xAxisSliderComp = xAxisSlider ? <> x-Axis slider will be implemented in another issue (todo)</> : null;
-
-  // description text element should only be rendered if description is available
-  const descriptionText = description ? (
-    <p className={`w-full h-fit pb-4 ${DESCRIPTION_TEXT_SIZE} px-3`}> {description} </p>
-  ) : null;
-
-  // button to switch between line and bar chart; can be disabled via `barChartSwitch`
-  const barChartSwitchButton = (size: number = 4) => {
-    if (!barChartSwitch) return null;
-
-    const tooltipText = `Switch to ${showBarChart ? 'Line' : 'Bar'} Chart`;
-    const icon = showBarChart ? (
-      <Diagram className={`h-${size} w-${size}`} />
-    ) : (
-      <Chart className={`h-${size} w-${size}`} />
-    );
-    return (
-      <Tooltip text={tooltipText}>
-        <Button isIconOnly variant="light" size="sm" onClick={switchChartType}>
-          {icon}
-        </Button>
-      </Tooltip>
-    );
-  };
-
-  // button to trigger the full screen modal; rendered if `expandable`
-  const fullScreenButton = expandable ? (
-    <Tooltip text="Enlarge Chart">
-      <Button isIconOnly variant="light" size="sm" onClick={onOpen}>
-        <Maximize4 className={`h-${ICON_BUTTON_SIZE} w-${ICON_BUTTON_SIZE}`} />
-      </Button>
-    </Tooltip>
-  ) : null;
-
-  // button to hide/show the slider to manipulate the plotted x-axis range of the chart; can be disabled via `xAxisSlider`
-  const xAxisSliderButton = (size: number = 4) => {
-    return xAxisSlider ? (
-      <Tooltip text="x-Axis Slider">
-        <Button
-          isIconOnly
-          variant="light"
-          size="sm"
-          onPress={() => {
-            setShowXAxisSlider(!showXAxisSlider);
-          }}
-        >
-          <Settings className={`h-${size} w-${size}`} />
-        </Button>
-      </Tooltip>
-    ) : null;
-  };
-
   // full screen modal that can be opened if `expandable==true`; offers a larger chart and an additional features (see buttons)
   const fullScreenModal = (
     <Modal
@@ -158,8 +100,35 @@ export function LineChart({
           <div className="flex flex-row justify-between w-full h-full">
             {title}
             <div className="flex flex-row w-fit h-full gap-4">
-              {xAxisSliderButton()}
-              {barChartSwitchButton()}
+              {
+                // button to hide/show the slider to manipulate the plotted x-axis range of the chart;
+                // can be disabled via `xAxisSlider`
+                xAxisSlider ? (
+                  <Tooltip text="x-Axis Slider">
+                    <Button
+                      isIconOnly
+                      variant="light"
+                      size="sm"
+                      onPress={() => {
+                        setShowXAxisSlider(!showXAxisSlider);
+                      }}
+                    >
+                      <Settings className="h-4 w-4" />
+                    </Button>
+                  </Tooltip>
+                ) : null
+              }
+              {
+                // button to switch between line and bar chart; can be disabled via `barChartSwitch`
+                barChartSwitch ? (
+                  <Tooltip text={`Switch to ${showBarChart ? 'Line' : 'Bar'} Chart`}>
+                    <Button isIconOnly variant="light" size="sm" onClick={switchChartType}>
+                      {showBarChart ? <Diagram className="h-4 w-4" /> : <Chart className="h-4 w-4" />}
+                    </Button>
+                  </Tooltip>
+                ) : null
+              }
+              {/* chart download buttons */}
               <Tooltip text="Download Data as JSON">
                 <Button
                   isIconOnly
@@ -184,6 +153,7 @@ export function LineChart({
                   <GalleryImport className="h-4 w-4" />
                 </Button>
               </Tooltip>
+              {/* close model button */}
               <Tooltip text="Close">
                 <Button isIconOnly variant="light" size="sm" onPress={onClose}>
                   <Minus className="h-4 w-4" />
@@ -194,6 +164,7 @@ export function LineChart({
         </ModalHeader>
 
         <ModalBody>
+          {/* modal main content: description and chart */}
           <p className="w-full h-fit text-md font-normal">{description}</p>
           <div className="py-6">
             <HighchartsReact
@@ -205,7 +176,12 @@ export function LineChart({
           </div>
         </ModalBody>
 
-        <ModalFooter> {xAxisSliderComp} </ModalFooter>
+        <ModalFooter>
+          {
+            // slider to manipulate the plotted x-axis range of the chart; can be disabled via `xAxisSlider`
+            xAxisSlider ? <> x-Axis slider will be implemented in another issue (todo)</> : null
+          }
+        </ModalFooter>
       </ModalContent>
     </Modal>
   );
@@ -216,14 +192,57 @@ export function LineChart({
         <div className={`w-full h-fit flex flex-row justify-between items-start gap-1 pl-3 pb-${HEADER_PADDING}`}>
           <h2 className={`${TITLE_TEXT_SIZE} font-normal pt-2 flex flex-row items-center`}> {title} </h2>
           <div className="flex flex-row gap-0.5 pt-0.5 pr-0.5">
-            {xAxisSliderButton(ICON_BUTTON_SIZE)}
-            {barChartSwitchButton(ICON_BUTTON_SIZE)}
-            {fullScreenButton}
+            {
+              // button to hide/show the slider to manipulate the plotted x-axis range of the chart;
+              // can be disabled via `xAxisSlider`
+              xAxisSlider ? (
+                <Tooltip text="x-Axis Slider">
+                  <Button
+                    isIconOnly
+                    variant="light"
+                    size="sm"
+                    onPress={() => {
+                      setShowXAxisSlider(!showXAxisSlider);
+                    }}
+                  >
+                    <Settings className={`h-${ICON_BUTTON_SIZE} w-${ICON_BUTTON_SIZE}`} />
+                  </Button>
+                </Tooltip>
+              ) : null
+            }
+            {
+              // button to switch between line and bar chart; can be disabled via `barChartSwitch`
+              barChartSwitch ? (
+                <Tooltip text={`Switch to ${showBarChart ? 'Line' : 'Bar'} Chart`}>
+                  <Button isIconOnly variant="light" size="sm" onClick={switchChartType}>
+                    {showBarChart ? (
+                      <Diagram className={`h-${ICON_BUTTON_SIZE} w-${ICON_BUTTON_SIZE}`} />
+                    ) : (
+                      <Chart className={`h-${ICON_BUTTON_SIZE} w-${ICON_BUTTON_SIZE}`} />
+                    )}
+                  </Button>
+                </Tooltip>
+              ) : null
+            }
+            {
+              // button to trigger the full screen modal; rendered if `expandable`
+              expandable ? (
+                <Tooltip text="Enlarge Chart">
+                  <Button isIconOnly variant="light" size="sm" onClick={onOpen}>
+                    <Maximize4 className={`h-${ICON_BUTTON_SIZE} w-${ICON_BUTTON_SIZE}`} />
+                  </Button>
+                </Tooltip>
+              ) : null
+            }
           </div>
         </div>
 
-        {descriptionText}
+        {
+          // description text element should only be rendered if description is available
+          description ? <p className={`w-full h-fit pb-4 ${DESCRIPTION_TEXT_SIZE} px-3`}> {description} </p> : null
+        }
 
+        {/* the actual chart */}
         <HighchartsReact
           highcharts={Highcharts}
           options={chartOptions}
@@ -235,7 +254,10 @@ export function LineChart({
             },
           }}
         />
-        {xAxisSlider}
+        {
+          // slider to manipulate the plotted x-axis range of the chart; can be disabled via `xAxisSlider`
+          xAxisSlider ? <> x-Axis slider will be implemented in another issue (todo)</> : null
+        }
       </div>
       {fullScreenModal}
     </>

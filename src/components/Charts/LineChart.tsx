@@ -214,7 +214,7 @@ export function LineChart({
     <>
       <div className="w-full h-fit flex-col rounded-md bg-background">
         <div className={`w-full h-fit flex flex-row justify-between items-start gap-1 pl-3 pb-${HEADER_PADDING}`}>
-          <p className={`${TITLE_TEXT_SIZE} font-normal pt-2 flex flex-row items-center`}> {title} </p>
+          <h2 className={`${TITLE_TEXT_SIZE} font-normal pt-2 flex flex-row items-center`}> {title} </h2>
           <div className="flex flex-row gap-0.5 pt-0.5 pr-0.5">
             {xAxisSliderButton(ICON_BUTTON_SIZE)}
             {barChartSwitchButton(ICON_BUTTON_SIZE)}

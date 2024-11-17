@@ -40,6 +40,7 @@ if (typeof Highcharts === 'object') {
  * @param small when selected, all components in the line chart box become slightly smaller (optional)
  * @param barChartSwitch when selected, the user is given the option to switch to a bar chart (optional)
  * @param xAxisSlider when selected, the user is given the option to change the x-axis range via a slider (optional)
+ * @param transparentBackground when selected, the background of the entire component is transparent (optional)
  * @param data the actual data to be used in the chart
  */
 export function LineChart({
@@ -49,6 +50,7 @@ export function LineChart({
   small,
   barChartSwitch,
   xAxisSlider,
+  transparentBackground,
   data,
 }: LineChartProps) {
   const TITLE_TEXT_SIZE = small ? 'text-sm' : 'text-md';
@@ -185,7 +187,7 @@ export function LineChart({
 
   return (
     <>
-      <div className="w-full h-fit flex-col rounded-md bg-background">
+      <div className={`w-full h-fit flex-col rounded-md ${transparentBackground ? 'bg-background' : 'bg-transparent'}`}>
         <div className={`w-full h-fit flex flex-row justify-between items-start gap-1 pl-3 pb-${HEADER_PADDING}`}>
           <h2 className={`${TITLE_TEXT_SIZE} font-normal pt-2 flex flex-row items-center`}> {title} </h2>
           <div className="flex flex-row gap-0.5 pt-0.5 pr-0.5">

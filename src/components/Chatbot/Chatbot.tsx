@@ -354,7 +354,7 @@ export default function HungerMapChatbot() {
                     rows={1}
                   />
                   <Tooltip text="Submit">
-                    <Button type="submit" variant="light" isIconOnly disabled={isTyping}>
+                    <Button type="submit" variant="light" isIconOnly disabled={chats[currentChatIndex].isTyping}>
                       <Send2 className="h-4 w-4" />
                     </Button>
                   </Tooltip>

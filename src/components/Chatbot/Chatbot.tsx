@@ -86,11 +86,8 @@ export default function HungerMapChatbot() {
     }
   };
 
-  const setTypingStatus = async (chatIndex: number, isTyping: boolean): Promise<void> => {
-    return new Promise((resolve) => {
-      setChats((prevChats) => prevChats.map((chat, index) => (index === chatIndex ? { ...chat, isTyping } : chat)));
-      resolve();
-    });
+  const setTypingStatus = (chatIndex: number, isTyping: boolean): void => {
+    setChats((prevChats) => prevChats.map((chat, index) => (index === chatIndex ? { ...chat, isTyping } : chat)));
   };
 
   /**
@@ -307,9 +304,7 @@ export default function HungerMapChatbot() {
                               textID={message.id}
                               chatIndex={currentChatIndex}
                               onTypingStart={() => setTypingStatus(currentChatIndex, false)}
-                              onTypingComplete={() => {
-                                handleTypingComplete();
-                              }}
+                              onTypingComplete={() => handleTypingComplete()}
                             />
                           )}
                         </div>
@@ -317,7 +312,7 @@ export default function HungerMapChatbot() {
                     ))
                   )}
 
-                  {chats[currentChatIndex].isTyping === true && (
+                  {chats[currentChatIndex].isTyping && (
                     <div className="flex justify-start mb-4">
                       <div className="relative flex items-center justify-center bg-transparent w-12 h-12 rounded-full border-2 border-black dark:border-white bg-white dark:bg-black">
                         <Bot className="w-6 h-6 stroke-black dark:stroke-white" />

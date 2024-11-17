@@ -41,17 +41,30 @@ export function LineChart({ title, description, expandable, small, noBarChartSwi
   const HEADER_BOTTOM_PADDING = title ? 3 : 0;
   const JSON_DOWNLOAD_FILE_NAME = `hunger_map_line_chart_json-${title}.json`;
 
-  const [showBarChart, setShowBarChart] = useState(false);
+  // convert data to `LineChartData` and build chart options for 'Highcharts'
+  const lineChartData: LineChartData = LineChartOperations.convertToLineChartData(data);
+  const lineChartOptions: Highcharts.Options = LineChartOperations.getHighChartLineData(lineChartData);
+  const barChartOptions: Highcharts.Options = LineChartOperations.getHighChartBarData(lineChartData);
+
+  // todo descr
+  const [showBarChart, setShowBarChart] = useState(false); // todo check if necessary
+  const [chartOptions, setChartOptions] = useState(lineChartOptions);
+  const [showXAxisSlider, setShowXAxisSlider] = useState(false);
 
   // full screen modal state handling
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  // convert data to `LineChartData` and build chart options for 'Highcharts'
-  const lineChartData: LineChartData = LineChartOperations.convertToLineChartData(data);
-  const chartOptions: Highcharts.Options = LineChartOperations.getHighChartData(lineChartData);
-
-  // check if switching to bar chart should be possibel
-  const switchToBarChartAvailable = !noBarChartSwitch && lineChartData.lines.length >= 2;
+  // listen to todo descr
+  const switchChartType = () => {
+    if (showBarChart) {
+      // switch to line chart
+      setChartOptions(lineChartOptions);
+      setShowBarChart(false);
+      return;
+    }
+    setChartOptions(barChartOptions);
+    setShowBarChart(true);
+  };
 
   // trigger download of the given line chart `data` as a json file
   const downloadDataJson = () => {
@@ -101,8 +114,8 @@ export function LineChart({ title, description, expandable, small, noBarChartSwi
   ) : null;
 
   // todo
-  const barChartSwitchButton = switchToBarChartAvailable ? (
-    <Button isIconOnly variant="light" size="sm" onClick={() => setShowBarChart(!showBarChart)}>
+  const barChartSwitchButton = noBarChartSwitch ? null : (
+    <Button isIconOnly variant="light" size="sm" onClick={switchChartType}>
       {showBarChart ? (
         <Tooltip text="Switch to Line Chart">
           <Diagram className={`h-${ICON_BUTTON_SIZE} w-${ICON_BUTTON_SIZE}`} />
@@ -113,7 +126,7 @@ export function LineChart({ title, description, expandable, small, noBarChartSwi
         </Tooltip>
       )}
     </Button>
-  ) : null;
+  );
 
   return (
     <>

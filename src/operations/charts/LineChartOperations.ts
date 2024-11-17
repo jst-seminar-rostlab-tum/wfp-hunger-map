@@ -104,7 +104,7 @@ export default class LineChartOperations {
    * a `y` value for each `x` value. For example, if one line has values for x=1, x=2, and x=3,
    * the second line must also provide `y` values for these exact `x` values and no more or less.
    */
-  public static getHighChartData(data: LineChartData): Highcharts.Options {
+  public static getHighChartLineData(data: LineChartData): Highcharts.Options {
     const { theme } = useTheme();
 
     // parsing all given line data
@@ -220,6 +220,109 @@ export default class LineChartOperations {
             radius: 0,
             animation: true,
           },
+        },
+      },
+    };
+  }
+
+
+  /**
+   * With this static function, the LineChart component can build the HighCharts options,  todo
+   * needed for the HighCharts component, out of a given `LineChartData` instance.
+   * It is expected that all line data in `LineChartData.lines` have the same `x` values and provide
+   * a `y` value for each `x` value. For example, if one line has values for x=1, x=2, and x=3,
+   * the second line must also provide `y` values for these exact `x` values and no more or less.
+   */
+  public static getHighChartBarData(data: LineChartData): Highcharts.Options {
+    const { theme } = useTheme();
+
+    // parsing all given line data
+    const series: SeriesOptionsType[] = [];
+    let categories: string[] = [];
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < data.lines.length; i++) {
+      const lineData = data.lines[i];
+      // it is assumed that all `x` values are the same and are given for all lines
+      // therefore we only have to collect the x Axis categories once
+      if (i === 0) {
+        categories = lineData.dataPoints.map((p) => p.x);
+      }
+
+      // the first four line colors are fixed; however, they can also be overridden by the `color` property;
+      // if more than four lines are rendered the default Highcharts colors will be used
+      let lineColor;
+      if (lineData.color) {
+        lineColor = lineData.color;
+      } else if (i < this.LINE_COLORS.length) {
+        lineColor = this.LINE_COLORS[i];
+      }
+
+      series.push({
+        name: lineData.name,
+        type: 'column',
+        data: lineData.dataPoints.map((p) => p.y),
+        color: lineColor,
+      });
+      // checking if area range should be added as well
+      if (lineData.showRange) {
+        // todo
+      }
+    }
+
+    // building the final HighCharts Options
+    return {
+      title: {
+        text: '',
+      },
+      chart: {
+        backgroundColor: 'transparent',
+      },
+      legend: {
+        itemStyle: {
+          fontSize: '0.7rem',
+          color: theme === 'light' ? '#4f4f4f' : '#b6b6b6',
+        },
+      },
+      xAxis: {
+        type: data.xAxisType,
+        categories,
+        labels: {
+          style: {
+            color: '#7a7a7a',
+            fontSize: '0.7rem',
+          },
+        },
+        lineColor: '#7a7a7a',
+      },
+      yAxis: {
+        title: {
+          text: data.yAxisLabel,
+          style: {
+            color: '#7a7a7a',
+          },
+        },
+        labels: {
+          style: {
+            color: '#7a7a7a',
+            fontSize: '0.7rem',
+          },
+          formatter() {
+            return Highcharts.numberFormat(this.value as number, -1);
+          },
+        },
+        lineColor: 'transparent',
+        gridLineColor: theme === 'light' ? '#e1e1e1' : '#2a2a2a',
+      },
+      tooltip: {
+        shared: true,
+      },
+      series,
+      plotOptions: {
+        column: {
+          animation: true,
+          grouping: true,
+          shadow: false,
+          borderWidth: 0,
         },
       },
     };

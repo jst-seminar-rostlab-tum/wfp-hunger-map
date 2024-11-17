@@ -5,7 +5,7 @@ import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure
 import * as Highcharts from 'highcharts';
 import { HighchartsReact } from 'highcharts-react-official';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { Chart, Diagram, Maximize4 } from 'iconsax-react';
+import { Chart, Diagram, Maximize4, DocumentDownload, Minus, Settings } from 'iconsax-react';
 import { Tooltip } from '@/components/Tooltip/Tooltip';
 
 import { LineChartData } from '@/domain/entities/charts/LineChartData';
@@ -30,10 +30,21 @@ import { useState } from 'react';
  * @param description chart description text (optional)
  * @param expandable when selected, the user is given the option to open the chart in a larger modal (optional)
  * @param small when selected, all components in the line chart box become slightly smaller (optional)
- * @param noBarChartSwitch todo
+ * @param noBarChartSwitch todo (optional)
+ * @param noXAxisSlider todo (optional)
+ * @param showXAxisSliderOnRender todo (optional)
  * @param data the actual data to be used in the chart
  */
-export function LineChart({ title, description, expandable, small, noBarChartSwitch, data }: LineChartProps) {
+export function LineChart({
+  title,
+  description,
+  expandable,
+  small,
+  noBarChartSwitch,
+  noXAxisSlider,
+  showXAxisSliderOnRender,
+  data,
+}: LineChartProps) {
   const TITLE_TEXT_SIZE = small ? 'text-sm' : 'text-md';
   const DESCRIPTION_TEXT_SIZE = small ? 'text-xs' : 'text-sm';
   const CHART_HEIGHT = small ? 12 : 16;
@@ -49,10 +60,10 @@ export function LineChart({ title, description, expandable, small, noBarChartSwi
   // todo descr
   const [showBarChart, setShowBarChart] = useState(false); // todo check if necessary
   const [chartOptions, setChartOptions] = useState(lineChartOptions);
-  const [showXAxisSlider, setShowXAxisSlider] = useState(false);
+  const [showXAxisSlider, setShowXAxisSlider] = useState(showXAxisSliderOnRender);
 
   // full screen modal state handling
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
 
   // listen to todo descr
   const switchChartType = () => {
@@ -77,30 +88,6 @@ export function LineChart({ title, description, expandable, small, noBarChartSwi
     link.click();
   };
 
-  // Full screen modal that can be opened if `expandable==true`. Offers a larger chart and a download button.
-  const fullScreenModal = (
-    <Modal size="5xl" isOpen={isOpen} backdrop="blur" scrollBehavior="inside" onOpenChange={onOpenChange}>
-      <ModalContent>
-        <ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
-        <ModalBody>
-          <p className="w-full h-fit text-md font-normal">{description}</p>
-          <div className="py-6">
-            <HighchartsReact
-              highcharts={Highcharts}
-              options={chartOptions}
-              containerProps={{ style: { width: '100%', height: '40vh', borderRadius: '0 0 0.5rem 0.5rem' } }}
-            />
-          </div>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onPress={downloadDataJson}>
-            Download data as JSON
-          </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
-  );
-
   // Button to trigger the full screen modal; rendered if `expandable==true`
   const fullScreenButton = expandable ? (
     <Button isIconOnly variant="light" size="sm" onClick={onOpen}>
@@ -114,18 +101,70 @@ export function LineChart({ title, description, expandable, small, noBarChartSwi
   ) : null;
 
   // todo
-  const barChartSwitchButton = noBarChartSwitch ? null : (
-    <Button isIconOnly variant="light" size="sm" onClick={switchChartType}>
-      {showBarChart ? (
-        <Tooltip text="Switch to Line Chart">
-          <Diagram className={`h-${ICON_BUTTON_SIZE} w-${ICON_BUTTON_SIZE}`} />
-        </Tooltip>
-      ) : (
-        <Tooltip text="Switch to Bar Chart">
-          <Chart className={`h-${ICON_BUTTON_SIZE} w-${ICON_BUTTON_SIZE}`} />
-        </Tooltip>
-      )}
-    </Button>
+  const barChartSwitchButton = (size: number = 4) => {
+    return noBarChartSwitch ? null : (
+      <Button isIconOnly variant="light" size="sm" onClick={switchChartType}>
+        {showBarChart ? (
+          <Tooltip text="Switch to Line Chart">
+            <Diagram className={`h-${size} w-${size}`} />
+          </Tooltip>
+        ) : (
+          <Tooltip text="Switch to Bar Chart">
+            <Chart className={`h-${size} w-${size}`} />
+          </Tooltip>
+        )}
+      </Button>
+    );
+  };
+
+  // Full screen modal that can be opened if `expandable==true`. Offers a larger chart and a download button.
+  const fullScreenModal = (
+    <Modal
+      size="5xl"
+      isOpen={isOpen}
+      backdrop="blur"
+      scrollBehavior="inside"
+      onOpenChange={onOpenChange}
+      hideCloseButton
+    >
+      <ModalContent>
+        <ModalHeader className="flex flex-col gap-1">
+          <div className="flex flex-row justify-between w-full h-full">
+            {title}
+
+            <div className="flex flex-row w-fit h-full gap-4">
+              <Tooltip text="Download Chart">
+                <Button isIconOnly variant="light" size="sm" onPress={downloadDataJson}>
+                  <Settings className="h-4 w-4" />
+                </Button>
+              </Tooltip>
+              {barChartSwitchButton()}
+              <Tooltip text="Download Chart">
+                <Button isIconOnly variant="light" size="sm" onPress={downloadDataJson}>
+                  <DocumentDownload className="h-4 w-4" />
+                </Button>
+              </Tooltip>
+              <Tooltip text="Close">
+                <Button isIconOnly variant="light" size="sm" onPress={onClose}>
+                  <Minus className="h-4 w-4" />
+                </Button>
+              </Tooltip>
+            </div>
+          </div>
+        </ModalHeader>
+        <ModalBody>
+          <p className="w-full h-fit text-md font-normal">{description}</p>
+          <div className="py-6">
+            <HighchartsReact
+              highcharts={Highcharts}
+              options={chartOptions}
+              containerProps={{ style: { width: '100%', height: '40vh', borderRadius: '0 0 0.5rem 0.5rem' } }}
+            />
+          </div>
+        </ModalBody>
+        <ModalFooter></ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 
   return (
@@ -136,7 +175,7 @@ export function LineChart({ title, description, expandable, small, noBarChartSwi
         >
           <p className={`${TITLE_TEXT_SIZE} font-normal pt-2 flex flex-row items-center`}> {title} </p>
           <div className="flex flex-row gap-1 pt-0.5 pr-0.5">
-            {barChartSwitchButton}
+            {barChartSwitchButton(ICON_BUTTON_SIZE)}
             {fullScreenButton}
           </div>
         </div>

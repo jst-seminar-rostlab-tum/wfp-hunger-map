@@ -9,5 +9,7 @@ export default interface LineChartProps {
   expandable?: boolean;
   small?: boolean;
   noBarChartSwitch?: boolean;
+  noXAxisSlider?: boolean;
+  showXAxisSliderOnRender?: boolean;
   data: LineChartData | BalanceOfTradeGraph | CurrencyExchangeGraph | InflationGraphs;
 }

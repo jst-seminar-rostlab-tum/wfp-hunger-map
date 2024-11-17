@@ -7,7 +7,8 @@ import Exporting from 'highcharts/modules/exporting';
 import OfflineExporting from 'highcharts/modules/offline-exporting';
 import HighchartsReact from 'highcharts-react-official';
 import { Chart, Diagram, DocumentDownload, GalleryImport, Maximize4, Minus, Settings } from 'iconsax-react';
-import { useRef, useState } from 'react';
+import { useTheme } from 'next-themes';
+import { useEffect, useRef, useState } from 'react';
 
 import { Tooltip } from '@/components/Tooltip/Tooltip';
 import { LineChartData } from '@/domain/entities/charts/LineChartData';
@@ -56,34 +57,30 @@ export function LineChart({
   const ICON_BUTTON_SIZE = small ? 3 : 4;
   const HEADER_PADDING = title ? 3 : 0;
 
+  // referencing the Highcharts chart object (needed for download the chart as a png)
+  const chartRef = useRef<HighchartsReact.RefObject | null>(null);
+  // full screen modal state handling
+  const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
+  // the 'chartOptions' are dependent on the theme
+  const { theme } = useTheme();
+
   // convert data to `LineChartData` and build chart options for 'Highcharts' (line and bar chart)
   const lineChartData: LineChartData = LineChartOperations.convertToLineChartData(data);
-  const lineChartOptions: Highcharts.Options = LineChartOperations.getHighChartLineData(lineChartData);
-  const barChartOptions: Highcharts.Options = LineChartOperations.getHighChartBarData(lineChartData);
+  const lineChartOptions: Highcharts.Options = LineChartOperations.getHighChartLineData(lineChartData, theme);
 
-  // controlling if a line or bar chart is rendered
+  // controlling if a line or bar chart is rendered; line chart is the default
   const [showBarChart, setShowBarChart] = useState(false);
   const [chartOptions, setChartOptions] = useState(lineChartOptions);
   // handling the x-axis range slider visibility
   const [showXAxisSlider, setShowXAxisSlider] = useState(false);
 
-  // referencing the Highcharts chart object (needed for download the chart as a png)
-  const chartRef = useRef<HighchartsReact.RefObject | null>(null);
-  // full screen modal state handling
-  const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
-
-  // handling the switch between line and bar chart
-  const switchChartType = (): void => {
-    if (showBarChart) {
-      // switch to line chart
-      setChartOptions(lineChartOptions);
-      setShowBarChart(false);
-      return;
-    }
-    // switch to bar chart
-    setChartOptions(barChartOptions);
-    setShowBarChart(true);
-  };
+  // handling the line and bar chart switch and the theme switch
+  useEffect(() => {
+    const newChartOptions = showBarChart
+      ? LineChartOperations.getHighChartBarData(lineChartData, theme)
+      : LineChartOperations.getHighChartLineData(lineChartData, theme);
+    setChartOptions(newChartOptions);
+  }, [showBarChart, theme]);
 
   // full screen modal that can be opened if `expandable==true`; offers a larger chart and an additional features (see buttons)
   const fullScreenModal = (
@@ -122,7 +119,7 @@ export function LineChart({
                 // button to switch between line and bar chart; can be disabled via `barChartSwitch`
                 barChartSwitch ? (
                   <Tooltip text={`Switch to ${showBarChart ? 'Line' : 'Bar'} Chart`}>
-                    <Button isIconOnly variant="light" size="sm" onClick={switchChartType}>
+                    <Button isIconOnly variant="light" size="sm" onClick={() => setShowBarChart(!showBarChart)}>
                       {showBarChart ? <Diagram className="h-4 w-4" /> : <Chart className="h-4 w-4" />}
                     </Button>
                   </Tooltip>
@@ -179,7 +176,7 @@ export function LineChart({
         <ModalFooter>
           {
             // slider to manipulate the plotted x-axis range of the chart; can be disabled via `xAxisSlider`
-            xAxisSlider ? <> x-Axis slider will be implemented in another issue (todo)</> : null
+            showXAxisSlider ? <> x-Axis slider will be implemented in another issue (todo)</> : null
           }
         </ModalFooter>
       </ModalContent>
@@ -214,7 +211,7 @@ export function LineChart({
               // button to switch between line and bar chart; can be disabled via `barChartSwitch`
               barChartSwitch ? (
                 <Tooltip text={`Switch to ${showBarChart ? 'Line' : 'Bar'} Chart`}>
-                  <Button isIconOnly variant="light" size="sm" onClick={switchChartType}>
+                  <Button isIconOnly variant="light" size="sm" onClick={() => setShowBarChart(!showBarChart)}>
                     {showBarChart ? (
                       <Diagram className={`h-${ICON_BUTTON_SIZE} w-${ICON_BUTTON_SIZE}`} />
                     ) : (
@@ -256,7 +253,7 @@ export function LineChart({
         />
         {
           // slider to manipulate the plotted x-axis range of the chart; can be disabled via `xAxisSlider`
-          xAxisSlider ? <> x-Axis slider will be implemented in another issue (todo)</> : null
+          showXAxisSlider ? <> x-Axis slider will be implemented in another issue (todo)</> : null
         }
       </div>
       {fullScreenModal}

@@ -3,7 +3,6 @@
 import Highcharts, { SeriesOptionsType } from 'highcharts';
 import highchartsMore from 'highcharts/highcharts-more';
 import HighchartsReact from 'highcharts-react-official';
-import { useTheme } from 'next-themes';
 
 import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph.ts';
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph.ts';
@@ -108,9 +107,7 @@ export default class LineChartOperations {
    * a `y` value for each `x` value. For example, if one line has values for x=1, x=2, and x=3,
    * the second line must also provide `y` values for these exact `x` values and no more or less.
    */
-  public static getHighChartLineData(data: LineChartData): Highcharts.Options {
-    const { theme } = useTheme();
-
+  public static getHighChartLineData(data: LineChartData, theme: string | undefined): Highcharts.Options {
     // parsing all given line data
     const series: SeriesOptionsType[] = [];
     let categories: string[] = [];
@@ -238,9 +235,7 @@ export default class LineChartOperations {
    * a `y` value for each `x` value. For example, if one line has values for x=1, x=2, and x=3,
    * the second line must also provide `y` values for these exact `x` values and no more or less.
    */
-  public static getHighChartBarData(data: LineChartData): Highcharts.Options {
-    const { theme } = useTheme();
-
+  public static getHighChartBarData(data: LineChartData, theme: string | undefined): Highcharts.Options {
     // parsing all given line data
     const series: SeriesOptionsType[] = [];
     let categories: string[] = [];

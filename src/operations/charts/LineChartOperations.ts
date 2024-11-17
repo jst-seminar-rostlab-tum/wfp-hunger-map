@@ -137,7 +137,7 @@ export default class LineChartOperations {
       // checking if area range should be added as well
       if (lineData.showRange) {
         series.push({
-          name: `${lineData.name} - area range`,
+          name: `${lineData.name} - range`,
           type: 'arearange', // Area range type
           data: lineData.dataPoints.map((p) => [p.yRangeMin!, p.yRangeMax!]),
           color: lineColor,
@@ -262,10 +262,17 @@ export default class LineChartOperations {
         type: 'column',
         data: lineData.dataPoints.map((p) => p.y),
         color: lineColor,
+        opacity: lineData.showRange ? 0.7 : 1,
       });
       // checking if area range should be added as well
       if (lineData.showRange) {
-        // todo
+        series.push({
+          name: `${lineData.name} - range`,
+          type: 'errorbar',
+          data: lineData.dataPoints.map((p) => [p.yRangeMin!, p.yRangeMax!]),
+          linkedTo: ':previous',
+          color: lineColor,
+        });
       }
     }
 
@@ -323,6 +330,11 @@ export default class LineChartOperations {
           grouping: true,
           shadow: false,
           borderWidth: 0,
+        },
+        errorbar: {
+          whiskerLength: '50%',
+          lineWidth: 1.5,
+          color: 'black',
         },
       },
     };

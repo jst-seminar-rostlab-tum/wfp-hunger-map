@@ -29,6 +29,31 @@ export function mapLegendData(
             'Updated: Daily (low and lower-middle income countries), Annually (upper-middle and high income countries).',
         },
       ];
+
+    case GlobalInsight.IPC:
+      return [
+        {
+          title: 'Number of people in IPC/CH Phase 3 or above (millions)',
+          startColor: 'ipcStartColor',
+          middleColor: 'ipcMiddleColor',
+          endColor: 'ipcEndColor',
+          startLabel: '0',
+          endLabel: '>10',
+          tooltipInfo: `
+                Developed by a global partnership, the Integrated Food Security Phase Classification (IPC) / Cadre Harmonisé (CH) is a set of tools and procedures to classify food insecurity. 
+                It classifies the populations in five different phases according to the severity of the food insecurity and malnutrition situation: 
+                - Minimal
+                - Stressed
+                - Crisis
+                - Emergency
+                - Catastrophe/Famine.
+        
+                Data source: Integrated Food Security Phase Classification (IPC) / Cadre Harmonisé (CH) www.ipcinfo.org
+        
+                Updated: N/A
+              `,
+        },
+      ];
     default:
       return [];
   }

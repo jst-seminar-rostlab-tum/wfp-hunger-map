@@ -117,7 +117,10 @@ module.exports = {
             conflictStrategic: '#bec0c1',
             fcsGreen: '#345d34',
             fcsOrange: '#ea6a2c',
-            fcsRed: '#fa190e'
+            fcsRed: '#fa190e',
+            ipcStartColor: '#F6D1C1',
+            ipcMiddleColor: '#FB7453',
+            ipcEndColor: '#710013',
           },
         },
         dark: {

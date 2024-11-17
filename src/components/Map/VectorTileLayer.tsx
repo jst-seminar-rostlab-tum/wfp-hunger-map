@@ -16,7 +16,6 @@ export default function VectorTileLayer({ countries, disputedAreas, ipcData }: M
   const { selectedMapType } = useSidebar();
 
   mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
-  const { selectedMapType } = useSidebar();
 
   useEffect(() => {
     const baseMap: mapboxgl.Map = MapOperations.createMapboxMap(
@@ -24,7 +23,7 @@ export default function VectorTileLayer({ countries, disputedAreas, ipcData }: M
       { countries, disputedAreas, ipcData, selectedMapType },
       mapContainer
     );
-    MapOperations.setMapInteractionFunctionality(baseMap);
+    MapOperations.setMapInteractionFunctionality({ countries, ipcData, selectedMapType }, baseMap);
     MapOperations.synchronizeLeafletMapbox(baseMap, mapContainer, context);
     /* To add when CORS issue is solved
     MapOperations.addFCSFunctionality(baseMap, selectedMapType);

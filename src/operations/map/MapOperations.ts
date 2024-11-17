@@ -1,5 +1,3 @@
-import './style.css';
-
 /* eslint-disable */
 import { LeafletContextInterface } from '@react-leaflet/core';
 import { FeatureCollection } from 'geojson';
@@ -36,7 +34,6 @@ export class MapOperations {
               mapColors.activeCountries,
             ],
           ];
-        // TODO add nutrition
         default:
           return [
             'case',
@@ -110,44 +107,70 @@ export class MapOperations {
     });
   }
 
-  static setMapInteractionFunctionality(baseMap: mapboxgl.Map): void {
+  static setMapInteractionFunctionality(
+    { countries, ipcData, selectedMapType }: MapProps,
+    baseMap: mapboxgl.Map
+  ): void {
     let hoveredPolygonId: string | number | undefined;
     const popup = new mapboxgl.Popup({ closeButton: false, closeOnClick: false });
 
-    const popupElement = popup.getElement();
-    if (popupElement) {
-      popupElement.classList.add('bg-red-100');
-    }
-
     baseMap.on('mousemove', 'country-fills', (e: any) => {
       const feature = e.features && (e.features[0] as CountryMapData);
-      if (feature && feature.properties.interactive) {
-        if (hoveredPolygonId) {
-          baseMap.setFeatureState({ source: 'countries', id: hoveredPolygonId }, { hover: false });
+
+      if (hoveredPolygonId && (!feature || hoveredPolygonId !== feature.id)) {
+        baseMap.setFeatureState({ source: 'countries', id: hoveredPolygonId }, { hover: false });
+        hoveredPolygonId = undefined;
+        baseMap.getCanvas().style.cursor = '';
+      }
+
+      if (!feature) {
+        popup.remove();
+        return;
+      }
+
+      baseMap.getCanvas().style.cursor = 'pointer';
+      hoveredPolygonId = feature.id;
+      if (hoveredPolygonId) {
+        baseMap.setFeatureState({ source: 'countries', id: hoveredPolygonId }, { hover: true });
+      }
+
+      switch (selectedMapType) {
+        case 'ipc': {
+          const countryName = feature.properties.adm0_name;
+          const ipcColorMap = IPCMapOperations.generateColorMap(ipcData!, countries!);
+
+          if (!ipcColorMap[countryName]) {
+            popup.remove();
+            return;
+          }
+
+          const { date_of_analysis, analysis_period, ipc_percent, ipc_popnmbr } = IPCMapOperations.findIpcData(
+            countryName,
+            ipcData!
+          );
+          const formattedPopNum = ipc_popnmbr.toLocaleString('en-US', {
+            useGrouping: true,
+          });
+          const title = `${countryName}`;
+          const body = `Date of analysis: ${date_of_analysis} <br> Validity period: ${analysis_period}`;
+          const conclusion = `${formattedPopNum} people in IPC/CH Phase 3 and above <br> (${ipc_percent}% of people in the analyzed areas)`;
+
+          const popupContent = this.generatePopupContent(title, body, conclusion);
+          popup.setLngLat(e.lngLat).setHTML(popupContent).addTo(baseMap);
+          break;
         }
-        hoveredPolygonId = feature.id;
-        if (hoveredPolygonId) {
-          baseMap.setFeatureState({ source: 'countries', id: hoveredPolygonId }, { hover: true });
-        }
-        const coordinates = e.lngLat;
-        const countryName = feature.properties.adm0_name;
-        console.log('featureÖ ', feature);
-
-        const title = `: ${countryName}`;
-        const body = `Date of analysis: 11/11/2024 \n Validity period: 12/12/122`;
-        const conclusion = `People in IPC/CH Phase 3 and above\n(${5}% of people in the analyzed areas)`;
-
-        const popupContent = this.generatePopupContent(countryName, body, conclusion);
-
-        popup.setLngLat(coordinates).setHTML(popupContent).addTo(baseMap);
+        default:
+          popup.remove();
+          return;
       }
     });
 
     baseMap.on('mouseleave', 'country-fills', () => {
+      baseMap.getCanvas().style.cursor = '';
       if (hoveredPolygonId) {
         baseMap.setFeatureState({ source: 'countries', id: hoveredPolygonId }, { hover: false });
+        hoveredPolygonId = undefined;
       }
-      hoveredPolygonId = undefined;
       popup.remove();
     });
 
@@ -160,7 +183,7 @@ export class MapOperations {
     });
     baseMap.on('mouseup', 'country-fills', (e: any) => {
       if (!isDragging && e.features && (e.features[0] as CountryMapData).properties.interactive) {
-        alert(`You clicked on ${(e.features[0] as CountryMapData).properties.adm0_name}`);
+        // alert(`You clicked on ${(e.features[0] as CountryMapData).properties.adm0_name}`);
       }
     });
   }

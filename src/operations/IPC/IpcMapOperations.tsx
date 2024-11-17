@@ -2,7 +2,7 @@ import { CountryIpcData } from '@/domain/entities/country/CountryIpcData';
 import { CountryMapData, CountryMapDataWrapper } from '@/domain/entities/country/CountryMapData';
 
 export class IPCMapOperations {
-  static fillIpc = (ipcPopulation: number | null): string => {
+  static fillIpcMap = (ipcPopulation: number | null): string => {
     if (ipcPopulation === null) return 'none';
     if (ipcPopulation < 0.1) return '#F6D1C1';
     if (ipcPopulation < 0.5) return '#FC9B7D';
@@ -26,10 +26,14 @@ export class IPCMapOperations {
         const countryName = feature.properties.adm0_name;
         const { ipcPopulation } = feature.properties;
 
-        colorMap[countryName] = IPCMapOperations.fillIpc(ipcPopulation!);
+        colorMap[countryName] = IPCMapOperations.fillIpcMap(ipcPopulation!);
       }
     });
 
     return colorMap;
+  };
+
+  static findIpcData = (countryName: string, ipcData: CountryIpcData[]): CountryIpcData => {
+    return ipcData.find((currentCountry: CountryIpcData) => currentCountry.adm0_name === countryName)!;
   };
 }

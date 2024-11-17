@@ -30,6 +30,7 @@ export default function Map({ countries, disputedAreas }: MapProps) {
     .catch((error) => {
       console.error('Error fetching nutrition data:', error);
     });
+
   return (
     <MapContainer
       center={[21.505, -0.09]}
@@ -51,7 +52,6 @@ export default function Map({ countries, disputedAreas }: MapProps) {
           .filter((c) => c.properties.interactive)
           .map((c) => {
             const isCodeInArray = adm0Codes.includes(c.properties.adm0_id);
-
             return isCodeInArray ? (
               <NutritionChoropleth
                 key={c.properties.adm0_id}

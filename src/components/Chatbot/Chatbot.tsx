@@ -15,8 +15,6 @@ import container from '@/container';
 import {
   CHAT_TITLE,
   CLOSE_SIDE_BAR,
-  DATA_SOURCES,
-  DEFAULT_DATA_SOURCES,
   DEFAULT_PROMPT,
   ENTER_FULL_SCREEN,
   EXIT_FULL_SCREEN,
@@ -106,13 +104,11 @@ export default function HungerMapChatbot() {
       }
     }
     // TODO: get data sources from response later
-    const dataSources = DEFAULT_DATA_SOURCES;
     const updatedChatsWithAI = structuredClone(chats);
     updatedChatsWithAI[currentChatIndex].messages.push({
       id: crypto.randomUUID(),
       content: aiResponse,
       role: SenderRole.ASSISTANT,
-      dataSources,
     });
     setChats(updatedChatsWithAI);
   };
@@ -315,16 +311,6 @@ export default function HungerMapChatbot() {
                             onTypingStart={() => setTypingStatus(currentChatIndex, false)}
                             onTypingComplete={() => onTypingComplete()}
                           />
-                        )}
-                        {message.dataSources && (
-                          <div className="mt-2 text-xs text-gray-600 dark:text-gray-400">
-                            <p className="truncate">{DATA_SOURCES}</p>
-                            <ul className="list-disc pl-4">
-                              {message.dataSources.map((source) => (
-                                <li key={source}>{source}</li>
-                              ))}
-                            </ul>
-                          </div>
                         )}
                       </div>
                     </div>

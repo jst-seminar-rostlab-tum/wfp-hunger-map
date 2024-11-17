@@ -21,25 +21,30 @@ const NutritionChoropleth = ({
     const map = useMap();
     const [regionData, setRegionData] = useState(null);
     const [showStateChoropleth, setShowStateChoropleth] = useState(false);
+    const [selectedCountryId, setSelectedCountryId] = useState(null);
 
     const handleCountryClick = async (feature, bounds) => {
         const countryId = feature.properties.adm0_id;
         if (countryId) {
             try {
                 const regionData = await CountryRepo.getRegionData(countryId);
+                const regionData2 = await CountryRepo.getRegionNutritionData(countryId);
+                console.log("sht2", regionData2.features);
+                setSelectedCountryId(regionData2);
                 if (regionData && regionData.features) {
                     setRegionData({
                         type: "FeatureCollection",
                         features: regionData.features
                     });
                     setShowStateChoropleth(true);
-                    map.fitBounds(bounds);
+                     map.fitBounds(bounds);
                 }
             } catch (error) {
                 console.error("Error fetching country data:", error);
             }
         }
         if (handleClick) handleClick(feature, bounds, map);
+        console.log("value to be given", setSelectedCountryId);
     };
 
     const features = (feature, layer) => {
@@ -63,6 +68,7 @@ const NutritionChoropleth = ({
             <GeoJSON ref={geoJsonRef} style={style} data={data} onEachFeature={features} />
             {showStateChoropleth && regionData && (
                 <StateChoropleth
+                    regionNutri= {selectedCountryId}
                     regionData={regionData}
                     style={{
                         fillColor: '#F9C97C',

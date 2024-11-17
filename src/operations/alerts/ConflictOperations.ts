@@ -1,7 +1,6 @@
 import L, { MarkerCluster } from 'leaflet';
 
 import { Conflict } from '@/domain/entities/alerts/Conflict';
-import { ConflictTypeMap } from '@/domain/entities/alerts/ConflictTypeMap';
 import { ConflictType } from '@/domain/enums/ConflictType';
 import PointLegendContainerItem from '@/domain/props/PointLegendContainerItem';
 
@@ -23,8 +22,8 @@ export default class ConflictOperations {
     }
   }
 
-  static sortConflictsByType(data?: Conflict[]): ConflictTypeMap {
-    const result: ConflictTypeMap = {
+  static sortConflictsByType(data?: Conflict[]): Record<ConflictType, Conflict[]> {
+    const result: Record<ConflictType, Conflict[]> = {
       [ConflictType.BATTLES]: [],
       [ConflictType.PROTESTS]: [],
       [ConflictType.RIOTS]: [],

@@ -41,9 +41,9 @@ export default function TypingText({
      * sets isTyping to false so that dot animation
      * gets cancelled
      */
-    const handleTypingStart = async (): Promise<void> => {
+    const handleTypingStart = (): void => {
       if (onTypingStart) {
-        await onTypingStart(chatIndex, false);
+        onTypingStart(chatIndex, false);
       }
     };
 

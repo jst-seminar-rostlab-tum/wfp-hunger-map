@@ -2,6 +2,7 @@
 
 import Highcharts, { SeriesOptionsType } from 'highcharts';
 import highchartsMore from 'highcharts/highcharts-more';
+import HighchartsReact from 'highcharts-react-official';
 import { useTheme } from 'next-themes';
 
 import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph.ts';
@@ -17,6 +18,8 @@ if (typeof Highcharts === 'object') {
  * Using LineChartOperations, the LineChart component can convert its received data into LineChartData
  * and then generate the chart `Highcharts.Options` object required by the Highcharts component.
  * Two types of options can be created: rendering the LineChart data as a line chart or as a bar chart.
+ *
+ * In addition, several download functionalities are implemented.
  */
 export default class LineChartOperations {
   /**
@@ -341,5 +344,28 @@ export default class LineChartOperations {
         },
       },
     };
+  }
+
+  /**
+   * Trigger download of the given line chart `data` as a json file.
+   */
+  public static downloadDataJSON(data: LineChartData): void {
+    // convert data json object to string and encode as URI
+    const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(data, null, 2))}`;
+    // create a temporary link element and trigger the download
+    const link = document.createElement('a');
+    link.href = jsonString;
+    link.download = 'hunger_map_chart_data.json';
+    link.click();
+  }
+
+  /**
+   * Trigger download of the given line chart `data` as a png file.
+   */
+  public static downloadChartPNG(chart: HighchartsReact.RefObject): void {
+    chart.chart.exportChartLocal({
+      type: 'image/png',
+      filename: 'chart-download',
+    });
   }
 }

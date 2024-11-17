@@ -55,7 +55,6 @@ export function LineChart({
   const CHART_HEIGHT = small ? 12 : 16;
   const ICON_BUTTON_SIZE = small ? 3 : 4;
   const HEADER_PADDING = title ? 3 : 0;
-  const JSON_DOWNLOAD_FILE_NAME = `hunger_map_line_chart_json-${title}.json`;
 
   // convert data to `LineChartData` and build chart options for 'Highcharts' (line and bar chart)
   const lineChartData: LineChartData = LineChartOperations.convertToLineChartData(data);
@@ -74,7 +73,7 @@ export function LineChart({
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
 
   // handling the switch between line and bar chart
-  const switchChartType = () => {
+  const switchChartType = (): void => {
     if (showBarChart) {
       // switch to line chart
       setChartOptions(lineChartOptions);
@@ -84,27 +83,6 @@ export function LineChart({
     // switch to bar chart
     setChartOptions(barChartOptions);
     setShowBarChart(true);
-  };
-
-  // trigger download of the given line chart `data` as a json file
-  const downloadDataJSON = () => {
-    // convert data json object to string and encode as URI
-    const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(data, null, 2))}`;
-    // create a temporary link element and trigger the download
-    const link = document.createElement('a');
-    link.href = jsonString;
-    link.download = JSON_DOWNLOAD_FILE_NAME;
-    link.click();
-  };
-
-  // trigger download of the given line chart `data` as a json file
-  const downloadChartPNG = () => {
-    if (chartRef.current) {
-      chartRef?.current.chart.exportChartLocal({
-        type: 'image/png',
-        filename: 'chart-download',
-      });
-    }
   };
 
   // --------------
@@ -183,12 +161,26 @@ export function LineChart({
               {xAxisSliderButton()}
               {barChartSwitchButton()}
               <Tooltip text="Download Data as JSON">
-                <Button isIconOnly variant="light" size="sm" onPress={downloadDataJSON}>
+                <Button
+                  isIconOnly
+                  variant="light"
+                  size="sm"
+                  onPress={() => {
+                    LineChartOperations.downloadDataJSON(lineChartData);
+                  }}
+                >
                   <DocumentDownload className="h-4 w-4" />
                 </Button>
               </Tooltip>
               <Tooltip text="Download Chart as PNG">
-                <Button isIconOnly variant="light" size="sm" onPress={downloadChartPNG}>
+                <Button
+                  isIconOnly
+                  variant="light"
+                  size="sm"
+                  onPress={() => {
+                    if (chartRef.current) LineChartOperations.downloadChartPNG(chartRef.current);
+                  }}
+                >
                   <GalleryImport className="h-4 w-4" />
                 </Button>
               </Tooltip>

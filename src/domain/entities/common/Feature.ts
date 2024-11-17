@@ -1,7 +1,9 @@
+import { LatLngExpression } from 'leaflet';
+
 import { Geometry } from './Geometry';
 
-export interface Feature<T> {
+export interface Feature<T, U = LatLngExpression[][][]> {
   type: string;
-  geometry: Geometry;
+  geometry: Geometry<U>;
   properties: T;
 }

@@ -9,14 +9,14 @@ import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchange
 import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
 import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
 
-// https://stackoverflow.com/questions/55483079/highcharts-cannot-read-property-parts-globals-js-of-undefined
 if (typeof Highcharts === 'object') {
   highchartsMore(Highcharts); // enables the usage of HighCharts 'arearange'
 }
 
 /**
  * Using LineChartOperations, the LineChart component can convert its received data into LineChartData
- * and then generate the chart options for Highcharts.
+ * and then generate the chart `Highcharts.Options` object required by the Highcharts component.
+ * Two types of options can be created: rendering the LineChart data as a line chart or as a bar chart.
  */
 export default class LineChartOperations {
   /**
@@ -98,8 +98,8 @@ export default class LineChartOperations {
   }
 
   /**
-   * With this static function, the LineChart component can build the HighCharts options,
-   * needed for the HighCharts component, out of a given `LineChartData` instance.
+   * With this static function, the LineChart component can build the HighCharts.Options object
+   * for a line chart, out of a given `LineChartData` instance.
    * It is expected that all line data in `LineChartData.lines` have the same `x` values and provide
    * a `y` value for each `x` value. For example, if one line has values for x=1, x=2, and x=3,
    * the second line must also provide `y` values for these exact `x` values and no more or less.
@@ -110,8 +110,7 @@ export default class LineChartOperations {
     // parsing all given line data
     const series: SeriesOptionsType[] = [];
     let categories: string[] = [];
-    // eslint-disable-next-line no-plusplus
-    for (let i = 0; i < data.lines.length; i++) {
+    for (let i = 0; i < data.lines.length; i += 1) {
       const lineData = data.lines[i];
       // it is assumed that all `x` values are the same and are given for all lines
       // therefore we only have to collect the x Axis categories once
@@ -228,10 +227,9 @@ export default class LineChartOperations {
     };
   }
 
-
   /**
-   * With this static function, the LineChart component can build the HighCharts options,  todo
-   * needed for the HighCharts component, out of a given `LineChartData` instance.
+   * With this static function, the LineChart component can build the HighCharts.Options object
+   * for a bar chart, out of a given `LineChartData` instance.
    * It is expected that all line data in `LineChartData.lines` have the same `x` values and provide
    * a `y` value for each `x` value. For example, if one line has values for x=1, x=2, and x=3,
    * the second line must also provide `y` values for these exact `x` values and no more or less.
@@ -242,8 +240,7 @@ export default class LineChartOperations {
     // parsing all given line data
     const series: SeriesOptionsType[] = [];
     let categories: string[] = [];
-    // eslint-disable-next-line no-plusplus
-    for (let i = 0; i < data.lines.length; i++) {
+    for (let i = 0; i < data.lines.length; i += 1) {
       const lineData = data.lines[i];
       // it is assumed that all `x` values are the same and are given for all lines
       // therefore we only have to collect the x Axis categories once
@@ -251,20 +248,20 @@ export default class LineChartOperations {
         categories = lineData.dataPoints.map((p) => p.x);
       }
 
-      // the first four line colors are fixed; however, they can also be overridden by the `color` property;
+      // the first category colors are fixed; however, they can also be overridden by the `color` property;
       // if more than four lines are rendered the default Highcharts colors will be used
-      let lineColor;
+      let barColor;
       if (lineData.color) {
-        lineColor = lineData.color;
+        barColor = lineData.color;
       } else if (i < this.LINE_COLORS.length) {
-        lineColor = this.LINE_COLORS[i];
+        barColor = this.LINE_COLORS[i];
       }
 
       series.push({
         name: lineData.name,
         type: 'column',
         data: lineData.dataPoints.map((p) => p.y),
-        color: lineColor,
+        color: barColor,
         opacity: lineData.showRange ? 0.7 : 1,
       });
       // checking if area range should be added as well
@@ -274,7 +271,7 @@ export default class LineChartOperations {
           type: 'errorbar',
           data: lineData.dataPoints.map((p) => [p.yRangeMin!, p.yRangeMax!]),
           linkedTo: ':previous',
-          color: lineColor,
+          color: barColor,
         });
       }
     }

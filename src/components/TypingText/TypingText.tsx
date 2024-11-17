@@ -96,6 +96,8 @@ export default function TypingText({
         } else {
           handleFinishedAnimation();
         }
+      } else {
+        setDisplayedText(normalizedText);
       }
     };
 

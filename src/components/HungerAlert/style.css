@@ -10,6 +10,7 @@
   background: #3F3F46;
   z-index: -1;
   animation: pulse-animation 2s infinite ease-out;
+  border: 2px solid #f7b750;
 }
 
 .pulse::after {

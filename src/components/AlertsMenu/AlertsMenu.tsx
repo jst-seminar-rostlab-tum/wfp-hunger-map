@@ -5,13 +5,13 @@ import { useMemo } from 'react';
 
 import { AlertButton } from '@/components/AlertsMenu/AlertButton';
 import { Tooltip } from '@/components/Tooltip/Tooltip';
-import { useSidebar } from '@/domain/contexts/SidebarContext';
+import { useSelectedAlert } from '@/domain/contexts/SelectedAlertContext';
 import { AlertType } from '@/domain/enums/AlertType';
 import { AlertsMenuProps } from '@/domain/props/AlertsMenuProps';
 import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
 
 export function AlertsMenu({ variant }: AlertsMenuProps) {
-  const { isAlertSelected, toggleAlert } = useSidebar();
+  const { isAlertSelected, toggleAlert } = useSelectedAlert();
 
   const isSubAlertClicked = useMemo(
     () => (mainAlert: AlertType) => {

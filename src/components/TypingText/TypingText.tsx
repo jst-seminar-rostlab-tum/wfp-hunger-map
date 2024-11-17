@@ -55,6 +55,7 @@ export default function TypingText({
     const handleFinishedAnimation = (): void => {
       localStorage.setItem(completionKey, 'true');
       localStorage.removeItem(progressKey);
+      onTypingComplete?.();
     };
 
     /**
@@ -105,9 +106,7 @@ export default function TypingText({
     handleTypingStart();
     animateText(currentCharIndex);
 
-    return () => {
-      onTypingComplete?.();
-    };
+    return () => {};
   }, [normalizedText, textID, isUserMessageSent]);
 
   return (

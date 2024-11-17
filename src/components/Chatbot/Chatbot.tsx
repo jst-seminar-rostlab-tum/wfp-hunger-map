@@ -2,14 +2,13 @@
 
 'use client';
 
-import { Button, Card, CardBody, CardFooter, CardHeader, Divider } from '@nextui-org/react';
+import { Button, Card, CardBody, CardFooter, CardHeader, Divider, Tooltip } from '@nextui-org/react';
 import clsx from 'clsx';
 import { CloseCircle, Send2, SidebarLeft, SidebarRight } from 'iconsax-react';
 import { Bot, Maximize2, Minimize2 } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
-import { Tooltip } from '@/components/Tooltip/Tooltip';
 import TypingText from '@/components/TypingText/TypingText';
 import container from '@/container';
 import {
@@ -63,13 +62,18 @@ export default function HungerMapChatbot() {
   };
 
   const startNewChat = (): void => {
-    if (isResponseAnimated) {
-      const newChat: IChat = { id: chats.length + 1, title: `Chat ${chats.length + 1}`, messages: [], isTyping: false };
-      setChats([...chats, newChat]);
-      setCurrentChatIndex(chats.length);
-      if (isMobile) {
-        setIsSidebarOpen(false);
-      }
+    setChats((prevChats) => {
+      const newChat: IChat = {
+        id: prevChats.length + 1,
+        title: `Chat ${prevChats.length + 1}`,
+        messages: [],
+        isTyping: false,
+      };
+      return [...prevChats, newChat];
+    });
+    setCurrentChatIndex((prevIndex) => prevIndex + 1);
+    if (isMobile) {
+      setIsSidebarOpen(false);
     }
   };
 
@@ -109,15 +113,18 @@ export default function HungerMapChatbot() {
     }
     // TODO: get data sources from response later
     const dataSources = DEFAULT_DATA_SOURCES;
-    const updatedChatsWithAI = structuredClone(chats);
-    updatedChatsWithAI[currentChatIndex].messages.push({
-      id: crypto.randomUUID(),
-      content: aiResponse,
-      role: SenderRole.ASSISTANT,
-      dataSources,
+
+    setChats((prevChats) => {
+      const updatedChatsWithAI = structuredClone(prevChats);
+      updatedChatsWithAI[currentChatIndex].messages.push({
+        id: crypto.randomUUID(),
+        content: aiResponse,
+        role: SenderRole.ASSISTANT,
+        dataSources,
+      });
+      updatedChatsWithAI[currentChatIndex].isTyping = false;
+      return updatedChatsWithAI;
     });
-    chats[currentChatIndex].isTyping = false;
-    setChats(updatedChatsWithAI);
   };
 
   /**
@@ -231,13 +238,13 @@ export default function HungerMapChatbot() {
               </div>
               <div className="flex items-center space-x-2">
                 {!isMobile && (
-                  <Tooltip text={isFullScreen ? EXIT_FULL_SCREEN : ENTER_FULL_SCREEN}>
+                  <Tooltip content={isFullScreen ? EXIT_FULL_SCREEN : ENTER_FULL_SCREEN}>
                     <Button variant="light" isIconOnly onClick={toggleFullScreen}>
                       {isFullScreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
                     </Button>
                   </Tooltip>
                 )}
-                <Tooltip text="Close Chat">
+                <Tooltip content="Close Chat">
                   <Button variant="light" isIconOnly onClick={toggleChat}>
                     <CloseCircle className="h-4 w-4" />
                   </Button>
@@ -305,9 +312,9 @@ export default function HungerMapChatbot() {
                           ) : (
                             <TypingText
                               text={message.content}
-                              textID={message.content}
+                              textID={message.id}
                               chatIndex={currentChatIndex}
-                              onTypingStart={() => setTypingStatus(currentChatIndex, false)} // regarding on how double typing animation is fixed
+                              onTypingStart={() => setTypingStatus(currentChatIndex, false)}
                               onTypingComplete={() => {
                                 handleTypingComplete();
                               }}
@@ -353,7 +360,7 @@ export default function HungerMapChatbot() {
                     className="rounded-xl border border-solid border-black bg-chatbotInputArea dark:bg-chatbotInputArea flex-grow px-3 py-2 mr-2 dark:text-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none overflow-hidden"
                     rows={1}
                   />
-                  <Tooltip text="Submit">
+                  <Tooltip content="Submit">
                     <Button type="submit" variant="light" isIconOnly disabled={chats[currentChatIndex].isTyping}>
                       <Send2 className="h-4 w-4" />
                     </Button>

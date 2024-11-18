@@ -9,7 +9,12 @@ import { Tooltip } from '@/components/Tooltip/Tooltip';
 import LineChartModalProps from '@/domain/props/LineChartModalProps';
 import LineChartOperations from '@/operations/charts/LineChartOperations.ts';
 
-
+/**
+ * This component is tied to the `LineChart` component and should not be used independently.
+ * It renders the modal, which can be opened by the user from the `LineChart` to display the chart
+ * in a larger view and access additional functionalities, such as downloading the chart as a PNG.
+ * For more details, please refer to the `LineChart` component.
+ */
 export function LineChartModal({
   title,
   description,
@@ -25,12 +30,11 @@ export function LineChartModal({
   showBarChart,
   setShowBarChart,
 }: LineChartModalProps) {
-
   // referencing the Highcharts chart object (needed for download the chart as a png)
   const chartRef = useRef<HighchartsReact.RefObject | null>(null);
 
-
-  // full screen modal that can be opened if `expandable==true`; offers a larger chart and an additional features (see buttons)
+  // full screen modal by the 'LineChart' component that can be opened if `expandable==true`;
+  // offers a larger chart and an additional features (see buttons)
   return (
     <Modal
       size="5xl"
@@ -124,7 +128,7 @@ export function LineChartModal({
         <ModalFooter>
           {
             // slider to manipulate the plotted x-axis range of the chart; can be disabled via `xAxisSlider`
-            showXAxisSlider ? <> x-Axis slider will be implemented in another issue (todo)</> : null
+            showXAxisSlider ? <> x-Axis slider will be implemented in another issue (F-67)</> : null
           }
         </ModalFooter>
       </ModalContent>

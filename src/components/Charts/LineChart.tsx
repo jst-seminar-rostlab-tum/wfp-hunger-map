@@ -151,7 +151,7 @@ export function LineChart({
         />
         {
           // slider to manipulate the plotted x-axis range of the chart; can be disabled via `xAxisSlider`
-          showXAxisSlider ? <> x-Axis slider will be implemented in another issue (todo)</> : null
+          showXAxisSlider ? <> x-Axis slider will be implemented in another issue (F-67)</> : null
         }
       </div>
 

@@ -1,5 +1,6 @@
-import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
 import Highcharts from 'highcharts';
+
+import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
 
 export default interface LineChartModalProps {
   title?: string;

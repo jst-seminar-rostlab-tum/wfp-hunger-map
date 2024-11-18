@@ -5,6 +5,7 @@ import CustomAccordion from '@/components/Accordions/Accordion';
 import { cardsWrapperClass } from '@/utils/primitives';
 import CustomCard from '@/components/Cards/Card';
 import { CustomButton } from '@/components/Buttons/CustomButton';
+import LegendContainer from '@/components/Legend/LegendContainer';
 
 const StateChoropleth = ({ regionNutri, regionData, style, hoverStyle, handleClick, tooltip }) => {
     const [showAccordion, setShowAccordion] = useState(true);
@@ -91,6 +92,17 @@ const StateChoropleth = ({ regionNutri, regionData, style, hoverStyle, handleCli
         layer.on('mouseout', (e) => e.target.setStyle(dynamicStyle));
     };
     const accordionData = StateChoropleth.getAccordionData(selectedNutrient);
+    const legendItems = [
+        {
+          title: 'Risk of Inadequate Micronutrient Intake',
+          startColor: "#fde2e1",
+          middleColor: '#f88884',
+          endColor: '#f32e27',
+          startLabel: '0%',
+          endLabel: '100%',
+          tooltipInfo: 'Shows the adequacy ratio of nutrient intake.',
+        },
+      ];
 
     return (
         <>
@@ -120,6 +132,9 @@ const StateChoropleth = ({ regionNutri, regionData, style, hoverStyle, handleCli
                     </div>
                 </div>
             )}
+             <div className="absolute bottom-5 right-0 z-50 pr-10">
+                <LegendContainer items={legendItems} />
+            </div>
             <GeoJSON data={regionData} style={dynamicStyle} onEachFeature={onEachFeature} />
         </>
     );

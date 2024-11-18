@@ -22,8 +22,13 @@ export default function HungerAlert({ countryMapData }: HungerAlertProps) {
   );
 
   return (
-    <div className="absolute bottom-0 left-0 z-10 cursor-pointer" style={{ bottom: '17rem', left: '1.2rem' }}>
-      <button className={`${HungerAlertOperations.getPulseClasses()} p-2 text-sm`} onClick={toggleModal} type="button">
+    <div className="absolute bottom-0 left-0 z-10 cursor-pointer" style={{ bottom: '18rem', left: '1.86rem' }}>
+      <button
+        className={`${HungerAlertOperations.getPulseClasses()} p-1 text-sm`}
+        onClick={toggleModal}
+        style={{ width: '4rem', height: '4rem' }}
+        type="button"
+      >
         <p className="text-4xl">{countriesWithHighHunger.length}</p>
       </button>
       <PopupModal

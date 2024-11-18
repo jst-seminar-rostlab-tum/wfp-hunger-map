@@ -2,7 +2,6 @@ import L, { MarkerCluster } from 'leaflet';
 
 import { Conflict } from '@/domain/entities/alerts/Conflict';
 import { ConflictType } from '@/domain/enums/ConflictType';
-import PointLegendContainerItem from '@/domain/props/PointLegendContainerItem';
 
 export default class ConflictOperations {
   static getMarkerColor(conflictType: ConflictType): string {
@@ -49,23 +48,5 @@ export default class ConflictOperations {
       className: '',
       iconSize: L.point(40, 40, true),
     });
-  }
-
-  static generateConflictLegend(): PointLegendContainerItem[] {
-    return [
-      {
-        title: 'Types of conflict',
-        tooltipInfo:
-          'All reported violence and conflicts across Africa, the Middle East, South and South East Asia, Eastern and Southeastern Europe and the Balkans.',
-        records: [
-          { label: ConflictType.BATTLES, color: 'conflictBattle' },
-          { label: ConflictType.CIVIL_VIOLENCE, color: 'conflictCivil' },
-          { label: ConflictType.EXPLOSIONS, color: 'conflictExplosion' },
-          { label: ConflictType.RIOTS, color: 'conflictRiot' },
-          { label: ConflictType.PROTESTS, color: 'conflictProtest' },
-          { label: ConflictType.STRATEGIC, color: 'conflictStrategic' },
-        ],
-      },
-    ];
   }
 }

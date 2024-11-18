@@ -26,6 +26,7 @@ export function HazardLayer() {
             zoomToBoundsOnClick
             maxClusterRadius={60}
             spiderfyOnMaxZoom={false}
+            animate={false}
           >
             {hazardsByType[hazardType].map((hazard) => (
               <HazardMarker key={hazard.create_date + hazard.latitude + hazard.longitude} hazard={hazard} />

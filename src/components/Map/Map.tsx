@@ -21,6 +21,8 @@ export default function Map({ countries, disputedAreas }: MapProps) {
       maxZoom={MAP_MAX_ZOOM}
       maxBoundsViscosity={1.0}
       zoomControl={false}
+      markerZoomAnimation={false}
+      zoomAnimation={false}
       style={{ height: '100%', width: '100%', zIndex: 1 }}
     >
       <AlertContainer />

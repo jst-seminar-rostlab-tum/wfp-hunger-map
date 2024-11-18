@@ -5,10 +5,6 @@ export const DEFAULT_PROMPT = [
   { id: 3, value: "What are WFP's main initiatives to combat hunger?" },
 ];
 
-export const DEFAULT_DATA_SOURCES = ['HungerMap Live', 'WFP Country Reports', 'FAO Statistics'];
-
-export const DATA_SOURCES = 'Data sources:';
-
 export const WELCOME_MESSAGE = 'Welcome to HungerMap ChatBot!';
 
 export const SUB_WELCOME_MESSAGE = 'How can I assist you today?';

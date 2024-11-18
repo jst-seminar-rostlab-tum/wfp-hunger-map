@@ -8,13 +8,16 @@ import OfflineExporting from 'highcharts/modules/offline-exporting';
 import HighchartsReact from 'highcharts-react-official';
 import { Chart, Diagram, Maximize4, Settings } from 'iconsax-react';
 import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { LineChartModal } from '@/components/Charts/LineChartModal';
 import { Tooltip } from '@/components/Tooltip/Tooltip';
 import { LineChartData } from '@/domain/entities/charts/LineChartData';
 import LineChartProps from '@/domain/props/LineChartProps';
 import LineChartOperations from '@/operations/charts/LineChartOperations';
+import { erase } from 'sisteransi';
+import line = erase.line;
+import { Slider } from '@nextui-org/slider';
 
 // initialize the exporting module
 if (typeof Highcharts === 'object') {
@@ -69,6 +72,10 @@ export function LineChart({
   const lineChartData: LineChartData = LineChartOperations.convertToLineChartData(data);
   const lineChartOptions: Highcharts.Options = LineChartOperations.getHighChartLineData(lineChartData, theme);
 
+  // todo descr
+  const xAxisValues: string[] = lineChartData.lines[0]?.dataPoints.map((d) => d.x) || [];
+  const [selectedXAxisRange, setSelectedXAxisRange] = useState([0, xAxisValues.length - 1]);
+
   // controlling if a line or bar chart is rendered; line chart is the default
   const [showBarChart, setShowBarChart] = useState(false);
   const [chartOptions, setChartOptions] = useState(lineChartOptions);
@@ -82,6 +89,15 @@ export function LineChart({
       : LineChartOperations.getHighChartLineData(lineChartData, theme);
     setChartOptions(newChartOptions);
   }, [showBarChart, theme]);
+
+  // todo descr
+  const changeSelectedXAxisRange = (range: number[]) => {
+    setSelectedXAxisRange(range);
+    const newChartOptions = showBarChart
+      ? LineChartOperations.getHighChartBarData(lineChartData, theme)
+      : LineChartOperations.getHighChartLineData(lineChartData, theme, range[0], range[1]);
+    setChartOptions(newChartOptions);
+  }
 
   return (
     <>
@@ -151,7 +167,16 @@ export function LineChart({
         />
         {
           // slider to manipulate the plotted x-axis range of the chart; can be disabled via `xAxisSlider`
-          showXAxisSlider ? <> x-Axis slider will be implemented in another issue (F-67)</> : null
+          showXAxisSlider ? (
+            <Slider
+              minValue={0}
+              maxValue={xAxisValues.length - 1}
+              step={1}
+              value={selectedXAxisRange}
+              onChange={(e) => changeSelectedXAxisRange(e as number[])}
+              className="max-w-md"
+            />
+          ) : null
         }
       </div>
 

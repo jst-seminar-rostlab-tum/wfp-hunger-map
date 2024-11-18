@@ -106,8 +106,14 @@ export default class LineChartOperations {
    * It is expected that all line data in `LineChartData.lines` have the same `x` values and provide
    * a `y` value for each `x` value. For example, if one line has values for x=1, x=2, and x=3,
    * the second line must also provide `y` values for these exact `x` values and no more or less.
+   * // todo params
    */
-  public static getHighChartLineData(data: LineChartData, theme: string | undefined): Highcharts.Options {
+  public static getHighChartLineData(
+    data: LineChartData,
+    theme: string | undefined,
+    xAxisSelectedMinIdx?: number,
+    xAxisSelectedMaxIdx?: number
+  ): Highcharts.Options {
     // parsing all given line data
     const series: SeriesOptionsType[] = [];
     let categories: string[] = [];
@@ -117,6 +123,9 @@ export default class LineChartOperations {
       // therefore we only have to collect the x Axis categories once
       if (i === 0) {
         categories = lineData.dataPoints.map((p) => p.x);
+        if (xAxisSelectedMinIdx && xAxisSelectedMaxIdx) { // todo descr
+          categories = categories.slice(xAxisSelectedMinIdx, xAxisSelectedMaxIdx + 1);
+        }
       }
 
       // the first four line colors are fixed; however, they can also be overridden by the `color` property;
@@ -128,18 +137,29 @@ export default class LineChartOperations {
         lineColor = this.LINE_COLORS[i];
       }
 
+      // todo line data calculations descr
+      let seriesData = lineData.dataPoints.map((p) => p.y);
+      if (xAxisSelectedMinIdx && xAxisSelectedMaxIdx) { // todo descr
+        seriesData = seriesData.slice(xAxisSelectedMinIdx, xAxisSelectedMaxIdx + 1);
+      }
       series.push({
         name: lineData.name,
         type: data.roundLines ? 'spline' : 'line',
-        data: lineData.dataPoints.map((p) => p.y),
+        data: seriesData,
         color: lineColor,
       });
       // checking if area range should be added as well
+
       if (lineData.showRange) {
+        // todo line data calculations descr
+        let areaSeriesData = lineData.dataPoints.map((p) => [p.yRangeMin!, p.yRangeMax!]);
+        if (xAxisSelectedMinIdx && xAxisSelectedMaxIdx) { // todo descr
+          areaSeriesData = areaSeriesData.slice(xAxisSelectedMinIdx, xAxisSelectedMaxIdx + 1);
+        }
         series.push({
           name: `${lineData.name} - range`,
           type: 'arearange', // Area range type
-          data: lineData.dataPoints.map((p) => [p.yRangeMin!, p.yRangeMax!]),
+          data: areaSeriesData,
           color: lineColor,
           linkedTo: ':previous',
         });

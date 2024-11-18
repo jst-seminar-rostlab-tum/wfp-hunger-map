@@ -6,7 +6,7 @@ import LegendContainer from '@/components/Legend/LegendContainer';
 import { MAP_MAX_ZOOM } from '@/domain/constant/Map';
 import { ConflictType } from '@/domain/enums/ConflictType';
 import { useConflictQuery } from '@/domain/hooks/alertHooks';
-import ConflictOperations from '@/operations/ConflictOperations';
+import ConflictOperations from '@/operations/alerts/ConflictOperations';
 import GeometryOperations from '@/operations/GeometryOperations';
 import { getTailwindColor } from '@/utils/tailwind-util';
 

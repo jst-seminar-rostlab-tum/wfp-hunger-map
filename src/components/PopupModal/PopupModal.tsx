@@ -19,12 +19,12 @@ export default function PopupModal({
       onOpenChange={toggleModal}
       classNames={{
         backdrop: 'bg-gradient-to-t from-zinc-900 to-zinc-900/10 backdrop-opacity-20',
-        base: `p-10 ${modalHeight}`,
+        base: `xl:p-10 lg:p-8 md:p-6 sm:p-4  ${modalHeight}`,
       }}
       size={modalSize}
     >
       <ModalContent>
-        <ModalHeader className="text-3xl font-bold mb-2">{modalTitle}</ModalHeader>
+        <ModalHeader className="xl:text-3xl text-2xl font-bold justify-center">{modalTitle}</ModalHeader>
         <ModalBody>{children}</ModalBody>
       </ModalContent>
     </Modal>

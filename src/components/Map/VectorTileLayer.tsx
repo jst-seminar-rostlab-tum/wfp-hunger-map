@@ -26,7 +26,9 @@ export default function VectorTileLayer({ countries, disputedAreas }: MapProps) 
     MapOperations.setMapInteractionFunctionality(baseMap);
     MapOperations.synchronizeLeafletMapbox(baseMap, mapContainer, context);
     /* To add when CORS issue is solved
-    MapOperations.addFCSFunctionality(baseMap, selectedMapType);
+    MapOperations.addRainfallLayer(baseMap, selectedMapType);
+    MapOperations.addVegetationLayer(baseMap, selectedMapType);
+    MapOperations.addFCSLayer(baseMap, selectedMapType);
      */
 
     return () => {

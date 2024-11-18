@@ -10,7 +10,6 @@ import StateChoropleth from './NutritionStateLayer';
 const CountryRepo = new CountryRepositoryImpl();
 
 const NutritionChoropleth = ({
-    view,
     data,
     style,
     handleClick,
@@ -29,7 +28,6 @@ const NutritionChoropleth = ({
             try {
                 const regionData = await CountryRepo.getRegionData(countryId);
                 const regionData2 = await CountryRepo.getRegionNutritionData(countryId);
-                console.log("sht2", regionData2.features);
                 setSelectedCountryId(regionData2);
                 if (regionData && regionData.features) {
                     setRegionData({
@@ -44,7 +42,6 @@ const NutritionChoropleth = ({
             }
         }
         if (handleClick) handleClick(feature, bounds, map);
-        console.log("value to be given", setSelectedCountryId);
     };
 
     const features = (feature, layer) => {
@@ -70,15 +67,9 @@ const NutritionChoropleth = ({
                 <StateChoropleth
                     regionNutri= {selectedCountryId}
                     regionData={regionData}
-                    style={{
-                        fillColor: '#F9C97C',
-                        color: '#000',
-                        weight: 1,
-                        fillOpacity: 0.6,
-                    }}
                     hoverStyle={{
-                        fillColor: '#FFD700',
-                        fillOpacity: 0.8,
+                        fillColor: '#3F3F46',
+                        fillOpacity: 1,
                     }}
                     handleClick={(feature) => console.log("State clicked:", feature)}
                     tooltip={{
@@ -97,7 +88,6 @@ NutritionChoropleth.propTypes = {
     hoverStyle: PropTypes.func,
     handleClick: PropTypes.func,
     onEachFeature: PropTypes.func,
-    onFeatureMouseOver: PropTypes.func,
     tooltip: PropTypes.shape({
         className: PropTypes.string,
         render: PropTypes.func,
@@ -108,7 +98,6 @@ NutritionChoropleth.defaultProps = {
     style: () => ({}),
     hoverStyle: null,
     handleClick: () => {},
-    onFeatureMouseOver: () => {},
 };
 
 export default NutritionChoropleth;

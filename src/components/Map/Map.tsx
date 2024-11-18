@@ -56,7 +56,6 @@ export default function Map({ countries, disputedAreas }: MapProps) {
               <NutritionChoropleth
                 key={c.properties.adm0_id}
                 data={c}
-                view="nutritionOverview"
                 style={() => ({
                   color: '#fff',
                   weight: 1,
@@ -69,7 +68,6 @@ export default function Map({ countries, disputedAreas }: MapProps) {
                 onEachFeature={(feature, layer) => {
                   layer.bindTooltip(feature.properties.adm0_name, { sticky: true });
                 }}
-                onFeatureMouseOver={() => {}}
               />
             ) : null;
           })}

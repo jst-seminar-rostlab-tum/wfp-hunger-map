@@ -6,11 +6,14 @@ import { cardsWrapperClass } from '@/utils/primitives';
 import CustomCard from '@/components/Cards/Card';
 import { CustomButton } from '@/components/Buttons/CustomButton';
 import LegendContainer from '@/components/Legend/LegendContainer';
+import { useTheme } from 'next-themes';
 
-const StateChoropleth = ({ regionNutri, regionData, style, hoverStyle, handleClick, tooltip }) => {
+const StateChoropleth = ({ regionNutri, regionData, hoverStyle, handleClick, tooltip }) => {
     const [showAccordion, setShowAccordion] = useState(true);
     const [selectedNutrient, setSelectedNutrient] = useState('mimi_simple');
-    const layersRef = useRef([]); // Store references to all layers
+    const layersRef = useRef([]); 
+    const { theme } = useTheme();
+    const accordionImage = theme === 'dark' ? '/Images/Micronutrients.svg' : '/Images/MicronutrientsDark.svg';
 
     useEffect(() => {
         layersRef.current.forEach((layer) => {
@@ -25,7 +28,7 @@ const StateChoropleth = ({ regionNutri, regionData, style, hoverStyle, handleCli
                 va_ai: 'Vitamin A',
                 vb12_ai: 'Vitamin B12',
                 zn_ai: 'Zinc',
-                mimi_simple: 'Adequacy Ratio',
+                mimi_simple: 'Mean Adequacy Ratio',
             };
             const nutrientLabel = nutrientLabels[selectedNutrient] || 'Unknown Nutrient';
             const tooltipContent = `
@@ -39,7 +42,7 @@ const StateChoropleth = ({ regionNutri, regionData, style, hoverStyle, handleCli
 
     const formatNutrientValue = (value) => {
         if (value === null || value === undefined) return 'N/A';
-        return `${value.toFixed(1)}%`; // Format value with one decimal place and add '%'
+        return `${value.toFixed(1)}%`;
     };
 
     const dynamicStyle = (feature) => {
@@ -79,7 +82,7 @@ const StateChoropleth = ({ regionNutri, regionData, style, hoverStyle, handleCli
             va_ai: 'Vitamin A',
             vb12_ai: 'Vitamin B12',
             zn_ai: 'Zinc',
-            mimi_simple: 'Adequacy Ratio',
+            mimi_simple: 'Mean Adequacy Ratio',
         };
         const nutrientLabel = nutrientLabels[selectedNutrient] || 'Unknown Nutrient';
 
@@ -91,16 +94,16 @@ const StateChoropleth = ({ regionNutri, regionData, style, hoverStyle, handleCli
         layer.on('mouseover', (e) => e.target.setStyle(hoverStyle));
         layer.on('mouseout', (e) => e.target.setStyle(dynamicStyle));
     };
-    const accordionData = StateChoropleth.getAccordionData(selectedNutrient);
+    const accordionData = StateChoropleth.getAccordionData(selectedNutrient, accordionImage);
     const legendItems = [
         {
           title: 'Risk of Inadequate Micronutrient Intake',
-          startColor: "#fde2e1",
-          middleColor: '#f88884',
-          endColor: '#f32e27',
+          startColor: '#345d34',
+          endColor: '#fa190e',
           startLabel: '0%',
           endLabel: '100%',
-          tooltipInfo: 'Shows the adequacy ratio of nutrient intake.',
+          middleColor: '#ea6a2c',
+          tooltipInfo: 'Shows the inadequate ratio of nutrient intake.',
         },
       ];
 
@@ -112,7 +115,7 @@ const StateChoropleth = ({ regionNutri, regionData, style, hoverStyle, handleCli
                         <CustomAccordion items={accordionData} />
                         <div className="mt-4 grid grid-cols-2 gap-4 justify-items-center">
                             {[
-                                { label: 'Adequacy Ratio', key: 'mimi_simple' },
+                                { label: 'Mean Adequacy Ratio', key: 'mimi_simple' },
                                 { label: 'Folate', key: 'fol_ai' },
                                 { label: 'Iron', key: 'fe_ai' },
                                 { label: 'Zinc', key: 'zn_ai' },
@@ -140,14 +143,14 @@ const StateChoropleth = ({ regionNutri, regionData, style, hoverStyle, handleCli
     );
 };
 
-StateChoropleth.getAccordionData = function (selectedNutrient) {
+StateChoropleth.getAccordionData = function (selectedNutrient, accordionImage) {
     const nutrientLabels = {
         fe_ai: 'Iron',
         fol_ai: 'Folate',
         va_ai: 'Vitamin A',
         vb12_ai: 'Vitamin B12',
         zn_ai: 'Zinc',
-        mimi_simple: 'Adequacy Ratio',
+        mimi_simple: 'Mean Adequacy Ratio',
     };
 
 
@@ -160,7 +163,7 @@ StateChoropleth.getAccordionData = function (selectedNutrient) {
                 <div className={cardsWrapperClass}>
                     <CustomCard
                         title="Inadequate Micronutrient Intake"
-                        content={[{ imageSrc: '/Images/Micronutrients.svg', text: selectedLabel, altText: 'Icon' }]}
+                        content={[{ imageSrc: accordionImage, text: selectedLabel, altText: 'Icon' }]}
                     />
                 </div>
             ),
@@ -171,7 +174,6 @@ StateChoropleth.getAccordionData = function (selectedNutrient) {
 StateChoropleth.propTypes = {
     regionNutri: PropTypes.object.isRequired,
     regionData: PropTypes.object.isRequired,
-    style: PropTypes.object,
     hoverStyle: PropTypes.object,
     handleClick: PropTypes.func,
     tooltip: PropTypes.shape({
@@ -181,7 +183,6 @@ StateChoropleth.propTypes = {
 };
 
 StateChoropleth.defaultProps = {
-    style: {},
     hoverStyle: {},
     handleClick: () => {},
 };

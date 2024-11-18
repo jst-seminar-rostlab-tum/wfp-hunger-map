@@ -5,11 +5,10 @@ import { GeoJSON, useMap } from 'react-leaflet';
 
 import container from '@/container';
 import { CountryData } from '@/domain/entities/country/CountryData';
+import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data';
 import CountryRepository from '@/domain/repositories/CountryRepository';
-import { cardsWrapperClass } from '@/utils/primitives';
 
-import CustomAccordion from '../Accordions/Accordion';
-import CustomCard from '../Cards/Card';
+import FcsAccordion from './FcsAccordion';
 
 interface ChoroplethProps {
   data: FeatureCollection<Geometry, GeoJsonProperties>;
@@ -23,17 +22,24 @@ function Choropleth({ data, style, hoverStyle }: ChoroplethProps) {
   const map = useMap();
   const [selectedCountryId, setSelectedCountryId] = useState<number | undefined>();
   const [countryData, setCountryData] = useState<CountryData | undefined>();
+  const [countryIso3Data, setCountryIso3Data] = useState<CountryIso3Data | undefined>();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleCountryClick = async (feature: Feature<Geometry, GeoJsonProperties>, bounds: L.LatLngBounds) => {
     map.fitBounds(bounds);
     setSelectedCountryId(feature.properties?.adm0_id);
-    // added
+    setLoading(true);
     if (feature.properties?.adm0_id) {
       try {
         const newCountryData = await container
           .resolve<CountryRepository>('CountryRepository')
           .getCountryData(feature.properties.adm0_id);
         setCountryData(newCountryData);
+        const newCountryIso3Data = await container
+          .resolve<CountryRepository>('CountryRepository')
+          .getCountryIso3Data(feature.properties.iso3);
+        setCountryIso3Data(newCountryIso3Data);
+        setLoading(false);
       } catch (error) {
         console.error(error);
       }
@@ -41,7 +47,7 @@ function Choropleth({ data, style, hoverStyle }: ChoroplethProps) {
   };
 
   const onEachFeature = (feature: Feature<Geometry, GeoJsonProperties>, layer: L.Layer) => {
-    const pathLayer = layer as L.Path; // Explicitly cast `layer` to `L.Path`
+    const pathLayer = layer as L.Path;
 
     pathLayer.on({
       mouseover: () => {
@@ -82,54 +88,8 @@ function Choropleth({ data, style, hoverStyle }: ChoroplethProps) {
                     selectedCountryId={selectedCountryId}
                 />
             )} */}
-      {selectedCountryId && countryData && (
-        <div className="absolute w-[350px] left-[108px] top-4 z-9999">
-          <CustomAccordion
-            items={[
-              {
-                title: 'Food Security',
-                iconSrc: '/Images/InfoIcon.svg',
-                content: (
-                  <div className={cardsWrapperClass}>
-                    <CustomCard
-                      title="Population"
-                      content={[
-                        {
-                          imageSrc: '/Images/Population.svg',
-                          text: countryData?.population ? `${countryData.population.toFixed(2)} M` : 'N/A',
-                          altText: 'Population Icon',
-                        },
-                      ]}
-                    />
-                    <CustomCard
-                      title="People with insufficient food consumption"
-                      content={[
-                        {
-                          imageSrc: '/Images/FoodConsumption.svg',
-                          text: countryData?.fcs ? `${countryData.fcs.toFixed(2)} M` : 'N/A',
-                          altText: 'Population Icon',
-                        },
-                        {
-                          imageSrc: '/Images/ArrowRed.svg',
-                          // TODO plus minus depending on the value
-                          text: countryData?.fcsMinus1 ? `- ${countryData.fcsMinus1.toFixed(2)} M` : 'N/A',
-                          timeText: '1 Months ago',
-                          altText: 'Icon',
-                        },
-                        {
-                          imageSrc: '/Images/ArrowGreen.svg',
-                          text: countryData?.fcsMinus3 ? `- ${countryData.fcsMinus3.toFixed(2)} M` : 'N/A',
-                          timeText: '3 Month ago',
-                          altText: 'Other Icon',
-                        },
-                      ]}
-                    />
-                  </div>
-                ),
-              },
-            ]}
-          />
-        </div>
+      {selectedCountryId && (
+        <FcsAccordion countryData={countryData} countryIso3Data={countryIso3Data} loading={loading} />
       )}
     </div>
   );

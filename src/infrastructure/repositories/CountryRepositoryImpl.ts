@@ -1,3 +1,5 @@
+import { FeatureCollection } from 'geojson';
+
 import { AdditionalCountryData } from '@/domain/entities/country/AdditionalCountryData';
 import { CountryData } from '@/domain/entities/country/CountryData';
 import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data';
@@ -35,5 +37,14 @@ export default class CountryRepositoryImpl implements CountryRepository {
   async getRegionIpcData(countryId: number): Promise<RegionIpc> {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/adm0/${countryId}/ipc.geojson`);
     return response.json();
+  }
+
+  async getCountryGeoJSON(countryName: string): Promise<FeatureCollection> {
+    const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
+    const response = await fetch(
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${countryName}.json?access_token=${mapboxToken}&types=country`
+    );
+    const data = await response.json();
+    return data.features[0];
   }
 }

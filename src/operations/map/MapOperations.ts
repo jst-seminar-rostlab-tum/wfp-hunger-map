@@ -1,16 +1,21 @@
 import { LeafletContextInterface } from '@react-leaflet/core';
+import * as turf from '@turf/turf';
 import { FeatureCollection } from 'geojson';
 import mapboxgl from 'mapbox-gl';
 import { RefObject } from 'react';
 
+import container from '@/container';
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 import { SelectedCountry } from '@/domain/entities/country/SelectedCountry';
 import { MapColorsType } from '@/domain/entities/map/MapColorsType.ts';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
 import { MapProps } from '@/domain/props/MapProps';
+import CountryRepository from '@/domain/repositories/CountryRepository';
 import { getColors } from '@/styles/MapColors.ts';
 
 export class MapOperations {
+  static countryRepository: CountryRepository = container.resolve<CountryRepository>('CountryRepository');
+
   static createMapboxMap(
     isDark: boolean,
     { countries }: MapProps,
@@ -147,10 +152,10 @@ export class MapOperations {
       baseMap.setMinZoom(context.map.getMinZoom() - 1);
     };
 
-    const container = context.layerContainer || context.map;
+    const layerContainer = context.layerContainer || context.map;
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
-    const leafletMap = container.getContainer();
+    const leafletMap = layerContainer.getContainer();
     leafletMap.appendChild(mapContainer.current);
 
     baseMap.setZoom(context.map.getZoom());
@@ -215,13 +220,15 @@ export class MapOperations {
     });
   }
 
-  static zoomToCountry(baseMap: mapboxgl.Map, country: SelectedCountry | null) {
-    // TODO: try getting bounds data for dynamic zooming via mapbox
+  static async zoomToCountry(baseMap: mapboxgl.Map, country: SelectedCountry | null) {
     if (country) {
-      baseMap.flyTo({
-        center: [country.coordinates.longitude, country.coordinates.latitude],
-        zoom: 4,
+      const countryGeoJSON = await MapOperations.countryRepository.getCountryGeoJSON(country.name);
+      const bbox = turf.bbox(countryGeoJSON);
+      const adjustedBbox: [number, number, number, number] = [bbox[0], bbox[1], bbox[2], bbox[3]];
+
+      baseMap.fitBounds(adjustedBbox, {
         padding: 20,
+        duration: 1000,
         essential: true,
       });
     }

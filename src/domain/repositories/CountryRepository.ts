@@ -1,3 +1,5 @@
+import { FeatureCollection } from 'geojson';
+
 import { AdditionalCountryData } from '../entities/country/AdditionalCountryData';
 import { CountryData } from '../entities/country/CountryData';
 import { CountryIso3Data } from '../entities/country/CountryIso3Data';
@@ -32,4 +34,10 @@ export default interface CountryRepository {
    * @param countryId
    */
   getRegionIpcData(countryId: number): Promise<RegionIpc>;
+
+  /**
+   * Returns the geoJSON data for a country
+   * @param countryName
+   */
+  getCountryGeoJSON(countryName: string): Promise<FeatureCollection>;
 }

@@ -7,6 +7,7 @@ import type { ThemeProviderProps } from 'next-themes/dist/types.d.ts';
 import * as React from 'react';
 
 import { SelectedAlertProvider } from '@/domain/contexts/SelectedAlertContext';
+import { SelectedCountryProvider } from '@/domain/contexts/SelectedCountryContext';
 import { SelectedMapProvider } from '@/domain/contexts/SelectedMapContext';
 import { SidebarProvider } from '@/domain/contexts/SidebarContext';
 
@@ -23,7 +24,9 @@ export function Providers({ children, themeProps }: ProvidersProps) {
       <NextThemesProvider defaultTheme="system" {...themeProps}>
         <SidebarProvider>
           <SelectedMapProvider>
-            <SelectedAlertProvider>{children}</SelectedAlertProvider>
+            <SelectedAlertProvider>
+              <SelectedCountryProvider>{children}</SelectedCountryProvider>
+            </SelectedAlertProvider>
           </SelectedMapProvider>
         </SidebarProvider>
       </NextThemesProvider>

@@ -1,7 +1,9 @@
+import { SelectedCountry } from '@/domain/entities/country/SelectedCountry';
 import { SidebarAlertType } from '@/domain/entities/sidebar/SidebarAlertType';
 import { SidebarMapType } from '@/domain/entities/sidebar/SidebarMapType';
 import { AlertType } from '@/domain/enums/AlertType';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight';
+import { GlobalDataRepository } from '@/domain/repositories/GlobalDataRepository';
 
 export class SidebarOperations {
   public static getSidebarMapTypes(): SidebarMapType[] {
@@ -62,5 +64,20 @@ export class SidebarOperations {
 
   public static hasSubalerts(item: SidebarAlertType): item is SidebarAlertType & { subalerts: SidebarAlertType[] } {
     return 'subalerts' in item;
+  }
+
+  public static async fetchCountries(globalRepo: GlobalDataRepository): Promise<SelectedCountry[]> {
+    try {
+      const countryData = await globalRepo.getIpcData(); // TBD: get countries from another request ?
+      return countryData.map((country) => ({
+        name: country.adm0_name,
+        coordinates: {
+          longitude: country.longitude,
+          latitude: country.latitude,
+        },
+      }));
+    } catch {
+      return [];
+    }
   }
 }

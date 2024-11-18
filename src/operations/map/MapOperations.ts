@@ -4,6 +4,7 @@ import mapboxgl from 'mapbox-gl';
 import { RefObject } from 'react';
 
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
+import { SelectedCountry } from '@/domain/entities/country/SelectedCountry';
 import { MapColorsType } from '@/domain/entities/map/MapColorsType.ts';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
 import { MapProps } from '@/domain/props/MapProps';
@@ -86,8 +87,12 @@ export class MapOperations {
     });
   }
 
-  static setMapInteractionFunctionality(baseMap: mapboxgl.Map): void {
+  static setMapInteractionFunctionality(
+    baseMap: mapboxgl.Map,
+    setSelectedCountry: (country: SelectedCountry | null) => void
+  ): void {
     let hoveredPolygonId: string | number | undefined;
+    let isDragging = false;
 
     baseMap.on('mousemove', 'country-fills', (e) => {
       if (e.features && e.features.length > 0 && (e.features[0] as unknown as CountryMapData).properties.interactive) {
@@ -108,7 +113,6 @@ export class MapOperations {
       hoveredPolygonId = undefined;
     });
 
-    let isDragging = false;
     baseMap.on('mousedown', () => {
       isDragging = false;
     });
@@ -119,7 +123,13 @@ export class MapOperations {
 
     baseMap.on('mouseup', 'country-fills', (e) => {
       if (!isDragging && e.features && (e.features[0] as unknown as CountryMapData).properties.interactive) {
-        alert(`You clicked on ${(e.features[0] as unknown as CountryMapData).properties.adm0_name}`);
+        const feature = e.features[0] as unknown as CountryMapData;
+        const country = {
+          name: feature.properties.adm0_name,
+          coordinates: { longitude: e.lngLat.lng, latitude: e.lngLat.lat },
+        };
+        setSelectedCountry(country);
+        MapOperations.zoomToCountry(baseMap, country);
       }
     });
   }
@@ -203,5 +213,17 @@ export class MapOperations {
         paint: {},
       });
     });
+  }
+
+  static zoomToCountry(baseMap: mapboxgl.Map, country: SelectedCountry | null) {
+    // TODO: try getting bounds data for dynamic zooming via mapbox
+    if (country) {
+      baseMap.flyTo({
+        center: [country.coordinates.longitude, country.coordinates.latitude],
+        zoom: 4,
+        padding: 20,
+        essential: true,
+      });
+    }
   }
 }

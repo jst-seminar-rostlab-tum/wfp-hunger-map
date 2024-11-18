@@ -123,7 +123,8 @@ export default class LineChartOperations {
       // therefore we only have to collect the x Axis categories once
       if (i === 0) {
         categories = lineData.dataPoints.map((p) => p.x);
-        if (xAxisSelectedMinIdx && xAxisSelectedMaxIdx) { // todo descr
+        if (xAxisSelectedMinIdx && xAxisSelectedMaxIdx) {
+          // todo descr
           categories = categories.slice(xAxisSelectedMinIdx, xAxisSelectedMaxIdx + 1);
         }
       }
@@ -139,7 +140,8 @@ export default class LineChartOperations {
 
       // todo line data calculations descr
       let seriesData = lineData.dataPoints.map((p) => p.y);
-      if (xAxisSelectedMinIdx && xAxisSelectedMaxIdx) { // todo descr
+      if (xAxisSelectedMinIdx && xAxisSelectedMaxIdx) {
+        // todo descr
         seriesData = seriesData.slice(xAxisSelectedMinIdx, xAxisSelectedMaxIdx + 1);
       }
       series.push({
@@ -153,7 +155,8 @@ export default class LineChartOperations {
       if (lineData.showRange) {
         // todo line data calculations descr
         let areaSeriesData = lineData.dataPoints.map((p) => [p.yRangeMin!, p.yRangeMax!]);
-        if (xAxisSelectedMinIdx && xAxisSelectedMaxIdx) { // todo descr
+        if (xAxisSelectedMinIdx && xAxisSelectedMaxIdx) {
+          // todo descr
           areaSeriesData = areaSeriesData.slice(xAxisSelectedMinIdx, xAxisSelectedMaxIdx + 1);
         }
         series.push({
@@ -255,7 +258,12 @@ export default class LineChartOperations {
    * a `y` value for each `x` value. For example, if one line has values for x=1, x=2, and x=3,
    * the second line must also provide `y` values for these exact `x` values and no more or less.
    */
-  public static getHighChartBarData(data: LineChartData, theme: string | undefined): Highcharts.Options {
+  public static getHighChartBarData(
+    data: LineChartData,
+    theme: string | undefined,
+    xAxisSelectedMinIdx?: number,
+    xAxisSelectedMaxIdx?: number
+  ): Highcharts.Options {
     // parsing all given line data
     const series: SeriesOptionsType[] = [];
     let categories: string[] = [];
@@ -265,6 +273,10 @@ export default class LineChartOperations {
       // therefore we only have to collect the x Axis categories once
       if (i === 0) {
         categories = lineData.dataPoints.map((p) => p.x);
+        if (xAxisSelectedMinIdx && xAxisSelectedMaxIdx) {
+          // todo descr
+          categories = categories.slice(xAxisSelectedMinIdx, xAxisSelectedMaxIdx + 1);
+        }
       }
 
       // the first category colors are fixed; however, they can also be overridden by the `color` property;
@@ -276,19 +288,29 @@ export default class LineChartOperations {
         barColor = this.LINE_COLORS[i];
       }
 
+      let seriesData = lineData.dataPoints.map((p) => p.y);
+      if (xAxisSelectedMinIdx && xAxisSelectedMaxIdx) {
+        // todo descr
+        seriesData = seriesData.slice(xAxisSelectedMinIdx, xAxisSelectedMaxIdx + 1);
+      }
       series.push({
         name: lineData.name,
         type: 'column',
-        data: lineData.dataPoints.map((p) => p.y),
+        data: seriesData,
         color: barColor,
         opacity: lineData.showRange ? 0.7 : 1,
       });
       // checking if area range should be added as well
       if (lineData.showRange) {
+        let areaSeriesData = lineData.dataPoints.map((p) => [p.yRangeMin!, p.yRangeMax!]);
+        if (xAxisSelectedMinIdx && xAxisSelectedMaxIdx) {
+          // todo descr
+          areaSeriesData = areaSeriesData.slice(xAxisSelectedMinIdx, xAxisSelectedMaxIdx + 1);
+        }
         series.push({
           name: `${lineData.name} - range`,
           type: 'errorbar',
-          data: lineData.dataPoints.map((p) => [p.yRangeMin!, p.yRangeMax!]),
+          data: areaSeriesData,
           linkedTo: ':previous',
           color: barColor,
         });

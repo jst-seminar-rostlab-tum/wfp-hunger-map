@@ -9,13 +9,13 @@ import HighchartsReact from 'highcharts-react-official';
 import { Chart, Diagram, Maximize4, Settings } from 'iconsax-react';
 import { useTheme } from 'next-themes';
 import { useCallback, useEffect, useState } from 'react';
+import { erase } from 'sisteransi';
 
 import { LineChartModal } from '@/components/Charts/LineChartModal';
 import { Tooltip } from '@/components/Tooltip/Tooltip';
 import { LineChartData } from '@/domain/entities/charts/LineChartData';
 import LineChartProps from '@/domain/props/LineChartProps';
 import LineChartOperations from '@/operations/charts/LineChartOperations';
-import { erase } from 'sisteransi';
 import line = erase.line;
 import { Slider } from '@nextui-org/slider';
 
@@ -83,21 +83,13 @@ export function LineChart({
   const [showXAxisSlider, setShowXAxisSlider] = useState(false);
 
   // handling the line and bar chart switch and the theme switch
+  // todo descr slider
   useEffect(() => {
     const newChartOptions = showBarChart
-      ? LineChartOperations.getHighChartBarData(lineChartData, theme)
-      : LineChartOperations.getHighChartLineData(lineChartData, theme);
+      ? LineChartOperations.getHighChartBarData(lineChartData, theme, selectedXAxisRange[0], selectedXAxisRange[1])
+      : LineChartOperations.getHighChartLineData(lineChartData, theme, selectedXAxisRange[0], selectedXAxisRange[1]);
     setChartOptions(newChartOptions);
-  }, [showBarChart, theme]);
-
-  // todo descr
-  const changeSelectedXAxisRange = (range: number[]) => {
-    setSelectedXAxisRange(range);
-    const newChartOptions = showBarChart
-      ? LineChartOperations.getHighChartBarData(lineChartData, theme)
-      : LineChartOperations.getHighChartLineData(lineChartData, theme, range[0], range[1]);
-    setChartOptions(newChartOptions);
-  }
+  }, [showBarChart, theme, selectedXAxisRange]);
 
   return (
     <>
@@ -168,14 +160,24 @@ export function LineChart({
         {
           // slider to manipulate the plotted x-axis range of the chart; can be disabled via `xAxisSlider`
           showXAxisSlider ? (
-            <Slider
-              minValue={0}
-              maxValue={xAxisValues.length - 1}
-              step={1}
-              value={selectedXAxisRange}
-              onChange={(e) => changeSelectedXAxisRange(e as number[])}
-              className="max-w-md"
-            />
+            <div className="pl-5 pr-2">
+              <h3 className="font-normal text-secondary text-tiny pb-1">Adjusting x-axis range:</h3>
+              <Slider
+                minValue={0}
+                maxValue={xAxisValues.length - 1}
+                step={1}
+                value={selectedXAxisRange}
+                onChange={(e) => setSelectedXAxisRange(e as number[])}
+                showSteps
+                color="secondary"
+                size="sm"
+                classNames={{
+                  base: 'max-w-md',
+                  track: 'bg-secondary bg-opacity-10',
+                  filler: 'bg-secondary',
+                }}
+              />
+            </div>
           ) : null
         }
       </div>

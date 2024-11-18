@@ -8,6 +8,7 @@ import { useRef } from 'react';
 import { Tooltip } from '@/components/Tooltip/Tooltip';
 import LineChartModalProps from '@/domain/props/LineChartModalProps';
 import LineChartOperations from '@/operations/charts/LineChartOperations.ts';
+import { Slider } from '@nextui-org/slider';
 
 /**
  * This component is tied to the `LineChart` component and should not be used independently.
@@ -29,9 +30,14 @@ export function LineChartModal({
   setShowXAxisSlider,
   showBarChart,
   setShowBarChart,
+  selectedXAxisRange,
+  setSelectedXAxisRange,
 }: LineChartModalProps) {
   // referencing the Highcharts chart object (needed for download the chart as a png)
   const chartRef = useRef<HighchartsReact.RefObject | null>(null);
+
+  // todo descr
+  const xAxisValues: string[] = lineChartData.lines[0]?.dataPoints.map((d) => d.x) || [];
 
   // full screen modal by the 'LineChart' component that can be opened if `expandable==true`;
   // offers a larger chart and an additional features (see buttons)
@@ -115,7 +121,7 @@ export function LineChartModal({
         <ModalBody>
           {/* modal main content: description and chart */}
           <p className="w-full h-fit text-md font-normal">{description}</p>
-          <div className="py-6">
+          <div className="pt-6">
             <HighchartsReact
               highcharts={Highcharts}
               options={chartOptions}
@@ -128,7 +134,26 @@ export function LineChartModal({
         <ModalFooter>
           {
             // slider to manipulate the plotted x-axis range of the chart; can be disabled via `xAxisSlider`
-            showXAxisSlider ? <> x-Axis slider will be implemented in another issue (F-67)</> : null
+            showXAxisSlider ? (
+              <div className="w-full">
+                <h3 className="font-normal text-secondary text-tiny pb-1">Adjusting x-axis range:</h3>
+                <Slider
+                  minValue={0}
+                  maxValue={xAxisValues.length - 1}
+                  step={1}
+                  value={selectedXAxisRange}
+                  onChange={(e) => setSelectedXAxisRange(e as number[])}
+                  showSteps
+                  color="secondary"
+                  size="sm"
+                  classNames={{
+                    base: 'max-w-md',
+                    track: 'bg-secondary bg-opacity-10',
+                    filler: 'bg-secondary',
+                  }}
+                />
+              </div>
+            ) : null
           }
         </ModalFooter>
       </ModalContent>

@@ -196,6 +196,8 @@ export function LineChart({
         setShowXAxisSlider={setShowXAxisSlider}
         showBarChart={showBarChart}
         setShowBarChart={setShowBarChart}
+        selectedXAxisRange={selectedXAxisRange}
+        setSelectedXAxisRange={setSelectedXAxisRange}
       />
     </>
   );

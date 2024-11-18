@@ -1,0 +1,7 @@
+export enum HazardSeverity {
+  TERMINATION = 'TERMINATION',
+  INFORMATION = 'INFORMATION',
+  ADVISORY = 'ADVISORY',
+  WATCH = 'WATCH',
+  WARNING = 'WARNING',
+}

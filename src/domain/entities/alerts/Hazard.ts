@@ -1,7 +1,10 @@
+import { HazardSeverity } from '@/domain/enums/HazardSeverity';
+import { HazardType } from '@/domain/enums/HazardType';
+
 export interface Hazard {
   Id: number;
-  type: string;
-  severity_id: string;
+  type: HazardType;
+  severity_id: HazardSeverity;
   hazard_name: string;
   latitude: number;
   longitude: number;

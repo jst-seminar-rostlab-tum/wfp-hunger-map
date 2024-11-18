@@ -41,26 +41,14 @@ export class SidebarOperations {
       icon: '/menu_fcs.png',
     },
     {
-      key: AlertType.CONFLICTS,
-      label: 'Conflicts',
-      icon: '/menu_conflicts.png',
-      subalerts: [
-        {
-          key: AlertType.CONFLICT1,
-          label: 'Conflicts 1',
-          icon: '/menu_conflicts.png',
-        },
-        {
-          key: AlertType.CONFLICT2,
-          label: 'Conflicts 2',
-          icon: '/menu_conflicts.png',
-        },
-      ],
-    },
-    {
       key: AlertType.HAZARDS,
       label: 'Hazards',
       icon: '/menu_hazards.png',
+    },
+    {
+      key: AlertType.CONFLICTS,
+      label: 'Conflicts',
+      icon: '/menu_conflicts.png',
     },
   ];
 

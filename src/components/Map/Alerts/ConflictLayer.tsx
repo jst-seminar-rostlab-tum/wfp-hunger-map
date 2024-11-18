@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 import { CircleMarker } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 
-import LegendContainer from '@/components/Legend/LegendContainer';
 import { MAP_MAX_ZOOM } from '@/domain/constant/Map';
 import { ConflictType } from '@/domain/enums/ConflictType';
 import { useConflictQuery } from '@/domain/hooks/alertHooks';
@@ -15,10 +14,7 @@ export function ConflictLayer() {
   const conflictsByType = useMemo(() => ConflictOperations.sortConflictsByType(data), [data]);
 
   return (
-    <>
-      <div className="absolute bottom-6 right-8 z-9999">
-        <LegendContainer loading={isPending || !data} items={ConflictOperations.generateConflictLegend()} />
-      </div>
+    <div>
       {!isPending &&
         data &&
         (Object.keys(conflictsByType) as ConflictType[]).map((conflictType) => (
@@ -45,6 +41,6 @@ export function ConflictLayer() {
             ))}
           </MarkerClusterGroup>
         ))}
-    </>
+    </div>
   );
 }

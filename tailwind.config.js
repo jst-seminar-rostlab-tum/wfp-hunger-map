@@ -134,9 +134,9 @@ module.exports = {
             fcsGreen: '#345d34',
             fcsOrange: '#ea6a2c',
             fcsRed: '#fa190e',
-            ipcStartColor: '#F6D1C1',
-            ipcMiddleColor: '#FB7453',
-            ipcEndColor: '#710013',
+            ipcStart: '#F6D1C1',
+            ipcMiddle: '#FB7453',
+            ipcEnd: '#710013',
           },
         },
         dark: {

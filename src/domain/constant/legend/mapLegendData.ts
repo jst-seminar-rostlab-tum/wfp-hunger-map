@@ -34,9 +34,9 @@ export function mapLegendData(
       return [
         {
           title: 'Number of people in IPC/CH Phase 3 or above (millions)',
-          startColor: 'ipcStartColor',
-          middleColor: 'ipcMiddleColor',
-          endColor: 'ipcEndColor',
+          startColor: 'ipcStart',
+          middleColor: 'ipcMiddle',
+          endColor: 'ipcEnd',
           startLabel: '0',
           endLabel: '>10',
           tooltipInfo: `

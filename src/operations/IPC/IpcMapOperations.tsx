@@ -15,25 +15,24 @@ export class IPCMapOperations {
 
   static generateColorMap = (ipcData: CountryIpcData[], mapData: CountryMapDataWrapper) => {
     const ipcDataById: Record<string, CountryIpcData> = {};
-    ipcData.forEach((d) => {
-      ipcDataById[d.adm0_code] = d;
+    ipcData.forEach((currentIpcData: CountryIpcData) => {
+      ipcDataById[currentIpcData.adm0_code] = currentIpcData;
     });
     const colorMap: Record<string, string> = {};
-    mapData.features.forEach((feature: CountryMapData) => {
-      const ipcDataForFeature = ipcDataById[feature.properties.adm0_id];
+    mapData.features.forEach((countryData: CountryMapData) => {
+      const ipcDataForFeature = ipcDataById[countryData.properties.adm0_id];
 
       if (ipcDataForFeature) {
-        const countryName = feature.properties.adm0_name;
-        const { ipcPopulation } = feature.properties;
-
-        colorMap[countryName] = IPCMapOperations.fillIpcMap(ipcPopulation!);
+        const countryName = countryData.properties.adm0_name;
+        const { ipcPopulation } = countryData.properties;
+        colorMap[countryName] = IPCMapOperations.fillIpcMap(ipcPopulation ?? null);
       }
     });
 
     return colorMap;
   };
 
-  static findIpcData = (countryName: string, ipcData: CountryIpcData[]): CountryIpcData => {
-    return ipcData.find((currentCountry: CountryIpcData) => currentCountry.adm0_name === countryName)!;
+  static findIpcData = (countryName: string, ipcData: CountryIpcData[]): CountryIpcData | null => {
+    return ipcData.find((currentCountry: CountryIpcData) => currentCountry.adm0_name === countryName) || null;
   };
 }

@@ -4,7 +4,7 @@ import { DisputedAreas } from '../entities/DisputedAreas';
 
 export interface MapProps {
   countries: CountryMapDataWrapper;
+  ipcData: CountryIpcData[];
   disputedAreas?: DisputedAreas;
-  ipcData?: CountryIpcData[];
   selectedMapType?: string;
 }

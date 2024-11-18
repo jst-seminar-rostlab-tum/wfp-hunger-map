@@ -20,7 +20,7 @@ export class MapOperations {
   ): mapboxgl.Map {
     const mapColors: MapColorsType = getColors(isDark);
 
-    const getCountryFillPaint = (): DataDrivenPropertyValueSpecification<string> => {
+    const getCountryFillColorForIPC = (): DataDrivenPropertyValueSpecification<string> => {
       switch (selectedMapType) {
         case 'ipc':
           return [
@@ -30,7 +30,7 @@ export class MapOperations {
             [
               'match',
               ['get', 'adm0_name'],
-              ...Object.entries(IPCMapOperations.generateColorMap(ipcData!, countries!)).flat(),
+              ...Object.entries(IPCMapOperations.generateColorMap(ipcData, countries)).flat(),
               mapColors.activeCountries,
             ],
           ];
@@ -75,7 +75,7 @@ export class MapOperations {
             source: 'countries',
             layout: {},
             paint: {
-              'fill-color': getCountryFillPaint(),
+              'fill-color': getCountryFillColorForIPC(),
               'fill-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 0.7, 1],
             },
           },
@@ -115,47 +115,47 @@ export class MapOperations {
     const popup = new mapboxgl.Popup({ closeButton: false, closeOnClick: false });
 
     baseMap.on('mousemove', 'country-fills', (e: any) => {
-      const feature = e.features && (e.features[0] as CountryMapData);
+      const countryData = e.features && (e.features[0] as CountryMapData);
 
-      if (hoveredPolygonId && (!feature || hoveredPolygonId !== feature.id)) {
+      if (hoveredPolygonId && (!countryData || hoveredPolygonId !== countryData.id)) {
         baseMap.setFeatureState({ source: 'countries', id: hoveredPolygonId }, { hover: false });
         hoveredPolygonId = undefined;
         baseMap.getCanvas().style.cursor = '';
       }
 
-      if (!feature) {
+      if (!countryData) {
         popup.remove();
         return;
       }
 
       baseMap.getCanvas().style.cursor = 'pointer';
-      hoveredPolygonId = feature.id;
+      hoveredPolygonId = countryData.id;
       if (hoveredPolygonId) {
         baseMap.setFeatureState({ source: 'countries', id: hoveredPolygonId }, { hover: true });
       }
 
       switch (selectedMapType) {
         case 'ipc': {
-          const countryName = feature.properties.adm0_name;
-          const ipcColorMap = IPCMapOperations.generateColorMap(ipcData!, countries!);
+          const countryName = countryData.properties.adm0_name;
+          const ipcColorMap = IPCMapOperations.generateColorMap(ipcData, countries);
 
           if (!ipcColorMap[countryName]) {
             popup.remove();
             return;
           }
 
-          const { date_of_analysis, analysis_period, ipc_percent, ipc_popnmbr } = IPCMapOperations.findIpcData(
-            countryName,
-            ipcData!
-          );
+          const selectedCountryData = IPCMapOperations.findIpcData(countryName, ipcData);
+          const date_of_analysis = selectedCountryData?.date_of_analysis || 'N/A';
+          const analysis_period = selectedCountryData?.analysis_period || 'N/A';
+          const ipc_percent = selectedCountryData?.ipc_percent ?? 0;
+          const ipc_popnmbr = selectedCountryData?.ipc_popnmbr ?? 0;
+
           const formattedPopNum = ipc_popnmbr.toLocaleString('en-US', {
             useGrouping: true,
           });
-          const title = `${countryName}`;
-          const body = `Date of analysis: ${date_of_analysis} <br> Validity period: ${analysis_period}`;
-          const conclusion = `${formattedPopNum} people in IPC/CH Phase 3 and above <br> (${ipc_percent}% of people in the analyzed areas)`;
-
-          const popupContent = this.generatePopupContent(title, body, conclusion);
+          const popupDetails = `Date of analysis: ${date_of_analysis} <br> Validity period: ${analysis_period}`;
+          const popupSummary = `${formattedPopNum} people in IPC/CH Phase 3 and above <br> (${ipc_percent}% of people in the analyzed areas)`;
+          const popupContent = this.generatePopupContent(countryName, popupDetails, popupSummary);
           popup.setLngLat(e.lngLat).setHTML(popupContent).addTo(baseMap);
           break;
         }
@@ -188,12 +188,12 @@ export class MapOperations {
     });
   }
 
-  static generatePopupContent(title?: string, body?: string, conclusion?: string): string {
+  static generatePopupContent(header?: string, details?: string, summary?: string): string {
     return `
       <div class="p-4 bg-white dark:bg-black text-black dark:text-white rounded-medium flex flex-col gap-2">
-        <h1 class="text-md font-semibold">${title}</h1>
-        <p class="text-xs">${body}</p>
-        <p class="text-xs">${conclusion}</p>
+        <h1 class="text-md font-semibold">${header}</h1>
+        <p class="text-xs">${details}</p>
+        <p class="text-xs">${summary}</p>
       </div>
     `;
   }

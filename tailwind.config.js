@@ -135,6 +135,12 @@ const config = {
             fcsGreen: '#345d34',
             fcsOrange: '#ea6a2c',
             fcsRed: '#fa190e',
+            rainfallLow: '#b99260',
+            rainfallNormal: '#fff',
+            rainfallHigh: '#4295d3',
+            vegetationLow: '#b99260',
+            vegetationNormal: '#fff',
+            vegetationHigh: '#b1dbb5',
           },
         },
         dark: {

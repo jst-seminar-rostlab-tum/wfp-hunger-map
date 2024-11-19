@@ -11,6 +11,8 @@ import { MapProps } from '@/domain/props/MapProps';
 import { getColors } from '@/styles/MapColors.ts';
 
 import { IPCMapOperations } from '../IPC/IpcMapOperations';
+import ReactDOMServer from 'react-dom/server';
+import CountryHoverPopover from '../../components/CountryHoverPopover/CountryHoverPopover';
 
 export class MapOperations {
   static createMapboxMap(
@@ -112,7 +114,7 @@ export class MapOperations {
     baseMap: mapboxgl.Map
   ): void {
     let hoveredPolygonId: string | number | undefined;
-    const popup = new mapboxgl.Popup({ closeButton: false, closeOnClick: false });
+    const popover = new mapboxgl.Popup({ closeButton: false, closeOnClick: false });
 
     baseMap.on('mousemove', 'country-fills', (e: any) => {
       const countryData = e.features && (e.features[0] as CountryMapData);
@@ -124,7 +126,7 @@ export class MapOperations {
       }
 
       if (!countryData) {
-        popup.remove();
+        popover.remove();
         return;
       }
 
@@ -140,7 +142,7 @@ export class MapOperations {
           const ipcColorMap = IPCMapOperations.generateColorMap(ipcData, countries);
 
           if (!ipcColorMap[countryName]) {
-            popup.remove();
+            popover.remove();
             return;
           }
 
@@ -149,21 +151,35 @@ export class MapOperations {
           const analysis_period = selectedCountryData?.analysis_period || 'N/A';
           const ipc_percent = selectedCountryData?.ipc_percent ?? 0;
           const ipc_popnmbr = selectedCountryData?.ipc_popnmbr ?? 0;
-
           const formattedPopNum = ipc_popnmbr.toLocaleString('en-US', {
             useGrouping: true,
           });
-          const popupDetails = `Date of analysis: ${date_of_analysis} <br> Validity period: ${analysis_period}`;
-          const popupSummary = `
-          <span class="text-base font-semibold" style="color: #E08004;">${formattedPopNum}</span> 
-          people in IPC/CH Phase 3 and above 
-          (<span class="text-base font-semibold" style="color: #E08004;">${ipc_percent}%</span> of people in the analyzed areas)`;
-          const popupContent = this.generatePopupContent(countryName, popupDetails, popupSummary);
-          popup.setLngLat(e.lngLat).setHTML(popupContent).addTo(baseMap);
+
+          const popoverContentHTML = ReactDOMServer.renderToString(
+            <CountryHoverPopover
+              header={countryName}
+              details={
+                <>
+                  Date of analysis: {date_of_analysis}
+                  <br />
+                  Validity period: {analysis_period}
+                </>
+              }
+              summary={
+                <>
+                  <span className="font-bold text-danger text-base">{formattedPopNum}</span> people in IPC/CH Phase 3
+                  and above (<span className="font-bold text-danger text-base">{ipc_percent}%</span> of people in the
+                  analyzed areas)
+                </>
+              }
+            />
+          );
+
+          popover.setLngLat(e.lngLat).setHTML(popoverContentHTML).addTo(baseMap);
           break;
         }
         default:
-          popup.remove();
+          popover.remove();
           return;
       }
     });
@@ -174,7 +190,7 @@ export class MapOperations {
         baseMap.setFeatureState({ source: 'countries', id: hoveredPolygonId }, { hover: false });
         hoveredPolygonId = undefined;
       }
-      popup.remove();
+      popover.remove();
     });
 
     let isDragging = false;
@@ -189,16 +205,6 @@ export class MapOperations {
         alert(`You clicked on ${(e.features[0] as CountryMapData).properties.adm0_name}`);
       }
     });
-  }
-
-  static generatePopupContent(header?: string, details?: string, summary?: string): string {
-    return `
-      <div class="p-4 bg-white dark:bg-black text-black dark:text-white rounded-medium flex flex-col gap-2">
-        <h1 class="text-md font-semibold">${header}</h1>
-        <p class="text-xs">${details}</p>
-        <p class="text-xs">${summary}</p>
-      </div>
-    `;
   }
 
   static synchronizeLeafletMapbox(

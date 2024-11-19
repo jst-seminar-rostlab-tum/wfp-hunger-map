@@ -7,7 +7,7 @@ import React, { RefObject, useEffect, useRef } from 'react';
 
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { MapProps } from '@/domain/props/MapProps';
-import { MapOperations } from '@/operations/map/MapOperations.ts';
+import { MapOperations } from '@/operations/map/MapOperations';
 
 export default function VectorTileLayer({ countries, disputedAreas, ipcData }: MapProps) {
   const { theme } = useTheme();

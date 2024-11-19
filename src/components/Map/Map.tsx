@@ -2,7 +2,7 @@ import 'leaflet/dist/leaflet.css';
 
 import { MapContainer, ZoomControl } from 'react-leaflet';
 
-import { MAP_MAX_ZOOM, MAP_MIN_ZOOM } from '@/domain/constant/Map';
+import { MAP_MAX_ZOOM, MAP_MIN_ZOOM } from '@/domain/constant/map/Map.ts';
 import { MapProps } from '@/domain/props/MapProps';
 
 import { AlertContainer } from './Alerts/AlertContainer';

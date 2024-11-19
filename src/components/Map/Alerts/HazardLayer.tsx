@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 
-import { MAP_MAX_ZOOM } from '@/domain/constant/Map';
+import { MAP_MAX_ZOOM } from '@/domain/constant/map/Map.ts';
 import { HazardType } from '@/domain/enums/HazardType';
 import { useHazardQuery } from '@/domain/hooks/alertHooks';
 import HazardOperations from '@/operations/alerts/HazardOperations';

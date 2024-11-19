@@ -190,7 +190,7 @@ export default function HungerMapChatbot() {
           <Button
             onClick={toggleChat}
             className="
-            relative flex items-center justify-center min-w-12 h-12 px-1 rounded-full bg-white dark:bg-black shadow-md"
+            relative flex items-center justify-center min-w-12 h-12 px-1 rounded-full bg-content1 shadow-md"
           >
             <Bot size={24} />
           </Button>

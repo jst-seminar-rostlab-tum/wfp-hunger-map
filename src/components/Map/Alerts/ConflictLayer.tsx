@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { CircleMarker } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 
-import { MAP_MAX_ZOOM } from '@/domain/constant/Map';
+import { MAP_MAX_ZOOM } from '@/domain/constant/map/Map.ts';
 import { ConflictType } from '@/domain/enums/ConflictType';
 import { useConflictQuery } from '@/domain/hooks/alertHooks';
 import ConflictOperations from '@/operations/alerts/ConflictOperations';

@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-const { nextui } = require('@nextui-org/theme')
+const { nextui } = require('@nextui-org/theme');
 
 const config = {
   safelist: [
@@ -34,6 +34,9 @@ const config = {
     'text-hazarAdvisory',
     'text-hazardInformation',
     'text-hazardTermination',
+    'bg-fatalityAlert',
+    'bg-climateWetAlert',
+    'bg-climateDryAlert',
   ],
   content: [
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -51,9 +54,6 @@ const config = {
       colors: {
         brand: '#157DBC',
         brandHover: '#0F6396',
-        fatalityAlert: '#742280',
-        climateWetAlert: '#4295D3',
-        climateDryAlert: '#B95926',
       },
       width: {
         '215px': '215px',
@@ -82,7 +82,7 @@ const config = {
         blink: 'blink 1s step-end infinite',
         pulse: 'pulse 1.5s ease-in-out infinite',
         opacityPulse: 'opacityPulse 1.5s infinite',
-        ping: 'ping 2s cubic-bezier(0, 0, 0.2, 1) infinite',
+        pulsingAlert: 'pulsingAlert 2s cubic-bezier(0, 0, 0.2, 1) infinite',
       },
       keyframes: {
         blink: {
@@ -96,7 +96,7 @@ const config = {
           '0%, 100%': { 'fill-opacity': '1' },
           '50%': { 'fill-opacity': '0.5' },
         },
-        ping: {
+        pulsingAlert: {
           '75%, 100%': {
             transform: 'scale(2)',
             opacity: 0,
@@ -206,4 +206,4 @@ const config = {
   ],
 };
 
-module.exports = config
+module.exports = config;

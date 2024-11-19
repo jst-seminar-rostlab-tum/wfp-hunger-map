@@ -1,12 +1,12 @@
 import { useSelectedAlert } from '@/domain/contexts/SelectedAlertContext';
+import { CountryMapDataWrapper } from '@/domain/entities/country/CountryMapData';
 import { AlertType } from '@/domain/enums/AlertType';
-import { AlertContainerProps } from '@/domain/props/AlertContainerProps';
 
 import { ConflictLayer } from './ConflictLayer';
-import { DefaultLayer } from './DefaultLayer/DefaultLayer';
+import { CountryAlertsLayer } from './CountryAlerts/CountryAlertsLayer';
 import { HazardLayer } from './HazardLayer';
 
-export function AlertContainer({ countries }: AlertContainerProps) {
+export function AlertContainer({ countries }: { countries: CountryMapDataWrapper }) {
   const { selectedAlert } = useSelectedAlert();
 
   switch (selectedAlert) {
@@ -14,8 +14,8 @@ export function AlertContainer({ countries }: AlertContainerProps) {
       return <ConflictLayer />;
     case AlertType.HAZARDS:
       return <HazardLayer />;
-    case AlertType.HUNGER:
-      return <DefaultLayer countries={countries} />;
+    case AlertType.COUNTRY_ALERTS:
+      return <CountryAlertsLayer countries={countries} />;
     default:
       return null; // TODO: hazard layers
   }

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import GroupedTable from '@/components/GroupedTable/GroupedTable';
+import Abbreviation from '@/components/Tooltip/Abbreviation';
 import { AccordionItemProps } from '@/domain/entities/accordions/Accordions';
 import { DataSourceTableData, GroupedTableColumns } from '@/domain/props/GroupedTableProps';
 import formatDataSourceTable from '@/operations/groupedTable/formatDataSourceTable';
@@ -42,16 +43,23 @@ const foodSecurityTableData: DataSourceTableData = [
   {
     label: 'Estimated number of people',
     description:
-      'The number of people are estimated by multiplying the percentages calculated from WFP mVAM data by the population of the country.',
+      'The number of people are estimated by multiplying the percentages calculated from mVAM data by the population of the country.',
     dataSource: (
       <span>
-        World Food Programme - (i) representative face-to-face household surveys, e.g. Comprehensive Food Security and
-        Vulnerability Analysis (CFSVA), Emergency Food Security Assessment (EFSA); and (ii) mobile Vulnerability
-        Analysis and Mapping (mVAM) surveys
+        <Abbreviation abbreviation="WFP" />: representative face-to-face household surveys (e.g.{' '}
+        <Abbreviation abbreviation="CFSVA" />, <Abbreviation abbreviation="EFSA" />) and{' '}
+        <Abbreviation abbreviation="mVAM" /> surveys
       </span>
     ),
     updateDetails: [
-      { label: 'mVAM surveys', interval: 'daily or monthly' },
+      {
+        label: (
+          <>
+            <Abbreviation abbreviation="mVAM" /> surveys
+          </>
+        ),
+        interval: 'daily or monthly',
+      },
       { label: 'face-to-face surveys', interval: 'biyearly or less' },
     ],
   },
@@ -62,13 +70,20 @@ const foodSecurityTableData: DataSourceTableData = [
     readMoreLink: '#',
     dataSource: (
       <span>
-        World Food Programme - (i) representative face-to-face household surveys, e.g. Comprehensive Food Security and
-        Vulnerability Analysis (CFSVA), Emergency Food Security Assessment (EFSA); and (ii) mobile Vulnerability
-        Analysis and Mapping (mVAM) surveys
+        <Abbreviation abbreviation="WFP" />: representative face-to-face household surveys (e.g.{' '}
+        <Abbreviation abbreviation="CFSVA" />, <Abbreviation abbreviation="EFSA" />) and{' '}
+        <Abbreviation abbreviation="mVAM" /> surveys
       </span>
     ),
     updateDetails: [
-      { label: 'mVAM surveys', interval: 'daily or monthly' },
+      {
+        label: (
+          <>
+            <Abbreviation abbreviation="mVAM" /> surveys
+          </>
+        ),
+        interval: 'daily or monthly',
+      },
       { label: 'face-to-face surveys', interval: 'biyearly or less' },
     ],
   },
@@ -87,13 +102,20 @@ const foodSecurityTableData: DataSourceTableData = [
     readMoreLink: '#',
     dataSource: (
       <span>
-        World Food Programme - (i) representative face-to-face household surveys, e.g. Comprehensive Food Security and
-        Vulnerability Analysis (CFSVA), Emergency Food Security Assessment (EFSA); and (ii) mobile Vulnerability
-        Analysis and Mapping (mVAM) surveys
+        <Abbreviation abbreviation="WFP" />: representative face-to-face household surveys (e.g.{' '}
+        <Abbreviation abbreviation="CFSVA" />, <Abbreviation abbreviation="EFSA" />) and{' '}
+        <Abbreviation abbreviation="mVAM" /> surveys
       </span>
     ),
     updateDetails: [
-      { label: 'mVAM surveys', interval: 'daily or monthly' },
+      {
+        label: (
+          <>
+            <Abbreviation abbreviation="mVAM" /> surveys
+          </>
+        ),
+        interval: 'daily or monthly',
+      },
       { label: 'face-to-face surveys', interval: 'biyearly or less' },
     ],
   },
@@ -101,7 +123,12 @@ const foodSecurityTableData: DataSourceTableData = [
     label: 'Undernourishment',
     description:
       'Estimate of the percentage of individuals in the total populations that are in a condition of undernourishment',
-    dataSource: 'FAO, IFAD, UNICEF, WFP and WHO: "The State of Food Security and Nutrition in the World"',
+    dataSource: (
+      <>
+        FAO, IFAD, UNICEF, <Abbreviation abbreviation="WFP" /> and WHO: &ldquo;The State of Food Security and Nutrition
+        in the World&rdquo;
+      </>
+    ),
     dataSourceLink:
       'https://www.wfp.org/publications/2019-state-food-security-and-nutrition-world-sofi-safeguarding-against-economic',
     updateInterval: 'yearly',
@@ -136,7 +163,12 @@ const marketsTable: DataSourceTableData = [
         IDR = Imports ÷ (local production + imports – exports) × 100%
       </span>
     ),
-    dataSource: 'WFP’s calculation based on USDA data',
+    dataSource: (
+      <>
+        <Abbreviation abbreviation="WFP" />
+        ’s calculation based on USDA data
+      </>
+    ),
     updateInterval: 'daily',
   },
   {
@@ -174,8 +206,12 @@ const seasonalTable: DataSourceTableData = [
     label: 'Rainfall',
     description:
       'The rainfall layer shows the cumulative rainfall in the previous month compared to the 20-year average.',
-    dataSource:
-      'CHIRPS rainfall estimates, Climate Hazards Group, University of California at Santa Barbara; data processed by WFP VAM',
+    dataSource: (
+      <>
+        CHIRPS rainfall estimates, Climate Hazards Group, University of California at Santa Barbara; data processed by{' '}
+        <Abbreviation abbreviation="WFP" /> <Abbreviation abbreviation="VAM" />
+      </>
+    ),
     updateInterval: 'every 10 days',
   },
   {
@@ -185,7 +221,7 @@ const seasonalTable: DataSourceTableData = [
     dataSource:
       'MODIS platforms Terra and Aqua. MODIS NDVI CMG data product retrieved from Earthdata Search, courtesy of NASA ' +
       'EOSDIS Land Processes Distributed Active Archive Center (LP DAAC), USGS/Earth Resources Observation and ' +
-      'Science (EROS) Center and Sioux Falls, South Dakota, USA.',
+      'Science (EROS) Center.',
     updateInterval: 'every 8 days',
   },
   {
@@ -195,8 +231,12 @@ const seasonalTable: DataSourceTableData = [
       'rivers (Limpopo, Nile, Orange, Shabelli-Juba, and Zambesi), allowing users to track whether the current ' +
       'basin-wide rainfall is within the normal range, or whether there is a risk of drought and lower river flows ' +
       'or flooding and high river flows.',
-    dataSource:
-      'CHIRPS rainfall estimates, Climate Hazards Group, University of California at Santa Barbara; data processed by WFP-VAM',
+    dataSource: (
+      <>
+        CHIRPS rainfall estimates, Climate Hazards Group, University of California at Santa Barbara; data processed by{' '}
+        <Abbreviation abbreviation="WFP" /> <Abbreviation abbreviation="VAM" />
+      </>
+    ),
     updateInterval: 'every 5-10 days',
   },
   {

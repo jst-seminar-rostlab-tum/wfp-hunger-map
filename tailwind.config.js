@@ -38,6 +38,7 @@ const config = {
   content: [
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/domain/constant/dataSourceTables/dataSourceAccordionItems.tsx',
     './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
@@ -175,6 +176,6 @@ const config = {
       },
     }),
   ],
-}
+};
 
 module.exports = config

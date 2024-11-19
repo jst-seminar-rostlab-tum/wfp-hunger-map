@@ -39,30 +39,26 @@ export class MapOperations {
           {
             id: 'ocean',
             type: 'background',
-            paint: {
-              'background-color': mapColors.ocean,
-            },
+            paint: { 'background-color': mapColors.ocean },
           },
           {
             id: 'countries-base',
             type: 'fill',
             source: 'countries',
-            layout: {},
-            paint: {
-              'fill-color': [
-                'case',
-                ['boolean', ['coalesce', ['get', 'interactive'], false]],
-                mapColors.activeCountries,
-                mapColors.inactiveCountries,
-              ],
-              'fill-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 0.7, 1],
-            },
+            paint: { 'fill-color': mapColors.countriesBase },
+          },
+          // additional layers (FCS, vegetation etc.) are being placed here
+          {
+            id: 'countries-inactive',
+            type: 'fill',
+            source: 'countries',
+            paint: { 'fill-color': mapColors.inactiveCountriesOverlay, 'fill-opacity': 0.5 },
+            filter: ['==', ['coalesce', ['get', 'interactive'], false], false],
           },
           {
             id: 'countries-hover',
             type: 'fill',
             source: 'countries',
-            layout: {},
             paint: {
               'fill-color': mapColors.outline,
               'fill-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 0.3, 0],
@@ -72,7 +68,6 @@ export class MapOperations {
             id: 'country-borders',
             type: 'line',
             source: 'countries',
-            layout: {},
             paint: {
               'line-color': mapColors.outline,
               'line-width': 0.7,
@@ -206,13 +201,15 @@ export class MapOperations {
         scheme: 'tms',
       });
 
-      baseMap.addLayer({
-        id: 'fcsLayer',
-        type: 'raster',
-        source: 'fcsRaster',
-        layout: { visibility: selectedMapType === GlobalInsight.FOOD ? 'visible' : 'none' },
-        paint: {},
-      });
+      baseMap.addLayer(
+        {
+          id: 'fcsLayer',
+          type: 'raster',
+          source: 'fcsRaster',
+          layout: { visibility: selectedMapType === GlobalInsight.FOOD ? 'visible' : 'none' },
+        },
+        'countries-inactive'
+      );
     });
   }
 
@@ -233,9 +230,8 @@ export class MapOperations {
           type: 'raster',
           source: 'rainfallRaster',
           layout: { visibility: selectedMapType === GlobalInsight.RAINFALL ? 'visible' : 'none' },
-          paint: {},
         },
-        'countries-hover'
+        'countries-inactive'
       );
     });
   }
@@ -257,9 +253,8 @@ export class MapOperations {
           type: 'raster',
           source: 'vegetationRaster',
           layout: { visibility: selectedMapType === GlobalInsight.VEGETATION ? 'visible' : 'none' },
-          paint: {},
         },
-        'countries-hover'
+        'countries-inactive'
       );
     });
   }

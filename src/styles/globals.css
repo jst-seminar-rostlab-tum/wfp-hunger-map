@@ -11,7 +11,7 @@
         @apply text-4xl sm:text-5xl lg:text-7xl font-black mb-8
     }
 
-    .text-content h2 {
+    .text-content section > h2 {
         @apply text-2xl lg:text-3xl mb-3
     }
 

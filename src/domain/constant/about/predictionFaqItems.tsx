@@ -18,8 +18,11 @@ const generalQuestionItems: AccordionItemProps[] = [
           data point is also included as input variable.
         </p>
         <p>
-          More details are listed in the <b>Data sources page</b>. Additional sources used only for the model but not
-          for display purposes are:
+          More details are listed in the{' '}
+          <StyledLink href="/data_sources" isInternal>
+            Data sources page
+          </StyledLink>
+          . Additional sources used only for the model but not for display purposes are:
         </p>
         <ul>
           <li>

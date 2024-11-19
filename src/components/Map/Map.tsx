@@ -22,7 +22,6 @@ export default function Map({ countries, disputedAreas }: MapProps) {
       if (global && Array.isArray(global.body)) {
         const Codes = global.body.map((item) => item.adm0_code);
         setAdm0Codes(Codes);
-        console.log(Codes);
       } else {
         console.error('Expected an array in global.body');
       }

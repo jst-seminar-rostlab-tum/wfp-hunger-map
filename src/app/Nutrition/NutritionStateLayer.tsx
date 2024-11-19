@@ -7,6 +7,7 @@ import CustomCard from '@/components/Cards/Card';
 import { CustomButton } from '@/components/Buttons/CustomButton';
 import LegendContainer from '@/components/Legend/LegendContainer';
 import { useTheme } from 'next-themes';
+import { GradientLegendContainerItem } from '@/domain/props/GradientLegendContainerItem.ts';
 
 const StateChoropleth = ({ regionNutri, regionData, hoverStyle, handleClick, tooltip }) => {
   const [showAccordion, setShowAccordion] = useState(true);
@@ -58,8 +59,8 @@ const StateChoropleth = ({ regionNutri, regionData, hoverStyle, handleClick, too
   };
 
   const nutritionFill = (value) => {
-    if (value === null || value === undefined) return 'none';
-    if (value <= 19) return '#fde2e1';
+    if (!value) return 'none';
+    if (value <= 19) return '#fff3f3';
     if (value <= 39) return '#fcd0ce';
     if (value <= 59) return '#f88884';
     if (value <= 79) return '#f5524c';
@@ -95,17 +96,15 @@ const StateChoropleth = ({ regionNutri, regionData, hoverStyle, handleClick, too
     layer.on('mouseout', (e) => e.target.setStyle(dynamicStyle));
   };
   const accordionData = StateChoropleth.getAccordionData(selectedNutrient, accordionImage);
-  const legendItems = [
-    {
-      title: 'Risk of Inadequate Micronutrient Intake',
-      startColor: '#345d34',
-      endColor: '#fa190e',
-      startLabel: '0%',
-      endLabel: '100%',
-      middleColor: '#ea6a2c',
-      tooltipInfo: 'Shows the inadequate ratio of nutrient intake.',
-    },
-  ];
+  const legendItem: GradientLegendContainerItem = {
+    title: 'Risk of Inadequate Micronutrient Intake',
+    startColor: 'nutritionGradientStart',
+    endColor: 'nutritionGradientEnd',
+    startLabel: '0%',
+    endLabel: '100%',
+    middleColor: 'nutritionGradientMiddle',
+    tooltipInfo: 'Shows the inadequate ratio of nutrient intake.',
+  };
 
   return (
     <>
@@ -131,7 +130,7 @@ const StateChoropleth = ({ regionNutri, regionData, hoverStyle, handleClick, too
         </div>
       )}
       <div className="absolute bottom-5 right-0 z-50 pr-10">
-        <LegendContainer items={legendItems} />
+        <LegendContainer items={[legendItem]} />
       </div>
       <GeoJSON data={regionData} style={dynamicStyle} onEachFeature={onEachFeature} />
     </>

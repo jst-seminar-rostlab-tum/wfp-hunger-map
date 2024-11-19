@@ -24,7 +24,7 @@
     }
 
     .text-content ol, .text-content ul {
-        @apply pl-8
+        @apply pl-4 md:pl-8
     }
 
     .text-content ol {

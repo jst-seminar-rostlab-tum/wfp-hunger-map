@@ -120,7 +120,7 @@ const foodSecurityTableData: DataSourceTableData = [
     ],
   },
   {
-    label: 'Undernourishment',
+    label: 'Under­nourish­ment',
     description:
       'Estimate of the percentage of individuals in the total populations that are in a condition of undernourishment',
     dataSource: (

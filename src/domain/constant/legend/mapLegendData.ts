@@ -69,6 +69,34 @@ export function mapLegendData(
           'Updated: Daily (low and lower-middle income countries), Annually (upper-middle and high income countries).',
       });
       break;
+    case GlobalInsight.RAINFALL:
+      legendData.push({
+        title: 'Rainfall',
+        startColor: 'rainfallLow',
+        middleColor: 'rainfallNormal',
+        endColor: 'rainfallHigh',
+        startLabel: '<40%',
+        endLabel: '>180%',
+        tooltipInfo:
+          'This layer shows the cumulative rainfall in the previous month compared to the 20-year average. ' +
+          'Variations between 90% and 110% are considered as having an inconsequential impact for crops or pasture and these are represented in white. ' +
+          'Otherwise, brown shades indicate below-average rainfall and blue shades indicate above-average seasonal rainfall.',
+      });
+      break;
+    case GlobalInsight.VEGETATION:
+      legendData.push({
+        title: 'Vegetation',
+        startColor: 'vegetationLow',
+        middleColor: 'vegetationNormal',
+        endColor: 'vegetationHigh',
+        startLabel: '<50%',
+        endLabel: '>150%',
+        tooltipInfo:
+          'The Normalized Difference Vegetation Index (NDVI) shows the recent vegetation development compared to the average. ' +
+          'Green shades show areas where vegetation cover is above average, whilst orange and brown shades identify areas where vegetation cover is below normal. ' +
+          'Values between 90% and 110% are considered as being within the range of normal variability.',
+      });
+      break;
     default:
   }
 

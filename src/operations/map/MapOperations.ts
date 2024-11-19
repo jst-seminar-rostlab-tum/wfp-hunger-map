@@ -154,7 +154,10 @@ export class MapOperations {
             useGrouping: true,
           });
           const popupDetails = `Date of analysis: ${date_of_analysis} <br> Validity period: ${analysis_period}`;
-          const popupSummary = `${formattedPopNum} people in IPC/CH Phase 3 and above <br> (${ipc_percent}% of people in the analyzed areas)`;
+          const popupSummary = `
+          <span class="text-base font-semibold" style="color: #E08004;">${formattedPopNum}</span> 
+          people in IPC/CH Phase 3 and above 
+          (<span class="text-base font-semibold" style="color: #E08004;">${ipc_percent}%</span> of people in the analyzed areas)`;
           const popupContent = this.generatePopupContent(countryName, popupDetails, popupSummary);
           popup.setLngLat(e.lngLat).setHTML(popupContent).addTo(baseMap);
           break;

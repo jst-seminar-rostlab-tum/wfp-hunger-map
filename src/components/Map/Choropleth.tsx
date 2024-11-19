@@ -8,21 +8,22 @@ import { CountryData } from '@/domain/entities/country/CountryData';
 import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data';
 import CountryRepository from '@/domain/repositories/CountryRepository';
 
-import FcsAccordion from './FcsAccordion';
+import FscCountryChoropleth from './FcsCountryChoropleth';
 
 interface ChoroplethProps {
   data: FeatureCollection<Geometry, GeoJsonProperties>;
   style: PathOptions;
-  hoverStyle: PathOptions;
+  countryId: number;
+  selectedCountryId?: number;
+  setSelectedCountryId: (countryId: number) => void;
 }
 
-// FscChoropleth
-function Choropleth({ data, style, hoverStyle }: ChoroplethProps) {
+function Choropleth({ data, style, countryId, selectedCountryId, setSelectedCountryId }: ChoroplethProps) {
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
   const map = useMap();
-  const [selectedCountryId, setSelectedCountryId] = useState<number | undefined>();
   const [countryData, setCountryData] = useState<CountryData | undefined>();
   const [countryIso3Data, setCountryIso3Data] = useState<CountryIso3Data | undefined>();
+  const [regionData, setRegionData] = useState<FeatureCollection<Geometry, GeoJsonProperties> | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleCountryClick = async (feature: Feature<Geometry, GeoJsonProperties>, bounds: L.LatLngBounds) => {
@@ -30,14 +31,18 @@ function Choropleth({ data, style, hoverStyle }: ChoroplethProps) {
     setSelectedCountryId(feature.properties?.adm0_id);
     setLoading(true);
     if (feature.properties?.adm0_id) {
+      const countryRepository = container.resolve<CountryRepository>('CountryRepository');
       try {
-        const newCountryData = await container
-          .resolve<CountryRepository>('CountryRepository')
-          .getCountryData(feature.properties.adm0_id);
+        const newRegionData = await countryRepository.getRegionData(feature.properties.adm0_id);
+        if (newRegionData && newRegionData.features) {
+          setRegionData({
+            type: 'FeatureCollection',
+            features: newRegionData.features as Feature<Geometry, GeoJsonProperties>[],
+          });
+        }
+        const newCountryData = await countryRepository.getCountryData(feature.properties.adm0_id);
         setCountryData(newCountryData);
-        const newCountryIso3Data = await container
-          .resolve<CountryRepository>('CountryRepository')
-          .getCountryIso3Data(feature.properties.iso3);
+        const newCountryIso3Data = await countryRepository.getCountryIso3Data(feature.properties.iso3);
         setCountryIso3Data(newCountryIso3Data);
         setLoading(false);
       } catch (error) {
@@ -50,12 +55,6 @@ function Choropleth({ data, style, hoverStyle }: ChoroplethProps) {
     const pathLayer = layer as L.Path;
 
     pathLayer.on({
-      mouseover: () => {
-        pathLayer.setStyle(hoverStyle);
-      },
-      mouseout: () => {
-        pathLayer.setStyle(style);
-      },
       click: async () => {
         const bounds = (layer as L.GeoJSON).getBounds();
         handleCountryClick(feature, bounds);
@@ -80,16 +79,13 @@ function Choropleth({ data, style, hoverStyle }: ChoroplethProps) {
         style={() => style}
         onEachFeature={onEachFeature}
       />
-      {/* {selectedCountryId && (
-                <FscCountryChoropleth
-                    data={data}
-                    style={style}
-                    hoverStyle={hoverStyle}
-                    selectedCountryId={selectedCountryId}
-                />
-            )} */}
-      {selectedCountryId && (
-        <FcsAccordion countryData={countryData} countryIso3Data={countryIso3Data} loading={loading} />
+      {regionData && countryId === selectedCountryId && (
+        <FscCountryChoropleth
+          data={regionData}
+          countryData={countryData}
+          countryIso3Data={countryIso3Data}
+          loading={loading}
+        />
       )}
     </div>
   );

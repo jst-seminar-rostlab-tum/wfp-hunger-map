@@ -1,111 +1,60 @@
 import { Feature, FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
-import L, { PathOptions } from 'leaflet';
-import React, { useEffect, useRef } from 'react';
+import L from 'leaflet';
+import React from 'react';
 import { GeoJSON } from 'react-leaflet';
 
-import { useCountryDataQuery } from '@/domain/hooks/countryHooks';
-import { cardsWrapperClass } from '@/utils/primitives';
+import { CountryData } from '@/domain/entities/country/CountryData';
+import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data';
 
-import CustomAccordion from '../Accordions/Accordion';
-import CustomCard from '../Cards/Card';
+import FcsAccordion from './FcsAccordion';
 
 interface FscCountryChoroplethProps {
   data: FeatureCollection<Geometry, GeoJsonProperties>;
-  style: PathOptions;
-  hoverStyle: PathOptions;
-  selectedCountryId: number;
+  countryData: CountryData | undefined;
+  countryIso3Data: CountryIso3Data | undefined;
+  loading: boolean;
 }
 
-function FscCountryChoropleth({ data, style, hoverStyle, selectedCountryId }: FscCountryChoroplethProps) {
-  const geoJsonRef = useRef<L.GeoJSON | null>(null);
+function FscCountryChoropleth({ data, countryData, countryIso3Data, loading }: FscCountryChoroplethProps) {
+  const fcsFill = (fcs: number | null) => {
+    if (fcs === null) return 'none';
+    if (fcs <= 0.05) return '#29563A';
+    if (fcs <= 0.1) return '#73B358';
+    if (fcs <= 0.2) return '#CBCC58';
+    if (fcs <= 0.3) return '#d5a137';
+    if (fcs <= 0.4) return '#EB5A26';
+    return '#D3130C';
+  };
 
-  const { data: countryData, isPending } = useCountryDataQuery(selectedCountryId);
+  const dynamicStyle: L.StyleFunction<GeoJsonProperties> = (feature) => {
+    return {
+      fillColor: fcsFill(feature?.properties?.fcs?.score),
+      color: '#000',
+      weight: 1,
+      fillOpacity: 0.6,
+    };
+  };
 
   const onEachFeature = (feature: Feature<Geometry, GeoJsonProperties>, layer: L.Layer) => {
-    const pathLayer = layer as L.Path;
+    const tooltipContent = `
+      <b>${feature.properties?.Name}</b><br/>
+      Tooltip Content
+    `;
+    layer.bindTooltip(tooltipContent, { className: 'state-tooltip' });
 
+    const pathLayer = layer as L.Path;
     pathLayer.on({
-      mouseover: () => {
-        pathLayer.setStyle(hoverStyle);
-      },
       mouseout: () => {
-        pathLayer.setStyle(style);
+        pathLayer.setStyle(dynamicStyle(feature));
       },
       click: () => {},
     });
   };
 
-  useEffect(() => {
-    if (geoJsonRef.current) {
-      geoJsonRef.current.clearLayers();
-      geoJsonRef.current.addData(data);
-    }
-  }, [data]);
-
-  useEffect(() => {
-    if (countryData && !isPending) {
-      console.log('Country data:', countryData);
-    }
-  }, [countryData, isPending]);
-
   return (
     <div>
-      <GeoJSON
-        ref={(instance) => {
-          geoJsonRef.current = instance;
-        }}
-        data={data}
-        style={() => style}
-        onEachFeature={onEachFeature}
-      />
-      <div className="absolute w-[350px] left-[108px] top-4 z-9999">
-        <CustomAccordion
-          loading={isPending}
-          items={[
-            {
-              title: 'Food Security',
-              iconSrc: '/Images/InfoIcon.svg',
-              content: (
-                <div className={cardsWrapperClass}>
-                  <CustomCard
-                    title="Population"
-                    content={[
-                      {
-                        imageSrc: '/Images/Population.svg',
-                        text: countryData?.population ? `${countryData.population.toFixed(2)} M` : 'N/A',
-                        altText: 'Population Icon',
-                      },
-                    ]}
-                  />
-                  <CustomCard
-                    title="People with insufficient food consumption"
-                    content={[
-                      {
-                        imageSrc: '/Images/FoodConsumption.svg',
-                        text: countryData?.fcs ? `${countryData.fcs.toFixed(2)} M` : 'N/A',
-                        altText: 'Population Icon',
-                      },
-                      {
-                        imageSrc: '/Images/ArrowRed.svg',
-                        // TODO plus minus depending on the value
-                        text: countryData?.fcsMinus1 ? `- ${countryData.fcsMinus1.toFixed(2)} M` : 'N/A',
-                        timeText: '1 Months ago',
-                        altText: 'Icon',
-                      },
-                      {
-                        imageSrc: '/Images/ArrowGreen.svg',
-                        text: countryData?.fcsMinus3 ? `- ${countryData.fcsMinus3.toFixed(2)} M` : 'N/A',
-                        timeText: '3 Month ago',
-                        altText: 'Other Icon',
-                      },
-                    ]}
-                  />
-                </div>
-              ),
-            },
-          ]}
-        />
-      </div>
+      <FcsAccordion countryData={countryData} countryIso3Data={countryIso3Data} loading={loading} />
+      <GeoJSON data={data} style={dynamicStyle} onEachFeature={onEachFeature} />
     </div>
   );
 }

@@ -1,10 +1,10 @@
 import 'leaflet/dist/leaflet.css';
 
 import { Feature, GeoJsonProperties, Geometry } from 'geojson';
+import { useState } from 'react';
 import { MapContainer, ZoomControl } from 'react-leaflet';
 
 import { useSidebar } from '@/domain/contexts/SidebarContext';
-import { CountryMapData } from '@/domain/entities/country/CountryMapData';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight';
 import { MapProps } from '@/domain/props/MapProps';
 
@@ -14,25 +14,10 @@ import VectorTileLayer from './VectorTileLayer';
 
 export default function Map({ countries, disputedAreas }: MapProps) {
   const { selectedMapType } = useSidebar();
-
-  const onCountryClick = (countryMapData: CountryMapData) => {
-    console.log('Country clicked:', countryMapData);
-  };
+  const [selectedCountryId, setSelectedCountryId] = useState<number | undefined>();
 
   const countryStyle: L.PathOptions = {
     color: undefined,
-    // weight: 1,
-    // opacity: 1,
-    // fillOpacity: 0.2,
-    // fillColor: '#3388ff'
-  };
-
-  const countryHoverStyle: L.PathOptions = {
-    color: undefined,
-    // weight: 2,
-    // opacity: 1,
-    // fillOpacity: 0.4,
-    // fillColor: '#0056b3'
   };
 
   return (
@@ -50,18 +35,18 @@ export default function Map({ countries, disputedAreas }: MapProps) {
       style={{ height: '100%', width: '100%', zIndex: 1 }}
     >
       <AlertContainer />
-      {countries && (
-        <VectorTileLayer countries={countries} disputedAreas={disputedAreas} onCountryClick={onCountryClick} />
-      )}
+      {countries && <VectorTileLayer countries={countries} disputedAreas={disputedAreas} />}
       {selectedMapType === GlobalInsight.FOOD &&
         countries.features
           .filter((countryData) => countryData.properties.interactive)
           .map((countryData) => (
             <Choropleth
               key={countryData.properties.adm0_id}
+              countryId={countryData.properties.adm0_id}
               data={{ type: 'FeatureCollection', features: [countryData as Feature<Geometry, GeoJsonProperties>] }}
               style={countryStyle}
-              hoverStyle={countryHoverStyle}
+              selectedCountryId={selectedCountryId}
+              setSelectedCountryId={setSelectedCountryId}
             />
           ))}
       <ZoomControl position="bottomright" />

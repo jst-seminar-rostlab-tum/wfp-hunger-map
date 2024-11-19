@@ -9,7 +9,7 @@ import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { MapProps } from '@/domain/props/MapProps';
 import { MapOperations } from '@/operations/map/MapOperations.ts';
 
-export default function VectorTileLayer({ countries, disputedAreas, onCountryClick }: MapProps) {
+export default function VectorTileLayer({ countries, disputedAreas }: MapProps) {
   const { theme } = useTheme();
   const context: LeafletContextInterface = useLeafletContext();
   const mapContainer: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
@@ -20,10 +20,10 @@ export default function VectorTileLayer({ countries, disputedAreas, onCountryCli
   useEffect(() => {
     const baseMap: mapboxgl.Map = MapOperations.createMapboxMap(
       theme === 'dark',
-      { countries, disputedAreas, onCountryClick },
+      { countries, disputedAreas },
       mapContainer
     );
-    MapOperations.setMapInteractionFunctionality(baseMap, onCountryClick);
+    MapOperations.setMapInteractionFunctionality(baseMap);
     MapOperations.synchronizeLeafletMapbox(baseMap, mapContainer, context);
     /* To add when CORS issue is solved
     MapOperations.addFCSFunctionality(baseMap, selectedMapType);

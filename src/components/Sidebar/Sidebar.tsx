@@ -15,6 +15,7 @@ import { CollapsedSidebar } from '@/components/Sidebar/CollapsedSidebar';
 import { ThemeSwitch } from '@/components/Sidebar/ThemeSwitch';
 import { pageLinks } from '@/domain/constant/PageLinks';
 import { SUBSCRIBE_MODAL_TITLE } from '@/domain/constant/subscribe/Subscribe';
+import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { AlertsMenuVariant } from '@/domain/enums/AlertsMenuVariant';
 import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
@@ -23,7 +24,8 @@ import PopupModal from '../PopupModal/PopupModal';
 import Subscribe from '../Subscribe/Subscribe';
 
 export function Sidebar() {
-  const { isSidebarOpen, toggleSidebar, selectedMapType, setSelectedMapType } = useSidebar();
+  const { isSidebarOpen, toggleSidebar } = useSidebar();
+  const { selectedMapType, setSelectedMapType } = useSelectedMap();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   if (!isSidebarOpen) {
@@ -57,7 +59,10 @@ export function Sidebar() {
                   startContent={item.icon && <NextImage src={item.icon} alt={item.label} width={24} height={24} />}
                   key={item.key}
                   variant={selectedMapType === item.key ? undefined : 'light'}
-                  className={clsx('justify-start', selectedMapType === item.key && 'bg-primary')}
+                  className={clsx(
+                    'justify-start dark:text-white',
+                    selectedMapType === item.key ? 'bg-primary text-white' : 'text-black'
+                  )}
                   onClick={() => setSelectedMapType(item.key)}
                 >
                   {item.label}
@@ -74,7 +79,7 @@ export function Sidebar() {
         </CardBody>
         <CardFooter>
           <div className="flex flex-col gap-1">
-            <Button radius="full" onClick={() => setIsModalOpen(!isModalOpen)} size="sm" className="w-fit">
+            <Button radius="full" onClick={() => setIsModalOpen(!isModalOpen)} size="sm" className="w-fit text-white">
               SUBSCRIBE
             </Button>
             <PopupModal

@@ -11,4 +11,5 @@ export interface IChat {
   id: number;
   title: string;
   messages: IMessage[];
+  isTyping: boolean;
 }

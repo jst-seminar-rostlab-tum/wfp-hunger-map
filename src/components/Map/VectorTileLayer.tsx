@@ -5,7 +5,7 @@ import mapboxgl from 'mapbox-gl'; // eslint-disable-line import/no-webpack-loade
 import { useTheme } from 'next-themes';
 import React, { RefObject, useEffect, useRef } from 'react';
 
-import { useSidebar } from '@/domain/contexts/SidebarContext';
+import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { MapProps } from '@/domain/props/MapProps';
 import { MapOperations } from '@/operations/map/MapOperations.ts';
 
@@ -13,7 +13,7 @@ export default function VectorTileLayer({ countries, disputedAreas }: MapProps) 
   const { theme } = useTheme();
   const context: LeafletContextInterface = useLeafletContext();
   const mapContainer: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
-  const { selectedMapType } = useSidebar();
+  const { selectedMapType } = useSelectedMap();
 
   mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 
@@ -25,9 +25,10 @@ export default function VectorTileLayer({ countries, disputedAreas }: MapProps) 
     );
     MapOperations.setMapInteractionFunctionality(baseMap);
     MapOperations.synchronizeLeafletMapbox(baseMap, mapContainer, context);
-    /* To add when CORS issue is solved
-    MapOperations.addFCSFunctionality(baseMap, selectedMapType);
-     */
+    // The following layers currently don't work due to CORS issues.
+    MapOperations.addRainfallLayer(baseMap, selectedMapType);
+    MapOperations.addVegetationLayer(baseMap, selectedMapType);
+    MapOperations.addFCSLayer(baseMap, selectedMapType);
 
     return () => {
       baseMap.remove();

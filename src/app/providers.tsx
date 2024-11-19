@@ -6,6 +6,8 @@ import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import type { ThemeProviderProps } from 'next-themes/dist/types.d.ts';
 import * as React from 'react';
 
+import { SelectedAlertProvider } from '@/domain/contexts/SelectedAlertContext';
+import { SelectedMapProvider } from '@/domain/contexts/SelectedMapContext';
 import { SidebarProvider } from '@/domain/contexts/SidebarContext';
 
 export interface ProvidersProps {
@@ -19,7 +21,11 @@ export function Providers({ children, themeProps }: ProvidersProps) {
   return (
     <NextUIProvider navigate={router.push}>
       <NextThemesProvider defaultTheme="system" {...themeProps}>
-        <SidebarProvider>{children} </SidebarProvider>
+        <SidebarProvider>
+          <SelectedMapProvider>
+            <SelectedAlertProvider>{children}</SelectedAlertProvider>
+          </SelectedMapProvider>
+        </SidebarProvider>
       </NextThemesProvider>
     </NextUIProvider>
   );

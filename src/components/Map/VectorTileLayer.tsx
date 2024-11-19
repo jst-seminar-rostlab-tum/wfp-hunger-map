@@ -25,11 +25,10 @@ export default function VectorTileLayer({ countries, disputedAreas }: MapProps) 
     );
     MapOperations.setMapInteractionFunctionality(baseMap);
     MapOperations.synchronizeLeafletMapbox(baseMap, mapContainer, context);
-    /* To add when CORS issue is solved
+    // The following layers currently don't work due to CORS issues.
     MapOperations.addRainfallLayer(baseMap, selectedMapType);
     MapOperations.addVegetationLayer(baseMap, selectedMapType);
     MapOperations.addFCSLayer(baseMap, selectedMapType);
-     */
 
     return () => {
       baseMap.remove();

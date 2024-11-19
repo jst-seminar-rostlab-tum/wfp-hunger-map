@@ -1,21 +1,15 @@
-import { Feature, FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
+import { Feature, GeoJsonProperties, Geometry } from 'geojson';
 import L from 'leaflet';
 import React from 'react';
+import ReactDOMServer from 'react-dom/server';
 import { GeoJSON } from 'react-leaflet';
 
-import { CountryData } from '@/domain/entities/country/CountryData';
-import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data';
+import FscCountryChoroplethProps from '@/domain/props/FcsCountryChoroplethProps';
 
 import FcsAccordion from './FcsAccordion';
+import FcsRegionTooltip from './FcsRegionTooltip';
 
-interface FscCountryChoroplethProps {
-  data: FeatureCollection<Geometry, GeoJsonProperties>;
-  countryData: CountryData | undefined;
-  countryIso3Data: CountryIso3Data | undefined;
-  loading: boolean;
-}
-
-function FscCountryChoropleth({ data, countryData, countryIso3Data, loading }: FscCountryChoroplethProps) {
+function FscCountryChoropleth({ regionData, countryData, countryIso3Data, loading }: FscCountryChoroplethProps) {
   const fcsFill = (fcs: number | null) => {
     if (fcs === null) return 'none';
     if (fcs <= 0.05) return '#29563A';
@@ -36,10 +30,12 @@ function FscCountryChoropleth({ data, countryData, countryIso3Data, loading }: F
   };
 
   const onEachFeature = (feature: Feature<Geometry, GeoJsonProperties>, layer: L.Layer) => {
-    const tooltipContent = `
-      <b>${feature.properties?.Name}</b><br/>
-      Tooltip Content
-    `;
+    const hoveredRegionFeature = regionData.features.find(
+      (regionFeature) => regionFeature.properties?.Code === feature.properties?.Code
+    );
+    const tooltipContent = hoveredRegionFeature
+      ? ReactDOMServer.renderToStaticMarkup(<FcsRegionTooltip feature={hoveredRegionFeature} />)
+      : 'N/A';
     layer.bindTooltip(tooltipContent, { className: 'state-tooltip' });
 
     const pathLayer = layer as L.Path;
@@ -54,7 +50,7 @@ function FscCountryChoropleth({ data, countryData, countryIso3Data, loading }: F
   return (
     <div>
       <FcsAccordion countryData={countryData} countryIso3Data={countryIso3Data} loading={loading} />
-      <GeoJSON data={data} style={dynamicStyle} onEachFeature={onEachFeature} />
+      <GeoJSON data={regionData} style={dynamicStyle} onEachFeature={onEachFeature} />
     </div>
   );
 }

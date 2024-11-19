@@ -1,24 +1,17 @@
 import { Feature, FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
-import L, { PathOptions } from 'leaflet';
+import L from 'leaflet';
 import React, { useEffect, useRef, useState } from 'react';
 import { GeoJSON, useMap } from 'react-leaflet';
 
 import container from '@/container';
 import { CountryData } from '@/domain/entities/country/CountryData';
 import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data';
+import FcsChoroplethProps from '@/domain/props/FcsChoroplethProps';
 import CountryRepository from '@/domain/repositories/CountryRepository';
 
 import FscCountryChoropleth from './FcsCountryChoropleth';
 
-interface ChoroplethProps {
-  data: FeatureCollection<Geometry, GeoJsonProperties>;
-  style: PathOptions;
-  countryId: number;
-  selectedCountryId?: number;
-  setSelectedCountryId: (countryId: number) => void;
-}
-
-function Choropleth({ data, style, countryId, selectedCountryId, setSelectedCountryId }: ChoroplethProps) {
+function FcsChoropleth({ data, style, countryId, selectedCountryId, setSelectedCountryId }: FcsChoroplethProps) {
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
   const map = useMap();
   const [countryData, setCountryData] = useState<CountryData | undefined>();
@@ -81,7 +74,7 @@ function Choropleth({ data, style, countryId, selectedCountryId, setSelectedCoun
       />
       {regionData && countryId === selectedCountryId && (
         <FscCountryChoropleth
-          data={regionData}
+          regionData={regionData}
           countryData={countryData}
           countryIso3Data={countryIso3Data}
           loading={loading}
@@ -91,4 +84,4 @@ function Choropleth({ data, style, countryId, selectedCountryId, setSelectedCoun
   );
 }
 
-export default Choropleth;
+export default FcsChoropleth;

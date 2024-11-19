@@ -2,22 +2,20 @@
 
 import { Button } from '@nextui-org/button';
 import { useDisclosure } from '@nextui-org/modal';
+import { Slider } from '@nextui-org/slider';
 import Highcharts from 'highcharts';
 import Exporting from 'highcharts/modules/exporting';
 import OfflineExporting from 'highcharts/modules/offline-exporting';
 import HighchartsReact from 'highcharts-react-official';
 import { Chart, Diagram, Maximize4, Settings } from 'iconsax-react';
 import { useTheme } from 'next-themes';
-import { useCallback, useEffect, useState } from 'react';
-import { erase } from 'sisteransi';
+import { useEffect, useState } from 'react';
 
 import { LineChartModal } from '@/components/Charts/LineChartModal';
 import { Tooltip } from '@/components/Tooltip/Tooltip';
 import { LineChartData } from '@/domain/entities/charts/LineChartData';
 import LineChartProps from '@/domain/props/LineChartProps';
 import LineChartOperations from '@/operations/charts/LineChartOperations';
-import line = erase.line;
-import { Slider } from '@nextui-org/slider';
 
 // initialize the exporting module
 if (typeof Highcharts === 'object') {

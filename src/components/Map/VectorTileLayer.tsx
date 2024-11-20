@@ -25,7 +25,6 @@ export default function VectorTileLayer({ countries, disputedAreas }: MapProps) 
     );
     MapOperations.setMapInteractionFunctionality(baseMap);
     MapOperations.synchronizeLeafletMapbox(baseMap, mapContainer, context);
-    /* MapOperations.addNutritionChoroplethFunctionality(baseMap, selectedMapType, nutrition.nutrition, countries); */
     return () => {
       baseMap.remove();
       context.map.off('move');

@@ -126,6 +126,7 @@ module.exports = {
             nutritionGradientStart: '#fff3f3ff',
             nutritionGradientMiddle: '#fa9997',
             nutritionGradientEnd: '#f32e27',
+            nutritionNotAnalyzed: '#52525b',
           },
         },
         dark: {

@@ -32,6 +32,7 @@ export default function CustomAccordion({ items, loading = false }: AccordionsPr
               </div>
             }
           >
+            {item.description && <p className="text-sm text-balance pb-8 text-center">{item.description}</p>}
             {typeof item.content === 'string' ? (
               <div className="p-4 break-words text-balance">{item.content}</div>
             ) : (

@@ -1,7 +1,7 @@
-import { nextui } from '@nextui-org/theme';
-
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+const { nextui } = require('@nextui-org/theme');
+
+const config = {
   safelist: [
     'w-[215px]',
     'w-[179px]',
@@ -34,10 +34,15 @@ module.exports = {
     'text-hazarAdvisory',
     'text-hazardInformation',
     'text-hazardTermination',
+    'bg-fatalityAlert',
+    'bg-climateWetAlert',
+    'bg-climateDryAlert',
   ],
   content: [
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/domain/constant/dataSourceTables/dataSourceAccordionItems.tsx',
+    './src/operations/groupedTable/formatDataSourceTable.tsx',
     './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
@@ -76,6 +81,8 @@ module.exports = {
       animation: {
         blink: 'blink 1s step-end infinite',
         pulse: 'pulse 1.5s ease-in-out infinite',
+        opacityPulse: 'opacityPulse 1.5s infinite',
+        pulsingAlert: 'pulsingAlert 2s cubic-bezier(0, 0, 0.2, 1) infinite',
       },
       keyframes: {
         blink: {
@@ -84,6 +91,16 @@ module.exports = {
         pulse: {
           '0%, 100%': { transform: 'scale(1)', opacity: '0.6' },
           '50%': { transform: 'scale(1.3)', opacity: '1' },
+        },
+        opacityPulse: {
+          '0%, 100%': { 'fill-opacity': '1' },
+          '50%': { 'fill-opacity': '0.5' },
+        },
+        pulsingAlert: {
+          '75%, 100%': {
+            transform: 'scale(2)',
+            opacity: 0,
+          },
         },
       },
     },
@@ -117,8 +134,6 @@ module.exports = {
             chatbotUserMsg: '#E6F1FE',
             chatbotDivider: '#292d32',
             surfaceGrey: '#B0B0B0',
-            activeCountries: '#82bce0',
-            inactiveCountries: '#a7b3ba',
             subscribeText: '#284366',
             conflictProtest: '#0d657de6',
             conflictRiot: '#c95200e6',
@@ -134,6 +149,17 @@ module.exports = {
             fcsGreen: '#345d34',
             fcsOrange: '#ea6a2c',
             fcsRed: '#fa190e',
+            rainfallLow: '#b99260',
+            rainfallNormal: '#fff',
+            rainfallHigh: '#4295d3',
+            vegetationLow: '#b99260',
+            vegetationNormal: '#fff',
+            vegetationHigh: '#b1dbb5',
+            countriesBase: '#fefeff',
+            ocean: '#91cccb',
+            fatalityAlert: '#742280',
+            climateWetAlert: '#4295D3',
+            climateDryAlert: '#B95926',
           },
         },
         dark: {
@@ -161,8 +187,6 @@ module.exports = {
             chatbotUserMsg: '#26262A',
             chatbotDivider: '#556372',
             surfaceGrey: '#444444',
-            activeCountries: '#115884',
-            inactiveCountries: '#85929b',
             subscribeText: '#ffffff',
             conflictProtest: '#0d657de6',
             conflictRiot: '#c95200e6',
@@ -170,9 +194,16 @@ module.exports = {
             conflictCivil: '#96badc',
             conflictExplosion: '#eaaf75',
             conflictStrategic: '#bec0c1',
+            countriesBase: '#0e6397',
+            ocean: '#111111',
+            fatalityAlert: '#742280',
+            climateWetAlert: '#4295D3',
+            climateDryAlert: '#B95926',
           },
         },
       },
     }),
   ],
 };
+
+module.exports = config;

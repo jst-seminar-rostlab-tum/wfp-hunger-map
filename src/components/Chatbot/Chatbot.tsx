@@ -15,8 +15,6 @@ import container from '@/container';
 import {
   CHAT_TITLE,
   CLOSE_SIDE_BAR,
-  DATA_SOURCES,
-  DEFAULT_DATA_SOURCES,
   DEFAULT_PROMPT,
   ENTER_FULL_SCREEN,
   EXIT_FULL_SCREEN,
@@ -30,6 +28,7 @@ import { APIError } from '@/domain/entities/chatbot/BackendCommunication';
 import { IChat } from '@/domain/entities/chatbot/Chatbot';
 import { SenderRole } from '@/domain/enums/SenderRole';
 import ChatbotRepository from '@/domain/repositories/ChatbotRepository';
+import ChatbotOperations from '@/operations/chatbot/Chatbot';
 import { useMediaQuery } from '@/utils/resolution';
 
 import TypingDots from '../TypingText/TypingDot';
@@ -41,11 +40,10 @@ export default function HungerMapChatbot() {
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isUserMessageSent, setIsUserMessageSent] = useState(false);
-  const [chats, setChats] = useState<IChat[]>([{ id: 1, title: 'Chat 1', messages: [] }]);
+  const [chats, setChats] = useState<IChat[]>([{ id: 1, title: 'Chat 1', messages: [], isTyping: false }]);
   const [currentChatIndex, setCurrentChatIndex] = useState(0);
   const [input, setInput] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
-  const [isResponding, setIsResponding] = useState(false);
+  const [isResponseAnimated, setIsResponseAnimated] = useState(true);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery('(max-width: 640px)');
@@ -67,12 +65,16 @@ export default function HungerMapChatbot() {
   };
 
   const startNewChat = (): void => {
-    const newChat: IChat = { id: chats.length + 1, title: `Chat ${chats.length + 1}`, messages: [] };
+    const newChat: IChat = { id: chats.length + 1, title: `Chat ${chats.length + 1}`, messages: [], isTyping: false };
     setChats([...chats, newChat]);
     setCurrentChatIndex(chats.length);
     if (isMobile) {
       setIsSidebarOpen(false);
     }
+  };
+
+  const setTypingStatus = (chatIndex: number, isTyping: boolean): void => {
+    setChats((prevChats) => prevChats.map((chat, index) => (index === chatIndex ? { ...chat, isTyping } : chat)));
   };
 
   /**
@@ -103,51 +105,45 @@ export default function HungerMapChatbot() {
       }
     }
     // TODO: get data sources from response later
-    const dataSources = DEFAULT_DATA_SOURCES;
     const updatedChatsWithAI = structuredClone(chats);
     updatedChatsWithAI[currentChatIndex].messages.push({
       id: crypto.randomUUID(),
       content: aiResponse,
       role: SenderRole.ASSISTANT,
-      dataSources,
     });
     setChats(updatedChatsWithAI);
-    setIsResponding(true);
   };
 
   /**
    * Handle form submit
-   * @param fromEvent is form event including key down triggered submit
+   * @param submitEvent is form event including key down triggered submit
    * @param promptText is requested text from user
    */
-  const handleSubmit = (fromEvent: React.FormEvent, promptText: string | null = null): void => {
-    fromEvent.preventDefault();
-    const text = promptText || input;
-    if (isTyping) return; // prevent multiple submission
-    if (text.trim()) {
-      const updatedChats = structuredClone(chats);
-      updatedChats[currentChatIndex].messages.push({ id: crypto.randomUUID(), content: text, role: SenderRole.USER });
-      if (updatedChats[currentChatIndex].title === `Chat ${updatedChats[currentChatIndex].id}`) {
-        updatedChats[currentChatIndex].title = text.slice(0, 30) + (text.length > 30 ? '...' : '');
+  const handleSubmit = (submitEvent: React.FormEvent, promptText: string | null = null): void => {
+    if (isResponseAnimated) {
+      setIsResponseAnimated(false);
+      const text = promptText || input;
+      const updatedChats = ChatbotOperations.processInput(submitEvent, chats, currentChatIndex, text);
+      if (text.trim()) {
+        setChats(updatedChats);
+        setInput('');
+        setIsUserMessageSent(true);
+        setTypingStatus(currentChatIndex, true);
       }
-      setChats(updatedChats);
-      setInput('');
-      setIsUserMessageSent(true);
-      setIsTyping(true);
     }
   };
 
   const handleKeyDown = (keyboardEvent: React.KeyboardEvent<HTMLTextAreaElement>): void => {
-    if (keyboardEvent.key === 'Enter' && !keyboardEvent.shiftKey) {
+    if (isResponseAnimated && keyboardEvent.key === 'Enter' && !keyboardEvent.shiftKey) {
       keyboardEvent.preventDefault();
-      if (isTyping) return; // prevent multiple submission
+      if (chats[currentChatIndex].isTyping) return; // prevent multiple submission
       handleSubmit(keyboardEvent);
     }
   };
 
   const onTypingComplete = (): void => {
-    setIsTyping(false);
-    setIsResponding(false);
+    setTypingStatus(currentChatIndex, false);
+    setIsResponseAnimated(true);
   };
 
   /**
@@ -194,7 +190,7 @@ export default function HungerMapChatbot() {
           <Button
             onClick={toggleChat}
             className="
-            relative flex items-center justify-center min-w-12 h-12 px-1 rounded-full bg-white dark:bg-black shadow-md"
+            relative flex items-center justify-center min-w-12 h-12 px-1 rounded-full bg-content1 shadow-md"
           >
             <Bot size={24} />
           </Button>
@@ -294,10 +290,10 @@ export default function HungerMapChatbot() {
                       )}
                       <div
                         className={clsx(
-                          'p-2 mb-5 rounded-lg max-w-[80%]',
+                          'mb-5 rounded-lg max-w-[80%]',
                           message.role === SenderRole.USER
-                            ? 'rounded-xl bg-chatbotUserMsg dark:bg-chatbotUserMsg ml-12'
-                            : 'bg-transparent'
+                            ? 'rounded-xl p-2 bg-chatbotUserMsg dark:bg-chatbotUserMsg ml-12'
+                            : 'bg-transparent pl-2 pr-2'
                         )}
                       >
                         {message.role === SenderRole.USER ? (
@@ -305,27 +301,18 @@ export default function HungerMapChatbot() {
                         ) : (
                           <TypingText
                             text={message.content}
-                            speed={100}
-                            endSentencePause={500}
-                            onTypingComplete={onTypingComplete}
+                            textID={message.id}
+                            chatIndex={currentChatIndex}
+                            onTypingStart={() => setTypingStatus(currentChatIndex, false)}
+                            onTypingComplete={() => onTypingComplete()}
                           />
-                        )}
-                        {message.dataSources && (
-                          <div className="mt-2 text-xs text-gray-600 dark:text-gray-400">
-                            <p className="truncate">{DATA_SOURCES}</p>
-                            <ul className="list-disc pl-4">
-                              {message.dataSources.map((source) => (
-                                <li key={source}>{source}</li>
-                              ))}
-                            </ul>
-                          </div>
                         )}
                       </div>
                     </div>
                   ))
                 )}
 
-                {isTyping && !isResponding && (
+                {chats[currentChatIndex].isTyping && (
                   <div className="flex justify-start mb-4">
                     <div className="relative flex items-center justify-center bg-transparent w-10 h-10 rounded-full border-2 border-black dark:border-white bg-white dark:bg-black">
                       <Bot />
@@ -350,7 +337,7 @@ export default function HungerMapChatbot() {
                     rows={1}
                   />
                   <Tooltip text="Submit">
-                    <Button type="submit" variant="light" isIconOnly disabled={isTyping}>
+                    <Button type="submit" variant="light" isIconOnly disabled={chats[currentChatIndex].isTyping}>
                       <Send2 size={24} />
                     </Button>
                   </Tooltip>

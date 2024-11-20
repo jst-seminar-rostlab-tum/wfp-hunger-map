@@ -3,15 +3,20 @@ import clsx from 'clsx';
 import NextImage from 'next/image';
 import { forwardRef } from 'react';
 
+import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { AlertButtonProps } from '@/domain/props/AlertButtonProps';
 
 export const AlertButton = forwardRef<HTMLButtonElement, AlertButtonProps>(
   ({ icon, label, isSelected, onClick, className, ...props }, ref) => {
+    const { isSidebarOpen } = useSidebar();
     return (
       <Button
         isIconOnly
         radius="full"
-        className={clsx(isSelected ? 'bg-primary' : 'bg-content2', className)}
+        className={clsx(
+          { 'bg-content2': isSidebarOpen, 'bg-content1': !isSidebarOpen, 'bg-primary': isSelected },
+          className
+        )}
         onClick={onClick}
         ref={ref}
         {...props}

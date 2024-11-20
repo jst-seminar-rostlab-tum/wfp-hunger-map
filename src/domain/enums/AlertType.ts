@@ -1,5 +1,5 @@
 export enum AlertType {
-  HUNGER = 'hunger',
+  COUNTRY_ALERTS = 'countryAlerts',
   CONFLICTS = 'conflicts',
   HAZARDS = 'hazards',
 }

@@ -1,6 +1,8 @@
+import { CountryAlertLegendItem } from '@/components/Map/Alerts/CountryAlerts/CountryAlertLegendItem';
 import { HazardLegendItem } from '@/components/Map/Alerts/HazardLegendItem';
 import { AlertType } from '@/domain/enums/AlertType.ts';
 import { ConflictType } from '@/domain/enums/ConflictType.ts';
+import { CountryAlertType } from '@/domain/enums/CountryAlertType';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
 import { HazardSeverity } from '@/domain/enums/HazardSeverity.ts';
 import { GradientLegendContainerItem } from '@/domain/props/GradientLegendContainerItem.ts';
@@ -41,6 +43,18 @@ export function mapLegendData(
           { label: HazardSeverity.TERMINATION, color: 'hazardTermination' },
         ],
         renderItem: HazardLegendItem,
+      });
+      break;
+    case AlertType.COUNTRY_ALERTS:
+      legendData.push({
+        title: 'Country alerts',
+        tooltipInfo: 'Alerts on a country level.',
+        records: [
+          { label: CountryAlertType.FATALITY, color: 'fatalityAlert' },
+          { label: CountryAlertType.CLIMATE_WET, color: 'climateWetAlert' },
+          { label: CountryAlertType.CLIMATE_DRY, color: 'climateDryAlert' },
+        ],
+        renderItem: CountryAlertLegendItem,
       });
       break;
     default:

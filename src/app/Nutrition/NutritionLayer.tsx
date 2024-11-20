@@ -26,7 +26,6 @@ export default function NutritionChoropleth({
   const [showStateChoropleth, setShowStateChoropleth] = useState<boolean>(false);
   const [selectedCountryId, setSelectedCountryId] = useState<GeoJSON.FeatureCollection | undefined>(undefined);
 
-  // Define ref type
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
 
   const map = useMap();
@@ -38,7 +37,6 @@ export default function NutritionChoropleth({
         const regData = await CountryRepo.getRegionData(countryId);
         const regNutritionData = await CountryRepo.getRegionNutritionData(countryId);
         setSelectedCountryId(regNutritionData as GeoJSON.FeatureCollection);
-        console.log('bulshit', regNutritionData);
         if (regData && regData.features) {
           setRegionData({
             type: 'FeatureCollection',

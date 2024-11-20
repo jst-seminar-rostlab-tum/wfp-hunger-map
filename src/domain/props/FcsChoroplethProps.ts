@@ -6,5 +6,5 @@ export default interface FcsChoroplethProps {
   style: PathOptions;
   countryId: number;
   selectedCountryId?: number;
-  setSelectedCountryId: (countryId: number) => void;
+  setSelectedCountryId: (countryId?: number) => void;
 }

@@ -5,7 +5,7 @@ import { CountryIso3Data } from '../entities/country/CountryIso3Data';
 
 export default interface FscCountryChoroplethProps {
   regionData: FeatureCollection<Geometry, GeoJsonProperties>;
-  countryData: CountryData | undefined;
-  countryIso3Data: CountryIso3Data | undefined;
+  countryData?: CountryData;
+  countryIso3Data?: CountryIso3Data;
   loading: boolean;
 }

@@ -192,30 +192,42 @@ export class MapOperations {
     });
   }
 
-  static addFCSLayer(baseMap: mapboxgl.Map, selectedMapType: GlobalInsight) {
+  static changeMapTheme(baseMap: mapboxgl.Map, isDark: boolean) {
+    const mapColors: MapColorsType = getColors(isDark);
+    baseMap.setPaintProperty('ocean', 'background-color', mapColors.ocean);
+    baseMap.setPaintProperty('countries-base', 'fill-color', mapColors.countriesBase);
+    baseMap.setPaintProperty('countries-inactive', 'fill-color', mapColors.inactiveCountriesOverlay);
+    baseMap.setPaintProperty('countries-hover', 'fill-color', mapColors.outline);
+    baseMap.setPaintProperty('country-borders', 'line-color', mapColors.outline);
+    baseMap.setPaintProperty('mapbox-roads', 'line-color', mapColors.roads);
+  }
+
+  static FCS_RASTER = 'fcsRaster';
+
+  static FCS_LAYER = 'fcsLayer';
+
+  static RAINFALL_RASTER = 'rainfallRaster';
+
+  static RAINFALL_LAYER = 'rainfallLayer';
+
+  static VEGETATION_RASTER = 'vegetationRaster';
+
+  static VEGETATION_LAYER = 'vegetationLayer';
+
+  static initFCSLayer(baseMap: mapboxgl.Map) {
     baseMap.on('load', () => {
-      baseMap.addSource('fcsRaster', {
+      baseMap.addSource(this.FCS_RASTER, {
         type: 'raster',
         tiles: ['https://static.hungermapdata.org/proteus_tiles/{z}/{x}/{y}.png'],
         tileSize: 256,
         scheme: 'tms',
       });
-
-      baseMap.addLayer(
-        {
-          id: 'fcsLayer',
-          type: 'raster',
-          source: 'fcsRaster',
-          layout: { visibility: selectedMapType === GlobalInsight.FOOD ? 'visible' : 'none' },
-        },
-        'countries-inactive'
-      );
     });
   }
 
-  static addRainfallLayer(baseMap: mapboxgl.Map, selectedMapType: GlobalInsight) {
+  static initRainfallLayer(baseMap: mapboxgl.Map) {
     baseMap.on('load', () => {
-      baseMap.addSource('rainfallRaster', {
+      baseMap.addSource(this.RAINFALL_RASTER, {
         type: 'raster',
         tiles: [`https://dev.api.earthobservation.vam.wfp.org/tiles/latest/r3q_dekad/{z}/{x}/{y}.png`],
         tileSize: 256,
@@ -223,22 +235,12 @@ export class MapOperations {
         maxzoom: 7,
         bounds: [-180, -49, 180, 49],
       });
-
-      baseMap.addLayer(
-        {
-          id: 'rainfallLayer',
-          type: 'raster',
-          source: 'rainfallRaster',
-          layout: { visibility: selectedMapType === GlobalInsight.RAINFALL ? 'visible' : 'none' },
-        },
-        'countries-inactive'
-      );
     });
   }
 
-  static addVegetationLayer(baseMap: mapboxgl.Map, selectedMapType: GlobalInsight) {
+  static initVegetationLayer(baseMap: mapboxgl.Map) {
     baseMap.on('load', () => {
-      baseMap.addSource('vegetationRaster', {
+      baseMap.addSource(this.VEGETATION_RASTER, {
         type: 'raster',
         tiles: [`https://dev.api.earthobservation.vam.wfp.org/tiles/latest/viq_dekad/{z}/{x}/{y}.png`],
         tileSize: 256,
@@ -246,16 +248,53 @@ export class MapOperations {
         maxzoom: 7,
         bounds: [-180, -60, 180, 80],
       });
-
-      baseMap.addLayer(
-        {
-          id: 'vegetationLayer',
-          type: 'raster',
-          source: 'vegetationRaster',
-          layout: { visibility: selectedMapType === GlobalInsight.VEGETATION ? 'visible' : 'none' },
-        },
-        'countries-inactive'
-      );
     });
+  }
+
+  static addMapAsLayer(baseMap: mapboxgl.Map, selectedMap: GlobalInsight) {
+    switch (selectedMap) {
+      case GlobalInsight.FOOD:
+        baseMap.addLayer(
+          {
+            id: this.FCS_LAYER,
+            type: 'raster',
+            source: this.FCS_RASTER,
+          },
+          'countries-inactive'
+        );
+        break;
+      case GlobalInsight.VEGETATION:
+        baseMap.addLayer(
+          {
+            id: this.VEGETATION_LAYER,
+            type: 'raster',
+            source: this.VEGETATION_RASTER,
+          },
+          'countries-inactive'
+        );
+        break;
+      case GlobalInsight.RAINFALL:
+        baseMap.addLayer(
+          {
+            id: this.RAINFALL_LAYER,
+            type: 'raster',
+            source: this.RAINFALL_RASTER,
+          },
+          'countries-inactive'
+        );
+        break;
+      default:
+    }
+  }
+
+  static removeActiveMapLayer(baseMap: mapboxgl.Map) {
+    const layers = baseMap.getStyle()?.layers;
+    if (!layers) return;
+    const layerToRemove = layers.find((layer) =>
+      // TODO make sure to update this list with the new layers!
+      [this.FCS_LAYER, this.VEGETATION_LAYER, this.RAINFALL_LAYER].includes(layer.id)
+    );
+    if (!layerToRemove) return;
+    baseMap.removeLayer(layerToRemove.id);
   }
 }

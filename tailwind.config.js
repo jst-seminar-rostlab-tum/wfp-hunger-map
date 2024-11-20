@@ -38,6 +38,8 @@ const config = {
   content: [
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/domain/constant/dataSourceTables/dataSourceAccordionItems.tsx',
+    './src/operations/groupedTable/formatDataSourceTable.tsx',
     './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
@@ -76,6 +78,7 @@ const config = {
       animation: {
         blink: 'blink 1s step-end infinite',
         pulse: 'pulse 1.5s ease-in-out infinite',
+        opacityPulse: 'opacityPulse 1.5s infinite',
       },
       keyframes: {
         blink: {
@@ -84,6 +87,10 @@ const config = {
         pulse: {
           '0%, 100%': { transform: 'scale(1)', opacity: '0.6' },
           '50%': { transform: 'scale(1.3)', opacity: '1' },
+        },
+        opacityPulse: {
+          '0%, 100%': { 'fill-opacity': '1' },
+          '50%': { 'fill-opacity': '0.5' },
         },
       },
     },
@@ -117,8 +124,6 @@ const config = {
             chatbotUserMsg: '#E6F1FE',
             chatbotDivider: '#292d32',
             surfaceGrey: '#B0B0B0',
-            activeCountries: '#82bce0',
-            inactiveCountries: '#a7b3ba',
             subscribeText: '#284366',
             conflictProtest: '#0d657de6',
             conflictRiot: '#c95200e6',
@@ -140,6 +145,8 @@ const config = {
             vegetationLow: '#b99260',
             vegetationNormal: '#fff',
             vegetationHigh: '#b1dbb5',
+            countriesBase: '#fefeff',
+            ocean: '#91cccb'
           },
         },
         dark: {
@@ -167,8 +174,6 @@ const config = {
             chatbotUserMsg: '#26262A',
             chatbotDivider: '#556372',
             surfaceGrey: '#444444',
-            activeCountries: '#115884',
-            inactiveCountries: '#85929b',
             subscribeText: '#ffffff',
             conflictProtest: '#0d657de6',
             conflictRiot: '#c95200e6',
@@ -176,6 +181,8 @@ const config = {
             conflictCivil: '#96badc',
             conflictExplosion: '#eaaf75',
             conflictStrategic: '#bec0c1',
+            countriesBase: '#0e6397',
+            ocean: '#111111'
           },
         },
       },

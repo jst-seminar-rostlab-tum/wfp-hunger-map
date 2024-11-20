@@ -1,4 +1,4 @@
-import ExternalLink from '@/components/About/ExternalLink';
+import StyledLink from '@/components/About/StyledLink';
 import { GroupedTableColumns, GroupedTableData } from '@/domain/props/GroupedTableProps';
 
 export const accuracyTableColumns = [
@@ -8,15 +8,15 @@ export const accuracyTableColumns = [
   { columnId: 'rCSI', label: 'rCSI' },
 ] as GroupedTableColumns;
 
-export const accuracyTableData = [
+export const accuracyTableContents = [
   {
     groupKey: '1',
     groupName: (
       <>
         {' '}
-        <ExternalLink href="https://en.wikipedia.org/wiki/Coefficient_of_determination" className="text-sm">
+        <StyledLink href="https://en.wikipedia.org/wiki/Coefficient_of_determination" className="text-sm">
           Coefficient of determination (R²)
-        </ExternalLink>{' '}
+        </StyledLink>{' '}
         (higher is better)
       </>
     ),
@@ -29,9 +29,9 @@ export const accuracyTableData = [
     groupKey: '2',
     groupName: (
       <span className="text-small">
-        <ExternalLink href="https://en.wikipedia.org/wiki/Mean_absolute_error" className="text-sm">
+        <StyledLink href="https://en.wikipedia.org/wiki/Mean_absolute_error" className="text-sm">
           Mean Absolute Error
-        </ExternalLink>{' '}
+        </StyledLink>{' '}
         (lower is better)
       </span>
     ),

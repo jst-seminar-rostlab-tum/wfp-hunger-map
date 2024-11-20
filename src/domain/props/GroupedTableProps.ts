@@ -26,3 +26,13 @@ export default interface GroupedTableProps {
   data: GroupedTableData;
   ariaLabel?: string;
 }
+
+export type DataSourceTableData = {
+  label: string;
+  description: ReactNode;
+  readMoreLink?: string;
+  dataSource: ReactNode;
+  dataSourceLink?: string;
+  updateInterval?: string;
+  updateDetails?: readonly { label: ReactNode; interval: string }[];
+}[];

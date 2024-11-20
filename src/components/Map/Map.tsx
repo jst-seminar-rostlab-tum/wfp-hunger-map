@@ -4,6 +4,7 @@ import { Feature, GeoJsonProperties, Geometry } from 'geojson';
 import { useState } from 'react';
 import { MapContainer, ZoomControl } from 'react-leaflet';
 
+import { MAP_MAX_ZOOM, MAP_MIN_ZOOM } from '@/domain/constant/map/Map.ts';
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight';
 import { MapProps } from '@/domain/props/MapProps';

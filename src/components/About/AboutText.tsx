@@ -1,7 +1,7 @@
 import React from 'react';
 
-import ExternalLink from '@/components/About/ExternalLink';
 import HungerMapLiveSuperscript from '@/components/About/HungerMapLiveSuperscript';
+import StyledLink from '@/components/About/StyledLink';
 
 export function AboutText() {
   return (
@@ -23,12 +23,11 @@ export function AboutText() {
       </p>
       <p>
         The platform covers 94 countries, including countries where WFP has operations as well as most{' '}
-        <ExternalLink href="https://datahelpdesk.worldbank.org/knowledgebase/articles/906519-world-bank-country-and-lending-groups">
+        <StyledLink href="https://datahelpdesk.worldbank.org/knowledgebase/articles/906519-world-bank-country-and-lending-groups">
           lower and lower-middle income countries
-        </ExternalLink>{' '}
+        </StyledLink>{' '}
         (as classified by the World Bank). For any questions, comments, or if you would like further information, please
-        get in touch by sending an email to <ExternalLink href="mailto:wfp.mvam@wfp.org">wfp.mvam@wfp.org</ExternalLink>
-        .
+        get in touch by sending an email to <StyledLink href="mailto:wfp.mvam@wfp.org">wfp.mvam@wfp.org</StyledLink>.
       </p>
     </>
   );

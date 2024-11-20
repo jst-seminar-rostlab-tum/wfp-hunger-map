@@ -1,6 +1,7 @@
 import CustomAccordion from '@/components/Accordions/Accordion';
 import { CustomButton } from '@/components/Buttons/CustomButton';
 import { LineChart } from '@/components/Charts/LineChart';
+import MapSkeleton from '@/components/Map/MapSkeleton';
 import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph.ts';
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph.ts';
 import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
@@ -210,6 +211,7 @@ export default async function Elements() {
           <LineChart title="Headline and food inflation" data={inflationGraphsData} expandable />
         </div>
       </div>
+      <MapSkeleton />
     </div>
   );
 }

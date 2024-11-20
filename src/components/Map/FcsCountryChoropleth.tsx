@@ -1,7 +1,7 @@
 import { Feature, GeoJsonProperties, Geometry } from 'geojson';
 import L from 'leaflet';
 import React from 'react';
-import ReactDOMServer from 'react-dom/server';
+import { createRoot } from 'react-dom/client';
 import { GeoJSON } from 'react-leaflet';
 
 import FscCountryChoroplethProps from '@/domain/props/FcsCountryChoroplethProps';
@@ -33,10 +33,14 @@ function FscCountryChoropleth({ regionData, countryData, countryIso3Data, loadin
     const hoveredRegionFeature = regionData.features.find(
       (regionFeature) => regionFeature.properties?.Code === feature.properties?.Code
     );
-    const tooltipContent = hoveredRegionFeature
-      ? ReactDOMServer.renderToStaticMarkup(<FcsRegionTooltip feature={hoveredRegionFeature} />)
-      : 'N/A';
-    layer.bindTooltip(tooltipContent, { className: 'state-tooltip' });
+    if (hoveredRegionFeature) {
+      const tooltipContainer = document.createElement('div');
+      const root = createRoot(tooltipContainer);
+      root.render(<FcsRegionTooltip feature={hoveredRegionFeature} />);
+      layer.bindTooltip(tooltipContainer, { className: 'leaflet-tooltip', sticky: true });
+    } else {
+      layer.bindTooltip('N/A', { className: 'leaflet-tooltip', sticky: true });
+    }
 
     const pathLayer = layer as L.Path;
     pathLayer.on({

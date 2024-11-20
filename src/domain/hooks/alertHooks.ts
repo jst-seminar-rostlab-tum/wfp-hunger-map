@@ -9,20 +9,22 @@ import { AlertRepository } from '../repositories/AlertRepository';
 
 const alertsRepo = container.resolve<AlertRepository>('AlertRepository');
 
-export const useConflictQuery = () =>
+export const useConflictQuery = (enabled: boolean) =>
   useQuery<Conflict[]>(
     {
       queryKey: ['fetchConflicts'],
       queryFn: alertsRepo.getConflictData,
+      enabled,
     },
     cachedQueryClient
   );
 
-export const useHazardQuery = () =>
+export const useHazardQuery = (enabled: boolean) =>
   useQuery<Hazard[]>(
     {
       queryKey: ['fetchHazards'],
       queryFn: alertsRepo.getHazardData,
+      enabled,
     },
     cachedQueryClient
   );

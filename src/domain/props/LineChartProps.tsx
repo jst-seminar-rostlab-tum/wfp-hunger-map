@@ -13,3 +13,19 @@ export default interface LineChartProps {
   transparentBackground?: boolean;
   data: LineChartData | BalanceOfTradeGraph | CurrencyExchangeGraph | InflationGraphs;
 }
+
+/**
+ * following: helpers props
+ */
+
+export interface LineChartSliderButtonProps {
+  showXAxisSlider: boolean;
+  setShowXAxisSlider: (b: boolean) => void;
+  size: number;
+}
+
+export interface LineChartBarLineSwitchButtonProps {
+  showBarChart: boolean;
+  setShowBarChart: (b: boolean) => void;
+  size: number;
+}

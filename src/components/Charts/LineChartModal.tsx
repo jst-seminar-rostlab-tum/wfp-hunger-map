@@ -2,9 +2,11 @@ import { Button } from '@nextui-org/button';
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@nextui-org/modal';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import { Chart, Diagram, DocumentDownload, GalleryImport, Minus, Settings } from 'iconsax-react';
+import { DocumentDownload, GalleryImport, Minus } from 'iconsax-react';
 import { useRef } from 'react';
 
+import LineChartBarLineSwitchButton from '@/components/Charts/helpers/LineChartBarLineSwitchButton';
+import LineChartSliderButton from '@/components/Charts/helpers/LineChartSliderButton';
 import { Tooltip } from '@/components/Tooltip/Tooltip';
 import LineChartModalProps from '@/domain/props/LineChartModalProps';
 import LineChartOperations from '@/operations/charts/LineChartOperations.ts';
@@ -52,30 +54,23 @@ export function LineChartModal({
               {
                 // button to hide/show the slider to manipulate the plotted x-axis range of the chart;
                 // can be disabled via `xAxisSlider`
-                xAxisSlider ? (
-                  <Tooltip text="x-Axis Slider">
-                    <Button
-                      isIconOnly
-                      variant="light"
-                      size="sm"
-                      onPress={() => {
-                        setShowXAxisSlider(!showXAxisSlider);
-                      }}
-                    >
-                      <Settings className="h-4 w-4" />
-                    </Button>
-                  </Tooltip>
-                ) : null
+                xAxisSlider && (
+                  <LineChartSliderButton
+                    showXAxisSlider={showXAxisSlider}
+                    setShowXAxisSlider={setShowXAxisSlider}
+                    size={4}
+                  />
+                )
               }
               {
                 // button to switch between line and bar chart; can be disabled via `barChartSwitch`
-                barChartSwitch ? (
-                  <Tooltip text={`Switch to ${showBarChart ? 'Line' : 'Bar'} Chart`}>
-                    <Button isIconOnly variant="light" size="sm" onClick={() => setShowBarChart(!showBarChart)}>
-                      {showBarChart ? <Diagram className="h-4 w-4" /> : <Chart className="h-4 w-4" />}
-                    </Button>
-                  </Tooltip>
-                ) : null
+                barChartSwitch && (
+                  <LineChartBarLineSwitchButton
+                    showBarChart={showBarChart}
+                    setShowBarChart={setShowBarChart}
+                    size={4}
+                  />
+                )
               }
               {/* chart download buttons */}
               <Tooltip text="Download Data as JSON">
@@ -111,7 +106,6 @@ export function LineChartModal({
             </div>
           </div>
         </ModalHeader>
-
         <ModalBody>
           {/* modal main content: description and chart */}
           <p className="w-full h-fit text-md font-normal">{description}</p>
@@ -120,17 +114,18 @@ export function LineChartModal({
               highcharts={Highcharts}
               options={chartOptions}
               ref={chartRef}
-              containerProps={{ style: { width: '100%', height: '40vh', borderRadius: '0 0 0.5rem 0.5rem' } }}
+              containerProps={{ style: { width: '100%', height: '45vh', borderRadius: '0 0 0.5rem 0.5rem' } }}
             />
           </div>
         </ModalBody>
-
+        ;
         <ModalFooter>
           {
             // slider to manipulate the plotted x-axis range of the chart; can be disabled via `xAxisSlider`
-            showXAxisSlider ? <> x-Axis slider will be implemented in another issue (F-67)</> : null
+            showXAxisSlider && <> x-Axis slider will be implemented in another issue (F-67)</>
           }
         </ModalFooter>
+        ;
       </ModalContent>
     </Modal>
   );

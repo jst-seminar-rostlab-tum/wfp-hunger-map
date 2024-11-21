@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { MapContainer, ZoomControl } from 'react-leaflet';
 
 import { MAP_MAX_ZOOM, MAP_MIN_ZOOM } from '@/domain/constant/map/Map';
+import { useSelectedAlert } from '@/domain/contexts/SelectedAlertContext';
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSelectedMapVisibility } from '@/domain/contexts/SelectedMapVisibilityContext';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight';
@@ -18,6 +19,7 @@ export default function Map({ countries, disputedAreas }: MapProps) {
   const { selectedMapType } = useSelectedMap();
   const [selectedCountryId, setSelectedCountryId] = useState<number | undefined>();
   const { setSelectedMapVisibility } = useSelectedMapVisibility();
+  const { selectedAlert, toggleAlert } = useSelectedAlert();
 
   return (
     <MapContainer
@@ -47,8 +49,10 @@ export default function Map({ countries, disputedAreas }: MapProps) {
               countryId={countryData.properties.adm0_id}
               data={{ type: 'FeatureCollection', features: [countryData as Feature<Geometry, GeoJsonProperties>] }}
               selectedCountryId={selectedCountryId}
+              selectedAlert={selectedAlert}
               setSelectedCountryId={setSelectedCountryId}
               setSelectedMapVisibility={setSelectedMapVisibility}
+              toggleAlert={toggleAlert}
             />
           ))}
       <ZoomControl position="bottomright" />

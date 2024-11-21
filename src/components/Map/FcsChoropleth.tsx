@@ -14,8 +14,10 @@ export default function FcsChoropleth({
   data,
   countryId,
   selectedCountryId,
+  selectedAlert,
   setSelectedCountryId,
   setSelectedMapVisibility,
+  toggleAlert,
 }: FcsChoroplethProps) {
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
   const map = useMap();
@@ -44,12 +46,14 @@ export default function FcsChoropleth({
             feature,
             layer,
             map,
+            selectedAlert,
             setSelectedCountryId,
             setLoading,
             setRegionData,
             setCountryData,
             setCountryIso3Data,
-            setSelectedMapVisibility
+            setSelectedMapVisibility,
+            toggleAlert
           )
         }
       />

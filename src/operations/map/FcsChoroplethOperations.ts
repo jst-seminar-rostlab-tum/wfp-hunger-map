@@ -4,6 +4,7 @@ import L from 'leaflet';
 import container from '@/container';
 import { CountryData } from '@/domain/entities/country/CountryData';
 import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data';
+import { AlertType } from '@/domain/enums/AlertType';
 import CountryRepository from '@/domain/repositories/CountryRepository';
 
 class FcsChoroplethOperations {
@@ -11,16 +12,21 @@ class FcsChoroplethOperations {
     feature: Feature<Geometry, GeoJsonProperties>,
     bounds: L.LatLngBounds,
     map: L.Map,
+    selectedAlert: AlertType | null,
     setSelectedCountryId: (id?: number) => void,
     setLoading: (loading: boolean) => void,
     setRegionData: (data: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
     setCountryData: (data: CountryData | undefined) => void,
     setCountryIso3Data: (data: CountryIso3Data | undefined) => void,
-    setSelectedMapVisibility: (visibility: boolean) => void
+    setSelectedMapVisibility: (visibility: boolean) => void,
+    toggleAlert: (alertType: AlertType) => void
   ) {
     map.fitBounds(bounds);
     setSelectedCountryId(feature.properties?.adm0_id);
     setSelectedMapVisibility(false);
+    if (selectedAlert) {
+      toggleAlert(selectedAlert);
+    }
     setLoading(true);
     if (feature.properties?.adm0_id) {
       const countryRepository = container.resolve<CountryRepository>('CountryRepository');
@@ -47,12 +53,14 @@ class FcsChoroplethOperations {
     feature: Feature<Geometry, GeoJsonProperties>,
     layer: L.Layer,
     map: L.Map,
+    selectedAlert: AlertType | null,
     setSelectedCountryId: (countryId?: number) => void,
     setLoading: (loading: boolean) => void,
     setRegionData: (data: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
     setCountryData: (data: CountryData | undefined) => void,
     setCountryIso3Data: (data: CountryIso3Data | undefined) => void,
-    setSelectedMapVisibility: (visibility: boolean) => void
+    setSelectedMapVisibility: (visibility: boolean) => void,
+    toggleAlert: (alertType: AlertType) => void
   ) {
     const pathLayer = layer as L.Path;
 
@@ -63,12 +71,14 @@ class FcsChoroplethOperations {
           feature,
           bounds,
           map,
+          selectedAlert,
           setSelectedCountryId,
           setLoading,
           setRegionData,
           setCountryData,
           setCountryIso3Data,
-          setSelectedMapVisibility
+          setSelectedMapVisibility,
+          toggleAlert
         );
       },
     });

@@ -1,7 +1,7 @@
 import React from 'react';
 
-import ExternalLink from '@/components/About/ExternalLink';
 import HungerMapLiveSuperscript from '@/components/About/HungerMapLiveSuperscript';
+import StyledLink from '@/components/About/StyledLink';
 import { AccordionItemProps } from '@/domain/entities/accordions/Accordions';
 
 const generalFaqItems: AccordionItemProps[] = [
@@ -25,9 +25,9 @@ const generalFaqItems: AccordionItemProps[] = [
         <p>
           More so, in areas where we do not have data on the prevalence of people with insufficient food intake - and
           are therefore not clickable - we use the{' '}
-          <ExternalLink href="https://www.sciencedirect.com/science/article/abs/pii/S0305750X19303572">
+          <StyledLink href="https://www.sciencedirect.com/science/article/abs/pii/S0305750X19303572">
             Proteus index
-          </ExternalLink>
+          </StyledLink>
           , which measures food security in 185 countries over 28 years and is published annually.
         </p>
       </>

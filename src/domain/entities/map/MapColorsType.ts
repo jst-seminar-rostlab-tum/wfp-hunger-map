@@ -1,6 +1,6 @@
 export interface MapColorsType {
-  activeCountries: string;
-  inactiveCountries: string;
+  countriesBase: string;
+  inactiveCountriesOverlay: string;
   ocean: string;
   outline: string;
   roads: string;

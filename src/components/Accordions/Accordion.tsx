@@ -15,7 +15,7 @@ export default function CustomAccordion({ items, loading = false }: AccordionsPr
           <AccordionItem
             key={item.title}
             aria-label={item.title}
-            className="last:border-b-[none] dark:bg-black white:bg-white overflow-x-auto"
+            className="last:border-b-[none] bg-content1 white:bg-white overflow-x-auto"
             title={
               <div className="flex justify-between items-center w-full">
                 <div className="flex gap-4">

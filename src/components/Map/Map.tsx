@@ -2,7 +2,7 @@ import 'leaflet/dist/leaflet.css';
 
 import { MapContainer, ZoomControl } from 'react-leaflet';
 
-import { MAP_MAX_ZOOM, MAP_MIN_ZOOM } from '@/domain/constant/Map';
+import { MAP_MAX_ZOOM, MAP_MIN_ZOOM } from '@/domain/constant/map/Map.ts';
 import { MapProps } from '@/domain/props/MapProps';
 
 import { AlertContainer } from './Alerts/AlertContainer';
@@ -21,9 +21,11 @@ export default function Map({ countries, disputedAreas }: MapProps) {
       maxZoom={MAP_MAX_ZOOM}
       maxBoundsViscosity={1.0}
       zoomControl={false}
+      markerZoomAnimation={false}
+      zoomAnimation={false}
       style={{ height: '100%', width: '100%', zIndex: 1 }}
     >
-      <AlertContainer />
+      <AlertContainer countries={countries} />
       {countries && <VectorTileLayer countries={countries} disputedAreas={disputedAreas} />}
       <ZoomControl position="bottomright" />
     </MapContainer>

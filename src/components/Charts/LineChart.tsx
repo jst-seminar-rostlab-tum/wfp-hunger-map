@@ -11,6 +11,8 @@ import { Chart, Diagram, Maximize4, Settings } from 'iconsax-react';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 
+import LineChartBarLineSwitchButton from '@/components/Charts/helpers/LineChartBarLineSwitchButton';
+import LineChartSliderButton from '@/components/Charts/helpers/LineChartSliderButton';
 import { LineChartModal } from '@/components/Charts/LineChartModal';
 import { Tooltip } from '@/components/Tooltip/Tooltip';
 import { LineChartData } from '@/domain/entities/charts/LineChartData';
@@ -98,50 +100,39 @@ export function LineChart({
             {
               // button to hide/show the slider to manipulate the plotted x-axis range of the chart;
               // can be disabled via `xAxisSlider`
-              xAxisSlider ? (
-                <Tooltip text="x-Axis Slider">
-                  <Button
-                    isIconOnly
-                    variant="light"
-                    size="sm"
-                    onPress={() => {
-                      setShowXAxisSlider(!showXAxisSlider);
-                    }}
-                  >
-                    <Settings className={`h-${ICON_BUTTON_SIZE} w-${ICON_BUTTON_SIZE}`} />
-                  </Button>
-                </Tooltip>
-              ) : null
+              xAxisSlider && (
+                <LineChartSliderButton
+                  showXAxisSlider={showXAxisSlider}
+                  setShowXAxisSlider={setShowXAxisSlider}
+                  size={ICON_BUTTON_SIZE}
+                />
+              )
             }
             {
               // button to switch between line and bar chart; can be disabled via `barChartSwitch`
-              barChartSwitch ? (
-                <Tooltip text={`Switch to ${showBarChart ? 'Line' : 'Bar'} Chart`}>
-                  <Button isIconOnly variant="light" size="sm" onClick={() => setShowBarChart(!showBarChart)}>
-                    {showBarChart ? (
-                      <Diagram className={`h-${ICON_BUTTON_SIZE} w-${ICON_BUTTON_SIZE}`} />
-                    ) : (
-                      <Chart className={`h-${ICON_BUTTON_SIZE} w-${ICON_BUTTON_SIZE}`} />
-                    )}
-                  </Button>
-                </Tooltip>
-              ) : null
+              barChartSwitch && (
+                <LineChartBarLineSwitchButton
+                  showBarChart={showBarChart}
+                  setShowBarChart={setShowBarChart}
+                  size={ICON_BUTTON_SIZE}
+                />
+              )
             }
             {
               // button to trigger the full screen modal; rendered if `expandable`
-              expandable ? (
+              expandable && (
                 <Tooltip text="Enlarge Chart">
                   <Button isIconOnly variant="light" size="sm" onClick={onOpen}>
                     <Maximize4 className={`h-${ICON_BUTTON_SIZE} w-${ICON_BUTTON_SIZE}`} />
                   </Button>
                 </Tooltip>
-              ) : null
+              )
             }
           </div>
         </div>
         {
           // description text element should only be rendered if description is available
-          description ? <p className={`w-full h-fit pb-4 ${DESCRIPTION_TEXT_SIZE} px-3`}> {description} </p> : null
+          description && <p className={`w-full h-fit pb-4 ${DESCRIPTION_TEXT_SIZE} px-3`}> {description} </p>
         }
         {/* the actual chart */}
         <HighchartsReact

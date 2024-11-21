@@ -27,7 +27,7 @@ export function AlertsMenu({ variant }: AlertsMenuProps) {
   const alertFetching: Record<AlertType, boolean> = {
     [AlertType.CONFLICTS]: conflictsFetching,
     [AlertType.HAZARDS]: hazardsFetching,
-    [AlertType.COUNTRY_ALERTS]: false, // this will be fetched on the server, so this can stay false for now
+    [AlertType.COUNTRY_ALERTS]: false,
   };
 
   return (

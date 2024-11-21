@@ -11,27 +11,39 @@ interface FcsRegionTooltipProps {
 
 export default function FcsRegionTooltip({ feature }: FcsRegionTooltipProps) {
   const fcsPeople = feature.properties?.fcs?.people;
-  const fcsMillion = fcsPeople ? formatToMillion(fcsPeople) : 'N/A';
-  const fcsRatio = feature?.properties?.fcs?.ratio || 'N/A';
+  const fcsMillion = fcsPeople ? formatToMillion(fcsPeople) : null;
+  const fcsRatio = feature?.properties?.fcs?.ratio;
   const rcsiPeople = feature.properties?.rcsi?.people;
   const rcsiMillion = rcsiPeople ? formatToMillion(rcsiPeople) : 'N/A';
   const rcsiRatio = feature?.properties?.rcsi?.ratio || 'N/A';
   return (
     <div className="bg-background text-foreground rounded-md shadow-md max-w-sm z-9999">
-      <div className="p-4">
+      <div className="px-4 pt-4">
         <h3 className="text-lg text-foreground font-bold">{feature.properties?.Name}</h3>
         <div className="mt-2 text-foreground">
           <p>
-            <span className="text-clusterOrange font-bold">
-              {fcsRatio}% ({fcsMillion}M)
-            </span>{' '}
-            with insufficient food consumption
+            {fcsMillion && fcsRatio ? (
+              <div>
+                <span className="text-clusterOrange font-bold">
+                  {fcsRatio}% ({fcsMillion}M){' '}
+                </span>
+                with insufficient food consumption
+              </div>
+            ) : (
+              'No data about insufficient food consumption'
+            )}
           </p>
           <p>
-            <span className="text-clusterOrange font-bold">
-              {rcsiRatio}% ({rcsiMillion}M)
-            </span>{' '}
-            with crisis or above crisis food-based coping
+            {rcsiRatio && rcsiMillion ? (
+              <div>
+                <span className="text-clusterOrange font-bold">
+                  {rcsiRatio}% ({rcsiMillion}M){' '}
+                </span>
+                with crisis or above crisis food-based coping
+              </div>
+            ) : (
+              'No data about crisis or above crisis food-based coping'
+            )}
           </p>
         </div>
       </div>

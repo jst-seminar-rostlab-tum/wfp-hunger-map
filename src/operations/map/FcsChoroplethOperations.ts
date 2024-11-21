@@ -15,10 +15,12 @@ class FcsChoroplethOperations {
     setLoading: (loading: boolean) => void,
     setRegionData: (data: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
     setCountryData: (data: CountryData | undefined) => void,
-    setCountryIso3Data: (data: CountryIso3Data | undefined) => void
+    setCountryIso3Data: (data: CountryIso3Data | undefined) => void,
+    setSelectedMapVisibility: (visibility: boolean) => void
   ) {
     map.fitBounds(bounds);
     setSelectedCountryId(feature.properties?.adm0_id);
+    setSelectedMapVisibility(false);
     setLoading(true);
     if (feature.properties?.adm0_id) {
       const countryRepository = container.resolve<CountryRepository>('CountryRepository');
@@ -49,7 +51,8 @@ class FcsChoroplethOperations {
     setLoading: (loading: boolean) => void,
     setRegionData: (data: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
     setCountryData: (data: CountryData | undefined) => void,
-    setCountryIso3Data: (data: CountryIso3Data | undefined) => void
+    setCountryIso3Data: (data: CountryIso3Data | undefined) => void,
+    setSelectedMapVisibility: (visibility: boolean) => void
   ) {
     const pathLayer = layer as L.Path;
 
@@ -64,11 +67,16 @@ class FcsChoroplethOperations {
           setLoading,
           setRegionData,
           setCountryData,
-          setCountryIso3Data
+          setCountryIso3Data,
+          setSelectedMapVisibility
         );
       },
     });
   }
+
+  static countryStyle: L.PathOptions = {
+    color: undefined,
+  };
 }
 
 export default FcsChoroplethOperations;

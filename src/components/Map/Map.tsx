@@ -4,7 +4,9 @@ import { Feature, GeoJsonProperties, Geometry } from 'geojson';
 import { useState } from 'react';
 import { MapContainer, ZoomControl } from 'react-leaflet';
 
+import { MAP_MAX_ZOOM, MAP_MIN_ZOOM } from '@/domain/constant/map/Map';
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
+import { useSelectedMapVisibility } from '@/domain/contexts/SelectedMapVisibilityContext';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight';
 import { MapProps } from '@/domain/props/MapProps';
 
@@ -15,10 +17,7 @@ import VectorTileLayer from './VectorTileLayer';
 export default function Map({ countries, disputedAreas }: MapProps) {
   const { selectedMapType } = useSelectedMap();
   const [selectedCountryId, setSelectedCountryId] = useState<number | undefined>();
-
-  const countryStyle: L.PathOptions = {
-    color: undefined,
-  };
+  const { setSelectedMapVisibility } = useSelectedMapVisibility();
 
   return (
     <MapContainer
@@ -28,8 +27,8 @@ export default function Map({ countries, disputedAreas }: MapProps) {
         [-90, -180],
         [90, 180],
       ]}
-      minZoom={2}
-      maxZoom={18}
+      minZoom={MAP_MIN_ZOOM}
+      maxZoom={MAP_MAX_ZOOM}
       maxBoundsViscosity={1.0}
       zoomControl={false}
       markerZoomAnimation={false}
@@ -39,6 +38,7 @@ export default function Map({ countries, disputedAreas }: MapProps) {
       <AlertContainer />
       {countries && <VectorTileLayer countries={countries} disputedAreas={disputedAreas} />}
       {selectedMapType === GlobalInsight.FOOD &&
+        countries.features &&
         countries.features
           .filter((countryData) => countryData.properties.interactive)
           .map((countryData) => (
@@ -46,9 +46,9 @@ export default function Map({ countries, disputedAreas }: MapProps) {
               key={countryData.properties.adm0_id}
               countryId={countryData.properties.adm0_id}
               data={{ type: 'FeatureCollection', features: [countryData as Feature<Geometry, GeoJsonProperties>] }}
-              style={countryStyle}
               selectedCountryId={selectedCountryId}
               setSelectedCountryId={setSelectedCountryId}
+              setSelectedMapVisibility={setSelectedMapVisibility}
             />
           ))}
       <ZoomControl position="bottomright" />

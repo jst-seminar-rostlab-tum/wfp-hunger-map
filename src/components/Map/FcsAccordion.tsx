@@ -1,4 +1,5 @@
 import { Spacer } from '@nextui-org/react';
+import { useMemo } from 'react';
 
 import FcsAccordionProps from '@/domain/props/FcsAccordionProps';
 import { FcsAccordionOperations } from '@/operations/map/FcsAccordionOperations';
@@ -9,8 +10,14 @@ import CustomCard from '../Cards/Card';
 import { LineChart } from '../Charts/LineChart';
 
 export default function FcsAccordion({ countryData, loading, countryIso3Data }: FcsAccordionProps) {
-  const deltaOneMonth = countryData?.fcsMinus1 ? countryData.fcs - countryData.fcsMinus1 : undefined;
-  const deltaThreeMonth = countryData?.fcsMinus3 ? countryData.fcs - countryData.fcsMinus3 : undefined;
+  const deltaOneMonth = useMemo(() => {
+    return countryData?.fcsMinus1 ? countryData.fcs - countryData.fcsMinus1 : undefined;
+  }, [countryData]);
+
+  const deltaThreeMonth = useMemo(() => {
+    return countryData?.fcsMinus3 ? countryData.fcs - countryData.fcsMinus3 : undefined;
+  }, [countryData]);
+
   return (
     <div className="absolute w-[350px] left-[108px] top-4 z-9999">
       <CustomAccordion

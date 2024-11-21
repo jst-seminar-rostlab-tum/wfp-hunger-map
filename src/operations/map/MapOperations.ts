@@ -192,7 +192,7 @@ export class MapOperations {
     });
   }
 
-  static addFCSLayer(baseMap: mapboxgl.Map, selectedMapType: GlobalInsight) {
+  static addFCSLayer(baseMap: mapboxgl.Map, selectedMapType: GlobalInsight, selectedMapVisibility: boolean) {
     baseMap.on('load', () => {
       baseMap.addSource('fcsRaster', {
         type: 'raster',
@@ -206,14 +206,14 @@ export class MapOperations {
           id: 'fcsLayer',
           type: 'raster',
           source: 'fcsRaster',
-          layout: { visibility: selectedMapType === GlobalInsight.FOOD ? 'visible' : 'none' },
+          layout: { visibility: selectedMapType === GlobalInsight.FOOD && selectedMapVisibility ? 'visible' : 'none' },
         },
         'countries-inactive'
       );
     });
   }
 
-  static addRainfallLayer(baseMap: mapboxgl.Map, selectedMapType: GlobalInsight) {
+  static addRainfallLayer(baseMap: mapboxgl.Map, selectedMapType: GlobalInsight, selectedMapVisibility: boolean) {
     baseMap.on('load', () => {
       baseMap.addSource('rainfallRaster', {
         type: 'raster',
@@ -229,14 +229,16 @@ export class MapOperations {
           id: 'rainfallLayer',
           type: 'raster',
           source: 'rainfallRaster',
-          layout: { visibility: selectedMapType === GlobalInsight.RAINFALL ? 'visible' : 'none' },
+          layout: {
+            visibility: selectedMapType === GlobalInsight.RAINFALL && selectedMapVisibility ? 'visible' : 'none',
+          },
         },
         'countries-inactive'
       );
     });
   }
 
-  static addVegetationLayer(baseMap: mapboxgl.Map, selectedMapType: GlobalInsight) {
+  static addVegetationLayer(baseMap: mapboxgl.Map, selectedMapType: GlobalInsight, selectedMapVisibility: boolean) {
     baseMap.on('load', () => {
       baseMap.addSource('vegetationRaster', {
         type: 'raster',
@@ -252,7 +254,9 @@ export class MapOperations {
           id: 'vegetationLayer',
           type: 'raster',
           source: 'vegetationRaster',
-          layout: { visibility: selectedMapType === GlobalInsight.VEGETATION ? 'visible' : 'none' },
+          layout: {
+            visibility: selectedMapType === GlobalInsight.VEGETATION && selectedMapVisibility ? 'visible' : 'none',
+          },
         },
         'countries-inactive'
       );

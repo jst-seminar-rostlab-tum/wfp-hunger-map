@@ -12,10 +12,10 @@ import FscCountryChoropleth from './FcsCountryChoropleth';
 
 export default function FcsChoropleth({
   data,
-  style,
   countryId,
   selectedCountryId,
   setSelectedCountryId,
+  setSelectedMapVisibility,
 }: FcsChoroplethProps) {
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
   const map = useMap();
@@ -38,7 +38,7 @@ export default function FcsChoropleth({
           geoJsonRef.current = instance;
         }}
         data={data}
-        style={() => style}
+        style={FcsChoroplethOperations.countryStyle}
         onEachFeature={(feature, layer) =>
           FcsChoroplethOperations.onEachFeature(
             feature,
@@ -48,7 +48,8 @@ export default function FcsChoropleth({
             setLoading,
             setRegionData,
             setCountryData,
-            setCountryIso3Data
+            setCountryIso3Data,
+            setSelectedMapVisibility
           )
         }
       />

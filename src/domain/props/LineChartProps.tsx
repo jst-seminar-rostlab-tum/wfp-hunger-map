@@ -29,3 +29,9 @@ export interface LineChartBarLineSwitchButtonProps {
   setShowBarChart: (b: boolean) => void;
   size: number;
 }
+
+export interface LineChartXAxisSlider {
+  selectedXAxisRange: number[]; // [xAxisRangeMinIndex, xAxisRangeMaxIndex]
+  setSelectedXAxisRange: (ns: number[]) => void;
+  data: LineChartData;
+}

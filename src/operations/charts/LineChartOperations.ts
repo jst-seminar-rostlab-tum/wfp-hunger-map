@@ -107,6 +107,8 @@ export default class LineChartOperations {
    * a `y` value for each `x` value. For example, if one line has values for x=1, x=2, and x=3,
    * the second line must also provide `y` values for these exact `x` values and no more or less.
    * // todo params
+   * // using the 'xAxisSelectedMinIdx' and 'xAxisSelectedMinIdx' the rendered x-axis range is manipulated
+   * if a min is defined a max must be defined as well and vice versa
    */
   public static getHighChartLineData(
     data: LineChartData,
@@ -123,9 +125,9 @@ export default class LineChartOperations {
       // therefore we only have to collect the x Axis categories once
       if (i === 0) {
         categories = lineData.dataPoints.map((p) => p.x);
-        if (xAxisSelectedMinIdx && xAxisSelectedMaxIdx) {
-          // todo descr
-          categories = categories.slice(xAxisSelectedMinIdx, xAxisSelectedMaxIdx + 1);
+        // slice to selected x-axis range if requested
+        if (xAxisSelectedMinIdx !== undefined && xAxisSelectedMaxIdx !== undefined) {
+          categories = categories.slice(xAxisSelectedMinIdx, xAxisSelectedMaxIdx);
         }
       }
 
@@ -138,10 +140,10 @@ export default class LineChartOperations {
         lineColor = this.LINE_COLORS[i];
       }
 
-      // todo line data calculations descr
+      // collect line series data
       let seriesData = lineData.dataPoints.map((p) => p.y);
-      if (xAxisSelectedMinIdx && xAxisSelectedMaxIdx) {
-        // todo descr
+      // slice to selected x-axis range if requested
+      if (xAxisSelectedMinIdx !== undefined && xAxisSelectedMaxIdx !== undefined) {
         seriesData = seriesData.slice(xAxisSelectedMinIdx, xAxisSelectedMaxIdx + 1);
       }
       series.push({
@@ -150,13 +152,12 @@ export default class LineChartOperations {
         data: seriesData,
         color: lineColor,
       });
-      // checking if area range should be added as well
 
+      // checking if area series range should be added as well
       if (lineData.showRange) {
-        // todo line data calculations descr
         let areaSeriesData = lineData.dataPoints.map((p) => [p.yRangeMin!, p.yRangeMax!]);
-        if (xAxisSelectedMinIdx && xAxisSelectedMaxIdx) {
-          // todo descr
+        // slice to selected x-axis range if requested
+        if (xAxisSelectedMinIdx !== undefined && xAxisSelectedMaxIdx !== undefined) {
           areaSeriesData = areaSeriesData.slice(xAxisSelectedMinIdx, xAxisSelectedMaxIdx + 1);
         }
         series.push({
@@ -273,9 +274,9 @@ export default class LineChartOperations {
       // therefore we only have to collect the x Axis categories once
       if (i === 0) {
         categories = lineData.dataPoints.map((p) => p.x);
-        if (xAxisSelectedMinIdx && xAxisSelectedMaxIdx) {
-          // todo descr
-          categories = categories.slice(xAxisSelectedMinIdx, xAxisSelectedMaxIdx + 1);
+        // slice to selected x-axis range if requested
+        if (xAxisSelectedMinIdx !== undefined && xAxisSelectedMaxIdx !== undefined) {
+          categories = categories.slice(xAxisSelectedMinIdx, xAxisSelectedMaxIdx);
         }
       }
 
@@ -289,8 +290,8 @@ export default class LineChartOperations {
       }
 
       let seriesData = lineData.dataPoints.map((p) => p.y);
-      if (xAxisSelectedMinIdx && xAxisSelectedMaxIdx) {
-        // todo descr
+      // slice to selected x-axis range if requested
+      if (xAxisSelectedMinIdx !== undefined && xAxisSelectedMaxIdx !== undefined) {
         seriesData = seriesData.slice(xAxisSelectedMinIdx, xAxisSelectedMaxIdx + 1);
       }
       series.push({
@@ -303,8 +304,8 @@ export default class LineChartOperations {
       // checking if area range should be added as well
       if (lineData.showRange) {
         let areaSeriesData = lineData.dataPoints.map((p) => [p.yRangeMin!, p.yRangeMax!]);
-        if (xAxisSelectedMinIdx && xAxisSelectedMaxIdx) {
-          // todo descr
+        // slice to selected x-axis range if requested
+        if (xAxisSelectedMinIdx !== undefined && xAxisSelectedMaxIdx !== undefined) {
           areaSeriesData = areaSeriesData.slice(xAxisSelectedMinIdx, xAxisSelectedMaxIdx + 1);
         }
         series.push({

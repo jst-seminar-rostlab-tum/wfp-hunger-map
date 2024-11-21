@@ -2,17 +2,17 @@
 
 import { Button } from '@nextui-org/button';
 import { useDisclosure } from '@nextui-org/modal';
-import { Slider } from '@nextui-org/slider';
 import Highcharts from 'highcharts';
 import Exporting from 'highcharts/modules/exporting';
 import OfflineExporting from 'highcharts/modules/offline-exporting';
 import HighchartsReact from 'highcharts-react-official';
-import { Chart, Diagram, Maximize4, Settings } from 'iconsax-react';
+import { Maximize4 } from 'iconsax-react';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 
 import LineChartBarLineSwitchButton from '@/components/Charts/helpers/LineChartBarLineSwitchButton';
 import LineChartSliderButton from '@/components/Charts/helpers/LineChartSliderButton';
+import LineChartXAxisSlider from '@/components/Charts/helpers/LineChartXAxisSlider';
 import { LineChartModal } from '@/components/Charts/LineChartModal';
 import { Tooltip } from '@/components/Tooltip/Tooltip';
 import { LineChartData } from '@/domain/entities/charts/LineChartData';
@@ -72,18 +72,21 @@ export function LineChart({
   const lineChartData: LineChartData = LineChartOperations.convertToLineChartData(data);
   const lineChartOptions: Highcharts.Options = LineChartOperations.getHighChartLineData(lineChartData, theme);
 
-  // todo descr
+  // the `selectedXAxisRange` saves the to be rendered x-axis range of the chart
+  // can be changed using the `LinkeChartXAxisSlider` if the param `xAxisSlider==true`
   const xAxisValues: string[] = lineChartData.lines[0]?.dataPoints.map((d) => d.x) || [];
   const [selectedXAxisRange, setSelectedXAxisRange] = useState([0, xAxisValues.length - 1]);
 
   // controlling if a line or bar chart is rendered; line chart is the default
   const [showBarChart, setShowBarChart] = useState(false);
+
   const [chartOptions, setChartOptions] = useState(lineChartOptions);
+
   // handling the x-axis range slider visibility
   const [showXAxisSlider, setShowXAxisSlider] = useState(false);
 
-  // handling the line and bar chart switch and the theme switch
-  // todo descr slider
+  // handling the line and bar chart switch and the theme switch;
+  // also handling changing the x-axis range using the `LineChartXAxisSlider`
   useEffect(() => {
     const newChartOptions = showBarChart
       ? LineChartOperations.getHighChartBarData(lineChartData, theme, selectedXAxisRange[0], selectedXAxisRange[1])
@@ -148,26 +151,13 @@ export function LineChart({
         />
         {
           // slider to manipulate the plotted x-axis range of the chart; can be disabled via `xAxisSlider`
-          showXAxisSlider ? (
-            <div className="pl-5 pr-2">
-              <h3 className="font-normal text-secondary text-tiny pb-1">Adjusting x-axis range:</h3>
-              <Slider
-                minValue={0}
-                maxValue={xAxisValues.length - 1}
-                step={1}
-                value={selectedXAxisRange}
-                onChange={(e) => setSelectedXAxisRange(e as number[])}
-                showSteps
-                color="secondary"
-                size="sm"
-                classNames={{
-                  base: 'max-w-md',
-                  track: 'bg-secondary bg-opacity-10',
-                  filler: 'bg-secondary',
-                }}
-              />
-            </div>
-          ) : null
+          showXAxisSlider && (
+            <LineChartXAxisSlider
+              selectedXAxisRange={selectedXAxisRange}
+              setSelectedXAxisRange={setSelectedXAxisRange}
+              data={lineChartData}
+            />
+          )
         }
       </div>
 

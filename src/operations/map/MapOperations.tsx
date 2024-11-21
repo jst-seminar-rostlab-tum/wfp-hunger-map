@@ -154,7 +154,7 @@ export class MapOperations {
     baseMap.on('mousemove', () => {
       isDragging = true;
     });
-    baseMap.on('mouseup', 'countries-base', (e: any) => {
+    baseMap.on('mouseup', 'countries-hover', (e: any) => {
       if (!isDragging && e.features && (e.features[0] as CountryMapData).properties.interactive) {
         alert(`You clicked on ${(e.features[0] as CountryMapData).properties.adm0_name}`);
       }

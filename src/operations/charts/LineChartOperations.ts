@@ -127,7 +127,7 @@ export default class LineChartOperations {
         categories = lineData.dataPoints.map((p) => p.x);
         // slice to selected x-axis range if requested
         if (xAxisSelectedMinIdx !== undefined && xAxisSelectedMaxIdx !== undefined) {
-          categories = categories.slice(xAxisSelectedMinIdx, xAxisSelectedMaxIdx);
+          categories = categories.slice(xAxisSelectedMinIdx, xAxisSelectedMaxIdx + 1);
         }
       }
 
@@ -151,6 +151,11 @@ export default class LineChartOperations {
         type: data.roundLines ? 'spline' : 'line',
         data: seriesData,
         color: lineColor,
+        marker: {
+          // increase marker size if only a single x-category is shown
+          enabled: categories.length === 1,
+          radius: categories.length === 1 ? 4 : 1,
+        },
       });
 
       // checking if area series range should be added as well
@@ -166,6 +171,11 @@ export default class LineChartOperations {
           data: areaSeriesData,
           color: lineColor,
           linkedTo: ':previous',
+          marker: {
+            // render marker if only a single x-category is shown
+            enabled: categories.length === 1,
+            radius: categories.length === 1 ? 2 : 1,
+          },
         });
       }
     }
@@ -225,17 +235,15 @@ export default class LineChartOperations {
         line: {
           animation: true,
           marker: {
-            enabled: false,
-            radius: 1,
             animation: true,
+            symbol: 'circle',
           },
         },
         spline: {
           animation: true,
           marker: {
-            enabled: false,
-            radius: 1,
             animation: true,
+            symbol: 'circle',
           },
         },
         arearange: {
@@ -243,9 +251,8 @@ export default class LineChartOperations {
           fillOpacity: 0.2,
           lineWidth: 0,
           marker: {
-            enabled: false,
-            radius: 0,
             animation: true,
+            symbol: 'diamond',
           },
         },
       },
@@ -276,7 +283,7 @@ export default class LineChartOperations {
         categories = lineData.dataPoints.map((p) => p.x);
         // slice to selected x-axis range if requested
         if (xAxisSelectedMinIdx !== undefined && xAxisSelectedMaxIdx !== undefined) {
-          categories = categories.slice(xAxisSelectedMinIdx, xAxisSelectedMaxIdx);
+          categories = categories.slice(xAxisSelectedMinIdx, xAxisSelectedMaxIdx + 1);
         }
       }
 

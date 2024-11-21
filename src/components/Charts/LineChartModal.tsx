@@ -122,19 +122,20 @@ export function LineChartModal({
             />
           </div>
         </ModalBody>
-
-        <ModalFooter>
-          {
-            // slider to manipulate the plotted x-axis range of the chart; can be disabled via `xAxisSlider`
-            showXAxisSlider && (
-              <LineChartXAxisSlider
-                selectedXAxisRange={selectedXAxisRange}
-                setSelectedXAxisRange={setSelectedXAxisRange}
-                data={lineChartData}
-              />
-            )
-          }
-        </ModalFooter>
+        {
+          // slider to manipulate the plotted x-axis range of the chart; can be disabled via `xAxisSlider`
+          showXAxisSlider && (
+            <ModalFooter>
+              <div className="w-full">
+                <LineChartXAxisSlider
+                  selectedXAxisRange={selectedXAxisRange}
+                  setSelectedXAxisRange={setSelectedXAxisRange}
+                  data={lineChartData}
+                />
+              </div>
+            </ModalFooter>
+          )
+        }
       </ModalContent>
     </Modal>
   );

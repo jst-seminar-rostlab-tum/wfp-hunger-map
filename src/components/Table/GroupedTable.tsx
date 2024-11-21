@@ -22,7 +22,7 @@ function GroupedTable({ columns, data, ariaLabel }: GroupedTableProps) {
       groupKey,
       groupLength: attributeRows.length,
       cellContents: {
-        mainColumn: groupName,
+        keyColumn: groupName,
         ...row,
       },
     }))

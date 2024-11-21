@@ -1,9 +1,9 @@
 import { GroupedTableData, SimpleTableData } from '@/domain/props/GroupedTableProps';
 
 function formatSimpleTable(dataSources: SimpleTableData) {
-  return dataSources.map(({ mainColumn, ...otherColumns }) => ({
-    groupKey: mainColumn,
-    groupName: mainColumn,
+  return dataSources.map(({ keyColumn, ...otherColumns }) => ({
+    groupKey: keyColumn,
+    groupName: keyColumn,
     attributeRows: [{ ...otherColumns }],
   })) as GroupedTableData;
 }

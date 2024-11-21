@@ -8,7 +8,7 @@ export default class HungerAlertOperations {
         .filter(({ properties: { fcs } }) => typeof fcs === 'number' && fcs >= 0.4)
         .sort((country1, country2) => (country2.properties.fcs as number) - (country1.properties.fcs as number))
         .map(({ properties: { adm0_name: countryName, fcs } }, index) => ({
-          mainColumn: index + 1,
+          keyColumn: index + 1,
           country: countryName,
           fcs: `${Math.floor((fcs as number) * 100)}%`,
         }));
@@ -19,7 +19,7 @@ export default class HungerAlertOperations {
 
   static getHungerAlertModalColumns() {
     return [
-      { columnId: 'mainColumn', label: 'Rank' },
+      { columnId: 'keyColumn', label: 'Rank' },
       { columnId: 'country', label: 'Country' },
       { columnId: 'fcs', label: 'FCS' },
     ] as GroupedTableColumns;

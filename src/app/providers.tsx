@@ -8,6 +8,7 @@ import * as React from 'react';
 
 import { SelectedAlertProvider } from '@/domain/contexts/SelectedAlertContext';
 import { SelectedMapProvider } from '@/domain/contexts/SelectedMapContext';
+import { SelectedMapVisibilityProvider } from '@/domain/contexts/SelectedMapVisibilityContext';
 import { SidebarProvider } from '@/domain/contexts/SidebarContext';
 
 export interface ProvidersProps {
@@ -22,9 +23,11 @@ export function Providers({ children, themeProps }: ProvidersProps) {
     <NextUIProvider navigate={router.push}>
       <NextThemesProvider defaultTheme="system" {...themeProps}>
         <SidebarProvider>
-          <SelectedMapProvider>
-            <SelectedAlertProvider>{children}</SelectedAlertProvider>
-          </SelectedMapProvider>
+          <SelectedMapVisibilityProvider>
+            <SelectedMapProvider>
+              <SelectedAlertProvider>{children}</SelectedAlertProvider>
+            </SelectedMapProvider>
+          </SelectedMapVisibilityProvider>
         </SidebarProvider>
       </NextThemesProvider>
     </NextUIProvider>

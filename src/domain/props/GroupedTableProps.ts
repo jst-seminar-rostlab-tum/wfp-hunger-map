@@ -10,9 +10,9 @@ export type GroupedTableRow = {
   };
 };
 
-export type GroupedTableColumns = { columnId: string; label: ReactNode }[] & {
+export type GroupedTableColumns = { columnId: string; label: ReactNode; alignLeft?: boolean }[] & {
   // the first described column should be mainColumn
-  0: { columnId: 'mainColumn'; label: ReactNode };
+  0: { columnId: 'mainColumn'; label: ReactNode; alignLeft?: boolean };
 };
 
 export type GroupedTableData = {

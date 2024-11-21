@@ -7,7 +7,7 @@ import { DataSourceTableData, GroupedTableColumns } from '@/domain/props/Grouped
 import formatDataSourceTable from '@/operations/tables/formatDataSourceTable';
 
 const dataSourceTableColumns = [
-  { columnId: 'mainColumn', label: 'Data type' },
+  { columnId: 'mainColumn', label: 'Data type', alignLeft: true },
   { columnId: 'source', label: 'Source' },
 ] as GroupedTableColumns;
 

@@ -28,14 +28,13 @@ function GroupedTable({ columns, data, ariaLabel }: GroupedTableProps) {
     }))
   ) as GroupedTableRow[];
 
+  const leftAlignedColumns = new Set(columns.filter((c) => c.alignLeft).map((c) => c.columnId));
+
   return (
     <Table removeWrapper aria-label={ariaLabel} classNames={{ thead: '[&>tr:last-child]:hidden' }}>
       <TableHeader columns={columns}>
-        {({ columnId, label }) => (
-          <TableColumn
-            key={columnId}
-            className={clsx('border-b-2 text-wrap', { 'text-center': columnId !== 'mainColumn' })}
-          >
+        {({ columnId, label, alignLeft }) => (
+          <TableColumn key={columnId} className={clsx('border-b-2 text-wrap', { 'text-center': !alignLeft })}>
             {label}
           </TableColumn>
         )}
@@ -44,7 +43,7 @@ function GroupedTable({ columns, data, ariaLabel }: GroupedTableProps) {
         {(row) => {
           return (
             <TableRow key={`${row.groupKey}×${row.index}`}>
-              {(columnKey) => getTableCell(row, columnKey as string)}
+              {(columnKey) => getTableCell(row, columnKey as string, !leftAlignedColumns.has(columnKey as string))}
             </TableRow>
           );
         }}

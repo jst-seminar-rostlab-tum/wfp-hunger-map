@@ -2,7 +2,7 @@ import StyledLink from '@/components/About/StyledLink';
 import { GroupedTableColumns, GroupedTableData } from '@/domain/props/GroupedTableProps';
 
 export const accuracyTableColumns = [
-  { columnId: 'mainColumn', label: 'Measure' },
+  { columnId: 'mainColumn', label: 'Measure', alignLeft: true },
   { columnId: 'withPast', label: 'With past data' },
   { columnId: 'FCS', label: 'FCS' },
   { columnId: 'rCSI', label: 'rCSI' },

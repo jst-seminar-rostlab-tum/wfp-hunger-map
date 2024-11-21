@@ -5,7 +5,7 @@ import React from 'react';
 import { GroupedTableRow } from '@/domain/props/GroupedTableProps';
 
 // This function cannot be converted into a component because TableCell has to be the direct descendant of a TableRow.
-export function getTableCell(row: GroupedTableRow, columnKey: string) {
+export function getTableCell(row: GroupedTableRow, columnKey: string, center: boolean | undefined) {
   if (columnKey === 'mainColumn' && row.index > 0)
     // don't return null here because TableRow can't deal with that
     // eslint-disable-next-line react/jsx-no-useless-fragment
@@ -19,7 +19,7 @@ export function getTableCell(row: GroupedTableRow, columnKey: string) {
     <TableCell
       className={clsx('align-top', {
         'border-b-2': addBottomBorder,
-        'text-center': columnKey !== 'mainColumn',
+        'text-center': center,
       })}
       rowSpan={columnKey === 'mainColumn' ? row.groupLength : 1}
     >

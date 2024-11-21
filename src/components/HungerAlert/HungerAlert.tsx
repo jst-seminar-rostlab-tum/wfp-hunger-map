@@ -4,8 +4,8 @@ import './style.css';
 
 import { useMemo, useState } from 'react';
 
-import DataTable from '@/components/DataTable/DataTable';
 import PopupModal from '@/components/PopupModal/PopupModal';
+import DataTable from '@/components/Table/DataTable';
 import HungerLevel from '@/domain/entities/HungerLevel';
 import HungerAlertProps from '@/domain/props/HungerAlertProps';
 

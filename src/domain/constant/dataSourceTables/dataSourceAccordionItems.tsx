@@ -1,10 +1,10 @@
 import React from 'react';
 
-import GroupedTable from '@/components/GroupedTable/GroupedTable';
+import GroupedTable from '@/components/Table/GroupedTable';
 import Abbreviation from '@/components/Tooltip/Abbreviation';
 import { AccordionItemProps } from '@/domain/entities/accordions/Accordions';
 import { DataSourceTableData, GroupedTableColumns } from '@/domain/props/GroupedTableProps';
-import formatDataSourceTable from '@/operations/groupedTable/formatDataSourceTable';
+import formatDataSourceTable from '@/operations/tables/formatDataSourceTable';
 
 const dataSourceTableColumns = [
   { columnId: 'mainColumn', label: 'Data type' },

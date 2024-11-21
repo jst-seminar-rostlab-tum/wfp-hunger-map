@@ -1,7 +1,7 @@
 import React from 'react';
 
 import StyledLink from '@/components/About/StyledLink';
-import GroupedTable from '@/components/GroupedTable/GroupedTable';
+import GroupedTable from '@/components/Table/GroupedTable';
 import { accuracyTableColumns, accuracyTableContents } from '@/domain/constant/about/accuracyTableContents';
 import { AccordionItemProps } from '@/domain/entities/accordions/Accordions';
 

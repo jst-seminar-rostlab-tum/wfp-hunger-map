@@ -8,7 +8,7 @@ import clsx from 'clsx';
 import React from 'react';
 
 import GroupedTableProps, { GroupedTableRow } from '@/domain/props/GroupedTableProps';
-import { getTableCell } from '@/operations/groupedTable/groupedTableOperations';
+import { getTableCell } from '@/operations/tables/groupedTableOperations';
 
 /**
  * A table with its rows grouped by the values in the first column.

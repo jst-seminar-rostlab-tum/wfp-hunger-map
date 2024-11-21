@@ -12,7 +12,7 @@ interface SelectedAlertsState {
 const SelectedAlertContext = createContext<SelectedAlertsState | undefined>(undefined);
 
 export function SelectedAlertProvider({ children }: { children: ReactNode }) {
-  const [selectedAlert, setSelectedAlert] = useState<AlertType | null>(AlertType.HUNGER);
+  const [selectedAlert, setSelectedAlert] = useState<AlertType | null>(AlertType.COUNTRY_ALERTS);
 
   const isAlertSelected = (alertType: AlertType) => selectedAlert === alertType;
   const toggleAlert = (alertType: AlertType) =>

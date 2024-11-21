@@ -1,5 +1,5 @@
 export default interface HungerLevel {
-  rank: number;
+  mainColumn: number;
   country: string;
   fcs: string;
 }

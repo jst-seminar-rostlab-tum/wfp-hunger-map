@@ -16,7 +16,7 @@ export type GroupedTableColumns = { columnId: string; label: ReactNode; alignLef
 };
 
 export type GroupedTableData = {
-  groupKey: string;
+  groupKey: string | number;
   groupName: ReactNode;
   attributeRows: readonly { [columnId: string]: ReactNode }[];
 }[];
@@ -35,4 +35,9 @@ export type DataSourceTableData = {
   dataSourceLink?: string;
   updateInterval?: string;
   updateDetails?: readonly { label: ReactNode; interval: string }[];
+}[];
+
+export type SimpleTableData = {
+  mainColumn: ReactNode;
+  [columnId: string]: ReactNode;
 }[];

@@ -1,14 +1,14 @@
 import { CountryMapDataWrapper } from '@/domain/entities/country/CountryMapData';
-import HungerLevel from '@/domain/entities/HungerLevel';
+import { GroupedTableColumns, SimpleTableData } from '@/domain/props/GroupedTableProps';
 
 export default class HungerAlertOperations {
-  static getHungerAlertData(countryMapData: CountryMapDataWrapper): HungerLevel[] {
+  static getHungerAlertData(countryMapData: CountryMapDataWrapper): SimpleTableData {
     try {
       return countryMapData.features
         .filter(({ properties: { fcs } }) => typeof fcs === 'number' && fcs >= 0.4)
         .sort((country1, country2) => (country2.properties.fcs as number) - (country1.properties.fcs as number))
         .map(({ properties: { adm0_name: countryName, fcs } }, index) => ({
-          rank: index + 1,
+          mainColumn: index + 1,
           country: countryName,
           fcs: `${Math.floor((fcs as number) * 100)}%`,
         }));
@@ -19,10 +19,10 @@ export default class HungerAlertOperations {
 
   static getHungerAlertModalColumns() {
     return [
-      { label: 'Rank', key: 'rank' },
-      { label: 'Country', key: 'country' },
-      { label: 'FCS', key: 'fcs' },
-    ];
+      { columnId: 'mainColumn', label: 'Rank' },
+      { columnId: 'country', label: 'Country' },
+      { columnId: 'fcs', label: 'FCS' },
+    ] as GroupedTableColumns;
   }
 
   static getPulseClasses(): string {

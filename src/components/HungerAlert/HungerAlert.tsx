@@ -6,7 +6,7 @@ import { useMemo, useState } from 'react';
 
 import PopupModal from '@/components/PopupModal/PopupModal';
 import DataTable from '@/components/Table/DataTable';
-import HungerLevel from '@/domain/entities/HungerLevel';
+import { SimpleTableData } from '@/domain/props/GroupedTableProps';
 import HungerAlertProps from '@/domain/props/HungerAlertProps';
 
 import HungerAlertOperations from '../../operations/hungerAlert/HungerAlertOperations.ts';
@@ -16,7 +16,7 @@ export default function HungerAlert({ countryMapData }: HungerAlertProps) {
 
   const toggleModal = () => setIsModalOpen((prevIsModalOpen) => !prevIsModalOpen);
 
-  const countriesWithHighHunger: HungerLevel[] = useMemo(
+  const countriesWithHighHunger: SimpleTableData = useMemo(
     () => HungerAlertOperations.getHungerAlertData(countryMapData),
     [countryMapData]
   );

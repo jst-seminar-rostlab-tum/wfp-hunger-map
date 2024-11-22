@@ -12,7 +12,7 @@ import { getTableCell } from '@/operations/tables/groupedTableOperations';
 import tableFormatters from '@/operations/tables/tableFormatters';
 
 /**
- * A table with its rows grouped by the values in the first column.
+ * A table with its rows grouped by the values in the first column (`keyColumn`).
  * For simple tables, each group has one row, i.e. 'groups' and 'rows' are equal.
  */
 function CustomTable<D>({ columns, data, ariaLabel, className, format = 'simple' }: CustomTableProps<D>) {

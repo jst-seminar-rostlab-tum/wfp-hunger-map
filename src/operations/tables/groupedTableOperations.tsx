@@ -17,7 +17,7 @@ export function getTableCell(row: CustomTableRow, columnKey: string, center: boo
 
   return (
     <TableCell
-      className={clsx('align-top', {
+      className={clsx({
         'border-b-2': addBottomBorder,
         'text-center': center,
       })}

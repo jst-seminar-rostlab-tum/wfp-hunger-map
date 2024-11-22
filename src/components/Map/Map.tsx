@@ -14,12 +14,18 @@ import { MapProps } from '@/domain/props/MapProps';
 import { AlertContainer } from './Alerts/AlertContainer';
 import FcsChoropleth from './FcsChoropleth';
 import VectorTileLayer from './VectorTileLayer';
+import ZoomTracker from './ZoomTracker';
 
 export default function Map({ countries, disputedAreas }: MapProps) {
   const { selectedMapType } = useSelectedMap();
   const [selectedCountryId, setSelectedCountryId] = useState<number | undefined>();
   const { setSelectedMapVisibility } = useSelectedMapVisibility();
   const { selectedAlert, toggleAlert } = useSelectedAlert();
+
+  const onZoomThresholdReached = () => {
+    setSelectedCountryId(undefined);
+    setSelectedMapVisibility(true);
+  };
 
   return (
     <MapContainer
@@ -55,6 +61,7 @@ export default function Map({ countries, disputedAreas }: MapProps) {
               toggleAlert={toggleAlert}
             />
           ))}
+      <ZoomTracker threshold={5} callback={onZoomThresholdReached} />
       <ZoomControl position="bottomright" />
     </MapContainer>
   );

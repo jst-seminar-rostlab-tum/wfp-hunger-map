@@ -9,13 +9,13 @@ import { Tooltip } from '../Tooltip/Tooltip';
 
 export default function CustomAccordion({ items, loading = false }: AccordionsProps) {
   return (
-    <div className="w-full flex justify-start items-start max-w-[600px] overflow-visible overflow-x-auto p-2 rounded-lg">
+    <div className="w-full max-w-[600px] overflow-x-auto p-2 rounded-lg">
       <Accordion variant="splitted">
         {items.map((item) => (
           <AccordionItem
             key={item.title}
             aria-label={item.title}
-            className="last:border-b-[none] bg-content1 white:bg-white overflow-x-auto"
+            className="last:border-b-[none] bg-content1 white:bg-white overflow-hidden"
             title={
               <div className="flex justify-between items-center w-full">
                 <div className="flex gap-4">

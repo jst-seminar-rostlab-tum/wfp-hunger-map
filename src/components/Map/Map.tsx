@@ -49,6 +49,7 @@ export default function Map({ countries, disputedAreas }: MapProps) {
         countries.features &&
         countries.features
           .filter((countryData) => countryData.properties.interactive)
+          .filter((countryData) => countryData.properties.fcs !== null)
           .map((countryData) => (
             <FcsChoropleth
               key={countryData.properties.adm0_id}

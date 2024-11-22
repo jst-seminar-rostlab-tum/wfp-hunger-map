@@ -1,6 +1,7 @@
 'use client';
 
 import { Card, CardBody, CardHeader, Image } from '@nextui-org/react';
+import { v4 as uuid } from 'uuid';
 
 import { CardProps } from '@/domain/props/CardProps';
 
@@ -13,7 +14,7 @@ export default function CustomCard({ title, content }: CardProps) {
       <CardBody className="flex flex-col items-center justify-center overflow-visible overflow-y-auto max-h-[300px] py-2">
         <div className="flex flex-row gap-6 overflow-y-auto">
           {content.map((item) => (
-            <div key={item.text} className="flex flex-col gap-[3px] items-center">
+            <div key={uuid()} className="flex flex-col gap-[3px] items-center">
               <div className="imageWrapper">
                 <Image alt={item.altText} className="w-[102px] h-[75px]" src={item.imageSrc} />
               </div>

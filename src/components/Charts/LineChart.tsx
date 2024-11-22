@@ -3,6 +3,8 @@
 import { Button } from '@nextui-org/button';
 import { useDisclosure } from '@nextui-org/modal';
 import Highcharts, { XAxisOptions } from 'highcharts';
+import Exporting from 'highcharts/modules/exporting';
+import OfflineExporting from 'highcharts/modules/offline-exporting';
 import HighchartsReact from 'highcharts-react-official';
 import { Maximize4 } from 'iconsax-react';
 import { useTheme } from 'next-themes';
@@ -16,6 +18,12 @@ import { Tooltip } from '@/components/Tooltip/Tooltip';
 import { LineChartData } from '@/domain/entities/charts/LineChartData';
 import LineChartProps from '@/domain/props/LineChartProps';
 import LineChartOperations from '@/operations/charts/LineChartOperations';
+
+// initialize the exporting module
+if (typeof Highcharts === 'object') {
+  Exporting(Highcharts);
+  OfflineExporting(Highcharts);
+}
 
 /**
  * The LineChart component is a box that primarily renders a title, description text, and a line chart.
@@ -71,9 +79,7 @@ export function LineChart({
 
   // controlling if a line or bar chart is rendered; line chart is the default
   const [showBarChart, setShowBarChart] = useState(false);
-
   const [chartOptions, setChartOptions] = useState(lineChartOptions);
-
   // handling the x-axis range slider visibility
   const [showXAxisSlider, setShowXAxisSlider] = useState(false);
 

@@ -42,7 +42,7 @@ const config = {
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
     './src/domain/constant/dataSourceTables/dataSourceAccordionItems.tsx',
-    './src/operations/groupedTable/formatDataSourceTable.tsx',
+    './src/operations/tables/*.tsx',
     './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
@@ -149,6 +149,9 @@ const config = {
             fcsGreen: '#345d34',
             fcsOrange: '#ea6a2c',
             fcsRed: '#fa190e',
+            ipcStart: '#F6D1C1',
+            ipcMiddle: '#FB7453',
+            ipcEnd: '#710013',
             rainfallLow: '#b99260',
             rainfallNormal: '#fff',
             rainfallHigh: '#4295d3',

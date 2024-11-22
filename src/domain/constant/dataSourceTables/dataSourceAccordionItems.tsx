@@ -1,15 +1,14 @@
 import React from 'react';
 
-import GroupedTable from '@/components/GroupedTable/GroupedTable';
+import CustomTable from '@/components/Table/CustomTable';
 import Abbreviation from '@/components/Tooltip/Abbreviation';
 import { AccordionItemProps } from '@/domain/entities/accordions/Accordions';
-import { DataSourceTableData, GroupedTableColumns } from '@/domain/props/GroupedTableProps';
-import formatDataSourceTable from '@/operations/groupedTable/formatDataSourceTable';
+import { CustomTableColumns, DataSourceTableData } from '@/domain/props/CustomTableProps';
 
 const dataSourceTableColumns = [
-  { columnId: 'mainColumn', label: 'Data type' },
+  { columnId: 'keyColumn', label: 'Data type', alignLeft: true },
   { columnId: 'source', label: 'Source' },
-] as GroupedTableColumns;
+] as CustomTableColumns;
 
 const contextAndNeedTableData: DataSourceTableData = [
   {
@@ -264,27 +263,27 @@ const otherTable: DataSourceTableData = [
 const dataSourceAccordionItems: AccordionItemProps[] = [
   {
     title: 'Context and Need',
-    content: <GroupedTable columns={dataSourceTableColumns} data={formatDataSourceTable(contextAndNeedTableData)} />,
+    content: <CustomTable columns={dataSourceTableColumns} data={contextAndNeedTableData} format="dataSources" />,
   },
   {
     title: 'Food Security',
-    content: <GroupedTable columns={dataSourceTableColumns} data={formatDataSourceTable(foodSecurityTableData)} />,
+    content: <CustomTable columns={dataSourceTableColumns} data={foodSecurityTableData} format="dataSources" />,
   },
   {
     title: 'Nutrition',
-    content: <GroupedTable columns={dataSourceTableColumns} data={formatDataSourceTable(nutritionTable)} />,
+    content: <CustomTable columns={dataSourceTableColumns} data={nutritionTable} format="dataSources" />,
   },
   {
     title: 'Markets',
-    content: <GroupedTable columns={dataSourceTableColumns} data={formatDataSourceTable(marketsTable)} />,
+    content: <CustomTable columns={dataSourceTableColumns} data={marketsTable} format="dataSources" />,
   },
   {
     title: 'Seasonal Information',
-    content: <GroupedTable columns={dataSourceTableColumns} data={formatDataSourceTable(seasonalTable)} />,
+    content: <CustomTable columns={dataSourceTableColumns} data={seasonalTable} format="dataSources" />,
   },
   {
     title: 'Other',
-    content: <GroupedTable columns={dataSourceTableColumns} data={formatDataSourceTable(otherTable)} />,
+    content: <CustomTable columns={dataSourceTableColumns} data={otherTable} format="dataSources" />,
   },
 ];
 

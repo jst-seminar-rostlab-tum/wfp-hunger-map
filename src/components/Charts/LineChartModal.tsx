@@ -157,7 +157,7 @@ export function LineChartModal({
         <ModalBody>
           {/* modal main content: description and chart */}
           <p className="w-full h-fit text-md font-normal">{description}</p>
-          <div className="pt-6">
+          <div className="py-6">
             <HighchartsReact
               highcharts={Highcharts}
               options={chartOptions}

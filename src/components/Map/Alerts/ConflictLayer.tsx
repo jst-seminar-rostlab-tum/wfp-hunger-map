@@ -10,7 +10,7 @@ import GeometryOperations from '@/operations/GeometryOperations';
 import { getTailwindColor } from '@/utils/tailwind-util';
 
 export function ConflictLayer() {
-  const { data, isPending } = useConflictQuery();
+  const { data, isPending } = useConflictQuery(true);
   const conflictsByType = useMemo(() => ConflictOperations.sortConflictsByType(data), [data]);
 
   return (

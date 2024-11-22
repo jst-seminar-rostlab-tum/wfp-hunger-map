@@ -111,6 +111,29 @@ export function mapLegendData(
           'Values between 90% and 110% are considered as being within the range of normal variability.',
       });
       break;
+    case GlobalInsight.IPC:
+      legendData.push({
+        title: 'Number of people in IPC/CH Phase 3 or above (millions)',
+        startColor: 'ipcStart',
+        middleColor: 'ipcMiddle',
+        endColor: 'ipcEnd',
+        startLabel: '0',
+        endLabel: '>10',
+        tooltipInfo: `
+          Developed by a global partnership, the Integrated Food Security Phase Classification (IPC) / Cadre Harmonisé (CH) is a set of tools and procedures to classify food insecurity.\n
+          It classifies the populations in five different phases according to the severity of the food insecurity and malnutrition situation:\n
+          - Minimal\n
+          - Stressed\n
+          - Crisis\n
+          - Emergency\n
+          - Catastrophe/Famine.\n
+          \n
+          Data source: Integrated Food Security Phase Classification (IPC) / Cadre Harmonisé (CH) www.ipcinfo.org\n
+          \n
+          Updated: N/A
+          `,
+      });
+      break;
     default:
   }
 

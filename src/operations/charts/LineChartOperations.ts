@@ -151,11 +151,6 @@ export default class LineChartOperations {
         type: data.roundLines ? 'spline' : 'line',
         data: seriesData,
         color: lineColor,
-        marker: {
-          // increase marker size if only a single x-category is shown
-          enabled: categories.length === 1,
-          radius: categories.length === 1 ? 4 : 1,
-        },
       });
 
       // checking if area series range should be added as well
@@ -171,11 +166,6 @@ export default class LineChartOperations {
           data: areaSeriesData,
           color: lineColor,
           linkedTo: ':previous',
-          marker: {
-            // render marker if only a single x-category is shown
-            enabled: categories.length === 1,
-            radius: categories.length === 1 ? 2 : 1,
-          },
         });
       }
     }
@@ -235,6 +225,8 @@ export default class LineChartOperations {
         line: {
           animation: true,
           marker: {
+            enabled: false,
+            radius: 1,
             animation: true,
             symbol: 'circle',
           },
@@ -242,6 +234,8 @@ export default class LineChartOperations {
         spline: {
           animation: true,
           marker: {
+            enabled: false,
+            radius: 1,
             animation: true,
             symbol: 'circle',
           },
@@ -251,6 +245,8 @@ export default class LineChartOperations {
           fillOpacity: 0.2,
           lineWidth: 0,
           marker: {
+            enabled: false,
+            radius: 1,
             animation: true,
             symbol: 'diamond',
           },
@@ -393,6 +389,39 @@ export default class LineChartOperations {
   }
 
   /**
+   * Trigger download of the given line chart as a png file.
+   */
+  public static downloadChartPNG(chart: HighchartsReact.RefObject): void {
+    chart.chart.exportChartLocal({
+      type: 'image/png',
+      filename: 'chart-download',
+    });
+  }
+
+  /**
+   * Trigger download of the given line chart as a svg file.
+   */
+  public static downloadChartDataSVG(chart: HighchartsReact.RefObject): void {
+    const svg = chart.chart.getSVG();
+    const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    // create a temporary link element and trigger the download
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'chart.svg'; // Name of the SVG file
+    a.click();
+    // clean up the URL object
+    URL.revokeObjectURL(url);
+  }
+
+  /**
+   * Trigger download of the given line chart data as a csv file.
+   */
+  public static downloadChartDataCSV(chart: HighchartsReact.RefObject): void {
+    chart.chart.downloadCSV();
+  }
+
+  /**
    * Trigger download of the given line chart `data` as a json file.
    */
   public static downloadDataJSON(data: LineChartData): void {
@@ -405,13 +434,4 @@ export default class LineChartOperations {
     link.click();
   }
 
-  /**
-   * Trigger download of the given line chart `data` as a png file.
-   */
-  public static downloadChartPNG(chart: HighchartsReact.RefObject): void {
-    chart.chart.exportChartLocal({
-      type: 'image/png',
-      filename: 'chart-download',
-    });
-  }
 }

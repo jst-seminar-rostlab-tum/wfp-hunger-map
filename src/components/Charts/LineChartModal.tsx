@@ -1,6 +1,10 @@
 import { Button } from '@nextui-org/button';
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@nextui-org/modal';
+import { Popover, PopoverContent, PopoverTrigger } from '@nextui-org/popover';
 import Highcharts from 'highcharts';
+import ExportDataModule from 'highcharts/modules/export-data';
+import Exporting from 'highcharts/modules/exporting';
+import OfflineExporting from 'highcharts/modules/offline-exporting';
 import HighchartsReact from 'highcharts-react-official';
 import { DocumentDownload, GalleryImport, Minus } from 'iconsax-react';
 import { useRef } from 'react';
@@ -11,6 +15,13 @@ import LineChartXAxisSlider from '@/components/Charts/helpers/LineChartXAxisSlid
 import { Tooltip } from '@/components/Tooltip/Tooltip';
 import LineChartModalProps from '@/domain/props/LineChartModalProps';
 import LineChartOperations from '@/operations/charts/LineChartOperations.ts';
+
+// initialize the exporting module
+if (typeof Highcharts === 'object') {
+  Exporting(Highcharts);
+  ExportDataModule(Highcharts);
+  OfflineExporting(Highcharts);
+}
 
 /**
  * This component is tied to the `LineChart` component and should not be used independently.
@@ -75,31 +86,64 @@ export function LineChartModal({
                   />
                 )
               }
-              {/* chart download buttons */}
-              <Tooltip text="Download Data as JSON">
-                <Button
-                  isIconOnly
-                  variant="light"
-                  size="sm"
-                  onPress={() => {
-                    LineChartOperations.downloadDataJSON(lineChartData);
-                  }}
-                >
-                  <DocumentDownload className="h-4 w-4" />
-                </Button>
-              </Tooltip>
-              <Tooltip text="Download Chart as PNG">
-                <Button
-                  isIconOnly
-                  variant="light"
-                  size="sm"
-                  onPress={() => {
-                    if (chartRef.current) LineChartOperations.downloadChartPNG(chartRef.current);
-                  }}
-                >
-                  <GalleryImport className="h-4 w-4" />
-                </Button>
-              </Tooltip>
+
+              {/* chart download dropdown */}
+              <Popover placement="bottom" offset={10} backdrop="opaque">
+                <PopoverTrigger>
+                  <Button isIconOnly variant="light" size="sm">
+                    <Tooltip text="Download Data as JSON">
+                      <DocumentDownload className="h-4 w-4" />
+                    </Tooltip>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-fit h-fit p-2 flex flex-col gap-1 items-start">
+                  <Button
+                    variant="light"
+                    size="sm"
+                    className="w-full justify-start"
+                    onPress={() => {
+                      if (chartRef.current) LineChartOperations.downloadChartPNG(chartRef.current);
+                    }}
+                    startContent={<GalleryImport className="h-4 w-4" />}
+                  >
+                    Chart as PNG
+                  </Button>
+                  <Button
+                    variant="light"
+                    size="sm"
+                    className="w-full justify-start"
+                    onPress={() => {
+                      if (chartRef.current) LineChartOperations.downloadChartDataSVG(chartRef.current);
+                    }}
+                    startContent={<GalleryImport className="h-4 w-4" />}
+                  >
+                    Chart as SVG
+                  </Button>
+                  <Button
+                    variant="light"
+                    size="sm"
+                    className="w-full justify-start"
+                    onPress={() => {
+                      if (chartRef.current) LineChartOperations.downloadChartDataCSV(chartRef.current);
+                    }}
+                    startContent={<DocumentDownload className="h-4 w-4" />}
+                  >
+                    Data as CSV
+                  </Button>
+                  <Button
+                    variant="light"
+                    size="sm"
+                    className="w-full justify-start"
+                    onPress={() => {
+                      if (chartRef.current) LineChartOperations.downloadDataJSON(lineChartData);
+                    }}
+                    startContent={<DocumentDownload className="h-4 w-4" />}
+                  >
+                    Data as JSON
+                  </Button>
+                </PopoverContent>
+              </Popover>
+
               {/* close model button */}
               <Tooltip text="Close">
                 <Button isIconOnly variant="light" size="sm" onPress={onClose}>

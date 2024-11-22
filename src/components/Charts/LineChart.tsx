@@ -3,8 +3,6 @@
 import { Button } from '@nextui-org/button';
 import { useDisclosure } from '@nextui-org/modal';
 import Highcharts, { XAxisOptions } from 'highcharts';
-import Exporting from 'highcharts/modules/exporting';
-import OfflineExporting from 'highcharts/modules/offline-exporting';
 import HighchartsReact from 'highcharts-react-official';
 import { Maximize4 } from 'iconsax-react';
 import { useTheme } from 'next-themes';
@@ -18,12 +16,6 @@ import { Tooltip } from '@/components/Tooltip/Tooltip';
 import { LineChartData } from '@/domain/entities/charts/LineChartData';
 import LineChartProps from '@/domain/props/LineChartProps';
 import LineChartOperations from '@/operations/charts/LineChartOperations';
-
-// initialize the exporting module
-if (typeof Highcharts === 'object') {
-  Exporting(Highcharts);
-  OfflineExporting(Highcharts);
-}
 
 /**
  * The LineChart component is a box that primarily renders a title, description text, and a line chart.
@@ -86,12 +78,18 @@ export function LineChart({
   const [showXAxisSlider, setShowXAxisSlider] = useState(false);
 
   // handling the line and bar chart switch and the theme switch;
-  // also handling changing the x-axis range using the `LineChartXAxisSlider`
+  // also handling changing the x-axis range using the `LineChartXAxisSlider`;
+  // special: if the selected x-axis range has length 1 -> bar chart is displayed
   useEffect(() => {
-    const newChartOptions = showBarChart
-      ? LineChartOperations.getHighChartBarData(lineChartData, theme, selectedXAxisRange[0], selectedXAxisRange[1])
-      : LineChartOperations.getHighChartLineData(lineChartData, theme, selectedXAxisRange[0], selectedXAxisRange[1]);
-    setChartOptions(newChartOptions);
+    if (showBarChart || selectedXAxisRange[1] - selectedXAxisRange[0] === 0) {
+      setChartOptions(
+        LineChartOperations.getHighChartBarData(lineChartData, theme, selectedXAxisRange[0], selectedXAxisRange[1])
+      );
+    } else {
+      setChartOptions(
+        LineChartOperations.getHighChartLineData(lineChartData, theme, selectedXAxisRange[0], selectedXAxisRange[1])
+      );
+    }
   }, [showBarChart, theme, selectedXAxisRange]);
 
   return (

@@ -95,3 +95,9 @@ canvas.react-pdf__Page__canvas {
   padding: 0 !important;
   background-color: transparent !important;
 }
+
+.leaflet-tooltip {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}

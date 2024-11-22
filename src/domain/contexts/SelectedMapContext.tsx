@@ -1,6 +1,7 @@
 import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
 
 import { GlobalInsight } from '../enums/GlobalInsight';
+import { useSelectedMapVisibility } from './SelectedMapVisibilityContext';
 
 interface SelectedMapTypeState {
   selectedMapType: GlobalInsight;
@@ -10,7 +11,14 @@ interface SelectedMapTypeState {
 const SelectedMapContext = createContext<SelectedMapTypeState | undefined>(undefined);
 
 export function SelectedMapProvider({ children }: { children: ReactNode }) {
-  const [selectedMapType, setSelectedMapType] = useState<GlobalInsight>(GlobalInsight.FOOD);
+  const [selectedMapType, setSelectedMapTypeState] = useState<GlobalInsight>(GlobalInsight.FOOD);
+  const { setSelectedMapVisibility } = useSelectedMapVisibility();
+  const setSelectedMapType = (value: GlobalInsight) => {
+    if (value !== selectedMapType) {
+      setSelectedMapVisibility(true);
+    }
+    setSelectedMapTypeState(value);
+  };
 
   const value = useMemo(
     () => ({

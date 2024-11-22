@@ -6,6 +6,7 @@ import { useTheme } from 'next-themes';
 import React, { RefObject, useEffect, useRef, useState } from 'react';
 
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
+import { useSelectedMapVisibility } from '@/domain/contexts/SelectedMapVisibilityContext';
 import { MapProps } from '@/domain/props/MapProps';
 import { MapOperations } from '@/operations/map/MapOperations';
 
@@ -16,6 +17,7 @@ export default function VectorTileLayer({ countries, disputedAreas, ipcData }: M
   const { selectedMapType } = useSelectedMap();
   const [map, setMap] = useState<mapboxgl.Map>();
   const [popup, setPopup] = useState<Popup>();
+  const { selectedMapVisibility } = useSelectedMapVisibility();
 
   mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 
@@ -45,11 +47,13 @@ export default function VectorTileLayer({ countries, disputedAreas, ipcData }: M
   }, [context]);
 
   useEffect(() => {
-    if (map && popup) {
+    if (map && popup && selectedMapVisibility) {
       MapOperations.removeActiveMapLayer(map, theme === 'dark');
       MapOperations.addMapAsLayer(map, theme === 'dark', { countries, ipcData, selectedMapType }, popup);
+    } else if (map && popup) {
+      MapOperations.removeActiveMapLayer(map, theme === 'dark');
     }
-  }, [map, selectedMapType]);
+  }, [map, selectedMapType, selectedMapVisibility]);
 
   useEffect(() => {
     if (map) {

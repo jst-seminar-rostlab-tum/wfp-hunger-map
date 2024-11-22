@@ -11,6 +11,7 @@ import * as React from 'react';
 import { cachedQueryClient } from '@/config/queryClient';
 import { SelectedAlertProvider } from '@/domain/contexts/SelectedAlertContext';
 import { SelectedMapProvider } from '@/domain/contexts/SelectedMapContext';
+import { SelectedMapVisibilityProvider } from '@/domain/contexts/SelectedMapVisibilityContext';
 import { SidebarProvider } from '@/domain/contexts/SidebarContext';
 
 export interface ProvidersProps {
@@ -26,9 +27,11 @@ export function Providers({ children, themeProps }: ProvidersProps) {
       <NextThemesProvider defaultTheme="system" {...themeProps}>
         <QueryClientProvider client={cachedQueryClient}>
           <SidebarProvider>
-            <SelectedMapProvider>
-              <SelectedAlertProvider>{children}</SelectedAlertProvider>
-            </SelectedMapProvider>
+            <SelectedMapVisibilityProvider>
+              <SelectedMapProvider>
+                <SelectedAlertProvider>{children}</SelectedAlertProvider>
+              </SelectedMapProvider>
+            </SelectedMapVisibilityProvider>
           </SidebarProvider>
           <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>

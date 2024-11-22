@@ -25,6 +25,7 @@ export default interface GroupedTableProps {
   columns: GroupedTableColumns;
   data: GroupedTableData;
   ariaLabel?: string;
+  className?: string;
 }
 
 export type DataSourceTableData = {

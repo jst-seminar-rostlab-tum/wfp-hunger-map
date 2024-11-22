@@ -15,7 +15,7 @@ import { getTableCell } from '@/operations/tables/groupedTableOperations';
  *
  * Rows belonging to different groups are visually seperated by a divider.
  */
-function GroupedTable({ columns, data, ariaLabel }: GroupedTableProps) {
+function GroupedTable({ columns, data, ariaLabel, className }: GroupedTableProps) {
   const rows = data.flatMap(({ groupKey, groupName, attributeRows }) =>
     attributeRows.map((row, index) => ({
       index,
@@ -31,7 +31,12 @@ function GroupedTable({ columns, data, ariaLabel }: GroupedTableProps) {
   const leftAlignedColumns = new Set(columns.filter((c) => c.alignLeft).map((c) => c.columnId));
 
   return (
-    <Table removeWrapper aria-label={ariaLabel} classNames={{ thead: '[&>tr:last-child]:hidden' }}>
+    <Table
+      removeWrapper
+      aria-label={ariaLabel}
+      classNames={{ thead: '[&>tr:last-child]:hidden' }}
+      className={className}
+    >
       <TableHeader columns={columns}>
         {({ columnId, label, alignLeft }) => (
           <TableColumn key={columnId} className={clsx('border-b-2 text-wrap', { 'text-center': !alignLeft })}>

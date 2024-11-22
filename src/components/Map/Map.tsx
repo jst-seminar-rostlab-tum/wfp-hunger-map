@@ -16,7 +16,7 @@ import FcsChoropleth from './FcsChoropleth';
 import VectorTileLayer from './VectorTileLayer';
 import ZoomTracker from './ZoomTracker';
 
-export default function Map({ countries, disputedAreas }: MapProps) {
+export default function Map({ countries, disputedAreas, ipcData }: MapProps) {
   const { selectedMapType } = useSelectedMap();
   const [selectedCountryId, setSelectedCountryId] = useState<number | undefined>();
   const { setSelectedMapVisibility } = useSelectedMapVisibility();
@@ -44,7 +44,7 @@ export default function Map({ countries, disputedAreas }: MapProps) {
       style={{ height: '100%', width: '100%', zIndex: 1 }}
     >
       <AlertContainer countries={countries} />
-      {countries && <VectorTileLayer countries={countries} disputedAreas={disputedAreas} />}
+      {countries && <VectorTileLayer countries={countries} disputedAreas={disputedAreas} ipcData={ipcData} />}
       {selectedMapType === GlobalInsight.FOOD &&
         countries.features &&
         countries.features

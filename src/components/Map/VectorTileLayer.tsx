@@ -1,21 +1,22 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 import { LeafletContextInterface, useLeafletContext } from '@react-leaflet/core';
-import mapboxgl from 'mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
+import mapboxgl, { Popup } from 'mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import { useTheme } from 'next-themes';
 import React, { RefObject, useEffect, useRef, useState } from 'react';
 
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSelectedMapVisibility } from '@/domain/contexts/SelectedMapVisibilityContext';
 import { MapProps } from '@/domain/props/MapProps';
-import { MapOperations } from '@/operations/map/MapOperations.ts';
+import { MapOperations } from '@/operations/map/MapOperations';
 
-export default function VectorTileLayer({ countries, disputedAreas }: MapProps) {
+export default function VectorTileLayer({ countries, disputedAreas, ipcData }: MapProps) {
   const { theme } = useTheme();
   const context: LeafletContextInterface = useLeafletContext();
   const mapContainer: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
   const { selectedMapType } = useSelectedMap();
   const [map, setMap] = useState<mapboxgl.Map>();
+  const [popup, setPopup] = useState<Popup>();
   const { selectedMapVisibility } = useSelectedMapVisibility();
 
   mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
@@ -23,11 +24,15 @@ export default function VectorTileLayer({ countries, disputedAreas }: MapProps) 
   useEffect(() => {
     const baseMap: mapboxgl.Map = MapOperations.createMapboxMap(
       theme === 'dark',
-      { countries, disputedAreas },
+      { countries, disputedAreas, ipcData, selectedMapType },
       mapContainer
     );
-    baseMap.on('load', () => setMap(baseMap));
-    MapOperations.setMapInteractionFunctionality(baseMap);
+    const popover = new mapboxgl.Popup({ closeButton: false, closeOnClick: false });
+    baseMap.on('load', () => {
+      setMap(baseMap);
+      setPopup(popover);
+    });
+    MapOperations.setMapInteractionFunctionality(baseMap, popover);
     MapOperations.synchronizeLeafletMapbox(baseMap, mapContainer, context);
     // The following layers currently don't work due to CORS issues.
     MapOperations.initRainfallLayer(baseMap);
@@ -42,11 +47,11 @@ export default function VectorTileLayer({ countries, disputedAreas }: MapProps) 
   }, [context]);
 
   useEffect(() => {
-    if (map && selectedMapVisibility) {
-      MapOperations.removeActiveMapLayer(map);
-      MapOperations.addMapAsLayer(map, selectedMapType);
-    } else if (map) {
-      MapOperations.removeActiveMapLayer(map);
+    if (map && popup && selectedMapVisibility) {
+      MapOperations.removeActiveMapLayer(map, theme === 'dark');
+      MapOperations.addMapAsLayer(map, theme === 'dark', { countries, ipcData, selectedMapType }, popup);
+    } else if (map && popup) {
+      MapOperations.removeActiveMapLayer(map, theme === 'dark');
     }
   }, [map, selectedMapType, selectedMapVisibility]);
 

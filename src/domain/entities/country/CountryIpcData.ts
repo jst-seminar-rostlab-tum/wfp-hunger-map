@@ -10,7 +10,9 @@ export interface CountryIpcData {
   source: string;
   analysis_id: string;
   phase_4_plus: number;
+  phase_4_plus_percent: number;
   phase_5: number;
+  phase_5_percent: number;
   longitude: number;
   latitude: number;
 }

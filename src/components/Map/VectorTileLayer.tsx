@@ -42,11 +42,13 @@ export default function VectorTileLayer({ countries, disputedAreas }: MapProps) 
   }, [context]);
 
   useEffect(() => {
-    if (map) {
+    if (map && selectedMapVisibility) {
       MapOperations.removeActiveMapLayer(map);
       MapOperations.addMapAsLayer(map, selectedMapType);
+    } else if (map) {
+      MapOperations.removeActiveMapLayer(map);
     }
-  }, [map, selectedMapType]);
+  }, [map, selectedMapType, selectedMapVisibility]);
 
   useEffect(() => {
     if (map) {

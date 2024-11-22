@@ -7,7 +7,10 @@ import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data';
 import { formatToMillion } from '@/utils/formatting';
 
 export class FcsAccordionOperations {
-  static getFcsChartData(countryData: CountryData): LineChartData {
+  static getFcsChartData(countryData?: CountryData): LineChartData | null {
+    if (!countryData?.fcsGraph) {
+      return null;
+    }
     return {
       type: 'LineChartData',
       xAxisType: 'linear',
@@ -25,7 +28,10 @@ export class FcsAccordionOperations {
     };
   }
 
-  static getRcsiChartData(countryData: CountryData): LineChartData {
+  static getRcsiChartData(countryData?: CountryData): LineChartData | null {
+    if (!countryData?.rcsiGraph) {
+      return null;
+    }
     return {
       type: 'LineChartData',
       xAxisType: 'linear',
@@ -43,32 +49,51 @@ export class FcsAccordionOperations {
     };
   }
 
-  static getBalanceOfTradeChartData(countryIso3Data: CountryIso3Data): BalanceOfTradeGraph {
+  static getBalanceOfTradeChartData(countryIso3Data?: CountryIso3Data): BalanceOfTradeGraph | null {
+    if (!countryIso3Data?.balanceOfTradeGraph?.data) {
+      return null;
+    }
     return {
       type: 'BalanceOfTradeGraph',
-      data: countryIso3Data.balanceOfTradeGraph.data || [],
+      data: countryIso3Data.balanceOfTradeGraph.data,
     };
   }
 
-  static getHeadlineAndFoodInflationChartData(countryIso3Data: CountryIso3Data): InflationGraphs {
+  static getHeadlineAndFoodInflationChartData(countryIso3Data?: CountryIso3Data): InflationGraphs | null {
+    if (!countryIso3Data?.inflationGraphs) {
+      return null;
+    }
+    const headlineData = countryIso3Data.inflationGraphs.headline?.data;
+    const foodData = countryIso3Data.inflationGraphs.food?.data;
+    if (!headlineData || !foodData) {
+      return null;
+    }
+
     return {
       type: 'InflationGraphs',
       headline: {
-        data: countryIso3Data?.inflationGraphs?.headline?.data || [],
+        data: headlineData,
       },
       food: {
-        data: countryIso3Data?.inflationGraphs?.food?.data || [],
+        data: foodData,
       },
     };
   }
 
-  static getCurrencyExchangeChartData(countryIso3Data: CountryIso3Data): CurrencyExchangeGraph {
+  static getCurrencyExchangeChartData(countryIso3Data?: CountryIso3Data): CurrencyExchangeGraph | null {
+    if (!countryIso3Data?.currencyExchangeGraph) {
+      return null;
+    }
+    const { name, source, updated, data } = countryIso3Data.currencyExchangeGraph;
+    if (!name || !source || !updated || !data) {
+      return null;
+    }
     return {
       type: 'CurrencyExchangeGraph',
-      name: countryIso3Data?.currencyExchangeGraph?.name || '',
-      source: countryIso3Data?.currencyExchangeGraph?.source || '',
-      updated: countryIso3Data?.currencyExchangeGraph?.updated || '',
-      data: countryIso3Data?.currencyExchangeGraph?.data || [],
+      name,
+      source,
+      updated,
+      data,
     };
   }
 }

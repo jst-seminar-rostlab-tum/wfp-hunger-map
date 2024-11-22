@@ -1,5 +1,4 @@
 import { Spacer } from '@nextui-org/react';
-import { useMemo } from 'react';
 
 import FcsAccordionProps from '@/domain/props/FcsAccordionProps';
 import { FcsAccordionOperations } from '@/operations/map/FcsAccordionOperations';
@@ -10,14 +9,14 @@ import CustomCard from '../Cards/Card';
 import { LineChart } from '../Charts/LineChart';
 
 export default function FcsAccordion({ countryData, loading, countryIso3Data }: FcsAccordionProps) {
-  const deltaOneMonth = useMemo(() => {
-    return countryData?.fcsMinus1 ? countryData.fcs - countryData.fcsMinus1 : undefined;
-  }, [countryData]);
-
-  const deltaThreeMonth = useMemo(() => {
-    return countryData?.fcsMinus3 ? countryData.fcs - countryData.fcsMinus3 : undefined;
-  }, [countryData]);
-
+  const deltaOneMonth = countryData?.fcsMinus1 ? countryData.fcs - countryData.fcsMinus1 : null;
+  const deltaThreeMonth = countryData?.fcsMinus3 ? countryData.fcs - countryData.fcsMinus3 : null;
+  const fcsChartData = FcsAccordionOperations.getFcsChartData(countryData);
+  const rcsiChartData = FcsAccordionOperations.getRcsiChartData(countryData);
+  const currencyExchangeChartData = FcsAccordionOperations.getCurrencyExchangeChartData(countryIso3Data);
+  const balanceOfTradeChartData = FcsAccordionOperations.getBalanceOfTradeChartData(countryIso3Data);
+  const headlineAndFoodInflationChartData =
+    FcsAccordionOperations.getHeadlineAndFoodInflationChartData(countryIso3Data);
   return (
     <div className="absolute w-[350px] left-[108px] top-4 z-9999">
       <CustomAccordion
@@ -69,22 +68,26 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
             iconSrc: '/Images/InfoIcon.svg',
             content: (
               <div>
-                {countryData && (
+                {fcsChartData ? (
                   <LineChart
                     title="Trend of the number of people with insufficient food consumption"
-                    data={FcsAccordionOperations.getFcsChartData(countryData)}
+                    data={fcsChartData}
                     expandable
                     small
                   />
+                ) : (
+                  <p>No data about insufficient food consumption</p>
                 )}
                 <Spacer y={1} />
-                {countryData && (
+                {rcsiChartData ? (
                   <LineChart
                     title="Trend of the number of people using crisis or above crisis food-based coping"
-                    data={FcsAccordionOperations.getRcsiChartData(countryData)}
+                    data={rcsiChartData}
                     expandable
                     small
                   />
+                ) : (
+                  <p>No data about crisis or above crisis food-based coping</p>
                 )}
               </div>
             ),
@@ -114,12 +117,10 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
             iconSrc: '/Images/InfoIcon.svg',
             content: (
               <div>
-                {countryIso3Data && (
-                  <LineChart
-                    data={FcsAccordionOperations.getCurrencyExchangeChartData(countryIso3Data)}
-                    expandable
-                    small
-                  />
+                {currencyExchangeChartData ? (
+                  <LineChart data={currencyExchangeChartData} expandable small />
+                ) : (
+                  <p>No data about currency exchange</p>
                 )}
               </div>
             ),
@@ -129,12 +130,10 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
             iconSrc: '/Images/InfoIcon.svg',
             content: (
               <div>
-                {countryIso3Data && (
-                  <LineChart
-                    data={FcsAccordionOperations.getBalanceOfTradeChartData(countryIso3Data)}
-                    expandable
-                    small
-                  />
+                {balanceOfTradeChartData ? (
+                  <LineChart data={balanceOfTradeChartData} expandable small />
+                ) : (
+                  <p>No data about balance of trade</p>
                 )}
               </div>
             ),
@@ -144,12 +143,10 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
             iconSrc: '/Images/InfoIcon.svg',
             content: (
               <div>
-                {countryIso3Data && (
-                  <LineChart
-                    data={FcsAccordionOperations.getHeadlineAndFoodInflationChartData(countryIso3Data)}
-                    expandable
-                    small
-                  />
+                {headlineAndFoodInflationChartData ? (
+                  <LineChart data={headlineAndFoodInflationChartData} expandable small />
+                ) : (
+                  <p>No data about headline and food inflation</p>
                 )}
               </div>
             ),

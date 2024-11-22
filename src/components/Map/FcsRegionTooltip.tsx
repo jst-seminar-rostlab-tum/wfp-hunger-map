@@ -23,24 +23,24 @@ export default function FcsRegionTooltip({ feature }: FcsRegionTooltipProps) {
         <div className="mt-2 text-foreground">
           <p>
             {fcsMillion && fcsRatio ? (
-              <div>
+              <>
                 <span className="text-clusterOrange font-bold">
                   {fcsRatio}% ({fcsMillion}M){' '}
                 </span>
                 with insufficient food consumption
-              </div>
+              </>
             ) : (
               'No data about insufficient food consumption'
             )}
           </p>
           <p>
             {rcsiRatio && rcsiMillion ? (
-              <div>
+              <>
                 <span className="text-clusterOrange font-bold">
                   {rcsiRatio}% ({rcsiMillion}M){' '}
                 </span>
                 with crisis or above crisis food-based coping
-              </div>
+              </>
             ) : (
               'No data about crisis or above crisis food-based coping'
             )}

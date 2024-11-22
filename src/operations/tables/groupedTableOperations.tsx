@@ -2,10 +2,10 @@ import { TableCell } from '@nextui-org/table';
 import clsx from 'clsx';
 import React from 'react';
 
-import { GroupedTableRow } from '@/domain/props/GroupedTableProps';
+import { CustomTableRow } from '@/domain/props/CustomTableProps';
 
 // This function cannot be converted into a component because TableCell has to be the direct descendant of a TableRow.
-export function getTableCell(row: GroupedTableRow, columnKey: string, center: boolean | undefined) {
+export function getTableCell(row: CustomTableRow, columnKey: string, center: boolean | undefined) {
   if (columnKey === 'keyColumn' && row.index > 0)
     // don't return null here because TableRow can't deal with that
     // eslint-disable-next-line react/jsx-no-useless-fragment

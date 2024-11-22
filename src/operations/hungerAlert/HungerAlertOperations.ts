@@ -1,5 +1,5 @@
 import { CountryMapDataWrapper } from '@/domain/entities/country/CountryMapData';
-import { GroupedTableColumns, SimpleTableData } from '@/domain/props/GroupedTableProps';
+import { CustomTableColumns, SimpleTableData } from '@/domain/props/CustomTableProps';
 
 export default class HungerAlertOperations {
   static getHungerAlertData(countryMapData: CountryMapDataWrapper): SimpleTableData {
@@ -22,7 +22,7 @@ export default class HungerAlertOperations {
       { columnId: 'keyColumn', label: 'Rank' },
       { columnId: 'country', label: 'Country' },
       { columnId: 'fcs', label: 'FCS' },
-    ] as GroupedTableColumns;
+    ] as CustomTableColumns;
   }
 
   static getPulseClasses(): string {

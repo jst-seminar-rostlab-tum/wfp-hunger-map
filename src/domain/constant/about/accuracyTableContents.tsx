@@ -1,12 +1,12 @@
 import StyledLink from '@/components/About/StyledLink';
-import { GroupedTableColumns, GroupedTableData } from '@/domain/props/GroupedTableProps';
+import { CustomTableColumns, CustomTableData } from '@/domain/props/CustomTableProps';
 
 export const accuracyTableColumns = [
   { columnId: 'keyColumn', label: 'Measure', alignLeft: true },
   { columnId: 'withPast', label: 'With past data' },
   { columnId: 'FCS', label: 'FCS' },
   { columnId: 'rCSI', label: 'rCSI' },
-] as GroupedTableColumns;
+] as CustomTableColumns;
 
 export const accuracyTableContents = [
   {
@@ -40,4 +40,4 @@ export const accuracyTableContents = [
       { withPast: false, FCS: 0.09, rCSI: 0.07 },
     ],
   },
-] as GroupedTableData;
+] as CustomTableData;

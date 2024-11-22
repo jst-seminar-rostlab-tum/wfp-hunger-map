@@ -7,16 +7,17 @@ import { Table, TableBody, TableColumn, TableHeader, TableRow } from '@nextui-or
 import clsx from 'clsx';
 import React from 'react';
 
-import GroupedTableProps, { GroupedTableRow } from '@/domain/props/GroupedTableProps';
+import CustomTableProps, { CustomTableData, CustomTableRow } from '@/domain/props/CustomTableProps';
 import { getTableCell } from '@/operations/tables/groupedTableOperations';
+import tableFormatters from '@/operations/tables/tableFormatters';
 
 /**
  * A table with its rows grouped by the values in the first column.
- *
- * Rows belonging to different groups are visually seperated by a divider.
+ * For simple tables, each group has one row, i.e. 'groups' and 'rows' are equal.
  */
-function GroupedTable({ columns, data, ariaLabel, className }: GroupedTableProps) {
-  const rows = data.flatMap(({ groupKey, groupName, attributeRows }) =>
+function CustomTable<D>({ columns, data, ariaLabel, className, format = 'simple' }: CustomTableProps<D>) {
+  const formattingFunction = tableFormatters[format] as (d: D) => CustomTableData;
+  const rows = formattingFunction(data).flatMap(({ groupKey, groupName, attributeRows }) =>
     attributeRows.map((row, index) => ({
       index,
       groupKey,
@@ -26,7 +27,7 @@ function GroupedTable({ columns, data, ariaLabel, className }: GroupedTableProps
         ...row,
       },
     }))
-  ) as GroupedTableRow[];
+  ) as CustomTableRow[];
 
   const leftAlignedColumns = new Set(columns.filter((c) => c.alignLeft).map((c) => c.columnId));
 
@@ -57,4 +58,4 @@ function GroupedTable({ columns, data, ariaLabel, className }: GroupedTableProps
   );
 }
 
-export default GroupedTable;
+export default CustomTable;

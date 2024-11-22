@@ -1,11 +1,11 @@
-import { GroupedTableData, SimpleTableData } from '@/domain/props/GroupedTableProps';
+import { CustomTableData, SimpleTableData } from '@/domain/props/CustomTableProps';
 
 function formatSimpleTable(dataSources: SimpleTableData) {
   return dataSources.map(({ keyColumn, ...otherColumns }) => ({
     groupKey: keyColumn,
     groupName: keyColumn,
     attributeRows: [{ ...otherColumns }],
-  })) as GroupedTableData;
+  })) as CustomTableData;
 }
 
 export default formatSimpleTable;

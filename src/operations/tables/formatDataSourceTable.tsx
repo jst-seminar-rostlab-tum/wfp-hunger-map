@@ -2,7 +2,7 @@ import { Chip } from '@nextui-org/chip';
 import clsx from 'clsx';
 
 import StyledLink from '@/components/About/StyledLink';
-import { DataSourceTableData, GroupedTableData } from '@/domain/props/GroupedTableProps';
+import { CustomTableData, DataSourceTableData } from '@/domain/props/CustomTableProps';
 
 function formatDataSourceTable(dataSources: DataSourceTableData) {
   return dataSources.map(
@@ -66,7 +66,7 @@ function formatDataSourceTable(dataSources: DataSourceTableData) {
         ],
       };
     }
-  ) as GroupedTableData;
+  ) as CustomTableData;
 }
 
 export default formatDataSourceTable;

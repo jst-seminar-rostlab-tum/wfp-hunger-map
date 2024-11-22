@@ -6,10 +6,9 @@ import { Pagination } from '@nextui-org/react';
 import React, { useMemo, useState } from 'react';
 
 import PopupModal from '@/components/PopupModal/PopupModal';
-import GroupedTable from '@/components/Table/GroupedTable';
-import { SimpleTableData } from '@/domain/props/GroupedTableProps';
+import CustomTable from '@/components/Table/CustomTable';
+import { SimpleTableData } from '@/domain/props/CustomTableProps';
 import HungerAlertProps from '@/domain/props/HungerAlertProps';
-import formatSimpleTable from '@/operations/tables/formatSimpleTable';
 
 import HungerAlertOperations from '../../operations/hungerAlert/HungerAlertOperations.ts';
 
@@ -50,9 +49,9 @@ export default function HungerAlert({ countryMapData }: HungerAlertProps) {
         modalSize="xl"
       >
         <div className="flex-1 flex flex-col justify-between items-center">
-          <GroupedTable
+          <CustomTable
             columns={HungerAlertOperations.getHungerAlertModalColumns()}
-            data={formatSimpleTable(displayedRows)}
+            data={displayedRows}
             className="mb-3 min-h-[28rem]"
           />
           <Pagination isCompact showControls page={page} total={totalPages} onChange={(newPage) => setPage(newPage)} />

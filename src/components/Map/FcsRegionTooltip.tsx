@@ -14,8 +14,8 @@ export default function FcsRegionTooltip({ feature }: FcsRegionTooltipProps) {
   const fcsMillion = fcsPeople ? formatToMillion(fcsPeople) : null;
   const fcsRatio = feature?.properties?.fcs?.ratio;
   const rcsiPeople = feature.properties?.rcsi?.people;
-  const rcsiMillion = rcsiPeople ? formatToMillion(rcsiPeople) : 'N/A';
-  const rcsiRatio = feature?.properties?.rcsi?.ratio || 'N/A';
+  const rcsiMillion = rcsiPeople ? formatToMillion(rcsiPeople) : null;
+  const rcsiRatio = feature?.properties?.rcsi?.ratio || null;
   return (
     <div className="bg-background text-foreground rounded-md shadow-md max-w-sm z-9999">
       <div className="px-4 pt-4">

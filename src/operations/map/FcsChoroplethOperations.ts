@@ -4,8 +4,10 @@ import L from 'leaflet';
 import container from '@/container';
 import { CountryData } from '@/domain/entities/country/CountryData';
 import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data';
+import { MapColorsType } from '@/domain/entities/map/MapColorsType';
 import { AlertType } from '@/domain/enums/AlertType';
 import CountryRepository from '@/domain/repositories/CountryRepository';
+import { getColors } from '@/styles/MapColors';
 
 class FcsChoroplethOperations {
   static async handleCountryClick(
@@ -60,9 +62,11 @@ class FcsChoroplethOperations {
     setCountryData: (data: CountryData | undefined) => void,
     setCountryIso3Data: (data: CountryIso3Data | undefined) => void,
     setSelectedMapVisibility: (visibility: boolean) => void,
-    toggleAlert: (alertType: AlertType) => void
+    toggleAlert: (alertType: AlertType) => void,
+    isDark: boolean
   ) {
     const pathLayer = layer as L.Path;
+    const mapColors: MapColorsType = getColors(isDark);
 
     pathLayer.on({
       click: async () => {
@@ -81,11 +85,18 @@ class FcsChoroplethOperations {
           toggleAlert
         );
       },
+      mouseover: () => {
+        pathLayer.setStyle({ fillOpacity: 0.3, fillColor: mapColors.outline });
+      },
+      mouseout: () => {
+        pathLayer.setStyle({ fillOpacity: 0 });
+      },
     });
   }
 
   static countryStyle: L.PathOptions = {
     color: undefined,
+    fillOpacity: 0,
   };
 }
 

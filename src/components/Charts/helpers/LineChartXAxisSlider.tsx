@@ -28,10 +28,13 @@ export default function LineChartXAxisSlider({
         showSteps
         color="secondary"
         size="sm"
+        showOutline
         classNames={{
           base: 'max-w-md',
-          track: 'bg-secondary bg-opacity-10',
-          filler: 'bg-secondary',
+          track: 'bg-clickableSecondary h-0.5',
+          filler: 'bg-surfaceGrey',
+          step: 'bg-clickableSecondary data-[in-range=true]:bg-surfaceGrey h-1.5 w-0.5',
+          thumb: "w-5 h-5 bg-clickableSecondary data-[dragging=true]:bg-primary"
         }}
       />
     </div>

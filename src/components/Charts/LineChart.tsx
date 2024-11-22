@@ -2,7 +2,7 @@
 
 import { Button } from '@nextui-org/button';
 import { useDisclosure } from '@nextui-org/modal';
-import Highcharts from 'highcharts';
+import Highcharts, { XAxisOptions } from 'highcharts';
 import Exporting from 'highcharts/modules/exporting';
 import OfflineExporting from 'highcharts/modules/offline-exporting';
 import HighchartsReact from 'highcharts-react-official';
@@ -74,8 +74,8 @@ export function LineChart({
 
   // the `selectedXAxisRange` saves the to be rendered x-axis range of the chart
   // can be changed using the `LinkeChartXAxisSlider` if the param `xAxisSlider==true`
-  const xAxisValues: string[] = lineChartData.lines[0]?.dataPoints.map((d) => d.x) || [];
-  const [selectedXAxisRange, setSelectedXAxisRange] = useState([0, xAxisValues.length - 1]);
+  const xAxisLength: number = (lineChartOptions.xAxis as XAxisOptions).categories?.length || 0;
+  const [selectedXAxisRange, setSelectedXAxisRange] = useState([0, xAxisLength - 1]);
 
   // controlling if a line or bar chart is rendered; line chart is the default
   const [showBarChart, setShowBarChart] = useState(false);

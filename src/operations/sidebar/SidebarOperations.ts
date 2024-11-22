@@ -36,9 +36,9 @@ export class SidebarOperations {
 
   static sidebarAlertTypes: SidebarAlertType[] = [
     {
-      key: AlertType.HUNGER,
-      label: 'Hunger Alert',
-      icon: '/menu_fcs.png',
+      key: AlertType.COUNTRY_ALERTS,
+      label: 'Country Alerts',
+      icon: '/country_alerts.svg',
     },
     {
       key: AlertType.HAZARDS,

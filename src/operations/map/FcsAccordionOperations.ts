@@ -4,6 +4,7 @@ import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs';
 import { LineChartData } from '@/domain/entities/charts/LineChartData';
 import { CountryData } from '@/domain/entities/country/CountryData';
 import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data';
+import { LineChartDataType } from '@/domain/enums/LineChartDataType';
 import { formatToMillion } from '@/utils/formatting';
 
 export class FcsAccordionOperations {
@@ -12,7 +13,7 @@ export class FcsAccordionOperations {
       return null;
     }
     return {
-      type: 'LineChartData',
+      type: LineChartDataType.LineChartData,
       xAxisType: 'linear',
       yAxisLabel: 'Mill',
       roundLines: false,
@@ -33,7 +34,7 @@ export class FcsAccordionOperations {
       return null;
     }
     return {
-      type: 'LineChartData',
+      type: LineChartDataType.LineChartData,
       xAxisType: 'linear',
       yAxisLabel: 'Mill',
       roundLines: false,
@@ -54,7 +55,7 @@ export class FcsAccordionOperations {
       return null;
     }
     return {
-      type: 'BalanceOfTradeGraph',
+      type: LineChartDataType.BalanceOfTradeGraph,
       data: countryIso3Data.balanceOfTradeGraph.data,
     };
   }
@@ -70,7 +71,7 @@ export class FcsAccordionOperations {
     }
 
     return {
-      type: 'InflationGraphs',
+      type: LineChartDataType.InflationGraphs,
       headline: {
         data: headlineData,
       },
@@ -89,7 +90,7 @@ export class FcsAccordionOperations {
       return null;
     }
     return {
-      type: 'CurrencyExchangeGraph',
+      type: LineChartDataType.CurrencyExchangeGraph,
       name,
       source,
       updated,

@@ -35,7 +35,7 @@ export default function HungerAlert({ countryMapData }: HungerAlertProps) {
 
   return (
     <div className="absolute bottom-0 left-0 z-10 cursor-pointer" style={{ bottom: '18rem', left: '1.86rem' }}>
-      <Tooltip title="High Hunger Alert" text="This shows the number of countries with high hunger levels.">
+      <Tooltip text="Number of countries with high levels of hunger">
         <button
           className={HungerAlertOperations.getPulseClasses()}
           onClick={toggleModal}

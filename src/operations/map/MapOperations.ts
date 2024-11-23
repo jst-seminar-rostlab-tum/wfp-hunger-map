@@ -1,21 +1,16 @@
 import { LeafletContextInterface } from '@react-leaflet/core';
 import * as turf from '@turf/turf';
-import { FeatureCollection } from 'geojson';
+import { FeatureCollection, GeoJSON } from 'geojson';
 import mapboxgl from 'mapbox-gl';
 import { RefObject } from 'react';
 
-import container from '@/container';
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
-import { SelectedCountry } from '@/domain/entities/country/SelectedCountry';
 import { MapColorsType } from '@/domain/entities/map/MapColorsType.ts';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
 import { MapProps } from '@/domain/props/MapProps';
-import CountryRepository from '@/domain/repositories/CountryRepository';
 import { getColors } from '@/styles/MapColors.ts';
 
 export class MapOperations {
-  static countryRepository: CountryRepository = container.resolve<CountryRepository>('CountryRepository');
-
   static createMapboxMap(
     isDark: boolean,
     { countries }: MapProps,
@@ -94,7 +89,8 @@ export class MapOperations {
 
   static setMapInteractionFunctionality(
     baseMap: mapboxgl.Map,
-    setSelectedCountry: (country: SelectedCountry | null) => void
+    setSelectedCountry: (country: CountryMapData | null) => void,
+    { countries }: MapProps
   ): void {
     let hoveredPolygonId: string | number | undefined;
     let isDragging = false;
@@ -129,12 +125,12 @@ export class MapOperations {
     baseMap.on('mouseup', 'country-fills', (e) => {
       if (!isDragging && e.features && (e.features[0] as unknown as CountryMapData).properties.interactive) {
         const feature = e.features[0] as unknown as CountryMapData;
-        const country = {
-          name: feature.properties.adm0_name,
-          coordinates: { longitude: e.lngLat.lng, latitude: e.lngLat.lat },
-        };
-        setSelectedCountry(country);
-        MapOperations.zoomToCountry(baseMap, country);
+        const selectedCountryData: CountryMapData | undefined = countries.features.find(
+          (countryItem) => countryItem.properties.adm0_name === feature.properties.adm0_name
+        );
+        if (selectedCountryData) {
+          setSelectedCountry(selectedCountryData);
+        }
       }
     });
   }
@@ -220,10 +216,9 @@ export class MapOperations {
     });
   }
 
-  static async zoomToCountry(baseMap: mapboxgl.Map, country: SelectedCountry | null) {
+  static async zoomToCountry(baseMap: mapboxgl.Map, country: CountryMapData | null) {
     if (country) {
-      const countryGeoJSON = await MapOperations.countryRepository.getCountryGeoJSON(country.name);
-      const bbox = turf.bbox(countryGeoJSON);
+      const bbox = turf.bbox(country as GeoJSON);
       const adjustedBbox: [number, number, number, number] = [bbox[0], bbox[1], bbox[2], bbox[3]];
 
       baseMap.fitBounds(adjustedBbox, {

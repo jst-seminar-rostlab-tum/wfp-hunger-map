@@ -2,17 +2,17 @@
 
 import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
 
-import { SelectedCountry } from '@/domain/entities/country/SelectedCountry';
+import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 
 interface SelectedCountryContextType {
-  selectedCountry: SelectedCountry | null;
-  setSelectedCountry: (country: SelectedCountry | null) => void;
+  selectedCountry: CountryMapData | null;
+  setSelectedCountry: (country: CountryMapData | null) => void;
 }
 
 const SelectedCountryContext = createContext<SelectedCountryContextType | undefined>(undefined);
 
 export function SelectedCountryProvider({ children }: { children: ReactNode }) {
-  const [selectedCountry, setSelectedCountry] = useState<SelectedCountry | null>(null);
+  const [selectedCountry, setSelectedCountry] = useState<CountryMapData | null>(null);
 
   const value = useMemo(() => ({ selectedCountry, setSelectedCountry }), [selectedCountry, setSelectedCountry]);
 

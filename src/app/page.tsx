@@ -14,7 +14,7 @@ export default async function Home() {
   const [countryMapData, disputedAreas] = await Promise.all([countryMapDataPromise, disputedAreasPromise]);
   return (
     <>
-      <Sidebar />
+      <Sidebar countryMapData={countryMapData} />
       <AlertsMenuWrapper />
       <Chatbot />
       <MapLoader countries={countryMapData} disputedAreas={disputedAreas} />

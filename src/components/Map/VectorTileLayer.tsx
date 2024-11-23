@@ -28,7 +28,7 @@ export default function VectorTileLayer({ countries, disputedAreas }: MapProps) 
     );
     mapRef.current = baseMap;
 
-    MapOperations.setMapInteractionFunctionality(baseMap, setSelectedCountry);
+    MapOperations.setMapInteractionFunctionality(baseMap, setSelectedCountry, { countries, disputedAreas });
     MapOperations.synchronizeLeafletMapbox(baseMap, mapContainer, context);
 
     return () => {

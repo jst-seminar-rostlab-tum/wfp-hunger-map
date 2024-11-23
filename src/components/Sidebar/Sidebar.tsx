@@ -3,52 +3,40 @@
 import { Button } from '@nextui-org/button';
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
 import { Link } from '@nextui-org/link';
-import { Select, SelectItem } from '@nextui-org/react';
+import { Autocomplete, AutocompleteItem } from '@nextui-org/react';
 import clsx from 'clsx';
 import { SidebarLeft } from 'iconsax-react';
 import NextImage from 'next/image';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { AlertsMenu } from '@/components/AlertsMenu/AlertsMenu';
 import { LogoWithText } from '@/components/LogoWithText/LogoWithText';
 import { CollapsedSidebar } from '@/components/Sidebar/CollapsedSidebar';
 import { ThemeSwitch } from '@/components/Sidebar/ThemeSwitch';
-import container from '@/container';
 import { pageLinks } from '@/domain/constant/PageLinks';
 import { SUBSCRIBE_MODAL_TITLE } from '@/domain/constant/subscribe/Subscribe';
 import { useSelectedCountry } from '@/domain/contexts/SelectedCountryContext';
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSidebar } from '@/domain/contexts/SidebarContext';
-import { SelectedCountry } from '@/domain/entities/country/SelectedCountry';
 import { AlertsMenuVariant } from '@/domain/enums/AlertsMenuVariant';
-import { GlobalDataRepository } from '@/domain/repositories/GlobalDataRepository';
+import SidebarProps from '@/domain/props/SidebarProps.ts';
 import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
 
 import PopupModal from '../PopupModal/PopupModal';
 import Subscribe from '../Subscribe/Subscribe';
 
-export function Sidebar() {
+export function Sidebar({ countryMapData }: SidebarProps) {
   const { isSidebarOpen, toggleSidebar } = useSidebar();
   const { selectedMapType, setSelectedMapType } = useSelectedMap();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [countryData, setCountryData] = useState<SelectedCountry[]>([]);
   const { setSelectedCountry } = useSelectedCountry();
 
-  const globalRepo = container.resolve<GlobalDataRepository>('GlobalDataRepository');
-
-  useEffect(() => {
-    const fetchCountries = async () => {
-      const data = await SidebarOperations.fetchCountries(globalRepo);
-      setCountryData(data);
-    };
-
-    fetchCountries();
-  }, [globalRepo]);
-
-  const handleCountrySelect = async (countryName: string) => {
-    const selectedCountryData = countryData.find((country) => country.name === countryName);
+  const handleCountrySelect = (countryID: React.Key | null) => {
+    const selectedCountryData = countryMapData.features.find(
+      (country) => country.properties.adm0_id === Number(countryID)
+    );
     if (selectedCountryData) {
-      setSelectedCountry({ name: selectedCountryData.name, coordinates: selectedCountryData.coordinates });
+      setSelectedCountry(selectedCountryData);
     }
   };
 
@@ -72,19 +60,19 @@ export function Sidebar() {
             </Button>
           </div>
           <ThemeSwitch />
-          <Select
+          <Autocomplete
             placeholder="Search a country"
-            onChange={(event) => handleCountrySelect(event.target.value)}
+            onSelectionChange={handleCountrySelect}
             className="w-full"
             variant="faded"
             color="primary"
           >
-            {countryData.map((country) => (
-              <SelectItem key={country.name} value={country.name}>
-                {country.name}
-              </SelectItem>
+            {countryMapData.features.map((country) => (
+              <AutocompleteItem key={country.properties.adm0_id} aria-label={country.properties.adm0_name}>
+                {country.properties.adm0_name}
+              </AutocompleteItem>
             ))}
-          </Select>
+          </Autocomplete>
         </CardHeader>
         <CardBody>
           <div className="p-1 w-full">

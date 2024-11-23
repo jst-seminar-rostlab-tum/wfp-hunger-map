@@ -9,6 +9,7 @@ import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
 import { LineChartDataType } from '@/domain/enums/LineChartDataType.ts';
 import AccordionsOperations from '@/operations/accordions/AccordionOperations';
 
+import { ReactComponent as FoodSvg } from '../../../public/Images/FoodConsumption.svg';
 /**
  * You can use this page to try and show off your components.
  * It's not accessible from the UI, but you can reach it by manually navigating to /elements
@@ -177,6 +178,9 @@ export default async function Elements() {
 
   return (
     <div className="w-full flex flex-col items-center justify-center">
+      <div className="svg-icon">
+        <FoodSvg width={200} height={200} />
+      </div>
       <CustomButton variant="solid">Test</CustomButton>
       <CustomButton variant="bordered">Test</CustomButton>
       <CustomButton variant="flat">Test</CustomButton>

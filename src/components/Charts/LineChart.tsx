@@ -77,7 +77,7 @@ export function LineChart({
 
   // the `selectedXAxisRange` saves the to be rendered x-axis range of the chart
   // can be changed using the `LinkeChartXAxisSlider` if the param `xAxisSlider==true`
-  const xAxisLength: number = (lineChartOptions.xAxis as XAxisOptions).categories?.length || 0;
+  const xAxisLength: number = LineChartOperations.getDistinctXAxisValues(lineChartData).length;
   const [selectedXAxisRange, setSelectedXAxisRange] = useState([0, xAxisLength - 1]);
 
   // controlling if a line or bar chart is rendered; line chart is the default

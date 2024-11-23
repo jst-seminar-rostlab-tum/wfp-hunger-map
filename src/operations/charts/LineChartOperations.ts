@@ -49,6 +49,16 @@ export default class LineChartOperations {
   }
 
   /**
+   * Formatter function for `LineChart.Options.xAxis.labels.formatter` usage only.
+   */
+  private static chartXAxisFormatter(xAxisType: AxisTypeValue, x: string | number): string {
+    if (xAxisType === 'datetime' && typeof x === 'number') {
+      return Highcharts.dateFormat('%m.%y', x);
+    }
+    return String(x);
+  }
+
+  /**
    * With this static function, the LineChart component can ensure that the received data for the chart
    * is converted to the `LineChartData` type.
    * To support another interface in `LineChartProps.data`, one has to add another switch case here
@@ -70,7 +80,7 @@ export default class LineChartOperations {
             {
               name: 'Balance of Trade',
               dataPoints: data.data.map((p) => {
-                return { x: p.x, y: p.y };
+                return { x: new Date(p.x).getTime(), y: p.y };
               }),
             },
           ],
@@ -84,7 +94,7 @@ export default class LineChartOperations {
             {
               name: data.name,
               dataPoints: data.data.map((p) => {
-                return { x: p.x, y: p.y };
+                return { x: new Date(p.x).getTime(), y: p.y };
               }),
             },
           ],
@@ -98,13 +108,13 @@ export default class LineChartOperations {
             {
               name: 'Headline Inflation',
               dataPoints: data.headline.data.map((p) => {
-                return { x: p.x, y: p.y };
+                return { x: new Date(p.x).getTime(), y: p.y };
               }),
             },
             {
               name: 'Food Inflation',
               dataPoints: data.food.data.map((p) => {
-                return { x: p.x, y: p.y };
+                return { x: new Date(p.x).getTime(), y: p.y };
               }),
             },
           ],
@@ -121,12 +131,21 @@ export default class LineChartOperations {
   }
 
   /**
+   * Given `LineChartData` get list of all distinct x values of all lines' data points.
+   */
+  public static getDistinctXAxisValues(data: LineChartData): number[] {
+    const uniqueXValues = new Set<number>();
+    data.lines.forEach((line) => {
+      line.dataPoints.forEach((point) => {
+        uniqueXValues.add(point.x); // Add x-value to the Set
+      });
+    });
+    return Array.from(uniqueXValues).sort((a, b) => a - b);
+  }
+
+  /**
    * With this static function, the LineChart component can build the `HighCharts.Options` object
    * for a line chart or bar chart, out of a given `LineChartData` instance.
-   *
-   * It is expected that all data series in `LineChartData.lines` have the same `x` values and provide
-   * a `y` value for each `x` value. For example, if one line has values for x=1, x=2, and x=3,
-   * the second line must also provide `y` values for these exact `x` values and no more or less.
    *
    * Setting the 'xAxisSelectedMinIdx' and 'xAxisSelectedMinIdx' the rendered x-axis range
    * can be manipulated; important: if a min is defined a max must be defined as well and vice versa.
@@ -134,8 +153,8 @@ export default class LineChartOperations {
    * @param data `LineChartData` object, containing all data to be plotted in the chart
    * @param theme current theme ('light' or 'dark')
    * @param barChart if true, bars are plotted instead of lines
-   * @param xAxisSelectedMinIdx index of the rendered x-axis range min value
-   * @param xAxisSelectedMaxIdx index of the rendered x-axis range max value
+   * @param xAxisSelectedMinIdx index of selected x-axis range min value
+   * @param xAxisSelectedMaxIdx index of selected x-axis range max value
    */
   public static getHighChartOptions(
     data: LineChartData,
@@ -144,24 +163,15 @@ export default class LineChartOperations {
     xAxisSelectedMaxIdx?: number,
     barChart?: boolean
   ): Highcharts.Options {
+    // get selected x-axis range min and max values
+    const xAxisDistinctValues = LineChartOperations.getDistinctXAxisValues(data);
+    const xAxisSelectedMin = xAxisSelectedMinIdx !== undefined ? xAxisDistinctValues[xAxisSelectedMinIdx] : undefined;
+    const xAxisSelectedMax = xAxisSelectedMaxIdx !== undefined ? xAxisDistinctValues[xAxisSelectedMaxIdx] : undefined;
+
     // parsing all given line data
     const series: SeriesOptionsType[] = [];
-    let categories: string[] | number[] = [];
     for (let i = 0; i < data.lines.length; i += 1) {
       const lineData = data.lines[i];
-      // it is assumed that all `x` values are the same and are given for all lines
-      // therefore we only have to collect the x Axis categories once
-      if (i === 0) {
-        categories = lineData.dataPoints.map((p) => p.x);
-        // if 'DATETIME' is selected as the xAxisType => convert categories to dates
-        if (data.xAxisType === 'datetime') {
-          categories = categories.map((x) => new Date(x).getTime());
-        }
-        // slice to selected x-axis range if requested
-        if (xAxisSelectedMinIdx !== undefined && xAxisSelectedMaxIdx !== undefined) {
-          categories = categories.slice(xAxisSelectedMinIdx, xAxisSelectedMaxIdx + 1);
-        }
-      }
 
       // the first four line colors are fixed; however, they can also be overridden by the `color` property;
       // if more than four lines are rendered the default Highcharts colors will be used
@@ -173,11 +183,21 @@ export default class LineChartOperations {
       }
 
       // collect chart series data
-      let seriesData = lineData.dataPoints.map((p) => p.y);
-      // slice to selected x-axis range if requested
-      if (xAxisSelectedMinIdx !== undefined && xAxisSelectedMaxIdx !== undefined) {
-        seriesData = seriesData.slice(xAxisSelectedMinIdx, xAxisSelectedMaxIdx + 1);
-      }
+      const seriesData: Highcharts.PointOptionsObject[] = [];
+      lineData.dataPoints.forEach((p) => {
+        // check if datapoint x is in selected x-axis range
+        if (xAxisSelectedMin !== undefined && xAxisSelectedMax !== undefined) {
+          if (p.x < xAxisSelectedMin || xAxisSelectedMax < p.x) return;
+        }
+        seriesData.push({
+          x: p.x,
+          y: p.y,
+        });
+      });
+      // make sure data is sorted (required by highchart)
+      seriesData.sort((a, b) => a.x! - b.x!);
+
+      // build chart series object
       if (barChart) {
         // plot series as bars
         series.push({
@@ -190,8 +210,8 @@ export default class LineChartOperations {
       } else {
         // plot series as line
         series.push({
-          name: lineData.name,
           type: data.roundLines ? 'spline' : 'line',
+          name: lineData.name,
           data: seriesData,
           color: categoryColor,
         });
@@ -199,11 +219,23 @@ export default class LineChartOperations {
 
       // checking if area series range should be added as well
       if (lineData.showRange) {
-        let areaSeriesData = lineData.dataPoints.map((p) => [p.yRangeMin!, p.yRangeMax!]);
-        // slice to selected x-axis range if requested
-        if (xAxisSelectedMinIdx !== undefined && xAxisSelectedMaxIdx !== undefined) {
-          areaSeriesData = areaSeriesData.slice(xAxisSelectedMinIdx, xAxisSelectedMaxIdx + 1);
-        }
+        // collect chart series data
+        const areaSeriesData: Highcharts.PointOptionsObject[] = [];
+        lineData.dataPoints.forEach((p) => {
+          // check if datapoint x is in selected x-axis range
+          if (xAxisSelectedMin !== undefined && xAxisSelectedMax !== undefined) {
+            if (p.x < xAxisSelectedMin || xAxisSelectedMax < p.x) return;
+          }
+          areaSeriesData.push({
+            x: p.x,
+            low: p.yRangeMin,
+            high: p.yRangeMax,
+          });
+        });
+        // make sure data is sorted (required by highchart)
+        areaSeriesData.sort((a, b) => a.x! - b.x!);
+
+        // build chart series object
         if (barChart) {
           // add error "whiskers" to bars
           series.push({
@@ -217,7 +249,7 @@ export default class LineChartOperations {
           // add area around line
           series.push({
             name: `${lineData.name} - range`,
-            type: 'arearange', // Area range type
+            type: 'arearange',
             data: areaSeriesData,
             color: categoryColor,
             linkedTo: ':previous',
@@ -245,14 +277,15 @@ export default class LineChartOperations {
       },
       xAxis: {
         type: data.xAxisType,
-        categories,
         labels: {
           style: {
             color: '#7a7a7a',
             fontSize: '0.7rem',
           },
-          format: '{value:%m.%y}', // highchart applies this rule if the xAxisType id `datetime`
-          step: Math.ceil(categories.length / 4), // maximal 4 labels on the x-axis should be displayed
+          formatter() {
+            return LineChartOperations.chartXAxisFormatter(data.xAxisType, this.value);
+          },
+          step: 1, // maximal 4 labels on the x-axis should be displayed  // todoMath.ceil(4 / 4)
         },
         lineColor: '#7a7a7a',
       },

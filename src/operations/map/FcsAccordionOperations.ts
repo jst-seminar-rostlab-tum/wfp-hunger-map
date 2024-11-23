@@ -21,7 +21,7 @@ export class FcsAccordionOperations {
         {
           name: 'People with insufficient food consumption',
           dataPoints: countryData.fcsGraph.map((fcsChartData) => ({
-            x: fcsChartData.x,
+            x: new Date(fcsChartData.x).getTime(),
             y: formatToMillion(fcsChartData.fcs),
           })),
         },
@@ -42,7 +42,7 @@ export class FcsAccordionOperations {
         {
           name: 'People using crisis or above crisis food-based coping',
           dataPoints: countryData.rcsiGraph.map((rcsiChartData) => ({
-            x: rcsiChartData.x,
+            x: new Date(rcsiChartData.x).getTime(),
             y: formatToMillion(rcsiChartData.rcsi),
           })),
         },

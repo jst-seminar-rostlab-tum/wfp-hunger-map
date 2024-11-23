@@ -21,10 +21,10 @@ export default async function Elements() {
       {
         name: 'Category A',
         dataPoints: [
-          { x: '0', y: 1 },
-          { x: '1', y: 2 },
-          { x: '2', y: 4 },
-          { x: '3', y: 4 },
+          { x: 0, y: 1 },
+          { x: 1, y: 2 },
+          { x: 2, y: 4 },
+          { x: 3, y: 4 },
         ],
       },
     ],
@@ -39,10 +39,10 @@ export default async function Elements() {
       {
         name: 'Category A',
         dataPoints: [
-          { x: '0', y: 1 },
-          { x: '1', y: 2 },
-          { x: '2', y: 4 },
-          { x: '3', y: 8 },
+          { x: 0, y: 1 },
+          { x: 1, y: 2 },
+          { x: 2, y: 4 },
+          { x: 3, y: 8 },
         ],
       },
     ],
@@ -57,28 +57,27 @@ export default async function Elements() {
         name: 'Category A',
         showRange: true,
         dataPoints: [
-          { x: '0', y: 1, yRangeMin: 0, yRangeMax: 2 },
-          { x: '1', y: 3, yRangeMin: 2, yRangeMax: 4 },
-          { x: '2', y: 4, yRangeMin: 3.5, yRangeMax: 4.5 },
-          { x: '3', y: 8, yRangeMin: 7.5, yRangeMax: 8.5 },
+          { x: 0, y: 1, yRangeMin: 0, yRangeMax: 2 },
+          { x: 1, y: 3, yRangeMin: 2, yRangeMax: 4 },
+          { x: 2, y: 4, yRangeMin: 3.5, yRangeMax: 4.5 },
+          { x: 3, y: 8, yRangeMin: 7.5, yRangeMax: 8.5 },
         ],
       },
       {
         name: 'Category B',
         dataPoints: [
-          { x: '0', y: 4 },
-          { x: '1', y: 7 },
-          { x: '2', y: 5 },
-          { x: '3', y: 2 },
+          { x: 0, y: 4 },
+          { x: 1, y: 7 },
+          { x: 2, y: 5 },
+          { x: 3, y: 2 },
         ],
       },
       {
         name: 'Category C',
         dataPoints: [
-          { x: '0', y: 7 },
-          { x: '1', y: 2 },
-          { x: '2', y: 3 },
-          { x: '3', y: 3 },
+          { x: 0, y: 7 },
+          { x: 1, y: 2 },
+          { x: 3, y: 3 },
         ],
       },
     ],
@@ -211,7 +210,7 @@ export default async function Elements() {
           <LineChart title="Currency exchange" data={currencyExchangeGraphData} expandable />
         </div>
         <div className="w-400px h-fit">
-          <LineChart title="Headline and food inflation" data={inflationGraphsData} expandable />
+          <LineChart title="Headline and food inflation" data={inflationGraphsData} expandable barChartSwitch />
         </div>
       </div>
       <MapSkeleton />

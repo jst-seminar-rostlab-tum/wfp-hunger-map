@@ -14,7 +14,7 @@ export class FcsRegionTooltipOperations {
         {
           name: 'People with insufficient food consumption',
           dataPoints: chartData.map((fcsChartData) => ({
-            x: fcsChartData.x,
+            x: new Date(fcsChartData.x).getTime(),
             y: formatToMillion(fcsChartData.fcs),
           })),
         },

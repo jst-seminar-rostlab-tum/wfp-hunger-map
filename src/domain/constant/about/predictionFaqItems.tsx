@@ -1,8 +1,8 @@
 import React from 'react';
 
-import ExternalLink from '@/components/About/ExternalLink';
-import GroupedTable from '@/components/GroupedTable/GroupedTable';
-import { accuracyTableColumns, accuracyTableData } from '@/domain/constant/about/accuracyTableContents';
+import StyledLink from '@/components/About/StyledLink';
+import CustomTable from '@/components/Table/CustomTable';
+import { accuracyTableColumns, accuracyTableContents } from '@/domain/constant/about/accuracyTableContents';
 import { AccordionItemProps } from '@/domain/entities/accordions/Accordions';
 
 const generalQuestionItems: AccordionItemProps[] = [
@@ -18,19 +18,22 @@ const generalQuestionItems: AccordionItemProps[] = [
           data point is also included as input variable.
         </p>
         <p>
-          More details are listed in the <b>Data sources page</b>. Additional sources used only for the model but not
-          for display purposes are:
+          More details are listed in the{' '}
+          <StyledLink href="/data_sources" isInternal>
+            Data sources page
+          </StyledLink>
+          . Additional sources used only for the model but not for display purposes are:
         </p>
         <ul>
           <li>
-            <ExternalLink href="https://sedac.ciesin.columbia.edu/data/set/gpw-v4-population-count-rev11">
+            <StyledLink href="https://sedac.ciesin.columbia.edu/data/set/gpw-v4-population-count-rev11">
               Gridded Population of the World, Version 4 (GPWv4): Population Count, Revision 11
-            </ExternalLink>
+            </StyledLink>
           </li>
           <li>
-            <ExternalLink href="https://documents.wfp.org/stellent/groups/public/documents/manual_guide_proced/wfp264186.pdf">
+            <StyledLink href="https://documents.wfp.org/stellent/groups/public/documents/manual_guide_proced/wfp264186.pdf">
               WFP’s Alert for Price Spikes (ALPS) indicator
-            </ExternalLink>
+            </StyledLink>
           </li>
         </ul>
       </>
@@ -40,9 +43,9 @@ const generalQuestionItems: AccordionItemProps[] = [
     title: 'Which algorithm is being used for training?',
     content: (
       <p>
-        The predictive models are trained using <ExternalLink href="https://xgboost.ai/">XGBoost</ExternalLink> – a
-        machine learning technique producing predictive models in the of an ensemble of regression trees. The model
-        parameters were optimized by a cross-validated grid-search.
+        The predictive models are trained using <StyledLink href="https://xgboost.ai/">XGBoost</StyledLink> – a machine
+        learning technique producing predictive models in the of an ensemble of regression trees. The model parameters
+        were optimized by a cross-validated grid-search.
       </p>
     ),
   },
@@ -55,9 +58,10 @@ const generalQuestionItems: AccordionItemProps[] = [
           100 models on subsamples (with replacement) of the remaining 80% of the historical data. The following results
           were obtained on the test sets.
         </p>
-        <GroupedTable
+        <CustomTable
           columns={accuracyTableColumns}
-          data={accuracyTableData}
+          data={accuracyTableContents}
+          format="grouped"
           ariaLabel="Performance measures of the prediction algorithms"
         />
       </>

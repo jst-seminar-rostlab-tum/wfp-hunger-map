@@ -1,5 +1,7 @@
 import { AxisTypeValue } from 'highcharts';
 
+import { LineChartDataType } from '@/domain/enums/LineChartDataType';
+
 export interface LineChartDataPoint {
   y: number;
   x: string;
@@ -13,7 +15,7 @@ export interface LineChartDataPoint {
  * the second line must also provide `y` values for these exact `x` values and no more or less.
  */
 export interface LineChartData {
-  type: 'LineChartData';
+  type: LineChartDataType.LineChartData;
   xAxisType: AxisTypeValue; // can be one of linear, logarithmic, datetime or category
   yAxisLabel?: string;
   roundLines?: boolean;

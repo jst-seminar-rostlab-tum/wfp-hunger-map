@@ -3,53 +3,110 @@
 @tailwind utilities;
 
 @layer base {
-    .about-page {
-        @apply max-w-screen-lg mx-auto
-    }
+  .about-page {
+    @apply max-w-screen-lg mx-auto;
+  }
 
-    .about-page h1 {
-        @apply text-4xl sm:text-5xl lg:text-7xl font-black mb-8
-    }
+  .about-page h1 {
+    @apply text-4xl sm:text-5xl lg:text-7xl font-black mb-8;
+  }
 
-    .about-page h2 {
-        @apply text-2xl lg:text-3xl mb-3
-    }
+  .about-page h2 {
+    @apply text-2xl lg:text-3xl mb-3;
+  }
 
-    .about-page p, .about-page ol, .about-page ul {
-        @apply text-large leading-relaxed pb-6
-    }
+  .about-page p,
+  .about-page ol,
+  .about-page ul {
+    @apply text-large leading-relaxed pb-6;
+  }
 
-    .about-page p:last-child {
-        @apply pb-0
-    }
+  .about-page p:last-child {
+    @apply pb-0;
+  }
 
-    .about-page ol, .about-page ul {
-        @apply pl-8
-    }
+  .about-page ol,
+  .about-page ul {
+    @apply pl-8;
+  }
 
-    .about-page ol {
-        @apply list-decimal
-    }
+  .about-page ol {
+    @apply list-decimal;
+  }
 
-    .about-page ul {
-        @apply list-disc
-    }
+  .about-page ul {
+    @apply list-disc;
+  }
+  .text-content {
+    @apply max-w-screen-lg mx-auto;
+  }
+
+  .text-content h1 {
+    @apply text-4xl sm:text-5xl lg:text-7xl font-black mb-8;
+  }
+
+  .text-content section > h2 {
+    @apply text-2xl lg:text-3xl mb-3;
+  }
+
+  .text-content p,
+  .text-content ol,
+  .text-content ul {
+    @apply text-large leading-relaxed pb-6;
+  }
+
+  .text-content p:last-child {
+    @apply pb-0;
+  }
+
+  .text-content ol,
+  .text-content ul {
+    @apply pl-4 md:pl-8;
+  }
+
+  .text-content ol {
+    @apply list-decimal;
+  }
+
+  .text-content ul {
+    @apply list-disc;
+  }
 }
 
 /* PdfViewer.css */
 canvas.react-pdf__Page__canvas {
-    margin-bottom: 50px;
+  margin-bottom: 50px;
 }
 
 /* Define custom classes for animation delay */
 .dot-delay-1 {
-    animation-delay: 0s;
+  animation-delay: 0s;
 }
 
 .dot-delay-2 {
-    animation-delay: 0.3s;
+  animation-delay: 0.3s;
 }
 
 .dot-delay-3 {
-    animation-delay: 0.6s;
+  animation-delay: 0.6s;
+}
+
+.mapboxgl-popup-content {
+  padding: 0 !important;
+  background-color: transparent !important;
+}
+
+.leaflet-tooltip {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* .svg color */
+.svg-icon path {
+    fill: black;
+}
+  
+:root.dark .svg-icon path {
+    fill: white;
 }

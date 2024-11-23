@@ -2,21 +2,24 @@
 
 import Highcharts, { SeriesOptionsType } from 'highcharts';
 import highchartsMore from 'highcharts/highcharts-more';
-import { useTheme } from 'next-themes';
+import HighchartsReact from 'highcharts-react-official';
 
 import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph.ts';
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph.ts';
 import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
 import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
+import { LineChartDataType } from '@/domain/enums/LineChartDataType.ts';
 
-// https://stackoverflow.com/questions/55483079/highcharts-cannot-read-property-parts-globals-js-of-undefined
 if (typeof Highcharts === 'object') {
   highchartsMore(Highcharts); // enables the usage of HighCharts 'arearange'
 }
 
 /**
  * Using LineChartOperations, the LineChart component can convert its received data into LineChartData
- * and then generate the chart options for Highcharts.
+ * and then generate the chart `Highcharts.Options` object required by the Highcharts component.
+ * Two types of options can be created: rendering the LineChart data as a line chart or as a bar chart.
+ *
+ * In addition, several download functionalities are implemented.
  */
 export default class LineChartOperations {
   /**
@@ -36,12 +39,12 @@ export default class LineChartOperations {
     data: LineChartData | BalanceOfTradeGraph | CurrencyExchangeGraph | InflationGraphs
   ): LineChartData {
     switch (data.type) {
-      case 'LineChartData':
+      case LineChartDataType.LineChartData:
         return data;
 
-      case 'BalanceOfTradeGraph':
+      case LineChartDataType.BalanceOfTradeGraph:
         return {
-          type: 'LineChartData',
+          type: LineChartDataType.LineChartData,
           xAxisType: 'datetime',
           lines: [
             {
@@ -53,9 +56,9 @@ export default class LineChartOperations {
           ],
         };
 
-      case 'CurrencyExchangeGraph':
+      case LineChartDataType.CurrencyExchangeGraph:
         return {
-          type: 'LineChartData',
+          type: LineChartDataType.LineChartData,
           xAxisType: 'datetime',
           lines: [
             {
@@ -67,9 +70,9 @@ export default class LineChartOperations {
           ],
         };
 
-      case 'InflationGraphs':
+      case LineChartDataType.InflationGraphs:
         return {
-          type: 'LineChartData',
+          type: LineChartDataType.LineChartData,
           xAxisType: 'datetime',
           lines: [
             {
@@ -90,7 +93,7 @@ export default class LineChartOperations {
       default:
         // if the given type is not supported yet, an empty `LineChartData` instance is returned
         return {
-          type: 'LineChartData',
+          type: LineChartDataType.LineChartData,
           xAxisType: 'linear',
           lines: [],
         };
@@ -98,20 +101,17 @@ export default class LineChartOperations {
   }
 
   /**
-   * With this static function, the LineChart component can build the HighCharts options,
-   * needed for the HighCharts component, out of a given `LineChartData` instance.
+   * With this static function, the LineChart component can build the HighCharts.Options object
+   * for a line chart, out of a given `LineChartData` instance.
    * It is expected that all line data in `LineChartData.lines` have the same `x` values and provide
    * a `y` value for each `x` value. For example, if one line has values for x=1, x=2, and x=3,
    * the second line must also provide `y` values for these exact `x` values and no more or less.
    */
-  public static getHighChartData(data: LineChartData): Highcharts.Options {
-    const { theme } = useTheme();
-
+  public static getHighChartLineData(data: LineChartData, theme: string | undefined): Highcharts.Options {
     // parsing all given line data
     const series: SeriesOptionsType[] = [];
     let categories: string[] = [];
-    // eslint-disable-next-line no-plusplus
-    for (let i = 0; i < data.lines.length; i++) {
+    for (let i = 0; i < data.lines.length; i += 1) {
       const lineData = data.lines[i];
       // it is assumed that all `x` values are the same and are given for all lines
       // therefore we only have to collect the x Axis categories once
@@ -137,7 +137,7 @@ export default class LineChartOperations {
       // checking if area range should be added as well
       if (lineData.showRange) {
         series.push({
-          name: `${lineData.name} - area range`,
+          name: `${lineData.name} - range`,
           type: 'arearange', // Area range type
           data: lineData.dataPoints.map((p) => [p.yRangeMin!, p.yRangeMax!]),
           color: lineColor,
@@ -193,6 +193,9 @@ export default class LineChartOperations {
       tooltip: {
         shared: true,
       },
+      exporting: {
+        enabled: false, // disabling export menu icon
+      },
       series,
       plotOptions: {
         line: {
@@ -223,5 +226,142 @@ export default class LineChartOperations {
         },
       },
     };
+  }
+
+  /**
+   * With this static function, the LineChart component can build the HighCharts.Options object
+   * for a bar chart, out of a given `LineChartData` instance.
+   * It is expected that all line data in `LineChartData.lines` have the same `x` values and provide
+   * a `y` value for each `x` value. For example, if one line has values for x=1, x=2, and x=3,
+   * the second line must also provide `y` values for these exact `x` values and no more or less.
+   */
+  public static getHighChartBarData(data: LineChartData, theme: string | undefined): Highcharts.Options {
+    // parsing all given line data
+    const series: SeriesOptionsType[] = [];
+    let categories: string[] = [];
+    for (let i = 0; i < data.lines.length; i += 1) {
+      const lineData = data.lines[i];
+      // it is assumed that all `x` values are the same and are given for all lines
+      // therefore we only have to collect the x Axis categories once
+      if (i === 0) {
+        categories = lineData.dataPoints.map((p) => p.x);
+      }
+
+      // the first category colors are fixed; however, they can also be overridden by the `color` property;
+      // if more than four lines are rendered the default Highcharts colors will be used
+      let barColor;
+      if (lineData.color) {
+        barColor = lineData.color;
+      } else if (i < this.LINE_COLORS.length) {
+        barColor = this.LINE_COLORS[i];
+      }
+
+      series.push({
+        name: lineData.name,
+        type: 'column',
+        data: lineData.dataPoints.map((p) => p.y),
+        color: barColor,
+        opacity: lineData.showRange ? 0.7 : 1,
+      });
+      // checking if area range should be added as well
+      if (lineData.showRange) {
+        series.push({
+          name: `${lineData.name} - range`,
+          type: 'errorbar',
+          data: lineData.dataPoints.map((p) => [p.yRangeMin!, p.yRangeMax!]),
+          linkedTo: ':previous',
+          color: barColor,
+        });
+      }
+    }
+
+    // building the final HighCharts Options
+    return {
+      title: {
+        text: '',
+      },
+      chart: {
+        backgroundColor: 'transparent',
+      },
+      legend: {
+        itemStyle: {
+          fontSize: '0.7rem',
+          color: theme === 'light' ? '#4f4f4f' : '#b6b6b6',
+        },
+      },
+      xAxis: {
+        type: data.xAxisType,
+        categories,
+        labels: {
+          style: {
+            color: '#7a7a7a',
+            fontSize: '0.7rem',
+          },
+        },
+        lineColor: '#7a7a7a',
+      },
+      yAxis: {
+        title: {
+          text: data.yAxisLabel,
+          style: {
+            color: '#7a7a7a',
+          },
+        },
+        labels: {
+          style: {
+            color: '#7a7a7a',
+            fontSize: '0.7rem',
+          },
+          formatter() {
+            return Highcharts.numberFormat(this.value as number, -1);
+          },
+        },
+        lineColor: 'transparent',
+        gridLineColor: theme === 'light' ? '#e1e1e1' : '#2a2a2a',
+      },
+      tooltip: {
+        shared: true,
+      },
+      exporting: {
+        enabled: false, // disabling export menu icon
+      },
+      series,
+      plotOptions: {
+        column: {
+          animation: true,
+          grouping: true,
+          shadow: false,
+          borderWidth: 0,
+        },
+        errorbar: {
+          whiskerLength: '50%',
+          lineWidth: 1.5,
+          color: 'black',
+        },
+      },
+    };
+  }
+
+  /**
+   * Trigger download of the given line chart `data` as a json file.
+   */
+  public static downloadDataJSON(data: LineChartData): void {
+    // convert data json object to string and encode as URI
+    const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(data, null, 2))}`;
+    // create a temporary link element and trigger the download
+    const link = document.createElement('a');
+    link.href = jsonString;
+    link.download = 'hunger_map_chart_data.json';
+    link.click();
+  }
+
+  /**
+   * Trigger download of the given line chart `data` as a png file.
+   */
+  public static downloadChartPNG(chart: HighchartsReact.RefObject): void {
+    chart.chart.exportChartLocal({
+      type: 'image/png',
+      filename: 'chart-download',
+    });
   }
 }

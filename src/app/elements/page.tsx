@@ -1,19 +1,22 @@
 import CustomAccordion from '@/components/Accordions/Accordion';
 import { CustomButton } from '@/components/Buttons/CustomButton';
 import { LineChart } from '@/components/Charts/LineChart';
+import MapSkeleton from '@/components/Map/MapSkeleton';
 import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph.ts';
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph.ts';
 import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
 import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
+import { LineChartDataType } from '@/domain/enums/LineChartDataType.ts';
 import AccordionsOperations from '@/operations/accordions/AccordionOperations';
 
+import { ReactComponent as FoodSvg } from '../../../public/Images/FoodConsumption.svg';
 /**
  * You can use this page to try and show off your components.
  * It's not accessible from the UI, but you can reach it by manually navigating to /elements
  */
 export default async function Elements() {
   const simpleAndSmallLineChartData: LineChartData = {
-    type: 'LineChartData',
+    type: LineChartDataType.LineChartData,
     xAxisType: 'linear',
     lines: [
       {
@@ -29,7 +32,7 @@ export default async function Elements() {
   };
 
   const simpleLineChartData: LineChartData = {
-    type: 'LineChartData',
+    type: LineChartDataType.LineChartData,
     xAxisType: 'linear',
     yAxisLabel: 'yield',
     roundLines: true,
@@ -47,7 +50,7 @@ export default async function Elements() {
   };
 
   const maxedOutLineChartData: LineChartData = {
-    type: 'LineChartData',
+    type: LineChartDataType.LineChartData,
     xAxisType: 'linear',
     yAxisLabel: 'yield',
     lines: [
@@ -83,7 +86,7 @@ export default async function Elements() {
   };
 
   const balanceOfTradeGraphData: BalanceOfTradeGraph = {
-    type: 'BalanceOfTradeGraph',
+    type: LineChartDataType.BalanceOfTradeGraph,
     data: [
       {
         x: '2023-10-01',
@@ -105,7 +108,7 @@ export default async function Elements() {
   };
 
   const currencyExchangeGraphData: CurrencyExchangeGraph = {
-    type: 'CurrencyExchangeGraph',
+    type: LineChartDataType.CurrencyExchangeGraph,
     name: 'Exchange Rate (USD/NGN)',
     source: '',
     updated: '',
@@ -130,7 +133,7 @@ export default async function Elements() {
   };
 
   const inflationGraphsData: InflationGraphs = {
-    type: 'InflationGraphs',
+    type: LineChartDataType.InflationGraphs,
     headline: {
       data: [
         {
@@ -175,6 +178,9 @@ export default async function Elements() {
 
   return (
     <div className="w-full flex flex-col items-center justify-center">
+      <div className="svg-icon">
+        <FoodSvg width={200} height={200} />
+      </div>
       <CustomButton variant="solid">Test</CustomButton>
       <CustomButton variant="bordered">Test</CustomButton>
       <CustomButton variant="flat">Test</CustomButton>
@@ -198,6 +204,8 @@ export default async function Elements() {
             description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
             data={maxedOutLineChartData}
             expandable
+            xAxisSlider
+            barChartSwitch
           />
         </div>
         <div className="w-400px h-fit">
@@ -210,6 +218,7 @@ export default async function Elements() {
           <LineChart title="Headline and food inflation" data={inflationGraphsData} expandable />
         </div>
       </div>
+      <MapSkeleton />
     </div>
   );
 }

@@ -34,7 +34,6 @@ export default async function Elements() {
     type: LineChartDataType.LINE_CHART_DATA,
     xAxisType: 'linear',
     yAxisLabel: 'yield',
-    roundLines: true,
     lines: [
       {
         name: 'Category A',
@@ -191,12 +190,13 @@ export default async function Elements() {
             data={simpleLineChartData}
             expandable
             small
+            roundLines
           />
         </div>
         <div className="w-400px h-fit">
           <LineChart
             title="Maxed Out Line Chart"
-            description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
+            description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor onsetetur sadipscing elitr."
             data={maxedOutLineChartData}
             expandable
             xAxisSlider

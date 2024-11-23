@@ -63,8 +63,8 @@ export function LineChartModal({
       <ModalContent>
         <ModalHeader className="flex flex-col gap-1">
           <div className="flex flex-row justify-between w-full h-full">
-            <h2 className="flex flex-col justify-center font-normal text-lg"> {title} </h2>
-            <div className="flex flex-row w-fit h-full gap-4">
+            <h2 className="flex flex-col justify-center font-normal text-sm sm:text-md md:text-lg"> {title} </h2>
+            <div className="flex flex-row w-fit h-full gap-0.5 sm:gap-4 md:gap-6">
               {
                 // button to hide/show the slider to manipulate the plotted x-axis range of the chart;
                 // can be disabled via `xAxisSlider`
@@ -156,7 +156,7 @@ export function LineChartModal({
 
         <ModalBody>
           {/* modal main content: description and chart */}
-          <p className="w-full h-fit text-md font-normal">{description}</p>
+          <p className="w-full h-fit font-normal text-tiny sm:text-sm md:text-md">{description}</p>
           <div className="py-6">
             <HighchartsReact
               highcharts={Highcharts}

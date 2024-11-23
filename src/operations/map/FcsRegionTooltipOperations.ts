@@ -9,7 +9,6 @@ export class FcsRegionTooltipOperations {
       type: LineChartDataType.LINE_CHART_DATA,
       xAxisType: 'datetime',
       yAxisLabel: 'Mill',
-      roundLines: false,
       lines: [
         {
           name: 'People with insufficient food consumption',

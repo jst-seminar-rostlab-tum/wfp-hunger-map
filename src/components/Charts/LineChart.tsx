@@ -2,7 +2,7 @@
 
 import { Button } from '@nextui-org/button';
 import { useDisclosure } from '@nextui-org/modal';
-import Highcharts, { XAxisOptions } from 'highcharts';
+import Highcharts from 'highcharts';
 import Exporting from 'highcharts/modules/exporting';
 import OfflineExporting from 'highcharts/modules/offline-exporting';
 import HighchartsReact from 'highcharts-react-official';
@@ -44,6 +44,7 @@ if (typeof Highcharts === 'object') {
  * @param barChartSwitch when selected, the user is given the option to switch to a bar chart (optional)
  * @param xAxisSlider when selected, the user is given the option to change the x-axis range via a slider (optional)
  * @param small when selected, all components in the line chart box become slightly smaller (optional)
+ * @param roundLines when selected, all plotted lines will be rounded (optional)
  * @param noPadding when selected, the main box has no padding on all sides (optional)
  * @param transparentBackground when selected, the background of the entire component is transparent (optional)
  * @param data the actual data to be used in the chart
@@ -55,12 +56,13 @@ export function LineChart({
   barChartSwitch,
   xAxisSlider,
   small,
+  roundLines,
   noPadding,
   transparentBackground,
   data,
 }: LineChartProps) {
   const TITLE_TEXT_SIZE = small ? 'text-sm' : 'text-md';
-  const DESCRIPTION_TEXT_SIZE = small ? 'text-xs' : 'text-sm';
+  const DESCRIPTION_TEXT_SIZE = small ? 'text-tiny' : 'text-sm';
   const CHART_HEIGHT = small ? 12 : 16;
   const ICON_BUTTON_SIZE = small ? 3 : 4;
   const HEADER_PADDING = title ? 3 : 0;
@@ -73,7 +75,11 @@ export function LineChart({
 
   // convert data to `LineChartData` and build chart options for 'Highcharts' (line and bar chart)
   const lineChartData: LineChartData = LineChartOperations.convertToLineChartData(data);
-  const lineChartOptions: Highcharts.Options = LineChartOperations.getHighChartOptions(lineChartData, theme);
+  const lineChartOptions: Highcharts.Options = LineChartOperations.getHighChartOptions(
+    lineChartData,
+    theme,
+    roundLines
+  );
 
   // the `selectedXAxisRange` saves the to be rendered x-axis range of the chart
   // can be changed using the `LinkeChartXAxisSlider` if the param `xAxisSlider==true`
@@ -95,6 +101,7 @@ export function LineChart({
         LineChartOperations.getHighChartOptions(
           lineChartData,
           theme,
+          roundLines,
           selectedXAxisRange[0],
           selectedXAxisRange[1],
           true
@@ -102,7 +109,13 @@ export function LineChart({
       );
     } else {
       setChartOptions(
-        LineChartOperations.getHighChartOptions(lineChartData, theme, selectedXAxisRange[0], selectedXAxisRange[1])
+        LineChartOperations.getHighChartOptions(
+          lineChartData,
+          theme,
+          roundLines,
+          selectedXAxisRange[0],
+          selectedXAxisRange[1]
+        )
       );
     }
   }, [showBarChart, theme, selectedXAxisRange]);

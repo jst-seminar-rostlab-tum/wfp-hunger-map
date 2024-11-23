@@ -1,6 +1,7 @@
 import { Slider } from '@nextui-org/slider';
 
 import { LineChartXAxisSlider } from '@/domain/props/LineChartProps';
+import LineChartOperations from '@/operations/charts/LineChartOperations.ts';
 
 /**
  * This component is tied to the `LineChart` and `LineChartModal` component
@@ -13,7 +14,7 @@ export default function LineChartXAxisSlider({
   setSelectedXAxisRange,
   data,
 }: LineChartXAxisSlider) {
-  const xAxisValues: string[] = data.lines[0]?.dataPoints.map((d) => d.x) || [];
+  const xAxisValues: number[] = LineChartOperations.getDistinctXAxisValues(data);
 
   return (
     <div className="pl-5 pr-2">

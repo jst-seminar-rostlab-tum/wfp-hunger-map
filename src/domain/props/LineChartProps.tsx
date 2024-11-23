@@ -7,11 +7,12 @@ export default interface LineChartProps {
   title?: string;
   description?: string;
   expandable?: boolean;
-  small?: boolean;
   barChartSwitch?: boolean;
   xAxisSlider?: boolean;
-  transparentBackground?: boolean;
+  small?: boolean;
+  roundLines?: boolean;
   noPadding?: boolean;
+  transparentBackground?: boolean;
   data: LineChartData | BalanceOfTradeGraph | CurrencyExchangeGraph | InflationGraphs;
 }
 

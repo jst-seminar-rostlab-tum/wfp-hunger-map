@@ -16,7 +16,6 @@ export class FcsAccordionOperations {
       type: LineChartDataType.LINE_CHART_DATA,
       xAxisType: 'datetime',
       yAxisLabel: 'Mill',
-      roundLines: false,
       lines: [
         {
           name: 'People with insufficient food consumption',
@@ -37,7 +36,6 @@ export class FcsAccordionOperations {
       type: LineChartDataType.LINE_CHART_DATA,
       xAxisType: 'datetime',
       yAxisLabel: 'Mill',
-      roundLines: false,
       lines: [
         {
           name: 'People using crisis or above crisis food-based coping',

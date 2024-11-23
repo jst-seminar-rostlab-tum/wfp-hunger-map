@@ -11,7 +11,7 @@ import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
 import { LineChartDataType } from '@/domain/enums/LineChartDataType.ts';
 
 if (typeof Highcharts === 'object') {
-  highchartsMore(Highcharts); // enables the usage of HighCharts 'arearange'
+  highchartsMore(Highcharts);
 }
 
 /**
@@ -152,6 +152,7 @@ export default class LineChartOperations {
    *
    * @param data `LineChartData` object, containing all data to be plotted in the chart
    * @param theme current theme ('light' or 'dark')
+   * @param roundLines if true, all plotted lines will be rounded
    * @param barChart if true, bars are plotted instead of lines
    * @param xAxisSelectedMinIdx index of selected x-axis range min value
    * @param xAxisSelectedMaxIdx index of selected x-axis range max value
@@ -159,6 +160,7 @@ export default class LineChartOperations {
   public static getHighChartOptions(
     data: LineChartData,
     theme: string | undefined,
+    roundLines?: boolean,
     xAxisSelectedMinIdx?: number,
     xAxisSelectedMaxIdx?: number,
     barChart?: boolean
@@ -168,7 +170,7 @@ export default class LineChartOperations {
     const xAxisSelectedMin = xAxisSelectedMinIdx !== undefined ? xAxisDistinctValues[xAxisSelectedMinIdx] : undefined;
     const xAxisSelectedMax = xAxisSelectedMaxIdx !== undefined ? xAxisDistinctValues[xAxisSelectedMaxIdx] : undefined;
 
-    // parsing all given line data
+    // parsing all given data series
     const series: SeriesOptionsType[] = [];
     for (let i = 0; i < data.lines.length; i += 1) {
       const lineData = data.lines[i];
@@ -182,7 +184,7 @@ export default class LineChartOperations {
         categoryColor = this.LINE_COLORS[i];
       }
 
-      // collect chart series data
+      // collect series data
       const seriesData: Highcharts.PointOptionsObject[] = [];
       lineData.dataPoints.forEach((p) => {
         // check if datapoint x is in selected x-axis range
@@ -197,7 +199,7 @@ export default class LineChartOperations {
       // make sure data is sorted (required by highchart)
       seriesData.sort((a, b) => a.x! - b.x!);
 
-      // build chart series object
+      // build series object for highchart
       if (barChart) {
         // plot series as bars
         series.push({
@@ -210,16 +212,16 @@ export default class LineChartOperations {
       } else {
         // plot series as line
         series.push({
-          type: data.roundLines ? 'spline' : 'line',
+          type: roundLines ? 'spline' : 'line',
           name: lineData.name,
           data: seriesData,
           color: categoryColor,
         });
       }
 
-      // checking if area series range should be added as well
+      // checking if area range should be added as well
       if (lineData.showRange) {
-        // collect chart series data
+        // collect series area range data
         const areaSeriesData: Highcharts.PointOptionsObject[] = [];
         lineData.dataPoints.forEach((p) => {
           // check if datapoint x is in selected x-axis range
@@ -235,7 +237,7 @@ export default class LineChartOperations {
         // make sure data is sorted (required by highchart)
         areaSeriesData.sort((a, b) => a.x! - b.x!);
 
-        // build chart series object
+        // build series area range object
         if (barChart) {
           // add error "whiskers" to bars
           series.push({
@@ -258,7 +260,7 @@ export default class LineChartOperations {
       }
     }
 
-    // building the final HighCharts.Options
+    // constructing the final HighCharts.Options
     return {
       title: {
         text: '',
@@ -285,7 +287,6 @@ export default class LineChartOperations {
           formatter() {
             return LineChartOperations.chartXAxisFormatter(data.xAxisType, this.value);
           },
-          step: 1, // maximal 4 labels on the x-axis should be displayed  // todoMath.ceil(4 / 4)
         },
         lineColor: '#7a7a7a',
       },
@@ -355,6 +356,7 @@ export default class LineChartOperations {
           borderWidth: 0,
         },
         errorbar: {
+          animation: true,
           whiskerLength: '50%',
           lineWidth: 1.5,
           color: 'black',

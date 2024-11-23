@@ -41,9 +41,10 @@ if (typeof Highcharts === 'object') {
  * @param title chart title (optional)
  * @param description chart description text (optional)
  * @param expandable when selected, the user is given the option to open the chart in a larger modal (optional)
- * @param small when selected, all components in the line chart box become slightly smaller (optional)
  * @param barChartSwitch when selected, the user is given the option to switch to a bar chart (optional)
  * @param xAxisSlider when selected, the user is given the option to change the x-axis range via a slider (optional)
+ * @param small when selected, all components in the line chart box become slightly smaller (optional)
+ * @param noPadding when selected, the main box has no padding on all sides (optional)
  * @param transparentBackground when selected, the background of the entire component is transparent (optional)
  * @param data the actual data to be used in the chart
  */
@@ -51,9 +52,10 @@ export function LineChart({
   title,
   description,
   expandable,
-  small,
   barChartSwitch,
   xAxisSlider,
+  small,
+  noPadding,
   transparentBackground,
   data,
 }: LineChartProps) {
@@ -62,6 +64,7 @@ export function LineChart({
   const CHART_HEIGHT = small ? 12 : 16;
   const ICON_BUTTON_SIZE = small ? 3 : 4;
   const HEADER_PADDING = title ? 3 : 0;
+  const MAIN_BOX_PADDING_FACTOR = noPadding ? 0 : 1;
 
   // full screen modal state handling
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
@@ -100,10 +103,16 @@ export function LineChart({
 
   return (
     <>
-      <div className={`w-full h-fit flex-col rounded-md ${transparentBackground ? 'bg-background' : 'bg-transparent'}`}>
-        <div className={`w-full h-fit flex flex-row justify-between items-start gap-1 pl-3 pb-${HEADER_PADDING}`}>
-          <h2 className={`${TITLE_TEXT_SIZE} font-normal pt-2 flex flex-row items-center`}> {title} </h2>
-          <div className="flex flex-row gap-0.5 pt-0.5 pr-0.5">
+      <div className={`w-full h-fit flex-col rounded-md ${transparentBackground ? 'bg-transparent' : 'bg-background'}`}>
+        <div
+          className={`w-full h-fit flex flex-row justify-between items-start gap-1 pl-${3 * MAIN_BOX_PADDING_FACTOR} pb-${HEADER_PADDING}`}
+        >
+          <h2 className={`${TITLE_TEXT_SIZE} font-normal pt-${2 * MAIN_BOX_PADDING_FACTOR} flex flex-row items-center`}>
+            {title}
+          </h2>
+          <div
+            className={`flex flex-row gap-0.5 pt-${0.5 * MAIN_BOX_PADDING_FACTOR} pr-${0.5 * MAIN_BOX_PADDING_FACTOR}`}
+          >
             {
               // button to hide/show the slider to manipulate the plotted x-axis range of the chart;
               // can be disabled via `xAxisSlider`
@@ -139,7 +148,11 @@ export function LineChart({
         </div>
         {
           // description text element should only be rendered if description is available
-          description && <p className={`w-full h-fit pb-4 ${DESCRIPTION_TEXT_SIZE} px-3`}> {description} </p>
+          description && (
+            <p className={`w-full h-fit pb-4 ${DESCRIPTION_TEXT_SIZE} px-${3 * MAIN_BOX_PADDING_FACTOR}`}>
+              {description}
+            </p>
+          )
         }
         {/* the actual chart */}
         <HighchartsReact

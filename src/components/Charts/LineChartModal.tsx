@@ -63,7 +63,7 @@ export function LineChartModal({
       <ModalContent>
         <ModalHeader className="flex flex-col gap-1">
           <div className="flex flex-row justify-between w-full h-full">
-            {title}
+            <h2 className="flex flex-col justify-center font-normal text-lg"> {title} </h2>
             <div className="flex flex-row w-fit h-full gap-4">
               {
                 // button to hide/show the slider to manipulate the plotted x-axis range of the chart;

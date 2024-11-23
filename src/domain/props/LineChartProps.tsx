@@ -11,6 +11,7 @@ export default interface LineChartProps {
   barChartSwitch?: boolean;
   xAxisSlider?: boolean;
   transparentBackground?: boolean;
+  noPadding?: boolean;
   data: LineChartData | BalanceOfTradeGraph | CurrencyExchangeGraph | InflationGraphs;
 }
 

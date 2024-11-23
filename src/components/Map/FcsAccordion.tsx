@@ -73,18 +73,24 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
                     title="Trend of the number of people with insufficient food consumption"
                     data={fcsChartData}
                     expandable
+                    xAxisSlider
                     small
+                    noPadding
+                    transparentBackground
                   />
                 ) : (
                   <p>No data about insufficient food consumption</p>
                 )}
-                <Spacer y={1} />
+                <Spacer y={6} />
                 {rcsiChartData ? (
                   <LineChart
                     title="Trend of the number of people using crisis or above crisis food-based coping"
                     data={rcsiChartData}
                     expandable
+                    xAxisSlider
                     small
+                    noPadding
+                    transparentBackground
                   />
                 ) : (
                   <p>No data about crisis or above crisis food-based coping</p>
@@ -118,7 +124,14 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
             content: (
               <div>
                 {currencyExchangeChartData ? (
-                  <LineChart data={currencyExchangeChartData} expandable small />
+                  <LineChart
+                    data={currencyExchangeChartData}
+                    expandable
+                    xAxisSlider
+                    small
+                    noPadding
+                    transparentBackground
+                  />
                 ) : (
                   <p>No data about currency exchange</p>
                 )}
@@ -131,7 +144,14 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
             content: (
               <div>
                 {balanceOfTradeChartData ? (
-                  <LineChart data={balanceOfTradeChartData} expandable small />
+                  <LineChart
+                    data={balanceOfTradeChartData}
+                    expandable
+                    xAxisSlider
+                    small
+                    noPadding
+                    transparentBackground
+                  />
                 ) : (
                   <p>No data about balance of trade</p>
                 )}
@@ -144,7 +164,16 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
             content: (
               <div>
                 {headlineAndFoodInflationChartData ? (
-                  <LineChart data={headlineAndFoodInflationChartData} expandable small />
+                  <LineChart
+                    title="Headline and food inflation"
+                    data={headlineAndFoodInflationChartData}
+                    expandable
+                    xAxisSlider
+                    barChartSwitch
+                    small
+                    noPadding
+                    transparentBackground
+                  />
                 ) : (
                   <p>No data about headline and food inflation</p>
                 )}

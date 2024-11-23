@@ -6,8 +6,8 @@ import { formatToMillion } from '@/utils/formatting';
 export class FcsRegionTooltipOperations {
   static getFcsChartData(chartData: FcsChartData[]): LineChartData {
     return {
-      type: LineChartDataType.LineChartData,
-      xAxisType: 'linear',
+      type: LineChartDataType.LINE_CHART_DATA,
+      xAxisType: 'datetime',
       yAxisLabel: 'Mill',
       roundLines: false,
       lines: [

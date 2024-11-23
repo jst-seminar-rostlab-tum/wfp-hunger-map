@@ -15,7 +15,7 @@ import AccordionsOperations from '@/operations/accordions/AccordionOperations';
  */
 export default async function Elements() {
   const simpleAndSmallLineChartData: LineChartData = {
-    type: LineChartDataType.LineChartData,
+    type: LineChartDataType.LINE_CHART_DATA,
     xAxisType: 'linear',
     lines: [
       {
@@ -31,7 +31,7 @@ export default async function Elements() {
   };
 
   const simpleLineChartData: LineChartData = {
-    type: LineChartDataType.LineChartData,
+    type: LineChartDataType.LINE_CHART_DATA,
     xAxisType: 'linear',
     yAxisLabel: 'yield',
     roundLines: true,
@@ -49,7 +49,7 @@ export default async function Elements() {
   };
 
   const maxedOutLineChartData: LineChartData = {
-    type: LineChartDataType.LineChartData,
+    type: LineChartDataType.LINE_CHART_DATA,
     xAxisType: 'linear',
     yAxisLabel: 'yield',
     lines: [
@@ -85,7 +85,7 @@ export default async function Elements() {
   };
 
   const balanceOfTradeGraphData: BalanceOfTradeGraph = {
-    type: LineChartDataType.BalanceOfTradeGraph,
+    type: LineChartDataType.BALANCE_OF_TRADE_CHART,
     data: [
       {
         x: '2023-10-01',
@@ -107,7 +107,7 @@ export default async function Elements() {
   };
 
   const currencyExchangeGraphData: CurrencyExchangeGraph = {
-    type: LineChartDataType.CurrencyExchangeGraph,
+    type: LineChartDataType.CURRENCY_EXCHANGE_GRAPH,
     name: 'Exchange Rate (USD/NGN)',
     source: '',
     updated: '',
@@ -132,7 +132,7 @@ export default async function Elements() {
   };
 
   const inflationGraphsData: InflationGraphs = {
-    type: LineChartDataType.InflationGraphs,
+    type: LineChartDataType.INFLATION_GRAPHS,
     headline: {
       data: [
         {

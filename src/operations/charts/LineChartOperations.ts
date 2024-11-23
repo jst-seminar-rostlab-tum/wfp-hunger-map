@@ -1,6 +1,6 @@
 'use client';
 
-import Highcharts, { SeriesOptionsType } from 'highcharts';
+import Highcharts, { AxisTypeValue, SeriesOptionsType, TooltipFormatterContextObject } from 'highcharts';
 import highchartsMore from 'highcharts/highcharts-more';
 import HighchartsReact from 'highcharts-react-official';
 
@@ -29,6 +29,30 @@ export default class LineChartOperations {
   private static LINE_COLORS = ['#FFB74D', '#157DBC', '#85E77C', '#FF5252'];
 
   /**
+   * todo
+   * @param xAxisType
+   * @param x
+   * @param points
+   * @private
+   */
+  private static chartTooltipFormatter(
+    xAxisType: AxisTypeValue,
+    x: string | number | undefined,
+    points: TooltipFormatterContextObject[] | undefined
+  ) {
+    let tooltip = '';
+    if (xAxisType === 'datetime' && typeof x === 'number') {
+      tooltip = `<b>${Highcharts.dateFormat('%d.%m.%y', x)}</b><br/>`;
+    } else {
+      tooltip = `<b>${x}</b><br/>`;
+    }
+    points?.forEach((p) => {
+      tooltip += `<span style="color:${p.series.color}">\u25CF</span> ${p.series.name}: <b>${p.y}</b><br/>`;
+    });
+    return tooltip;
+  }
+
+  /**
    * With this static function, the LineChart component can ensure that the received data for the chart
    * is converted to the `LineChartData` type.
    * To support another interface in `LineChartProps.data`, one has to add another switch case here
@@ -39,12 +63,12 @@ export default class LineChartOperations {
     data: LineChartData | BalanceOfTradeGraph | CurrencyExchangeGraph | InflationGraphs
   ): LineChartData {
     switch (data.type) {
-      case LineChartDataType.LineChartData:
+      case LineChartDataType.LINE_CHART_DATA:
         return data;
 
-      case LineChartDataType.BalanceOfTradeGraph:
+      case LineChartDataType.BALANCE_OF_TRADE_CHART:
         return {
-          type: LineChartDataType.LineChartData,
+          type: LineChartDataType.LINE_CHART_DATA,
           xAxisType: 'datetime',
           lines: [
             {
@@ -56,9 +80,9 @@ export default class LineChartOperations {
           ],
         };
 
-      case LineChartDataType.CurrencyExchangeGraph:
+      case LineChartDataType.CURRENCY_EXCHANGE_GRAPH:
         return {
-          type: LineChartDataType.LineChartData,
+          type: LineChartDataType.LINE_CHART_DATA,
           xAxisType: 'datetime',
           lines: [
             {
@@ -70,9 +94,9 @@ export default class LineChartOperations {
           ],
         };
 
-      case LineChartDataType.InflationGraphs:
+      case LineChartDataType.INFLATION_GRAPHS:
         return {
-          type: LineChartDataType.LineChartData,
+          type: LineChartDataType.LINE_CHART_DATA,
           xAxisType: 'datetime',
           lines: [
             {
@@ -93,7 +117,7 @@ export default class LineChartOperations {
       default:
         // if the given type is not supported yet, an empty `LineChartData` instance is returned
         return {
-          type: LineChartDataType.LineChartData,
+          type: LineChartDataType.LINE_CHART_DATA,
           xAxisType: 'linear',
           lines: [],
         };
@@ -101,14 +125,15 @@ export default class LineChartOperations {
   }
 
   /**
-   * With this static function, the LineChart component can build the HighCharts.Options object
+   * With this static function, the LineChart component can build the `HighCharts.Options` object
    * for a line chart, out of a given `LineChartData` instance.
+   *
    * It is expected that all line data in `LineChartData.lines` have the same `x` values and provide
    * a `y` value for each `x` value. For example, if one line has values for x=1, x=2, and x=3,
    * the second line must also provide `y` values for these exact `x` values and no more or less.
-   * // todo params
-   * // using the 'xAxisSelectedMinIdx' and 'xAxisSelectedMinIdx' the rendered x-axis range is manipulated
-   * if a min is defined a max must be defined as well and vice versa
+   *
+   * Setting the 'xAxisSelectedMinIdx' and 'xAxisSelectedMinIdx' the rendered x-axis range
+   * can be manipulated; important: if a min is defined a max must be defined as well and vice versa.
    */
   public static getHighChartLineData(
     data: LineChartData,
@@ -118,13 +143,17 @@ export default class LineChartOperations {
   ): Highcharts.Options {
     // parsing all given line data
     const series: SeriesOptionsType[] = [];
-    let categories: string[] = [];
+    let categories: string[] | number[] = [];
     for (let i = 0; i < data.lines.length; i += 1) {
       const lineData = data.lines[i];
       // it is assumed that all `x` values are the same and are given for all lines
       // therefore we only have to collect the x Axis categories once
       if (i === 0) {
         categories = lineData.dataPoints.map((p) => p.x);
+        // if 'DATETIME' is selected as the xAxisType => convert categories to dates
+        if (data.xAxisType === 'datetime') {
+          categories = categories.map((x) => new Date(x).getTime());
+        }
         // slice to selected x-axis range if requested
         if (xAxisSelectedMinIdx !== undefined && xAxisSelectedMaxIdx !== undefined) {
           categories = categories.slice(xAxisSelectedMinIdx, xAxisSelectedMaxIdx + 1);
@@ -170,6 +199,9 @@ export default class LineChartOperations {
       }
     }
 
+    // maximal 4 x-axis labels should be displayed
+    const xAxisStep = Math.ceil(categories.length / 4);
+
     // building the final HighCharts Options
     return {
       title: {
@@ -192,6 +224,8 @@ export default class LineChartOperations {
             color: '#7a7a7a',
             fontSize: '0.7rem',
           },
+          format: '{value:%m.%y}', // highchart applies this rule if the xAxisType id `datetime`
+          step: xAxisStep,
         },
         lineColor: '#7a7a7a',
       },
@@ -215,7 +249,10 @@ export default class LineChartOperations {
         gridLineColor: theme === 'light' ? '#e1e1e1' : '#2a2a2a',
       },
       tooltip: {
-        shared: true,
+        shared: true, // Optional: if multiple series exist
+        formatter() {
+          return LineChartOperations.chartTooltipFormatter(data.xAxisType, this.x, this.points);
+        },
       },
       exporting: {
         enabled: false, // disabling export menu icon
@@ -258,9 +295,13 @@ export default class LineChartOperations {
   /**
    * With this static function, the LineChart component can build the HighCharts.Options object
    * for a bar chart, out of a given `LineChartData` instance.
+   *
    * It is expected that all line data in `LineChartData.lines` have the same `x` values and provide
    * a `y` value for each `x` value. For example, if one line has values for x=1, x=2, and x=3,
    * the second line must also provide `y` values for these exact `x` values and no more or less.
+   *
+   * Setting the 'xAxisSelectedMinIdx' and 'xAxisSelectedMinIdx' the rendered x-axis range
+   * can be manipulated; important: if a min is defined a max must be defined as well and vice versa.
    */
   public static getHighChartBarData(
     data: LineChartData,
@@ -270,13 +311,17 @@ export default class LineChartOperations {
   ): Highcharts.Options {
     // parsing all given line data
     const series: SeriesOptionsType[] = [];
-    let categories: string[] = [];
+    let categories: string[] | number[] = [];
     for (let i = 0; i < data.lines.length; i += 1) {
       const lineData = data.lines[i];
       // it is assumed that all `x` values are the same and are given for all lines
       // therefore we only have to collect the x Axis categories once
       if (i === 0) {
         categories = lineData.dataPoints.map((p) => p.x);
+        // if 'DATETIME' is selected as the xAxisType => convert categories to dates
+        if (data.xAxisType === 'datetime') {
+          categories = categories.map((x) => new Date(x).getTime());
+        }
         // slice to selected x-axis range if requested
         if (xAxisSelectedMinIdx !== undefined && xAxisSelectedMaxIdx !== undefined) {
           categories = categories.slice(xAxisSelectedMinIdx, xAxisSelectedMaxIdx + 1);
@@ -321,6 +366,9 @@ export default class LineChartOperations {
       }
     }
 
+    // maximal 4 x-axis labels should be displayed
+    const xAxisStep = Math.ceil(categories.length / 4);
+
     // building the final HighCharts Options
     return {
       title: {
@@ -343,6 +391,8 @@ export default class LineChartOperations {
             color: '#7a7a7a',
             fontSize: '0.7rem',
           },
+          format: '{value:%m.%y}', // highchart applies this rule if the xAxisType id `datetime`
+          step: xAxisStep,
         },
         lineColor: '#7a7a7a',
       },
@@ -367,6 +417,9 @@ export default class LineChartOperations {
       },
       tooltip: {
         shared: true,
+        formatter() {
+          return LineChartOperations.chartTooltipFormatter(data.xAxisType, this.x, this.points);
+        },
       },
       exporting: {
         enabled: false, // disabling export menu icon
@@ -433,5 +486,4 @@ export default class LineChartOperations {
     link.download = 'hunger_map_chart_data.json';
     link.click();
   }
-
 }

@@ -73,7 +73,7 @@ export function LineChart({
 
   // convert data to `LineChartData` and build chart options for 'Highcharts' (line and bar chart)
   const lineChartData: LineChartData = LineChartOperations.convertToLineChartData(data);
-  const lineChartOptions: Highcharts.Options = LineChartOperations.getHighChartLineData(lineChartData, theme);
+  const lineChartOptions: Highcharts.Options = LineChartOperations.getHighChartOptions(lineChartData, theme);
 
   // the `selectedXAxisRange` saves the to be rendered x-axis range of the chart
   // can be changed using the `LinkeChartXAxisSlider` if the param `xAxisSlider==true`
@@ -92,11 +92,17 @@ export function LineChart({
   useEffect(() => {
     if (showBarChart || selectedXAxisRange[1] - selectedXAxisRange[0] === 0) {
       setChartOptions(
-        LineChartOperations.getHighChartBarData(lineChartData, theme, selectedXAxisRange[0], selectedXAxisRange[1])
+        LineChartOperations.getHighChartOptions(
+          lineChartData,
+          theme,
+          selectedXAxisRange[0],
+          selectedXAxisRange[1],
+          true
+        )
       );
     } else {
       setChartOptions(
-        LineChartOperations.getHighChartLineData(lineChartData, theme, selectedXAxisRange[0], selectedXAxisRange[1])
+        LineChartOperations.getHighChartOptions(lineChartData, theme, selectedXAxisRange[0], selectedXAxisRange[1])
       );
     }
   }, [showBarChart, theme, selectedXAxisRange]);

@@ -165,7 +165,6 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
               <div>
                 {headlineAndFoodInflationChartData ? (
                   <LineChart
-                    title="Headline and food inflation"
                     data={headlineAndFoodInflationChartData}
                     expandable
                     xAxisSlider

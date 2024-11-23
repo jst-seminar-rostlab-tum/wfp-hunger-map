@@ -25,7 +25,6 @@ export default function LineChartXAxisSlider({
         step={1}
         value={selectedXAxisRange}
         onChange={(e) => setSelectedXAxisRange(e as number[])}
-        showSteps
         color="secondary"
         size="sm"
         showOutline

@@ -11,6 +11,7 @@ import { SimpleTableData } from '@/domain/props/CustomTableProps';
 import HungerAlertProps from '@/domain/props/HungerAlertProps';
 
 import HungerAlertOperations from '../../operations/hungerAlert/HungerAlertOperations.ts';
+import { Tooltip } from '../Tooltip/Tooltip';
 
 export default function HungerAlert({ countryMapData }: HungerAlertProps) {
   const ROWS_PER_PAGE = 10;
@@ -34,14 +35,16 @@ export default function HungerAlert({ countryMapData }: HungerAlertProps) {
 
   return (
     <div className="absolute bottom-0 left-0 z-10 cursor-pointer" style={{ bottom: '18rem', left: '1.86rem' }}>
-      <button
-        className={HungerAlertOperations.getPulseClasses()}
-        onClick={toggleModal}
-        style={{ width: '4rem', height: '4rem' }}
-        type="button"
-      >
-        <p className="text-4xl">{countriesWithHighHunger.length}</p>
-      </button>
+      <Tooltip text="Number of countries with high levels of hunger">
+        <button
+          className={HungerAlertOperations.getPulseClasses()}
+          onClick={toggleModal}
+          style={{ width: '4rem', height: '4rem' }}
+          type="button"
+        >
+          <p className="text-4xl">{countriesWithHighHunger.length}</p>
+        </button>
+      </Tooltip>
       <PopupModal
         isModalOpen={isModalOpen}
         toggleModal={toggleModal}

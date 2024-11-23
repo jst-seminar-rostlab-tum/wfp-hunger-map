@@ -1,4 +1,5 @@
 import { Spacer } from '@nextui-org/react';
+import { InfoCircle } from 'iconsax-react';
 
 import FcsAccordionProps from '@/domain/props/FcsAccordionProps';
 import { FcsAccordionOperations } from '@/operations/map/FcsAccordionOperations';
@@ -24,7 +25,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
         items={[
           {
             title: 'Food Security',
-            iconSrc: '/Images/InfoIcon.svg',
+            infoIcon: <InfoCircle />,
             content: (
               <div className={cardsWrapperClass}>
                 <CustomCard
@@ -65,7 +66,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
           },
           {
             title: 'Food Security Trends',
-            iconSrc: '/Images/InfoIcon.svg',
+            infoIcon: <InfoCircle />,
             content: (
               <div>
                 {fcsChartData ? (
@@ -94,7 +95,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
           },
           {
             title: 'Macro-economic',
-            iconSrc: '/Images/InfoIcon.svg',
+            infoIcon: <InfoCircle />,
             content: (
               <div className={cardsWrapperClass}>
                 <CustomCard
@@ -114,7 +115,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
           },
           {
             title: 'Currency Exchange',
-            iconSrc: '/Images/InfoIcon.svg',
+            infoIcon: <InfoCircle />,
             content: (
               <div>
                 {currencyExchangeChartData ? (
@@ -127,7 +128,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
           },
           {
             title: 'Balance of Trade',
-            iconSrc: '/Images/InfoIcon.svg',
+            infoIcon: <InfoCircle />,
             content: (
               <div>
                 {balanceOfTradeChartData ? (
@@ -140,7 +141,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
           },
           {
             title: 'Headline and food inflation',
-            iconSrc: '/Images/InfoIcon.svg',
+            infoIcon: <InfoCircle />,
             content: (
               <div>
                 {headlineAndFoodInflationChartData ? (

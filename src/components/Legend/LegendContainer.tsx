@@ -1,3 +1,5 @@
+import { InfoCircle } from 'iconsax-react';
+
 import LegendContainerProps from '@/domain/props/LegendContainerProps';
 import { LegendOperations } from '@/operations/legends/LegendOperations.ts';
 
@@ -12,7 +14,7 @@ export default function LegendContainer({ items, loading = false }: LegendContai
         loading={loading}
         items={items.map((item) => ({
           title: item.title,
-          iconSrc: '/Images/InfoIcon.svg',
+          infoIcon: <InfoCircle />,
           tooltipInfo: item.tooltipInfo,
           content: LegendOperations.isGradientLegendContainerItem(item) ? (
             <GradientLegend {...item} />

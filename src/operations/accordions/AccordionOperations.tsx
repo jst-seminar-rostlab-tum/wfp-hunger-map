@@ -1,3 +1,5 @@
+import { InfoCircle } from 'iconsax-react';
+
 import CustomCard from '@/components/Cards/Card';
 import { AccordionItemProps } from '@/domain/entities/accordions/Accordions';
 import { cardsWrapperClass } from '@/utils/primitives';
@@ -7,7 +9,7 @@ export default class AccordionOperations {
     return [
       {
         title: 'Food Security',
-        iconSrc: '/Images/InfoIcon.svg',
+        infoIcon: <InfoCircle />,
         content: (
           <div className={cardsWrapperClass}>
             <CustomCard
@@ -32,7 +34,7 @@ export default class AccordionOperations {
       },
       {
         title: 'Nutrition',
-        iconSrc: '/Images/InfoIcon.svg',
+        infoIcon: <InfoCircle />,
         content: (
           <div className={cardsWrapperClass}>
             <CustomCard
@@ -48,7 +50,7 @@ export default class AccordionOperations {
       },
       {
         title: 'Macroeconomic',
-        iconSrc: '/Images/InfoIcon.svg',
+        infoIcon: <InfoCircle />,
         content: (
           <div className={cardsWrapperClass}>
             <CustomCard
@@ -60,7 +62,7 @@ export default class AccordionOperations {
       },
       {
         title: 'Test',
-        iconSrc: '/Images/InfoIcon.svg',
+        infoIcon: <InfoCircle />,
         content: 'Test paragraph ',
       },
     ];

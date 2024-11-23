@@ -101,3 +101,12 @@ canvas.react-pdf__Page__canvas {
     border: none !important;
     box-shadow: none !important;
 }
+
+/* .svg color */
+.svg-icon path {
+    fill: black;
+}
+  
+:root.dark .svg-icon path {
+    fill: white;
+}

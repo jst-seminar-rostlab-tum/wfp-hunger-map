@@ -29,6 +29,7 @@
     "@nextui-org/popover": "^2.1.29",
     "@nextui-org/react": "^2.4.8",
     "@nextui-org/skeleton": "^2.0.32",
+    "@nextui-org/slider": "^2.2.17",
     "@nextui-org/snippet": "2.0.43",
     "@nextui-org/spinner": "^2.0.34",
     "@nextui-org/switch": "^2.0.34",

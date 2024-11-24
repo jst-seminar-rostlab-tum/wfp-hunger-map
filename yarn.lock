@@ -2673,7 +2673,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nextui-org/slider@npm:2.2.17":
+"@nextui-org/slider@npm:2.2.17, @nextui-org/slider@npm:^2.2.17":
   version: 2.2.17
   resolution: "@nextui-org/slider@npm:2.2.17"
   dependencies:
@@ -11840,6 +11840,7 @@ __metadata:
     "@nextui-org/popover": "npm:^2.1.29"
     "@nextui-org/react": "npm:^2.4.8"
     "@nextui-org/skeleton": "npm:^2.0.32"
+    "@nextui-org/slider": "npm:^2.2.17"
     "@nextui-org/snippet": "npm:2.0.43"
     "@nextui-org/spinner": "npm:^2.0.34"
     "@nextui-org/switch": "npm:^2.0.34"

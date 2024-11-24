@@ -1,15 +1,27 @@
 import { Button } from '@nextui-org/button';
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@nextui-org/modal';
+import { Popover, PopoverContent, PopoverTrigger } from '@nextui-org/popover';
 import Highcharts from 'highcharts';
+import ExportDataModule from 'highcharts/modules/export-data';
+import Exporting from 'highcharts/modules/exporting';
+import OfflineExporting from 'highcharts/modules/offline-exporting';
 import HighchartsReact from 'highcharts-react-official';
 import { DocumentDownload, GalleryImport, Minus } from 'iconsax-react';
 import { useRef } from 'react';
 
 import LineChartBarLineSwitchButton from '@/components/Charts/helpers/LineChartBarLineSwitchButton';
 import LineChartSliderButton from '@/components/Charts/helpers/LineChartSliderButton';
+import LineChartXAxisSlider from '@/components/Charts/helpers/LineChartXAxisSlider';
 import { Tooltip } from '@/components/Tooltip/Tooltip';
 import LineChartModalProps from '@/domain/props/LineChartModalProps';
 import LineChartOperations from '@/operations/charts/LineChartOperations.ts';
+
+// initialize the exporting module
+if (typeof Highcharts === 'object') {
+  Exporting(Highcharts);
+  ExportDataModule(Highcharts);
+  OfflineExporting(Highcharts);
+}
 
 /**
  * This component is tied to the `LineChart` component and should not be used independently.
@@ -31,6 +43,8 @@ export function LineChartModal({
   setShowXAxisSlider,
   showBarChart,
   setShowBarChart,
+  selectedXAxisRange,
+  setSelectedXAxisRange,
 }: LineChartModalProps) {
   // referencing the Highcharts chart object (needed for download the chart as a png)
   const chartRef = useRef<HighchartsReact.RefObject | null>(null);
@@ -49,8 +63,8 @@ export function LineChartModal({
       <ModalContent>
         <ModalHeader className="flex flex-col gap-1">
           <div className="flex flex-row justify-between w-full h-full">
-            {title}
-            <div className="flex flex-row w-fit h-full gap-4">
+            <h2 className="flex flex-col justify-center font-normal text-sm sm:text-md md:text-lg"> {title} </h2>
+            <div className="flex flex-row w-fit h-full gap-0.5 sm:gap-4 md:gap-6">
               {
                 // button to hide/show the slider to manipulate the plotted x-axis range of the chart;
                 // can be disabled via `xAxisSlider`
@@ -72,31 +86,64 @@ export function LineChartModal({
                   />
                 )
               }
-              {/* chart download buttons */}
-              <Tooltip text="Download Data as JSON">
-                <Button
-                  isIconOnly
-                  variant="light"
-                  size="sm"
-                  onPress={() => {
-                    LineChartOperations.downloadDataJSON(lineChartData);
-                  }}
-                >
-                  <DocumentDownload className="h-4 w-4" />
-                </Button>
-              </Tooltip>
-              <Tooltip text="Download Chart as PNG">
-                <Button
-                  isIconOnly
-                  variant="light"
-                  size="sm"
-                  onPress={() => {
-                    if (chartRef.current) LineChartOperations.downloadChartPNG(chartRef.current);
-                  }}
-                >
-                  <GalleryImport className="h-4 w-4" />
-                </Button>
-              </Tooltip>
+
+              {/* chart download dropdown */}
+              <Popover placement="bottom" offset={10} backdrop="opaque">
+                <PopoverTrigger>
+                  <Button isIconOnly variant="light" size="sm">
+                    <Tooltip text="Export Chart / Data">
+                      <DocumentDownload className="h-4 w-4" />
+                    </Tooltip>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-fit h-fit p-2 flex flex-col gap-1 items-start">
+                  <Button
+                    variant="light"
+                    size="sm"
+                    className="w-full justify-start"
+                    onPress={() => {
+                      if (chartRef.current) LineChartOperations.downloadChartPNG(chartRef.current);
+                    }}
+                    startContent={<GalleryImport className="h-4 w-4" />}
+                  >
+                    Chart as PNG
+                  </Button>
+                  <Button
+                    variant="light"
+                    size="sm"
+                    className="w-full justify-start"
+                    onPress={() => {
+                      if (chartRef.current) LineChartOperations.downloadChartDataSVG(chartRef.current);
+                    }}
+                    startContent={<GalleryImport className="h-4 w-4" />}
+                  >
+                    Chart as SVG
+                  </Button>
+                  <Button
+                    variant="light"
+                    size="sm"
+                    className="w-full justify-start"
+                    onPress={() => {
+                      if (chartRef.current) LineChartOperations.downloadChartDataCSV(chartRef.current);
+                    }}
+                    startContent={<DocumentDownload className="h-4 w-4" />}
+                  >
+                    Data as CSV
+                  </Button>
+                  <Button
+                    variant="light"
+                    size="sm"
+                    className="w-full justify-start"
+                    onPress={() => {
+                      if (chartRef.current) LineChartOperations.downloadDataJSON(lineChartData);
+                    }}
+                    startContent={<DocumentDownload className="h-4 w-4" />}
+                  >
+                    Data as JSON
+                  </Button>
+                </PopoverContent>
+              </Popover>
+
               {/* close model button */}
               <Tooltip text="Close">
                 <Button isIconOnly variant="light" size="sm" onPress={onClose}>
@@ -106,9 +153,10 @@ export function LineChartModal({
             </div>
           </div>
         </ModalHeader>
+
         <ModalBody>
           {/* modal main content: description and chart */}
-          <p className="w-full h-fit text-md font-normal">{description}</p>
+          <p className="w-full h-fit font-normal text-tiny sm:text-sm md:text-md">{description}</p>
           <div className="py-6">
             <HighchartsReact
               highcharts={Highcharts}
@@ -118,14 +166,20 @@ export function LineChartModal({
             />
           </div>
         </ModalBody>
-        ;
-        <ModalFooter>
-          {
-            // slider to manipulate the plotted x-axis range of the chart; can be disabled via `xAxisSlider`
-            showXAxisSlider && <> x-Axis slider will be implemented in another issue (F-67)</>
-          }
-        </ModalFooter>
-        ;
+        {
+          // slider to manipulate the plotted x-axis range of the chart; can be disabled via `xAxisSlider`
+          showXAxisSlider && (
+            <ModalFooter>
+              <div className="w-full">
+                <LineChartXAxisSlider
+                  selectedXAxisRange={selectedXAxisRange}
+                  setSelectedXAxisRange={setSelectedXAxisRange}
+                  data={lineChartData}
+                />
+              </div>
+            </ModalFooter>
+          )
+        }
       </ModalContent>
     </Modal>
   );

@@ -33,7 +33,7 @@ export function Sidebar() {
   }
 
   return (
-    <div className="absolute top-0 left-0 z-50 h-screen mt-4 ml-4">
+    <div className="absolute top-0 left-0 z-50 mt-4 ml-4 mb-10 h-[calc(100vh-3.5rem)]">
       <Card
         classNames={{
           base: 'h-full',

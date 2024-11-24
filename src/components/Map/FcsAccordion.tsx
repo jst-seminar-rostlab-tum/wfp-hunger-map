@@ -4,6 +4,9 @@ import FcsAccordionProps from '@/domain/props/FcsAccordionProps';
 import { FcsAccordionOperations } from '@/operations/map/FcsAccordionOperations';
 import { cardsWrapperClass } from '@/utils/primitives';
 
+import { ReactComponent as FoodConsumption } from '../../../public/Images/FoodConsumption.svg';
+import { ReactComponent as Import } from '../../../public/Images/Import.svg';
+import { ReactComponent as Population } from '../../../public/Images/Population.svg';
 import CustomAccordion from '../Accordions/Accordion';
 import CustomCard from '../Cards/Card';
 import { LineChart } from '../Charts/LineChart';
@@ -31,7 +34,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
                   title="Population"
                   content={[
                     {
-                      imageSrc: '/Images/Population.svg',
+                      svgIcon: <Population className="w-full h-full object-contain" />,
                       text: countryData?.population ? `${countryData.population.toFixed(2)} M` : 'N/A',
                       altText: 'Population Icon',
                     },
@@ -41,9 +44,9 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
                   title="People with insufficient food consumption"
                   content={[
                     {
-                      imageSrc: '/Images/FoodConsumption.svg',
+                      svgIcon: <FoodConsumption className="w-full h-full object-contain" />,
                       text: countryData?.fcs ? `${countryData.fcs.toFixed(2)} M` : 'N/A',
-                      altText: 'Population Icon',
+                      altText: 'Food Consumption Icon',
                     },
                     {
                       imageSrc: deltaOneMonth && deltaOneMonth > 0 ? '/Images/ArrowGreen.svg' : '/Images/ArrowRed.svg',
@@ -107,11 +110,11 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
                   title="Import Dependency"
                   content={[
                     {
-                      imageSrc: '/Images/Import.svg',
+                      svgIcon: <Import className="w-full h-full object-contain" />,
                       text: countryData?.importDependency
                         ? `${countryData.importDependency.toFixed(1)}% of Cereals`
                         : 'N/A',
-                      altText: 'Icon',
+                      altText: 'Import Dependency Icon',
                     },
                   ]}
                 />

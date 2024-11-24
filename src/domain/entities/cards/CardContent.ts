@@ -1,5 +1,6 @@
 export interface CardContent {
-  imageSrc: string;
+  imageSrc?: string;
+  svgIcon?: any;
   text: string;
   timeText?: string;
   altText: string;

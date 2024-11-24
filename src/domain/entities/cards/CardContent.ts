@@ -1,6 +1,6 @@
 export interface CardContent {
   imageSrc?: string;
-  svgIcon?: any;
+  svgIcon?: React.ReactNode;
   text: string;
   timeText?: string;
   altText: string;

@@ -2,7 +2,6 @@ import { Button } from '@nextui-org/button';
 import { Information } from 'iconsax-react';
 import { useState } from 'react';
 
-import { INFO_POPUP_TOOLTIP } from '@/domain/constant/legend/mapLegendData';
 import LegendContainerProps from '@/domain/props/LegendContainerProps';
 import { LegendOperations } from '@/operations/legends/LegendOperations.ts';
 import { useMediaQuery } from '@/utils/resolution';

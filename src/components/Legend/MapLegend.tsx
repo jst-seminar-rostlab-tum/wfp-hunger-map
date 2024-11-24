@@ -19,7 +19,7 @@ export default function MapLegend() {
   }, [selectedAlert, selectedMapType]);
 
   return (
-    <div className="absolute bottom-5 right-0 z-50 pr-10">
+    <div className="absolute bottom-0 right-0 z-50 mr-10 mb-5">
       <LegendContainer items={items} />
     </div>
   );

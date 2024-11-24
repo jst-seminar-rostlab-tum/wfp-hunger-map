@@ -4,6 +4,7 @@ import { Button } from '@nextui-org/button';
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
 import { Input } from '@nextui-org/input';
 import { Link } from '@nextui-org/link';
+import { ScrollShadow } from '@nextui-org/react';
 import clsx from 'clsx';
 import { SidebarLeft } from 'iconsax-react';
 import NextImage from 'next/image';
@@ -51,31 +52,33 @@ export function Sidebar() {
           <Input className="w-full" color="primary" placeholder="Search a country" variant="faded" />
         </CardHeader>
         <CardBody>
-          <div className="p-1 w-full">
-            <span className="text-tiny text-foreground-500 pl-1">Global Insights</span>
-            <div className="flex flex-col gap-1 pt-1">
-              {SidebarOperations.getSidebarMapTypes().map((item) => (
-                <Button
-                  startContent={item.icon && <NextImage src={item.icon} alt={item.label} width={24} height={24} />}
-                  key={item.key}
-                  variant={selectedMapType === item.key ? undefined : 'light'}
-                  className={clsx(
-                    'justify-start dark:text-white',
-                    selectedMapType === item.key ? 'bg-primary text-white' : 'text-black'
-                  )}
-                  onClick={() => setSelectedMapType(item.key)}
-                >
-                  {item.label}
-                </Button>
-              ))}
+          <ScrollShadow className="w-full h-full">
+            <div className="p-1 w-full">
+              <span className="text-tiny text-foreground-500 pl-1">Global Insights</span>
+              <div className="flex flex-col gap-1 pt-1">
+                {SidebarOperations.getSidebarMapTypes().map((item) => (
+                  <Button
+                    startContent={item.icon && <NextImage src={item.icon} alt={item.label} width={24} height={24} />}
+                    key={item.key}
+                    variant={selectedMapType === item.key ? undefined : 'light'}
+                    className={clsx(
+                      'justify-start dark:text-white',
+                      selectedMapType === item.key ? 'bg-primary text-white' : 'text-black'
+                    )}
+                    onClick={() => setSelectedMapType(item.key)}
+                  >
+                    {item.label}
+                  </Button>
+                ))}
+              </div>
             </div>
-          </div>
-          <div className="p-1 w-full">
-            <span className="text-tiny text-foreground-500 pl-1">Alerts</span>
-            <div className="pt-1">
-              <AlertsMenu variant={AlertsMenuVariant.Inside} />
+            <div className="p-1 w-full">
+              <span className="text-tiny text-foreground-500 pl-1">Alerts</span>
+              <div className="pt-1">
+                <AlertsMenu variant={AlertsMenuVariant.Inside} />
+              </div>
             </div>
-          </div>
+          </ScrollShadow>
         </CardBody>
         <CardFooter>
           <div className="flex flex-col gap-1">

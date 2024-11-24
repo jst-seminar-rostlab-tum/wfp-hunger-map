@@ -139,5 +139,3 @@ export function mapLegendData(
 
   return legendData;
 }
-
-export const INFO_POPUP_TOOLTIP = 'Click trigger info popup';

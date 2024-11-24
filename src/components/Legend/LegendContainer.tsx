@@ -36,12 +36,13 @@ export default function LegendContainer({ items, loading = false }: LegendContai
   ) : (
     <>
       <div className="absolute z-50 bottom-3 right-16">
-        <Tooltip text={INFO_POPUP_TOOLTIP}>
+        <Tooltip text={items.length > 1 ? 'Legends Information' : 'Legend Information'}>
           <Button
             onClick={() => setInfoPopup(true)}
             className="
         relative flex items-center justify-center min-w-12 h-12 px-1 rounded-full bg-content1 shadow-md"
           >
+            {/* TODO: Icon to be modified */}
             <Information size={32} />
           </Button>
         </Tooltip>

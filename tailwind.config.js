@@ -163,6 +163,11 @@ const config = {
             fatalityAlert: '#742280',
             climateWetAlert: '#4295D3',
             climateDryAlert: '#B95926',
+            ipcPhase1: '#d1fad1',
+            ipcPhase2: '#fae834',
+            ipcPhase3: '#e88519',
+            ipcPhase4: '#cd1919',
+            ipcPhase5: '#731919',
           },
         },
         dark: {

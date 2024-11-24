@@ -1,43 +1,20 @@
 /* eslint-disable */
 import { LeafletContextInterface } from '@react-leaflet/core';
 import { FeatureCollection } from 'geojson';
-import mapboxgl, { DataDrivenPropertyValueSpecification, Popup } from 'mapbox-gl';
+import mapboxgl, { Popup } from 'mapbox-gl';
 import { RefObject } from 'react';
 
-import { CountryMapData, CountryMapDataWrapper } from '@/domain/entities/country/CountryMapData.ts';
+import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 import { MapColorsType } from '@/domain/entities/map/MapColorsType.ts';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
 import { MapProps } from '@/domain/props/MapProps';
 import { getColors } from '@/styles/MapColors.ts';
 
-import { IPCMapOperations } from '../IPC/IpcMapOperations';
-import ReactDOMServer from 'react-dom/server';
-import CountryHoverPopover from '../../components/CountryHoverPopover/CountryHoverPopover';
-import { CountryIpcData } from '@/domain/entities/country/CountryIpcData';
-
 export class MapOperations {
-  private static getCountryFillColorForIPC = ({ selectedMapType, ipcData, countries }: MapProps, mapColors: MapColorsType): DataDrivenPropertyValueSpecification<string> => {
-    switch (selectedMapType) {
-      case GlobalInsight.IPC:
-        return [
-          'match',
-          ['get', 'adm0_name'],
-          ...Object.entries(IPCMapOperations.generateColorMap(ipcData, countries)).flat(),
-          mapColors.countriesBase,
-        ];
-      default:
-        return mapColors.countriesBase;
-    }
-  };
-
-  static createMapboxMap(
-    isDark: boolean,
-    mapProps: MapProps,
-    mapContainer: RefObject<HTMLDivElement>
-  ): mapboxgl.Map {
+  static createMapboxMap(isDark: boolean, mapProps: MapProps, mapContainer: RefObject<HTMLDivElement>): mapboxgl.Map {
     const mapColors: MapColorsType = getColors(isDark);
 
-    const { countries } = mapProps
+    const { countries } = mapProps;
     return new mapboxgl.Map({
       container: mapContainer.current as unknown as string | HTMLElement,
       style: {
@@ -66,7 +43,7 @@ export class MapOperations {
             id: 'countries-base',
             type: 'fill',
             source: 'countries',
-            paint: { 'fill-color': this.getCountryFillColorForIPC(mapProps, mapColors) },
+            paint: { 'fill-color': mapColors.countriesBase },
           },
           // additional layers (FCS, vegetation etc.) are being placed here
           {
@@ -112,9 +89,7 @@ export class MapOperations {
     });
   }
 
-  static setMapInteractionFunctionality(
-    baseMap: mapboxgl.Map, popover: Popup
-  ): void {
+  static setMapInteractionFunctionality(baseMap: mapboxgl.Map, popover: Popup): void {
     let hoveredPolygonId: string | number | undefined;
 
     baseMap.on('mousemove', 'countries-hover', (e: any) => {
@@ -159,49 +134,6 @@ export class MapOperations {
         alert(`You clicked on ${(e.features[0] as CountryMapData).properties.adm0_name}`);
       }
     });
-  }
-
-  private static onIpcMoveInvocation: ((e: any) => void) | null = null
-
-  private static onIpcMouseMove(e: any, popover: Popup, ipcData: CountryIpcData[], countries: CountryMapDataWrapper, baseMap: mapboxgl.Map) {
-    const countryData = e.features && (e.features[0] as CountryMapData);
-    const countryName = countryData.properties.adm0_name;
-    const ipcColorMap = IPCMapOperations.generateColorMap(ipcData, countries);
-
-    if (!ipcColorMap[countryName]) {
-      popover.remove();
-      return;
-    }
-
-    const selectedCountryData = IPCMapOperations.findIpcData(countryName, ipcData);
-    const date_of_analysis = selectedCountryData?.date_of_analysis || 'N/A';
-    const analysis_period = selectedCountryData?.analysis_period || 'N/A';
-    const ipc_percent = selectedCountryData?.ipc_percent ?? 0;
-    const ipc_popnmbr = selectedCountryData?.ipc_popnmbr ?? 0;
-    const formattedPopNum = ipc_popnmbr.toLocaleString('en-US', {
-      useGrouping: true,
-    });
-
-    const popoverContentHTML = ReactDOMServer.renderToString(
-      <CountryHoverPopover
-        header={countryName}
-        details={
-          <>
-            Date of analysis: {date_of_analysis}
-            <br />
-            Validity period: {analysis_period}
-          </>
-        }
-        summary={
-          <>
-            <span className="font-bold text-danger text-base">{formattedPopNum}</span> people in IPC/CH Phase 3
-            and above (<span className="font-bold text-danger text-base">{ipc_percent}%</span> of people in the
-            analyzed areas)
-          </>
-        }
-      />
-    );
-    popover.setLngLat(e.lngLat).setHTML(popoverContentHTML).addTo(baseMap);
   }
 
   static synchronizeLeafletMapbox(
@@ -358,10 +290,6 @@ export class MapOperations {
           'countries-inactive'
         );
         break;
-      case GlobalInsight.IPC:
-        baseMap.setPaintProperty('countries-base', 'fill-color', this.getCountryFillColorForIPC(mapProps, mapColors))
-        this.onIpcMoveInvocation = (e) => this.onIpcMouseMove(e, popover, mapProps.ipcData, mapProps.countries, baseMap)
-        baseMap.on('mousemove', 'countries-hover', this.onIpcMoveInvocation)
       default:
     }
   }
@@ -375,13 +303,9 @@ export class MapOperations {
       [this.FCS_LAYER, this.VEGETATION_LAYER, this.RAINFALL_LAYER].includes(layer.id)
     );
     if (!layerToRemove) {
-      baseMap.setPaintProperty('countries-base', 'fill-color', mapColors.countriesBase)
-      if (this.onIpcMoveInvocation) {
-        baseMap.off('mousemove', 'countries-hover', this.onIpcMoveInvocation)
-        this.onIpcMoveInvocation = null
-      }
-      return
-    };
+      baseMap.setPaintProperty('countries-base', 'fill-color', mapColors.countriesBase);
+      return;
+    }
     baseMap.removeLayer(layerToRemove.id);
   }
 }

@@ -91,7 +91,7 @@ export function LineChartModal({
               <Popover placement="bottom" offset={10} backdrop="opaque">
                 <PopoverTrigger>
                   <Button isIconOnly variant="light" size="sm">
-                    <Tooltip text="Download Data as JSON">
+                    <Tooltip text="Export Chart / Data">
                       <DocumentDownload className="h-4 w-4" />
                     </Tooltip>
                   </Button>

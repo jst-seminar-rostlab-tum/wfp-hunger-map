@@ -13,15 +13,14 @@ export class FcsAccordionOperations {
       return null;
     }
     return {
-      type: LineChartDataType.LineChartData,
-      xAxisType: 'linear',
+      type: LineChartDataType.LINE_CHART_DATA,
+      xAxisType: 'datetime',
       yAxisLabel: 'Mill',
-      roundLines: false,
       lines: [
         {
           name: 'People with insufficient food consumption',
           dataPoints: countryData.fcsGraph.map((fcsChartData) => ({
-            x: fcsChartData.x,
+            x: new Date(fcsChartData.x).getTime(),
             y: formatToMillion(fcsChartData.fcs),
           })),
         },
@@ -34,15 +33,14 @@ export class FcsAccordionOperations {
       return null;
     }
     return {
-      type: LineChartDataType.LineChartData,
-      xAxisType: 'linear',
+      type: LineChartDataType.LINE_CHART_DATA,
+      xAxisType: 'datetime',
       yAxisLabel: 'Mill',
-      roundLines: false,
       lines: [
         {
           name: 'People using crisis or above crisis food-based coping',
           dataPoints: countryData.rcsiGraph.map((rcsiChartData) => ({
-            x: rcsiChartData.x,
+            x: new Date(rcsiChartData.x).getTime(),
             y: formatToMillion(rcsiChartData.rcsi),
           })),
         },
@@ -55,7 +53,7 @@ export class FcsAccordionOperations {
       return null;
     }
     return {
-      type: LineChartDataType.BalanceOfTradeGraph,
+      type: LineChartDataType.BALANCE_OF_TRADE_CHART,
       data: countryIso3Data.balanceOfTradeGraph.data,
     };
   }
@@ -71,7 +69,7 @@ export class FcsAccordionOperations {
     }
 
     return {
-      type: LineChartDataType.InflationGraphs,
+      type: LineChartDataType.INFLATION_GRAPHS,
       headline: {
         data: headlineData,
       },
@@ -90,7 +88,7 @@ export class FcsAccordionOperations {
       return null;
     }
     return {
-      type: LineChartDataType.CurrencyExchangeGraph,
+      type: LineChartDataType.CURRENCY_EXCHANGE_GRAPH,
       name,
       source,
       updated,

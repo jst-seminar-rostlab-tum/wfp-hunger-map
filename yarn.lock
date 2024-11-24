@@ -1926,7 +1926,7 @@
     "@nextui-org/react-utils" "2.0.17"
     "@nextui-org/shared-utils" "2.0.8"
 
-"@nextui-org/slider@2.2.17":
+"@nextui-org/slider@2.2.17", "@nextui-org/slider@^2.2.17":
   version "2.2.17"
   resolved "https://registry.yarnpkg.com/@nextui-org/slider/-/slider-2.2.17.tgz#f40b7a04d272a8fc191d52b27887861fd2c75d39"
   integrity sha512-MgeJv3X+bT7Bw+LK1zba4vToOUzv8lCvDuGe0U5suJy1AKGN6uGDgSAxpIZhCYNWsuNRsopwdvsGtyeIjOEStA==

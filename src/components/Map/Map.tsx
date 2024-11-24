@@ -13,6 +13,7 @@ import { MapProps } from '@/domain/props/MapProps';
 
 import { AlertContainer } from './Alerts/AlertContainer';
 import FcsChoropleth from './FcsChoropleth';
+import NutritionChoropleth from './NutritionChoropleth';
 import VectorTileLayer from './VectorTileLayer';
 import ZoomTracker from './ZoomTracker';
 
@@ -59,6 +60,20 @@ export default function Map({ countries, disputedAreas, ipcData }: MapProps) {
               selectedAlert={selectedAlert}
               setSelectedCountryId={setSelectedCountryId}
               setSelectedMapVisibility={setSelectedMapVisibility}
+              toggleAlert={toggleAlert}
+            />
+          ))}
+      {selectedMapType === GlobalInsight.NUTRITION &&
+        countries.features
+          .filter((countryData) => countryData.properties.interactive)
+          .map((countryData) => (
+            <NutritionChoropleth
+              key={countryData.properties.adm0_id}
+              countryId={countryData.properties.adm0_id}
+              data={{ type: 'FeatureCollection', features: [countryData as Feature<Geometry, GeoJsonProperties>] }}
+              selectedCountryId={selectedCountryId}
+              selectedAlert={selectedAlert}
+              setSelectedCountryId={setSelectedCountryId}
               toggleAlert={toggleAlert}
             />
           ))}

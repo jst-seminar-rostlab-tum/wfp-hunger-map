@@ -163,6 +163,12 @@ const config = {
             fatalityAlert: '#742280',
             climateWetAlert: '#4295D3',
             climateDryAlert: '#B95926',
+            nutritionGradientStart: '#fff3f3ff',
+            nutritionGradientMiddle: '#fa9997',
+            nutritionGradientEnd: '#f32e27',
+            nutritionActual: '#FFB74D',
+            nutritionPredicted: '#E3F2FD',
+            nutritionNotAnalyzed: '#52525b',
           },
         },
         dark: {

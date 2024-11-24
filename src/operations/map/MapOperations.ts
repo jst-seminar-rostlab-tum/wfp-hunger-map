@@ -1,6 +1,7 @@
 import { LeafletContextInterface } from '@react-leaflet/core';
 import * as turf from '@turf/turf';
 import { FeatureCollection, GeoJSON } from 'geojson';
+import { Map } from 'leaflet';
 import mapboxgl from 'mapbox-gl';
 import { RefObject } from 'react';
 
@@ -216,15 +217,37 @@ export class MapOperations {
     });
   }
 
-  static async zoomToCountry(baseMap: mapboxgl.Map, country: CountryMapData | null) {
+  static zoomToCountry(
+    baseMap: mapboxgl.Map,
+    country: CountryMapData | null,
+    leafletMap: Map,
+    mapContainer: RefObject<HTMLDivElement>,
+    context: LeafletContextInterface
+  ) {
     if (country) {
       const bbox = turf.bbox(country as GeoJSON);
-      const adjustedBbox: [number, number, number, number] = [bbox[0], bbox[1], bbox[2], bbox[3]];
 
-      baseMap.fitBounds(adjustedBbox, {
+      const mapboxAdjustedBbox: [number, number, number, number] = [bbox[0], bbox[1], bbox[2], bbox[3]];
+      /*
+      const leafletAdjustedBbox: [[number, number], [number, number]] = [[bbox[1], bbox[0]], [bbox[3], bbox[2]]];
+      leafletMap.fitBounds(leafletAdjustedBbox, { animate: true });
+       */
+
+      leafletMap.off();
+
+      baseMap.fitBounds(mapboxAdjustedBbox, {
         padding: 20,
         duration: 1000,
         essential: true,
+      });
+
+      baseMap.once('moveend', () => {
+        const center = baseMap.getCenter();
+        const zoom = baseMap.getZoom();
+        leafletMap.setView([center.lat, center.lng], zoom + 1, {
+          animate: false,
+        });
+        this.synchronizeLeafletMapbox(baseMap, mapContainer, context);
       });
     }
   }

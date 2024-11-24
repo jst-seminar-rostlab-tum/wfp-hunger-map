@@ -4,6 +4,7 @@ import { LeafletContextInterface, useLeafletContext } from '@react-leaflet/core'
 import mapboxgl from 'mapbox-gl';
 import { useTheme } from 'next-themes';
 import React, { RefObject, useEffect, useRef } from 'react';
+import { useMap } from 'react-leaflet';
 
 import { useSelectedCountry } from '@/domain/contexts/SelectedCountryContext';
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
@@ -17,6 +18,7 @@ export default function VectorTileLayer({ countries, disputedAreas }: MapProps) 
   const { selectedMapType } = useSelectedMap();
   const { selectedCountry, setSelectedCountry } = useSelectedCountry();
   const mapRef = useRef<mapboxgl.Map | null>(null);
+  const leafletMap = useMap();
 
   mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 
@@ -39,7 +41,7 @@ export default function VectorTileLayer({ countries, disputedAreas }: MapProps) 
 
   useEffect(() => {
     if (selectedCountry && mapRef.current) {
-      MapOperations.zoomToCountry(mapRef.current, selectedCountry);
+      MapOperations.zoomToCountry(mapRef.current, selectedCountry, leafletMap, mapContainer, context);
     }
   }, [selectedCountry]);
 

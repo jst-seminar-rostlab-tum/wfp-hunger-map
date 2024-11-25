@@ -11,7 +11,7 @@ export function AlertsMenuWrapper() {
     return null;
   }
   return (
-    <div className="absolute bottom-0 left-0 z-50 p-4">
+    <div className="absolute bottom-0 left-0 z-50 mb-10 ml-4">
       <AlertsMenu variant={AlertsMenuVariant.Outside} />
     </div>
   );

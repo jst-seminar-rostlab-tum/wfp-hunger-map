@@ -17,7 +17,6 @@ function NutritionStateChoropleth({
   return (
     <>
       <NutritionAccordion
-        selectedNutrient={selectedNutrient}
         setSelectedNutrient={setSelectedNutrient}
         selectedLabel={selectedLabel}
         setSelectedLabel={setSelectedLabel}

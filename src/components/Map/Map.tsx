@@ -64,6 +64,7 @@ export default function Map({ countries, disputedAreas, ipcData }: MapProps) {
             />
           ))}
       {selectedMapType === GlobalInsight.NUTRITION &&
+        countries.features &&
         countries.features
           .filter((countryData) => countryData.properties.interactive)
           .map((countryData) => (

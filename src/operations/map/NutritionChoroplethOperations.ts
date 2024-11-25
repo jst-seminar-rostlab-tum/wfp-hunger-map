@@ -3,11 +3,11 @@ import L from 'leaflet';
 
 import container from '@/container';
 import { CountryMimiData } from '@/domain/entities/country/CountryMimiData';
+import { CountryNutrition } from '@/domain/entities/country/CountryNutrition.ts';
 import CountryRepository from '@/domain/repositories/CountryRepository';
-import { GlobalDataRepository } from '@/domain/repositories/GlobalDataRepository';
 
 class NutritionChoroplethOperations {
-  public static getFillColor(dataType: string): string {
+  private static getFillColor(dataType: string): string {
     switch (dataType) {
       case 'actual':
         return '#FFB74D';
@@ -18,10 +18,9 @@ class NutritionChoroplethOperations {
     }
   }
 
-  public static async fetchAndSetCountryStyles(setCountryStyles: (styles: { [key: number]: L.PathOptions }) => void) {
-    const global = await container.resolve<GlobalDataRepository>('GlobalDataRepository').getNutritionData();
-    if (global && Array.isArray(global.body)) {
-      const styles = global.body.reduce(
+  public static getCountryStyles(nutritionData: CountryNutrition) {
+    if (nutritionData && Array.isArray(nutritionData.body)) {
+      return nutritionData.body.reduce(
         (acc, item) => {
           acc[item.adm0_code] = {
             color: '#fff',
@@ -33,9 +32,8 @@ class NutritionChoroplethOperations {
         },
         {} as { [key: number]: L.PathOptions }
       );
-
-      setCountryStyles(styles);
     }
+    return {};
   }
 
   private static async handleCountryClick(

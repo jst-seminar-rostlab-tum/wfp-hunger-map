@@ -12,10 +12,12 @@ export default async function Home() {
   const countryMapDataPromise = globalRepo.getMapDataForCountries();
   const disputedAreasPromise = globalRepo.getDisputedAreas();
   const ipcDataPromise = globalRepo.getIpcData();
-  const [countryMapData, disputedAreas, ipcData] = await Promise.all([
+  const nutritionDataPromise = globalRepo.getNutritionData();
+  const [countryMapData, disputedAreas, ipcData, nutritionData] = await Promise.all([
     countryMapDataPromise,
     disputedAreasPromise,
     ipcDataPromise,
+    nutritionDataPromise
   ]);
 
   return (
@@ -23,7 +25,12 @@ export default async function Home() {
       <Sidebar />
       <AlertsMenuWrapper />
       <Chatbot />
-      <MapLoader countries={countryMapData} disputedAreas={disputedAreas} ipcData={ipcData} />
+      <MapLoader
+        countries={countryMapData}
+        disputedAreas={disputedAreas}
+        ipcData={ipcData}
+        nutritionData={nutritionData}
+      />
       <HungerAlertLoader countryMapData={countryMapData} />
       <MapLegend />
     </>

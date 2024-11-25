@@ -16,6 +16,7 @@ export default function NutritionChoropleth({
   selectedAlert,
   setSelectedCountryId,
   toggleAlert,
+  nutritionData,
 }: NutritionChoroplethProps) {
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
   const map = useMap();
@@ -24,8 +25,9 @@ export default function NutritionChoropleth({
   const [countryStyles, setCountryStyles] = useState<{ [key: number]: L.PathOptions }>({});
 
   useEffect(() => {
-    NutritionChoroplethOperations.fetchAndSetCountryStyles(setCountryStyles);
-  }, []);
+    const countrStyles = NutritionChoroplethOperations.getCountryStyles(nutritionData)
+    setCountryStyles(countrStyles);
+  }, [nutritionData]);
 
   if (selectedAlert) {
     toggleAlert(selectedAlert);

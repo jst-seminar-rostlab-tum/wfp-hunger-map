@@ -17,7 +17,7 @@ import NutritionChoropleth from './NutritionChoropleth';
 import VectorTileLayer from './VectorTileLayer';
 import ZoomTracker from './ZoomTracker';
 
-export default function Map({ countries, disputedAreas, ipcData }: MapProps) {
+export default function Map({ countries, disputedAreas, ipcData, nutritionData }: MapProps) {
   const { selectedMapType } = useSelectedMap();
   const [selectedCountryId, setSelectedCountryId] = useState<number | undefined>();
   const { setSelectedMapVisibility } = useSelectedMapVisibility();
@@ -45,7 +45,14 @@ export default function Map({ countries, disputedAreas, ipcData }: MapProps) {
       style={{ height: '100%', width: '100%', zIndex: 1 }}
     >
       <AlertContainer countries={countries} />
-      {countries && <VectorTileLayer countries={countries} disputedAreas={disputedAreas} ipcData={ipcData} />}
+      {countries && (
+        <VectorTileLayer
+          countries={countries}
+          disputedAreas={disputedAreas}
+          ipcData={ipcData}
+          nutritionData={nutritionData}
+        />
+      )}
       {selectedMapType === GlobalInsight.FOOD &&
         countries.features &&
         countries.features
@@ -76,6 +83,7 @@ export default function Map({ countries, disputedAreas, ipcData }: MapProps) {
               selectedAlert={selectedAlert}
               setSelectedCountryId={setSelectedCountryId}
               toggleAlert={toggleAlert}
+              nutritionData={nutritionData}
             />
           ))}
       <ZoomTracker threshold={5} callback={onZoomThresholdReached} />

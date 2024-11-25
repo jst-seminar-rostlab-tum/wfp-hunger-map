@@ -28,7 +28,8 @@ function NutritionStateChoropleth({
         const match = regionNutri?.features.find((item) => item.id === stateId);
         const nutrientValue = match ? match?.properties?.nutrition[selectedNutrient as keyof Nutrition] : null;
         const formattedNutrientValue = NutritionStateChoroplethOperations.formatNutrientValue(nutrientValue);
-        const nutrientLabel = NutritionStateChoroplethOperations.nutrientLabels[selectedNutrient] || 'Unknown Nutrient';
+        const nutrientLabel =
+          NutritionStateChoroplethOperations.getNutritionLabel(selectedNutrient) || 'Unknown Nutrient';
         const tooltipContent = `
           <div class="bg-background text-foreground rounded-md shadow-md max-w-sm z-9999">
             <div class="p-4">

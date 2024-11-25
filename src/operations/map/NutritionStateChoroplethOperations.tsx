@@ -1,4 +1,16 @@
+import { NutrientOption } from '@/domain/props/NutritionStateProps.ts';
+
 export default class NutritionStateChoroplethOperations {
+  // all selectable nutrition categories
+  public static NUTRITION_OPTIONS: NutrientOption[] = [
+    { label: 'Mean Adequacy Ratio', key: 'mimi_simple' },
+    { label: 'Folate', key: 'fol_ai' },
+    { label: 'Iron', key: 'fe_ai' },
+    { label: 'Zinc', key: 'zn_ai' },
+    { label: 'Vitamin A', key: 'va_ai' },
+    { label: 'Vitamin B12', key: 'vb12_ai' },
+  ];
+
   public static formatNutrientValue = (value: number | null | undefined): string => {
     if (value === null || value === undefined) return 'N/A';
     return `${value.toFixed(1)}%`;
@@ -14,12 +26,7 @@ export default class NutritionStateChoroplethOperations {
     return '#A0A0A0';
   }
 
-  public static nutrientLabels: { [key: string]: string } = {
-    fe_ai: 'Iron',
-    fol_ai: 'Folate',
-    va_ai: 'Vitamin A',
-    vb12_ai: 'Vitamin B12',
-    zn_ai: 'Zinc',
-    mimi_simple: 'Mean Adequacy Ratio',
-  };
+  public static getNutritionLabel(key: string): string | undefined {
+    return this.NUTRITION_OPTIONS.find((o) => o.key === key)?.label;
+  }
 }

@@ -4,23 +4,13 @@ import React from 'react';
 
 import CustomAccordion from '@/components/Accordions/Accordion';
 import NutritionAccordionProps from '@/domain/props/NutritionAccordionProps';
-import { NutrientOption } from '@/domain/props/NutritionStateProps.ts';
+import NutritionStateChoroplethOperations from '@/operations/map/NutritionStateChoroplethOperations.tsx';
 
 export default function NutritionAccordion({
   setSelectedNutrient,
   selectedLabel,
   setSelectedLabel,
 }: NutritionAccordionProps) {
-  // all selectable nutrition categories
-  const NUTRITION_OPTIONS: NutrientOption[] = [
-    { label: 'Mean Adequacy Ratio', key: 'mimi_simple' },
-    { label: 'Folate', key: 'fol_ai' },
-    { label: 'Iron', key: 'fe_ai' },
-    { label: 'Zinc', key: 'zn_ai' },
-    { label: 'Vitamin A', key: 'va_ai' },
-    { label: 'Vitamin B12', key: 'vb12_ai' },
-  ];
-
   return (
     <div className="absolute left-[108px] top-4" style={{ zIndex: 1000 }}>
       <div className="absolute w-[350px] box-border">
@@ -43,12 +33,14 @@ export default function NutritionAccordion({
                       aria-label="Nutrient Selection"
                       onAction={(key) => {
                         const selectedKey = key.toString();
-                        const selectedOption = NUTRITION_OPTIONS.find((option) => option.key === selectedKey);
+                        const selectedOption = NutritionStateChoroplethOperations.NUTRITION_OPTIONS.find(
+                          (option) => option.key === selectedKey
+                        );
                         setSelectedNutrient(selectedKey);
                         setSelectedLabel(selectedOption?.label || 'Mean Adequancy Ratio');
                       }}
                     >
-                      {NUTRITION_OPTIONS.map(({ label, key }) => (
+                      {NutritionStateChoroplethOperations.NUTRITION_OPTIONS.map(({ label, key }) => (
                         <DropdownItem key={key}>{label}</DropdownItem>
                       ))}
                     </DropdownMenu>

@@ -16,3 +16,12 @@ export const useIpcQuery = () =>
     },
     cachedQueryClient
   );
+
+export const useCountryCodesQuery = () =>
+  useQuery(
+    {
+      queryKey: ['fetchCountryCodes'],
+      queryFn: globalRepo.getCountryCodes,
+    },
+    cachedQueryClient
+  );

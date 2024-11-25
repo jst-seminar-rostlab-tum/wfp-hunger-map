@@ -15,7 +15,13 @@ import PdfViewerOperations from '@/operations/pdf/PdfViewerOperations';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url).toString();
 
-export function PdfViewer({ onTooltipClick, file, onDownloadPdf, onDownloadJson, onDownloadCsv }: PdfViewerProps) {
+export function PdfViewer({
+  file,
+  onTooltipClick = () => {},
+  onDownloadPdf = () => {},
+  onDownloadJson = () => {},
+  onDownloadCsv = () => {},
+}: PdfViewerProps) {
   const [totalPages, setTotalPages] = useState<number>();
   const [pageNumber, setPageNumber] = useState(1);
   const [selectionText, setSelectionText] = useState<string | null>(null);

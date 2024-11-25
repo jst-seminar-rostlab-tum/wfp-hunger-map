@@ -314,6 +314,11 @@ export default class LineChartOperations {
         formatter() {
           return LineChartOperations.chartTooltipFormatter(data.xAxisType, this.x, this.points);
         },
+        backgroundColor: theme === 'light' ? '#F5F5F5' : '#252525',
+        style: {
+          color: theme === 'light' ? '#333333' : '#E0E0E0',
+          fontSize: '0.7rem',
+        },
       },
       exporting: {
         enabled: false, // disabling export menu icon

@@ -7,6 +7,7 @@ import { cardsWrapperClass } from '@/utils/primitives';
 import CustomAccordion from '../Accordions/Accordion';
 import CustomCard from '../Cards/Card';
 import { LineChart } from '../Charts/LineChart';
+import CustomInfoCircle from '../CustomInfoCircle/CustomInfoCircle';
 
 export default function FcsAccordion({ countryData, loading, countryIso3Data }: FcsAccordionProps) {
   const deltaOneMonth = countryData?.fcsMinus1 ? countryData.fcs - countryData.fcsMinus1 : null;
@@ -24,7 +25,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
         items={[
           {
             title: 'Food Security',
-            iconSrc: '/Images/InfoIcon.svg',
+            infoIcon: <CustomInfoCircle />,
             content: (
               <div className={cardsWrapperClass}>
                 <CustomCard
@@ -48,7 +49,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
                     {
                       imageSrc: deltaOneMonth && deltaOneMonth > 0 ? '/Images/ArrowGreen.svg' : '/Images/ArrowRed.svg',
                       text: deltaOneMonth ? `${deltaOneMonth.toFixed(2)} M` : 'N/A',
-                      timeText: '1 Months ago',
+                      timeText: '1 Month ago',
                       altText: 'Icon',
                     },
                     {
@@ -65,7 +66,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
           },
           {
             title: 'Food Security Trends',
-            iconSrc: '/Images/InfoIcon.svg',
+            infoIcon: <CustomInfoCircle />,
             content: (
               <div>
                 {fcsChartData ? (
@@ -73,18 +74,24 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
                     title="Trend of the number of people with insufficient food consumption"
                     data={fcsChartData}
                     expandable
+                    xAxisSlider
                     small
+                    noPadding
+                    transparentBackground
                   />
                 ) : (
                   <p>No data about insufficient food consumption</p>
                 )}
-                <Spacer y={1} />
+                <Spacer y={6} />
                 {rcsiChartData ? (
                   <LineChart
                     title="Trend of the number of people using crisis or above crisis food-based coping"
                     data={rcsiChartData}
                     expandable
+                    xAxisSlider
                     small
+                    noPadding
+                    transparentBackground
                   />
                 ) : (
                   <p>No data about crisis or above crisis food-based coping</p>
@@ -94,7 +101,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
           },
           {
             title: 'Macro-economic',
-            iconSrc: '/Images/InfoIcon.svg',
+            infoIcon: <CustomInfoCircle />,
             content: (
               <div className={cardsWrapperClass}>
                 <CustomCard
@@ -114,11 +121,18 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
           },
           {
             title: 'Currency Exchange',
-            iconSrc: '/Images/InfoIcon.svg',
+            infoIcon: <CustomInfoCircle />,
             content: (
               <div>
                 {currencyExchangeChartData ? (
-                  <LineChart data={currencyExchangeChartData} expandable small />
+                  <LineChart
+                    data={currencyExchangeChartData}
+                    expandable
+                    xAxisSlider
+                    small
+                    noPadding
+                    transparentBackground
+                  />
                 ) : (
                   <p>No data about currency exchange</p>
                 )}
@@ -127,11 +141,18 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
           },
           {
             title: 'Balance of Trade',
-            iconSrc: '/Images/InfoIcon.svg',
+            infoIcon: <CustomInfoCircle />,
             content: (
               <div>
                 {balanceOfTradeChartData ? (
-                  <LineChart data={balanceOfTradeChartData} expandable small />
+                  <LineChart
+                    data={balanceOfTradeChartData}
+                    expandable
+                    xAxisSlider
+                    small
+                    noPadding
+                    transparentBackground
+                  />
                 ) : (
                   <p>No data about balance of trade</p>
                 )}
@@ -140,11 +161,19 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
           },
           {
             title: 'Headline and food inflation',
-            iconSrc: '/Images/InfoIcon.svg',
+            infoIcon: <CustomInfoCircle />,
             content: (
               <div>
                 {headlineAndFoodInflationChartData ? (
-                  <LineChart data={headlineAndFoodInflationChartData} expandable small />
+                  <LineChart
+                    data={headlineAndFoodInflationChartData}
+                    expandable
+                    xAxisSlider
+                    barChartSwitch
+                    small
+                    noPadding
+                    transparentBackground
+                  />
                 ) : (
                   <p>No data about headline and food inflation</p>
                 )}

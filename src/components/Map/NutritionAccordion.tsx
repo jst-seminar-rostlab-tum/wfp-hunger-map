@@ -3,6 +3,7 @@ import { ArrowDown2 } from 'iconsax-react';
 import React from 'react';
 
 import CustomAccordion from '@/components/Accordions/Accordion';
+import CustomInfoCircle from '@/components/CustomInfoCircle/CustomInfoCircle';
 import { NutrientType } from '@/domain/enums/NutrientType.ts';
 import NutritionAccordionProps from '@/domain/props/NutritionAccordionProps';
 import NutritionStateChoroplethOperations from '@/operations/map/NutritionStateChoroplethOperations';
@@ -15,7 +16,7 @@ export default function NutritionAccordion({ setSelectedNutrient, selectedNutrie
           items={[
             {
               title: 'Micronutrients',
-              iconSrc: '/Images/InfoIcon.svg',
+              infoIcon: <CustomInfoCircle />,
               description: 'Population at Risk of Inadequate Micronutrient Intake',
               content: (
                 <div className="flex flex-row gap-4 justify-center flex-wrap pb-8">

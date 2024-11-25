@@ -2,7 +2,7 @@ import 'leaflet/dist/leaflet.css';
 
 import { Feature, GeoJsonProperties, Geometry } from 'geojson';
 import { useState } from 'react';
-import { MapContainer, ZoomControl } from 'react-leaflet';
+import { MapContainer } from 'react-leaflet';
 
 import { MAP_MAX_ZOOM, MAP_MIN_ZOOM } from '@/domain/constant/map/Map';
 import { useSelectedAlert } from '@/domain/contexts/SelectedAlertContext';
@@ -15,7 +15,7 @@ import { AlertContainer } from './Alerts/AlertContainer';
 import FcsChoropleth from './FcsChoropleth';
 import NutritionChoropleth from './NutritionChoropleth';
 import VectorTileLayer from './VectorTileLayer';
-import ZoomTracker from './ZoomTracker';
+import ZoomControl from './ZoomControl';
 
 export default function Map({ countries, disputedAreas, ipcData, nutritionData }: MapProps) {
   const { selectedMapType } = useSelectedMap();
@@ -86,8 +86,7 @@ export default function Map({ countries, disputedAreas, ipcData, nutritionData }
               nutritionData={nutritionData}
             />
           ))}
-      <ZoomTracker threshold={5} callback={onZoomThresholdReached} />
-      <ZoomControl position="bottomright" />
+      <ZoomControl threshold={5} callback={onZoomThresholdReached} />
     </MapContainer>
   );
 }

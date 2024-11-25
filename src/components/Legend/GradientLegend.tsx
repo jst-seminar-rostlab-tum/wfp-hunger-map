@@ -8,7 +8,7 @@ export default function GradientLegend({
   endLabel,
 }: GradientLegendProps) {
   return (
-    <div className="relative flex flex-col items-center w-96 px-4 py-3">
+    <div className="relative flex flex-col items-center w-full md:w-96 px-4 py-3">
       <div
         className="flex items-center w-full h-2 rounded-full"
         style={{

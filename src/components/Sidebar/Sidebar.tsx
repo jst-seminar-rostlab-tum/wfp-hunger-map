@@ -58,7 +58,18 @@ export function Sidebar() {
               <div className="flex flex-col gap-1 pt-1">
                 {SidebarOperations.getSidebarMapTypes().map((item) => (
                   <Button
-                    startContent={item.icon && <NextImage src={item.icon} alt={item.label} width={24} height={24} />}
+                    startContent={
+                      item.icon && (
+                        <NextImage
+                          unoptimized
+                          loading="eager"
+                          src={item.icon}
+                          alt={item.label}
+                          width={24}
+                          height={24}
+                        />
+                      )
+                    }
                     key={item.key}
                     variant={selectedMapType === item.key ? undefined : 'light'}
                     className={clsx(

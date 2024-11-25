@@ -29,7 +29,7 @@ export function CollapsedSidebar() {
                 className={selectedMapType === item.key ? 'bg-primary' : undefined}
                 onClick={() => setSelectedMapType(item.key)}
               >
-                <NextImage src={item.icon} alt={item.label} width={24} height={24} />
+                <NextImage unoptimized loading="eager" src={item.icon} alt={item.label} width={24} height={24} />
               </Button>
             ))}
           </div>

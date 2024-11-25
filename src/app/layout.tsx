@@ -29,7 +29,9 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html suppressHydrationWarning lang="en">
-      <head />
+      <head>
+        <link rel="preload" href="/wfp_logo.svg" as="image" />
+      </head>
       <body className={clsx('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
         <Providers themeProps={{ attribute: 'class', defaultTheme: 'dark' }}>
           <div className="relative h-screen">

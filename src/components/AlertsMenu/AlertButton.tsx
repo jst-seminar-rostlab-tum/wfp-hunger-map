@@ -24,6 +24,8 @@ export const AlertButton = forwardRef<HTMLButtonElement, AlertButtonProps>(
       >
         <div className="w-6 h-6 flex items-center justify-center relative">
           <NextImage
+            unoptimized
+            loading="eager"
             src={icon}
             alt={label}
             className="object-contain w-auto h-auto max-w-full max-h-full"

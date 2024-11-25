@@ -20,13 +20,15 @@ export default function NutritionChoropleth({
 }: NutritionChoroplethProps) {
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
   const map = useMap();
+
   const [regionData, setRegionData] = useState<FeatureCollection<Geometry, GeoJsonProperties> | undefined>();
   const [regionNutritionData, setRegionNutritionData] = useState<CountryMimiData | undefined>();
   const [countryStyles, setCountryStyles] = useState<{ [key: number]: L.PathOptions }>({});
 
+  // given the `CountryNutrition` data -> parse the data to map country styling
   useEffect(() => {
-    const countrStyles = NutritionChoroplethOperations.getCountryStyles(nutritionData)
-    setCountryStyles(countrStyles);
+    const parsedStyles = NutritionChoroplethOperations.getCountryStyles(nutritionData);
+    setCountryStyles(parsedStyles);
   }, [nutritionData]);
 
   if (selectedAlert) {
@@ -56,9 +58,12 @@ export default function NutritionChoropleth({
           )
         }
       />
-      {regionData && countryId === selectedCountryId && (
-        <NutritionStateChoropleth regionData={regionData} regionNutri={regionNutritionData} />
-      )}
+      {
+        // if this country ('countryId') is selected and data is loaded ('regionData') show Choropleth for all states
+        regionData && countryId === selectedCountryId && (
+          <NutritionStateChoropleth regionData={regionData} regionNutri={regionNutritionData} />
+        )
+      }
     </div>
   );
 }

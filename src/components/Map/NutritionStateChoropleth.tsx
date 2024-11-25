@@ -10,16 +10,18 @@ import NutritionStateChoroplethOperations from '@/operations/map/NutritionStateC
 import NutritionAccordion from './NutritionAccordion';
 import NutritionStateLegend from './NutritionStateLegend';
 
-function NutritionStateChoropleth({
+export default function NutritionStateChoropleth({
   regionNutri,
   regionData,
   handleClick = () => {},
   tooltip,
 }: NutritionStateChoroplethProps) {
-  const [selectedNutrient, setSelectedNutrient] = useState<string>('mimi_simple');
-  const [selectedLabel, setSelectedLabel] = useState<string>('Mean Adequacy Ratio');
   const layersRef = useRef<LayerWithFeature[]>([]);
 
+  const [selectedNutrient, setSelectedNutrient] = useState<string>('mimi_simple');
+  const [selectedLabel, setSelectedLabel] = useState<string>('Mean Adequacy Ratio');
+
+  // based on the selected nutrient -> setup heatmap layer
   useEffect(() => {
     layersRef.current.forEach((layer) => {
       const { feature } = layer;
@@ -85,5 +87,3 @@ function NutritionStateChoropleth({
     </>
   );
 }
-
-export default NutritionStateChoropleth;

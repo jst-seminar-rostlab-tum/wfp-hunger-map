@@ -4,7 +4,7 @@ import React from 'react';
 
 import CustomAccordion from '@/components/Accordions/Accordion';
 import NutritionAccordionProps from '@/domain/props/NutritionAccordionProps';
-import NutritionStateChoroplethOperations from '@/operations/map/NutritionStateChoroplethOperations.tsx';
+import NutritionStateChoroplethOperations from '@/operations/map/NutritionStateChoroplethOperations';
 
 export default function NutritionAccordion({
   setSelectedNutrient,

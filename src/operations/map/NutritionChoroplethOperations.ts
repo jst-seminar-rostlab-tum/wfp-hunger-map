@@ -6,7 +6,7 @@ import { CountryMimiData } from '@/domain/entities/country/CountryMimiData';
 import { CountryNutrition } from '@/domain/entities/country/CountryNutrition.ts';
 import CountryRepository from '@/domain/repositories/CountryRepository';
 
-class NutritionChoroplethOperations {
+export default class NutritionChoroplethOperations {
   private static getFillColor(dataType: string): string {
     switch (dataType) {
       case 'actual':
@@ -94,5 +94,3 @@ class NutritionChoroplethOperations {
     fillOpacity: 0,
   };
 }
-
-export default NutritionChoroplethOperations;

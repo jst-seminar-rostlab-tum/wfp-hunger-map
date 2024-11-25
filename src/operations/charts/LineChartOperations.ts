@@ -26,7 +26,12 @@ export default class LineChartOperations {
    * The first four line colors are fixed; if more than four lines are rendered,
    * the default Highcharts colors will be used.
    */
-  private static LINE_COLORS = ['#FFB74D', '#157DBC', '#85E77C', '#FF5252'];
+  private static LINE_COLORS = [
+    'hsl(var(--nextui-clusterOrange))',
+    'hsl(var(--nextui-clusterBlue))',
+    'hsl(var(--nextui-clusterGreen))',
+    'hsl(var(--nextui-clusterRed))',
+  ];
 
   /**
    * Formatter function for `LineChart.Options.tooltip.formatter` usage only.
@@ -151,7 +156,6 @@ export default class LineChartOperations {
    * can be manipulated; important: if a min is defined a max must be defined as well and vice versa.
    *
    * @param data `LineChartData` object, containing all data to be plotted in the chart
-   * @param theme current theme ('light' or 'dark')
    * @param roundLines if true, all plotted lines will be rounded
    * @param barChart if true, bars are plotted instead of lines
    * @param xAxisSelectedMinIdx index of selected x-axis range min value
@@ -159,7 +163,6 @@ export default class LineChartOperations {
    */
   public static getHighChartOptions(
     data: LineChartData,
-    theme: string | undefined,
     roundLines?: boolean,
     xAxisSelectedMinIdx?: number,
     xAxisSelectedMaxIdx?: number,
@@ -271,35 +274,37 @@ export default class LineChartOperations {
       legend: {
         itemStyle: {
           fontSize: '0.7rem',
-          color: theme === 'light' ? '#4f4f4f' : '#b6b6b6',
+          color: 'hsl(var(--nextui-secondary))',
         },
         itemHoverStyle: {
-          color: '#005489',
+          color: 'hsl(var(--nextui-hover))',
         },
       },
       xAxis: {
         type: data.xAxisType,
         labels: {
           style: {
-            color: '#7a7a7a',
+            color: 'hsl(var(--nextui-secondary))',
             fontSize: '0.7rem',
           },
           formatter() {
             return LineChartOperations.chartXAxisFormatter(data.xAxisType, this.value);
           },
         },
-        lineColor: '#7a7a7a',
+        lineColor: 'hsl(var(--nextui-chartsXAxisLine))',
+        tickColor: 'hsl(var(--nextui-chartsXAxisLine))',
+        tickLength: 4,
       },
       yAxis: {
         title: {
           text: data.yAxisLabel,
           style: {
-            color: '#7a7a7a',
+            color: 'hsl(var(--nextui-secondary))',
           },
         },
         labels: {
           style: {
-            color: '#7a7a7a',
+            color: 'hsl(var(--nextui-secondary))',
             fontSize: '0.7rem',
           },
           formatter() {
@@ -307,16 +312,16 @@ export default class LineChartOperations {
           },
         },
         lineColor: 'transparent',
-        gridLineColor: theme === 'light' ? '#e1e1e1' : '#2a2a2a',
+        gridLineColor: 'hsl(var(--nextui-clickableSecondary))',
       },
       tooltip: {
         shared: true,
         formatter() {
           return LineChartOperations.chartTooltipFormatter(data.xAxisType, this.x, this.points);
         },
-        backgroundColor: theme === 'light' ? '#F5F5F5' : '#252525',
+        backgroundColor: 'hsl(var(--nextui-chartsLegendBackground))',
         style: {
-          color: theme === 'light' ? '#333333' : '#E0E0E0',
+          color: 'hsl(var(--nextui-foreground))',
           fontSize: '0.7rem',
         },
       },

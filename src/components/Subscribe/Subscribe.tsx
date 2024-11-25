@@ -3,7 +3,7 @@
 import { Button, Divider, Input, Select, SelectItem } from '@nextui-org/react';
 import { motion } from 'framer-motion';
 import { ChartCircle, CloseCircle, Facebook, Instagram, TickCircle, Twitch, Youtube } from 'iconsax-react';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import container from '@/container';
 import {
@@ -13,7 +13,7 @@ import {
   SUCCESSFUL_SUBSCRIPTION,
   UNSUCCESSFUL_SUBSCRIPTION,
 } from '@/domain/constant/subscribe/Subscribe';
-import { SubscribeStatus, SubscribeTopic } from '@/domain/enums/SubscribeTopic';
+import { SubscribeStatus } from '@/domain/enums/SubscribeTopic';
 import SubscriptionRepository from '@/domain/repositories/SubscriptionRepository';
 
 import { SocialLink } from './SocialLink';
@@ -24,6 +24,7 @@ export default function SubscriptionForm() {
   const [organization, setOrganization] = useState('');
   const [email, setEmail] = useState('');
   const [selectedTopic, setSelectedTopic] = useState<string>('');
+  const [options, setOptions] = useState<string[]>([]);
 
   const [isNameInvalid, setIsNameInvalid] = useState(false);
   const [isEmailInvalid, setIsEmailInvalid] = useState(false);
@@ -61,13 +62,13 @@ export default function SubscriptionForm() {
       // Handle form submission here and interact with the backend
       try {
         setIsWaitingSubResponse(true);
-        // TODO: backend integration not working rn
         await subscribe
           .subscribe({
             name,
             email,
-            selectedTopic,
+            topicId: selectedTopic,
             organization,
+            options,
           })
           .then((res) => {
             if (res) {
@@ -78,30 +79,20 @@ export default function SubscriptionForm() {
               setIsWaitingSubResponse(false);
             }
           });
-        // TODO: Mock response to be removed later
-        // console.log({
-        //   name,
-        //   email,
-        //   selectedTopic,
-        //   organization,
-        // });
-        // const response = false;
-        // if (response) {
-        //   setTimeout(() => {
-        //     setSubscribeStatus(SubscribeStatus.Success);
-        //     setIsWaitingSubResponse(false);
-        //   }, 2000);
-        // } else {
-        //   setTimeout(() => {
-        //     setSubscribeStatus(SubscribeStatus.Error);
-        //     setIsWaitingSubResponse(false);
-        //   }, 2000);
-        // }
       } catch (err) {
         throw new Error(err instanceof Error ? err.message : String(err));
       }
     }
   };
+
+  // use subscribe.getSubscribeTopics() to get the topics, when the component initializes
+  // and set it to the state
+  useEffect(() => {
+    subscribe.getSubscribeTopic().then((topic) => {
+      console.log(topics);
+      setTopics(topics);
+    });
+  }, []);
 
   return (
     <div className="flex flex-col items-center">
@@ -141,7 +132,7 @@ export default function SubscriptionForm() {
           onChange={(changeOrgEvent) => setOrganization(changeOrgEvent.target.value)}
           value={organization}
         />
-        <Select
+        {/*         <Select
           label="Topic"
           placeholder="Please select a topic"
           selectedKeys={selectedTopic ? [selectedTopic] : []}
@@ -156,7 +147,7 @@ export default function SubscriptionForm() {
               {value}
             </SelectItem>
           ))}
-        </Select>
+        </Select> */}
 
         <Button
           type="submit"

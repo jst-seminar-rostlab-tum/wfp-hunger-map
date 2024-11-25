@@ -1,6 +1,13 @@
+export interface ITopic {
+  id: string;
+  name: string;
+  options: string[];
+}
+
 export interface ISubscribe {
   name: string;
   email: string;
-  selectedTopic?: string;
-  organization?: string;
+  topicId: string;
+  organization: string;
+  options: string[];
 }

@@ -15,7 +15,12 @@ export const AlertButton = forwardRef<HTMLButtonElement, AlertButtonProps>(
         isIconOnly
         radius="full"
         className={clsx(
-          { 'bg-content2': isSidebarOpen, 'bg-content1': !isSidebarOpen, 'bg-primary': !isLoading && isSelected },
+          {
+            'bg-content2': isSidebarOpen,
+            'bg-content1': !isSidebarOpen,
+            'bg-primary': !isLoading && isSelected,
+            'shadow-medium': !isSidebarOpen,
+          },
           className
         )}
         onClick={onClick}

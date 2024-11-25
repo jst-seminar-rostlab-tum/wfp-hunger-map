@@ -9,6 +9,7 @@ import { useMediaQuery } from '@/utils/resolution';
 import CustomAccordion from '../Accordions/Accordion';
 import PopupModal from '../PopupModal/PopupModal';
 import { Tooltip } from '../Tooltip/Tooltip';
+import CustomInfoCircle from '../CustomInfoCircle/CustomInfoCircle';
 import GradientLegend from './GradientLegend';
 import PointLegend from './PointLegend';
 
@@ -22,7 +23,7 @@ export default function LegendContainer({ items, loading = false }: LegendContai
         loading={loading}
         items={items.map((item) => ({
           title: item.title,
-          iconSrc: '/Images/InfoIcon.svg',
+          infoIcon: <CustomInfoCircle />,
           tooltipInfo: item.tooltipInfo,
           content: LegendOperations.isGradientLegendContainerItem(item) ? (
             <GradientLegend {...item} />

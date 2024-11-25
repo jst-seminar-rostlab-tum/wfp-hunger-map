@@ -34,15 +34,17 @@ export function Sidebar() {
   }
 
   return (
-    <div className="absolute top-0 left-0 z-50 h-screen p-4">
+    <div className="w-screen h-screen absolute top-0 left-0 z-sidebar sm:w-auto sm:h-screen sm:p-4">
       <Card
         classNames={{
-          base: 'h-full',
+          base: 'h-full rounded-none sm:rounded-large',
           header: 'flex flex-col gap-4 w-full items-start',
+          body: 'flex-grow overflow-auto min-h-[100px]',
+          footer: 'flex-shrink-0',
         }}
       >
         <CardHeader>
-          <div className="flex items-center w-full gap-2">
+          <div className="flex items-center w-full gap-2 justify-between">
             <LogoWithText />
             <Button isIconOnly variant="light" onClick={toggleSidebar} aria-label="Close sidebar">
               <SidebarLeft size={24} />
@@ -53,7 +55,7 @@ export function Sidebar() {
         </CardHeader>
         <CardBody>
           <ScrollShadow className="w-full h-full">
-            <div className="p-1 w-full">
+            <div className="w-full">
               <span className="text-tiny text-foreground-500 pl-1">Global Insights</span>
               <div className="flex flex-col gap-1 pt-1">
                 {SidebarOperations.getSidebarMapTypes().map((item) => (
@@ -83,7 +85,7 @@ export function Sidebar() {
                 ))}
               </div>
             </div>
-            <div className="p-1 w-full">
+            <div className="w-full">
               <span className="text-tiny text-foreground-500 pl-1">Alerts</span>
               <div className="pt-1">
                 <AlertsMenu variant={AlertsMenuVariant.Inside} />
@@ -108,7 +110,7 @@ export function Sidebar() {
             <ul className="pl-3">
               {pageLinks.map((page) => (
                 <li key={page.label}>
-                  <Link href={page.href} size="sm" color="foreground" className="text-opacity-80">
+                  <Link href={page.href} color="foreground" className="text-tiny text-opacity-80">
                     {page.label}
                   </Link>
                 </li>

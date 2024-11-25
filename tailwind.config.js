@@ -17,6 +17,7 @@ const config = {
     'pl-[179px]',
     'pl-[320px]',
     'z-[9999]',
+    'z-sidebar',
     'bg-conflictProtest',
     'bg-conflictRiot',
     'bg-conflictBattle',
@@ -77,6 +78,7 @@ const config = {
       },
       zIndex: {
         9999: '9999',
+        sidebar: '99999',
       },
       animation: {
         blink: 'blink 1s step-end infinite',

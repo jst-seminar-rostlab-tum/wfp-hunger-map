@@ -9,17 +9,12 @@ import { CustomButtonProps } from '@/domain/props/CustomButtonProps';
  * @param variant solid | bordered | flat
  */
 
-export function CustomButton({ children, color, ...attributes }: CustomButtonProps) {
+export function CustomButton({ children, ...attributes }: CustomButtonProps) {
   const { variant } = attributes;
 
   return (
     <Button
       {...attributes}
-      style={{
-        backgroundColor: color,
-        minWidth: '120px',
-        textAlign: 'center',
-      }}
       className={clsx({
         'hover:bg-outlinedHover': variant === 'bordered',
         'hover:bg-hover dark:text-foreground': variant === 'flat' || variant === 'solid',

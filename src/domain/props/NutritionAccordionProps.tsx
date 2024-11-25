@@ -1,7 +1,8 @@
 import React from 'react';
 
+import { NutrientType } from '@/domain/enums/NutrientType.ts';
+
 export default interface NutritionAccordionProps {
-  setSelectedNutrient: React.Dispatch<React.SetStateAction<string>>;
-  selectedLabel: string;
-  setSelectedLabel: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedNutrient: React.Dispatch<React.SetStateAction<NutrientType>>;
+  selectedNutrient: NutrientType;
 }

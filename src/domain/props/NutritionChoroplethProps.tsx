@@ -1,7 +1,8 @@
 import { FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
 
-import { AlertType } from '../enums/AlertType';
 import { CountryNutrition } from '@/domain/entities/country/CountryNutrition.ts';
+
+import { AlertType } from '../enums/AlertType';
 
 export default interface NutritionChoroplethProps {
   data: FeatureCollection<Geometry, GeoJsonProperties>;

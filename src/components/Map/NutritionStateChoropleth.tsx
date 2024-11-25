@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { GeoJSON } from 'react-leaflet';
 
 import { Nutrition } from '@/domain/entities/region/RegionNutritionProperties.ts';
+import { NutrientType } from '@/domain/enums/NutrientType.ts';
 import { LayerWithFeature, NutritionStateChoroplethProps } from '@/domain/props/NutritionStateProps';
 import NutritionStateChoroplethOperations from '@/operations/map/NutritionStateChoroplethOperations';
 
@@ -18,8 +19,7 @@ export default function NutritionStateChoropleth({
 }: NutritionStateChoroplethProps) {
   const layersRef = useRef<LayerWithFeature[]>([]);
 
-  const [selectedNutrient, setSelectedNutrient] = useState<string>('mimi_simple');
-  const [selectedLabel, setSelectedLabel] = useState<string>('Mean Adequacy Ratio');
+  const [selectedNutrient, setSelectedNutrient] = useState<NutrientType>(NutrientType.MINI_SIMPLE);
 
   // based on the selected nutrient -> setup heatmap layer
   useEffect(() => {
@@ -30,8 +30,7 @@ export default function NutritionStateChoropleth({
         const match = regionNutri?.features.find((item) => item.id === stateId);
         const nutrientValue = match ? match?.properties?.nutrition[selectedNutrient as keyof Nutrition] : null;
         const formattedNutrientValue = NutritionStateChoroplethOperations.formatNutrientValue(nutrientValue);
-        const nutrientLabel =
-          NutritionStateChoroplethOperations.getNutritionLabel(selectedNutrient) || 'Unknown Nutrient';
+        const nutrientLabel = NutritionStateChoroplethOperations.getNutrientLabel(selectedNutrient);
         const tooltipContent = `
           <div class="bg-background text-foreground rounded-md shadow-md max-w-sm z-9999">
             <div class="p-4">
@@ -77,11 +76,7 @@ export default function NutritionStateChoropleth({
 
   return (
     <>
-      <NutritionAccordion
-        setSelectedNutrient={setSelectedNutrient}
-        selectedLabel={selectedLabel}
-        setSelectedLabel={setSelectedLabel}
-      />
+      <NutritionAccordion setSelectedNutrient={setSelectedNutrient} selectedNutrient={selectedNutrient} />
       <GeoJSON data={regionData} style={dynamicStyle} onEachFeature={onEachFeature} />
       <NutritionStateLegend />
     </>

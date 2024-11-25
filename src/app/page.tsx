@@ -17,7 +17,7 @@ export default async function Home() {
     countryMapDataPromise,
     disputedAreasPromise,
     ipcDataPromise,
-    nutritionDataPromise
+    nutritionDataPromise,
   ]);
 
   return (

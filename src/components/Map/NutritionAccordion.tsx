@@ -3,14 +3,11 @@ import { ArrowDown2 } from 'iconsax-react';
 import React from 'react';
 
 import CustomAccordion from '@/components/Accordions/Accordion';
+import { NutrientType } from '@/domain/enums/NutrientType.ts';
 import NutritionAccordionProps from '@/domain/props/NutritionAccordionProps';
 import NutritionStateChoroplethOperations from '@/operations/map/NutritionStateChoroplethOperations';
 
-export default function NutritionAccordion({
-  setSelectedNutrient,
-  selectedLabel,
-  setSelectedLabel,
-}: NutritionAccordionProps) {
+export default function NutritionAccordion({ setSelectedNutrient, selectedNutrient }: NutritionAccordionProps) {
   return (
     <div className="absolute left-[108px] top-4" style={{ zIndex: 1000 }}>
       <div className="absolute w-[350px] box-border">
@@ -25,23 +22,21 @@ export default function NutritionAccordion({
                   <Dropdown>
                     <DropdownTrigger>
                       <Button variant="solid" color="default">
-                        {selectedLabel}
+                        {NutritionStateChoroplethOperations.getNutrientLabel(selectedNutrient)}
                         <ArrowDown2 className="h-4 w-4" />
                       </Button>
                     </DropdownTrigger>
                     <DropdownMenu
                       aria-label="Nutrient Selection"
                       onAction={(key) => {
-                        const selectedKey = key.toString();
-                        const selectedOption = NutritionStateChoroplethOperations.NUTRITION_OPTIONS.find(
-                          (option) => option.key === selectedKey
-                        );
-                        setSelectedNutrient(selectedKey);
-                        setSelectedLabel(selectedOption?.label || 'Mean Adequancy Ratio');
+                        const newSelectedNutrient = key as NutrientType;
+                        setSelectedNutrient(newSelectedNutrient);
                       }}
                     >
-                      {NutritionStateChoroplethOperations.NUTRITION_OPTIONS.map(({ label, key }) => (
-                        <DropdownItem key={key}>{label}</DropdownItem>
+                      {Object.values(NutrientType).map((nutrient: NutrientType) => (
+                        <DropdownItem key={nutrient}>
+                          {NutritionStateChoroplethOperations.getNutrientLabel(nutrient)}
+                        </DropdownItem>
                       ))}
                     </DropdownMenu>
                   </Dropdown>

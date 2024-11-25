@@ -18,9 +18,5 @@ export default function MapLegend() {
     setItems(mapLegendData(selectedMapType, selectedAlert));
   }, [selectedAlert, selectedMapType]);
 
-  return (
-    <div className="absolute bottom-5 right-14 z-50">
-      <LegendContainer items={items} />
-    </div>
-  );
+  return <LegendContainer items={items} />;
 }

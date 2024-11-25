@@ -1,5 +1,4 @@
 import { Button } from '@nextui-org/button';
-import { Information } from 'iconsax-react';
 import { useState } from 'react';
 
 import LegendContainerProps from '@/domain/props/LegendContainerProps';
@@ -7,9 +6,9 @@ import { LegendOperations } from '@/operations/legends/LegendOperations.ts';
 import { useMediaQuery } from '@/utils/resolution';
 
 import CustomAccordion from '../Accordions/Accordion';
+import CustomInfoCircle from '../CustomInfoCircle/CustomInfoCircle';
 import PopupModal from '../PopupModal/PopupModal';
 import { Tooltip } from '../Tooltip/Tooltip';
-import CustomInfoCircle from '../CustomInfoCircle/CustomInfoCircle';
 import GradientLegend from './GradientLegend';
 import PointLegend from './PointLegend';
 
@@ -43,7 +42,7 @@ export default function LegendContainer({ items, loading = false }: LegendContai
         relative flex items-center justify-center min-w-12 h-12 px-1 rounded-full bg-content1 shadow-md"
           >
             {/* TODO: Icon to be modified */}
-            <Information size={32} />
+            <CustomInfoCircle size={32} />
           </Button>
         </Tooltip>
       </div>

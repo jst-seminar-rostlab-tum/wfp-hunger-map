@@ -30,7 +30,7 @@ export default function ZoomControl({ threshold, callback }: ZoomControlProps) {
   }, [map, threshold, callback]);
 
   return (
-    <div className="absolute right-2 bottom-7 z-9999 flex flex-col">
+    <div className="absolute right-4 bottom-7 z-9999 flex flex-col shadow-lg">
       <Button
         isDisabled={zoomLevel === MAP_MAX_ZOOM}
         size="sm"

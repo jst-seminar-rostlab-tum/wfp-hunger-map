@@ -34,7 +34,7 @@ export function Sidebar() {
   }
 
   return (
-    <div className="w-screen h-screen absolute top-0 left-0 z-sidebar sm:w-auto sm:h-screen sm:p-4">
+    <div className="w-screen h-screen absolute top-0 left-0 z-sidebar sm:w-auto sm:h-[calc(100vh-3.5rem)] sm:mt-4 sm:ml-4 sm:mb-10">
       <Card
         classNames={{
           base: 'h-full rounded-none sm:rounded-large',

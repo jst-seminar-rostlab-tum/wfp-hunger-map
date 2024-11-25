@@ -18,7 +18,9 @@ export const AlertButton = forwardRef<HTMLButtonElement, AlertButtonProps>(
           {
             'bg-content2': isSidebarOpen,
             'bg-content1': !isSidebarOpen,
+            'hover:bg-content2': !isSidebarOpen,
             'bg-primary': !isLoading && isSelected,
+            'hover:bg-hover': !isLoading && isSelected,
             'shadow-medium': !isSidebarOpen,
           },
           className

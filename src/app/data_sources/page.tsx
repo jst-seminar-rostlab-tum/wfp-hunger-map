@@ -21,7 +21,7 @@ function Page() {
         </StyledLink>
         .
       </p>
-      <CustomAccordion items={dataSourceAccordionItems} />
+      <CustomAccordion items={dataSourceAccordionItems} multipleSelectionMode />
     </section>
   );
 }

@@ -1,7 +1,7 @@
 export interface ITopic {
   id: string;
   name: string;
-  options: string[];
+  options?: string[];
 }
 
 export interface ISubscribe {
@@ -9,5 +9,5 @@ export interface ISubscribe {
   email: string;
   topicId: string;
   organization: string;
-  options: string[];
+  options?: string[];
 }

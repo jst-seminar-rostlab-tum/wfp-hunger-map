@@ -49,7 +49,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
                     {
                       imageSrc: deltaOneMonth && deltaOneMonth > 0 ? '/Images/ArrowGreen.svg' : '/Images/ArrowRed.svg',
                       text: deltaOneMonth ? `${deltaOneMonth.toFixed(2)} M` : 'N/A',
-                      timeText: '1 Months ago',
+                      timeText: '1 Month ago',
                       altText: 'Icon',
                     },
                     {

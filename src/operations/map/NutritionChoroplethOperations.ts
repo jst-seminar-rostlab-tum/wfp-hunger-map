@@ -7,7 +7,7 @@ import CountryRepository from '@/domain/repositories/CountryRepository';
 import { GlobalDataRepository } from '@/domain/repositories/GlobalDataRepository';
 
 class NutritionChoroplethOperations {
-  static getFillColor(dataType: string): string {
+  public static getFillColor(dataType: string): string {
     switch (dataType) {
       case 'actual':
         return '#FFB74D';
@@ -18,7 +18,7 @@ class NutritionChoroplethOperations {
     }
   }
 
-  static async fetchAndSetCountryStyles(setCountryStyles: (styles: { [key: number]: L.PathOptions }) => void) {
+  public static async fetchAndSetCountryStyles(setCountryStyles: (styles: { [key: number]: L.PathOptions }) => void) {
     const global = await container.resolve<GlobalDataRepository>('GlobalDataRepository').getNutritionData();
     if (global && Array.isArray(global.body)) {
       const styles = global.body.reduce(
@@ -38,7 +38,7 @@ class NutritionChoroplethOperations {
     }
   }
 
-  static async handleCountryClick(
+  private static async handleCountryClick(
     feature: Feature<Geometry, GeoJsonProperties>,
     bounds: L.LatLngBounds,
     map: L.Map,
@@ -62,7 +62,7 @@ class NutritionChoroplethOperations {
     }
   }
 
-  static onEachFeature(
+  public static onEachFeature(
     feature: Feature<Geometry, GeoJsonProperties>,
     layer: L.Layer,
     map: L.Map,

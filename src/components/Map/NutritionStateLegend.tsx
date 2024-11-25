@@ -12,6 +12,7 @@ export default function NutritionStateLegend() {
     middleColor: 'nutritionGradientMiddle',
     tooltipInfo: 'Shows the inadequate ratio of nutrient intake.',
   };
+
   return (
     <div className="absolute bottom-5 right-0 z-50 pr-10">
       <LegendContainer items={[legendItem]} />

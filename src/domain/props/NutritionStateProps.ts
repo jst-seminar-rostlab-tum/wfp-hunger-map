@@ -1,4 +1,4 @@
-import { GeoJsonProperties, Geometry } from 'geojson';
+import { Feature, FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
 import { Layer } from 'leaflet';
 import React from 'react';
 
@@ -9,16 +9,9 @@ export interface NutrientOption {
   key: string;
 }
 
-export interface AccordionItem {
-  title: string;
-  iconSrc: string;
-  description: string;
-  content: JSX.Element;
-}
-
 export interface NutritionStateChoroplethProps {
   regionNutri: CountryMimiData | undefined;
-  regionData: GeoJSON.FeatureCollection<Geometry, GeoJsonProperties>;
+  regionData: FeatureCollection<Geometry, GeoJsonProperties>;
   handleClick?: (feature: GeoJsonProperties) => void;
   tooltip?: { className?: string };
 }
@@ -31,5 +24,5 @@ export interface NutrientAccordionProps {
 }
 
 export type LayerWithFeature = Layer & {
-  feature?: GeoJSON.Feature<Geometry, GeoJsonProperties>;
+  feature?: Feature<Geometry, GeoJsonProperties>;
 };

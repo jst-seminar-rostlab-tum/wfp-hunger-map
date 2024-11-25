@@ -1,4 +1,5 @@
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react';
+import { ArrowDown2 } from 'iconsax-react';
 import React from 'react';
 
 import CustomAccordion from '@/components/Accordions/Accordion';
@@ -35,6 +36,7 @@ export default function NutritionAccordion({
                     <DropdownTrigger>
                       <Button variant="solid" color="default">
                         {selectedLabel}
+                        <ArrowDown2 className="h-4 w-4" />
                       </Button>
                     </DropdownTrigger>
                     <DropdownMenu

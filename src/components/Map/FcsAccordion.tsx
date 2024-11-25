@@ -7,6 +7,7 @@ import { cardsWrapperClass } from '@/utils/primitives';
 import CustomAccordion from '../Accordions/Accordion';
 import CustomCard from '../Cards/Card';
 import { LineChart } from '../Charts/LineChart';
+import CustomInfoCircle from '../CustomInfoCircle/CustomInfoCircle';
 
 export default function FcsAccordion({ countryData, loading, countryIso3Data }: FcsAccordionProps) {
   const deltaOneMonth = countryData?.fcsMinus1 ? countryData.fcs - countryData.fcsMinus1 : null;
@@ -24,7 +25,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
         items={[
           {
             title: 'Food Security',
-            iconSrc: '/Images/InfoIcon.svg',
+            infoIcon: <CustomInfoCircle />,
             content: (
               <div className={cardsWrapperClass}>
                 <CustomCard
@@ -65,7 +66,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
           },
           {
             title: 'Food Security Trends',
-            iconSrc: '/Images/InfoIcon.svg',
+            infoIcon: <CustomInfoCircle />,
             content: (
               <div>
                 {fcsChartData ? (
@@ -100,7 +101,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
           },
           {
             title: 'Macro-economic',
-            iconSrc: '/Images/InfoIcon.svg',
+            infoIcon: <CustomInfoCircle />,
             content: (
               <div className={cardsWrapperClass}>
                 <CustomCard
@@ -120,7 +121,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
           },
           {
             title: 'Currency Exchange',
-            iconSrc: '/Images/InfoIcon.svg',
+            infoIcon: <CustomInfoCircle />,
             content: (
               <div>
                 {currencyExchangeChartData ? (
@@ -140,7 +141,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
           },
           {
             title: 'Balance of Trade',
-            iconSrc: '/Images/InfoIcon.svg',
+            infoIcon: <CustomInfoCircle />,
             content: (
               <div>
                 {balanceOfTradeChartData ? (
@@ -160,7 +161,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
           },
           {
             title: 'Headline and food inflation',
-            iconSrc: '/Images/InfoIcon.svg',
+            infoIcon: <CustomInfoCircle />,
             content: (
               <div>
                 {headlineAndFoodInflationChartData ? (

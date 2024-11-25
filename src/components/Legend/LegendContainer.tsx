@@ -20,6 +20,7 @@ export default function LegendContainer({ items, loading = false }: LegendContai
     <div className="w-[450px] absolute bottom-5 right-0 z-50 mr-10">
       <CustomAccordion
         loading={loading}
+        multipleSelectionMode
         items={items.map((item) => ({
           title: item.title,
           infoIcon: <CustomInfoCircle />,

@@ -1,6 +1,6 @@
 export enum LineChartDataType {
-  LineChartData = 'LineChartData',
-  BalanceOfTradeGraph = 'BalanceOfTradeGraph',
-  CurrencyExchangeGraph = 'CurrencyExchangeGraph',
-  InflationGraphs = 'InflationGraphs',
+  LINE_CHART_DATA = 'LINE_CHART_DATA',
+  BALANCE_OF_TRADE_CHART = 'BALANCE_OF_TRADE_CHART',
+  CURRENCY_EXCHANGE_GRAPH = 'CURRENCY_EXCHANGE_GRAPH',
+  INFLATION_GRAPHS = 'INFLATION_GRAPHS',
 }

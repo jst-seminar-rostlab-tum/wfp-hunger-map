@@ -19,4 +19,6 @@ export default interface LineChartModalProps {
   setShowXAxisSlider: (b: boolean) => void;
   showBarChart: boolean;
   setShowBarChart: (b: boolean) => void;
+  selectedXAxisRange: number[];
+  setSelectedXAxisRange: (r: number[]) => void;
 }

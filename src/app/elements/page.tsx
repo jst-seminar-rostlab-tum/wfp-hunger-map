@@ -9,47 +9,47 @@ import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
 import { LineChartDataType } from '@/domain/enums/LineChartDataType.ts';
 import AccordionsOperations from '@/operations/accordions/AccordionOperations';
 
+import { ReactComponent as FoodSvg } from '../../../public/Images/FoodConsumption.svg';
 /**
  * You can use this page to try and show off your components.
  * It's not accessible from the UI, but you can reach it by manually navigating to /elements
  */
 export default async function Elements() {
   const simpleAndSmallLineChartData: LineChartData = {
-    type: LineChartDataType.LineChartData,
+    type: LineChartDataType.LINE_CHART_DATA,
     xAxisType: 'linear',
     lines: [
       {
         name: 'Category A',
         dataPoints: [
-          { x: '0', y: 1 },
-          { x: '1', y: 2 },
-          { x: '2', y: 4 },
-          { x: '3', y: 4 },
+          { x: 0, y: 1 },
+          { x: 1, y: 2 },
+          { x: 2, y: 4 },
+          { x: 3, y: 4 },
         ],
       },
     ],
   };
 
   const simpleLineChartData: LineChartData = {
-    type: LineChartDataType.LineChartData,
+    type: LineChartDataType.LINE_CHART_DATA,
     xAxisType: 'linear',
     yAxisLabel: 'yield',
-    roundLines: true,
     lines: [
       {
         name: 'Category A',
         dataPoints: [
-          { x: '0', y: 1 },
-          { x: '1', y: 2 },
-          { x: '2', y: 4 },
-          { x: '3', y: 8 },
+          { x: 0, y: 1 },
+          { x: 1, y: 2 },
+          { x: 2, y: 4 },
+          { x: 3, y: 8 },
         ],
       },
     ],
   };
 
   const maxedOutLineChartData: LineChartData = {
-    type: LineChartDataType.LineChartData,
+    type: LineChartDataType.LINE_CHART_DATA,
     xAxisType: 'linear',
     yAxisLabel: 'yield',
     lines: [
@@ -57,35 +57,34 @@ export default async function Elements() {
         name: 'Category A',
         showRange: true,
         dataPoints: [
-          { x: '0', y: 1, yRangeMin: 0, yRangeMax: 2 },
-          { x: '1', y: 3, yRangeMin: 2, yRangeMax: 4 },
-          { x: '2', y: 4, yRangeMin: 3.5, yRangeMax: 4.5 },
-          { x: '3', y: 8, yRangeMin: 7.5, yRangeMax: 8.5 },
+          { x: 0, y: 1, yRangeMin: 0, yRangeMax: 2 },
+          { x: 1, y: 3, yRangeMin: 2, yRangeMax: 4 },
+          { x: 2, y: 4, yRangeMin: 3.5, yRangeMax: 4.5 },
+          { x: 3, y: 8, yRangeMin: 7.5, yRangeMax: 8.5 },
         ],
       },
       {
         name: 'Category B',
         dataPoints: [
-          { x: '0', y: 4 },
-          { x: '1', y: 7 },
-          { x: '2', y: 5 },
-          { x: '3', y: 2 },
+          { x: 0, y: 4 },
+          { x: 1, y: 7 },
+          { x: 2, y: 5 },
+          { x: 3, y: 2 },
         ],
       },
       {
         name: 'Category C',
         dataPoints: [
-          { x: '0', y: 7 },
-          { x: '1', y: 2 },
-          { x: '2', y: 3 },
-          { x: '3', y: 3 },
+          { x: 0, y: 7 },
+          { x: 1, y: 2 },
+          { x: 3, y: 3 },
         ],
       },
     ],
   };
 
   const balanceOfTradeGraphData: BalanceOfTradeGraph = {
-    type: LineChartDataType.BalanceOfTradeGraph,
+    type: LineChartDataType.BALANCE_OF_TRADE_CHART,
     data: [
       {
         x: '2023-10-01',
@@ -107,7 +106,7 @@ export default async function Elements() {
   };
 
   const currencyExchangeGraphData: CurrencyExchangeGraph = {
-    type: LineChartDataType.CurrencyExchangeGraph,
+    type: LineChartDataType.CURRENCY_EXCHANGE_GRAPH,
     name: 'Exchange Rate (USD/NGN)',
     source: '',
     updated: '',
@@ -132,7 +131,7 @@ export default async function Elements() {
   };
 
   const inflationGraphsData: InflationGraphs = {
-    type: LineChartDataType.InflationGraphs,
+    type: LineChartDataType.INFLATION_GRAPHS,
     headline: {
       data: [
         {
@@ -177,6 +176,9 @@ export default async function Elements() {
 
   return (
     <div className="w-full flex flex-col items-center justify-center">
+      <div className="svg-icon">
+        <FoodSvg width={200} height={200} />
+      </div>
       <CustomButton variant="solid">Test</CustomButton>
       <CustomButton variant="bordered">Test</CustomButton>
       <CustomButton variant="flat">Test</CustomButton>
@@ -192,12 +194,13 @@ export default async function Elements() {
             data={simpleLineChartData}
             expandable
             small
+            roundLines
           />
         </div>
         <div className="w-400px h-fit">
           <LineChart
             title="Maxed Out Line Chart"
-            description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
+            description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor onsetetur sadipscing elitr."
             data={maxedOutLineChartData}
             expandable
             xAxisSlider
@@ -211,7 +214,7 @@ export default async function Elements() {
           <LineChart title="Currency exchange" data={currencyExchangeGraphData} expandable />
         </div>
         <div className="w-400px h-fit">
-          <LineChart title="Headline and food inflation" data={inflationGraphsData} expandable />
+          <LineChart title="Headline and food inflation" data={inflationGraphsData} expandable barChartSwitch />
         </div>
       </div>
       <MapSkeleton />

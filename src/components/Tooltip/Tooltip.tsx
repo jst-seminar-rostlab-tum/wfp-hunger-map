@@ -9,11 +9,11 @@ import TooltipProps from '@/domain/props/TooltipProps';
  * @param children the wrapped components
  * @param title title of the tooltip (optional)
  * @param text textual content of the tooltip
+ * @param delay delay with which tooltip appears on hover in milliseconds; default is 0
  * @param warning selected if the tooltip should be highlighted (optional)
  * @constructor
  */
-export function Tooltip({ children, title, text, warning }: TooltipProps) {
-  const DELAY: number = 1000;
+export function Tooltip({ children, title, text, delay, warning }: TooltipProps) {
   const OFFSET: number = 10;
   const RADIUS = 'sm';
   const SHADOW = 'md';
@@ -35,7 +35,7 @@ export function Tooltip({ children, title, text, warning }: TooltipProps) {
       className={`${borderStyle} px-2.5 py-1.5 max-w-2xl`}
       content={tooltipContent}
       color={COLOR}
-      delay={DELAY}
+      delay={delay || 0}
       offset={OFFSET}
       radius={RADIUS}
       shadow={SHADOW}

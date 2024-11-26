@@ -11,6 +11,7 @@ function IpcGlobalChoropleth({
   setSelectedCountryId,
   setIpcRegionData,
   setCountryData,
+  resetAlert,
 }: IpcGlobalChoroplethProps) {
   const map = useMap();
   const ipcColorData = IpcChoroplethOperations.generateColorMap(ipcData, countries) as FeatureCollection<
@@ -26,7 +27,8 @@ function IpcGlobalChoropleth({
       setSelectedCountryId,
       setIpcRegionData,
       setCountryData,
-      map
+      map,
+      resetAlert
     );
   };
 

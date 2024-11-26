@@ -95,10 +95,11 @@ export class IpcChoroplethOperations {
     setSelectedCountryId: (id: number | null) => void,
     setIpcRegionData: (data: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
     setCountryData: (countryData: CountryData) => void,
-    map: L.Map
+    map: L.Map,
+    resetAlert: () => void
   ) {
     this.createTooltip(feature, layer, ipcData);
-    this.attachEvents(feature, layer, setSelectedCountryId, setIpcRegionData, setCountryData, map);
+    this.attachEvents(feature, layer, setSelectedCountryId, setIpcRegionData, setCountryData, map, resetAlert);
   }
 
   static attachEvents(
@@ -107,7 +108,8 @@ export class IpcChoroplethOperations {
     setSelectedCountryId: (id: number | null) => void,
     setIpcRegionData: (data: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
     setCountryData: (countryData: CountryData) => void,
-    map: L.Map
+    map: L.Map,
+    resetAlert: () => void
   ) {
     const pathLayer = layer as L.Path;
     const originalStyle = { ...pathLayer.options };
@@ -116,6 +118,7 @@ export class IpcChoroplethOperations {
       click: () => {
         setSelectedCountryId(feature?.properties?.adm0_id);
         this.onCountryClick(feature, setIpcRegionData, setCountryData, map);
+        resetAlert();
       },
       mouseover: () => {
         pathLayer.setStyle({ ...originalStyle, fillOpacity: 0.7 });
@@ -154,7 +157,8 @@ export class IpcChoroplethOperations {
         summary={
           <>
             <span className="font-bold text-danger text-base">{formattedPopNum}</span> people in IPC/CH Phase 3 and
-            above (<span className="font-bold text-danger text-base">{ipcPercent}%</span> of people in the analyzed
+            above
+            <br />(<span className="font-bold text-danger text-base">{ipcPercent}%</span> of people in the analyzed
             areas)
           </>
         }

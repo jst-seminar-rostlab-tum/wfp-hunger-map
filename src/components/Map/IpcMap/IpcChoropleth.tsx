@@ -7,7 +7,13 @@ import { IpcChoroplethProps } from '@/domain/props/IpcChoroplethProps';
 import IpcCountryChoropleth from './IpcCountryChoropleth';
 import IpcGlobalChoropleth from './IpcGlobalChoropleth';
 
-function IpcChoropleth({ ipcData, countries, selectedCountryId, setSelectedCountryId }: IpcChoroplethProps) {
+function IpcChoropleth({
+  ipcData,
+  countries,
+  selectedCountryId,
+  setSelectedCountryId,
+  resetAlert,
+}: IpcChoroplethProps) {
   const [ipcRegionData, setIpcRegionData] = useState<FeatureCollection<Geometry, GeoJsonProperties> | null>();
   const [countryData, setCountryData] = useState<CountryData>();
 
@@ -26,6 +32,7 @@ function IpcChoropleth({ ipcData, countries, selectedCountryId, setSelectedCount
           setSelectedCountryId={setSelectedCountryId}
           setIpcRegionData={setIpcRegionData}
           setCountryData={setCountryData}
+          resetAlert={resetAlert}
         />
       ) : (
         ipcRegionData && <IpcCountryChoropleth regionIpcData={ipcRegionData} countryData={countryData} />

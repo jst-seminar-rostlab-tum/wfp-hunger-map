@@ -20,7 +20,7 @@ import ZoomTracker from './ZoomTracker';
 export default function Map({ countries, disputedAreas, ipcData }: MapProps) {
   const { selectedMapType } = useSelectedMap();
   const { setSelectedMapVisibility } = useSelectedMapVisibility();
-  const { selectedAlert, toggleAlert } = useSelectedAlert();
+  const { selectedAlert, toggleAlert, resetAlert } = useSelectedAlert();
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
 
   const onZoomThresholdReached = () => {
@@ -70,6 +70,7 @@ export default function Map({ countries, disputedAreas, ipcData }: MapProps) {
           ipcData={ipcData}
           selectedCountryId={selectedCountryId}
           setSelectedCountryId={setSelectedCountryId}
+          resetAlert={resetAlert}
         />
       )}
 

@@ -12,7 +12,7 @@ export default function SearchBar({ value, onValueChange, placeholder, className
       value={value}
       onChange={(e) => onValueChange(e.target.value)}
       radius="lg"
-      startContent={<SearchNormal1 className="text-lg flex-shrink-0" />}
+      startContent={<SearchNormal1 className="flex-shrink-0" />}
       className={className}
       classNames={{
         inputWrapper: ['shadow-xl', 'border', 'hover:border-primary', 'rounded-lg'],

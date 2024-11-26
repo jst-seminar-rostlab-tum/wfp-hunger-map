@@ -64,14 +64,23 @@ export function Sidebar({ countryMapData }: SidebarProps) {
             placeholder="Search a country"
             onSelectionChange={handleCountrySelect}
             className="w-full"
+            classNames={{ popoverContent: 'bg-clickableSecondary' }}
             variant="faded"
             color="primary"
           >
-            {countryMapData.features.map((country) => (
-              <AutocompleteItem key={country.properties.adm0_id} aria-label={country.properties.adm0_name}>
-                {country.properties.adm0_name}
-              </AutocompleteItem>
-            ))}
+            {countryMapData.features
+              .sort((sortItemA, sortItemB) =>
+                sortItemA.properties.adm0_name.localeCompare(sortItemB.properties.adm0_name)
+              )
+              .map((country) => (
+                <AutocompleteItem
+                  className="transition-all hover:text-background dark:text-foreground"
+                  key={country.properties.adm0_id}
+                  aria-label={country.properties.adm0_name}
+                >
+                  {country.properties.adm0_name}
+                </AutocompleteItem>
+              ))}
           </Autocomplete>
         </CardHeader>
         <CardBody>

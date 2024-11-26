@@ -23,7 +23,7 @@ export default function Map({ countries, disputedAreas }: MapProps) {
       zoomControl={false}
       style={{ height: '100%', width: '100%', zIndex: 1 }}
       zoomSnap={0}
-      wheelPxPerZoomLevel={2}
+      wheelPxPerZoomLevel={50}
     >
       <AlertContainer />
       {countries && <VectorTileLayer countries={countries} disputedAreas={disputedAreas} />}

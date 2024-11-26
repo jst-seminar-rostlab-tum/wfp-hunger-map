@@ -1,9 +1,9 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 import { LeafletContextInterface, useLeafletContext } from '@react-leaflet/core';
-import mapboxgl from 'mapbox-gl';
+import mapboxgl from 'mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import { useTheme } from 'next-themes';
-import React, { RefObject, useEffect, useRef } from 'react';
+import React, { RefObject, useEffect, useRef, useState } from 'react';
 import { useMap } from 'react-leaflet';
 
 import { useSelectedCountry } from '@/domain/contexts/SelectedCountryContext';
@@ -19,6 +19,7 @@ export default function VectorTileLayer({ countries, disputedAreas }: MapProps) 
   const { selectedCountry, setSelectedCountry } = useSelectedCountry();
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const leafletMap = useMap();
+  const [map, setMap] = useState<mapboxgl.Map>();
 
   mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 
@@ -28,16 +29,35 @@ export default function VectorTileLayer({ countries, disputedAreas }: MapProps) 
       { countries, disputedAreas },
       mapContainer
     );
+    baseMap.on('load', () => setMap(baseMap));
     mapRef.current = baseMap;
 
     MapOperations.setMapInteractionFunctionality(baseMap, setSelectedCountry, { countries, disputedAreas });
     MapOperations.synchronizeLeafletMapbox(baseMap, mapContainer, context);
+    // The following layers currently don't work due to CORS issues.
+    MapOperations.initRainfallLayer(baseMap);
+    MapOperations.initVegetationLayer(baseMap);
+    MapOperations.initFCSLayer(baseMap);
 
     return () => {
       baseMap.remove();
       context.map.off('move');
+      setMap(undefined);
     };
-  }, [context, theme, selectedMapType]);
+  }, [context]);
+
+  useEffect(() => {
+    if (map) {
+      MapOperations.removeActiveMapLayer(map);
+      MapOperations.addMapAsLayer(map, selectedMapType);
+    }
+  }, [map, selectedMapType]);
+
+  useEffect(() => {
+    if (map) {
+      MapOperations.changeMapTheme(map, theme === 'dark');
+    }
+  }, [theme]);
 
   useEffect(() => {
     if (selectedCountry && mapRef.current) {

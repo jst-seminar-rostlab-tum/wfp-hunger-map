@@ -1,8 +1,8 @@
 import React from 'react';
 
 import AboutText from '@/components/About/AboutText';
-import ExternalLink from '@/components/About/ExternalLink';
 import HungerMapLiveSuperscript from '@/components/About/HungerMapLiveSuperscript';
+import StyledLink from '@/components/About/StyledLink';
 import Accordion from '@/components/Accordions/Accordion';
 import generalFaqItems from '@/domain/constant/about/generalFaqItems';
 import predictionFaqItems from '@/domain/constant/about/predictionFaqItems';
@@ -30,13 +30,13 @@ function Page() {
         <p>
           For first-level administrative areas where daily updated survey data is not available, the prevalence of
           people with poor or borderline{' '}
-          <ExternalLink href="https://documents.wfp.org/stellent/groups/public/documents/manual_guide_proced/wfp197216.pdf">
+          <StyledLink href="https://documents.wfp.org/stellent/groups/public/documents/manual_guide_proced/wfp197216.pdf">
             food consumption (FCS)
-          </ExternalLink>{' '}
+          </StyledLink>{' '}
           and the prevalence of people with{' '}
-          <ExternalLink href="https://documents.wfp.org/stellent/groups/public/documents/manual_guide_proced/wfp211058.pdf">
+          <StyledLink href="https://documents.wfp.org/stellent/groups/public/documents/manual_guide_proced/wfp211058.pdf">
             reduced coping strategy index (rCSI)
-          </ExternalLink>{' '}
+          </StyledLink>{' '}
           ≥ 19 is estimated with a predictive model.
         </p>
         <Accordion items={predictionFaqItems} />

@@ -59,6 +59,7 @@ export function LineChartModal({
       scrollBehavior="inside"
       onOpenChange={onOpenChange}
       hideCloseButton
+      className="bg-background"
     >
       <ModalContent>
         <ModalHeader className="flex flex-col gap-1">

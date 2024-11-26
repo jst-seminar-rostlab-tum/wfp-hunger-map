@@ -127,6 +127,7 @@ const config = {
             clusterGreen: '#85E77C',
             clusterOrange: '#FFB74D',
             clusterRed: '#FF5252',
+            clusterBlue: '#157DBC',
             default: '#157DBC',
             chatbotFullscreen: '#d8d8d8',
             chatbotSidebar: '#71717a50',
@@ -165,6 +166,8 @@ const config = {
             fatalityAlert: '#742280',
             climateWetAlert: '#4295D3',
             climateDryAlert: '#B95926',
+            chartsLegendBackground: '#F5F5F5',
+            chartsXAxisLine: '#a6a6a6'
           },
         },
         dark: {
@@ -183,6 +186,7 @@ const config = {
             clusterGreen: '#A3F39C',
             clusterOrange: '#FFB74D',
             clusterRed: '#FF5252',
+            clusterBlue: '#157DBC',
             default: '#157DBC',
             chatbotFullscreen: '#292929',
             chatbotSidebar: '#40404050',
@@ -204,6 +208,8 @@ const config = {
             fatalityAlert: '#742280',
             climateWetAlert: '#4295D3',
             climateDryAlert: '#B95926',
+            chartsLegendBackground: '#2a2a2a',
+            chartsXAxisLine: '#757575'
           },
         },
       },

@@ -102,6 +102,11 @@ canvas.react-pdf__Page__canvas {
   box-shadow: none !important;
 }
 
+/* remove rectangle when focus over the country/global */
+path.leaflet-interactive:focus {
+  outline: none;
+}
+
 /* .svg color */
 .svg-icon path {
   fill: black;

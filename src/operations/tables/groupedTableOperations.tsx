@@ -13,12 +13,11 @@ export function getTableCell(row: CustomTableRow, columnKey: string, center: boo
 
   let cellContent = row.cellContents[columnKey];
   if (typeof cellContent === 'boolean') cellContent = cellContent ? '✅' : '❎';
-  const addBottomBorder = row.index === row.groupLength - 1 || columnKey === 'keyColumn';
 
   return (
     <TableCell
       className={clsx({
-        'border-b-2': addBottomBorder,
+        'border-t-2': row.index === row.groupLength - 1,
         'text-center': center,
       })}
       rowSpan={columnKey === 'keyColumn' ? row.groupLength : 1}

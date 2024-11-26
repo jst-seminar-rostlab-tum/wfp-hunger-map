@@ -2,7 +2,7 @@ import React from 'react';
 
 function Page() {
   return (
-    <div className="text-content">
+    <>
       <h1>Disclaimer</h1>
       <p>
         The designations employed and the presentation of material for all the maps on this site{' '}
@@ -24,7 +24,7 @@ function Page() {
           Ireland concerning sovereignty over the Falkland Islands (Malvinas).
         </li>
       </ul>
-    </div>
+    </>
   );
 }
 

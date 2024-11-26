@@ -9,6 +9,9 @@ import { ReactComponent as Population } from '../../../../public/Images/Populati
 export default function IpcAccordion({ countryData }: IpcAccordionProps) {
   const deltaOneMonth = countryData?.fcsMinus1 ? countryData.fcs - countryData.fcsMinus1 : null;
   const deltaThreeMonth = countryData?.fcsMinus3 ? countryData.fcs - countryData.fcsMinus3 : null;
+  const hasNoData: boolean =
+    !countryData || !countryData.population || !countryData.fcs || !deltaOneMonth || !deltaThreeMonth;
+
   return (
     <div className="absolute w-[350px] left-[108px] top-4 z-9999">
       <CustomAccordion
@@ -16,14 +19,14 @@ export default function IpcAccordion({ countryData }: IpcAccordionProps) {
           {
             title: 'Food Security',
             iconSrc: '/Images/InfoIcon.svg',
-            content: (
+            content: !hasNoData ? (
               <div className={cardsWrapperClass}>
                 <CustomCard
                   title="Population"
                   content={[
                     {
                       svgIcon: <Population className="w-full h-full object-contain" />,
-                      text: countryData?.population ? `${countryData.population.toFixed(2)} M` : 'N/A',
+                      text: countryData?.population ? `${countryData?.population.toFixed(2)} M` : 'N/A',
                       altText: 'Population Icon',
                     },
                   ]}
@@ -33,7 +36,7 @@ export default function IpcAccordion({ countryData }: IpcAccordionProps) {
                   content={[
                     {
                       svgIcon: <FoodConsumption className="w-full h-full object-contain" />,
-                      text: countryData?.fcs ? `${countryData.fcs.toFixed(2)} M` : 'N/A',
+                      text: countryData?.fcs ? `${countryData?.fcs.toFixed(2)} M` : 'N/A',
                       altText: 'Food Consumption Icon',
                     },
                     {
@@ -52,6 +55,8 @@ export default function IpcAccordion({ countryData }: IpcAccordionProps) {
                   ]}
                 />
               </div>
+            ) : (
+              <p>No data about food security</p>
             ),
           },
         ]}

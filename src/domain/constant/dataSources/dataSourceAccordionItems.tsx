@@ -40,29 +40,6 @@ const contextAndNeedTableData: DataSourceTableData = [
 
 const foodSecurityTableData: DataSourceTableData = [
   {
-    label: 'Estimated number of people',
-    description:
-      'The number of people are estimated by multiplying the percentages calculated from mVAM data by the population of the country.',
-    dataSource: (
-      <span>
-        <Abbreviation abbreviation="WFP" />: representative face-to-face household surveys (e.g.{' '}
-        <Abbreviation abbreviation="CFSVA" />, <Abbreviation abbreviation="EFSA" />) and{' '}
-        <Abbreviation abbreviation="mVAM" /> surveys
-      </span>
-    ),
-    updateDetails: [
-      {
-        label: (
-          <>
-            <Abbreviation abbreviation="mVAM" /> surveys
-          </>
-        ),
-        interval: 'daily or monthly',
-      },
-      { label: 'face-to-face surveys', interval: 'biyearly or less' },
-    ],
-  },
-  {
     label: 'People with insufficient food consumption',
     description:
       'Number of people with poor or borderline food consumption according to the Food Consumption Score (FCS).',

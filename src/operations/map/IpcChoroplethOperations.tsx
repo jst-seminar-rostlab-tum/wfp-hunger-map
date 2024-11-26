@@ -120,6 +120,7 @@ export class IpcChoroplethOperations {
 
     layer.on({
       click: () => {
+        setIpcRegionData(undefined);
         setSelectedCountryId(feature?.properties?.adm0_id);
         this.onCountryClick(feature, setIpcRegionData, setCountryData, map);
         resetAlert();

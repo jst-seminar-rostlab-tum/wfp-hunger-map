@@ -12,12 +12,18 @@ function IpcGlobalChoropleth({
   setIpcRegionData,
   setCountryData,
   resetAlert,
+  selectedCountryId,
 }: IpcGlobalChoroplethProps) {
   const map = useMap();
   const ipcColorData = IpcChoroplethOperations.generateColorMap(ipcData, countries) as FeatureCollection<
     Geometry,
     GeoJsonProperties
   >;
+
+  const filteredIpcColorData = {
+    ...ipcColorData,
+    features: ipcColorData.features.filter((feature) => feature?.properties?.adm0_id !== selectedCountryId),
+  };
 
   const handleCountryFeature = (feature: Feature<Geometry, GeoJsonProperties>, layer: L.Layer) => {
     IpcChoroplethOperations.initializeCountryLayer(
@@ -33,7 +39,12 @@ function IpcGlobalChoropleth({
   };
 
   return (
-    <GeoJSON style={IpcChoroplethOperations.ipcGlobalStyle} data={ipcColorData} onEachFeature={handleCountryFeature} />
+    <GeoJSON
+      key={selectedCountryId}
+      style={IpcChoroplethOperations.ipcGlobalStyle}
+      data={filteredIpcColorData}
+      onEachFeature={handleCountryFeature}
+    />
   );
 }
 

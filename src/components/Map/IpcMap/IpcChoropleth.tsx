@@ -25,18 +25,17 @@ function IpcChoropleth({
 
   return (
     <div>
-      {!selectedCountryId ? (
-        <IpcGlobalChoropleth
-          ipcData={ipcData}
-          countries={countries}
-          setSelectedCountryId={setSelectedCountryId}
-          setIpcRegionData={setIpcRegionData}
-          setCountryData={setCountryData}
-          resetAlert={resetAlert}
-        />
-      ) : (
-        ipcRegionData && <IpcCountryChoropleth regionIpcData={ipcRegionData} countryData={countryData} />
-      )}
+      <IpcGlobalChoropleth
+        ipcData={ipcData}
+        countries={countries}
+        setSelectedCountryId={setSelectedCountryId}
+        setIpcRegionData={setIpcRegionData}
+        setCountryData={setCountryData}
+        resetAlert={resetAlert}
+        selectedCountryId={selectedCountryId}
+      />
+
+      {ipcRegionData && <IpcCountryChoropleth regionIpcData={ipcRegionData} countryData={countryData} />}
     </div>
   );
 }

@@ -11,4 +11,5 @@ export default interface IpcGlobalChoroplethProps {
   setIpcRegionData: (data: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void;
   setCountryData: (countryData: CountryData) => void;
   resetAlert: () => void;
+  selectedCountryId: number | null;
 }

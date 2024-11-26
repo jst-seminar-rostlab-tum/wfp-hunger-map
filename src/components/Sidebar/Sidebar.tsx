@@ -20,21 +20,23 @@ import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { AlertsMenuVariant } from '@/domain/enums/AlertsMenuVariant';
 import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
+import { useMediaQuery } from '@/utils/resolution';
 
 import PopupModal from '../PopupModal/PopupModal';
 import Subscribe from '../Subscribe/Subscribe';
 
 export function Sidebar() {
-  const { isSidebarOpen, toggleSidebar } = useSidebar();
+  const { isSidebarOpen, toggleSidebar, closeSidebar } = useSidebar();
   const { selectedMapType, setSelectedMapType } = useSelectedMap();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const isMobile = useMediaQuery('(max-width: 640px)');
 
   if (!isSidebarOpen) {
     return <CollapsedSidebar />;
   }
 
   return (
-    <div className="w-screen h-screen absolute top-0 left-0 z-sidebar sm:w-auto sm:h-[calc(100vh-3.5rem)] sm:mt-4 sm:ml-4 sm:mb-10">
+    <div className="w-screen h-screen absolute top-0 left-0 z-sidebar sm:w-auto sm:h-[calc(100vh-3.5rem)] sm:z-50 sm:mt-4 sm:ml-4 sm:mb-10">
       <Card
         classNames={{
           base: 'h-full rounded-none sm:rounded-large',
@@ -78,7 +80,12 @@ export function Sidebar() {
                       'justify-start dark:text-white',
                       selectedMapType === item.key ? 'bg-primary text-white' : 'text-black'
                     )}
-                    onClick={() => setSelectedMapType(item.key)}
+                    onClick={() => {
+                      setSelectedMapType(item.key);
+                      if (isMobile) {
+                        closeSidebar();
+                      }
+                    }}
                   >
                     {item.label}
                   </Button>

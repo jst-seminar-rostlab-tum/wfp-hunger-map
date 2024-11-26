@@ -17,7 +17,6 @@ const config = {
     'pl-[179px]',
     'pl-[320px]',
     'z-[9999]',
-    'z-sidebar',
     'bg-conflictProtest',
     'bg-conflictRiot',
     'bg-conflictBattle',
@@ -78,7 +77,14 @@ const config = {
       },
       zIndex: {
         9999: '9999',
-        sidebar: '99999',
+        sidebarExpanded: '41',
+        sidebarCollapsed: '40',
+        sidebarFullScreen: '41',
+        chatbotExpanded: '41',
+        chatbotCollapsed: '40',
+        chatbotFullScreen: '41',
+        alertsMenu: '40',
+        legend: '40',
       },
       animation: {
         blink: 'blink 1s step-end infinite',
@@ -167,7 +173,7 @@ const config = {
             climateWetAlert: '#4295D3',
             climateDryAlert: '#B95926',
             chartsLegendBackground: '#F5F5F5',
-            chartsXAxisLine: '#a6a6a6'
+            chartsXAxisLine: '#a6a6a6',
           },
         },
         dark: {
@@ -209,7 +215,7 @@ const config = {
             climateWetAlert: '#4295D3',
             climateDryAlert: '#B95926',
             chartsLegendBackground: '#2a2a2a',
-            chartsXAxisLine: '#757575'
+            chartsXAxisLine: '#757575',
           },
         },
       },

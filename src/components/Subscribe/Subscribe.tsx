@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Divider, Input, Select, SelectItem } from '@nextui-org/react';
+import { Button, Divider, Input } from '@nextui-org/react';
 import { motion } from 'framer-motion';
 import { ChartCircle, CloseCircle, Facebook, Instagram, TickCircle, Twitch, Youtube } from 'iconsax-react';
 import { useCallback, useEffect, useState } from 'react';
@@ -16,6 +16,7 @@ import {
 import { SubscribeStatus } from '@/domain/enums/SubscribeTopic';
 import SubscriptionRepository from '@/domain/repositories/SubscriptionRepository';
 
+import { NestedPopover } from './NestedPopover';
 import { SocialLink } from './SocialLink';
 
 export default function SubscriptionForm() {
@@ -31,6 +32,38 @@ export default function SubscriptionForm() {
 
   const [subscribeStatus, setSubscribeStatus] = useState<SubscribeStatus>(SubscribeStatus.Idle);
   const [isWaitingSubResponse, setIsWaitingSubResponse] = useState(false);
+
+  const topics = [
+    {
+      id: '1',
+      name: 'Topic 1',
+    },
+    {
+      id: '2',
+      name: 'Topic 2',
+    },
+    {
+      id: '3',
+      name: 'Topic 3',
+      options: ['Option 1', 'Option 2', 'Option 3'],
+    },
+  ];
+
+  const nestedTopics = [
+    {
+      id: '4',
+      name: 'Nested Topic 1',
+    },
+    {
+      id: '5',
+      name: 'Nested Topic 2',
+    },
+    {
+      id: '6',
+      name: 'Nested Topic 3',
+      options: ['Option 1', 'Option 2', 'Option 3'],
+    },
+  ];
 
   const validateEmail = useCallback((newEmail: string): boolean => {
     return !!newEmail.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i);
@@ -87,12 +120,12 @@ export default function SubscriptionForm() {
 
   // use subscribe.getSubscribeTopics() to get the topics, when the component initializes
   // and set it to the state
-  useEffect(() => {
-    subscribe.getSubscribeTopic().then((topic) => {
-      console.log(topics);
-      setTopics(topics);
-    });
-  }, []);
+  // useEffect(() => {
+  //   subscribe.getSubscribeTopic().then((topic) => {
+  //     console.log(topics);
+  //     setTopics(topics);
+  //   });
+  // }, []);
 
   return (
     <div className="flex flex-col items-center">
@@ -132,23 +165,7 @@ export default function SubscriptionForm() {
           onChange={(changeOrgEvent) => setOrganization(changeOrgEvent.target.value)}
           value={organization}
         />
-        {/*         <Select
-          label="Topic"
-          placeholder="Please select a topic"
-          selectedKeys={selectedTopic ? [selectedTopic] : []}
-          onSelectionChange={(keys) => setSelectedTopic(Array.from(keys)[0] as string)}
-          color="default"
-          variant="faded"
-          errorMessage="Please select a valid topic"
-          value={selectedTopic}
-        >
-          {Object.entries(SubscribeTopic).map(([key, value]) => (
-            <SelectItem key={key} value={value}>
-              {value}
-            </SelectItem>
-          ))}
-        </Select> */}
-
+        <NestedPopover label="Topic" items={topics} nestedItems={nestedTopics} />
         <Button
           type="submit"
           className="w-full bg-subscribeText dark:bg-subscribeText text-white dark:text-black shadow-lg self-center"

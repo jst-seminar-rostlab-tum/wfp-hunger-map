@@ -50,11 +50,15 @@ export class IpcChoroplethOperations {
   static generateColorMap = (ipcData: CountryIpcData[], mapData: CountryMapDataWrapper) => {
     const ipcDataById = Object.fromEntries(ipcData.map((data: CountryIpcData) => [data.adm0_code, data]));
 
-    const updatedFeatures = mapData.features.map((feature: CountryMapData) => ({
+    const filteredFeatures = mapData.features.filter(
+      (feature: CountryMapData) => ipcDataById[feature.properties.adm0_id]
+    );
+
+    const updatedFeatures = filteredFeatures.map((feature: CountryMapData) => ({
       ...feature,
       properties: {
         ...feature.properties,
-        ipcData: ipcDataById[feature.properties.adm0_id] || null,
+        ipcData: ipcDataById[feature.properties.adm0_id],
       },
     }));
 

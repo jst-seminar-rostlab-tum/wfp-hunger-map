@@ -2,6 +2,6 @@ export const pageLinks = [
   { href: '/', label: 'Home' },
   { href: '/about', label: 'About' },
   { href: '/data_sources', label: 'Data Sources' },
-  { href: '/methodology', label: 'Methodology' },
+  { href: '/wiki', label: 'Wiki' },
   { href: '/disclaimer', label: 'Disclaimer' },
 ];

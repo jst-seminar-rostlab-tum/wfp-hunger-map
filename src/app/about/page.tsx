@@ -19,11 +19,11 @@ function Page() {
       </section>
       <section>
         <h2>General Questions</h2>
-        <Accordion items={generalFaqItems} />
+        <Accordion items={generalFaqItems} multipleSelectionMode />
       </section>
       <section>
         <h2> Near real-time food security continuous monitoring</h2>
-        <Accordion items={realTimeFaqItems} />
+        <Accordion items={realTimeFaqItems} multipleSelectionMode />
       </section>
       <section>
         <h2> Predictive analysis</h2>
@@ -39,7 +39,7 @@ function Page() {
           </StyledLink>{' '}
           ≥ 19 is estimated with a predictive model.
         </p>
-        <Accordion items={predictionFaqItems} />
+        <Accordion items={predictionFaqItems} multipleSelectionMode />
       </section>
     </>
   );

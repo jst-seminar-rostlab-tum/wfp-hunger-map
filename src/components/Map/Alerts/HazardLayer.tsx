@@ -9,7 +9,7 @@ import HazardOperations from '@/operations/alerts/HazardOperations';
 import { HazardMarker } from './HazardMarker';
 
 export function HazardLayer() {
-  const { data, isPending } = useHazardQuery();
+  const { data, isPending } = useHazardQuery(true);
   const hazardsByType = useMemo(() => HazardOperations.sortHazardsByType(data), [data]);
 
   return (

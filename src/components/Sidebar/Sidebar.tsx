@@ -3,7 +3,7 @@
 import { Button } from '@nextui-org/button';
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
 import { Link } from '@nextui-org/link';
-import { Autocomplete, AutocompleteItem } from '@nextui-org/react';
+import { Autocomplete, AutocompleteItem, ScrollShadow } from '@nextui-org/react';
 import clsx from 'clsx';
 import { SidebarLeft } from 'iconsax-react';
 import NextImage from 'next/image';
@@ -21,14 +21,16 @@ import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { AlertsMenuVariant } from '@/domain/enums/AlertsMenuVariant';
 import SidebarProps from '@/domain/props/SidebarProps.ts';
 import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
+import { useMediaQuery } from '@/utils/resolution';
 
 import PopupModal from '../PopupModal/PopupModal';
 import Subscribe from '../Subscribe/Subscribe';
 
 export function Sidebar({ countryMapData }: SidebarProps) {
-  const { isSidebarOpen, toggleSidebar } = useSidebar();
+  const { isSidebarOpen, toggleSidebar, closeSidebar } = useSidebar();
   const { selectedMapType, setSelectedMapType } = useSelectedMap();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const isMobile = useMediaQuery('(max-width: 640px)');
   const { setSelectedCountry } = useSelectedCountry();
 
   const handleCountrySelect = (countryID: React.Key | null) => {
@@ -45,15 +47,17 @@ export function Sidebar({ countryMapData }: SidebarProps) {
   }
 
   return (
-    <div className="absolute top-0 left-0 z-50 h-screen p-4">
+    <div className="w-screen h-screen absolute top-0 left-0 z-sidebarFullScreen sm:w-auto sm:h-[calc(100vh-3.5rem)] sm:z-sidebarExpanded sm:mt-4 sm:ml-4 sm:mb-10">
       <Card
         classNames={{
-          base: 'h-full',
+          base: 'h-full rounded-none sm:rounded-large',
           header: 'flex flex-col gap-4 w-full items-start',
+          body: 'flex-grow overflow-auto min-h-[100px]',
+          footer: 'flex-shrink-0',
         }}
       >
         <CardHeader>
-          <div className="flex items-center w-full gap-2">
+          <div className="flex items-center w-full gap-2 justify-between">
             <LogoWithText />
             <Button isIconOnly variant="light" onClick={toggleSidebar} aria-label="Close sidebar">
               <SidebarLeft size={24} />
@@ -84,31 +88,49 @@ export function Sidebar({ countryMapData }: SidebarProps) {
           </Autocomplete>
         </CardHeader>
         <CardBody>
-          <div className="p-1 w-full">
-            <span className="text-tiny text-foreground-500 pl-1">Global Insights</span>
-            <div className="flex flex-col gap-1 pt-1">
-              {SidebarOperations.getSidebarMapTypes().map((item) => (
-                <Button
-                  startContent={item.icon && <NextImage src={item.icon} alt={item.label} width={24} height={24} />}
-                  key={item.key}
-                  variant={selectedMapType === item.key ? undefined : 'light'}
-                  className={clsx(
-                    'justify-start dark:text-white',
-                    selectedMapType === item.key ? 'bg-primary text-white' : 'text-black'
-                  )}
-                  onClick={() => setSelectedMapType(item.key)}
-                >
-                  {item.label}
-                </Button>
-              ))}
+          <ScrollShadow className="w-full h-full">
+            <div className="w-full">
+              <span className="text-tiny text-foreground-500 pl-1">Global Insights</span>
+              <div className="flex flex-col gap-1 pt-1">
+                {SidebarOperations.getSidebarMapTypes().map((item) => (
+                  <Button
+                    startContent={
+                      item.icon && (
+                        <NextImage
+                          unoptimized
+                          loading="eager"
+                          src={item.icon}
+                          alt={item.label}
+                          width={24}
+                          height={24}
+                        />
+                      )
+                    }
+                    key={item.key}
+                    variant={selectedMapType === item.key ? undefined : 'light'}
+                    className={clsx(
+                      'justify-start dark:text-white',
+                      selectedMapType === item.key ? 'bg-primary text-white' : 'text-black'
+                    )}
+                    onClick={() => {
+                      setSelectedMapType(item.key);
+                      if (isMobile) {
+                        closeSidebar();
+                      }
+                    }}
+                  >
+                    {item.label}
+                  </Button>
+                ))}
+              </div>
             </div>
-          </div>
-          <div className="p-1 w-full">
-            <span className="text-tiny text-foreground-500 pl-1">Alerts</span>
-            <div className="pt-1">
-              <AlertsMenu variant={AlertsMenuVariant.Inside} />
+            <div className="w-full">
+              <span className="text-tiny text-foreground-500 pl-1">Alerts</span>
+              <div className="pt-1">
+                <AlertsMenu variant={AlertsMenuVariant.Inside} />
+              </div>
             </div>
-          </div>
+          </ScrollShadow>
         </CardBody>
         <CardFooter>
           <div className="flex flex-col gap-1">
@@ -127,7 +149,7 @@ export function Sidebar({ countryMapData }: SidebarProps) {
             <ul className="pl-3">
               {pageLinks.map((page) => (
                 <li key={page.label}>
-                  <Link href={page.href} size="sm" color="foreground" className="text-opacity-80">
+                  <Link href={page.href} color="foreground" className="text-tiny text-opacity-80">
                     {page.label}
                   </Link>
                 </li>

@@ -1,15 +1,29 @@
 'use client';
 
 import { Button } from '@nextui-org/button';
-import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/modal';
-import * as Highcharts from 'highcharts';
-import { HighchartsReact } from 'highcharts-react-official';
-// eslint-disable-next-line import/no-extraneous-dependencies
+import { useDisclosure } from '@nextui-org/modal';
+import Highcharts from 'highcharts';
+import Exporting from 'highcharts/modules/exporting';
+import OfflineExporting from 'highcharts/modules/offline-exporting';
+import HighchartsReact from 'highcharts-react-official';
 import { Maximize4 } from 'iconsax-react';
+import { useTheme } from 'next-themes';
+import { useEffect, useState } from 'react';
 
+import LineChartBarLineSwitchButton from '@/components/Charts/helpers/LineChartBarLineSwitchButton';
+import LineChartSliderButton from '@/components/Charts/helpers/LineChartSliderButton';
+import LineChartXAxisSlider from '@/components/Charts/helpers/LineChartXAxisSlider';
+import { LineChartModal } from '@/components/Charts/LineChartModal';
+import { Tooltip } from '@/components/Tooltip/Tooltip';
 import { LineChartData } from '@/domain/entities/charts/LineChartData';
 import LineChartProps from '@/domain/props/LineChartProps';
 import LineChartOperations from '@/operations/charts/LineChartOperations';
+
+// initialize the exporting module
+if (typeof Highcharts === 'object') {
+  Exporting(Highcharts);
+  OfflineExporting(Highcharts);
+}
 
 /**
  * The LineChart component is a box that primarily renders a title, description text, and a line chart.
@@ -27,81 +41,128 @@ import LineChartOperations from '@/operations/charts/LineChartOperations';
  * @param title chart title (optional)
  * @param description chart description text (optional)
  * @param expandable when selected, the user is given the option to open the chart in a larger modal (optional)
+ * @param barChartSwitch when selected, the user is given the option to switch to a bar chart (optional)
+ * @param xAxisSlider when selected, the user is given the option to change the x-axis range via a slider (optional)
  * @param small when selected, all components in the line chart box become slightly smaller (optional)
+ * @param roundLines when selected, all plotted lines will be rounded (optional)
+ * @param noPadding when selected, the main box has no padding on all sides (optional)
+ * @param transparentBackground when selected, the background of the entire component is transparent (optional)
  * @param data the actual data to be used in the chart
  */
-export function LineChart({ title, description, expandable, small, data }: LineChartProps) {
+export function LineChart({
+  title,
+  description,
+  expandable,
+  barChartSwitch,
+  xAxisSlider,
+  small,
+  roundLines,
+  noPadding,
+  transparentBackground,
+  data,
+}: LineChartProps) {
   const TITLE_TEXT_SIZE = small ? 'text-sm' : 'text-md';
-  const DESCRIPTION_TEXT_SIZE = small ? 'text-xs' : 'text-sm';
+  const DESCRIPTION_TEXT_SIZE = small ? 'text-tiny' : 'text-sm';
   const CHART_HEIGHT = small ? 12 : 16;
   const ICON_BUTTON_SIZE = small ? 3 : 4;
-  const HEADER_BOTTOM_PADDING = title ? 3 : 0;
-  const JSON_DOWNLOAD_FILE_NAME = `hunger_map_line_chart_json-${title}.json`;
+  const HEADER_PADDING = title ? 3 : 0;
+  const MAIN_BOX_PADDING_FACTOR = noPadding ? 0 : 1;
 
   // full screen modal state handling
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
+  // the 'chartOptions' are dependent on the theme
+  const { theme } = useTheme();
 
-  // convert data to `LineChartData` and build chart options for 'Highcharts'
+  // convert data to `LineChartData` and build chart options for 'Highcharts' (line and bar chart)
   const lineChartData: LineChartData = LineChartOperations.convertToLineChartData(data);
-  const chartOptions: Highcharts.Options = LineChartOperations.getHighChartData(lineChartData);
+  const lineChartOptions: Highcharts.Options = LineChartOperations.getHighChartOptions(lineChartData, roundLines);
 
-  // trigger download of the given line chart `data` as a json file
-  const downloadDataJson = () => {
-    // convert data json object to string and encode as URI
-    const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(data, null, 2))}`;
-    // create a temporary link element and trigger the download
-    const link = document.createElement('a');
-    link.href = jsonString;
-    link.download = JSON_DOWNLOAD_FILE_NAME;
-    link.click();
-  };
+  // the `selectedXAxisRange` saves the to be rendered x-axis range of the chart
+  // can be changed using the `LinkeChartXAxisSlider` if the param `xAxisSlider==true`
+  const xAxisLength: number = LineChartOperations.getDistinctXAxisValues(lineChartData).length;
+  const [selectedXAxisRange, setSelectedXAxisRange] = useState([0, xAxisLength - 1]);
 
-  // Full screen modal that can be opened if `expandable==true`. Offers a larger chart and a download button.
-  const fullScreenModal = (
-    <Modal size="5xl" isOpen={isOpen} backdrop="blur" scrollBehavior="inside" onOpenChange={onOpenChange}>
-      <ModalContent>
-        <ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
-        <ModalBody>
-          <p className="w-full h-fit text-md font-normal">{description}</p>
-          <div className="py-6">
-            <HighchartsReact
-              highcharts={Highcharts}
-              options={chartOptions}
-              containerProps={{ style: { width: '100%', height: '40vh', borderRadius: '0 0 0.5rem 0.5rem' } }}
-            />
-          </div>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onPress={downloadDataJson}>
-            Download data as JSON
-          </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
-  );
+  // controlling if a line or bar chart is rendered; line chart is the default
+  const [showBarChart, setShowBarChart] = useState(false);
+  const [chartOptions, setChartOptions] = useState(lineChartOptions);
+  // handling the x-axis range slider visibility
+  const [showXAxisSlider, setShowXAxisSlider] = useState(false);
 
-  // Button to trigger the full screen modal; rendered if `expandable==true`
-  const fullScreenButton = expandable ? (
-    <Button isIconOnly variant="light" size="sm" onClick={onOpen}>
-      <Maximize4 className={`h-${ICON_BUTTON_SIZE} w-${ICON_BUTTON_SIZE}`} />
-    </Button>
-  ) : null;
-
-  // Description text element should only be rendered if description is available
-  const descriptionText = description ? (
-    <p className={`w-full h-fit pb-4 ${DESCRIPTION_TEXT_SIZE} px-3`}> {description} </p>
-  ) : null;
+  // handling the line and bar chart switch and the theme switch;
+  // also handling changing the x-axis range using the `LineChartXAxisSlider`;
+  // special: if the selected x-axis range has length 1 -> bar chart is displayed
+  useEffect(() => {
+    if (showBarChart || selectedXAxisRange[1] - selectedXAxisRange[0] === 0) {
+      setChartOptions(
+        LineChartOperations.getHighChartOptions(
+          lineChartData,
+          roundLines,
+          selectedXAxisRange[0],
+          selectedXAxisRange[1],
+          true
+        )
+      );
+    } else {
+      setChartOptions(
+        LineChartOperations.getHighChartOptions(lineChartData, roundLines, selectedXAxisRange[0], selectedXAxisRange[1])
+      );
+    }
+  }, [showBarChart, theme, selectedXAxisRange]);
 
   return (
     <>
-      <div className="w-full h-fit flex-col rounded-md bg-background">
+      <div className={`w-full h-fit flex-col rounded-md ${transparentBackground ? 'bg-transparent' : 'bg-background'}`}>
         <div
-          className={`w-full h-fit flex flex-row justify-between items-start gap-3 pl-3 pb-${HEADER_BOTTOM_PADDING}`}
+          className={`w-full h-fit flex flex-row justify-between items-start gap-1 pl-${3 * MAIN_BOX_PADDING_FACTOR} pb-${HEADER_PADDING}`}
         >
-          <p className={`${TITLE_TEXT_SIZE} font-normal pt-2 flex flex-row items-center`}> {title} </p>
-          {fullScreenButton}
+          <h2 className={`${TITLE_TEXT_SIZE} font-normal pt-${2 * MAIN_BOX_PADDING_FACTOR} flex flex-row items-center`}>
+            {title}
+          </h2>
+          <div
+            className={`flex flex-row gap-0.5 pt-${0.5 * MAIN_BOX_PADDING_FACTOR} pr-${0.5 * MAIN_BOX_PADDING_FACTOR}`}
+          >
+            {
+              // button to hide/show the slider to manipulate the plotted x-axis range of the chart;
+              // can be disabled via `xAxisSlider`
+              xAxisSlider && (
+                <LineChartSliderButton
+                  showXAxisSlider={showXAxisSlider}
+                  setShowXAxisSlider={setShowXAxisSlider}
+                  size={ICON_BUTTON_SIZE}
+                />
+              )
+            }
+            {
+              // button to switch between line and bar chart; can be disabled via `barChartSwitch`
+              barChartSwitch && (
+                <LineChartBarLineSwitchButton
+                  showBarChart={showBarChart}
+                  setShowBarChart={setShowBarChart}
+                  size={ICON_BUTTON_SIZE}
+                />
+              )
+            }
+            {
+              // button to trigger the full screen modal; rendered if `expandable`
+              expandable && (
+                <Tooltip text="Enlarge Chart">
+                  <Button isIconOnly variant="light" size="sm" onClick={onOpen}>
+                    <Maximize4 className={`h-${ICON_BUTTON_SIZE} w-${ICON_BUTTON_SIZE}`} />
+                  </Button>
+                </Tooltip>
+              )
+            }
+          </div>
         </div>
-        {descriptionText}
+        {
+          // description text element should only be rendered if description is available
+          description && (
+            <p className={`w-full h-fit pb-4 ${DESCRIPTION_TEXT_SIZE} px-${3 * MAIN_BOX_PADDING_FACTOR}`}>
+              {description}
+            </p>
+          )
+        }
+        {/* the actual chart */}
         <HighchartsReact
           highcharts={Highcharts}
           options={chartOptions}
@@ -113,8 +174,35 @@ export function LineChart({ title, description, expandable, small, data }: LineC
             },
           }}
         />
+        {
+          // slider to manipulate the plotted x-axis range of the chart; can be disabled via `xAxisSlider`
+          showXAxisSlider && (
+            <LineChartXAxisSlider
+              selectedXAxisRange={selectedXAxisRange}
+              setSelectedXAxisRange={setSelectedXAxisRange}
+              data={lineChartData}
+            />
+          )
+        }
       </div>
-      {fullScreenModal}
+
+      <LineChartModal
+        title={title}
+        description={description}
+        barChartSwitch={barChartSwitch}
+        xAxisSlider={xAxisSlider}
+        lineChartData={lineChartData}
+        chartOptions={chartOptions}
+        isOpen={isOpen}
+        onClose={onClose}
+        onOpenChange={onOpenChange}
+        showXAxisSlider={showXAxisSlider}
+        setShowXAxisSlider={setShowXAxisSlider}
+        showBarChart={showBarChart}
+        setShowBarChart={setShowBarChart}
+        selectedXAxisRange={selectedXAxisRange}
+        setSelectedXAxisRange={setSelectedXAxisRange}
+      />
     </>
   );
 }

@@ -5,6 +5,7 @@ import { ConflictType } from '@/domain/enums/ConflictType.ts';
 import { CountryAlertType } from '@/domain/enums/CountryAlertType';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
 import { HazardSeverity } from '@/domain/enums/HazardSeverity.ts';
+import { NutritionData } from '@/domain/enums/NutritionData';
 import { GradientLegendContainerItem } from '@/domain/props/GradientLegendContainerItem.ts';
 import PointLegendContainerItem from '@/domain/props/PointLegendContainerItem.ts';
 
@@ -109,6 +110,40 @@ export function mapLegendData(
           'The Normalized Difference Vegetation Index (NDVI) shows the recent vegetation development compared to the average. ' +
           'Green shades show areas where vegetation cover is above average, whilst orange and brown shades identify areas where vegetation cover is below normal. ' +
           'Values between 90% and 110% are considered as being within the range of normal variability.',
+      });
+      break;
+    case GlobalInsight.IPC:
+      legendData.push({
+        title: 'Number of people in IPC/CH Phase 3 or above (millions)',
+        startColor: 'ipcStart',
+        middleColor: 'ipcMiddle',
+        endColor: 'ipcEnd',
+        startLabel: '0',
+        endLabel: '>10',
+        tooltipInfo: `
+          Developed by a global partnership, the Integrated Food Security Phase Classification (IPC) / Cadre Harmonisé (CH) is a set of tools and procedures to classify food insecurity.\n
+          It classifies the populations in five different phases according to the severity of the food insecurity and malnutrition situation:\n
+          - Minimal\n
+          - Stressed\n
+          - Crisis\n
+          - Emergency\n
+          - Catastrophe/Famine.\n
+          \n
+          Data source: Integrated Food Security Phase Classification (IPC) / Cadre Harmonisé (CH) www.ipcinfo.org\n
+          \n
+          Updated: N/A
+          `,
+      });
+      break;
+    case GlobalInsight.NUTRITION:
+      legendData.push({
+        title: 'Analysis Distribution',
+        tooltipInfo: 'Shows the inadequate ratio of nutrient intake.',
+        records: [
+          { label: NutritionData.ACTUAL_DATA, color: 'nutritionActual' },
+          { label: NutritionData.PREDICTED_DATA, color: 'nutritionPredicted' },
+          { label: NutritionData.NOT_ANALYZED_DATA, color: 'nutritionNotAnalyzed' },
+        ],
       });
       break;
     default:

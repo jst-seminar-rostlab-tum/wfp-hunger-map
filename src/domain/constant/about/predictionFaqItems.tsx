@@ -1,7 +1,7 @@
 import React from 'react';
 
 import StyledLink from '@/components/About/StyledLink';
-import GroupedTable from '@/components/GroupedTable/GroupedTable';
+import CustomTable from '@/components/Table/CustomTable';
 import { accuracyTableColumns, accuracyTableContents } from '@/domain/constant/about/accuracyTableContents';
 import { AccordionItemProps } from '@/domain/entities/accordions/Accordions';
 
@@ -58,9 +58,10 @@ const generalQuestionItems: AccordionItemProps[] = [
           100 models on subsamples (with replacement) of the remaining 80% of the historical data. The following results
           were obtained on the test sets.
         </p>
-        <GroupedTable
+        <CustomTable
           columns={accuracyTableColumns}
           data={accuracyTableContents}
+          format="grouped"
           ariaLabel="Performance measures of the prediction algorithms"
         />
       </>

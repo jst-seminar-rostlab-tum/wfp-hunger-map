@@ -29,6 +29,7 @@
     "@nextui-org/popover": "^2.1.29",
     "@nextui-org/react": "^2.4.8",
     "@nextui-org/skeleton": "^2.0.32",
+    "@nextui-org/slider": "^2.2.17",
     "@nextui-org/snippet": "2.0.43",
     "@nextui-org/spinner": "^2.0.34",
     "@nextui-org/switch": "^2.0.34",
@@ -39,8 +40,11 @@
     "@react-aria/ssr": "3.9.4",
     "@react-aria/visually-hidden": "3.8.12",
     "@react-leaflet/core": "^2.1.0",
+    "@svgr/webpack": "^8.1.0",
     "@tanstack/react-query": "^5.59.17",
+    "@tanstack/react-query-devtools": "^5.60.6",
     "@turf/turf": "^7.1.0",
+    "@types/prop-types": "^15.7.13",
     "clsx": "2.1.1",
     "date-fns": "^4.1.0",
     "framer-motion": "~11.1.1",
@@ -94,7 +98,8 @@
     "postcss": "8.4.38",
     "prettier": "^3.3.3",
     "tailwindcss": "3.4.3",
-    "typescript": "5.0.4"
+    "typescript": "5.0.4",
+    "url-loader": "^4.1.1"
   },
   "commitlint": {
     "rules": {

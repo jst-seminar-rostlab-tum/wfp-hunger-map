@@ -184,13 +184,20 @@ export default function HungerMapChatbot() {
   }, [input]);
 
   return (
-    <div className={clsx('absolute z-[9999]', isFullScreen && isOpen ? 'inset-0' : 'top-4 right-4')}>
+    <div
+      className={clsx('absolute', {
+        'inset-0 z-chatbotFullScreen': isFullScreen,
+        'top-4 right-4': !isFullScreen,
+        'z-chatbotExpanded': isOpen,
+        'z-chatbotCollapsed': !isOpen,
+      })}
+    >
       {!isOpen && (
         <Tooltip text={TRIGGER_CHAT}>
           <Button
             onClick={toggleChat}
             className="
-            relative flex items-center justify-center min-w-12 h-12 px-1 rounded-full bg-content1 shadow-md"
+            relative flex items-center justify-center min-w-12 h-12 px-1 rounded-full bg-content1 hover:bg-content2 shadow-md"
           >
             <Bot size={24} />
           </Button>

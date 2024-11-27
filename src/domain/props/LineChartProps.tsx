@@ -7,6 +7,33 @@ export default interface LineChartProps {
   title?: string;
   description?: string;
   expandable?: boolean;
+  barChartSwitch?: boolean;
+  xAxisSlider?: boolean;
   small?: boolean;
+  roundLines?: boolean;
+  noPadding?: boolean;
+  transparentBackground?: boolean;
   data: LineChartData | BalanceOfTradeGraph | CurrencyExchangeGraph | InflationGraphs;
+}
+
+/**
+ * following: helpers props
+ */
+
+export interface LineChartSliderButtonProps {
+  showXAxisSlider: boolean;
+  setShowXAxisSlider: (b: boolean) => void;
+  size: number;
+}
+
+export interface LineChartBarLineSwitchButtonProps {
+  showBarChart: boolean;
+  setShowBarChart: (b: boolean) => void;
+  size: number;
+}
+
+export interface LineChartXAxisSlider {
+  selectedXAxisRange: number[]; // [xAxisRangeMinIndex, xAxisRangeMaxIndex]
+  setSelectedXAxisRange: (ns: number[]) => void;
+  data: LineChartData;
 }

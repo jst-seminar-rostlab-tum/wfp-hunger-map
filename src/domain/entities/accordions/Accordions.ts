@@ -1,6 +1,7 @@
 export interface AccordionItemProps {
   title: string;
-  iconSrc?: string;
+  infoIcon?: React.ReactNode;
   tooltipInfo?: string;
+  description?: string;
   content: React.ReactNode | string;
 }

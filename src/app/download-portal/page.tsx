@@ -8,13 +8,14 @@ import SearchBar from '@/components/Search/SearchBar';
 import CustomTable from '@/components/Table/CustomTable';
 import { CountryCodesData } from '@/domain/entities/country/CountryCodesData';
 import { useCountryCodesQuery } from '@/domain/hooks/globalHooks';
+import { PdfFile } from '@/domain/props/PdfViewerProps';
 import { DownloadPortalOperations } from '@/operations/download-portal/DownloadPortalOperations';
 
 export default function DownloadPortal() {
   const { isLoading, data } = useCountryCodesQuery();
   const [isModalOpen, setModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [pdfFile, setPdfFile] = useState<string | ArrayBuffer | Blob | null>(null);
+  const [pdfFile, setPdfFile] = useState<PdfFile | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const toggleModal = () => {

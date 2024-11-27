@@ -10,7 +10,7 @@ import { Tooltip } from '@nextui-org/tooltip';
 import { useEffect, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 
-import PdfViewerProps from '@/domain/props/PdfViewerProps';
+import { PdfViewerProps } from '@/domain/props/PdfViewerProps';
 import PdfViewerOperations from '@/operations/pdf/PdfViewerOperations';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url).toString();
@@ -27,13 +27,13 @@ export function PdfViewer({
   const [selectionText, setSelectionText] = useState<string | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState<{ top: number; left: number } | null>(null);
 
-  const handleDocumentScroll = (): void => {
-    PdfViewerOperations.handleDocumentScroll(document, setPageNumber, pageNumber);
+  const handleMouseWheelEvent = (): void => {
+    PdfViewerOperations.handleMouseWheelEvent(document, setPageNumber, pageNumber);
   };
 
   const onDocumentLoadSuccess = ({ numPages }: { numPages: number }): void => {
     setTotalPages(numPages);
-    window.addEventListener('scroll', handleDocumentScroll);
+    window.addEventListener('mousewheel', handleMouseWheelEvent);
   };
 
   const onSelectStart = (): void => {
@@ -66,7 +66,7 @@ export function PdfViewer({
     return () => {
       document.removeEventListener('selectstart', onSelectStart);
       document.removeEventListener('mouseup', onSelectEnd);
-      window.removeEventListener('scroll', handleDocumentScroll);
+      window.removeEventListener('mousewheel', handleMouseWheelEvent);
     };
   }, []);
 

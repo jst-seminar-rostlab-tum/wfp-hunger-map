@@ -1,5 +1,5 @@
 export default class PdfViewerOperations {
-  static handleDocumentScroll(
+  static handleMouseWheelEvent(
     document: Document,
     updatePageNumber: (pageNumber: number) => void,
     currentPageNumber: number

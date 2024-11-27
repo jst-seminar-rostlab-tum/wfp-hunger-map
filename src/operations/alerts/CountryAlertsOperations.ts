@@ -55,6 +55,8 @@ export default class CountryAlertsOperations {
   static getFromMapData(countries: CountryMapDataWrapper): CountryAlert[] {
     const result: CountryAlert[] = [];
 
+    if (!countries.features) return result;
+
     countries.features
       .filter(
         (country) =>

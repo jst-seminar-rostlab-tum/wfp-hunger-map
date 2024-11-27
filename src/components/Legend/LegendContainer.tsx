@@ -17,9 +17,10 @@ export default function LegendContainer({ items, loading = false }: LegendContai
   const [showInfoPopup, setInfoPopup] = useState(false);
 
   return !isMobile ? (
-    <div className="w-[450px] absolute bottom-5 right-0 z-50 mr-10">
+    <div className="w-[450px] absolute bottom-5 right-0 z-legend mr-10">
       <CustomAccordion
         loading={loading}
+        multipleSelectionMode
         items={items.map((item) => ({
           title: item.title,
           infoIcon: <CustomInfoCircle />,
@@ -34,7 +35,7 @@ export default function LegendContainer({ items, loading = false }: LegendContai
     </div>
   ) : (
     <>
-      <div className="absolute z-50 bottom-3 right-16">
+      <div className="absolute z-legend bottom-3 right-16">
         <Tooltip text={items.length > 1 ? 'Legends Information' : 'Legend Information'}>
           <Button
             onClick={() => setInfoPopup(true)}

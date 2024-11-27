@@ -77,6 +77,14 @@ const config = {
       },
       zIndex: {
         9999: '9999',
+        sidebarExpanded: '41',
+        sidebarCollapsed: '40',
+        sidebarFullScreen: '41',
+        chatbotExpanded: '41',
+        chatbotCollapsed: '40',
+        chatbotFullScreen: '41',
+        alertsMenu: '40',
+        legend: '40',
       },
       animation: {
         blink: 'blink 1s step-end infinite',
@@ -165,7 +173,13 @@ const config = {
             climateWetAlert: '#4295D3',
             climateDryAlert: '#B95926',
             chartsLegendBackground: '#F5F5F5',
-            chartsXAxisLine: '#a6a6a6'
+            chartsXAxisLine: '#a6a6a6',
+            nutritionGradientStart: '#fff3f3ff',
+            nutritionGradientMiddle: '#fa9997',
+            nutritionGradientEnd: '#f32e27',
+            nutritionActual: '#FFB74D',
+            nutritionPredicted: '#E3F2FD',
+            nutritionNotAnalyzed: '#52525b',
           },
         },
         dark: {
@@ -207,7 +221,7 @@ const config = {
             climateWetAlert: '#4295D3',
             climateDryAlert: '#B95926',
             chartsLegendBackground: '#2a2a2a',
-            chartsXAxisLine: '#757575'
+            chartsXAxisLine: '#757575',
           },
         },
       },

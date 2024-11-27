@@ -41,27 +41,16 @@ export default function SubscriptionForm() {
     {
       id: '2',
       name: 'Topic 2',
+      options: ['Option 4', 'Option 5', 'Option 6'],
     },
     {
       id: '3',
       name: 'Topic 3',
       options: ['Option 1', 'Option 2', 'Option 3'],
     },
-  ];
-
-  const nestedTopics = [
     {
       id: '4',
-      name: 'Nested Topic 1',
-    },
-    {
-      id: '5',
-      name: 'Nested Topic 2',
-    },
-    {
-      id: '6',
-      name: 'Nested Topic 3',
-      options: ['Option 1', 'Option 2', 'Option 3'],
+      name: 'Topic 4',
     },
   ];
 
@@ -165,7 +154,7 @@ export default function SubscriptionForm() {
           onChange={(changeOrgEvent) => setOrganization(changeOrgEvent.target.value)}
           value={organization}
         />
-        <NestedPopover label="Topic" items={topics} nestedItems={nestedTopics} />
+        <NestedPopover label="Topic" items={topics} />
         <Button
           type="submit"
           className="w-full bg-subscribeText dark:bg-subscribeText text-white dark:text-black shadow-lg self-center"

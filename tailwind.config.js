@@ -174,6 +174,12 @@ const config = {
             climateDryAlert: '#B95926',
             chartsLegendBackground: '#F5F5F5',
             chartsXAxisLine: '#a6a6a6',
+            nutritionGradientStart: '#fff3f3ff',
+            nutritionGradientMiddle: '#fa9997',
+            nutritionGradientEnd: '#f32e27',
+            nutritionActual: '#FFB74D',
+            nutritionPredicted: '#E3F2FD',
+            nutritionNotAnalyzed: '#52525b',
           },
         },
         dark: {

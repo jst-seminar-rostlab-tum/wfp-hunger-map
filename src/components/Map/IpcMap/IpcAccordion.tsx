@@ -1,11 +1,11 @@
 import CustomAccordion from '@/components/Accordions/Accordion';
 import CustomCard from '@/components/Cards/Card';
+import CustomInfoCircle from '@/components/CustomInfoCircle/CustomInfoCircle';
 import IpcAccordionProps from '@/domain/props/IpcAccordionProps';
 import { cardsWrapperClass } from '@/utils/primitives';
 
 import { ReactComponent as FoodConsumption } from '../../../../public/Images/FoodConsumption.svg';
 import { ReactComponent as Population } from '../../../../public/Images/Population.svg';
-import CustomInfoCircle from '@/components/CustomInfoCircle/CustomInfoCircle';
 
 export default function IpcAccordion({ countryData }: IpcAccordionProps) {
   const deltaOneMonth = countryData?.fcsMinus1 ? countryData.fcs - countryData.fcsMinus1 : null;

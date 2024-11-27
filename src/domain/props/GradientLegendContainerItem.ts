@@ -1,7 +1,5 @@
 export interface GradientLegendContainerItem {
-  startColor: string;
-  middleColor?: string;
-  endColor: string;
+  colors: string[];
   title: string;
   startLabel: string;
   endLabel: string;

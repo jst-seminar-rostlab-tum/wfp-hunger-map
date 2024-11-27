@@ -9,7 +9,6 @@ import { LayerWithFeature, NutritionStateChoroplethProps } from '@/domain/props/
 import NutritionStateChoroplethOperations from '@/operations/map/NutritionStateChoroplethOperations';
 
 import NutritionAccordion from './NutritionAccordion';
-import NutritionStateLegend from './NutritionStateLegend';
 
 export default function NutritionStateChoropleth({
   regionNutri,
@@ -78,7 +77,6 @@ export default function NutritionStateChoropleth({
     <>
       <NutritionAccordion setSelectedNutrient={setSelectedNutrient} selectedNutrient={selectedNutrient} />
       <GeoJSON data={regionData} style={dynamicStyle} onEachFeature={onEachFeature} />
-      <NutritionStateLegend />
     </>
   );
 }

@@ -109,7 +109,6 @@ export default function SubscriptionForm() {
   };
 
   const handleSelectionChange = (selectedTopic: ITopic | undefined) => {
-    console.log('>>', selectedTopic);
     setTopic(selectedTopic?.id);
     setOptions(selectedTopic?.options);
   };
@@ -161,7 +160,7 @@ export default function SubscriptionForm() {
           onChange={(changeOrgEvent) => setOrganization(changeOrgEvent.target.value)}
           value={organization}
         />
-        <NestedPopover label="Topic" items={topics} onSelectionChange={handleSelectionChange} />
+        <NestedPopover label="Interested topic" items={topics} onSelectionChange={handleSelectionChange} />
         <Button
           type="submit"
           className="w-full bg-subscribeText dark:bg-subscribeText text-white dark:text-black shadow-lg self-center"

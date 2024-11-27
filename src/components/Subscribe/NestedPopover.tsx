@@ -87,11 +87,17 @@ export function NestedPopover({ label, items, onSelectionChange }: NestedPopover
       <Popover placement="top-end" isOpen={isMenuOpen}>
         <PopoverTrigger className="w-full">
           <Button
-            variant="light"
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white"
+            variant="bordered"
+            className="w-full h-12 hover:bg-blue-100 dark:hover:bg-gray-700 border-gray-200 dark:border-gray-100"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            {label}
+            <div className="flex flex-row items-center">
+              <p>{label}</p>
+              {selectedTopic && <p className="text-sm text-gray-700 dark:text-gray-300">: {selectedTopic?.name}</p>}
+              {selectedOptions.length > 0 && (
+                <p className="text-sm text-gray-500 dark:text-gray-400">: {selectedOptions.join(', ')}</p>
+              )}
+            </div>
           </Button>
         </PopoverTrigger>
 

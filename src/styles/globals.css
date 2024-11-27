@@ -97,6 +97,11 @@ canvas.react-pdf__Page__canvas {
   box-shadow: none !important;
 }
 
+/* remove rectangle when focus over the country/global */
+path.leaflet-interactive:focus {
+  outline: none;
+}
+
 /* .svg color */
 .svg-icon path {
   fill: black;
@@ -104,4 +109,28 @@ canvas.react-pdf__Page__canvas {
 
 :root.dark .svg-icon path {
   fill: white;
+}
+
+/* Custom Scrollbar for Safari */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: theme('colors.content3');
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: theme('colors.content4');
+}
+
+/* Custom Scrollbar for Chrome and Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: theme('colors.content3') transparent;
 }

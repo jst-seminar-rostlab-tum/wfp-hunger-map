@@ -7,10 +7,10 @@ import { AccordionsProps } from '@/domain/props/AccordionProps';
 
 import { Tooltip } from '../Tooltip/Tooltip';
 
-export default function CustomAccordion({ items, loading = false }: AccordionsProps) {
+export default function CustomAccordion({ items, loading = false, multipleSelectionMode = false }: AccordionsProps) {
   return (
     <div className="w-full max-w-[600px] overflow-x-auto p-2 rounded-lg">
-      <Accordion variant="splitted">
+      <Accordion variant="splitted" selectionMode={multipleSelectionMode ? 'multiple' : 'single'}>
         {items.map((item) => (
           <AccordionItem
             key={item.title}
@@ -24,10 +24,10 @@ export default function CustomAccordion({ items, loading = false }: AccordionsPr
                 </div>
                 {item.tooltipInfo ? (
                   <Tooltip text={item.tooltipInfo}>
-                    {item.iconSrc && <img src={item.iconSrc} alt="info icon" className="w-[37px] h-[37px] p-[5.5px]" />}
+                    {item.infoIcon && <span className="w-[37px] h-[37px] p-[5.5px]">{item.infoIcon}</span>}
                   </Tooltip>
                 ) : (
-                  item.iconSrc && <img src={item.iconSrc} alt="info icon" className="w-[37px] h-[37px] p-[5.5px]" />
+                  item.infoIcon && <span className="w-[37px] h-[37px] p-[5.5px]">{item.infoIcon}</span>
                 )}
               </div>
             }

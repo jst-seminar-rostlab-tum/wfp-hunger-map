@@ -17,6 +17,7 @@ export class MapOperations {
     const { countries } = mapProps;
     return new mapboxgl.Map({
       container: mapContainer.current as unknown as string | HTMLElement,
+      logoPosition: 'bottom-left',  // default which can be changed to 'bottom-right'
       style: {
         version: 8,
         name: 'HungerMap LIVE',

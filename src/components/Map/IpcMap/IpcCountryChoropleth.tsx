@@ -10,7 +10,7 @@ function IpcCountryChoropleth({ regionIpcData, countryData }: IpcCountryChorople
   return (
     <>
       <IpcAccordion countryData={countryData} />
-      <GeoJSON style={IpcChoroplethOperations.ipcCountryStyle} data={regionIpcData} />;
+      <GeoJSON style={IpcChoroplethOperations.ipcCountryStyle} data={regionIpcData} />
     </>
   );
 }

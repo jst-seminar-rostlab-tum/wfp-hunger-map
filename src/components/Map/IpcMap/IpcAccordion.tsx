@@ -5,6 +5,7 @@ import { cardsWrapperClass } from '@/utils/primitives';
 
 import { ReactComponent as FoodConsumption } from '../../../../public/Images/FoodConsumption.svg';
 import { ReactComponent as Population } from '../../../../public/Images/Population.svg';
+import CustomInfoCircle from '@/components/CustomInfoCircle/CustomInfoCircle';
 
 export default function IpcAccordion({ countryData }: IpcAccordionProps) {
   const deltaOneMonth = countryData?.fcsMinus1 ? countryData.fcs - countryData.fcsMinus1 : null;
@@ -18,7 +19,7 @@ export default function IpcAccordion({ countryData }: IpcAccordionProps) {
         items={[
           {
             title: 'Food Security',
-            iconSrc: '/Images/InfoIcon.svg',
+            infoIcon: <CustomInfoCircle />,
             content: !hasNoData ? (
               <div className={cardsWrapperClass}>
                 <CustomCard

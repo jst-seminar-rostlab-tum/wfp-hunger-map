@@ -20,9 +20,5 @@ export default function MapLegend() {
     setItems(mapLegendData(selectedMapType, selectedAlert, selectedCountryId));
   }, [selectedAlert, selectedMapType, selectedCountryId]);
 
-  return (
-    <div className="absolute bottom-5 right-0 z-50 pr-10">
-      <LegendContainer items={items} />
-    </div>
-  );
+  return <LegendContainer items={items} />;
 }

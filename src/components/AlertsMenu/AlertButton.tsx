@@ -15,7 +15,14 @@ export const AlertButton = forwardRef<HTMLButtonElement, AlertButtonProps>(
         isIconOnly
         radius="full"
         className={clsx(
-          { 'bg-content2': isSidebarOpen, 'bg-content1': !isSidebarOpen, 'bg-primary': !isLoading && isSelected },
+          {
+            'bg-content2': isSidebarOpen,
+            'bg-content1': !isSidebarOpen,
+            'hover:bg-content2': !isSidebarOpen,
+            'bg-primary': !isLoading && isSelected,
+            'hover:bg-hover': !isLoading && isSelected,
+            'shadow-medium': !isSidebarOpen,
+          },
           className
         )}
         onClick={onClick}
@@ -24,6 +31,8 @@ export const AlertButton = forwardRef<HTMLButtonElement, AlertButtonProps>(
       >
         <div className="w-6 h-6 flex items-center justify-center relative">
           <NextImage
+            unoptimized
+            loading="eager"
             src={icon}
             alt={label}
             className="object-contain w-auto h-auto max-w-full max-h-full"

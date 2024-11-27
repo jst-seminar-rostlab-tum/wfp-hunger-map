@@ -31,10 +31,6 @@ export default function NutritionChoropleth({
     setCountryStyles(parsedStyles);
   }, [nutritionData]);
 
-  if (selectedAlert) {
-    toggleAlert(selectedAlert);
-  }
-
   return (
     <div>
       <GeoJSON
@@ -51,10 +47,12 @@ export default function NutritionChoropleth({
             feature,
             layer,
             map,
+            selectedAlert,
             setSelectedCountryId,
             setRegionData,
             setRegionNutritionData,
-            countryStyles
+            countryStyles,
+            toggleAlert
           )
         }
       />

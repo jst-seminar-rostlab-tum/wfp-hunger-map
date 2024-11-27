@@ -5,23 +5,17 @@ import clsx from 'clsx';
 import { ArrowRight2 } from 'iconsax-react';
 import React, { useEffect, useRef, useState } from 'react';
 
-import { ITopic } from '@/domain/entities/subscribe/Subscribe';
+import { NestedPopoverProps } from '@/domain/props/NestedPopoverProps';
 
-export interface PopoverMenuProps {
-  label: string;
-  items: ITopic[]; // 主菜单项
-  nestedItems: ITopic[]; // 嵌套菜单项
-}
-
-export function NestedPopover({ label, items, nestedItems }: PopoverMenuProps) {
-  const [selectedNestedItems, setSelectedNestedItems] = useState<string[]>([]); // 嵌套菜单多选项
-  const [isNestedOpen, setIsNestedOpen] = useState(false); // 子菜单显示状态
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // 主菜单显示状态
+export function NestedPopover({ label, items, nestedItems }: NestedPopoverProps) {
+  const [selectedNestedItems, setSelectedNestedItems] = useState<string[]>([]);
+  const [isNestedOpen, setIsNestedOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const menuRef = useRef<HTMLDivElement>(null);
   const nestedMenuRef = useRef<HTMLDivElement>(null);
 
-  // 点击菜单外关闭所有菜单
+  // click outside to close the menu
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -40,19 +34,19 @@ export function NestedPopover({ label, items, nestedItems }: PopoverMenuProps) {
     };
   }, []);
 
-  // 主菜单选项点击逻辑：关闭主菜单
+  // main menu item click logic: to close the menu and select the item
   const handleMenuItemClick = () => {
     setIsMenuOpen(false);
   };
 
-  // 嵌套菜单项多选逻辑
+  // nested menu item click logic: to select the item since is multiple
   const handleNestedToggle = (id: string) => {
     setSelectedNestedItems((prev) => (prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]));
   };
 
   return (
     <div ref={menuRef} className="relative">
-      {/* 主菜单触发按钮 */}
+      {/* main menu trigger */}
       <Popover placement="top-end" isOpen={isMenuOpen}>
         <PopoverTrigger className="w-full">
           <Button
@@ -64,24 +58,24 @@ export function NestedPopover({ label, items, nestedItems }: PopoverMenuProps) {
           </Button>
         </PopoverTrigger>
 
-        {/* 主菜单内容 */}
-        <PopoverContent className="bg-white dark:bg-background shadow-lg rounded-md w-40 items-start p-0 border border-solid border-gray-300">
+        {/* main menu items */}
+        <PopoverContent className="bg-white dark:bg-background shadow-lg rounded-md w-40 items-start p-0 border-[0.5px] border-solid border-gray-500">
           <ul className="w-full">
             {items.map((item) => (
               <div
                 key={item.id}
-                className="w-full text-left text-gray-700 hover:bg-blue-100 hover:text-black dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white p-2"
+                className="m-1 h-10 text-left text-gray-700 hover:bg-blue-100 hover:text-black dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white p-2"
                 onClick={handleMenuItemClick}
               >
                 {item.name}
               </div>
             ))}
 
-            <Divider className="bg-gray-300" />
-            {/* 嵌套菜单触发逻辑 */}
+            <Divider className="bg-gray-500 h-[0.5px]" />
+            {/* nested menu trigger logic */}
             <li className="relative">
               <div
-                className="flex w-full flex-row justify-between items-center text-gray-700 hover:bg-blue-100 hover:text-black dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white p-2"
+                className="m-1 h-10 flex flex-row justify-between items-center text-gray-700 hover:bg-blue-100 hover:text-black dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white p-2"
                 onClick={() => setIsNestedOpen(true)}
                 onMouseEnter={() => setIsNestedOpen(true)}
               >
@@ -89,11 +83,11 @@ export function NestedPopover({ label, items, nestedItems }: PopoverMenuProps) {
                 <ArrowRight2 size={24} />
               </div>
 
-              {/* 嵌套菜单内容 */}
+              {/* nested menu items */}
               {isNestedOpen && (
                 <div
                   ref={nestedMenuRef}
-                  className="absolute top-0 left-full bg-white dark:bg-background shadow-lg rounded-md w-40 z-10 border border-solid border-gray-300"
+                  className="absolute top-0 left-full bg-white dark:bg-background shadow-lg rounded-md w-40 z-10 border-[0.5px] border-solid border-gray-500 p-1"
                 >
                   <ul>
                     {nestedItems.map((nestedItem) => (

@@ -6,6 +6,7 @@ import { CountryAlertType } from '@/domain/enums/CountryAlertType';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
 import { HazardSeverity } from '@/domain/enums/HazardSeverity.ts';
 import { IpcPhases } from '@/domain/enums/IpcPhases';
+import { NutritionData } from '@/domain/enums/NutritionData';
 import { GradientLegendContainerItem } from '@/domain/props/GradientLegendContainerItem.ts';
 import PointLegendContainerItem from '@/domain/props/PointLegendContainerItem.ts';
 
@@ -161,6 +162,17 @@ export function mapLegendData(
           ],
         });
       }
+      break;
+    case GlobalInsight.NUTRITION:
+      legendData.push({
+        title: 'Analysis Distribution',
+        tooltipInfo: 'Shows the inadequate ratio of nutrient intake.',
+        records: [
+          { label: NutritionData.ACTUAL_DATA, color: 'nutritionActual' },
+          { label: NutritionData.PREDICTED_DATA, color: 'nutritionPredicted' },
+          { label: NutritionData.NOT_ANALYZED_DATA, color: 'nutritionNotAnalyzed' },
+        ],
+      });
       break;
     default:
   }

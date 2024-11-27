@@ -14,10 +14,11 @@ import { MapProps } from '@/domain/props/MapProps';
 import { AlertContainer } from './Alerts/AlertContainer';
 import FcsChoropleth from './FcsChoropleth';
 import IpcChoropleth from './IpcMap/IpcChoropleth';
+import NutritionChoropleth from './NutritionChoropleth';
 import VectorTileLayer from './VectorTileLayer';
 import ZoomControl from './ZoomControl';
 
-export default function Map({ countries, disputedAreas, ipcData }: MapProps) {
+export default function Map({ countries, disputedAreas, ipcData, nutritionData }: MapProps) {
   const { selectedMapType } = useSelectedMap();
   const { setSelectedMapVisibility } = useSelectedMapVisibility();
   const { selectedAlert, toggleAlert, resetAlert } = useSelectedAlert();
@@ -45,7 +46,14 @@ export default function Map({ countries, disputedAreas, ipcData }: MapProps) {
       style={{ height: '100%', width: '100%', zIndex: 1 }}
     >
       <AlertContainer countries={countries} />
-      {countries && <VectorTileLayer countries={countries} disputedAreas={disputedAreas} ipcData={ipcData} />}
+      {countries && (
+        <VectorTileLayer
+          countries={countries}
+          disputedAreas={disputedAreas}
+          ipcData={ipcData}
+          nutritionData={nutritionData}
+        />
+      )}
       {selectedMapType === GlobalInsight.FOOD &&
         countries.features &&
         countries.features
@@ -74,6 +82,22 @@ export default function Map({ countries, disputedAreas, ipcData }: MapProps) {
         />
       )}
 
+      {selectedMapType === GlobalInsight.NUTRITION &&
+        countries.features &&
+        countries.features
+          .filter((countryData) => countryData.properties.interactive)
+          .map((countryData) => (
+            <NutritionChoropleth
+              key={countryData.properties.adm0_id}
+              countryId={countryData.properties.adm0_id}
+              data={{ type: 'FeatureCollection', features: [countryData as Feature<Geometry, GeoJsonProperties>] }}
+              selectedCountryId={selectedCountryId}
+              selectedAlert={selectedAlert}
+              setSelectedCountryId={setSelectedCountryId}
+              toggleAlert={toggleAlert}
+              nutritionData={nutritionData}
+            />
+          ))}
       <ZoomControl threshold={5} callback={onZoomThresholdReached} />
     </MapContainer>
   );

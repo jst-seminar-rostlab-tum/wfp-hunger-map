@@ -5,16 +5,16 @@ import clsx from 'clsx';
 import { ArrowRight2 } from 'iconsax-react';
 import React, { useEffect, useRef, useState } from 'react';
 
+import { CLICK_TO_SELECT, SELECTED_TOPICS } from '@/domain/constant/subscribe/Subscribe';
 import { ITopic } from '@/domain/entities/subscribe/Subscribe';
 import { NestedPopoverProps } from '@/domain/props/NestedPopoverProps';
 
 /**
  * NestedPopover component
- * @param label is the main menu label and will contain the select topics or options later
  * @param items is the list of items to be displayed in the menu
  * @returns a nested popover component
  */
-export function NestedPopover({ label, items, onSelectionChange }: NestedPopoverProps) {
+export function NestedPopover({ items, onSelectionChange }: NestedPopoverProps) {
   // store nested menu open state
   const [isNestedOpen, setIsNestedOpen] = useState(false);
   // store main menu open state
@@ -92,8 +92,8 @@ export function NestedPopover({ label, items, onSelectionChange }: NestedPopover
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             <div className="flex flex-row items-center">
-              <p>{label}</p>
-              {selectedTopic && <p className="text-sm text-gray-700 dark:text-gray-300">: {selectedTopic?.name}</p>}
+              {selectedTopic ? <p>{SELECTED_TOPICS}</p> : <p>{CLICK_TO_SELECT}</p>}
+              {selectedTopic && <p className="text-sm text-gray-700 dark:text-gray-300">{selectedTopic?.name}</p>}
               {selectedOptions.length > 0 && (
                 <p className="text-sm text-gray-500 dark:text-gray-400">: {selectedOptions.join(', ')}</p>
               )}

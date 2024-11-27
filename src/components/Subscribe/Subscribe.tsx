@@ -8,6 +8,7 @@ import { useCallback, useEffect, useState } from 'react';
 import container from '@/container';
 import {
   MANDATORY,
+  MOCK_TOPICS,
   SUBSCRIBE,
   SUBSCRIBE_MODAL_SUBTITLE,
   SUCCESSFUL_SUBSCRIPTION,
@@ -33,27 +34,6 @@ export default function SubscriptionForm() {
 
   const [subscribeStatus, setSubscribeStatus] = useState<SubscribeStatus>(SubscribeStatus.Idle);
   const [isWaitingSubResponse, setIsWaitingSubResponse] = useState(false);
-
-  const topics = [
-    {
-      id: '1',
-      name: 'Topic 1',
-    },
-    {
-      id: '2',
-      name: 'Topic 2',
-      options: ['Option 4', 'Option 5', 'Option 6'],
-    },
-    {
-      id: '3',
-      name: 'Topic 3',
-      options: ['Option 1', 'Option 2', 'Option 3'],
-    },
-    {
-      id: '4',
-      name: 'Topic 4',
-    },
-  ];
 
   const validateEmail = useCallback((newEmail: string): boolean => {
     return !!newEmail.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i);
@@ -160,7 +140,7 @@ export default function SubscriptionForm() {
           onChange={(changeOrgEvent) => setOrganization(changeOrgEvent.target.value)}
           value={organization}
         />
-        <NestedPopover label="Interested topic" items={topics} onSelectionChange={handleSelectionChange} />
+        <NestedPopover items={MOCK_TOPICS} onSelectionChange={handleSelectionChange} />
         <Button
           type="submit"
           className="w-full bg-subscribeText dark:bg-subscribeText text-white dark:text-black shadow-lg self-center"

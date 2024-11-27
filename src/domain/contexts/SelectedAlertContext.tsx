@@ -1,3 +1,4 @@
+import { sendGAEvent } from '@next/third-parties/google';
 import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
 
 import { AlertType } from '../enums/AlertType';
@@ -15,8 +16,16 @@ export function SelectedAlertProvider({ children }: { children: ReactNode }) {
   const [selectedAlert, setSelectedAlert] = useState<AlertType | null>(AlertType.COUNTRY_ALERTS);
 
   const isAlertSelected = (alertType: AlertType) => selectedAlert === alertType;
-  const toggleAlert = (alertType: AlertType) =>
-    isAlertSelected(alertType) ? setSelectedAlert(null) : setSelectedAlert(alertType);
+  const toggleAlert = (alertType: AlertType) => {
+    if (isAlertSelected(alertType)) {
+      setSelectedAlert(null);
+    } else {
+      setSelectedAlert(alertType);
+      sendGAEvent('event', 'selectedAlertChanged', {
+        alertType,
+      });
+    }
+  };
 
   const value = useMemo(
     () => ({

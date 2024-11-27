@@ -77,6 +77,14 @@ const config = {
       },
       zIndex: {
         9999: '9999',
+        sidebarExpanded: '41',
+        sidebarCollapsed: '40',
+        sidebarFullScreen: '41',
+        chatbotExpanded: '41',
+        chatbotCollapsed: '40',
+        chatbotFullScreen: '41',
+        alertsMenu: '40',
+        legend: '40',
       },
       animation: {
         blink: 'blink 1s step-end infinite',

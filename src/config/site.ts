@@ -1,6 +1,6 @@
 export const siteConfig = {
-  name: 'WFP HungerMap',
-  description: 'TODO',
+  name: 'HungerMap LIVE',
+  description: 'HungerMap LIVE by mVAM',
   navItems: [
     {
       label: 'Home',

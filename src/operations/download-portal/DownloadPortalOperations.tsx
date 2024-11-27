@@ -16,19 +16,14 @@ export class DownloadPortalOperations {
     ] as CustomTableColumns;
   }
 
-  static formatTableData(
-    data: CountryCodesData[],
-    setSelectedCountry: (country: CountryCodesData) => void,
-    toggleModal: () => void
-  ) {
+  static formatTableData(data: CountryCodesData[], onSelectCountry: (country: CountryCodesData) => void) {
     return data.map((item, index) => ({
       keyColumn: (index + 1).toString(),
       country: item.country.name,
       preview: (
         <CustomButton
           onClick={() => {
-            setSelectedCountry(item);
-            toggleModal();
+            onSelectCountry(item);
           }}
           className="hover:underline"
         >

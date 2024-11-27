@@ -2,7 +2,6 @@
 
 import { Button } from '@nextui-org/button';
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
-import { Input } from '@nextui-org/input';
 import { Link } from '@nextui-org/link';
 import clsx from 'clsx';
 import { SidebarLeft } from 'iconsax-react';
@@ -21,12 +20,14 @@ import { AlertsMenuVariant } from '@/domain/enums/AlertsMenuVariant';
 import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
 
 import PopupModal from '../PopupModal/PopupModal';
+import SearchBar from '../Search/SearchBar';
 import Subscribe from '../Subscribe/Subscribe';
 
 export function Sidebar() {
   const { isSidebarOpen, toggleSidebar } = useSidebar();
   const { selectedMapType, setSelectedMapType } = useSelectedMap();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   if (!isSidebarOpen) {
     return <CollapsedSidebar />;
@@ -48,7 +49,7 @@ export function Sidebar() {
             </Button>
           </div>
           <ThemeSwitch />
-          <Input className="w-full" color="primary" placeholder="Search a country" variant="faded" />
+          <SearchBar value={searchTerm} onValueChange={setSearchTerm} placeholder="Search a country" />
         </CardHeader>
         <CardBody>
           <div className="p-1 w-full">

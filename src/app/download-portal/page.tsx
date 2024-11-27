@@ -1,10 +1,10 @@
 'use client';
 
-import { Input } from '@nextui-org/input';
-import { SearchNormal1 } from 'iconsax-react';
 import { useState } from 'react';
 
+import { PdfViewer } from '@/components/Pdf/PdfViewer';
 import PopupModal from '@/components/PopupModal/PopupModal';
+import SearchBar from '@/components/Search/SearchBar';
 import CustomTable from '@/components/Table/CustomTable';
 import { CountryCodesData } from '@/domain/entities/country/CountryCodesData';
 import { useCountryCodesQuery } from '@/domain/hooks/globalHooks';
@@ -12,11 +12,43 @@ import { DownloadPortalOperations } from '@/operations/download-portal/DownloadP
 
 export default function DownloadPortal() {
   const { isLoading, data } = useCountryCodesQuery();
-  const [selectedCountry, setSelectedCountry] = useState<CountryCodesData | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [pdfFile, setPdfFile] = useState<string | ArrayBuffer | Blob | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const toggleModal = () => setModalOpen((prev) => !prev);
+  const toggleModal = () => {
+    setModalOpen((prev) => !prev);
+  };
+
+  const fetchPdfAsByteStream = async (url: string): Promise<ArrayBuffer> => {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch PDF: ${response.status} ${response.statusText}`);
+    }
+    return response.arrayBuffer();
+  };
+
+  const handlePreview = async (url: string) => {
+    setError(null);
+
+    try {
+      const arrayBuffer = await fetchPdfAsByteStream(url);
+      const blob = new Blob([arrayBuffer], { type: 'application/pdf' });
+      setPdfFile(blob);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unknown error occurred while fetching the PDF.');
+      }
+    }
+  };
+
+  const onSelectCountry = (country: CountryCodesData) => {
+    handlePreview(country.url.summary);
+    toggleModal();
+  };
 
   const filteredData = data?.filter((item) => item.country.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
@@ -28,50 +60,22 @@ export default function DownloadPortal() {
     <div>
       <h1>Download Portal</h1>
       <div className="my-3">
-        <Input
-          isClearable
-          placeholder="Search by country name..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          radius="lg"
-          startContent={<SearchNormal1 className="text-gray-500 dark:text-gray-300 text-lg flex-shrink-0" />}
-          classNames={{
-            inputWrapper: [
-              'bg-transparent',
-              'shadow-xl',
-              'border',
-              'border-gray-300',
-              'dark:border-gray-600',
-              'rounded-lg',
-            ],
-            input: 'bg-transparent text-black dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-300',
-          }}
-        />
+        <SearchBar value={searchTerm} onValueChange={setSearchTerm} placeholder="Search by country..." />
       </div>
       {filteredData && (
         <CustomTable
           columns={DownloadPortalOperations.getColumns()}
-          data={DownloadPortalOperations.formatTableData(filteredData, setSelectedCountry, toggleModal)}
+          data={DownloadPortalOperations.formatTableData(filteredData, onSelectCountry)}
           ariaLabel="Download Portal Table"
         />
       )}
-      {selectedCountry && (
-        <PopupModal
-          isModalOpen={isModalOpen}
-          toggleModal={toggleModal}
-          modalTitle={`${selectedCountry.country.name} - Preview`}
-          modalSize="5xl"
-          modalHeight="h-auto"
-        >
-          <div>
-            <p>Country: {selectedCountry.country.name}</p>
-            <p>ISO3: {selectedCountry.country.iso3}</p>
-            <a href={selectedCountry.url.summary} target="_blank" rel="noopener noreferrer">
-              Open Summary
-            </a>
-          </div>
-        </PopupModal>
-      )}
+      <PopupModal isModalOpen={isModalOpen} toggleModal={toggleModal} modalSize="5xl" scrollBehavior="outside">
+        {error ? (
+          <div className="bg-background text-danger border rounded-md p-4 text-center">{error}</div>
+        ) : (
+          <PdfViewer file={pdfFile} />
+        )}
+      </PopupModal>
     </div>
   );
 }

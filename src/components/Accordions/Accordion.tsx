@@ -7,10 +7,10 @@ import { AccordionsProps } from '@/domain/props/AccordionProps';
 
 import { Tooltip } from '../Tooltip/Tooltip';
 
-export default function CustomAccordion({ items, loading = false }: AccordionsProps) {
+export default function CustomAccordion({ items, loading = false, multipleSelectionMode = false }: AccordionsProps) {
   return (
     <div className="w-full max-w-[600px] overflow-x-auto p-2 rounded-lg">
-      <Accordion variant="splitted">
+      <Accordion variant="splitted" selectionMode={multipleSelectionMode ? 'multiple' : 'single'}>
         {items.map((item) => (
           <AccordionItem
             key={item.title}
@@ -32,6 +32,7 @@ export default function CustomAccordion({ items, loading = false }: AccordionsPr
               </div>
             }
           >
+            {item.description && <p className="text-sm text-balance pb-8 text-center">{item.description}</p>}
             {typeof item.content === 'string' ? (
               <div className="p-4 break-words text-balance">{item.content}</div>
             ) : (

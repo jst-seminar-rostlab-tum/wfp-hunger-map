@@ -10,7 +10,7 @@ import { useSelectedMapVisibility } from '@/domain/contexts/SelectedMapVisibilit
 import { MapProps } from '@/domain/props/MapProps';
 import { MapOperations } from '@/operations/map/MapOperations';
 
-export default function VectorTileLayer({ countries, disputedAreas, ipcData }: MapProps) {
+export default function VectorTileLayer({ countries, disputedAreas, ipcData, nutritionData }: MapProps) {
   const { theme } = useTheme();
   const context: LeafletContextInterface = useLeafletContext();
   const mapContainer: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
@@ -24,7 +24,7 @@ export default function VectorTileLayer({ countries, disputedAreas, ipcData }: M
   useEffect(() => {
     const baseMap: mapboxgl.Map = MapOperations.createMapboxMap(
       theme === 'dark',
-      { countries, disputedAreas, ipcData, selectedMapType },
+      { countries, disputedAreas, ipcData, selectedMapType, nutritionData },
       mapContainer
     );
     const popover = new mapboxgl.Popup({ closeButton: false, closeOnClick: false });
@@ -49,7 +49,7 @@ export default function VectorTileLayer({ countries, disputedAreas, ipcData }: M
   useEffect(() => {
     if (map && popup && selectedMapVisibility) {
       MapOperations.removeActiveMapLayer(map, theme === 'dark');
-      MapOperations.addMapAsLayer(map, theme === 'dark', { countries, ipcData, selectedMapType }, popup);
+      MapOperations.addMapAsLayer(map, theme === 'dark', { countries, ipcData, selectedMapType, nutritionData }, popup);
     } else if (map && popup) {
       MapOperations.removeActiveMapLayer(map, theme === 'dark');
     }

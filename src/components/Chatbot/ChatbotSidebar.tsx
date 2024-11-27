@@ -16,10 +16,10 @@ export default function ChatbotSidebar({
   return (
     <Card
       className={clsx(
-        'absolute top-0 left-0 h-full z-[9999] shadow-none',
+        'absolute top-0 left-0 h-full shadow-none',
         isFullScreen
-          ? 'w-[215px] rounded-none bg-chatbotFullscreen dark:bg-chatbotFullscreen'
-          : 'w-[179px] rounded-[12px_0_0_12px] bg-opacity-50 bg-chatbotSidebar dark:bg-chatbotSidebar'
+          ? 'w-[215px] rounded-none bg-chatbotFullscreen dark:bg-chatbotFullscreen z-chatbotFullScreen'
+          : 'w-[179px] rounded-[12px_0_0_12px] bg-opacity-50 bg-chatbotSidebar dark:bg-chatbotSidebar z-chatbotExpanded'
       )}
     >
       <CardBody className="p-4">

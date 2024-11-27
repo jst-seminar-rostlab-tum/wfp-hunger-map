@@ -1,13 +1,12 @@
 import { FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
 
-import { AlertType } from '../enums/AlertType';
+import { CountryData } from '@/domain/entities/country/CountryData.ts';
+import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data.ts';
 
 export default interface FcsChoroplethProps {
-  data: FeatureCollection<Geometry, GeoJsonProperties>;
   countryId: number;
-  selectedCountryId?: number;
-  selectedAlert: AlertType | null;
-  setSelectedCountryId: (countryId?: number) => void;
-  setSelectedMapVisibility: (visibility: boolean) => void;
-  toggleAlert: (alertType: AlertType) => void;
+  selectedCountryId: number | undefined;
+  countryData: CountryData | undefined;
+  countryIso3Data: CountryIso3Data | undefined;
+  regionData: FeatureCollection<Geometry, GeoJsonProperties> | undefined;
 }

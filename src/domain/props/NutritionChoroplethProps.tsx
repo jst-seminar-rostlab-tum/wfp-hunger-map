@@ -1,15 +1,10 @@
 import { FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
 
-import { CountryNutrition } from '@/domain/entities/country/CountryNutrition.ts';
-
-import { AlertType } from '../enums/AlertType';
+import { CountryMimiData } from '@/domain/entities/country/CountryMimiData.ts';
 
 export default interface NutritionChoroplethProps {
-  data: FeatureCollection<Geometry, GeoJsonProperties>;
   countryId: number;
-  selectedAlert: AlertType | null;
-  selectedCountryId?: number;
-  setSelectedCountryId: (countryId?: number) => void;
-  toggleAlert: (alertType: AlertType) => void;
-  nutritionData: CountryNutrition;
+  selectedCountryId: number | undefined;
+  regionData: FeatureCollection<Geometry, GeoJsonProperties> | undefined;
+  regionNutritionData: CountryMimiData | undefined;
 }

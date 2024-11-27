@@ -10,10 +10,19 @@ import { useSelectedAlert } from '@/domain/contexts/SelectedAlertContext';
 import { useSelectedCountry } from '@/domain/contexts/SelectedCountryContext';
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSelectedMapVisibility } from '@/domain/contexts/SelectedMapVisibilityContext';
-import { MapProps } from '@/domain/props/MapProps';
+import VectorTileLayerProps from '@/domain/props/VectorTileLayerProps.ts';
 import { MapOperations } from '@/operations/map/MapOperations';
 
-export default function VectorTileLayer({ countries, disputedAreas, ipcData, nutritionData }: MapProps) {
+export default function VectorTileLayer({
+  countries,
+  disputedAreas,
+  ipcData,
+  nutritionData,
+  setCountryData,
+  setCountryIso3Data,
+  setRegionData,
+  setRegionNutritionData,
+}: VectorTileLayerProps) {
   const { theme } = useTheme();
   const context: LeafletContextInterface = useLeafletContext();
   const mapContainer: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
@@ -24,7 +33,7 @@ export default function VectorTileLayer({ countries, disputedAreas, ipcData, nut
   const leafletMap = useMap();
   const [map, setMap] = useState<mapboxgl.Map>();
   const [popup, setPopup] = useState<Popup>();
-  const { selectedMapVisibility } = useSelectedMapVisibility();
+  const { selectedMapVisibility, setSelectedMapVisibility } = useSelectedMapVisibility();
 
   mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 
@@ -42,7 +51,17 @@ export default function VectorTileLayer({ countries, disputedAreas, ipcData, nut
       setMap(baseMap);
       setPopup(popover);
     });
-    MapOperations.setMapInteractionFunctionality(baseMap, popover, setSelectedCountry, countries);
+    MapOperations.setMapInteractionFunctionality(
+      baseMap,
+      popover,
+      setSelectedCountry,
+      countries,
+      setSelectedMapVisibility,
+      setCountryData,
+      setCountryIso3Data,
+      setRegionData,
+      setRegionNutritionData
+    );
     MapOperations.synchronizeLeafletMapbox(baseMap, mapContainer, context);
     // The following layers currently don't work due to CORS issues.
     MapOperations.initRainfallLayer(baseMap);

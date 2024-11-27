@@ -2,7 +2,7 @@
 import { LeafletContextInterface } from '@react-leaflet/core';
 import mapboxgl, { DataDrivenPropertyValueSpecification, Popup } from 'mapbox-gl';
 import * as turf from '@turf/turf';
-import { FeatureCollection, GeoJSON } from 'geojson';
+import { Feature, FeatureCollection, GeoJSON, GeoJsonProperties, Geometry } from 'geojson';
 import { Map } from 'leaflet';
 import { RefObject } from 'react';
 
@@ -16,9 +16,17 @@ import { IPCMapOperations } from '../IPC/IpcMapOperations';
 import ReactDOMServer from 'react-dom/server';
 import CountryHoverPopover from '../../components/CountryHoverPopover/CountryHoverPopover';
 import { CountryIpcData } from '@/domain/entities/country/CountryIpcData';
+import container from '@/container.tsx';
+import CountryRepository from '@/domain/repositories/CountryRepository.ts';
+import { CountryData } from '@/domain/entities/country/CountryData.ts';
+import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data.ts';
+import { CountryMimiData } from '@/domain/entities/country/CountryMimiData.ts';
 
 export class MapOperations {
-  private static getCountryFillColorForIPC = ({ selectedMapType, ipcData, countries }: MapProps, mapColors: MapColorsType): DataDrivenPropertyValueSpecification<string> => {
+  private static getCountryFillColorForIPC = (
+    { selectedMapType, ipcData, countries }: MapProps,
+    mapColors: MapColorsType
+  ): DataDrivenPropertyValueSpecification<string> => {
     switch (selectedMapType) {
       case GlobalInsight.IPC:
         return [
@@ -32,17 +40,13 @@ export class MapOperations {
     }
   };
 
-  static createMapboxMap(
-    isDark: boolean,
-    mapProps: MapProps,
-    mapContainer: RefObject<HTMLDivElement>
-  ): mapboxgl.Map {
+  static createMapboxMap(isDark: boolean, mapProps: MapProps, mapContainer: RefObject<HTMLDivElement>): mapboxgl.Map {
     const mapColors: MapColorsType = getColors(isDark);
 
-    const { countries } = mapProps
+    const { countries } = mapProps;
     return new mapboxgl.Map({
       container: mapContainer.current as unknown as string | HTMLElement,
-      logoPosition: 'bottom-left',  // default which can be changed to 'bottom-right'
+      logoPosition: 'bottom-left', // default which can be changed to 'bottom-right'
       style: {
         version: 8,
         name: 'HungerMap LIVE',
@@ -116,8 +120,15 @@ export class MapOperations {
   }
 
   static setMapInteractionFunctionality(
-    baseMap: mapboxgl.Map, popover: Popup, setSelectedCountry: (country: CountryMapData | null) => void,
-    countries: CountryMapDataWrapper
+    baseMap: mapboxgl.Map,
+    popover: Popup,
+    setSelectedCountry: (country: CountryMapData | null) => void,
+    countries: CountryMapDataWrapper,
+    setSelectedMapVisibility: (visibility: boolean) => void,
+    setCountryData: (countryData: CountryData) => void,
+    setCountryIso3Data: (countryIso3Data: CountryIso3Data) => void,
+    setRegionData: (regionData: FeatureCollection<Geometry, GeoJsonProperties>) => void,
+    setRegionNutritionData: (regionNutritionData: CountryMimiData | undefined) => void,
   ): void {
     let hoveredPolygonId: string | number | undefined;
 
@@ -165,16 +176,66 @@ export class MapOperations {
         const selectedCountryData: CountryMapData | undefined = countries.features.find(
           (countryItem) => countryItem.properties.adm0_name === feature.properties.adm0_name
         );
-        if (selectedCountryData) {
-          setSelectedCountry(selectedCountryData);
-        }
+        this.handleClickOnCountry(
+          selectedCountryData,
+          setSelectedCountry,
+          setSelectedMapVisibility,
+          setCountryData,
+          setCountryIso3Data,
+          setRegionData,
+          setRegionNutritionData,
+        );
       }
-    })
+    });
   }
 
-  private static onIpcMoveInvocation: ((e: any) => void) | null = null
+  private static async handleClickOnCountry(
+    selectedCountryData: CountryMapData | undefined,
+    setSelectedCountry: (country: CountryMapData | null) => void,
+    setSelectedMapVisibility: (visibility: boolean) => void,
+    setCountryData: (countryData: CountryData) => void,
+    setCountryIso3Data: (countryIso3Data: CountryIso3Data) => void,
+    setRegionData: (regionData: FeatureCollection<Geometry, GeoJsonProperties>) => void,
+    setRegionNutritionData: (regionNutritionData: CountryMimiData | undefined) => void,
+  ): Promise<void> {
+    if (selectedCountryData) {
+      setSelectedCountry(selectedCountryData);
+      setSelectedMapVisibility(false);
 
-  private static onIpcMouseMove(e: any, popover: Popup, ipcData: CountryIpcData[], countries: CountryMapDataWrapper, baseMap: mapboxgl.Map) {
+      const countryRepository = container.resolve<CountryRepository>('CountryRepository');
+      try {
+        const newRegionData = await countryRepository.getRegionData(selectedCountryData.properties.adm0_id);
+        if (newRegionData && newRegionData.features) {
+          setRegionData({
+            type: 'FeatureCollection',
+            features: newRegionData.features as Feature<Geometry, GeoJsonProperties>[],
+          });
+        }
+
+        const regionNutrition = await countryRepository.getRegionNutritionData(selectedCountryData.properties.adm0_id);
+        setRegionNutritionData(regionNutrition);
+
+        const newCountryData = await countryRepository.getCountryData(selectedCountryData.properties.adm0_id);
+        setCountryData(newCountryData);
+        const newCountryIso3Data = await countryRepository.getCountryIso3Data(selectedCountryData.properties.iso3);
+        setCountryIso3Data(newCountryIso3Data);
+
+        //setLoading(false);
+      } catch {
+        // Do nothing
+      }
+    }
+  }
+
+  private static onIpcMoveInvocation: ((e: any) => void) | null = null;
+
+  private static onIpcMouseMove(
+    e: any,
+    popover: Popup,
+    ipcData: CountryIpcData[],
+    countries: CountryMapDataWrapper,
+    baseMap: mapboxgl.Map
+  ) {
     const countryData = e.features && (e.features[0] as CountryMapData);
     const countryName = countryData.properties.adm0_name;
     const ipcColorMap = IPCMapOperations.generateColorMap(ipcData, countries);
@@ -205,9 +266,9 @@ export class MapOperations {
         }
         summary={
           <>
-            <span className="font-bold text-danger text-base">{formattedPopNum}</span> people in IPC/CH Phase 3
-            and above (<span className="font-bold text-danger text-base">{ipc_percent}%</span> of people in the
-            analyzed areas)
+            <span className="font-bold text-danger text-base">{formattedPopNum}</span> people in IPC/CH Phase 3 and
+            above (<span className="font-bold text-danger text-base">{ipc_percent}%</span> of people in the analyzed
+            areas)
           </>
         }
       />
@@ -370,9 +431,10 @@ export class MapOperations {
         );
         break;
       case GlobalInsight.IPC:
-        baseMap.setPaintProperty('countries-base', 'fill-color', this.getCountryFillColorForIPC(mapProps, mapColors))
-        this.onIpcMoveInvocation = (e) => this.onIpcMouseMove(e, popover, mapProps.ipcData, mapProps.countries, baseMap)
-        baseMap.on('mousemove', 'countries-hover', this.onIpcMoveInvocation)
+        baseMap.setPaintProperty('countries-base', 'fill-color', this.getCountryFillColorForIPC(mapProps, mapColors));
+        this.onIpcMoveInvocation = (e) =>
+          this.onIpcMouseMove(e, popover, mapProps.ipcData, mapProps.countries, baseMap);
+        baseMap.on('mousemove', 'countries-hover', this.onIpcMoveInvocation);
       default:
     }
   }
@@ -386,13 +448,13 @@ export class MapOperations {
       [this.FCS_LAYER, this.VEGETATION_LAYER, this.RAINFALL_LAYER].includes(layer.id)
     );
     if (!layerToRemove) {
-      baseMap.setPaintProperty('countries-base', 'fill-color', mapColors.countriesBase)
+      baseMap.setPaintProperty('countries-base', 'fill-color', mapColors.countriesBase);
       if (this.onIpcMoveInvocation) {
-        baseMap.off('mousemove', 'countries-hover', this.onIpcMoveInvocation)
-        this.onIpcMoveInvocation = null
+        baseMap.off('mousemove', 'countries-hover', this.onIpcMoveInvocation);
+        this.onIpcMoveInvocation = null;
       }
-      return
-    };
+      return;
+    }
     baseMap.removeLayer(layerToRemove.id);
   }
 

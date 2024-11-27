@@ -4,7 +4,7 @@ import { PointLegendProps } from '@/domain/props/PointLegendProps';
 
 export default function PointLegend({ records, children }: PointLegendProps) {
   return (
-    <div className="relative flex flex-col w-96 px-4 py-3">
+    <div className="relative flex flex-col w-full md:w-96 px-4 py-3">
       <div className="flex flex-wrap gap-x-3 gap-y-2">
         {records.map((record) =>
           children ? (

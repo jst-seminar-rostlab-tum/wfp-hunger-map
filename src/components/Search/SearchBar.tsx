@@ -2,12 +2,7 @@ import { Input } from '@nextui-org/react';
 import { SearchNormal1 } from 'iconsax-react';
 import React from 'react';
 
-interface SearchBarProps {
-  value: string;
-  onValueChange: (value: string) => void;
-  placeholder?: string;
-  className?: string;
-}
+import { SearchBarProps } from '@/domain/props/SearchBarProps';
 
 export default function SearchBar({ value, onValueChange, placeholder, className }: SearchBarProps) {
   return (

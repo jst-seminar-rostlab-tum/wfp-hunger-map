@@ -1,3 +1,5 @@
+import { CountryNutrition } from '@/domain/entities/country/CountryNutrition';
+
 import { ChangeLogItem } from '../entities/ChangeLogItem';
 import { CountryCodesData } from '../entities/country/CountryCodesData';
 import { CountryIpcData } from '../entities/country/CountryIpcData';
@@ -35,4 +37,6 @@ export interface GlobalDataRepository {
    * Return the Year in Review reports of the WFP HungerMap
    */
   getYearInReviews(): Promise<YearInReview[]>;
+
+  getNutritionData(): Promise<CountryNutrition>;
 }

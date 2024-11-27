@@ -3,6 +3,7 @@ import { ResponseWrapper } from '@/domain/entities/common/ResponseWrapper';
 import { CountryCodesData } from '@/domain/entities/country/CountryCodesData';
 import { CountryIpcData } from '@/domain/entities/country/CountryIpcData';
 import { CountryMapDataWrapper } from '@/domain/entities/country/CountryMapData';
+import { CountryNutrition } from '@/domain/entities/country/CountryNutrition';
 import { DisputedAreas } from '@/domain/entities/DisputedAreas';
 import { YearInReview } from '@/domain/entities/YearInReview';
 import { GlobalDataRepository } from '@/domain/repositories/GlobalDataRepository';
@@ -43,5 +44,10 @@ export default class GlobalDataRepositoryImpl implements GlobalDataRepository {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ipc.json`);
     const data: ResponseWrapper<CountryIpcData[]> = await response.json();
     return data.body;
+  }
+
+  async getNutritionData(): Promise<CountryNutrition> {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/mimiCountries.json`);
+    return response.json();
   }
 }

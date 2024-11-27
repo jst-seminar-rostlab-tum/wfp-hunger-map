@@ -40,33 +40,10 @@ const contextAndNeedTableData: DataSourceTableData = [
 
 const foodSecurityTableData: DataSourceTableData = [
   {
-    label: 'Estimated number of people',
-    description:
-      'The number of people are estimated by multiplying the percentages calculated from mVAM data by the population of the country.',
-    dataSource: (
-      <span>
-        <Abbreviation abbreviation="WFP" />: representative face-to-face household surveys (e.g.{' '}
-        <Abbreviation abbreviation="CFSVA" />, <Abbreviation abbreviation="EFSA" />) and{' '}
-        <Abbreviation abbreviation="mVAM" /> surveys
-      </span>
-    ),
-    updateDetails: [
-      {
-        label: (
-          <>
-            <Abbreviation abbreviation="mVAM" /> surveys
-          </>
-        ),
-        interval: 'daily or monthly',
-      },
-      { label: 'face-to-face surveys', interval: 'biyearly or less' },
-    ],
-  },
-  {
     label: 'People with insufficient food consumption',
     description:
       'Number of people with poor or borderline food consumption according to the Food Consumption Score (FCS).',
-    readMoreLink: '#',
+    readMoreLink: '/wiki',
     dataSource: (
       <span>
         <Abbreviation abbreviation="WFP" />: representative face-to-face household surveys (e.g.{' '}
@@ -98,7 +75,7 @@ const foodSecurityTableData: DataSourceTableData = [
   {
     label: 'reduced Coping Strategies Index (rCSI)',
     description: 'Frequency and Severity of behaviors when faced with shortages of food.',
-    readMoreLink: '#',
+    readMoreLink: '/wiki',
     dataSource: (
       <span>
         <Abbreviation abbreviation="WFP" />: representative face-to-face household surveys (e.g.{' '}
@@ -138,7 +115,7 @@ const nutritionTable: DataSourceTableData = [
   {
     label: 'Acute malnutrition',
     description: 'Characterized by a rapid deterioration in nutritional status over a short period of time.',
-    readMoreLink: '#',
+    readMoreLink: '/wiki',
     dataSource: 'Joint Malnutrition Estimates – UNICEF, WHO, World Bank',
     updateInterval: 'yearly or less',
   },
@@ -146,7 +123,7 @@ const nutritionTable: DataSourceTableData = [
     label: 'Chronic malnutrition',
     description:
       'A form of growth failure which develops as a result of inadequate nutrition and/or repeated infections over long periods of time.',
-    readMoreLink: '#',
+    readMoreLink: '/wiki',
     dataSource: 'Joint Malnutrition Estimates – UNICEF, WHO, World Bank',
     updateInterval: 'yearly or less',
   },
@@ -211,6 +188,7 @@ const seasonalTable: DataSourceTableData = [
         <Abbreviation abbreviation="WFP" /> <Abbreviation abbreviation="VAM" />
       </>
     ),
+    readMoreLink: '/wiki',
     updateInterval: 'every 10 days',
   },
   {
@@ -221,6 +199,7 @@ const seasonalTable: DataSourceTableData = [
       'MODIS platforms Terra and Aqua. MODIS NDVI CMG data product retrieved from Earthdata Search, courtesy of NASA ' +
       'EOSDIS Land Processes Distributed Active Archive Center (LP DAAC), USGS/Earth Resources Observation and ' +
       'Science (EROS) Center.',
+    readMoreLink: '/wiki',
     updateInterval: 'every 8 days',
   },
   {

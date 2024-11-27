@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { cachedQueryClient } from '@/config/queryClient';
 import container from '@/container';
+import { CountryNutrition } from '@/domain/entities/country/CountryNutrition';
 
 import { CountryIpcData } from '../entities/country/CountryIpcData';
 import { GlobalDataRepository } from '../repositories/GlobalDataRepository';
@@ -22,6 +23,15 @@ export const useCountryCodesQuery = () =>
     {
       queryKey: ['fetchCountryCodes'],
       queryFn: globalRepo.getCountryCodes,
+    },
+    cachedQueryClient
+  );
+
+export const useNutritionQuery = () =>
+  useQuery<CountryNutrition>(
+    {
+      queryKey: ['fetchNutritionData'],
+      queryFn: globalRepo.getNutritionData,
     },
     cachedQueryClient
   );

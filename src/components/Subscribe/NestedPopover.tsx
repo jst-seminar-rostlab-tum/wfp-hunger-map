@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import { ArrowRight2 } from 'iconsax-react';
 import React, { useEffect, useRef, useState } from 'react';
 
+import { ITopic } from '@/domain/entities/subscribe/Subscribe';
 import { NestedPopoverProps } from '@/domain/props/NestedPopoverProps';
 
 /**
@@ -21,7 +22,7 @@ export function NestedPopover({ label, items, onSelectionChange }: NestedPopover
   // store which nested menu is open
   const [openNestedMenu, setOpenNestedMenu] = useState<string | null>(null);
   // store select topic
-  const [selectedTopic, setSelectedTopic] = useState<string>('');
+  const [selectedTopic, setSelectedTopic] = useState<ITopic | undefined>(undefined);
   // store selected options
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
@@ -49,16 +50,20 @@ export function NestedPopover({ label, items, onSelectionChange }: NestedPopover
   }, []);
 
   // main menu item click logic: to close the menu and select the item
-  const selectMainMenuItem = (topicId: string): void => {
+  const selectMainMenuItem = (topic: ITopic): void => {
     setSelectedOptions([]); // if the selected item is a main menu item, clear the selected options of other items
-    setSelectedTopic(topicId);
+    setSelectedTopic(topic);
     setIsMenuOpen(false);
   };
 
   // nested menu item click logic: to select the item since is multiple
-  const selectNestedOption = (option: string, topicId: string): void => {
-    setSelectedTopic(topicId);
+  const selectNestedOption = (option: string, topic: ITopic): void => {
     setSelectedOptions((prev) => (prev.includes(option) ? prev.filter((item) => item !== option) : [...prev, option]));
+    if (selectedTopic && selectedTopic.id !== topic.id) {
+      // clear options if the topic is changed
+      setSelectedOptions([option]);
+    }
+    setSelectedTopic({ id: topic.id, name: topic.name, options: [...selectedOptions, option] });
   };
 
   /**
@@ -72,9 +77,9 @@ export function NestedPopover({ label, items, onSelectionChange }: NestedPopover
 
   useEffect(() => {
     if (selectedTopic) {
-      onSelectionChange(selectedTopic, selectedOptions);
+      onSelectionChange(selectedTopic);
     }
-  }, [selectedTopic, selectedOptions, onSelectionChange]);
+  }, [selectedTopic]);
 
   return (
     <div ref={menuRef} className="relative">
@@ -98,7 +103,7 @@ export function NestedPopover({ label, items, onSelectionChange }: NestedPopover
                 <div
                   key={item.id}
                   className="m-1 h-10 text-left text-gray-700 hover:bg-blue-100 hover:text-black dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white p-2"
-                  onClick={() => selectMainMenuItem(item.id)}
+                  onClick={() => selectMainMenuItem(item)}
                 >
                   {item.name}
                 </div>
@@ -136,7 +141,7 @@ export function NestedPopover({ label, items, onSelectionChange }: NestedPopover
                                 : 'text-gray-700 hover:bg-blue-100 hover:text-black dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white'
                             )}
                           >
-                            <div className="w-full text-left p-2" onClick={() => selectNestedOption(option, item.id)}>
+                            <div className="w-full text-left p-2" onClick={() => selectNestedOption(option, item)}>
                               {option}
                             </div>
                             {selectedOptions.includes(option) && (

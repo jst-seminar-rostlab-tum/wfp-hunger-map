@@ -7,7 +7,7 @@ export interface ITopic {
 export interface ISubscribe {
   name: string;
   email: string;
-  topicId: string;
+  topicId?: string;
   organization: string;
   options?: string[];
 }

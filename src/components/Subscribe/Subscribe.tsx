@@ -13,6 +13,7 @@ import {
   SUCCESSFUL_SUBSCRIPTION,
   UNSUCCESSFUL_SUBSCRIPTION,
 } from '@/domain/constant/subscribe/Subscribe';
+import { ITopic } from '@/domain/entities/subscribe/Subscribe';
 import { SubscribeStatus } from '@/domain/enums/SubscribeTopic';
 import SubscriptionRepository from '@/domain/repositories/SubscriptionRepository';
 
@@ -24,7 +25,7 @@ export default function SubscriptionForm() {
   const [name, setName] = useState('');
   const [organization, setOrganization] = useState('');
   const [email, setEmail] = useState('');
-  const [topic, setTopic] = useState<string>('');
+  const [topic, setTopic] = useState<string | undefined>('');
   const [options, setOptions] = useState<string[] | undefined>([]);
 
   const [isNameInvalid, setIsNameInvalid] = useState(false);
@@ -107,10 +108,10 @@ export default function SubscriptionForm() {
     }
   };
 
-  const handleSelectionChange = (selectedTopicId: string, selectedOptions: string[] | undefined) => {
-    console.log('>>', selectedTopicId, selectedOptions);
-    setTopic(selectedTopicId);
-    setOptions(selectedOptions);
+  const handleSelectionChange = (selectedTopic: ITopic | undefined) => {
+    console.log('>>', selectedTopic);
+    setTopic(selectedTopic?.id);
+    setOptions(selectedTopic?.options);
   };
 
   // use subscribe.getSubscribeTopics() to get the topics, when the component initializes

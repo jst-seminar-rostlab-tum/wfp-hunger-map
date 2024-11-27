@@ -3,7 +3,7 @@
 import { Button, Divider, Input } from '@nextui-org/react';
 import { motion } from 'framer-motion';
 import { ChartCircle, CloseCircle, Facebook, Instagram, TickCircle, Twitch, Youtube } from 'iconsax-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import container from '@/container';
 import {

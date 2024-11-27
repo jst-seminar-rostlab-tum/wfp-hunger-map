@@ -6,6 +6,7 @@ import { useTheme } from 'next-themes';
 import React, { RefObject, useEffect, useRef, useState } from 'react';
 import { useMap } from 'react-leaflet';
 
+import { useSelectedAlert } from '@/domain/contexts/SelectedAlertContext';
 import { useSelectedCountry } from '@/domain/contexts/SelectedCountryContext';
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { MapProps } from '@/domain/props/MapProps';
@@ -17,6 +18,7 @@ export default function VectorTileLayer({ countries, disputedAreas }: MapProps) 
   const mapContainer: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
   const { selectedMapType } = useSelectedMap();
   const { selectedCountry, setSelectedCountry } = useSelectedCountry();
+  const { setIsAlertsDisplayDisabled } = useSelectedAlert();
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const leafletMap = useMap();
   const [map, setMap] = useState<mapboxgl.Map>();
@@ -60,8 +62,8 @@ export default function VectorTileLayer({ countries, disputedAreas }: MapProps) 
   }, [theme]);
 
   useEffect(() => {
-    if (selectedCountry && mapRef.current) {
-      MapOperations.zoomToCountry(mapRef.current, selectedCountry, leafletMap, mapContainer, context);
+    if (selectedCountry && map) {
+      MapOperations.zoomToCountry(map, selectedCountry, leafletMap, mapContainer, context, setIsAlertsDisplayDisabled);
     }
   }, [selectedCountry]);
 

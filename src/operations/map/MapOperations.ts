@@ -315,7 +315,8 @@ export class MapOperations {
     country: CountryMapData | null,
     leafletMap: Map,
     mapContainer: RefObject<HTMLDivElement>,
-    context: LeafletContextInterface
+    context: LeafletContextInterface,
+    setIsAlertsDisplayDisabled: (value: boolean) => void
   ) {
     if (country) {
       const bbox = turf.bbox(country as GeoJSON);
@@ -327,10 +328,11 @@ export class MapOperations {
        */
 
       leafletMap.off();
+      setIsAlertsDisplayDisabled(true);
 
       baseMap.fitBounds(mapboxAdjustedBbox, {
         padding: 20,
-        duration: 1000,
+        duration: 500,
         essential: true,
       });
 
@@ -341,6 +343,7 @@ export class MapOperations {
           animate: false,
         });
         this.synchronizeLeafletMapbox(baseMap, mapContainer, context);
+        setIsAlertsDisplayDisabled(false);
       });
     }
   }

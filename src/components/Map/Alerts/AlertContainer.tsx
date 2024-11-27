@@ -7,16 +7,18 @@ import { CountryAlertsLayer } from './CountryAlerts/CountryAlertsLayer';
 import { HazardLayer } from './HazardLayer';
 
 export function AlertContainer({ countries }: { countries: CountryMapDataWrapper }) {
-  const { selectedAlert } = useSelectedAlert();
+  const { selectedAlert, isAlertsDisplayDisabled } = useSelectedAlert();
 
-  switch (selectedAlert) {
-    case AlertType.CONFLICTS:
-      return <ConflictLayer />;
-    case AlertType.HAZARDS:
-      return <HazardLayer />;
-    case AlertType.COUNTRY_ALERTS:
-      return <CountryAlertsLayer countries={countries} />;
-    default:
-      return null; // TODO: hazard layers
-  }
+  if (!isAlertsDisplayDisabled) {
+    switch (selectedAlert) {
+      case AlertType.CONFLICTS:
+        return <ConflictLayer />;
+      case AlertType.HAZARDS:
+        return <HazardLayer />;
+      case AlertType.COUNTRY_ALERTS:
+        return <CountryAlertsLayer countries={countries} />;
+      default:
+        return null; // TODO: hazard layers
+    }
+  } else return null;
 }

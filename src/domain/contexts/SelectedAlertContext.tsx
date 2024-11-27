@@ -7,12 +7,15 @@ interface SelectedAlertsState {
   setSelectedAlert: (value: AlertType) => void;
   isAlertSelected: (alertType: AlertType) => boolean;
   toggleAlert: (alertType: AlertType) => void;
+  isAlertsDisplayDisabled: boolean;
+  setIsAlertsDisplayDisabled: (value: boolean) => void;
 }
 
 const SelectedAlertContext = createContext<SelectedAlertsState | undefined>(undefined);
 
 export function SelectedAlertProvider({ children }: { children: ReactNode }) {
   const [selectedAlert, setSelectedAlert] = useState<AlertType | null>(AlertType.COUNTRY_ALERTS);
+  const [isAlertsDisplayDisabled, setIsAlertsDisplayDisabled] = useState<boolean>(false);
 
   const isAlertSelected = (alertType: AlertType) => selectedAlert === alertType;
   const toggleAlert = (alertType: AlertType) =>
@@ -24,8 +27,10 @@ export function SelectedAlertProvider({ children }: { children: ReactNode }) {
       setSelectedAlert,
       isAlertSelected,
       toggleAlert,
+      isAlertsDisplayDisabled,
+      setIsAlertsDisplayDisabled,
     }),
-    [selectedAlert]
+    [selectedAlert, isAlertsDisplayDisabled]
   );
 
   return <SelectedAlertContext.Provider value={value}>{children}</SelectedAlertContext.Provider>;

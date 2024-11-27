@@ -1,6 +1,5 @@
 import '@/styles/globals.css';
 
-import { GoogleAnalytics } from '@next/third-parties/google';
 import clsx from 'clsx';
 import { Metadata, Viewport } from 'next';
 
@@ -49,7 +48,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
         </Providers>
       </body>
-      <GoogleAnalytics gaId={process.env.GA_ID ?? ''} />
     </html>
   );
 }

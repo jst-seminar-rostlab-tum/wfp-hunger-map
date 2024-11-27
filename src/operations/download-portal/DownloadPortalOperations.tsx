@@ -47,4 +47,16 @@ export class DownloadPortalOperations {
       ),
     }));
   }
+
+  static downloadJsonFile(data: string, country: string): void {
+    const a = document.createElement('a');
+    const file = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(file);
+    a.href = url;
+    a.download = `${country}_food_security_data.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
 }

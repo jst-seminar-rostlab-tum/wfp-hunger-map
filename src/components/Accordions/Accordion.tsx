@@ -9,7 +9,7 @@ import { Tooltip } from '../Tooltip/Tooltip';
 
 export default function CustomAccordion({ items, loading = false, multipleSelectionMode = false }: AccordionsProps) {
   return (
-    <div className="w-full max-w-[600px] overflow-x-auto p-2 rounded-lg">
+    <div className="w-full overflow-x-auto p-2 rounded-lg">
       <Accordion variant="splitted" selectionMode={multipleSelectionMode ? 'multiple' : 'single'}>
         {items.map((item) => (
           <AccordionItem

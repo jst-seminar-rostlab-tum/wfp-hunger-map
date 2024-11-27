@@ -11824,6 +11824,7 @@ __metadata:
   dependencies:
     "@commitlint/cli": "npm:^19.5.0"
     "@commitlint/config-conventional": "npm:^19.5.0"
+    "@internationalized/date": "npm:^3.6.0"
     "@nextui-org/accordion": "npm:^2.0.40"
     "@nextui-org/button": "npm:^2.0.38"
     "@nextui-org/card": "npm:^2.0.34"

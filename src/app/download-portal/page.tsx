@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+import DownloadCountryAccordion from '@/components/DownloadCountryAccordions/DownloadCountryAccordions';
 import { PdfViewer } from '@/components/Pdf/PdfViewer';
 import PopupModal from '@/components/PopupModal/PopupModal';
 import SearchBar from '@/components/Search/SearchBar';
@@ -76,6 +77,8 @@ export default function DownloadPortal() {
           <PdfViewer file={pdfFile} />
         )}
       </PopupModal>
+
+      <DownloadCountryAccordion />
     </div>
   );
 }

@@ -163,8 +163,8 @@ export class IpcChoroplethOperations {
           <>
             <span className="font-bold text-danger text-base">{formattedPopNum}</span> people in IPC/CH Phase 3 and
             above
-            <br />(<span className="font-bold text-danger text-base">{ipcPercent}%</span> of people in the analyzed
-            areas)
+            <br />(<span className="font-bold text-danger text-base">{ipcPercent}%</span>
+            of people in the analyzed areas)
           </>
         }
       />

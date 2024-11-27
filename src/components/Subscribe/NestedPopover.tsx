@@ -13,30 +13,25 @@ import { NestedPopoverProps } from '@/domain/props/NestedPopoverProps';
  * @param items is the list of items to be displayed in the menu
  * @returns a nested popover component
  */
-export function NestedPopover({ label, items }: NestedPopoverProps) {
-  // store selected options
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+export function NestedPopover({ label, items, onSelectionChange }: NestedPopoverProps) {
   // store nested menu open state
   const [isNestedOpen, setIsNestedOpen] = useState(false);
   // store main menu open state
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   // store which nested menu is open
   const [openNestedMenu, setOpenNestedMenu] = useState<string | null>(null);
+  // store select topic
+  const [selectedTopic, setSelectedTopic] = useState<string>('');
+  // store selected options
+  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+
   // refs for the main menu and nested menu
   const menuRef = useRef<HTMLDivElement>(null);
   const nestedMenuRef = useRef<HTMLDivElement>(null);
-  /**
-   * take care of nested menu open state
-   * @param itemId is the id of the nested menu item
-   */
-  const handleNestedMenuToggle = (itemId: string): void => {
-    setOpenNestedMenu(openNestedMenu === itemId ? null : itemId);
-    setIsNestedOpen(true);
-  };
 
   // click outside to close the menu
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = (event: MouseEvent): void => {
       if (
         menuRef.current &&
         !menuRef.current.contains(event.target as Node) &&
@@ -54,15 +49,32 @@ export function NestedPopover({ label, items }: NestedPopoverProps) {
   }, []);
 
   // main menu item click logic: to close the menu and select the item
-  const handleMenuItemClick = (): void => {
-    setSelectedOptions([]);
+  const selectMainMenuItem = (topicId: string): void => {
+    setSelectedOptions([]); // if the selected item is a main menu item, clear the selected options of other items
+    setSelectedTopic(topicId);
     setIsMenuOpen(false);
   };
 
   // nested menu item click logic: to select the item since is multiple
-  const handleNestedToggle = (option: string): void => {
+  const selectNestedOption = (option: string, topicId: string): void => {
+    setSelectedTopic(topicId);
     setSelectedOptions((prev) => (prev.includes(option) ? prev.filter((item) => item !== option) : [...prev, option]));
   };
+
+  /**
+   * take care of nested menu open state
+   * @param itemId is the id of the nested menu item
+   */
+  const handleNestedMenuToggle = (itemId: string): void => {
+    setOpenNestedMenu(openNestedMenu === itemId ? null : itemId);
+    setIsNestedOpen(true);
+  };
+
+  useEffect(() => {
+    if (selectedTopic) {
+      onSelectionChange(selectedTopic, selectedOptions);
+    }
+  }, [selectedTopic, selectedOptions, onSelectionChange]);
 
   return (
     <div ref={menuRef} className="relative">
@@ -86,7 +98,7 @@ export function NestedPopover({ label, items }: NestedPopoverProps) {
                 <div
                   key={item.id}
                   className="m-1 h-10 text-left text-gray-700 hover:bg-blue-100 hover:text-black dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white p-2"
-                  onClick={handleMenuItemClick}
+                  onClick={() => selectMainMenuItem(item.id)}
                 >
                   {item.name}
                 </div>
@@ -124,7 +136,7 @@ export function NestedPopover({ label, items }: NestedPopoverProps) {
                                 : 'text-gray-700 hover:bg-blue-100 hover:text-black dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white'
                             )}
                           >
-                            <div className="w-full text-left p-2" onClick={() => handleNestedToggle(option)}>
+                            <div className="w-full text-left p-2" onClick={() => selectNestedOption(option, item.id)}>
                               {option}
                             </div>
                             {selectedOptions.includes(option) && (

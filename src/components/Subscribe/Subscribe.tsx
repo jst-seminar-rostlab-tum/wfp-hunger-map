@@ -24,8 +24,8 @@ export default function SubscriptionForm() {
   const [name, setName] = useState('');
   const [organization, setOrganization] = useState('');
   const [email, setEmail] = useState('');
-  const [selectedTopic, setSelectedTopic] = useState<string>('');
-  const [options, setOptions] = useState<string[]>([]);
+  const [topic, setTopic] = useState<string>('');
+  const [options, setOptions] = useState<string[] | undefined>([]);
 
   const [isNameInvalid, setIsNameInvalid] = useState(false);
   const [isEmailInvalid, setIsEmailInvalid] = useState(false);
@@ -88,7 +88,7 @@ export default function SubscriptionForm() {
           .subscribe({
             name,
             email,
-            topicId: selectedTopic,
+            topicId: topic,
             organization,
             options,
           })
@@ -105,6 +105,12 @@ export default function SubscriptionForm() {
         throw new Error(err instanceof Error ? err.message : String(err));
       }
     }
+  };
+
+  const handleSelectionChange = (selectedTopicId: string, selectedOptions: string[] | undefined) => {
+    console.log('>>', selectedTopicId, selectedOptions);
+    setTopic(selectedTopicId);
+    setOptions(selectedOptions);
   };
 
   // use subscribe.getSubscribeTopics() to get the topics, when the component initializes
@@ -154,7 +160,7 @@ export default function SubscriptionForm() {
           onChange={(changeOrgEvent) => setOrganization(changeOrgEvent.target.value)}
           value={organization}
         />
-        <NestedPopover label="Topic" items={topics} />
+        <NestedPopover label="Topic" items={topics} onSelectionChange={handleSelectionChange} />
         <Button
           type="submit"
           className="w-full bg-subscribeText dark:bg-subscribeText text-white dark:text-black shadow-lg self-center"

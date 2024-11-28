@@ -1,9 +1,10 @@
 import { parseDate } from '@internationalized/date';
-import { Autocomplete, AutocompleteItem, Button, DateRangePicker } from '@nextui-org/react';
-import React, { FormEvent, useState } from 'react';
+import { Autocomplete, AutocompleteItem, DateRangePicker } from '@nextui-org/react';
+import React, { useState } from 'react';
 
 import CustomAccordion from '@/components/Accordions/Accordion';
 import container from '@/container';
+import { DOWNLOAD_DATA } from '@/domain/constant/subscribe/Subscribe';
 import {
   COUNTRY_ERROR_MSG,
   DATE_RANGE_ERROR_MSG,
@@ -12,8 +13,11 @@ import {
   MOCK_COUNTRIES,
   TITLE,
 } from '@/domain/entities/download/Country';
+import { SubmitStatus } from '@/domain/enums/SubscribeTopic';
 import DownloadRepository from '@/domain/repositories/DownloadRepository';
 import { DownloadPortalOperations } from '@/operations/download-portal/DownloadPortalOperations';
+
+import { SubmitButton } from '../SubmitButton/SubmitButton';
 
 export default function DownloadCountryAccordion() {
   const download = container.resolve<DownloadRepository>('DownloadRepository');
@@ -25,32 +29,38 @@ export default function DownloadCountryAccordion() {
     start: parseDate(new Date().toISOString().split('T')[0]),
     end: parseDate(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]),
   }); // Default to 7 days
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e: FormEvent) => {
+  const [downloadStatus, setDownloadStatus] = useState<SubmitStatus>(SubmitStatus.Idle);
+  const [isWaitingDownloadResponse, setIsWaitingDownloadResponse] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    setIsLoading(true);
-    console.log('>>> country', country, value);
-    if (!country || !value) {
-      setIsCountryInvalid(!country);
-      setIsDateRangeInvalid(!value);
-    }
+    const countryInvalid = !country;
+    const dateRangeInvalid = !value;
+    const { start, end } = value || {};
+    const diffDays = start && end ? DownloadPortalOperations.calculateDateRange(start, end) : 0;
+    const dateRangeTooLong = diffDays > 500;
 
-    const { start, end } = value;
-    const diffDays = DownloadPortalOperations.calculateDateRange(start, end);
-
-    if (diffDays > 500) {
-      setIsDateRangeTooLong(true);
-    }
-
-    try {
-      const data = await download.getDownLoadCountryData(country, start, end);
-
-      DownloadPortalOperations.downloadJsonFile(data, country);
-    } catch {
-      // Handle error
-    } finally {
-      setIsLoading(false);
+    setIsCountryInvalid(countryInvalid);
+    setIsDateRangeInvalid(dateRangeInvalid);
+    setIsDateRangeTooLong(dateRangeTooLong);
+    if (!countryInvalid && !dateRangeInvalid && !dateRangeTooLong && !isWaitingDownloadResponse) {
+      setDownloadStatus(SubmitStatus.Loading);
+      setIsWaitingDownloadResponse(true);
+      try {
+        await download.getDownLoadCountryData(country, start, end).then((res) => {
+          if (res) {
+            setDownloadStatus(SubmitStatus.Success);
+            setIsWaitingDownloadResponse(false);
+            DownloadPortalOperations.downloadJsonFile(res, country);
+          } else {
+            setDownloadStatus(SubmitStatus.Error);
+            setIsWaitingDownloadResponse(false);
+          }
+        });
+      } catch (err) {
+        throw new Error(err instanceof Error ? err.message : String(err));
+      }
     }
   };
 
@@ -90,17 +100,14 @@ export default function DownloadCountryAccordion() {
                     className="flex-1 mr-4"
                     visibleMonths={2}
                     value={value}
-                    onChange={setValue}
+                    onChange={(selectDateRangeEvent) => setValue(selectDateRangeEvent)}
                   />
 
-                  <Button
+                  <SubmitButton
+                    label={DOWNLOAD_DATA}
+                    submitStatus={downloadStatus}
                     className="h-14 border-gray-200 dark:border-white hover:bg-blue-100 dark:hover:bg-gray-600"
-                    variant="bordered"
-                    type="submit"
-                    isLoading={isLoading}
-                  >
-                    {isLoading ? 'Fetching Data...' : 'Download Data'}
-                  </Button>
+                  />
                 </form>
               </div>
             ),

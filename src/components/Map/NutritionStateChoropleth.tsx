@@ -9,7 +9,6 @@ import { LayerWithFeature, NutritionStateChoroplethProps } from '@/domain/props/
 import NutritionStateChoroplethOperations from '@/operations/map/NutritionStateChoroplethOperations';
 
 import NutritionAccordion from './NutritionAccordion';
-import NutritionStateLegend from './NutritionStateLegend';
 
 export default function NutritionStateChoropleth({
   regionNutrition,
@@ -67,7 +66,6 @@ export default function NutritionStateChoropleth({
         style={(feature) => NutritionStateChoroplethOperations.dynamicStyle(feature, regionNutrition, selectedNutrient)}
         onEachFeature={onEachFeature}
       />
-      <NutritionStateLegend />
     </>
   );
 }

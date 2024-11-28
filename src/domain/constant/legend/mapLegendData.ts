@@ -65,11 +65,9 @@ export function mapLegendData(
     case GlobalInsight.FOOD:
       legendData.push({
         title: 'Prevalence of insufficient food consumption',
-        startColor: 'fcsGreen',
-        endColor: 'fcsRed',
+        colors: ['fcsGradient1', 'fcsGradient2', 'fcsGradient3', 'fcsGradient4', 'fcsGradient5', 'fcsGradient6'],
         startLabel: '0%',
         endLabel: 'above 40%',
-        middleColor: 'fcsOrange',
         tooltipInfo:
           'People with insufficient food consumption refers to those with poor or borderline food consumption, according to the Food Consumption Score (FCS).' +
           '\n' +
@@ -87,9 +85,17 @@ export function mapLegendData(
     case GlobalInsight.RAINFALL:
       legendData.push({
         title: 'Rainfall',
-        startColor: 'rainfallLow',
-        middleColor: 'rainfallNormal',
-        endColor: 'rainfallHigh',
+        colors: [
+          'vegetationGradient1',
+          'vegetationGradient2',
+          'vegetationGradient3',
+          'vegetationGradient4',
+          'vegetationGradient5',
+          'rainfallGradient6',
+          'rainfallGradient7',
+          'rainfallGradient8',
+          'rainfallGradient9',
+        ],
         startLabel: '<40%',
         endLabel: '>180%',
         tooltipInfo:
@@ -101,9 +107,17 @@ export function mapLegendData(
     case GlobalInsight.VEGETATION:
       legendData.push({
         title: 'Vegetation',
-        startColor: 'vegetationLow',
-        middleColor: 'vegetationNormal',
-        endColor: 'vegetationHigh',
+        colors: [
+          'vegetationGradient1',
+          'vegetationGradient2',
+          'vegetationGradient3',
+          'vegetationGradient4',
+          'vegetationGradient5',
+          'vegetationGradient6',
+          'vegetationGradient7',
+          'vegetationGradient8',
+          'vegetationGradient9',
+        ],
         startLabel: '<50%',
         endLabel: '>150%',
         tooltipInfo:
@@ -115,9 +129,15 @@ export function mapLegendData(
     case GlobalInsight.IPC:
       legendData.push({
         title: 'Number of people in IPC/CH Phase 3 or above (millions)',
-        startColor: 'ipcStart',
-        middleColor: 'ipcMiddle',
-        endColor: 'ipcEnd',
+        colors: [
+          'ipcGradient1',
+          'ipcGradient2',
+          'ipcGradient3',
+          'ipcGradient4',
+          'ipcGradient5',
+          'ipcGradient6',
+          'ipcGradient7',
+        ],
         startLabel: '0',
         endLabel: '>10',
         tooltipInfo: `
@@ -135,6 +155,17 @@ export function mapLegendData(
           `,
       });
       break;
+    // TODO: show this once IPC map PR is merged
+    // case GlobalInsight.NUTRITION:
+    //   legendData.push({
+    //     title: 'Risk of Inadequate Micronutrient Intake',
+    //     colors: ['ipcGradient1', 'ipcGradient2', 'ipcGradient3', 'ipcGradient4', 'ipcGradient5'],
+    //     startLabel: '0%',
+    //     endLabel: '100%',
+    //     tooltipInfo: 'Shows the inadequate ratio of nutrient intake.',
+    //   });
+    //   break;
+
     case GlobalInsight.NUTRITION:
       legendData.push({
         title: 'Analysis Distribution',

@@ -6,9 +6,12 @@ import HighchartsReact from 'highcharts-react-official';
 
 import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph.ts';
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph.ts';
+import { FcsChartData } from '@/domain/entities/charts/FcsChartData.ts';
 import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
 import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
+import { RcsiChartData } from '@/domain/entities/charts/RcsiChartData.ts';
 import { LineChartDataType } from '@/domain/enums/LineChartDataType.ts';
+import { formatToMillion } from '@/utils/formatting.ts';
 
 if (typeof Highcharts === 'object') {
   highchartsMore(Highcharts);
@@ -43,7 +46,7 @@ export default class LineChartOperations {
   ) {
     let tooltip = '';
     if (xAxisType === 'datetime' && typeof x === 'number') {
-      tooltip = `<b>${Highcharts.dateFormat('%d.%m.%y', x)}</b><br>`;
+      tooltip = `<b>${Highcharts.dateFormat('%d.%m.%y', x)}</b>`;
     } else {
       tooltip = `<b>${x}</b>`;
     }
@@ -95,7 +98,7 @@ export default class LineChartOperations {
           ],
         };
 
-      case LineChartDataType.CURRENCY_EXCHANGE_GRAPH:
+      case LineChartDataType.CURRENCY_EXCHANGE_CHART:
         return {
           type: LineChartDataType.LINE_CHART_DATA,
           xAxisType: 'datetime',
@@ -109,7 +112,7 @@ export default class LineChartOperations {
           ],
         };
 
-      case LineChartDataType.INFLATION_GRAPHS:
+      case LineChartDataType.INFLATION_CHARTS:
         return {
           type: LineChartDataType.LINE_CHART_DATA,
           xAxisType: 'datetime',

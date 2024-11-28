@@ -19,9 +19,12 @@ export class FcsAccordionOperations {
       lines: [
         {
           name: 'People with insufficient food consumption',
+          showRange: true,
           dataPoints: countryData.fcsGraph.map((fcsChartData) => ({
             x: new Date(fcsChartData.x).getTime(),
             y: formatToMillion(fcsChartData.fcs),
+            yRangeMin: formatToMillion(fcsChartData.fcsLow),
+            yRangeMax: formatToMillion(fcsChartData.fcsHigh),
           })),
         },
       ],
@@ -39,9 +42,12 @@ export class FcsAccordionOperations {
       lines: [
         {
           name: 'People using crisis or above crisis food-based coping',
+          showRange: true,
           dataPoints: countryData.rcsiGraph.map((rcsiChartData) => ({
             x: new Date(rcsiChartData.x).getTime(),
             y: formatToMillion(rcsiChartData.rcsi),
+            yRangeMin: formatToMillion(rcsiChartData.rcsiLow),
+            yRangeMax: formatToMillion(rcsiChartData.rcsiHigh),
           })),
         },
       ],
@@ -69,7 +75,7 @@ export class FcsAccordionOperations {
     }
 
     return {
-      type: LineChartDataType.INFLATION_GRAPHS,
+      type: LineChartDataType.INFLATION_CHARTS,
       headline: {
         data: headlineData,
       },
@@ -88,7 +94,7 @@ export class FcsAccordionOperations {
       return null;
     }
     return {
-      type: LineChartDataType.CURRENCY_EXCHANGE_GRAPH,
+      type: LineChartDataType.CURRENCY_EXCHANGE_CHART,
       name,
       source,
       updated,

@@ -18,8 +18,8 @@ import { ITopic } from '@/domain/entities/subscribe/Subscribe';
 import { SubmitStatus } from '@/domain/enums/SubscribeTopic';
 import SubscriptionRepository from '@/domain/repositories/SubscriptionRepository';
 
-import { NestedPopover } from './NestedPopover';
 import { SubmitButton } from '../SubmitButton/SubmitButton';
+import { NestedPopover } from './NestedPopover';
 import { SocialLink } from './SocialLink';
 
 export default function SubscriptionForm() {

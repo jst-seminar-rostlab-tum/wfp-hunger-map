@@ -1,7 +1,12 @@
+'use client';
+
+import { useState } from 'react';
+
 import CustomAccordion from '@/components/Accordions/Accordion';
 import { CustomButton } from '@/components/Buttons/CustomButton';
 import { LineChart } from '@/components/Charts/LineChart';
 import MapSkeleton from '@/components/Map/MapSkeleton';
+import SearchBar from '@/components/Search/SearchBar';
 import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph.ts';
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph.ts';
 import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
@@ -15,6 +20,7 @@ import { ReactComponent as FoodSvg } from '../../../public/Images/FoodConsumptio
  * It's not accessible from the UI, but you can reach it by manually navigating to /elements
  */
 export default async function Elements() {
+  const [searchTerm, setSearchTerm] = useState('');
   const simpleAndSmallLineChartData: LineChartData = {
     type: LineChartDataType.LINE_CHART_DATA,
     xAxisType: 'linear',
@@ -182,7 +188,13 @@ export default async function Elements() {
       <CustomButton variant="solid">Test</CustomButton>
       <CustomButton variant="bordered">Test</CustomButton>
       <CustomButton variant="flat">Test</CustomButton>
-      <CustomAccordion items={AccordionsOperations.getAccordionData()} />;
+      <SearchBar
+        value={searchTerm}
+        onValueChange={setSearchTerm}
+        placeholder="Search a country"
+        className="max-w-96 py-1"
+      />
+      <CustomAccordion items={AccordionsOperations.getAccordionData()} />
       <div className="w-full h-fit flex flex-row flex-wrap gap-10 justify-around px-8 pt-40 pb-16 border-b border-gray-800">
         <div className="w-250px h-fit">
           <LineChart data={simpleAndSmallLineChartData} small />

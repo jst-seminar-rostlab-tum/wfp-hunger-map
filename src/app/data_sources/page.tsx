@@ -3,7 +3,7 @@ import React from 'react';
 import HungerMapLiveSuperscript from '@/components/About/HungerMapLiveSuperscript';
 import StyledLink from '@/components/About/StyledLink';
 import CustomAccordion from '@/components/Accordions/Accordion';
-import dataSourceAccordionItems from '@/domain/constant/dataSourceTables/dataSourceAccordionItems';
+import dataSourceAccordionItems from '@/domain/constant/dataSources/dataSourceAccordionItems';
 
 function Page() {
   return (

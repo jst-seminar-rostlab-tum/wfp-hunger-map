@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { PdfViewer } from '@/components/Pdf/PdfViewer';
 import PopupModal from '@/components/PopupModal/PopupModal';
@@ -18,43 +18,10 @@ export default function DownloadPortal() {
   const [pdfFile, setPdfFile] = useState<PdfFile | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [selectedCountry, setSelectedCountry] = useState<CountryCodesData | null>(null);
-
-  const toggleModal = () => {
-    setModalOpen((prev) => !prev);
-  };
-
-  const fetchPdfAsByteStream = async (url: string): Promise<ArrayBuffer> => {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch PDF: ${response.status} ${response.statusText}`);
-    }
-    return response.arrayBuffer();
-  };
-
-  const handlePreview = async (url: string) => {
-    setPdfFile(null);
-    setError(null);
-
-    try {
-      const arrayBuffer = await fetchPdfAsByteStream(url);
-      const blob = new Blob([arrayBuffer], { type: 'application/pdf' });
-      setPdfFile(blob);
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError('An unknown error occurred while fetching the PDF.');
-      }
-    }
-  };
-
-  const onSelectCountry = (country: CountryCodesData) => {
-    setSelectedCountry(country);
-    handlePreview(country.url.summary);
-    toggleModal();
-  };
-
-  const filteredData = data?.filter((item) => item.country.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  const toggleModal = () => setModalOpen((prev) => !prev);
+  const filteredData = useMemo(() => {
+    return data?.filter((item) => item.country.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  }, [data, searchTerm]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -69,8 +36,13 @@ export default function DownloadPortal() {
       {filteredData && (
         <CustomTable
           columns={DownloadPortalOperations.getColumns()}
-          data={DownloadPortalOperations.formatTableData(filteredData, onSelectCountry)}
-          ariaLabel="Download Portal Table"
+          data={DownloadPortalOperations.formatTableData(
+            filteredData,
+            setSelectedCountry,
+            setPdfFile,
+            setError,
+            toggleModal
+          )}
         />
       )}
       <PopupModal isModalOpen={isModalOpen} toggleModal={toggleModal} modalSize="5xl" scrollBehavior="outside">

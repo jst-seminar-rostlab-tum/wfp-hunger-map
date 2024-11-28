@@ -16,14 +16,20 @@ export class DownloadPortalOperations {
     ] as CustomTableColumns;
   }
 
-  static formatTableData(data: CountryCodesData[], onSelectCountry: (country: CountryCodesData) => void) {
+  static formatTableData(
+    data: CountryCodesData[],
+    setSelectedCountry: (countryData: CountryCodesData) => void,
+    setPdfFile: (file: Blob | null) => void,
+    setError: (error: string | null) => void,
+    toggleModal: () => void
+  ) {
     return data.map((item, index) => ({
       keyColumn: (index + 1).toString(),
       country: item.country.name,
       preview: (
         <CustomButton
           onClick={() => {
-            onSelectCountry(item);
+            DownloadPortalOperations.onSelectCountry(item, setSelectedCountry, setPdfFile, setError, toggleModal);
           }}
           className="hover:underline"
         >
@@ -55,5 +61,46 @@ export class DownloadPortalOperations {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  }
+
+  static async fetchPdfAsByteStream(url: string): Promise<ArrayBuffer> {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch PDF: ${response.status} ${response.statusText}`);
+    }
+    return response.arrayBuffer();
+  }
+
+  static async handlePreview(
+    url: string,
+    setPdfFile: (file: Blob | null) => void,
+    setError: (error: string | null) => void
+  ): Promise<void> {
+    setPdfFile(null);
+    setError(null);
+
+    try {
+      const arrayBuffer = await DownloadPortalOperations.fetchPdfAsByteStream(url);
+      const blob = new Blob([arrayBuffer], { type: 'application/pdf' });
+      setPdfFile(blob);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unknown error occurred while fetching the PDF.');
+      }
+    }
+  }
+
+  static onSelectCountry(
+    country: CountryCodesData,
+    setSelectedCountry: (countryData: CountryCodesData) => void,
+    setPdfFile: (file: Blob | null) => void,
+    setError: (error: string | null) => void,
+    toggleModal: () => void
+  ): void {
+    setSelectedCountry(country);
+    DownloadPortalOperations.handlePreview(country.url.summary, setPdfFile, setError);
+    toggleModal();
   }
 }

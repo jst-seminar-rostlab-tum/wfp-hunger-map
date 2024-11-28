@@ -1,6 +1,4 @@
-import { Source } from 'react-pdf/dist/cjs/shared/types';
-
-export type PdfFile = string | ArrayBuffer | Blob | Source;
+export type PdfFile = string | Blob;
 
 export interface PdfViewerProps {
   onTooltipClick?: (selectionText: string) => void;

@@ -3,11 +3,24 @@ import { Autocomplete, AutocompleteItem, Button, DateRangePicker } from '@nextui
 import React, { FormEvent, useState } from 'react';
 
 import CustomAccordion from '@/components/Accordions/Accordion';
+import container from '@/container';
+import {
+  COUNTRY_ERROR_MSG,
+  DATE_RANGE_ERROR_MSG,
+  DATE_RANGE_TOO_LONG_ERROR_MSG,
+  DESCRIPTION,
+  MOCK_COUNTRIES,
+  TITLE,
+} from '@/domain/entities/download/Country';
+import DownloadRepository from '@/domain/repositories/DownloadRepository';
 import { DownloadPortalOperations } from '@/operations/download-portal/DownloadPortalOperations';
-import { DESCRIPTION, MOCK_COUNTRIES, TITLE } from '@/domain/entities/download/Country';
 
 export default function DownloadCountryAccordion() {
+  const download = container.resolve<DownloadRepository>('DownloadRepository');
   const [country, setCountry] = useState('');
+  const [isCountryInvalid, setIsCountryInvalid] = useState(false);
+  const [isDateRangeInvalid, setIsDateRangeInvalid] = useState(false);
+  const [isDateRangeTooLong, setIsDateRangeTooLong] = useState(false);
   const [value, setValue] = useState({
     start: parseDate(new Date().toISOString().split('T')[0]),
     end: parseDate(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]),
@@ -17,23 +30,21 @@ export default function DownloadCountryAccordion() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-
+    console.log('>>> country', country, value);
     if (!country || !value) {
-      setIsLoading(false);
-      return;
+      setIsCountryInvalid(!country);
+      setIsDateRangeInvalid(!value);
     }
-    // const daysDiff = (endDate - startDate) / (1000 * 60 * 60 * 24);
 
-    if (daysDiff > 500) {
-      setIsLoading(false);
-      return;
+    const { start, end } = value;
+    const diffDays = DownloadPortalOperations.calculateDateRange(start, end);
+
+    if (diffDays > 500) {
+      setIsDateRangeTooLong(true);
     }
 
     try {
-      const response = await fetch(
-        `https://api.hungermapdata.org/v1/foodsecurity/country/${country}/region?date_start=${startDate.toISOString().split('T')[0]}&date_end=${endDate.toISOString().split('T')[0]}`
-      );
-      const data = await response.json();
+      const data = await download.getDownLoadCountryData(country, start, end);
 
       DownloadPortalOperations.downloadJsonFile(data, country);
     } catch {
@@ -57,11 +68,14 @@ export default function DownloadCountryAccordion() {
                   <Autocomplete
                     size="md"
                     variant="bordered"
+                    isInvalid={isCountryInvalid}
+                    errorMessage={COUNTRY_ERROR_MSG}
                     isRequired
                     label="Country"
                     placeholder="Select a country"
                     className="flex-1 mr-4"
                     defaultItems={MOCK_COUNTRIES.map((c) => ({ label: c, value: c }))}
+                    onSelectionChange={(item) => setCountry(item as string)}
                   >
                     {(item) => <AutocompleteItem key={item.label}>{item.value}</AutocompleteItem>}
                   </Autocomplete>
@@ -69,6 +83,8 @@ export default function DownloadCountryAccordion() {
                   <DateRangePicker
                     size="md"
                     variant="bordered"
+                    isInvalid={isDateRangeInvalid}
+                    errorMessage={isDateRangeTooLong ? DATE_RANGE_TOO_LONG_ERROR_MSG : DATE_RANGE_ERROR_MSG}
                     isRequired
                     label="Select date Range"
                     className="flex-1 mr-4"

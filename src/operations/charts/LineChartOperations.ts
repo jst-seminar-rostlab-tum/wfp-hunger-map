@@ -43,12 +43,16 @@ export default class LineChartOperations {
   ) {
     let tooltip = '';
     if (xAxisType === 'datetime' && typeof x === 'number') {
-      tooltip = `<b>${Highcharts.dateFormat('%d.%m.%y', x)}</b><br/>`;
+      tooltip = `<b>${Highcharts.dateFormat('%d.%m.%y', x)}</b>`;
     } else {
-      tooltip = `<b>${x}</b><br/>`;
+      tooltip = `<b>${x}</b>`;
     }
     points?.forEach((p) => {
-      tooltip += `<span style="color:${p.series.color}">\u25CF</span> ${p.series.name}: <b>${p.y}</b><br/>`;
+      if (p.point.options.y) {
+        tooltip += `<br><span style="color:${p.series.color}">\u25CF</span> <div>${p.point.options.y}</div>`;
+      } else if (p.point.options.high !== undefined && p.point.options.low !== undefined) {
+        tooltip += `<div style="color: ${'hsl(var(--nextui-secondary))'}"> (<div>${p.point.options.low} - ${p.point.options.high}</div>)</div>`;
+      }
     });
     return tooltip;
   }
@@ -91,7 +95,7 @@ export default class LineChartOperations {
           ],
         };
 
-      case LineChartDataType.CURRENCY_EXCHANGE_GRAPH:
+      case LineChartDataType.CURRENCY_EXCHANGE_CHART:
         return {
           type: LineChartDataType.LINE_CHART_DATA,
           xAxisType: 'datetime',
@@ -105,7 +109,7 @@ export default class LineChartOperations {
           ],
         };
 
-      case LineChartDataType.INFLATION_GRAPHS:
+      case LineChartDataType.INFLATION_CHARTS:
         return {
           type: LineChartDataType.LINE_CHART_DATA,
           xAxisType: 'datetime',

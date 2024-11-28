@@ -17,4 +17,5 @@ export default interface VectorTileLayerProps {
   setCountryIso3Data: (countryIso3Data: CountryIso3Data) => void;
   setRegionData: (regionData: FeatureCollection<Geometry, GeoJsonProperties>) => void;
   setRegionNutritionData: (regionNutritionData: CountryMimiData | undefined) => void;
+  setCountryDataLoading: (countryDataLoading: boolean) => void;
 }

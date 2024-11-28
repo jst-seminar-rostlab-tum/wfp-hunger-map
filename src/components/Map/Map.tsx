@@ -28,6 +28,7 @@ export default function Map({ countries, disputedAreas, ipcData, nutritionData }
   const [countryIso3Data, setCountryIso3Data] = useState<CountryIso3Data | undefined>();
   const [regionData, setRegionData] = useState<FeatureCollection<Geometry, GeoJsonProperties> | undefined>();
   const [regionNutritionData, setRegionNutritionData] = useState<CountryMimiData | undefined>();
+  const [countryDataLoading, setCountryDataLoading] = useState<boolean>(false);
 
   const onZoomThresholdReached = () => {
     setSelectedCountry(null);
@@ -67,6 +68,7 @@ export default function Map({ countries, disputedAreas, ipcData, nutritionData }
           setCountryIso3Data={setCountryIso3Data}
           setRegionData={setRegionData}
           setRegionNutritionData={setRegionNutritionData}
+          setCountryDataLoading={setCountryDataLoading}
         />
       )}
       {selectedMapType === GlobalInsight.FOOD &&
@@ -82,6 +84,7 @@ export default function Map({ countries, disputedAreas, ipcData, nutritionData }
               countryData={countryData}
               countryIso3Data={countryIso3Data}
               regionData={regionData}
+              countryDataLoading={countryDataLoading}
             />
           ))}
       {selectedMapType === GlobalInsight.NUTRITION &&

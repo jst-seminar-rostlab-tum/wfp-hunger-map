@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import FcsChoroplethProps from '@/domain/props/FcsChoroplethProps';
 
@@ -10,9 +10,8 @@ export default function FcsChoropleth({
   countryData,
   countryIso3Data,
   regionData,
+  countryDataLoading,
 }: FcsChoroplethProps) {
-  const [loading] = useState<boolean>(false);
-
   return (
     <div>
       {regionData && countryId === selectedCountryId && (
@@ -20,7 +19,7 @@ export default function FcsChoropleth({
           regionData={regionData}
           countryData={countryData}
           countryIso3Data={countryIso3Data}
-          loading={loading}
+          loading={countryDataLoading}
         />
       )}
     </div>

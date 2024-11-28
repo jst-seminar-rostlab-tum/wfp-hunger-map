@@ -22,6 +22,7 @@ export default function VectorTileLayer({
   setCountryIso3Data,
   setRegionData,
   setRegionNutritionData,
+  setCountryDataLoading,
 }: VectorTileLayerProps) {
   const { theme } = useTheme();
   const context: LeafletContextInterface = useLeafletContext();
@@ -60,7 +61,8 @@ export default function VectorTileLayer({
       setCountryData,
       setCountryIso3Data,
       setRegionData,
-      setRegionNutritionData
+      setRegionNutritionData,
+      setCountryDataLoading
     );
     MapOperations.synchronizeLeafletMapbox(baseMap, mapContainer, context);
     // The following layers currently don't work due to CORS issues.

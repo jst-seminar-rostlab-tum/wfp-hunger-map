@@ -129,6 +129,7 @@ export class MapOperations {
     setCountryIso3Data: (countryIso3Data: CountryIso3Data) => void,
     setRegionData: (regionData: FeatureCollection<Geometry, GeoJsonProperties>) => void,
     setRegionNutritionData: (regionNutritionData: CountryMimiData | undefined) => void,
+    setCountryDataLoading: (countryDataLoading: boolean) => void
   ): void {
     let hoveredPolygonId: string | number | undefined;
 
@@ -184,6 +185,7 @@ export class MapOperations {
           setCountryIso3Data,
           setRegionData,
           setRegionNutritionData,
+          setCountryDataLoading
         );
       }
     });
@@ -197,8 +199,10 @@ export class MapOperations {
     setCountryIso3Data: (countryIso3Data: CountryIso3Data) => void,
     setRegionData: (regionData: FeatureCollection<Geometry, GeoJsonProperties>) => void,
     setRegionNutritionData: (regionNutritionData: CountryMimiData | undefined) => void,
+    setCountryDataLoading: (countryDataLoading: boolean) => void
   ): Promise<void> {
     if (selectedCountryData) {
+      setCountryDataLoading(true)
       setSelectedCountry(selectedCountryData);
       setSelectedMapVisibility(false);
 
@@ -220,7 +224,7 @@ export class MapOperations {
         const newCountryIso3Data = await countryRepository.getCountryIso3Data(selectedCountryData.properties.iso3);
         setCountryIso3Data(newCountryIso3Data);
 
-        //setLoading(false);
+        setCountryDataLoading(false);
       } catch {
         // Do nothing
       }
@@ -470,10 +474,6 @@ export class MapOperations {
       const bbox = turf.bbox(country as GeoJSON);
 
       const mapboxAdjustedBbox: [number, number, number, number] = [bbox[0], bbox[1], bbox[2], bbox[3]];
-      /*
-      const leafletAdjustedBbox: [[number, number], [number, number]] = [[bbox[1], bbox[0]], [bbox[3], bbox[2]]];
-      leafletMap.fitBounds(leafletAdjustedBbox, { animate: true });
-       */
 
       leafletMap.off();
       setIsAlertsDisplayDisabled(true);

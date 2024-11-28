@@ -9,4 +9,5 @@ export default interface FcsChoroplethProps {
   countryData: CountryData | undefined;
   countryIso3Data: CountryIso3Data | undefined;
   regionData: FeatureCollection<Geometry, GeoJsonProperties> | undefined;
+  countryDataLoading: boolean;
 }

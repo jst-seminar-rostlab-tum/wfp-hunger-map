@@ -17,6 +17,7 @@ export default function DownloadPortal() {
   const [searchTerm, setSearchTerm] = useState('');
   const [pdfFile, setPdfFile] = useState<PdfFile | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [selectedCountry, setSelectedCountry] = useState<CountryCodesData | null>(null);
 
   const toggleModal = () => {
     setModalOpen((prev) => !prev);
@@ -31,6 +32,7 @@ export default function DownloadPortal() {
   };
 
   const handlePreview = async (url: string) => {
+    setPdfFile(null);
     setError(null);
 
     try {
@@ -47,6 +49,7 @@ export default function DownloadPortal() {
   };
 
   const onSelectCountry = (country: CountryCodesData) => {
+    setSelectedCountry(country);
     handlePreview(country.url.summary);
     toggleModal();
   };
@@ -74,7 +77,14 @@ export default function DownloadPortal() {
         {error ? (
           <div className="bg-background text-danger border rounded-md p-4 text-center">{error}</div>
         ) : (
-          <PdfViewer file={pdfFile} />
+          <PdfViewer
+            file={pdfFile}
+            onDownloadPdf={() => {
+              if (selectedCountry) {
+                DownloadPortalOperations.downloadPdf(selectedCountry);
+              }
+            }}
+          />
         )}
       </PopupModal>
     </div>

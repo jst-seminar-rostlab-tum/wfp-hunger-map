@@ -47,4 +47,13 @@ export class DownloadPortalOperations {
       ),
     }));
   }
+
+  static downloadPdf(country: CountryCodesData) {
+    const link = document.createElement('a');
+    link.href = country.url.summary;
+    link.download = `${country.country.name}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
 }

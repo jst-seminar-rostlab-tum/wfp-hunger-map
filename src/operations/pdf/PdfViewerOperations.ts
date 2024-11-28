@@ -20,4 +20,23 @@ export default class PdfViewerOperations {
 
     updatePageNumber(currentPage);
   }
+
+  static getDisabledKeys(
+    onDownloadPdf?: () => void,
+    onDownloadJson?: () => void,
+    onDownloadCsv?: () => void
+  ): string[] {
+    return ['pdf', 'json', 'csv'].filter((key) => {
+      switch (key) {
+        case 'pdf':
+          return !onDownloadPdf;
+        case 'json':
+          return !onDownloadJson;
+        case 'csv':
+          return !onDownloadCsv;
+        default:
+          return false;
+      }
+    });
+  }
 }

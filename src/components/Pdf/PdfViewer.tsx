@@ -15,14 +15,8 @@ import PdfViewerOperations from '@/operations/pdf/PdfViewerOperations';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url).toString();
 
-export function PdfViewer({
-  file,
-  onTooltipClick = () => {},
-  onDownloadPdf = () => {},
-  onDownloadJson = () => {},
-  onDownloadCsv = () => {},
-}: PdfViewerProps) {
-  const [totalPages, setTotalPages] = useState<number>();
+export function PdfViewer({ file, onTooltipClick, onDownloadPdf, onDownloadJson, onDownloadCsv }: PdfViewerProps) {
+  const [totalPages, setTotalPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState(1);
   const [selectionText, setSelectionText] = useState<string | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState<{ top: number; left: number } | null>(null);
@@ -86,10 +80,19 @@ export function PdfViewer({
               Download As
             </Button>
           </DropdownTrigger>
-          <DropdownMenu color="secondary">
-            <DropdownItem onClick={onDownloadPdf}>Pdf</DropdownItem>
-            <DropdownItem onClick={onDownloadJson}>Json</DropdownItem>
-            <DropdownItem onClick={onDownloadCsv}>Csv</DropdownItem>
+          <DropdownMenu
+            color="secondary"
+            disabledKeys={PdfViewerOperations.getDisabledKeys(onDownloadPdf, onDownloadJson, onDownloadCsv)}
+          >
+            <DropdownItem key="pdf" onClick={onDownloadPdf}>
+              Pdf
+            </DropdownItem>
+            <DropdownItem key="json" onClick={onDownloadJson}>
+              Json
+            </DropdownItem>
+            <DropdownItem key="csv" onClick={onDownloadCsv}>
+              Csv
+            </DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </div>
@@ -113,7 +116,7 @@ export function PdfViewer({
             showArrow
             isOpen
             content={
-              <Button size="sm" color="primary" onClick={() => onTooltipClick(selectionText)}>
+              <Button size="sm" color="primary" onClick={() => onTooltipClick?.(selectionText)}>
                 Ask AI
               </Button>
             }

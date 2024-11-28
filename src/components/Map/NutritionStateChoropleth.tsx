@@ -1,5 +1,5 @@
-import { GeoJsonProperties, Geometry } from 'geojson';
-import L, { PathOptions } from 'leaflet';
+import { GeoJsonProperties } from 'geojson';
+import L from 'leaflet';
 import React, { useEffect, useRef, useState } from 'react';
 import { GeoJSON } from 'react-leaflet';
 
@@ -12,7 +12,7 @@ import NutritionAccordion from './NutritionAccordion';
 import NutritionStateLegend from './NutritionStateLegend';
 
 export default function NutritionStateChoropleth({
-  regionNutri,
+  regionNutrition,
   regionData,
   handleClick = () => {},
   tooltip,
@@ -27,7 +27,7 @@ export default function NutritionStateChoropleth({
       const { feature } = layer;
       if (feature) {
         const stateId = feature.id || feature.properties?.id;
-        const match = regionNutri?.features.find((item) => item.id === stateId);
+        const match = regionNutrition?.features.find((item) => item.id === stateId);
         const nutrientValue = match ? match?.properties?.nutrition[selectedNutrient as keyof Nutrition] : null;
         const formattedNutrientValue = NutritionStateChoroplethOperations.formatNutrientValue(nutrientValue);
         const nutrientLabel = NutritionStateChoroplethOperations.getNutrientLabel(selectedNutrient);
@@ -54,21 +54,6 @@ export default function NutritionStateChoropleth({
     });
   }, [selectedNutrient]);
 
-  const dynamicStyle = (feature: GeoJSON.Feature<Geometry, GeoJsonProperties> | undefined): PathOptions => {
-    if (!feature) return {};
-
-    const stateId = feature.id || feature?.properties?.id;
-    const match = regionNutri?.features.find((item) => item.id === stateId);
-    const value = match ? match?.properties?.nutrition[selectedNutrient as keyof Nutrition] : null;
-
-    return {
-      fillColor: NutritionStateChoroplethOperations.nutritionFillColor(value),
-      color: '#000',
-      weight: 1,
-      fillOpacity: 0.6,
-    };
-  };
-
   const onEachFeature = (feature: GeoJsonProperties, layer: L.Layer): void => {
     layersRef.current.push(layer);
     layer.on('click', () => handleClick(feature));
@@ -77,7 +62,11 @@ export default function NutritionStateChoropleth({
   return (
     <>
       <NutritionAccordion setSelectedNutrient={setSelectedNutrient} selectedNutrient={selectedNutrient} />
-      <GeoJSON data={regionData} style={dynamicStyle} onEachFeature={onEachFeature} />
+      <GeoJSON
+        data={regionData}
+        style={(feature) => NutritionStateChoroplethOperations.dynamicStyle(feature, regionNutrition, selectedNutrient)}
+        onEachFeature={onEachFeature}
+      />
       <NutritionStateLegend />
     </>
   );

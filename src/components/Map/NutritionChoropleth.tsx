@@ -61,7 +61,7 @@ export default function NutritionChoropleth({
       {
         // if this country ('countryId') is selected and data is loaded ('regionData') show Choropleth for all states
         regionData && countryId === selectedCountryId && (
-          <NutritionStateChoropleth regionData={regionData} regionNutri={regionNutritionData} />
+          <NutritionStateChoropleth regionData={regionData} regionNutrition={regionNutritionData} />
         )
       }
     </div>

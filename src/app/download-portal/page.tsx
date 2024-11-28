@@ -6,6 +6,7 @@ import { PdfViewer } from '@/components/Pdf/PdfViewer';
 import PopupModal from '@/components/PopupModal/PopupModal';
 import SearchBar from '@/components/Search/SearchBar';
 import CustomTable from '@/components/Table/CustomTable';
+import TableSkeleton from '@/components/Table/TableSkeleton';
 import { CountryCodesData } from '@/domain/entities/country/CountryCodesData';
 import { useCountryCodesQuery } from '@/domain/hooks/globalHooks';
 import { PdfFile } from '@/domain/props/PdfViewerProps';
@@ -23,17 +24,15 @@ export default function DownloadPortal() {
     return data?.filter((item) => item.country.name.toLowerCase().includes(searchTerm.toLowerCase()));
   }, [data, searchTerm]);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div>
       <h1>Download Portal</h1>
       <div className="my-3">
         <SearchBar value={searchTerm} onValueChange={setSearchTerm} placeholder="Search by country..." />
       </div>
-      {filteredData && (
+      {isLoading || !filteredData ? (
+        <TableSkeleton columnsCount={5} rowsCount={10} />
+      ) : (
         <CustomTable
           columns={DownloadPortalOperations.getColumns()}
           data={DownloadPortalOperations.formatTableData(

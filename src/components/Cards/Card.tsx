@@ -14,10 +14,12 @@ export default function CustomCard({ title, content }: CardProps) {
       <CardBody className="flex flex-col items-center justify-center overflow-visible overflow-y-auto max-h-[300px] py-2">
         <div className="flex flex-row gap-6 overflow-y-auto">
           {content.map((item) => (
-            <div key={uuid()} className="flex flex-col gap-[3px] items-center">
-              <div className="imageWrapper">
-                <Image alt={item.altText} className="w-[50px] h-[50px]" src={item.imageSrc} />
-              </div>
+            <div key={uuid()} className="flex flex-col gap-1 items-center">
+              {item.svgIcon ? (
+                <div className="svg-icon w-[90px]">{item.svgIcon}</div>
+              ) : (
+                <Image alt={item.altText} className="w-[102px] h-[75px]" src={item.imageSrc} />
+              )}
               <h1 className="text-base text-center mt-2">{item.text}</h1>
               {item.timeText && <h1 className="text-xs text-[#888888] text-center break-words">{item.timeText}</h1>}
             </div>

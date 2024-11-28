@@ -42,7 +42,7 @@ export default class NutritionChoroplethOperations {
     bounds: L.LatLngBounds,
     map: L.Map,
     selectedAlert: AlertType | null,
-    setSelectedCountryId: (id?: number) => void,
+    setSelectedCountryId: (countryId: number | null) => void,
     setRegionData: (data: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
     setRegionNutritionData: (data: CountryMimiData) => void,
     toggleAlert: (alertType: AlertType) => void
@@ -71,7 +71,7 @@ export default class NutritionChoroplethOperations {
     layer: L.Layer,
     map: L.Map,
     selectedAlert: AlertType | null,
-    setSelectedCountryId: (countryId?: number) => void,
+    setSelectedCountryId: (countryId: number | null) => void,
     setRegionData: (data: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
     setRegionNutritionData: (data: CountryMimiData) => void,
     countryStyles: { [key: number]: L.PathOptions },

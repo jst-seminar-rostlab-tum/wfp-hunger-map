@@ -66,7 +66,6 @@ export default function NutritionStateChoropleth({
         style={(feature) => NutritionStateChoroplethOperations.dynamicStyle(feature, regionNutrition, selectedNutrient)}
         onEachFeature={onEachFeature}
       />
-      <NutritionStateLegend />
     </>
   );
 }

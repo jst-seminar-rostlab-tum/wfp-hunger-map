@@ -16,7 +16,7 @@ export default function CustomCard({ title, content }: CardProps) {
           {content.map((item) => (
             <div key={uuid()} className="flex flex-col gap-[3px] items-center">
               <div className="imageWrapper">
-                <Image alt={item.altText} className="w-[102px] h-[75px]" src={item.imageSrc} />
+                <Image alt={item.altText} className="w-[50px] h-[50px]" src={item.imageSrc} />
               </div>
               <h1 className="text-base text-center mt-2">{item.text}</h1>
               {item.timeText && <h1 className="text-xs text-[#888888] text-center break-words">{item.timeText}</h1>}

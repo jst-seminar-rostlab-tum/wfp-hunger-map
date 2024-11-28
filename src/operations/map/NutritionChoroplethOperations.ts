@@ -54,12 +54,12 @@ export default class NutritionChoroplethOperations {
     }
     if (feature.properties?.adm0_id) {
       const countryRepository = container.resolve<CountryRepository>('CountryRepository');
-      const newRegionData = await countryRepository.getRegionData(feature.properties.adm0_id);
       const regionNutrition = await countryRepository.getRegionNutritionData(feature.properties.adm0_id);
-      if (newRegionData && newRegionData.features) {
+      const regionData = regionNutrition.features;
+      if (regionData) {
         setRegionData({
           type: 'FeatureCollection',
-          features: newRegionData.features as Feature<Geometry, GeoJsonProperties>[],
+          features: regionData as Feature<Geometry, GeoJsonProperties>[],
         });
         setRegionNutritionData(regionNutrition);
       }

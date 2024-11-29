@@ -7,7 +7,7 @@ import { Button } from '@nextui-org/button';
 import { Chip } from '@nextui-org/chip';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react';
 import { Tooltip } from '@nextui-org/tooltip';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 
 import { PdfViewerProps } from '@/domain/props/PdfViewerProps';
@@ -26,6 +26,12 @@ export default function PdfViewer({
   const [pageNumber, setPageNumber] = useState(1);
   const [selectionText, setSelectionText] = useState<string | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState<{ top: number; left: number } | null>(null);
+  const [pageWidth, setPageWidth] = useState(window.innerWidth * 0.9);
+  const topBarRef = useRef<HTMLDivElement>(null);
+
+  const onResize = useCallback(() => {
+    setPageWidth(topBarRef.current ? topBarRef.current.offsetWidth * 0.8 : window.innerWidth * 0.9);
+  }, []);
 
   const handleMouseWheelEvent = (): void => {
     PdfViewerOperations.handleMouseWheelEvent(document, setPageNumber, pageNumber);
@@ -60,20 +66,27 @@ export default function PdfViewer({
   };
 
   useEffect(() => {
+    window.addEventListener('resize', onResize);
+    // Initial calculation
+    onResize();
     document.addEventListener('selectstart', onSelectStart);
     document.addEventListener('mouseup', onSelectEnd);
 
     return () => {
       document.removeEventListener('selectstart', onSelectStart);
       document.removeEventListener('mouseup', onSelectEnd);
+      window.removeEventListener('resize', onResize);
       window.removeEventListener('mousewheel', handleMouseWheelEvent);
     };
-  }, []);
+  }, [onResize]);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-start relative">
       {/* Top Bar */}
-      <div className="bg-surfaceGrey shadow-md w-full py-4 flex justify-between items-center px-6 sticky top-0 z-10">
+      <div
+        ref={topBarRef}
+        className="bg-surfaceGrey shadow-md w-full py-4 flex justify-between items-center px-6 sticky top-0 z-10"
+      >
         <h1 className="text-lg font-semibold">Preview</h1>
         <Chip className="absolute left-1/2 transform -translate-x-1/2" color="secondary" size="md">
           <p className="text-sm text-black">
@@ -108,14 +121,14 @@ export default function PdfViewer({
         <div className="max-w-3xl">
           <Document file={file} onLoadSuccess={onDocumentLoadSuccess} className="flex-col items-center mx-auto">
             {Array.from(new Array(totalPages), (_, index) => (
-              <Page canvasBackground="transparent" key={`page_${index + 1}`} pageNumber={index + 1} />
+              <Page canvasBackground="transparent" key={`page_${index + 1}`} pageNumber={index + 1} width={pageWidth} />
             ))}
           </Document>
         </div>
       </div>
 
       {/* Tooltip */}
-      {tooltipPosition && selectionText && (
+      {onTooltipClick && tooltipPosition && selectionText && (
         <div className="absolute z-20 p-2 rounded-lg" style={{ top: tooltipPosition.top, left: tooltipPosition.left }}>
           <Tooltip
             color="primary"

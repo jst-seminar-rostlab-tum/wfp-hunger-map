@@ -106,7 +106,7 @@ export default function DownloadCountryAccordion({ countryCodes }: DownloadCount
         <SubmitButton
           label={DOWNLOAD_DATA}
           submitStatus={downloadStatus}
-          className="h-14 border-gray-200 dark:border-white hover:bg-blue-100 dark:hover:bg-gray-600"
+          className="h-14 bg-subscribeText dark:bg-subscribeText text-white dark:text-black shadow-lg border-gray-200"
         />
       </form>
     </div>

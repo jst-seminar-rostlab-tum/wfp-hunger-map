@@ -48,6 +48,7 @@ export default function DownloadPortal() {
                         setError,
                         toggleModal
                       )}
+                      ariaLabel="Pdf Reports"
                     />
                   )}
                   <PopupModal

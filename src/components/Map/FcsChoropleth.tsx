@@ -10,6 +10,9 @@ import FcsChoroplethProps from '@/domain/props/FcsChoroplethProps';
 import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
 
 import FscCountryChoropleth from './FcsCountryChoropleth';
+import { createRoot } from 'react-dom/client';
+import FcsRegionTooltip from '@/components/Map/FcsRegionTooltip.tsx';
+import CountryHoverPopover from '@/components/CountryHoverPopover/CountryHoverPopover.tsx';
 
 export default function FcsChoropleth({
   data,
@@ -36,7 +39,13 @@ export default function FcsChoropleth({
         }}
         data={data}
         style={FcsChoroplethOperations.countryStyle}
-        onEachFeature={(feature, layer) =>
+        onEachFeature={(feature, layer) => {
+          // tooltip on country hover -> showing name
+          const tooltipContainer = document.createElement('div');
+          const root = createRoot(tooltipContainer);
+          root.render(<CountryHoverPopover header={feature.properties.adm0_name} />);
+          layer.bindTooltip(tooltipContainer, { className: 'leaflet-tooltip', sticky: true });
+
           FcsChoroplethOperations.onEachFeature(
             feature,
             layer,
@@ -50,8 +59,8 @@ export default function FcsChoropleth({
             setSelectedMapVisibility,
             toggleAlert,
             theme === 'dark'
-          )
-        }
+          );
+        }}
       />
       {regionData && countryId === selectedCountryId && (
         <FscCountryChoropleth

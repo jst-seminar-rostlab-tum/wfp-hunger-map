@@ -12,5 +12,5 @@ export default interface SubscriptionRepository {
    * get all the topics that a user can subscribe to.
    * @returns A promise that resolves to an array of topics.
    */
-  getSubscribeTopic(): Promise<ITopic>;
+  getSubscribeTopic(): Promise<ITopic[]>;
 }

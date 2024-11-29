@@ -16,24 +16,3 @@ export const UNSUCCESSFUL_SUBSCRIPTION = 'Subscribed failed. Please try again la
 export const CLICK_TO_SELECT = 'Click to select topics';
 
 export const SELECTED_TOPICS = 'Selected topics: ';
-
-export const MOCK_TOPICS = [
-  {
-    id: '1',
-    name: 'Topic 1',
-  },
-  {
-    id: '2',
-    name: 'Topic 2',
-    options: ['Option 4', 'Option 5', 'Option 6'],
-  },
-  {
-    id: '3',
-    name: 'Topic 3',
-    options: ['Option 1', 'Option 2', 'Option 3'],
-  },
-  {
-    id: '4',
-    name: 'Topic 4',
-  },
-];

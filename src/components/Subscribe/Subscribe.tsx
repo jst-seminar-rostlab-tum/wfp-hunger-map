@@ -3,12 +3,11 @@
 import { Divider, Input } from '@nextui-org/react';
 import { motion } from 'framer-motion';
 import { Facebook, Instagram, Twitch, Youtube } from 'iconsax-react';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import container from '@/container';
 import {
   MANDATORY,
-  MOCK_TOPICS,
   SUBSCRIBE,
   SUBSCRIBE_MODAL_SUBTITLE,
   SUCCESSFUL_SUBSCRIPTION,
@@ -29,6 +28,7 @@ export default function SubscriptionForm() {
   const [email, setEmail] = useState('');
   const [topic, setTopic] = useState<string | undefined>('');
   const [options, setOptions] = useState<string[] | undefined>([]);
+  const [availableTopics, setAvailableTopics] = useState<ITopic[]>([]);
 
   const [isNameInvalid, setIsNameInvalid] = useState(false);
   const [isEmailInvalid, setIsEmailInvalid] = useState(false);
@@ -70,7 +70,7 @@ export default function SubscriptionForm() {
           .subscribe({
             name,
             email,
-            topicId: topic,
+            topic_id: topic,
             organization,
             options,
           })
@@ -90,18 +90,17 @@ export default function SubscriptionForm() {
   };
 
   const handleSelectionChange = (selectedTopic: ITopic | undefined) => {
-    setTopic(selectedTopic?.id);
+    setTopic(selectedTopic?.topic_id);
     setOptions(selectedTopic?.options);
   };
 
   // use subscribe.getSubscribeTopics() to get the topics, when the component initializes
   // and set it to the state
-  // useEffect(() => {
-  //   subscribe.getSubscribeTopic().then((topic) => {
-  //     console.log(topics);
-  //     setTopics(topics);
-  //   });
-  // }, []);
+  useEffect(() => {
+    subscribe.getSubscribeTopic().then((topics) => {
+      setAvailableTopics(topics);
+    });
+  }, []);
 
   return (
     <div className="flex flex-col items-center">
@@ -141,7 +140,7 @@ export default function SubscriptionForm() {
           onChange={(changeOrgEvent) => setOrganization(changeOrgEvent.target.value)}
           value={organization}
         />
-        <NestedPopover items={MOCK_TOPICS} onSelectionChange={handleSelectionChange} />
+        <NestedPopover items={availableTopics} onSelectionChange={handleSelectionChange} />
         <SubmitButton
           label={SUBSCRIBE}
           submitStatus={subscribeStatus}

@@ -59,11 +59,16 @@ export function NestedPopover({ items, onSelectionChange }: NestedPopoverProps) 
   // nested menu item click logic: to select the item since is multiple
   const selectNestedOption = (option: string, topic: ITopic): void => {
     setSelectedOptions((prev) => (prev.includes(option) ? prev.filter((item) => item !== option) : [...prev, option]));
-    if (selectedTopic && selectedTopic.id !== topic.id) {
+    if (selectedTopic && selectedTopic.topic_id !== topic.topic_id) {
       // clear options if the topic is changed
       setSelectedOptions([option]);
     }
-    setSelectedTopic({ id: topic.id, name: topic.name, options: [...selectedOptions, option] });
+    setSelectedTopic({
+      topic_id: topic.topic_id,
+      topic_name: topic.topic_name,
+      topic_description: topic.topic_description,
+      options: [...selectedOptions, option],
+    });
   };
 
   /**
@@ -93,7 +98,7 @@ export function NestedPopover({ items, onSelectionChange }: NestedPopoverProps) 
           >
             <div className="flex flex-row items-center">
               {selectedTopic ? <p>{SELECTED_TOPICS}</p> : <p>{CLICK_TO_SELECT}</p>}
-              {selectedTopic && <p className="text-sm text-gray-700 dark:text-gray-300">{selectedTopic?.name}</p>}
+              {selectedTopic && <p className="text-sm text-gray-700 dark:text-gray-300">{selectedTopic?.topic_name}</p>}
               {selectedOptions.length > 0 && (
                 <p className="text-sm text-gray-500 dark:text-gray-400">: {selectedOptions.join(', ')}</p>
               )}
@@ -107,11 +112,11 @@ export function NestedPopover({ items, onSelectionChange }: NestedPopoverProps) 
             {items.map((item) =>
               item.options === undefined || item.options.length === 0 ? (
                 <div
-                  key={item.id}
+                  key={item.topic_id}
                   className="m-1 h-10 text-left text-gray-700 hover:bg-blue-100 hover:text-black dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white p-2"
                   onClick={() => selectMainMenuItem(item)}
                 >
-                  {item.name}
+                  {item.topic_name}
                 </div>
               ) : null
             )}
@@ -120,18 +125,18 @@ export function NestedPopover({ items, onSelectionChange }: NestedPopoverProps) 
             {/* nested menu trigger logic */}
             {items.map((item) =>
               item.options && item.options.length > 0 ? (
-                <li key={item.id} className="relative">
+                <li key={item.topic_id} className="relative">
                   <div
                     className="m-1 h-10 flex flex-row justify-between items-center text-gray-700 hover:bg-blue-100 hover:text-black dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white p-2"
-                    onClick={() => handleNestedMenuToggle(item.id)}
-                    onMouseEnter={() => handleNestedMenuToggle(item.id)}
+                    onClick={() => handleNestedMenuToggle(item.topic_id)}
+                    onMouseEnter={() => handleNestedMenuToggle(item.topic_id)}
                   >
-                    <p>{item.name}</p>
+                    <p>{item.topic_name}</p>
                     <ArrowRight2 size={24} />
                   </div>
 
                   {/* nested menu items */}
-                  {isNestedOpen && openNestedMenu?.includes(item.id) && (
+                  {isNestedOpen && openNestedMenu?.includes(item.topic_id) && (
                     <div
                       ref={nestedMenuRef}
                       className="absolute top-0 left-full bg-white dark:bg-background shadow-lg rounded-md w-40 z-10 border-[0.5px] border-solid border-gray-500 p-1"

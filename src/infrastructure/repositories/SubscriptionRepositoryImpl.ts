@@ -22,14 +22,9 @@ export default class SubscriptionRepositoryImpl implements SubscriptionRepositor
     }
   }
 
-  async getSubscribeTopic(): Promise<ITopic> {
+  async getSubscribeTopic(): Promise<ITopic[]> {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subscribe`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await fetch(`${process.env.NEXT_EMAIL_SERVICE}/topics.json`);
 
       if (response.ok) {
         return response.json();

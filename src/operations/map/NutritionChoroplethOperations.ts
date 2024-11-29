@@ -4,6 +4,7 @@ import L from 'leaflet';
 import container from '@/container';
 import { CountryMimiData } from '@/domain/entities/country/CountryMimiData';
 import { CountryNutrition } from '@/domain/entities/country/CountryNutrition.ts';
+import { AlertType } from '@/domain/enums/AlertType';
 import CountryRepository from '@/domain/repositories/CountryRepository';
 
 export default class NutritionChoroplethOperations {
@@ -40,20 +41,25 @@ export default class NutritionChoroplethOperations {
     feature: Feature<Geometry, GeoJsonProperties>,
     bounds: L.LatLngBounds,
     map: L.Map,
-    setSelectedCountryId: (id?: number) => void,
+    selectedAlert: AlertType | null,
+    setSelectedCountryId: (countryId: number | null) => void,
     setRegionData: (data: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
-    setRegionNutritionData: (data: CountryMimiData) => void
+    setRegionNutritionData: (data: CountryMimiData) => void,
+    toggleAlert: (alertType: AlertType) => void
   ) {
     map.fitBounds(bounds);
     setSelectedCountryId(feature.properties?.adm0_id);
+    if (selectedAlert) {
+      toggleAlert(selectedAlert);
+    }
     if (feature.properties?.adm0_id) {
       const countryRepository = container.resolve<CountryRepository>('CountryRepository');
-      const newRegionData = await countryRepository.getRegionData(feature.properties.adm0_id);
       const regionNutrition = await countryRepository.getRegionNutritionData(feature.properties.adm0_id);
-      if (newRegionData && newRegionData.features) {
+      const regionData = regionNutrition.features;
+      if (regionData) {
         setRegionData({
           type: 'FeatureCollection',
-          features: newRegionData.features as Feature<Geometry, GeoJsonProperties>[],
+          features: regionData as Feature<Geometry, GeoJsonProperties>[],
         });
         setRegionNutritionData(regionNutrition);
       }
@@ -64,10 +70,12 @@ export default class NutritionChoroplethOperations {
     feature: Feature<Geometry, GeoJsonProperties>,
     layer: L.Layer,
     map: L.Map,
-    setSelectedCountryId: (countryId?: number) => void,
+    selectedAlert: AlertType | null,
+    setSelectedCountryId: (countryId: number | null) => void,
     setRegionData: (data: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
     setRegionNutritionData: (data: CountryMimiData) => void,
-    countryStyles: { [key: number]: L.PathOptions }
+    countryStyles: { [key: number]: L.PathOptions },
+    toggleAlert: (alertType: AlertType) => void
   ) {
     const pathLayer = layer as L.Path;
     const featureStyle = countryStyles[feature.properties?.adm0_id];
@@ -81,9 +89,11 @@ export default class NutritionChoroplethOperations {
           feature,
           bounds,
           map,
+          selectedAlert,
           setSelectedCountryId,
           setRegionData,
-          setRegionNutritionData
+          setRegionNutritionData,
+          toggleAlert
         );
       },
     });

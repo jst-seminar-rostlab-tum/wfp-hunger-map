@@ -31,10 +31,6 @@ export default function NutritionChoropleth({
     setCountryStyles(parsedStyles);
   }, [nutritionData]);
 
-  if (selectedAlert) {
-    toggleAlert(selectedAlert);
-  }
-
   return (
     <div>
       <GeoJSON
@@ -51,17 +47,19 @@ export default function NutritionChoropleth({
             feature,
             layer,
             map,
+            selectedAlert,
             setSelectedCountryId,
             setRegionData,
             setRegionNutritionData,
-            countryStyles
+            countryStyles,
+            toggleAlert
           )
         }
       />
       {
         // if this country ('countryId') is selected and data is loaded ('regionData') show Choropleth for all states
         regionData && countryId === selectedCountryId && (
-          <NutritionStateChoropleth regionData={regionData} regionNutri={regionNutritionData} />
+          <NutritionStateChoropleth regionData={regionData} regionNutrition={regionNutritionData} />
         )
       }
     </div>

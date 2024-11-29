@@ -2,6 +2,7 @@
 
 import { Button } from '@nextui-org/button';
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
+import { Input } from '@nextui-org/input';
 import { Link } from '@nextui-org/link';
 import { ScrollShadow } from '@nextui-org/react';
 import clsx from 'clsx';
@@ -22,14 +23,12 @@ import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
 import { useMediaQuery } from '@/utils/resolution';
 
 import PopupModal from '../PopupModal/PopupModal';
-import SearchBar from '../Search/SearchBar';
 import Subscribe from '../Subscribe/Subscribe';
 
 export function Sidebar() {
   const { isSidebarOpen, toggleSidebar, closeSidebar } = useSidebar();
   const { selectedMapType, setSelectedMapType } = useSelectedMap();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
   const isMobile = useMediaQuery('(max-width: 640px)');
 
   if (!isSidebarOpen) {
@@ -54,7 +53,7 @@ export function Sidebar() {
             </Button>
           </div>
           <ThemeSwitch />
-          <SearchBar value={searchTerm} onValueChange={setSearchTerm} placeholder="Search a country" />
+          <Input className="w-full" color="primary" placeholder="Search a country" variant="faded" />
         </CardHeader>
         <CardBody>
           <ScrollShadow className="w-full h-full">

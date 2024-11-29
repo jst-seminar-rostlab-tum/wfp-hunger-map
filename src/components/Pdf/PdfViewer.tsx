@@ -13,6 +13,30 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import { PdfViewerProps } from '@/domain/props/PdfViewerProps';
 import PdfViewerOperations from '@/operations/pdf/PdfViewerOperations';
 
+if (typeof Promise.withResolvers === 'undefined') {
+  if (typeof window !== 'undefined') {
+    window.Promise.withResolvers = function <T>() {
+      let resolve!: (value: T | PromiseLike<T>) => void;
+      let reject!: (reason?: unknown) => void;
+      const promise = new Promise<T>((res, rej) => {
+        resolve = res;
+        reject = rej;
+      });
+      return { promise, resolve, reject };
+    };
+  } else {
+    global.Promise.withResolvers = function <T>() {
+      let resolve!: (value: T | PromiseLike<T>) => void;
+      let reject!: (reason?: unknown) => void;
+      const promise = new Promise<T>((res, rej) => {
+        resolve = res;
+        reject = rej;
+      });
+      return { promise, resolve, reject };
+    };
+  }
+}
+
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.mjs`;
 
 export function PdfViewer({ file, onTooltipClick, onDownloadPdf, onDownloadJson, onDownloadCsv }: PdfViewerProps) {

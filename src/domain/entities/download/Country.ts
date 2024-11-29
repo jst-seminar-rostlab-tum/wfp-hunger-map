@@ -60,8 +60,6 @@ export const DESCRIPTION = 'Select a country and a date range to download its fo
 
 export const TITLE = 'Download Country Data';
 
-export const MOCK_COUNTRIES = ['Nigeria', 'Ghana', 'Kenya', 'Tanzania', 'Uganda'];
-
 export const COUNTRY_ERROR_MSG = 'Country is required';
 
 export const DATE_RANGE_ERROR_MSG = 'Date range is required';

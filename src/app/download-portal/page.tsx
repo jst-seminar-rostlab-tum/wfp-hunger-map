@@ -2,13 +2,14 @@
 
 import { useMemo, useState } from 'react';
 
-import DownloadCountryAccordion from '@/components/DownloadCountryAccordions/DownloadCountryAccordions';
 import CustomAccordion from '@/components/Accordions/Accordion';
+import DownloadCountryAccordion from '@/components/DownloadCountryAccordions/DownloadCountryAccordions';
 import PdfLoader from '@/components/Pdf/PdfLoader';
 import PopupModal from '@/components/PopupModal/PopupModal';
 import SearchBar from '@/components/Search/SearchBar';
 import CustomTable from '@/components/Table/CustomTable';
 import { CountryCodesData } from '@/domain/entities/country/CountryCodesData';
+import { TITLE } from '@/domain/entities/download/Country';
 import { useCountryCodesQuery } from '@/domain/hooks/globalHooks';
 import { PdfFile } from '@/domain/props/PdfViewerProps';
 import { DownloadPortalOperations } from '@/operations/download-portal/DownloadPortalOperations';
@@ -73,6 +74,14 @@ export default function DownloadPortal() {
                   </PopupModal>
                 </div>
               ),
+            },
+          ]}
+        />
+        <CustomAccordion
+          items={[
+            {
+              title: TITLE,
+              content: <DownloadCountryAccordion countryCodes={data} />,
             },
           ]}
         />

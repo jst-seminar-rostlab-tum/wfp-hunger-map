@@ -2,14 +2,13 @@ import { FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
 import L from 'leaflet';
 import { useTheme } from 'next-themes';
 import React, { useRef, useState } from 'react';
-import { createRoot } from 'react-dom/client';
 import { GeoJSON, useMap } from 'react-leaflet';
 
-import CountryHoverPopover from '@/components/CountryHoverPopover/CountryHoverPopover';
 import { CountryData } from '@/domain/entities/country/CountryData';
 import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data';
 import FcsChoroplethProps from '@/domain/props/FcsChoroplethProps';
 import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
+import { MapOperations } from '@/operations/map/MapOperations';
 
 import FscCountryChoropleth from './FcsCountryChoropleth';
 
@@ -40,9 +39,7 @@ export default function FcsChoropleth({
         style={FcsChoroplethOperations.countryStyle}
         onEachFeature={(feature, layer) => {
           // tooltip on country hover -> showing name
-          const tooltipContainer = document.createElement('div');
-          const root = createRoot(tooltipContainer);
-          root.render(<CountryHoverPopover header={feature?.properties?.adm0_name} />);
+          const tooltipContainer = MapOperations.creatCountryNameTooltipElement(feature?.properties?.adm0_name);
           layer.bindTooltip(tooltipContainer, { className: 'leaflet-tooltip', sticky: true });
 
           FcsChoroplethOperations.onEachFeature(

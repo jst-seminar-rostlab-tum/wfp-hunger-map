@@ -2,7 +2,7 @@
 import { LeafletContextInterface } from '@react-leaflet/core';
 import { FeatureCollection } from 'geojson';
 import mapboxgl, { Popup } from 'mapbox-gl';
-import React, { ReactDOM, RefObject } from 'react';
+import React, { RefObject } from 'react';
 
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 import { MapColorsType } from '@/domain/entities/map/MapColorsType.ts';
@@ -114,18 +114,12 @@ export class MapOperations {
       if (hoveredPolygonId && (countryData as CountryMapData).properties.interactive) {
         baseMap.setFeatureState({ source: 'countries', id: hoveredPolygonId }, { hover: true });
 
-        // Add tooltip
+        // tooltip on country hover -> showing name
+        // only for RAINFALL and VEGETATION cause the other Global Insights provide their own tooltips on hover
         if (selectedMapType === GlobalInsight.RAINFALL || selectedMapType === GlobalInsight.VEGETATION) {
-
-          const countryName = countryData.properties.adm0_name;
-          const coordinates = e.lngLat;
-
-          const tooltipContainer = document.createElement('div');
-          const root = createRoot(tooltipContainer);
-          root.render(<CountryHoverPopover header={countryName} />);
-
+          const tooltipContainer = MapOperations.creatCountryNameTooltipElement(countryData.properties.adm0_name);
           popover
-            .setLngLat(coordinates)
+            .setLngLat(e.lngLat)
             .setDOMContent(tooltipContainer)
             .addTo(baseMap);
         }
@@ -150,7 +144,7 @@ export class MapOperations {
     });
     baseMap.on('mouseup', 'countries-hover', (e: any) => {
       if (!isDragging && e.features && (e.features[0] as CountryMapData).properties.interactive) {
-        alert(`You clicked on ${(e.features[0] as CountryMapData).properties.adm0_name}`);
+        // alert(`You clicked on ${(e.features[0] as CountryMapData).properties.adm0_name}`);
       }
     });
   }
@@ -326,5 +320,16 @@ export class MapOperations {
       return;
     }
     baseMap.removeLayer(layerToRemove.id);
+  }
+
+  /**
+   * Create a 'HTMLDivElement' rending the given 'countryName' within a 'CountryHoverPopover'.
+   * Needed cause leaflet tooltips or mapbox popups does not accept React components.
+   */
+  static creatCountryNameTooltipElement(countryName: string): HTMLDivElement {
+    const tooltipContainer = document.createElement('div');
+    const root = createRoot(tooltipContainer);
+    root.render(<CountryHoverPopover header={countryName} />);
+    return tooltipContainer;
   }
 }

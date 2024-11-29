@@ -1,12 +1,11 @@
 import { FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
 import L from 'leaflet';
 import React, { useEffect, useRef, useState } from 'react';
-import { createRoot } from 'react-dom/client';
 import { GeoJSON, useMap } from 'react-leaflet';
 
-import CountryHoverPopover from '@/components/CountryHoverPopover/CountryHoverPopover';
 import { CountryMimiData } from '@/domain/entities/country/CountryMimiData';
 import NutritionChoroplethProps from '@/domain/props/NutritionChoroplethProps';
+import { MapOperations } from '@/operations/map/MapOperations';
 import NutritionChoroplethOperations from '@/operations/map/NutritionChoroplethOperations';
 
 import NutritionStateChoropleth from './NutritionStateChoropleth';
@@ -45,11 +44,9 @@ export default function NutritionChoropleth({
           return featureStyle || NutritionChoroplethOperations.countryStyle;
         }}
         onEachFeature={(feature, layer) => {
-          // tooltip on country hover -> showing name
           if (NutritionChoroplethOperations.allowCountryHover(nutritionData, feature?.properties?.adm0_id)) {
-            const tooltipContainer = document.createElement('div');
-            const root = createRoot(tooltipContainer);
-            root.render(<CountryHoverPopover header={feature?.properties?.adm0_name} />);
+            // tooltip on country hover -> showing name
+            const tooltipContainer = MapOperations.creatCountryNameTooltipElement(feature?.properties?.adm0_name);
             layer.bindTooltip(tooltipContainer, { className: 'leaflet-tooltip', sticky: true });
           }
 

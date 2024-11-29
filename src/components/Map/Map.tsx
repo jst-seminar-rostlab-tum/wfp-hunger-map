@@ -1,11 +1,11 @@
 import 'leaflet/dist/leaflet.css';
 
 import { Feature, GeoJsonProperties, Geometry } from 'geojson';
-import { useState } from 'react';
 import { MapContainer } from 'react-leaflet';
 
 import { MAP_MAX_ZOOM, MAP_MIN_ZOOM } from '@/domain/constant/map/Map';
 import { useSelectedAlert } from '@/domain/contexts/SelectedAlertContext';
+import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSelectedMapVisibility } from '@/domain/contexts/SelectedMapVisibilityContext';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight';
@@ -13,18 +13,19 @@ import { MapProps } from '@/domain/props/MapProps';
 
 import { AlertContainer } from './Alerts/AlertContainer';
 import FcsChoropleth from './FcsChoropleth';
+import IpcChoropleth from './IpcMap/IpcChoropleth';
 import NutritionChoropleth from './NutritionChoropleth';
 import VectorTileLayer from './VectorTileLayer';
 import ZoomControl from './ZoomControl';
 
 export default function Map({ countries, disputedAreas, ipcData, nutritionData }: MapProps) {
   const { selectedMapType } = useSelectedMap();
-  const [selectedCountryId, setSelectedCountryId] = useState<number | undefined>();
   const { setSelectedMapVisibility } = useSelectedMapVisibility();
-  const { selectedAlert, toggleAlert } = useSelectedAlert();
+  const { selectedAlert, toggleAlert, resetAlert } = useSelectedAlert();
+  const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
 
   const onZoomThresholdReached = () => {
-    setSelectedCountryId(undefined);
+    setSelectedCountryId(null);
     setSelectedMapVisibility(true);
   };
 
@@ -70,6 +71,17 @@ export default function Map({ countries, disputedAreas, ipcData, nutritionData }
               toggleAlert={toggleAlert}
             />
           ))}
+
+      {selectedMapType === GlobalInsight.IPC && (
+        <IpcChoropleth
+          countries={countries}
+          ipcData={ipcData}
+          selectedCountryId={selectedCountryId}
+          setSelectedCountryId={setSelectedCountryId}
+          resetAlert={resetAlert}
+        />
+      )}
+
       {selectedMapType === GlobalInsight.NUTRITION &&
         countries.features &&
         countries.features

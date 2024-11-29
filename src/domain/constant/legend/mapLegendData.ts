@@ -5,13 +5,15 @@ import { ConflictType } from '@/domain/enums/ConflictType.ts';
 import { CountryAlertType } from '@/domain/enums/CountryAlertType';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
 import { HazardSeverity } from '@/domain/enums/HazardSeverity.ts';
+import { IpcPhases } from '@/domain/enums/IpcPhases';
 import { NutritionData } from '@/domain/enums/NutritionData';
 import { GradientLegendContainerItem } from '@/domain/props/GradientLegendContainerItem.ts';
 import PointLegendContainerItem from '@/domain/props/PointLegendContainerItem.ts';
 
 export function mapLegendData(
   selectedMapType: GlobalInsight,
-  selectedAlert: AlertType | null
+  selectedAlert: AlertType | null,
+  selectedCountryId: number | null
 ): (PointLegendContainerItem | GradientLegendContainerItem)[] {
   const legendData: (PointLegendContainerItem | GradientLegendContainerItem)[] = [];
 
@@ -127,55 +129,83 @@ export function mapLegendData(
       });
       break;
     case GlobalInsight.IPC:
-      legendData.push({
-        title: 'Number of people in IPC/CH Phase 3 or above (millions)',
-        colors: [
-          'ipcGradient1',
-          'ipcGradient2',
-          'ipcGradient3',
-          'ipcGradient4',
-          'ipcGradient5',
-          'ipcGradient6',
-          'ipcGradient7',
-        ],
-        startLabel: '0',
-        endLabel: '>10',
-        tooltipInfo: `
-          Developed by a global partnership, the Integrated Food Security Phase Classification (IPC) / Cadre Harmonisé (CH) is a set of tools and procedures to classify food insecurity.\n
-          It classifies the populations in five different phases according to the severity of the food insecurity and malnutrition situation:\n
-          - Minimal\n
-          - Stressed\n
-          - Crisis\n
-          - Emergency\n
-          - Catastrophe/Famine.\n
-          \n
-          Data source: Integrated Food Security Phase Classification (IPC) / Cadre Harmonisé (CH) www.ipcinfo.org\n
-          \n
-          Updated: N/A
-          `,
-      });
+      if (!selectedCountryId) {
+        legendData.push({
+          title: 'Number of people in IPC/CH Phase 3 or above (millions)',
+          colors: [
+            'ipcGradient1',
+            'ipcGradient2',
+            'ipcGradient3',
+            'ipcGradient4',
+            'ipcGradient5',
+            'ipcGradient6',
+            'ipcGradient7',
+          ],
+          startLabel: '0',
+          endLabel: '>10',
+          tooltipInfo: `
+            Developed by a global partnership, the Integrated Food Security Phase Classification (IPC) / Cadre Harmonisé (CH) is a set of tools and procedures to classify food insecurity.\n
+            It classifies the populations in five different phases according to the severity of the food insecurity and malnutrition situation:\n
+            - Minimal\n
+            - Stressed\n
+            - Crisis\n
+            - Emergency\n
+            - Catastrophe/Famine.\n
+            \n
+            Data source: Integrated Food Security Phase Classification (IPC) / Cadre Harmonisé (CH) www.ipcinfo.org\n
+            \n
+            Updated: N/A
+            `,
+        });
+      } else {
+        legendData.push({
+          title: 'Acute food insecurity phase classification',
+          tooltipInfo: `
+              Developed by a global partnership, the Integrated Food Security Phase Classification (IPC) / Cadre Harmonisé (CH) is a set of tools and procedures to classify food insecurity.\n
+              It classifies the populations in five different phases according to the severity of the food insecurity and malnutrition situation:\n
+              - Minimal\n
+              - Stressed\n
+              - Crisis\n
+              - Emergency\n
+              - Catastrophe/Famine.\n
+              \n
+              Data source: Integrated Food Security Phase Classification (IPC) / Cadre Harmonisé (CH) www.ipcinfo.org\n
+              \n
+              Updated: N/A
+            `,
+          records: [
+            { label: IpcPhases.PHASE_1, color: 'ipcPhase1' },
+            { label: IpcPhases.PHASE_2, color: 'ipcPhase2' },
+            { label: IpcPhases.PHASE_3, color: 'ipcPhase3' },
+            { label: IpcPhases.PHASE_4, color: 'ipcPhase4' },
+            { label: IpcPhases.PHASE_5, color: 'ipcPhase5' },
+          ],
+        });
+      }
+
       break;
-    // TODO: show this once IPC map PR is merged
-    // case GlobalInsight.NUTRITION:
-    //   legendData.push({
-    //     title: 'Risk of Inadequate Micronutrient Intake',
-    //     colors: ['ipcGradient1', 'ipcGradient2', 'ipcGradient3', 'ipcGradient4', 'ipcGradient5'],
-    //     startLabel: '0%',
-    //     endLabel: '100%',
-    //     tooltipInfo: 'Shows the inadequate ratio of nutrient intake.',
-    //   });
-    //   break;
 
     case GlobalInsight.NUTRITION:
-      legendData.push({
-        title: 'Analysis Distribution',
-        tooltipInfo: 'Shows the inadequate ratio of nutrient intake.',
-        records: [
-          { label: NutritionData.ACTUAL_DATA, color: 'nutritionActual' },
-          { label: NutritionData.PREDICTED_DATA, color: 'nutritionPredicted' },
-          { label: NutritionData.NOT_ANALYZED_DATA, color: 'nutritionNotAnalyzed' },
-        ],
-      });
+      if (!selectedCountryId) {
+        legendData.push({
+          title: 'Analysis Distribution',
+          tooltipInfo: 'Shows the inadequate ratio of nutrient intake.',
+          records: [
+            { label: NutritionData.ACTUAL_DATA, color: 'nutritionActual' },
+            { label: NutritionData.PREDICTED_DATA, color: 'nutritionPredicted' },
+            { label: NutritionData.NOT_ANALYZED_DATA, color: 'nutritionNotAnalyzed' },
+          ],
+        });
+      } else {
+        legendData.push({
+          title: 'Risk of Inadequate Micronutrient Intake',
+          colors: ['ipcGradient1', 'ipcGradient2', 'ipcGradient3', 'ipcGradient4', 'ipcGradient5'],
+          startLabel: '0%',
+          endLabel: '100%',
+          tooltipInfo: 'Shows the inadequate ratio of nutrient intake.',
+        });
+      }
+
       break;
     default:
   }

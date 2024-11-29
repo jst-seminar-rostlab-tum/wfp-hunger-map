@@ -2,13 +2,15 @@
 import { LeafletContextInterface } from '@react-leaflet/core';
 import { FeatureCollection } from 'geojson';
 import mapboxgl, { Popup } from 'mapbox-gl';
-import { RefObject } from 'react';
+import React, { ReactDOM, RefObject } from 'react';
 
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 import { MapColorsType } from '@/domain/entities/map/MapColorsType.ts';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
 import { MapProps } from '@/domain/props/MapProps';
 import { getColors } from '@/styles/MapColors.ts';
+import { createRoot } from 'react-dom/client';
+import CountryHoverPopover from '@/components/CountryHoverPopover/CountryHoverPopover.tsx';
 
 export class MapOperations {
   static createMapboxMap(isDark: boolean, mapProps: MapProps, mapContainer: RefObject<HTMLDivElement>): mapboxgl.Map {
@@ -90,7 +92,7 @@ export class MapOperations {
     });
   }
 
-  static setMapInteractionFunctionality(baseMap: mapboxgl.Map, popover: Popup): void {
+  static setMapInteractionFunctionality(baseMap: mapboxgl.Map, popover: Popup, selectedMapType: GlobalInsight): void {
     let hoveredPolygonId: string | number | undefined;
 
     baseMap.on('mousemove', 'countries-hover', (e: any) => {
@@ -111,6 +113,22 @@ export class MapOperations {
       hoveredPolygonId = countryData.id;
       if (hoveredPolygonId && (countryData as CountryMapData).properties.interactive) {
         baseMap.setFeatureState({ source: 'countries', id: hoveredPolygonId }, { hover: true });
+
+        // Add tooltip
+        if (selectedMapType === GlobalInsight.RAINFALL || selectedMapType === GlobalInsight.VEGETATION) {
+
+          const countryName = countryData.properties.adm0_name;
+          const coordinates = e.lngLat;
+
+          const tooltipContainer = document.createElement('div');
+          const root = createRoot(tooltipContainer);
+          root.render(<CountryHoverPopover header={countryName} />);
+
+          popover
+            .setLngLat(coordinates)
+            .setDOMContent(tooltipContainer)
+            .addTo(baseMap);
+        }
       }
     });
 

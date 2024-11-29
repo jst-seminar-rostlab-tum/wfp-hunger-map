@@ -37,8 +37,8 @@ export default class NutritionChoroplethOperations {
     return {};
   }
 
-  public static getHoverCountryIds(nutritionData: CountryNutrition): number[] {
-    return nutritionData.body?.map((c) => c.adm0_code) || [];
+  public static allowCountryHover(nutritionData: CountryNutrition, countryId: number): boolean {
+    return nutritionData.body?.find((c) => c.adm0_code === countryId) !== undefined;
   }
 
   private static async handleCountryClick(

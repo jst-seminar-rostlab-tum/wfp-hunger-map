@@ -102,6 +102,23 @@ path.leaflet-interactive:focus {
   outline: none;
 }
 
+/* remove mapbox-popup surrounding white box */
+.mapbox-popup-transparent .mapboxgl-popup-content {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 5px !important;
+}
+/* shrink mapbox-popup tip triangle */
+.mapbox-popup-transparent .mapboxgl-popup-tip {
+  width: 10px !important;
+  height: 5px !important;
+  background: transparent !important;
+  border-left: 5px solid transparent !important;
+  border-right: 5px solid transparent !important;
+  border-top: 5px solid white !important;
+}
+
 /* .svg color */
 .svg-icon path {
   fill: black;

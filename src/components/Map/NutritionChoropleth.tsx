@@ -46,8 +46,7 @@ export default function NutritionChoropleth({
         }}
         onEachFeature={(feature, layer) => {
           // tooltip on country hover -> showing name
-          const hoverCountryIds = NutritionChoroplethOperations.getHoverCountryIds(nutritionData);
-          if (hoverCountryIds.includes(feature?.properties?.adm0_id)) {
+          if (NutritionChoroplethOperations.allowCountryHover(nutritionData, feature?.properties?.adm0_id)) {
             const tooltipContainer = document.createElement('div');
             const root = createRoot(tooltipContainer);
             root.render(<CountryHoverPopover header={feature?.properties?.adm0_name} />);

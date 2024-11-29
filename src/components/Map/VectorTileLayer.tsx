@@ -27,12 +27,16 @@ export default function VectorTileLayer({ countries, disputedAreas, ipcData, nut
       { countries, disputedAreas, ipcData, selectedMapType, nutritionData },
       mapContainer
     );
-    const popover = new mapboxgl.Popup({ closeButton: false, closeOnClick: false });
+    const popover = new mapboxgl.Popup({
+      closeButton: false,
+      closeOnClick: false,
+      className: 'mapbox-popup-transparent',
+    });
     baseMap.on('load', () => {
       setMap(baseMap);
       setPopup(popover);
     });
-    MapOperations.setMapInteractionFunctionality(baseMap, popover);
+    MapOperations.setMapInteractionFunctionality(baseMap, popover, selectedMapType);
     MapOperations.synchronizeLeafletMapbox(baseMap, mapContainer, context);
     // The following layers currently don't work due to CORS issues.
     MapOperations.initRainfallLayer(baseMap);
@@ -44,7 +48,7 @@ export default function VectorTileLayer({ countries, disputedAreas, ipcData, nut
       context.map.off('move');
       setMap(undefined);
     };
-  }, [context]);
+  }, [context, selectedMapType]);
 
   useEffect(() => {
     if (map && popup && selectedMapVisibility) {

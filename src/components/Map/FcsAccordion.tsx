@@ -12,7 +12,7 @@ import CustomCard from '../Cards/Card';
 import { LineChart } from '../Charts/LineChart';
 import CustomInfoCircle from '../CustomInfoCircle/CustomInfoCircle';
 
-export default function FcsAccordion({ countryData, loading, countryIso3Data }: FcsAccordionProps) {
+export default function FcsAccordion({ countryData, loading, countryIso3Data, countryName }: FcsAccordionProps) {
   const deltaOneMonth = countryData?.fcsMinus1 ? countryData.fcs - countryData.fcsMinus1 : null;
   const deltaThreeMonth = countryData?.fcsMinus3 ? countryData.fcs - countryData.fcsMinus3 : null;
   const fcsChartData = FcsAccordionOperations.getFcsChartData(countryData);
@@ -23,6 +23,15 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
     FcsAccordionOperations.getHeadlineAndFoodInflationChartData(countryIso3Data);
   return (
     <div className="absolute w-[350px] left-[108px] top-4 z-9999">
+      <CustomAccordion
+        items={[
+          {
+            title: <div className="text-4xl sm:text-5xl lg:text-3xl font-black font-sans">{countryName}</div>,
+          },
+        ]}
+        noSelectionMode
+        color="bg-primary"
+      />
       <CustomAccordion
         loading={loading}
         items={[

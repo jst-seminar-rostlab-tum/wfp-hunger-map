@@ -8,10 +8,23 @@ import { NutrientType } from '@/domain/enums/NutrientType.ts';
 import NutritionAccordionProps from '@/domain/props/NutritionAccordionProps';
 import NutritionStateChoroplethOperations from '@/operations/map/NutritionStateChoroplethOperations';
 
-export default function NutritionAccordion({ setSelectedNutrient, selectedNutrient }: NutritionAccordionProps) {
+export default function NutritionAccordion({
+  setSelectedNutrient,
+  selectedNutrient,
+  countryName,
+}: NutritionAccordionProps) {
   return (
-    <div className="absolute left-[108px] top-4" style={{ zIndex: 1000 }}>
-      <div className="absolute w-[350px] box-border">
+    <div className="absolute left-[108px] top-6" style={{ zIndex: 1000 }}>
+      <CustomAccordion
+        items={[
+          {
+            title: <div className="text-4xl sm:text-5xl lg:text-3xl font-black font-sans">{countryName}</div>,
+          },
+        ]}
+        noSelectionMode
+        color="bg-primary"
+      />
+      <div className=" w-[350px] box-border mt-2">
         <CustomAccordion
           items={[
             {

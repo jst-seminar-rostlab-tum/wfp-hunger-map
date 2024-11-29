@@ -7,7 +7,7 @@ import { cardsWrapperClass } from '@/utils/primitives';
 import { ReactComponent as FoodConsumption } from '../../../../public/Images/FoodConsumption.svg';
 import { ReactComponent as Population } from '../../../../public/Images/Population.svg';
 
-export default function IpcAccordion({ countryData }: IpcAccordionProps) {
+export default function IpcAccordion({ countryData, countryName }: IpcAccordionProps) {
   const deltaOneMonth = countryData?.fcsMinus1 ? countryData.fcs - countryData.fcsMinus1 : null;
   const deltaThreeMonth = countryData?.fcsMinus3 ? countryData.fcs - countryData.fcsMinus3 : null;
   const hasNoData: boolean =
@@ -15,6 +15,15 @@ export default function IpcAccordion({ countryData }: IpcAccordionProps) {
 
   return (
     <div className="absolute w-[350px] left-[108px] top-4 z-9999">
+      <CustomAccordion
+        items={[
+          {
+            title: <div className="text-4xl sm:text-5xl lg:text-3xl font-black font-sans">{countryName}</div>,
+          },
+        ]}
+        noSelectionMode
+        color="bg-primary"
+      />
       <CustomAccordion
         items={[
           {

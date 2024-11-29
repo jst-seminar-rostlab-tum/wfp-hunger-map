@@ -10,6 +10,7 @@ export default interface IpcGlobalChoroplethProps {
   setSelectedCountryId: (id: number | null) => void;
   setIpcRegionData: (data: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void;
   setCountryData: (countryData: CountryData) => void;
+  setCountryName: (data: string | null) => void;
   resetAlert: () => void;
   selectedCountryId: number | null;
 }

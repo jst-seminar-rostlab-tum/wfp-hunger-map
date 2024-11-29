@@ -21,6 +21,7 @@ class FcsChoroplethOperations {
     setCountryData: (data: CountryData | undefined) => void,
     setCountryIso3Data: (data: CountryIso3Data | undefined) => void,
     setSelectedMapVisibility: (visibility: boolean) => void,
+    setCountryName: (data: string) => void,
     toggleAlert: (alertType: AlertType) => void
   ) {
     map.fitBounds(bounds);
@@ -34,6 +35,7 @@ class FcsChoroplethOperations {
       const countryRepository = container.resolve<CountryRepository>('CountryRepository');
       try {
         const newRegionData = await countryRepository.getRegionData(feature.properties.adm0_id);
+        setCountryName(feature.properties.adm0_name);
         if (newRegionData && newRegionData.features) {
           setRegionData({
             type: 'FeatureCollection',
@@ -62,6 +64,7 @@ class FcsChoroplethOperations {
     setCountryData: (data: CountryData | undefined) => void,
     setCountryIso3Data: (data: CountryIso3Data | undefined) => void,
     setSelectedMapVisibility: (visibility: boolean) => void,
+    setCountryName: (data: string) => void,
     toggleAlert: (alertType: AlertType) => void,
     isDark: boolean
   ) {
@@ -82,6 +85,7 @@ class FcsChoroplethOperations {
           setCountryData,
           setCountryIso3Data,
           setSelectedMapVisibility,
+          setCountryName,
           toggleAlert
         );
       },

@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react';
 
 import CustomAccordion from '@/components/Accordions/Accordion';
-import { PdfViewer } from '@/components/Pdf/PdfViewer';
+import PdfLoader from '@/components/Pdf/PdfLoader';
 import PopupModal from '@/components/PopupModal/PopupModal';
 import SearchBar from '@/components/Search/SearchBar';
 import CustomTable from '@/components/Table/CustomTable';
@@ -59,7 +59,7 @@ export default function DownloadPortal() {
                     {error ? (
                       <div className="bg-background text-danger border rounded-md p-4 text-center">{error}</div>
                     ) : (
-                      <PdfViewer
+                      <PdfLoader
                         file={pdfFile}
                         onDownloadPdf={() => {
                           if (selectedCountry) {

@@ -2,14 +2,20 @@ import { useCookies } from 'react-cookie';
 
 import { CustomButton } from '../Buttons/CustomButton';
 
+const additionalGACookie = `_ga_${(process.env.NEXT_PUBLIC_GA_ID ?? '').slice(2)}`;
+
 export function CookieConsentPopup() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_, setCookie] = useCookies(['cookie-consent']);
+  const [_, setCookie, removeCookie] = useCookies(['cookie-consent', '_ga', additionalGACookie]);
 
   const setCookieConsent = (consented: boolean) => {
     const date = new Date();
     date.setFullYear(date.getFullYear() + 1);
     setCookie('cookie-consent', consented, { expires: date });
+    if (!consented) {
+      removeCookie('_ga');
+      removeCookie(additionalGACookie);
+    }
   };
 
   return (

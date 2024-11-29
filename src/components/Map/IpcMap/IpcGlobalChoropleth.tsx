@@ -1,6 +1,6 @@
 import { Feature, FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
 import React from 'react';
-import { GeoJSON, useMap } from 'react-leaflet';
+import { GeoJSON } from 'react-leaflet';
 
 import IpcGlobalChoroplethProps from '@/domain/props/IpcGlobalChoroplethProps';
 import { IpcChoroplethOperations } from '@/operations/map/IpcChoroplethOperations';
@@ -14,7 +14,6 @@ function IpcGlobalChoropleth({
   resetAlert,
   selectedCountryId,
 }: IpcGlobalChoroplethProps) {
-  const map = useMap();
   const ipcColorData = IpcChoroplethOperations.generateColorMap(ipcData, countries) as FeatureCollection<
     Geometry,
     GeoJsonProperties
@@ -33,7 +32,6 @@ function IpcGlobalChoropleth({
       setSelectedCountryId,
       setIpcRegionData,
       setCountryData,
-      map,
       resetAlert
     );
   };

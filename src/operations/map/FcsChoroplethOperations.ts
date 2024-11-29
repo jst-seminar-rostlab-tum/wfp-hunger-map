@@ -12,8 +12,6 @@ import { getColors } from '@/styles/MapColors';
 class FcsChoroplethOperations {
   static async handleCountryClick(
     feature: Feature<Geometry, GeoJsonProperties>,
-    bounds: L.LatLngBounds,
-    map: L.Map,
     selectedAlert: AlertType | null,
     setSelectedCountryId: (countryId: number) => void,
     setLoading: (loading: boolean) => void,
@@ -23,7 +21,6 @@ class FcsChoroplethOperations {
     setSelectedMapVisibility: (visibility: boolean) => void,
     toggleAlert: (alertType: AlertType) => void
   ) {
-    map.fitBounds(bounds);
     setSelectedCountryId(feature.properties?.adm0_id);
     setSelectedMapVisibility(false);
     if (selectedAlert) {
@@ -54,7 +51,6 @@ class FcsChoroplethOperations {
   static onEachFeature(
     feature: Feature<Geometry, GeoJsonProperties>,
     layer: L.Layer,
-    map: L.Map,
     selectedAlert: AlertType | null,
     setSelectedCountryId: (countryId: number) => void,
     setLoading: (loading: boolean) => void,
@@ -70,11 +66,8 @@ class FcsChoroplethOperations {
 
     pathLayer.on({
       click: async () => {
-        const bounds = (layer as L.GeoJSON).getBounds();
         FcsChoroplethOperations.handleCountryClick(
           feature,
-          bounds,
-          map,
           selectedAlert,
           setSelectedCountryId,
           setLoading,

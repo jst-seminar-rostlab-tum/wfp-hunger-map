@@ -1,6 +1,8 @@
 import 'leaflet/dist/leaflet.css';
 
-import { Feature, GeoJsonProperties, Geometry } from 'geojson';
+import { Feature, GeoJSON, GeoJsonProperties, Geometry } from 'geojson';
+import L, { Map as LeafletMap } from 'leaflet';
+import { useEffect, useRef } from 'react';
 import { MapContainer } from 'react-leaflet';
 
 import { MAP_MAX_ZOOM, MAP_MIN_ZOOM } from '@/domain/constant/map/Map';
@@ -8,6 +10,7 @@ import { useSelectedAlert } from '@/domain/contexts/SelectedAlertContext';
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSelectedMapVisibility } from '@/domain/contexts/SelectedMapVisibilityContext';
+import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight';
 import { MapProps } from '@/domain/props/MapProps';
 
@@ -19,6 +22,7 @@ import VectorTileLayer from './VectorTileLayer';
 import ZoomControl from './ZoomControl';
 
 export default function Map({ countries, disputedAreas, ipcData, nutritionData }: MapProps) {
+  const mapRef = useRef<LeafletMap | null>(null);
   const { selectedMapType } = useSelectedMap();
   const { setSelectedMapVisibility } = useSelectedMapVisibility();
   const { selectedAlert, toggleAlert, resetAlert } = useSelectedAlert();
@@ -29,8 +33,18 @@ export default function Map({ countries, disputedAreas, ipcData, nutritionData }
     setSelectedMapVisibility(true);
   };
 
+  useEffect(() => {
+    const selectedCountryData: CountryMapData | undefined = countries.features.find(
+      (country) => country.properties.adm0_id === Number(selectedCountryId)
+    );
+    if (selectedCountryData) {
+      mapRef.current?.fitBounds(L.geoJSON(selectedCountryData as GeoJSON).getBounds());
+    }
+  }, [selectedCountryId]);
+
   return (
     <MapContainer
+      ref={mapRef}
       center={[21.505, -0.09]}
       zoom={3}
       maxBounds={[

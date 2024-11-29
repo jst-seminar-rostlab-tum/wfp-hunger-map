@@ -72,12 +72,8 @@ export class IpcChoroplethOperations {
   static async onCountryClick(
     feature: Feature<Geometry, GeoJsonProperties>,
     setIpcRegionData: (data: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
-    setCountryData: (data: CountryData) => void,
-    map: L.Map
+    setCountryData: (data: CountryData) => void
   ) {
-    const bounds = L.geoJSON(feature).getBounds();
-    map.fitBounds(bounds);
-
     const countryRepository = container.resolve<CountryRepository>('CountryRepository');
     const [countryData, regionIpcData] = await Promise.all([
       countryRepository.getCountryData(feature?.properties?.adm0_id),
@@ -99,11 +95,10 @@ export class IpcChoroplethOperations {
     setSelectedCountryId: (id: number | null) => void,
     setIpcRegionData: (data: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
     setCountryData: (countryData: CountryData) => void,
-    map: L.Map,
     resetAlert: () => void
   ) {
     this.createTooltip(feature, layer, ipcData);
-    this.attachEvents(feature, layer, setSelectedCountryId, setIpcRegionData, setCountryData, map, resetAlert);
+    this.attachEvents(feature, layer, setSelectedCountryId, setIpcRegionData, setCountryData, resetAlert);
   }
 
   static attachEvents(
@@ -112,7 +107,6 @@ export class IpcChoroplethOperations {
     setSelectedCountryId: (id: number | null) => void,
     setIpcRegionData: (data: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
     setCountryData: (countryData: CountryData) => void,
-    map: L.Map,
     resetAlert: () => void
   ) {
     const pathLayer = layer as L.Path;
@@ -122,7 +116,7 @@ export class IpcChoroplethOperations {
       click: () => {
         setIpcRegionData(undefined);
         setSelectedCountryId(feature?.properties?.adm0_id);
-        this.onCountryClick(feature, setIpcRegionData, setCountryData, map);
+        this.onCountryClick(feature, setIpcRegionData, setCountryData);
         resetAlert();
       },
       mouseover: () => {

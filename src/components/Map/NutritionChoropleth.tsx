@@ -1,7 +1,7 @@
 import { FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
 import L from 'leaflet';
 import React, { useEffect, useRef, useState } from 'react';
-import { GeoJSON, useMap } from 'react-leaflet';
+import { GeoJSON } from 'react-leaflet';
 
 import { CountryMimiData } from '@/domain/entities/country/CountryMimiData';
 import NutritionChoroplethProps from '@/domain/props/NutritionChoroplethProps';
@@ -19,7 +19,6 @@ export default function NutritionChoropleth({
   nutritionData,
 }: NutritionChoroplethProps) {
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
-  const map = useMap();
 
   const [regionData, setRegionData] = useState<FeatureCollection<Geometry, GeoJsonProperties> | undefined>();
   const [regionNutritionData, setRegionNutritionData] = useState<CountryMimiData | undefined>();
@@ -46,7 +45,6 @@ export default function NutritionChoropleth({
           NutritionChoroplethOperations.onEachFeature(
             feature,
             layer,
-            map,
             selectedAlert,
             setSelectedCountryId,
             setRegionData,

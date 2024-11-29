@@ -39,15 +39,12 @@ export default class NutritionChoroplethOperations {
 
   private static async handleCountryClick(
     feature: Feature<Geometry, GeoJsonProperties>,
-    bounds: L.LatLngBounds,
-    map: L.Map,
     selectedAlert: AlertType | null,
     setSelectedCountryId: (countryId: number | null) => void,
     setRegionData: (data: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
     setRegionNutritionData: (data: CountryMimiData) => void,
     toggleAlert: (alertType: AlertType) => void
   ) {
-    map.fitBounds(bounds);
     setSelectedCountryId(feature.properties?.adm0_id);
     if (selectedAlert) {
       toggleAlert(selectedAlert);
@@ -69,7 +66,6 @@ export default class NutritionChoroplethOperations {
   public static onEachFeature(
     feature: Feature<Geometry, GeoJsonProperties>,
     layer: L.Layer,
-    map: L.Map,
     selectedAlert: AlertType | null,
     setSelectedCountryId: (countryId: number | null) => void,
     setRegionData: (data: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
@@ -84,11 +80,8 @@ export default class NutritionChoroplethOperations {
     }
     pathLayer.on({
       click: async () => {
-        const bounds = (layer as L.GeoJSON).getBounds();
         NutritionChoroplethOperations.handleCountryClick(
           feature,
-          bounds,
-          map,
           selectedAlert,
           setSelectedCountryId,
           setRegionData,

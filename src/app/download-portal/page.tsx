@@ -2,11 +2,11 @@
 
 import { useMemo, useState } from 'react';
 
+import CustomAccordion from '@/components/Accordions/Accordion';
 import { PdfViewer } from '@/components/Pdf/PdfViewer';
 import PopupModal from '@/components/PopupModal/PopupModal';
 import SearchBar from '@/components/Search/SearchBar';
 import CustomTable from '@/components/Table/CustomTable';
-import TableSkeleton from '@/components/Table/TableSkeleton';
 import { CountryCodesData } from '@/domain/entities/country/CountryCodesData';
 import { useCountryCodesQuery } from '@/domain/hooks/globalHooks';
 import { PdfFile } from '@/domain/props/PdfViewerProps';
@@ -27,37 +27,54 @@ export default function DownloadPortal() {
   return (
     <div>
       <h1>Download Portal</h1>
-      <div className="my-3">
-        <SearchBar value={searchTerm} onValueChange={setSearchTerm} placeholder="Search by country..." />
-      </div>
-      {isLoading || !filteredData ? (
-        <TableSkeleton columnsCount={5} rowsCount={10} />
-      ) : (
-        <CustomTable
-          columns={DownloadPortalOperations.getColumns()}
-          data={DownloadPortalOperations.formatTableData(
-            filteredData,
-            setSelectedCountry,
-            setPdfFile,
-            setError,
-            toggleModal
-          )}
+      <div>
+        <CustomAccordion
+          loading={isLoading}
+          items={[
+            {
+              title: 'Pdf Reports',
+              content: (
+                <div>
+                  <div className="my-3">
+                    <SearchBar value={searchTerm} onValueChange={setSearchTerm} placeholder="Search by country..." />
+                  </div>
+                  {filteredData && (
+                    <CustomTable
+                      columns={DownloadPortalOperations.getColumns()}
+                      data={DownloadPortalOperations.formatTableData(
+                        filteredData,
+                        setSelectedCountry,
+                        setPdfFile,
+                        setError,
+                        toggleModal
+                      )}
+                    />
+                  )}
+                  <PopupModal
+                    isModalOpen={isModalOpen}
+                    toggleModal={toggleModal}
+                    modalSize="5xl"
+                    scrollBehavior="outside"
+                  >
+                    {error ? (
+                      <div className="bg-background text-danger border rounded-md p-4 text-center">{error}</div>
+                    ) : (
+                      <PdfViewer
+                        file={pdfFile}
+                        onDownloadPdf={() => {
+                          if (selectedCountry) {
+                            DownloadPortalOperations.downloadPdf(selectedCountry);
+                          }
+                        }}
+                      />
+                    )}
+                  </PopupModal>
+                </div>
+              ),
+            },
+          ]}
         />
-      )}
-      <PopupModal isModalOpen={isModalOpen} toggleModal={toggleModal} modalSize="5xl" scrollBehavior="outside">
-        {error ? (
-          <div className="bg-background text-danger border rounded-md p-4 text-center">{error}</div>
-        ) : (
-          <PdfViewer
-            file={pdfFile}
-            onDownloadPdf={() => {
-              if (selectedCountry) {
-                DownloadPortalOperations.downloadPdf(selectedCountry);
-              }
-            }}
-          />
-        )}
-      </PopupModal>
+      </div>
     </div>
   );
 }

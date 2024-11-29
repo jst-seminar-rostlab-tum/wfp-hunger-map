@@ -1,6 +1,5 @@
 'use client';
 
-import { GoogleAnalytics } from '@next/third-parties/google';
 import { NextUIProvider } from '@nextui-org/system';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -8,7 +7,6 @@ import { useRouter } from 'next/navigation';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import type { ThemeProviderProps } from 'next-themes/dist/types.d.ts';
 import * as React from 'react';
-import { useCookies } from 'react-cookie';
 
 import { cachedQueryClient } from '@/config/queryClient';
 import { SelectedAlertProvider } from '@/domain/contexts/SelectedAlertContext';
@@ -16,6 +14,7 @@ import { SelectedMapProvider } from '@/domain/contexts/SelectedMapContext';
 import { SelectedMapVisibilityProvider } from '@/domain/contexts/SelectedMapVisibilityContext';
 import { SidebarProvider } from '@/domain/contexts/SidebarContext';
 
+const AnalyticsContainer = React.lazy(() => import('@/components/Analytics/AnalyticsContainer'));
 export interface ProvidersProps {
   children: React.ReactNode;
   themeProps?: ThemeProviderProps;
@@ -23,11 +22,12 @@ export interface ProvidersProps {
 
 export function Providers({ children, themeProps }: ProvidersProps) {
   const router = useRouter();
-  const [cookies] = useCookies(['cookie-consent']);
 
   return (
     <NextUIProvider navigate={router.push}>
-      {cookies['cookie-consent'] && <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID ?? ''} />}
+      <React.Suspense fallback={null}>
+        <AnalyticsContainer />
+      </React.Suspense>
       <NextThemesProvider defaultTheme="system" {...themeProps}>
         <QueryClientProvider client={cachedQueryClient}>
           <SidebarProvider>

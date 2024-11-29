@@ -1,6 +1,5 @@
 import { AlertsMenuWrapper } from '@/components/AlertsMenu/AlertsMenuWrapper';
 import Chatbot from '@/components/Chatbot/Chatbot';
-import { CookieConsentPopup } from '@/components/CookieConsent/CookieConsentPopup';
 import HungerAlertLoader from '@/components/HungerAlert/HungerAlertLoader';
 import MapLegend from '@/components/Legend/MapLegend';
 import MapLoader from '@/components/Map/MapLoader';
@@ -34,7 +33,6 @@ export default async function Home() {
       />
       <HungerAlertLoader countryMapData={countryMapData} />
       <MapLegend />
-      <CookieConsentPopup />
     </>
   );
 }

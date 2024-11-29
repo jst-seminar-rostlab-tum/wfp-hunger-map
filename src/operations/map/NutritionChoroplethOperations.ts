@@ -37,6 +37,10 @@ export default class NutritionChoroplethOperations {
     return {};
   }
 
+  public static getHoverCountryIds(nutritionData: CountryNutrition): number[] {
+    return nutritionData.body?.map((c) => c.adm0_code) || [];
+  }
+
   private static async handleCountryClick(
     feature: Feature<Geometry, GeoJsonProperties>,
     bounds: L.LatLngBounds,

@@ -8,13 +8,21 @@ export default class DownloadRepositoryImpl implements DownloadRepository {
     country: string,
     startDate: CalendarDate,
     endDate: CalendarDate
-  ): Promise<ICountryData[]> {
+  ): Promise<ICountryData[] | undefined> {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/foodsecurity/country/${country}/region?date_start=${startDate.toString()}&date_end=${endDate.toString()}`
+        `${process.env.NEXT_PUBLIC_API_URL_V1}/foodsecurity/country/${country}/region?date_start=${startDate.toString()}&date_end=${endDate.toString()}`
       );
-      const data = await response.json();
-      return Promise.resolve(data);
+
+      // ensure the response is ok and there is data in the body
+      if (response.ok) {
+        const data = await response.json();
+        if (data?.body && data?.body.length > 0) {
+          return Promise.resolve(data.body);
+        }
+      }
+
+      return Promise.resolve(undefined);
     } catch (error) {
       return Promise.reject(error);
     }

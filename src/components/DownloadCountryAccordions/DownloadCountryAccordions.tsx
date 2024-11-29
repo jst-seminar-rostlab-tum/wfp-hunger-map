@@ -54,7 +54,8 @@ export default function DownloadCountryAccordion({ countryCodes }: DownloadCount
       setIsWaitingDownloadResponse(true);
       try {
         await download.getDownLoadCountryData(country, start, end).then((res) => {
-          if (res) {
+          // only download if there is data
+          if (res && res.length > 0) {
             setDownloadStatus(SubmitStatus.Success);
             setIsWaitingDownloadResponse(false);
             DownloadPortalOperations.downloadJsonFile(res, country);

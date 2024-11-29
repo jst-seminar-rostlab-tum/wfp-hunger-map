@@ -9,5 +9,9 @@ export default interface DownloadRepository {
    * @param startDate is the start date of the data
    * @param endDate is the end date of the data
    */
-  getDownLoadCountryData(country: string, startDate: CalendarDate, endDate: CalendarDate): Promise<ICountryData[]>;
+  getDownLoadCountryData(
+    country: string,
+    startDate: CalendarDate,
+    endDate: CalendarDate
+  ): Promise<ICountryData[] | undefined>;
 }

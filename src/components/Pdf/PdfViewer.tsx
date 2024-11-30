@@ -33,13 +33,8 @@ export default function PdfViewer({
     setPageWidth(topBarRef.current ? topBarRef.current.offsetWidth * 0.8 : window.innerWidth * 0.9);
   }, []);
 
-  const handleMouseWheelEvent = (): void => {
-    PdfViewerOperations.handleMouseWheelEvent(document, setPageNumber, pageNumber);
-  };
-
   const onDocumentLoadSuccess = ({ numPages }: { numPages: number }): void => {
     setTotalPages(numPages);
-    window.addEventListener('mousewheel', handleMouseWheelEvent);
   };
 
   const onSelectStart = (): void => {
@@ -76,9 +71,18 @@ export default function PdfViewer({
       document.removeEventListener('selectstart', onSelectStart);
       document.removeEventListener('mouseup', onSelectEnd);
       window.removeEventListener('resize', onResize);
-      window.removeEventListener('mousewheel', handleMouseWheelEvent);
     };
   }, [onResize]);
+
+  useEffect(() => {
+    const trackPageInterval = setInterval(() => {
+      PdfViewerOperations.trackVisiblePage(document, setPageNumber);
+    }, 100);
+
+    return () => {
+      clearInterval(trackPageInterval);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-start relative">

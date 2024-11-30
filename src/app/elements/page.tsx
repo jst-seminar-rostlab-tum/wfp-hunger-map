@@ -112,7 +112,7 @@ export default async function Elements() {
   };
 
   const currencyExchangeGraphData: CurrencyExchangeGraph = {
-    type: LineChartDataType.CURRENCY_EXCHANGE_GRAPH,
+    type: LineChartDataType.CURRENCY_EXCHANGE_CHART,
     name: 'Exchange Rate (USD/NGN)',
     source: '',
     updated: '',
@@ -137,7 +137,7 @@ export default async function Elements() {
   };
 
   const inflationGraphsData: InflationGraphs = {
-    type: LineChartDataType.INFLATION_GRAPHS,
+    type: LineChartDataType.INFLATION_CHARTS,
     headline: {
       data: [
         {

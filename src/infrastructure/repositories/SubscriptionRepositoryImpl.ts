@@ -4,7 +4,6 @@ import SubscriptionRepository from '@/domain/repositories/SubscriptionRepository
 export default class SubscriptionRepositoryImpl implements SubscriptionRepository {
   async subscribe(subscribe: ISubscribe): Promise<boolean> {
     try {
-      // TODO: endpoint is not clear right now, can change later
       const response = await fetch(`${process.env.NEXT_PUBLIC_EMAIL_SERVICE}/subscribe`, {
         method: 'POST',
         headers: {

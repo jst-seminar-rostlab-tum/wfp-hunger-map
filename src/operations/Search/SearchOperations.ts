@@ -7,7 +7,9 @@ import { DataSourceTableRow } from '@/domain/props/CustomTableProps';
 export class SearchOperations {
   static makeAccordionItemSearchable(item: AccordionItemProps): Set<string> {
     return new Set(
-      `${item.title} ${item.description ?? ''} ${this.sanitizeReactNode(item.content)}`.replace(/\s+/g, ' ').split(' ')
+      `${item.title} ${item.description ?? ''} ${SearchOperations.sanitizeReactNode(item.content)}`
+        .replace(/\s+/g, ' ')
+        .split(' ')
     );
   }
 
@@ -17,7 +19,7 @@ export class SearchOperations {
       ${this.sanitizeReactNode(item.description)}
       ${this.sanitizeReactNode(item.dataSource)}
       ${item.updateInterval ?? ''}
-      ${item.updateDetails?.map((d) => `${d.interval} ${this.sanitizeReactNode(d.label)}`)?.join(' ') ?? ''}`
+      ${item.updateDetails?.map((d) => `${d.interval} ${SearchOperations.sanitizeReactNode(d.label)}`)?.join(' ') ?? ''}`
         .replace(/\s+/g, ' ')
         .replace(/\n/g, '')
         .split(' ')

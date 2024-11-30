@@ -14,7 +14,7 @@ export default function SearchBar({ value, onValueChange, placeholder, className
       radius="lg"
       startContent={<SearchNormal1 className="text-secondary dark:text-foreground text-lg flex-shrink-0" />}
       classNames={{
-        inputWrapper: ['shadow-xl', 'border', 'hover:border-primary', 'rounded-lg', className],
+        inputWrapper: ['border', 'hover:border-primary', 'rounded-lg', className],
       }}
     />
   );

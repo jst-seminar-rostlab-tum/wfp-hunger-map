@@ -1,11 +1,8 @@
-'use client';
-
 import { useEffect, useMemo, useState } from 'react';
 
 import CustomAccordion from '@/components/Accordions/Accordion';
 import DownloadCountryAccordion from '@/components/DownloadCountryAccordions/DownloadCountryAccordions';
-import PdfLoader from '@/components/Pdf/PdfLoader';
-import PopupModal from '@/components/PopupModal/PopupModal';
+import PdfPreview from '@/components/Pdf/PdfPreview';
 import SearchBar from '@/components/Search/SearchBar';
 import CustomTable from '@/components/Table/CustomTable';
 import { CountryCodesData } from '@/domain/entities/country/CountryCodesData';
@@ -51,10 +48,10 @@ export default function DownloadPortal() {
           loading={isLoading || isMapDataLoading || !isCountryListReady}
           items={[
             {
-              title: 'Pdf Reports',
+              title: 'Country Reports',
               content: (
                 <div>
-                  <div className="my-3">
+                  <div className="mb-3">
                     <SearchBar value={searchTerm} onValueChange={setSearchTerm} placeholder="Search by country..." />
                   </div>
                   {filteredData && (
@@ -67,28 +64,20 @@ export default function DownloadPortal() {
                         setError,
                         toggleModal
                       )}
-                      ariaLabel="Pdf Reports"
+                      ariaLabel="Country Reports"
                     />
                   )}
-                  <PopupModal
+                  <PdfPreview
                     isModalOpen={isModalOpen}
                     toggleModal={toggleModal}
-                    modalSize="5xl"
-                    scrollBehavior="outside"
-                  >
-                    {error ? (
-                      <div className="bg-background text-danger border rounded-md p-4 text-center">{error}</div>
-                    ) : (
-                      <PdfLoader
-                        file={pdfFile}
-                        onDownloadPdf={() => {
-                          if (selectedCountry) {
-                            DownloadPortalOperations.downloadPdf(selectedCountry);
-                          }
-                        }}
-                      />
-                    )}
-                  </PopupModal>
+                    pdfFile={pdfFile}
+                    error={error}
+                    onDownloadPdf={() => {
+                      if (selectedCountry) {
+                        DownloadPortalOperations.downloadPdf(selectedCountry);
+                      }
+                    }}
+                  />
                 </div>
               ),
             },

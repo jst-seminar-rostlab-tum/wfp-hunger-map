@@ -7,6 +7,7 @@ import { Button } from '@nextui-org/button';
 import { Chip } from '@nextui-org/chip';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react';
 import { Tooltip } from '@nextui-org/tooltip';
+import { DocumentDownload, Minus } from 'iconsax-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 
@@ -17,6 +18,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 
 export default function PdfViewer({
   file,
+  onClose,
   onTooltipClick,
   onDownloadPdf,
   onDownloadJson,
@@ -87,45 +89,60 @@ export default function PdfViewer({
   return (
     <div className="min-h-screen flex flex-col items-center justify-start relative">
       {/* Top Bar */}
-      <div
-        ref={topBarRef}
-        className="bg-surfaceGrey shadow-md w-full py-4 flex justify-between items-center px-6 sticky top-0 z-10"
-      >
+      <div ref={topBarRef} className="bg-background w-full py-4 flex justify-between items-center sticky top-0 z-10">
         <h1 className="text-lg font-semibold">Preview</h1>
-        <Chip className="absolute left-1/2 transform -translate-x-1/2" color="secondary" size="md">
+        <Chip className="absolute left-1/2 transform -translate-x-1/2 dark:bg-secondary bg-surfaceGrey" size="md">
           <p className="text-sm text-black">
             {pageNumber} / {totalPages}
           </p>
         </Chip>
-        <Dropdown>
-          <DropdownTrigger>
-            <Button className="text-black" color="secondary">
-              Download As
+        <div className="flex items-center space-x-2">
+          <Dropdown>
+            <DropdownTrigger>
+              <Button isIconOnly variant="light" size="sm">
+                <DocumentDownload size={24} />
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu
+              color="secondary"
+              disabledKeys={PdfViewerOperations.getDisabledKeys(onDownloadPdf, onDownloadJson, onDownloadCsv)}
+            >
+              <DropdownItem key="pdf" onClick={onDownloadPdf}>
+                PDF
+              </DropdownItem>
+              <DropdownItem key="json" onClick={onDownloadJson}>
+                JSON
+              </DropdownItem>
+              <DropdownItem key="csv" onClick={onDownloadCsv}>
+                CSV
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+          {onClose && (
+            <Button isIconOnly variant="light" size="sm">
+              <Minus size={24} onClick={onClose} />
             </Button>
-          </DropdownTrigger>
-          <DropdownMenu
-            color="secondary"
-            disabledKeys={PdfViewerOperations.getDisabledKeys(onDownloadPdf, onDownloadJson, onDownloadCsv)}
-          >
-            <DropdownItem key="pdf" onClick={onDownloadPdf}>
-              Pdf
-            </DropdownItem>
-            <DropdownItem key="json" onClick={onDownloadJson}>
-              Json
-            </DropdownItem>
-            <DropdownItem key="csv" onClick={onDownloadCsv}>
-              Csv
-            </DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
+          )}
+        </div>
       </div>
 
       {/* PDF Viewer */}
-      <div className="w-full h-full bg-surfaceGrey flex-grow flex justify-center items-center pb-10 z-0">
+      <div className="w-full h-full bg-background flex-grow flex justify-center items-center pb-10 z-0">
         <div className="max-w-3xl">
-          <Document file={file} onLoadSuccess={onDocumentLoadSuccess} className="flex-col items-center mx-auto">
+          <Document
+            file={file}
+            onLoadSuccess={onDocumentLoadSuccess}
+            className="flex-col items-center mx-auto"
+            loading=""
+          >
             {Array.from(new Array(totalPages), (_, index) => (
-              <Page canvasBackground="transparent" key={`page_${index + 1}`} pageNumber={index + 1} width={pageWidth} />
+              <Page
+                loading=""
+                canvasBackground="transparent"
+                key={`page_${index + 1}`}
+                pageNumber={index + 1}
+                width={pageWidth}
+              />
             ))}
           </Document>
         </div>

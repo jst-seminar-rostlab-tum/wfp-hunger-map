@@ -2,7 +2,9 @@ import '@/styles/globals.css';
 
 import clsx from 'clsx';
 import { Metadata, Viewport } from 'next';
+import Script from 'next/script';
 
+import { CookieConsentPopup } from '@/components/Analytics/CookieConsentPopup';
 import { fontSans } from '@/config/fonts';
 import { siteConfig } from '@/config/site';
 
@@ -39,9 +41,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html suppressHydrationWarning lang="en">
       <head>
+        <Script id="google-analytics">
+          {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('consent', 'default', {
+                'ad_user_data': 'denied',
+                'ad_personalization': 'denied',
+                'ad_storage': 'denied',
+                'analytics_storage': 'denied',
+              });
+              gtag('js', new Date());
+              gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}', { anonymize_ip: true });
+            `}
+        </Script>
         <link rel="preload" href="/wfp_logo.svg" as="image" />
       </head>
       <body className={clsx('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
+        <CookieConsentPopup />
         <Providers themeProps={{ attribute: 'class', defaultTheme: 'dark' }}>
           <div className="relative h-screen">
             <main className="h-full w-full">{children}</main>

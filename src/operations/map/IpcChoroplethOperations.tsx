@@ -121,11 +121,21 @@ export class IpcChoroplethOperations {
     setSelectedCountryId: (id: number | null) => void,
     setIpcRegionData: (data: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
     setCountryData: (countryData: CountryData) => void,
+    setCountryName: (data: string | null) => void,
     map: L.Map,
     resetAlert: () => void
   ) {
     this.createTooltip(feature, layer, ipcData);
-    this.attachEvents(feature, layer, setSelectedCountryId, setIpcRegionData, setCountryData, map, resetAlert);
+    this.attachEvents(
+      feature,
+      layer,
+      setSelectedCountryId,
+      setIpcRegionData,
+      setCountryData,
+      setCountryName,
+      map,
+      resetAlert
+    );
   }
 
   static attachEvents(
@@ -134,6 +144,7 @@ export class IpcChoroplethOperations {
     setSelectedCountryId: (id: number | null) => void,
     setIpcRegionData: (data: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
     setCountryData: (countryData: CountryData) => void,
+    setCountryName: (data: string | null) => void,
     map: L.Map,
     resetAlert: () => void
   ) {
@@ -144,6 +155,7 @@ export class IpcChoroplethOperations {
       click: () => {
         setIpcRegionData(undefined);
         setSelectedCountryId(feature?.properties?.adm0_id);
+        setCountryName(feature?.properties?.adm0_name);
         this.onCountryClick(feature, setIpcRegionData, setCountryData, map);
         resetAlert();
       },

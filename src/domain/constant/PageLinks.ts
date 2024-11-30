@@ -4,4 +4,5 @@ export const pageLinks = [
   { href: '/data_sources', label: 'Data Sources' },
   { href: '/wiki', label: 'Wiki' },
   { href: '/disclaimer', label: 'Disclaimer' },
+  { href: '/download-portal', label: 'Download Portal' },
 ];

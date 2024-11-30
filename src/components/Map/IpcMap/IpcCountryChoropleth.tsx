@@ -6,10 +6,10 @@ import { IpcChoroplethOperations } from '@/operations/map/IpcChoroplethOperation
 
 import IpcAccordion from './IpcAccordion';
 
-function IpcCountryChoropleth({ regionIpcData, countryData }: IpcCountryChoroplethProps) {
+function IpcCountryChoropleth({ regionIpcData, countryData, countryName }: IpcCountryChoroplethProps) {
   return (
     <>
-      <IpcAccordion countryData={countryData} />
+      <IpcAccordion countryData={countryData} countryName={countryName} />
       <GeoJSON style={IpcChoroplethOperations.ipcCountryStyle} data={regionIpcData} />
     </>
   );

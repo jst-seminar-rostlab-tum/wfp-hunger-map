@@ -13,6 +13,7 @@ import NutritionAccordion from './NutritionAccordion';
 export default function NutritionStateChoropleth({
   regionNutrition,
   regionData,
+  countryName,
   handleClick = () => {},
   tooltip,
 }: NutritionStateChoroplethProps) {
@@ -60,7 +61,11 @@ export default function NutritionStateChoropleth({
 
   return (
     <>
-      <NutritionAccordion setSelectedNutrient={setSelectedNutrient} selectedNutrient={selectedNutrient} />
+      <NutritionAccordion
+        setSelectedNutrient={setSelectedNutrient}
+        selectedNutrient={selectedNutrient}
+        countryName={countryName}
+      />
       <GeoJSON
         data={regionData}
         style={(feature) => NutritionStateChoroplethOperations.dynamicStyle(feature, regionNutrition, selectedNutrient)}

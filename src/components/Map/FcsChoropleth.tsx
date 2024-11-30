@@ -26,7 +26,13 @@ export default function FcsChoropleth({
   const [countryData, setCountryData] = useState<CountryData | undefined>();
   const [countryIso3Data, setCountryIso3Data] = useState<CountryIso3Data | undefined>();
   const [regionData, setRegionData] = useState<FeatureCollection<Geometry, GeoJsonProperties> | undefined>();
+  const [selectedCountryName, setSelectedCountryName] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const handleBackClick = () => {
+    setRegionData(undefined);
+    setCountryData(undefined);
+  };
 
   return (
     <div>
@@ -48,6 +54,7 @@ export default function FcsChoropleth({
             setCountryData,
             setCountryIso3Data,
             setSelectedMapVisibility,
+            setSelectedCountryName,
             toggleAlert,
             theme === 'dark'
           )
@@ -58,7 +65,9 @@ export default function FcsChoropleth({
           regionData={regionData}
           countryData={countryData}
           countryIso3Data={countryIso3Data}
+          countryName={selectedCountryName}
           loading={loading}
+          handleBackButtonClick={handleBackClick}
         />
       )}
     </div>

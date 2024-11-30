@@ -10,11 +10,17 @@ export default function FscCountryChoropleth({
   regionData,
   countryData,
   countryIso3Data,
+  countryName,
   loading,
 }: FscCountryChoroplethProps) {
   return (
     <div>
-      <FcsAccordion countryData={countryData} countryIso3Data={countryIso3Data} loading={loading} />
+      <FcsAccordion
+        countryData={countryData}
+        countryIso3Data={countryIso3Data}
+        loading={loading}
+        countryName={countryName}
+      />
       <GeoJSON
         data={regionData}
         style={FcsCountryChoroplethOperations.styleFunction}

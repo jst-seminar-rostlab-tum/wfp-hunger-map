@@ -7,8 +7,7 @@ import { CustomTableColumns } from '@/domain/props/CustomTableProps';
 export class DownloadPortalOperations {
   static getColumns(): CustomTableColumns {
     return [
-      { columnId: 'keyColumn', label: 'Number' },
-      { columnId: 'country', label: 'Country' },
+      { columnId: 'keyColumn', label: 'Country', alignLeft: true },
       { columnId: 'preview', label: 'Preview' },
       { columnId: 'download', label: 'Download' },
       { columnId: 'chat', label: 'Chat' },
@@ -22,9 +21,8 @@ export class DownloadPortalOperations {
     setError: (error: string | null) => void,
     toggleModal: () => void
   ) {
-    return data.map((item, index) => ({
-      keyColumn: (index + 1).toString(),
-      country: item.country.name,
+    return data.map((item) => ({
+      keyColumn: item.country.name,
       preview: (
         <div className="flex justify-center items-center">
           <SearchNormal1

@@ -10,6 +10,7 @@ import * as React from 'react';
 
 import { cachedQueryClient } from '@/config/queryClient';
 import { SelectedAlertProvider } from '@/domain/contexts/SelectedAlertContext';
+import { SelectedCountryIdProvider } from '@/domain/contexts/SelectedCountryIdContext'; // Import the provider
 import { SelectedMapProvider } from '@/domain/contexts/SelectedMapContext';
 import { SelectedMapVisibilityProvider } from '@/domain/contexts/SelectedMapVisibilityContext';
 import { SidebarProvider } from '@/domain/contexts/SidebarContext';
@@ -29,7 +30,9 @@ export function Providers({ children, themeProps }: ProvidersProps) {
           <SidebarProvider>
             <SelectedMapVisibilityProvider>
               <SelectedMapProvider>
-                <SelectedAlertProvider>{children}</SelectedAlertProvider>
+                <SelectedAlertProvider>
+                  <SelectedCountryIdProvider>{children}</SelectedCountryIdProvider>
+                </SelectedAlertProvider>
               </SelectedMapProvider>
             </SelectedMapVisibilityProvider>
           </SidebarProvider>

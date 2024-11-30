@@ -1,9 +1,10 @@
+import { ReactNode } from 'react';
+
 export interface GradientLegendContainerItem {
-  startColor: string;
-  middleColor?: string;
-  endColor: string;
+  colors: string[];
   title: string;
   startLabel: string;
   endLabel: string;
   tooltipInfo?: string;
+  popoverInfo?: ReactNode;
 }

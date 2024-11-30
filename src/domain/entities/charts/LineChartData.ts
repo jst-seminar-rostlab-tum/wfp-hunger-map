@@ -4,7 +4,7 @@ import { LineChartDataType } from '@/domain/enums/LineChartDataType';
 
 export interface LineChartDataPoint {
   x: number;
-  y: number;
+  y?: number;
   yRangeMin?: number;
   yRangeMax?: number;
 }

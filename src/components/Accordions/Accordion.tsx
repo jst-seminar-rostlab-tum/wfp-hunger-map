@@ -1,33 +1,58 @@
 'use client';
 
 import { Accordion, AccordionItem } from '@nextui-org/accordion';
+import { Button } from '@nextui-org/button';
+import { Popover, PopoverContent, PopoverTrigger } from '@nextui-org/popover';
 import { Spinner } from '@nextui-org/spinner';
 
 import { AccordionsProps } from '@/domain/props/AccordionProps';
 
 import { Tooltip } from '../Tooltip/Tooltip';
 
-export default function CustomAccordion({ items, loading = false, multipleSelectionMode = false }: AccordionsProps) {
+export default function CustomAccordion({
+  items,
+  loading = false,
+  multipleSelectionMode = false,
+  noSelectionMode = false,
+  color = 'bg-content1',
+}: AccordionsProps) {
+  const selectionMode = noSelectionMode ? 'none' : multipleSelectionMode ? 'multiple' : 'single';
   return (
-    <div className="w-full max-w-[600px] overflow-x-auto p-2 rounded-lg">
-      <Accordion variant="splitted" selectionMode={multipleSelectionMode ? 'multiple' : 'single'}>
-        {items.map((item) => (
+    <div className="w-full overflow-x-auto py-2 rounded-lg">
+      <Accordion variant="splitted" selectionMode={selectionMode}>
+        {items.map((item, index) => (
           <AccordionItem
-            key={item.title}
-            aria-label={item.title}
-            className="last:border-b-[none] bg-content1 white:bg-white overflow-hidden"
+            key={typeof item.title === 'string' ? item.title : `accordion-item-${index}`}
+            aria-label={typeof item.title === 'string' ? item.title : `Accordion Item ${index}`}
+            className={`last:border-b-0 ${color} white:bg-white overflow-hidden`}
+            hideIndicator={noSelectionMode}
             title={
               <div className="flex justify-between items-center w-full">
                 <div className="flex gap-4">
                   <span>{item.title}</span>
                   {loading && <Spinner size="sm" />}
                 </div>
-                {item.tooltipInfo ? (
+                {item.tooltipInfo && (
                   <Tooltip text={item.tooltipInfo}>
                     {item.infoIcon && <span className="w-[37px] h-[37px] p-[5.5px]">{item.infoIcon}</span>}
                   </Tooltip>
-                ) : (
-                  item.infoIcon && <span className="w-[37px] h-[37px] p-[5.5px]">{item.infoIcon}</span>
+                )}
+                {item.popoverInfo && (
+                  <Popover>
+                    <PopoverTrigger>
+                      {item.infoIcon && (
+                        <Button isIconOnly className="w-[37px] h-[37px] p-[5.5px]" variant="light">
+                          {item.infoIcon}
+                        </Button>
+                      )}
+                    </PopoverTrigger>
+                    <PopoverContent>
+                      <div className="p-2 max-w-[400px] content">{item.popoverInfo}</div>
+                    </PopoverContent>
+                  </Popover>
+                )}
+                {!item.tooltipInfo && !item.popoverInfo && item.infoIcon && (
+                  <span className="w-[37px] h-[37px] p-[5.5px]">{item.infoIcon}</span>
                 )}
               </div>
             }

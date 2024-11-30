@@ -7,6 +7,7 @@ interface SelectedAlertsState {
   setSelectedAlert: (value: AlertType) => void;
   isAlertSelected: (alertType: AlertType) => boolean;
   toggleAlert: (alertType: AlertType) => void;
+  resetAlert: () => void;
 }
 
 const SelectedAlertContext = createContext<SelectedAlertsState | undefined>(undefined);
@@ -24,12 +25,15 @@ export function SelectedAlertProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const resetAlert = () => setSelectedAlert(null);
+
   const value = useMemo(
     () => ({
       selectedAlert,
       setSelectedAlert,
       isAlertSelected,
       toggleAlert,
+      resetAlert,
     }),
     [selectedAlert]
   );

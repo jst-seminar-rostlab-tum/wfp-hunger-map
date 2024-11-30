@@ -8,8 +8,8 @@ export default interface NutritionChoroplethProps {
   data: FeatureCollection<Geometry, GeoJsonProperties>;
   countryId: number;
   selectedAlert: AlertType | null;
-  selectedCountryId?: number;
-  setSelectedCountryId: (countryId?: number) => void;
+  selectedCountryId?: number | null;
+  setSelectedCountryId: (countryId: number | null) => void;
   toggleAlert: (alertType: AlertType) => void;
   nutritionData: CountryNutrition;
 }

@@ -16,15 +16,7 @@ export default function IpcAccordion({ countryData, countryName }: IpcAccordionP
   return (
     <div className="absolute w-[350px] left-[108px] top-4 z-9999">
       <CustomAccordion
-        items={[
-          {
-            title: <div className="text-2xl font-black font-sans text-white">{countryName}</div>,
-          },
-        ]}
-        noSelectionMode
-        color="bg-primary"
-      />
-      <CustomAccordion
+        title={countryName ?? undefined}
         items={[
           {
             title: 'Food Security',

@@ -15,17 +15,9 @@ export default function NutritionAccordion({
 }: NutritionAccordionProps) {
   return (
     <div className="absolute left-[108px] top-6" style={{ zIndex: 1000 }}>
-      <CustomAccordion
-        items={[
-          {
-            title: <div className="text-2xl font-black font-sans text-white">{countryName}</div>,
-          },
-        ]}
-        noSelectionMode
-        color="bg-primary"
-      />
       <div className=" w-[350px] box-border mt-2">
         <CustomAccordion
+          title={countryName ?? undefined}
           items={[
             {
               title: 'Micronutrients',

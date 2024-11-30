@@ -24,16 +24,8 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
   return (
     <div className="absolute w-[350px] left-[108px] top-4 z-9999">
       <CustomAccordion
-        items={[
-          {
-            title: <div className="text-2xl font-black font-sans text-white">{countryName}</div>,
-          },
-        ]}
-        noSelectionMode
-        color="bg-primary"
-      />
-      <CustomAccordion
         loading={loading}
+        title={countryName ?? undefined}
         items={[
           {
             title: 'Food Security',

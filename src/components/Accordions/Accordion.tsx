@@ -12,6 +12,7 @@ import { Tooltip } from '../Tooltip/Tooltip';
 
 export default function CustomAccordion({
   items,
+  title,
   loading = false,
   multipleSelectionMode = false,
   noSelectionMode = false,
@@ -47,11 +48,7 @@ export default function CustomAccordion({
           }
         >
           {item.description && <p className="text-sm text-balance pb-8 text-center">{item.description}</p>}
-          {typeof item.content === 'string' ? (
-            <div className="p-4 break-words text-balance">{item.content}</div>
-          ) : (
-            item.content
-          )}
+          {item.content}
         </AccordionItem>
       ))}
     </Accordion>
@@ -62,5 +59,14 @@ export default function CustomAccordion({
     if (items.length > 0) setModalContent(accordion);
   }, [items, loading, multipleSelectionMode, noSelectionMode, color]); // todo linus better descr
 
-  return !isMobile ? <div className="w-full max-w-[600px] overflow-x-auto p-2 rounded-lg">{accordion}</div> : null;
+  return !isMobile ? (
+    <div className="w-full max-w-[600px] overflow-x-auto rounded-lg shadow-xl">
+      {title && (
+        <div className="bg-primary p-4 break-words text-balance rounded-lg mb-6">
+          <h1 className="text-2xl font-black font-sans text-white">{title}</h1>
+        </div>
+      )}
+      {accordion}
+    </div>
+  ) : null;
 }

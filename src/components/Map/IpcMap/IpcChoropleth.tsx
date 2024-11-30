@@ -10,7 +10,6 @@ function IpcChoropleth({
   countries,
   selectedCountryId,
   setSelectedCountryId,
-  resetAlert,
   countryData,
   ipcRegionData,
   selectedCountryName,
@@ -25,7 +24,6 @@ function IpcChoropleth({
         ipcData={ipcData}
         countries={countries}
         setSelectedCountryId={setSelectedCountryId}
-        resetAlert={resetAlert}
         selectedCountryId={selectedCountryId}
       />
 

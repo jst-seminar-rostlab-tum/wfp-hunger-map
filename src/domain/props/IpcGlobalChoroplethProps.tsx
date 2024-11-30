@@ -5,6 +5,5 @@ export default interface IpcGlobalChoroplethProps {
   ipcData: CountryIpcData[];
   countries: CountryMapDataWrapper;
   setSelectedCountryId: (id: number | null) => void;
-  resetAlert: () => void;
   selectedCountryId: number | null;
 }

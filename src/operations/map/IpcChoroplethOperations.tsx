@@ -70,18 +70,16 @@ export class IpcChoroplethOperations {
     feature: Feature<Geometry, GeoJsonProperties>,
     layer: L.Layer,
     ipcData: CountryIpcData[],
-    setSelectedCountryId: (id: number | null) => void,
-    resetAlert: () => void
+    setSelectedCountryId: (id: number | null) => void
   ) {
     this.createTooltip(feature, layer, ipcData);
-    this.attachEvents(feature, layer, setSelectedCountryId, resetAlert);
+    this.attachEvents(feature, layer, setSelectedCountryId);
   }
 
   static attachEvents(
     feature: Feature<Geometry, GeoJsonProperties>,
     layer: L.Layer,
-    setSelectedCountryId: (id: number | null) => void,
-    resetAlert: () => void
+    setSelectedCountryId: (id: number | null) => void
   ) {
     const pathLayer = layer as L.Path;
     const originalStyle = { ...pathLayer.options };
@@ -89,7 +87,6 @@ export class IpcChoroplethOperations {
     layer.on({
       click: () => {
         setSelectedCountryId(feature?.properties?.adm0_id);
-        resetAlert();
       },
       mouseover: () => {
         pathLayer.setStyle({ ...originalStyle, fillOpacity: 0.7 });

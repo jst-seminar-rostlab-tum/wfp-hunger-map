@@ -11,9 +11,7 @@ export default function NutritionChoropleth({
   data,
   countryId,
   selectedCountryId,
-  selectedAlert,
   setSelectedCountryId,
-  toggleAlert,
   nutritionData,
   regionNutritionData,
   regionData,
@@ -44,14 +42,7 @@ export default function NutritionChoropleth({
           return featureStyle || NutritionChoroplethOperations.countryStyle;
         }}
         onEachFeature={(feature, layer) =>
-          NutritionChoroplethOperations.onEachFeature(
-            feature,
-            layer,
-            selectedAlert,
-            setSelectedCountryId,
-            countryStyles,
-            toggleAlert
-          )
+          NutritionChoroplethOperations.onEachFeature(feature, layer, setSelectedCountryId, countryStyles)
         }
       />
       {

@@ -2,7 +2,6 @@ import { Feature, GeoJsonProperties, Geometry } from 'geojson';
 import L from 'leaflet';
 
 import { CountryNutrition } from '@/domain/entities/country/CountryNutrition.ts';
-import { AlertType } from '@/domain/enums/AlertType';
 
 export default class NutritionChoroplethOperations {
   private static getFillColor(dataType: string): string {
@@ -36,23 +35,16 @@ export default class NutritionChoroplethOperations {
 
   private static async handleCountryClick(
     feature: Feature<Geometry, GeoJsonProperties>,
-    selectedAlert: AlertType | null,
-    setSelectedCountryId: (countryId: number | null) => void,
-    toggleAlert: (alertType: AlertType) => void
+    setSelectedCountryId: (countryId: number | null) => void
   ) {
     setSelectedCountryId(feature.properties?.adm0_id);
-    if (selectedAlert) {
-      toggleAlert(selectedAlert);
-    }
   }
 
   public static onEachFeature(
     feature: Feature<Geometry, GeoJsonProperties>,
     layer: L.Layer,
-    selectedAlert: AlertType | null,
     setSelectedCountryId: (countryId: number | null) => void,
-    countryStyles: { [key: number]: L.PathOptions },
-    toggleAlert: (alertType: AlertType) => void
+    countryStyles: { [key: number]: L.PathOptions }
   ) {
     const pathLayer = layer as L.Path;
     const featureStyle = countryStyles[feature.properties?.adm0_id];
@@ -61,7 +53,7 @@ export default class NutritionChoroplethOperations {
     }
     pathLayer.on({
       click: async () => {
-        NutritionChoroplethOperations.handleCountryClick(feature, selectedAlert, setSelectedCountryId, toggleAlert);
+        NutritionChoroplethOperations.handleCountryClick(feature, setSelectedCountryId);
       },
     });
   }

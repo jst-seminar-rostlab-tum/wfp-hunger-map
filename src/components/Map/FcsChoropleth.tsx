@@ -12,10 +12,7 @@ export default function FcsChoropleth({
   data,
   countryId,
   selectedCountryId,
-  selectedAlert,
   setSelectedCountryId,
-  setSelectedMapVisibility,
-  toggleAlert,
   loading,
   regionData,
   countryData,
@@ -38,15 +35,7 @@ export default function FcsChoropleth({
         data={data}
         style={FcsChoroplethOperations.countryStyle}
         onEachFeature={(feature, layer) =>
-          FcsChoroplethOperations.onEachFeature(
-            feature,
-            layer,
-            selectedAlert,
-            setSelectedCountryId,
-            setSelectedMapVisibility,
-            toggleAlert,
-            theme === 'dark'
-          )
+          FcsChoroplethOperations.onEachFeature(feature, layer, setSelectedCountryId, theme === 'dark')
         }
       />
       {regionData && countryId === selectedCountryId && (

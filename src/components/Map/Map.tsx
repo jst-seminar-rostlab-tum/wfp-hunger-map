@@ -11,6 +11,7 @@ import { useSelectedAlert } from '@/domain/contexts/SelectedAlertContext';
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSelectedMapVisibility } from '@/domain/contexts/SelectedMapVisibilityContext';
+import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { CountryData } from '@/domain/entities/country/CountryData.ts';
 import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data.ts';
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
@@ -30,8 +31,9 @@ export default function Map({ countries, disputedAreas, ipcData, nutritionData }
   const mapRef = useRef<LeafletMap | null>(null);
   const { selectedMapType } = useSelectedMap();
   const { setSelectedMapVisibility } = useSelectedMapVisibility();
-  const { selectedAlert, toggleAlert, resetAlert } = useSelectedAlert();
+  const { resetAlert } = useSelectedAlert();
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
+  const { closeSidebar } = useSidebar();
 
   const [countryData, setCountryData] = useState<CountryData | undefined>();
   const [countryIso3Data, setCountryIso3Data] = useState<CountryIso3Data | undefined>();
@@ -55,6 +57,8 @@ export default function Map({ countries, disputedAreas, ipcData, nutritionData }
   useEffect(() => {
     if (selectedCountryId) {
       setSelectedMapVisibility(false);
+      closeSidebar();
+      resetAlert();
       const selectedCountryData: CountryMapData | undefined = countries.features.find(
         (country) => country.properties.adm0_id === Number(selectedCountryId)
       );
@@ -112,10 +116,7 @@ export default function Map({ countries, disputedAreas, ipcData, nutritionData }
               countryId={country.properties.adm0_id}
               data={{ type: 'FeatureCollection', features: [country as Feature<Geometry, GeoJsonProperties>] }}
               selectedCountryId={selectedCountryId}
-              selectedAlert={selectedAlert}
               setSelectedCountryId={setSelectedCountryId}
-              setSelectedMapVisibility={setSelectedMapVisibility}
-              toggleAlert={toggleAlert}
               loading={countryClickLoading}
               countryData={countryData}
               countryIso3Data={countryIso3Data}
@@ -130,7 +131,6 @@ export default function Map({ countries, disputedAreas, ipcData, nutritionData }
           ipcData={ipcData}
           selectedCountryId={selectedCountryId}
           setSelectedCountryId={setSelectedCountryId}
-          resetAlert={resetAlert}
           countryData={countryData}
           ipcRegionData={ipcRegionData}
           selectedCountryName={selectedCountryName}
@@ -147,9 +147,7 @@ export default function Map({ countries, disputedAreas, ipcData, nutritionData }
               countryId={country.properties.adm0_id}
               data={{ type: 'FeatureCollection', features: [country as Feature<Geometry, GeoJsonProperties>] }}
               selectedCountryId={selectedCountryId}
-              selectedAlert={selectedAlert}
               setSelectedCountryId={setSelectedCountryId}
-              toggleAlert={toggleAlert}
               nutritionData={nutritionData}
               regionNutritionData={regionNutritionData}
               regionData={regionData}

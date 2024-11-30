@@ -53,10 +53,12 @@ export class MapOperations {
       if (selectedMapType === GlobalInsight.IPC) {
         setIpcRegionData(undefined);
         const newIpcRegionData = await countryRepository.getRegionIpcData(selectedCountryData.properties.adm0_id);
-        setIpcRegionData({
-          type: 'FeatureCollection',
-          features: newIpcRegionData?.features as Feature<Geometry, GeoJsonProperties>[],
-        });
+        if (newIpcRegionData && newIpcRegionData.features) {
+          setIpcRegionData({
+            type: 'FeatureCollection',
+            features: newIpcRegionData?.features as Feature<Geometry, GeoJsonProperties>[],
+          });
+        }
       }
 
       setCountryClickLoading(false);

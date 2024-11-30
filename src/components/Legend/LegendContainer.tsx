@@ -40,10 +40,10 @@ export default function LegendContainer({ items, loading = false }: LegendContai
           <Button
             onClick={() => setInfoPopup(true)}
             className="
-        relative flex items-center justify-center min-w-12 h-12 px-1 rounded-full bg-content1 shadow-md"
+        relative flex items-center justify-center min-w-10 h-10 px-1 rounded-full bg-content1 shadow-md"
           >
             {/* TODO: Icon to be modified */}
-            <CustomInfoCircle size={32} />
+            <CustomInfoCircle size={28} />
           </Button>
         </Tooltip>
       </div>

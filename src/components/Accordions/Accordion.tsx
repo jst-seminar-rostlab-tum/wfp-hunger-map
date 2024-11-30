@@ -2,13 +2,13 @@
 
 import { Accordion, AccordionItem } from '@nextui-org/accordion';
 import { Spinner } from '@nextui-org/spinner';
+import { useEffect } from 'react';
 
+import { useAccordionsModal } from '@/domain/contexts/AccodionsModalContext';
 import { AccordionsProps } from '@/domain/props/AccordionProps';
+import { useMediaQuery } from '@/utils/resolution.ts';
 
 import { Tooltip } from '../Tooltip/Tooltip';
-import { useMediaQuery } from '@/utils/resolution.ts';
-import { useAccordionsModal } from '@/domain/contexts/AccodionsModalContext.tsx';
-import { useEffect } from 'react';
 
 export default function CustomAccordion({
   items,
@@ -18,7 +18,7 @@ export default function CustomAccordion({
   color = 'bg-content1',
 }: AccordionsProps) {
   const isMobile = useMediaQuery('(max-width: 640px)');
-  const {modalContent, setModalContent } = useAccordionsModal();
+  const { setModalContent } = useAccordionsModal();
 
   const selectionMode = noSelectionMode ? 'none' : multipleSelectionMode ? 'multiple' : 'single';
 
@@ -59,7 +59,7 @@ export default function CustomAccordion({
 
   // todo linus descr
   useEffect(() => {
-    setModalContent(accordion);
+    if (items.length > 0) setModalContent(accordion);
   }, [items, loading, multipleSelectionMode, noSelectionMode, color]); // todo linus better descr
 
   return !isMobile ? <div className="w-full max-w-[600px] overflow-x-auto p-2 rounded-lg">{accordion}</div> : null;

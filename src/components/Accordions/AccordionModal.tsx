@@ -1,12 +1,13 @@
 'use client';
 
 import { Button } from '@nextui-org/button';
+import { Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from '@nextui-org/modal';
 
 import { useAccordionsModal } from '@/domain/contexts/AccodionsModalContext';
 import { useMediaQuery } from '@/utils/resolution.ts';
-import { Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from '@nextui-org/modal';
 
-export default function AccordionModalButton() {
+// todo linus descr
+export default function AccordionModal() {
   const isMobile = useMediaQuery('(max-width: 640px)');
   const { modalContent } = useAccordionsModal();
   const {
@@ -17,9 +18,15 @@ export default function AccordionModalButton() {
 
   return isMobile && modalContent !== null ? (
     <>
-      <Button className="absolute z-accordionsModalButton bottom-3 left-44" onClick={onAccordionModalOpen}>
+      <Button
+        color="primary"
+        variant="solid"
+        className="absolute z-accordionsModalButton bottom-3 right-28 text-white"
+        onClick={onAccordionModalOpen}
+      >
         Country Insights
       </Button>
+
       <Modal
         size="2xl"
         isOpen={isAccordionModalOpen}

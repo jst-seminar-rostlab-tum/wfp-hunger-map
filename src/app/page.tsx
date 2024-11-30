@@ -1,4 +1,4 @@
-import AccordionModalButton from '@/components/Accordions/AccordionModalButton';
+import AccordionModal from '@/components/Accordions/AccordionModal';
 import { AlertsMenuWrapper } from '@/components/AlertsMenu/AlertsMenuWrapper';
 import Chatbot from '@/components/Chatbot/Chatbot';
 import HungerAlertLoader from '@/components/HungerAlert/HungerAlertLoader';
@@ -34,7 +34,7 @@ export default async function Home() {
       />
       <HungerAlertLoader countryMapData={countryMapData} />
       <MapLegend />
-      <AccordionModalButton />
+      <AccordionModal />
     </>
   );
 }

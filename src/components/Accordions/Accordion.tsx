@@ -16,7 +16,7 @@ export default function CustomAccordion({
 }: AccordionsProps) {
   const selectionMode = noSelectionMode ? 'none' : multipleSelectionMode ? 'multiple' : 'single';
   return (
-    <div className="w-full max-w-[600px] overflow-x-auto p-2 rounded-lg">
+    <div className="w-full overflow-x-auto py-2 rounded-lg">
       <Accordion variant="splitted" selectionMode={selectionMode}>
         {items.map((item, index) => (
           <AccordionItem

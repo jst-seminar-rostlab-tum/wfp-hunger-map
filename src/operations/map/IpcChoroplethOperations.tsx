@@ -77,7 +77,6 @@ export class IpcChoroplethOperations {
   ) {
     const bounds = L.geoJSON(feature).getBounds();
     map.fitBounds(bounds);
-
     const countryRepository = container.resolve<CountryRepository>('CountryRepository');
     const [countryData, regionIpcData] = await Promise.all([
       countryRepository.getCountryData(feature?.properties?.adm0_id),
@@ -89,7 +88,30 @@ export class IpcChoroplethOperations {
       features: regionIpcData?.features as Feature<Geometry, GeoJsonProperties>[],
     });
 
+    const regionFeatures = regionIpcData?.features as Feature<Geometry, GeoJsonProperties>[];
+
     setCountryData(countryData);
+    regionFeatures.forEach((regionFeature) => {
+      const regionLayer = L.geoJSON(regionFeature, {
+        style: IpcChoroplethOperations.ipcCountryStyle,
+        onEachFeature: (layer) => {
+          if (layer instanceof L.Path) {
+            const pathLayer = layer as L.Path;
+            const originalStyle = { ...pathLayer.options };
+            pathLayer.on({
+              mouseover: () => {
+                pathLayer.setStyle({ fillOpacity: 0.7 });
+              },
+              mouseout: () => {
+                pathLayer.setStyle(originalStyle);
+              },
+            });
+          }
+        },
+      });
+
+      regionLayer.addTo(map);
+    });
   }
 
   static initializeCountryLayer(

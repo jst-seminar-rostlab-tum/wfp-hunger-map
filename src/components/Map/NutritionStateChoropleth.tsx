@@ -1,4 +1,4 @@
-import { GeoJsonProperties } from 'geojson';
+import { GeoJsonProperties, Geometry } from 'geojson';
 import L from 'leaflet';
 import React, { useEffect, useRef, useState } from 'react';
 import { GeoJSON } from 'react-leaflet';
@@ -19,6 +19,12 @@ export default function NutritionStateChoropleth({
   const layersRef = useRef<LayerWithFeature[]>([]);
 
   const [selectedNutrient, setSelectedNutrient] = useState<NutrientType>(NutrientType.MINI_SIMPLE);
+
+  const selectedNutrientRef = useRef<NutrientType>(selectedNutrient);
+
+  useEffect(() => {
+    selectedNutrientRef.current = selectedNutrient;
+  }, [selectedNutrient]);
 
   // based on the selected nutrient -> setup heatmap layer
   useEffect(() => {
@@ -55,6 +61,12 @@ export default function NutritionStateChoropleth({
 
   const onEachFeature = (feature: GeoJsonProperties, layer: L.Layer): void => {
     layersRef.current.push(layer);
+    NutritionStateChoroplethOperations.addHoverEffect(
+      layer,
+      feature as GeoJSON.Feature<Geometry, GeoJsonProperties>,
+      regionNutrition,
+      () => selectedNutrientRef.current
+    );
     layer.on('click', () => handleClick(feature));
   };
 

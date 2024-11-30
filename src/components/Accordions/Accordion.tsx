@@ -7,15 +7,23 @@ import { AccordionsProps } from '@/domain/props/AccordionProps';
 
 import { Tooltip } from '../Tooltip/Tooltip';
 
-export default function CustomAccordion({ items, loading = false, multipleSelectionMode = false }: AccordionsProps) {
+export default function CustomAccordion({
+  items,
+  loading = false,
+  multipleSelectionMode = false,
+  noSelectionMode = false,
+  color = 'bg-content1',
+}: AccordionsProps) {
+  const selectionMode = noSelectionMode ? 'none' : multipleSelectionMode ? 'multiple' : 'single';
   return (
     <div className="w-full max-w-[600px] overflow-x-auto p-2 rounded-lg">
-      <Accordion variant="splitted" selectionMode={multipleSelectionMode ? 'multiple' : 'single'}>
-        {items.map((item) => (
+      <Accordion variant="splitted" selectionMode={selectionMode}>
+        {items.map((item, index) => (
           <AccordionItem
-            key={item.title}
-            aria-label={item.title}
-            className="last:border-b-[none] bg-content1 white:bg-white overflow-hidden"
+            key={typeof item.title === 'string' ? item.title : `accordion-item-${index}`}
+            aria-label={typeof item.title === 'string' ? item.title : `Accordion Item ${index}`}
+            className={`last:border-b-0 ${color} white:bg-white overflow-hidden`}
+            hideIndicator={noSelectionMode}
             title={
               <div className="flex justify-between items-center w-full">
                 <div className="flex gap-4">

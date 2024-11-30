@@ -20,9 +20,14 @@ export default function FcsChoropleth({
   regionData,
   countryData,
   countryIso3Data,
+  selectedCountryName,
 }: FcsChoroplethProps) {
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
   const { theme } = useTheme();
+
+  const handleBackClick = () => {
+    setSelectedCountryId(null);
+  };
 
   return (
     <div>
@@ -49,7 +54,9 @@ export default function FcsChoropleth({
           regionData={regionData}
           countryData={countryData}
           countryIso3Data={countryIso3Data}
+          countryName={selectedCountryName}
           loading={loading}
+          handleBackButtonClick={handleBackClick}
         />
       )}
     </div>

@@ -15,4 +15,5 @@ export default interface NutritionChoroplethProps {
   nutritionData: CountryNutrition;
   regionNutritionData: CountryMimiData | undefined;
   regionData?: FeatureCollection<Geometry, GeoJsonProperties>;
+  selectedCountryName?: string;
 }

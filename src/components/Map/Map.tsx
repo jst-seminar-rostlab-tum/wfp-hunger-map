@@ -5,6 +5,7 @@ import L, { Map as LeafletMap } from 'leaflet';
 import { useEffect, useRef, useState } from 'react';
 import { MapContainer } from 'react-leaflet';
 
+import BackToGlobalButton from '@/components/Map/BackToGlobalButton';
 import { MAP_MAX_ZOOM, MAP_MIN_ZOOM } from '@/domain/constant/map/Map';
 import { useSelectedAlert } from '@/domain/contexts/SelectedAlertContext';
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
@@ -38,6 +39,7 @@ export default function Map({ countries, disputedAreas, ipcData, nutritionData }
   const [countryClickLoading, setCountryClickLoading] = useState<boolean>(false);
   const [regionNutritionData, setRegionNutritionData] = useState<CountryMimiData | undefined>();
   const [ipcRegionData, setIpcRegionData] = useState<FeatureCollection<Geometry, GeoJsonProperties> | undefined>();
+  const [selectedCountryName, setSelectedCountryName] = useState<string | undefined>(undefined);
 
   const onZoomThresholdReached = () => {
     setSelectedCountryId(null);
@@ -67,6 +69,7 @@ export default function Map({ countries, disputedAreas, ipcData, nutritionData }
           setRegionNutritionData,
           setIpcRegionData
         );
+        setSelectedCountryName(selectedCountryData.properties.adm0_name);
         mapRef.current?.fitBounds(L.geoJSON(selectedCountryData as GeoJSON).getBounds(), { animate: true });
       }
     }
@@ -117,6 +120,7 @@ export default function Map({ countries, disputedAreas, ipcData, nutritionData }
               countryData={countryData}
               countryIso3Data={countryIso3Data}
               regionData={regionData}
+              selectedCountryName={selectedCountryName}
             />
           ))}
 
@@ -129,6 +133,7 @@ export default function Map({ countries, disputedAreas, ipcData, nutritionData }
           resetAlert={resetAlert}
           countryData={countryData}
           ipcRegionData={ipcRegionData}
+          selectedCountryName={selectedCountryName}
         />
       )}
 
@@ -148,9 +153,11 @@ export default function Map({ countries, disputedAreas, ipcData, nutritionData }
               nutritionData={nutritionData}
               regionNutritionData={regionNutritionData}
               regionData={regionData}
+              selectedCountryName={selectedCountryName}
             />
           ))}
       <ZoomControl threshold={5} callback={onZoomThresholdReached} />
+      <BackToGlobalButton />
     </MapContainer>
   );
 }

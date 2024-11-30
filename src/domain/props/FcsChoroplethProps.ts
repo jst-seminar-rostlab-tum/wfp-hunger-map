@@ -10,11 +10,12 @@ export default interface FcsChoroplethProps {
   countryId: number;
   selectedCountryId: number | null;
   selectedAlert: AlertType | null;
-  setSelectedCountryId: (countryId: number) => void;
+  setSelectedCountryId: (countryId: number | null) => void;
   setSelectedMapVisibility: (visibility: boolean) => void;
   toggleAlert: (alertType: AlertType) => void;
   loading: boolean;
   regionData?: FeatureCollection<Geometry, GeoJsonProperties>;
   countryData?: CountryData;
   countryIso3Data?: CountryIso3Data;
+  selectedCountryName?: string;
 }

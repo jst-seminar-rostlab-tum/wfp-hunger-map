@@ -13,7 +13,12 @@ function IpcChoropleth({
   resetAlert,
   countryData,
   ipcRegionData,
+  selectedCountryName,
 }: IpcChoroplethProps) {
+  const handleBackClick = () => {
+    setSelectedCountryId(null);
+  };
+
   return (
     <div>
       <IpcGlobalChoropleth
@@ -24,7 +29,14 @@ function IpcChoropleth({
         selectedCountryId={selectedCountryId}
       />
 
-      {ipcRegionData && <IpcCountryChoropleth regionIpcData={ipcRegionData} countryData={countryData} />}
+      {ipcRegionData && (
+        <IpcCountryChoropleth
+          regionIpcData={ipcRegionData}
+          countryData={countryData}
+          countryName={selectedCountryName}
+          handleBackButtonClick={handleBackClick}
+        />
+      )}
     </div>
   );
 }

@@ -24,3 +24,5 @@ export const ORGANISATION_MANADATORY_MSG = 'Please enter your organisation name'
 export const EMAIL_MANDATORY_MSG = 'Please enter a valid email address';
 
 export const NAME_MANDATORY_MSG = 'Please enter your name';
+
+export const DOWNLOAD_DATA = 'Download Data';

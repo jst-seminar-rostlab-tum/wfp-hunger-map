@@ -91,11 +91,6 @@ canvas.react-pdf__Page__canvas {
   animation-delay: 0.6s;
 }
 
-.mapboxgl-popup-content {
-  padding: 0 !important;
-  background-color: transparent !important;
-}
-
 .leaflet-tooltip {
   background-color: transparent !important;
   border: none !important;

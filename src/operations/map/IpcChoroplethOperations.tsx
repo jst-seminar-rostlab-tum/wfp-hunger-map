@@ -87,31 +87,7 @@ export class IpcChoroplethOperations {
       type: 'FeatureCollection',
       features: regionIpcData?.features as Feature<Geometry, GeoJsonProperties>[],
     });
-
-    const regionFeatures = regionIpcData?.features as Feature<Geometry, GeoJsonProperties>[];
-
     setCountryData(countryData);
-    regionFeatures.forEach((regionFeature) => {
-      const regionLayer = L.geoJSON(regionFeature, {
-        style: IpcChoroplethOperations.ipcCountryStyle,
-        onEachFeature: (layer) => {
-          if (layer instanceof L.Path) {
-            const pathLayer = layer as L.Path;
-            const originalStyle = { ...pathLayer.options };
-            pathLayer.on({
-              mouseover: () => {
-                pathLayer.setStyle({ fillOpacity: 0.7 });
-              },
-              mouseout: () => {
-                pathLayer.setStyle(originalStyle);
-              },
-            });
-          }
-        },
-      });
-
-      regionLayer.addTo(map);
-    });
   }
 
   static initializeCountryLayer(

@@ -4,6 +4,7 @@ import StyledLink from '@/components/About/StyledLink';
 import CustomTable from '@/components/Table/CustomTable';
 import { accuracyTableColumns, accuracyTableContents } from '@/domain/constant/about/accuracyTableContents';
 import { AccordionItemProps } from '@/domain/entities/accordions/Accordions';
+import { SearchOperations } from '@/operations/Search/SearchOperations';
 
 const generalQuestionItems: AccordionItemProps[] = [
   {
@@ -91,4 +92,4 @@ const generalQuestionItems: AccordionItemProps[] = [
   },
 ];
 
-export default generalQuestionItems;
+export default SearchOperations.makeAccordionItemsSearchable(generalQuestionItems);

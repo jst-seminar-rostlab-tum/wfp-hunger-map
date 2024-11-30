@@ -1,16 +1,34 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect, useState } from 'react';
 
 import AboutText from '@/components/About/AboutText';
 import HungerMapLiveSuperscript from '@/components/About/HungerMapLiveSuperscript';
 import StyledLink from '@/components/About/StyledLink';
 import Accordion from '@/components/Accordions/Accordion';
+import SearchBar from '@/components/Search/SearchBar';
 import generalFaqItems from '@/domain/constant/about/generalFaqItems';
 import predictionFaqItems from '@/domain/constant/about/predictionFaqItems';
 import realTimeFaqItems from '@/domain/constant/about/realTimeFaqItems';
 
 function Page() {
+  const [searchString, setSearchString] = useState('');
+  const [searchWords, setSearchWords] = useState<string[]>([]);
+
+  useEffect(
+    () =>
+      setSearchWords(
+        searchString
+          .toLowerCase()
+          .split(' ')
+          .filter((i) => i)
+      ),
+    [searchString]
+  );
+
   return (
     <>
+      <SearchBar value={searchString} onValueChange={(v) => setSearchString(v)} className="max-w-md mx-auto pb-5" />
       <section>
         <h1>
           About <HungerMapLiveSuperscript />
@@ -19,11 +37,11 @@ function Page() {
       </section>
       <section>
         <h2>General Questions</h2>
-        <Accordion items={generalFaqItems} multipleSelectionMode />
+        <Accordion items={generalFaqItems} searchWords={searchWords} multipleSelectionMode />
       </section>
       <section>
         <h2> Near real-time food security continuous monitoring</h2>
-        <Accordion items={realTimeFaqItems} multipleSelectionMode />
+        <Accordion items={realTimeFaqItems} searchWords={searchWords} multipleSelectionMode />
       </section>
       <section>
         <h2> Predictive analysis</h2>
@@ -39,7 +57,7 @@ function Page() {
           </StyledLink>{' '}
           ≥ 19 is estimated with a predictive model.
         </p>
-        <Accordion items={predictionFaqItems} multipleSelectionMode />
+        <Accordion items={predictionFaqItems} searchWords={searchWords} multipleSelectionMode />
       </section>
     </>
   );

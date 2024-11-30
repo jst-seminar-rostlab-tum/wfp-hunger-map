@@ -3,6 +3,7 @@ import React from 'react';
 import HungerMapLiveSuperscript from '@/components/About/HungerMapLiveSuperscript';
 import StyledLink from '@/components/About/StyledLink';
 import { AccordionItemProps } from '@/domain/entities/accordions/Accordions';
+import { SearchOperations } from '@/operations/Search/SearchOperations';
 
 const generalFaqItems: AccordionItemProps[] = [
   {
@@ -76,4 +77,4 @@ const generalFaqItems: AccordionItemProps[] = [
   },
 ];
 
-export default generalFaqItems;
+export default SearchOperations.makeAccordionItemsSearchable(generalFaqItems);

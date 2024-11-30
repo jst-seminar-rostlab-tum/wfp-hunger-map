@@ -5,25 +5,32 @@ import { AccordionItemProps } from '@/domain/entities/accordions/Accordions';
 import { DataSourceTableRow } from '@/domain/props/CustomTableProps';
 
 export class SearchOperations {
-  static makeAccordionItemSearchable(item: AccordionItemProps): Set<string> {
-    return new Set(
-      `${item.title} ${item.description ?? ''} ${SearchOperations.sanitizeReactNode(item.content)}`
-        .replace(/\s+/g, ' ')
-        .split(' ')
-    );
+  static makeAccordionItemsSearchable(items: AccordionItemProps[]): AccordionItemProps[] {
+    return items.map((item) => {
+      return { ...item, containedWords: SearchOperations.makeAccordionItemSearchable(item) };
+    });
   }
 
-  static makeTableRowSearchable(item: DataSourceTableRow): Set<string> {
-    return new Set(
-      `${item.label}
+  static makeAccordionItemSearchable(item: AccordionItemProps): string {
+    return Array.from(
+      new Set(
+        `${item.title} ${item.description ?? ''} ${SearchOperations.sanitizeReactNode(item.content)}`
+          .replace(/\s+/g, ' ')
+          .toLowerCase()
+          .split(' ')
+      )
+    ).join(' ');
+  }
+
+  static makeTableRowSearchable(item: DataSourceTableRow): string {
+    return `${item.label}
       ${this.sanitizeReactNode(item.description)}
       ${this.sanitizeReactNode(item.dataSource)}
       ${item.updateInterval ?? ''}
       ${item.updateDetails?.map((d) => `${d.interval} ${SearchOperations.sanitizeReactNode(d.label)}`)?.join(' ') ?? ''}`
-        .replace(/\s+/g, ' ')
-        .replace(/\n/g, '')
-        .split(' ')
-    );
+      .replace(/\s+/g, ' ')
+      .replace(/\n/g, '')
+      .toLowerCase();
   }
 
   private static sanitizeReactNode(item: ReactNode): string {

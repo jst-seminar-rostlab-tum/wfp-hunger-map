@@ -4,4 +4,5 @@ export interface AccordionsProps {
   items: AccordionItemProps[];
   loading?: boolean;
   multipleSelectionMode?: boolean;
+  searchWords?: string[];
 }

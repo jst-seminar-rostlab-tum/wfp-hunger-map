@@ -4,4 +4,5 @@ export interface GradientLegendContainerItem {
   startLabel: string;
   endLabel: string;
   tooltipInfo?: string;
+  hasNotAnalyzedPoint?: boolean;
 }

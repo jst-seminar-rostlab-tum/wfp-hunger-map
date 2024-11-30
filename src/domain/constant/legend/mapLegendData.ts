@@ -156,6 +156,7 @@ export function mapLegendData(
             \n
             Updated: N/A
             `,
+          hasNotAnalyzedPoint: true,
         });
       } else {
         legendData.push({
@@ -203,6 +204,7 @@ export function mapLegendData(
           startLabel: '0%',
           endLabel: '100%',
           tooltipInfo: 'Shows the inadequate ratio of nutrient intake.',
+          hasNotAnalyzedPoint: true,
         });
       }
 

@@ -5,10 +5,12 @@ import { CountryData } from '@/domain/entities/country/CountryData.ts';
 import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data.ts';
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 import { CountryMimiData } from '@/domain/entities/country/CountryMimiData.ts';
+import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
 import CountryRepository from '@/domain/repositories/CountryRepository.ts';
 
 export class MapOperations {
   static async fetchCountryData(
+    selectedMapType: GlobalInsight,
     selectedCountryData: CountryMapData,
     setCountryClickLoading: (isLoading: boolean) => void,
     setRegionData: (regionData: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
@@ -18,31 +20,44 @@ export class MapOperations {
     setIpcRegionData: (ipcRegionData: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void
   ) {
     setCountryClickLoading(true);
+
     const countryRepository = container.resolve<CountryRepository>('CountryRepository');
     try {
-      const newRegionData = await countryRepository.getRegionData(selectedCountryData.properties.adm0_id);
-      if (newRegionData && newRegionData.features) {
-        setRegionData({
+      if (selectedMapType === GlobalInsight.FOOD || selectedMapType === GlobalInsight.NUTRITION) {
+        const newRegionData = await countryRepository.getRegionData(selectedCountryData.properties.adm0_id);
+        if (newRegionData && newRegionData.features) {
+          setRegionData({
+            type: 'FeatureCollection',
+            features: newRegionData.features as Feature<Geometry, GeoJsonProperties>[],
+          });
+        }
+      }
+
+      if (selectedMapType === GlobalInsight.FOOD || selectedMapType === GlobalInsight.IPC) {
+        const newCountryData = await countryRepository.getCountryData(selectedCountryData.properties.adm0_id);
+        setCountryData(newCountryData);
+      }
+
+      if (selectedMapType === GlobalInsight.FOOD) {
+        const newCountryIso3Data = await countryRepository.getCountryIso3Data(selectedCountryData.properties.iso3);
+        setCountryIso3Data(newCountryIso3Data);
+      }
+
+      if (selectedMapType === GlobalInsight.NUTRITION) {
+        const newRegionNutritionData = await countryRepository.getRegionNutritionData(
+          selectedCountryData.properties.adm0_id
+        );
+        setRegionNutritionData(newRegionNutritionData);
+      }
+
+      if (selectedMapType === GlobalInsight.IPC) {
+        setIpcRegionData(undefined);
+        const newIpcRegionData = await countryRepository.getRegionIpcData(selectedCountryData.properties.adm0_id);
+        setIpcRegionData({
           type: 'FeatureCollection',
-          features: newRegionData.features as Feature<Geometry, GeoJsonProperties>[],
+          features: newIpcRegionData?.features as Feature<Geometry, GeoJsonProperties>[],
         });
       }
-      const newCountryData = await countryRepository.getCountryData(selectedCountryData.properties.adm0_id);
-      setCountryData(newCountryData);
-      const newCountryIso3Data = await countryRepository.getCountryIso3Data(selectedCountryData.properties.iso3);
-      setCountryIso3Data(newCountryIso3Data);
-
-      const newRegionNutritionData = await countryRepository.getRegionNutritionData(
-        selectedCountryData.properties.adm0_id
-      );
-      setRegionNutritionData(newRegionNutritionData);
-
-      setIpcRegionData(undefined);
-      const newIpcRegionData = await countryRepository.getRegionIpcData(selectedCountryData.properties.adm0_id);
-      setIpcRegionData({
-        type: 'FeatureCollection',
-        features: newIpcRegionData?.features as Feature<Geometry, GeoJsonProperties>[],
-      });
 
       setCountryClickLoading(false);
     } catch {

@@ -50,22 +50,25 @@ export default function Map({ countries, disputedAreas, ipcData, nutritionData }
   };
 
   useEffect(() => {
-    const selectedCountryData: CountryMapData | undefined = countries.features.find(
-      (country) => country.properties.adm0_id === Number(selectedCountryId)
-    );
-    if (selectedCountryData) {
-      MapOperations.fetchCountryData(
-        selectedCountryData,
-        setCountryClickLoading,
-        setRegionData,
-        setCountryData,
-        setCountryIso3Data,
-        setRegionNutritionData,
-        setIpcRegionData
+    if (selectedCountryId) {
+      const selectedCountryData: CountryMapData | undefined = countries.features.find(
+        (country) => country.properties.adm0_id === Number(selectedCountryId)
       );
-      mapRef.current?.fitBounds(L.geoJSON(selectedCountryData as GeoJSON).getBounds(), { animate: true });
+      if (selectedCountryData) {
+        MapOperations.fetchCountryData(
+          selectedMapType,
+          selectedCountryData,
+          setCountryClickLoading,
+          setRegionData,
+          setCountryData,
+          setCountryIso3Data,
+          setRegionNutritionData,
+          setIpcRegionData
+        );
+        mapRef.current?.fitBounds(L.geoJSON(selectedCountryData as GeoJSON).getBounds(), { animate: true });
+      }
     }
-  }, [selectedCountryId]);
+  }, [selectedCountryId, selectedMapType]);
 
   return (
     <MapContainer

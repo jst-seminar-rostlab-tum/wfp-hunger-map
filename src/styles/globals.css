@@ -110,7 +110,7 @@ path.leaflet-interactive:focus {
   border: none !important;
   border-radius: var(--nextui-radius-medium) !important;
   padding: 0.625rem !important;
-  margin-bottom: 6px !important;
+  margin-right: 6px !important;
 
   color: hsl(var(--nextui-foreground));
   font-weight: 600 !important;
@@ -119,12 +119,12 @@ path.leaflet-interactive:focus {
 }
  /* shrink mapbox-popup tip triangle */
 .mapbox-popup-transparent .mapboxgl-popup-tip {
-  width: 12px !important;
-  height: 6px !important;
+  width: 6px !important;
+  height: 12px !important;
   background: transparent !important;
-  border-left: 6px solid transparent !important;
-  border-right: 6px solid transparent !important;
-  border-top: 6px solid white !important;
+  border-top: 6px solid transparent !important;
+  border-bottom: 6px solid transparent !important;
+  border-left: 6px solid white !important;
 }
 
 /* .svg color */

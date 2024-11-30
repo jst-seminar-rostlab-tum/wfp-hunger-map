@@ -30,7 +30,7 @@ export default function VectorTileLayer({ countries, disputedAreas, ipcData, nut
     const popover = new mapboxgl.Popup({
       closeButton: false,
       closeOnClick: false,
-      anchor: 'bottom',
+      anchor: 'right',
       className: 'mapbox-popup-transparent',
     });
     baseMap.on('load', () => {

@@ -1,7 +1,6 @@
-import { DocumentDownload } from 'iconsax-react';
+import { DocumentDownload, SearchNormal1 } from 'iconsax-react';
 import { Bot } from 'lucide-react';
 
-import { CustomButton } from '@/components/Buttons/CustomButton';
 import { CountryCodesData } from '@/domain/entities/country/CountryCodesData';
 import { CustomTableColumns } from '@/domain/props/CustomTableProps';
 
@@ -27,28 +26,28 @@ export class DownloadPortalOperations {
       keyColumn: (index + 1).toString(),
       country: item.country.name,
       preview: (
-        <CustomButton
-          onClick={() => {
-            DownloadPortalOperations.onSelectCountry(item, setSelectedCountry, setPdfFile, setError, toggleModal);
-          }}
-          className="hover:underline"
-        >
-          Preview
-        </CustomButton>
+        <div className="flex justify-center items-center">
+          <SearchNormal1
+            size={20}
+            onClick={() =>
+              DownloadPortalOperations.onSelectCountry(item, setSelectedCountry, setPdfFile, setError, toggleModal)
+            }
+            className="cursor-pointer"
+          />
+        </div>
       ),
       download: (
-        <a
-          href={item.url.summary}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex justify-center items-center"
-        >
-          <DocumentDownload size={20} />
-        </a>
+        <div className="flex justify-center items-center">
+          <DocumentDownload
+            size={20}
+            onClick={() => DownloadPortalOperations.downloadPdf(item)}
+            className="cursor-pointer"
+          />
+        </div>
       ),
       chat: (
         <div className="flex justify-center items-center">
-          <Bot size={20} />
+          <Bot size={20} className="cursor-pointer" />
         </div>
       ),
     }));

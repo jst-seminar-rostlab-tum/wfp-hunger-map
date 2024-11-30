@@ -1,31 +1,21 @@
-import { useDisclosure } from '@nextui-org/modal';
-import { createContext, Dispatch, SetStateAction, useContext, useMemo, useState } from 'react';
+import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useMemo, useState } from 'react';
 
 interface AccordionsModalState {
-  openButtonVisible: boolean;
-  setOpenButtonVisible: Dispatch<SetStateAction<boolean>>;
-  isOpen: boolean;
-  onOpen: () => void;
-  onClose: () => void;
-  onOpenChange: () => void;
+  modalContent: ReactNode | null;
+  setModalContent: Dispatch<SetStateAction<ReactNode | null>>;
 }
 
 const AccordionsModalContext = createContext<AccordionsModalState | undefined>(undefined);
 
 export function AccordionsModalProvider({ children }: { children: React.ReactNode }) {
-  const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
-  const [openButtonVisible, setOpenButtonVisible] = useState<boolean>(false);
+  const [modalContent, setModalContent] = useState<ReactNode | null>(null);
 
   const value = useMemo(
     () => ({
-      isOpen,
-      onOpen,
-      onClose,
-      onOpenChange,
-      openButtonVisible,
-      setOpenButtonVisible,
+      modalContent,
+      setModalContent,
     }),
-    [isOpen, openButtonVisible]
+    [modalContent]
   );
 
   return <AccordionsModalContext.Provider value={value}> {children} </AccordionsModalContext.Provider>;

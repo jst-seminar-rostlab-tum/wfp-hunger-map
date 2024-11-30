@@ -1,3 +1,5 @@
+'use client';
+
 import { parseDate } from '@internationalized/date';
 import { Autocomplete, AutocompleteItem, DateRangePicker } from '@nextui-org/react';
 import React, { useState } from 'react';

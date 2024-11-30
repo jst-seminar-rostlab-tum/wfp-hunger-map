@@ -38,7 +38,7 @@ export default function Map({ countries, disputedAreas, ipcData, nutritionData }
       (country) => country.properties.adm0_id === Number(selectedCountryId)
     );
     if (selectedCountryData) {
-      mapRef.current?.fitBounds(L.geoJSON(selectedCountryData as GeoJSON).getBounds());
+      mapRef.current?.fitBounds(L.geoJSON(selectedCountryData as GeoJSON).getBounds(), { animate: true });
     }
   }, [selectedCountryId]);
 
@@ -55,8 +55,6 @@ export default function Map({ countries, disputedAreas, ipcData, nutritionData }
       maxZoom={MAP_MAX_ZOOM}
       maxBoundsViscosity={1.0}
       zoomControl={false}
-      markerZoomAnimation={false}
-      zoomAnimation={false}
       style={{ height: '100%', width: '100%', zIndex: 1 }}
     >
       <AlertContainer countries={countries} />

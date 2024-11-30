@@ -108,13 +108,13 @@ export default function PdfViewer({
               disabledKeys={PdfViewerOperations.getDisabledKeys(onDownloadPdf, onDownloadJson, onDownloadCsv)}
             >
               <DropdownItem key="pdf" onClick={onDownloadPdf}>
-                Pdf
+                PDF
               </DropdownItem>
               <DropdownItem key="json" onClick={onDownloadJson}>
-                Json
+                JSON
               </DropdownItem>
               <DropdownItem key="csv" onClick={onDownloadCsv}>
-                Csv
+                CSV
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
@@ -129,9 +129,20 @@ export default function PdfViewer({
       {/* PDF Viewer */}
       <div className="w-full h-full bg-background flex-grow flex justify-center items-center pb-10 z-0">
         <div className="max-w-3xl">
-          <Document file={file} onLoadSuccess={onDocumentLoadSuccess} className="flex-col items-center mx-auto">
+          <Document
+            file={file}
+            onLoadSuccess={onDocumentLoadSuccess}
+            className="flex-col items-center mx-auto"
+            loading=""
+          >
             {Array.from(new Array(totalPages), (_, index) => (
-              <Page canvasBackground="transparent" key={`page_${index + 1}`} pageNumber={index + 1} width={pageWidth} />
+              <Page
+                loading=""
+                canvasBackground="transparent"
+                key={`page_${index + 1}`}
+                pageNumber={index + 1}
+                width={pageWidth}
+              />
             ))}
           </Document>
         </div>

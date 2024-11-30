@@ -31,7 +31,7 @@ export default function DownloadPortal() {
           loading={isLoading}
           items={[
             {
-              title: 'Pdf Reports',
+              title: 'Country Reports',
               content: (
                 <div>
                   <div className="mb-3">
@@ -47,7 +47,7 @@ export default function DownloadPortal() {
                         setError,
                         toggleModal
                       )}
-                      ariaLabel="Pdf Reports"
+                      ariaLabel="Country Reports"
                     />
                   )}
                   <PdfPreview

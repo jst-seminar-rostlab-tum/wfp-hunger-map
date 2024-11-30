@@ -43,15 +43,14 @@ export default function DownloadCountryAccordion({ countries }: DownloadCountryA
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     const countryInvalid = !country;
-    const dateRangeInvalid = !value;
     const { start, end } = value || {};
     const diffDays = start && end ? DownloadPortalOperations.calculateDateRange(start, end) : 0;
-    const dateRangeTooLong = diffDays > 500;
+    const dateRangeInvalid = !value || diffDays > 500;
 
     setIsCountryInvalid(countryInvalid);
     setIsDateRangeInvalid(dateRangeInvalid);
-    setIsDateRangeTooLong(dateRangeTooLong);
-    if (!countryInvalid && !dateRangeInvalid && !dateRangeTooLong && !isWaitingDownloadResponse) {
+    setIsDateRangeTooLong(diffDays > 500);
+    if (!countryInvalid && !dateRangeInvalid && !isWaitingDownloadResponse) {
       setDownloadStatus(SubmitStatus.Loading);
       setIsWaitingDownloadResponse(true);
       try {

@@ -5,7 +5,7 @@ export default class SubscriptionRepositoryImpl implements SubscriptionRepositor
   async subscribe(subscribe: ISubscribe): Promise<boolean> {
     try {
       // TODO: endpoint is not clear right now, can change later
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subscribe`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_EMAIL_SERVICE}/subscribe`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -14,7 +14,7 @@ export interface ITopic {
 export interface ISubscribe {
   name: string;
   email: string;
+  organisation: string;
+  country_ids?: string[];
   topic_id?: string;
-  organization: string;
-  options_id?: string[];
 }

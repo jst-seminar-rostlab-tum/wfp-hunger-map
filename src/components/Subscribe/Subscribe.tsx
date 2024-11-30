@@ -24,7 +24,7 @@ import { SocialLink } from './SocialLink';
 export default function SubscriptionForm() {
   const subscribe = container.resolve<SubscriptionRepository>('SubscriptionRepository');
   const [name, setName] = useState('');
-  const [organization, setOrganization] = useState('');
+  const [organisation, setOrganisation] = useState('');
   const [email, setEmail] = useState('');
   const [topic, setTopic] = useState<string | undefined>('');
   const [options, setOptions] = useState<string[] | undefined>([]);
@@ -70,9 +70,9 @@ export default function SubscriptionForm() {
           .subscribe({
             name,
             email,
+            organisation,
+            country_ids: options,
             topic_id: topic,
-            organization,
-            options_id: options,
           })
           .then((res) => {
             if (res) {
@@ -137,8 +137,8 @@ export default function SubscriptionForm() {
           color="default"
           variant="faded"
           errorMessage="Please enter a valid organization"
-          onChange={(changeOrgEvent) => setOrganization(changeOrgEvent.target.value)}
-          value={organization}
+          onChange={(changeOrgEvent) => setOrganisation(changeOrgEvent.target.value)}
+          value={organisation}
         />
         <NestedPopover items={availableTopics} onSelectionChange={handleSelectionChange} />
         <SubmitButton

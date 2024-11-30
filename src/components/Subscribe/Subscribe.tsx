@@ -7,10 +7,14 @@ import { useCallback, useEffect, useState } from 'react';
 
 import container from '@/container';
 import {
+  EMAIL_MANDATORY_MSG,
   MANDATORY,
+  NAME_MANDATORY_MSG,
+  ORGANISATION_MANADATORY_MSG,
   SUBSCRIBE,
   SUBSCRIBE_MODAL_SUBTITLE,
   SUCCESSFUL_SUBSCRIPTION,
+  TOPIC_MANDATORY_MSG,
   UNSUCCESSFUL_SUBSCRIPTION,
 } from '@/domain/constant/subscribe/Subscribe';
 import { ITopic } from '@/domain/entities/subscribe/Subscribe';
@@ -32,6 +36,8 @@ export default function SubscriptionForm() {
 
   const [isNameInvalid, setIsNameInvalid] = useState(false);
   const [isEmailInvalid, setIsEmailInvalid] = useState(false);
+  const [isOrgInvalid, setIsOrgInvalid] = useState(false);
+  const [isTopicInvalid, setIsTopicInvalid] = useState(false);
 
   const [subscribeStatus, setSubscribeStatus] = useState<SubmitStatus>(SubmitStatus.Idle);
   const [isWaitingSubResponse, setIsWaitingSubResponse] = useState(false);
@@ -53,15 +59,35 @@ export default function SubscriptionForm() {
     [validateEmail]
   );
 
+  const changeOrganisation = useCallback((newOrg: string): void => {
+    setOrganisation(newOrg);
+    setIsOrgInvalid(!newOrg);
+  }, []);
+
+  const handleSelectionChange = (selectedTopic: ITopic | undefined) => {
+    setTopic(selectedTopic?.topic_id);
+    setIsTopicInvalid(!selectedTopic);
+    setOptions(selectedTopic?.options?.map((option) => option.report_id));
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     // Validate the form
-    const isFormInvalid = !name || !email || !validateEmail(email);
+    const isFormInvalid = !name || !email || !validateEmail(email) || !topic || !organisation;
 
     setIsNameInvalid(!name);
     setIsEmailInvalid(!validateEmail(email));
+    setIsOrgInvalid(!organisation);
+    setIsTopicInvalid(!topic);
 
-    if (!isEmailInvalid && !isNameInvalid && !isWaitingSubResponse && !isFormInvalid) {
+    if (
+      !isEmailInvalid &&
+      !isNameInvalid &&
+      !isWaitingSubResponse &&
+      !isFormInvalid &&
+      !isOrgInvalid &&
+      !isTopicInvalid
+    ) {
       setSubscribeStatus(SubmitStatus.Loading);
       // Handle form submission here and interact with the backend
       try {
@@ -89,11 +115,6 @@ export default function SubscriptionForm() {
     }
   };
 
-  const handleSelectionChange = (selectedTopic: ITopic | undefined) => {
-    setTopic(selectedTopic?.topic_id);
-    setOptions(selectedTopic?.options?.map((option) => option.report_id));
-  };
-
   // use subscribe.getSubscribeTopics() to get the topics, when the component initializes
   // and set it to the state
   useEffect(() => {
@@ -107,13 +128,13 @@ export default function SubscriptionForm() {
       <Divider className="bg-subscribeText dark:bg-subscribeText" />
       <p className="mb-12 text-justify text-subscribeText dark:text-subscribeText">{SUBSCRIBE_MODAL_SUBTITLE}</p>
       <p className="text-sm italic self-start text-subscribeText dark:text-subscribeText">{MANDATORY}</p>
-      <form onSubmit={handleSubmit} className="flex flex-col space-y-2 mb-3 w-full">
+      <form onSubmit={handleSubmit} className="flex flex-col space-y-1 mb-3 w-full">
         <Input
           label="Name"
           placeholder="Please enter your name"
           color={isNameInvalid ? 'danger' : 'default'}
           isInvalid={isNameInvalid}
-          errorMessage="Name is required"
+          errorMessage={NAME_MANDATORY_MSG}
           variant="faded"
           isRequired
           value={name}
@@ -127,7 +148,7 @@ export default function SubscriptionForm() {
           isRequired
           isInvalid={isEmailInvalid}
           color={isEmailInvalid ? 'danger' : 'default'}
-          errorMessage="Please enter a valid email"
+          errorMessage={EMAIL_MANDATORY_MSG}
           value={email}
           onChange={(changeEmailEvent) => changeEmail(changeEmailEvent.target.value)}
         />
@@ -136,11 +157,14 @@ export default function SubscriptionForm() {
           placeholder="Please enter your organization"
           color="default"
           variant="faded"
-          errorMessage="Please enter a valid organization"
-          onChange={(changeOrgEvent) => setOrganisation(changeOrgEvent.target.value)}
+          isRequired
+          isInvalid={isOrgInvalid}
+          errorMessage={ORGANISATION_MANADATORY_MSG}
+          onChange={(changeOrgEvent) => changeOrganisation(changeOrgEvent.target.value)}
           value={organisation}
         />
         <NestedPopover items={availableTopics} onSelectionChange={handleSelectionChange} />
+        {isTopicInvalid && <p className="p-1 text-red-500 text-sm self-start">{TOPIC_MANDATORY_MSG}</p>}
         <SubmitButton
           label={SUBSCRIBE}
           submitStatus={subscribeStatus}

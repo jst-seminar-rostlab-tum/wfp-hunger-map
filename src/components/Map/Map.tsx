@@ -3,6 +3,7 @@ import 'leaflet/dist/leaflet.css';
 import { Feature, GeoJsonProperties, Geometry } from 'geojson';
 import { MapContainer } from 'react-leaflet';
 
+import BackToGlobalButton from '@/components/Map/BackToGlobalButton';
 import { MAP_MAX_ZOOM, MAP_MIN_ZOOM } from '@/domain/constant/map/Map';
 import { useSelectedAlert } from '@/domain/contexts/SelectedAlertContext';
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
@@ -99,6 +100,7 @@ export default function Map({ countries, disputedAreas, ipcData, nutritionData }
             />
           ))}
       <ZoomControl threshold={5} callback={onZoomThresholdReached} />
+      <BackToGlobalButton />
     </MapContainer>
   );
 }

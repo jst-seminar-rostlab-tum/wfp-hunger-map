@@ -6,5 +6,6 @@ export interface IpcChoroplethProps {
   countries: CountryMapDataWrapper;
   selectedCountryId: number | null;
   setSelectedCountryId: (countryId: number | null) => void;
+  handleBackButtonClick?: () => void;
   resetAlert: () => void;
 }

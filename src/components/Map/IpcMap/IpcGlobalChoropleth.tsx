@@ -11,6 +11,7 @@ function IpcGlobalChoropleth({
   setSelectedCountryId,
   setIpcRegionData,
   setCountryData,
+  setCountryName,
   resetAlert,
   selectedCountryId,
 }: IpcGlobalChoroplethProps) {
@@ -33,6 +34,7 @@ function IpcGlobalChoropleth({
       setSelectedCountryId,
       setIpcRegionData,
       setCountryData,
+      setCountryName,
       map,
       resetAlert
     );

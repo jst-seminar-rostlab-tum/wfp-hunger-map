@@ -45,6 +45,7 @@ export default class NutritionChoroplethOperations {
     setSelectedCountryId: (countryId: number | null) => void,
     setRegionData: (data: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
     setRegionNutritionData: (data: CountryMimiData) => void,
+    setCountryName: (data: string) => void,
     toggleAlert: (alertType: AlertType) => void
   ) {
     map.fitBounds(bounds);
@@ -54,6 +55,7 @@ export default class NutritionChoroplethOperations {
     }
     if (feature.properties?.adm0_id) {
       const countryRepository = container.resolve<CountryRepository>('CountryRepository');
+      setCountryName(feature.properties.adm0_name);
       const regionNutrition = await countryRepository.getRegionNutritionData(feature.properties.adm0_id);
       const regionData = regionNutrition.features;
       if (regionData) {
@@ -75,6 +77,7 @@ export default class NutritionChoroplethOperations {
     setRegionData: (data: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
     setRegionNutritionData: (data: CountryMimiData) => void,
     countryStyles: { [key: number]: L.PathOptions },
+    setCountryName: (data: string) => void,
     toggleAlert: (alertType: AlertType) => void
   ) {
     const pathLayer = layer as L.Path;
@@ -93,6 +96,7 @@ export default class NutritionChoroplethOperations {
           setSelectedCountryId,
           setRegionData,
           setRegionNutritionData,
+          setCountryName,
           toggleAlert
         );
       },

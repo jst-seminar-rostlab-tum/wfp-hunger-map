@@ -24,15 +24,13 @@ export default class SubscriptionRepositoryImpl implements SubscriptionRepositor
 
   async getSubscribeTopic(): Promise<ITopic[]> {
     try {
-      const response = await fetch(`${process.env.NEXT_EMAIL_SERVICE}/topics`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await fetch(`${process.env.NEXT_PUBLIC_EMAIL_SERVICE}/topics`);
 
       if (response.ok) {
-        return response.json();
+        const data = await response.json();
+        if (data?.body && data?.body.length > 0) {
+          return Promise.resolve(data.body);
+        }
       }
       return Promise.reject(new Error('Failed to fetch topics'));
     } catch (error) {

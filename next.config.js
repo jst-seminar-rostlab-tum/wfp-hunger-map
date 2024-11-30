@@ -9,9 +9,6 @@ const nextConfig = {
   
       return config;
     },
-    env: {
-      NEXT_EMAIL_SERVICE: process.env.NEXT_EMAIL_SERVICE,
-    },
   };
   
   module.exports = nextConfig;

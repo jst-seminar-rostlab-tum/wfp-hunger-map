@@ -1,5 +1,5 @@
-import { CountryCodesData } from '../entities/country/CountryCodesData';
+import { ICountry } from '../entities/download/Country';
 
 export default interface DownloadCountryAccordionProps {
-  countryCodes: CountryCodesData[] | undefined;
+  countries: ICountry[] | undefined;
 }

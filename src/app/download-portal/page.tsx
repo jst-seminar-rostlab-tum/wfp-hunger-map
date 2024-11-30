@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import CustomAccordion from '@/components/Accordions/Accordion';
 import DownloadCountryAccordion from '@/components/DownloadCountryAccordions/DownloadCountryAccordions';
@@ -9,13 +9,14 @@ import PopupModal from '@/components/PopupModal/PopupModal';
 import SearchBar from '@/components/Search/SearchBar';
 import CustomTable from '@/components/Table/CustomTable';
 import { CountryCodesData } from '@/domain/entities/country/CountryCodesData';
-import { TITLE } from '@/domain/entities/download/Country';
-import { useCountryCodesQuery } from '@/domain/hooks/globalHooks';
+import { ICountry, TITLE } from '@/domain/entities/download/Country';
+import { useCountryCodesQuery, useMapDataForCountries } from '@/domain/hooks/globalHooks';
 import { PdfFile } from '@/domain/props/PdfViewerProps';
 import { DownloadPortalOperations } from '@/operations/download-portal/DownloadPortalOperations';
 
 export default function DownloadPortal() {
   const { isLoading, data } = useCountryCodesQuery();
+  const { isLoading: isMapDataLoading, data: downloadCountryList } = useMapDataForCountries();
   const [isModalOpen, setModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [pdfFile, setPdfFile] = useState<PdfFile | null>(null);
@@ -25,13 +26,29 @@ export default function DownloadPortal() {
   const filteredData = useMemo(() => {
     return data?.filter((item) => item.country.name.toLowerCase().includes(searchTerm.toLowerCase()));
   }, [data, searchTerm]);
+  const [countries, setCountries] = useState<ICountry[] | undefined>(undefined);
+  const [isCountryListReady, setIsCountryListReady] = useState(false);
+
+  useEffect(() => {
+    // since the country list too big and is not ready in the beginning
+    // we need to wait for the map data to be ready
+    setIsCountryListReady(downloadCountryList === undefined);
+    setCountries(
+      downloadCountryList?.features.map((feature) => ({
+        id: feature.properties.adm0_id,
+        name: feature.properties.adm0_name,
+        iso3: feature.properties.iso3,
+        iso2: feature.properties.STSCOD,
+      })) as ICountry[]
+    );
+  }, [downloadCountryList]);
 
   return (
     <div>
       <h1>Download Portal</h1>
       <div>
         <CustomAccordion
-          loading={isLoading}
+          loading={isLoading && isMapDataLoading && isCountryListReady}
           items={[
             {
               title: 'Pdf Reports',
@@ -75,13 +92,9 @@ export default function DownloadPortal() {
                 </div>
               ),
             },
-          ]}
-        />
-        <CustomAccordion
-          items={[
             {
               title: TITLE,
-              content: <DownloadCountryAccordion countryCodes={data} />,
+              content: <DownloadCountryAccordion countries={countries} />,
             },
           ]}
         />

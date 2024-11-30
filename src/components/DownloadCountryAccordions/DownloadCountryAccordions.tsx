@@ -1,6 +1,6 @@
 import { parseDate } from '@internationalized/date';
 import { Autocomplete, AutocompleteItem, DateRangePicker } from '@nextui-org/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import container from '@/container';
 import { DOWNLOAD_DATA } from '@/domain/constant/subscribe/Subscribe';
@@ -17,7 +17,7 @@ import { DownloadPortalOperations } from '@/operations/download-portal/DownloadP
 
 import { SubmitButton } from '../SubmitButton/SubmitButton';
 
-export default function DownloadCountryAccordion({ countryCodes }: DownloadCountryAccordionProps) {
+export default function DownloadCountryAccordion({ countries }: DownloadCountryAccordionProps) {
   const download = container.resolve<DownloadRepository>('DownloadRepository');
   const [country, setCountry] = useState('');
   const [isCountryInvalid, setIsCountryInvalid] = useState(false);
@@ -32,9 +32,9 @@ export default function DownloadCountryAccordion({ countryCodes }: DownloadCount
   const [isWaitingDownloadResponse, setIsWaitingDownloadResponse] = useState(false);
 
   const handleCountrySelection = (key: unknown): void => {
-    const selectedCountry = countryCodes?.find((item) => item.country.id === parseInt(key as string, 10));
+    const selectedCountry = countries?.find((item) => item.id === parseInt(key as string, 10));
     if (selectedCountry) {
-      setCountry(selectedCountry.country.iso3);
+      setCountry(selectedCountry.iso3);
     }
   };
 
@@ -70,6 +70,10 @@ export default function DownloadCountryAccordion({ countryCodes }: DownloadCount
     }
   };
 
+  useEffect(() => {
+    console.log('countries', countries);
+  }, [countries]);
+
   return (
     <div className="flex flex-col gap-4 justify-center flex-wrap pb-8">
       <h6>{DESCRIPTION}</h6>
@@ -84,10 +88,10 @@ export default function DownloadCountryAccordion({ countryCodes }: DownloadCount
           label="Country"
           placeholder="Select a country"
           className="flex-1 mr-4"
-          defaultItems={countryCodes}
+          defaultItems={countries}
           onSelectionChange={(key) => handleCountrySelection(key)}
         >
-          {(item) => <AutocompleteItem key={item.country.id}>{item.country.name}</AutocompleteItem>}
+          {(item) => <AutocompleteItem key={item.id}>{item.name}</AutocompleteItem>}
         </Autocomplete>
 
         <DateRangePicker

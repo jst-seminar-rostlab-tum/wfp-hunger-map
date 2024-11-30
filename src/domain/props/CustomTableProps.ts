@@ -31,7 +31,7 @@ export default interface CustomTableProps<D> {
   className?: string;
 }
 
-export type DataSourceTableData = {
+export type DataSourceTableRow = {
   label: string;
   description: ReactNode;
   readMoreLink?: string;
@@ -39,7 +39,9 @@ export type DataSourceTableData = {
   dataSourceLink?: string;
   updateInterval?: string;
   updateDetails?: readonly { label: ReactNode; interval: string }[];
-}[];
+};
+
+export type DataSourceTableData = DataSourceTableRow[];
 
 export type SimpleTableData = {
   keyColumn: ReactNode;

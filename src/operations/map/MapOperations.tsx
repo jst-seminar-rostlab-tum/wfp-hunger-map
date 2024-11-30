@@ -11,6 +11,7 @@ import { MapProps } from '@/domain/props/MapProps';
 import { getColors } from '@/styles/MapColors.ts';
 import { createRoot } from 'react-dom/client';
 import CountryHoverPopover from '@/components/CountryHoverPopover/CountryHoverPopover.tsx';
+import { pop } from '@jridgewell/set-array';
 
 export class MapOperations {
   static createMapboxMap(isDark: boolean, mapProps: MapProps, mapContainer: RefObject<HTMLDivElement>): mapboxgl.Map {
@@ -19,7 +20,7 @@ export class MapOperations {
     const { countries } = mapProps;
     return new mapboxgl.Map({
       container: mapContainer.current as unknown as string | HTMLElement,
-      logoPosition: 'bottom-left',  // default which can be changed to 'bottom-right'
+      logoPosition: 'bottom-left', // default which can be changed to 'bottom-right'
       style: {
         version: 8,
         name: 'HungerMap LIVE',
@@ -104,6 +105,7 @@ export class MapOperations {
         baseMap.getCanvas().style.cursor = '';
       }
 
+      // if no valid feature, remove the popup and return
       if (!countryData) {
         popover.remove();
         return;
@@ -111,17 +113,17 @@ export class MapOperations {
 
       baseMap.getCanvas().style.cursor = 'pointer';
       hoveredPolygonId = countryData.id;
+
       if (hoveredPolygonId && (countryData as CountryMapData).properties.interactive) {
         baseMap.setFeatureState({ source: 'countries', id: hoveredPolygonId }, { hover: true });
 
-        // tooltip on country hover -> showing name
-        // only for RAINFALL and VEGETATION cause the other Global Insights provide their own tooltips on hover
+        // tooltip on country hover -> showing name;
+        // only for RAINFALL and VEGETATION cause the other Global Insights provide their own tooltips on hover;
+        // we are using the 'setText' functionality and not the generated DOM element of 'createCountryNameTooltipElement',
+        // because otherwise it would cause the popup to "flicker" when moving the mouse)
         if (selectedMapType === GlobalInsight.RAINFALL || selectedMapType === GlobalInsight.VEGETATION) {
-          const tooltipContainer = MapOperations.creatCountryNameTooltipElement(countryData.properties.adm0_name);
-          popover
-            .setLngLat(e.lngLat)
-            .setDOMContent(tooltipContainer)
-            .addTo(baseMap);
+          const tooltipContainer = MapOperations.createCountryNameTooltipElement(countryData.properties.adm0_name);
+          popover.setText(countryData.properties.adm0_name).addTo(baseMap).setLngLat(e.lngLat);
         }
       }
     });
@@ -326,7 +328,7 @@ export class MapOperations {
    * Create a 'HTMLDivElement' rending the given 'countryName' within a 'CountryHoverPopover'.
    * Needed cause leaflet tooltips or mapbox popups does not accept React components.
    */
-  static creatCountryNameTooltipElement(countryName: string): HTMLDivElement {
+  static createCountryNameTooltipElement(countryName: string): HTMLDivElement {
     const tooltipContainer = document.createElement('div');
     const root = createRoot(tooltipContainer);
     root.render(<CountryHoverPopover header={countryName} />);

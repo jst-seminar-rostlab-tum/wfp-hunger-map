@@ -39,7 +39,7 @@ export default function FcsChoropleth({
         style={FcsChoroplethOperations.countryStyle}
         onEachFeature={(feature, layer) => {
           // tooltip on country hover -> showing name
-          const tooltipContainer = MapOperations.creatCountryNameTooltipElement(feature?.properties?.adm0_name);
+          const tooltipContainer = MapOperations.createCountryNameTooltipElement(feature?.properties?.adm0_name);
           layer.bindTooltip(tooltipContainer, { className: 'leaflet-tooltip', sticky: true });
 
           FcsChoroplethOperations.onEachFeature(

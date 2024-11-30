@@ -46,7 +46,7 @@ export default function NutritionChoropleth({
         onEachFeature={(feature, layer) => {
           if (NutritionChoroplethOperations.allowCountryHover(nutritionData, feature?.properties?.adm0_id)) {
             // tooltip on country hover -> showing name
-            const tooltipContainer = MapOperations.creatCountryNameTooltipElement(feature?.properties?.adm0_name);
+            const tooltipContainer = MapOperations.createCountryNameTooltipElement(feature?.properties?.adm0_name);
             layer.bindTooltip(tooltipContainer, { className: 'leaflet-tooltip', sticky: true });
           }
 

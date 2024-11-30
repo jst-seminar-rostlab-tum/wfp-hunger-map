@@ -35,3 +35,12 @@ export const useNutritionQuery = () =>
     },
     cachedQueryClient
   );
+
+export const useMapDataForCountries = () =>
+  useQuery(
+    {
+      queryKey: ['fetchMapDataForCountry'],
+      queryFn: globalRepo.getMapDataForCountries,
+    },
+    cachedQueryClient
+  );

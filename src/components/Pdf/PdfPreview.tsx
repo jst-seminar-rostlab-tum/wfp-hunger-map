@@ -1,16 +1,8 @@
 import { Modal, ModalBody, ModalContent } from '@nextui-org/modal';
 
-import { PdfFile } from '@/domain/props/PdfViewerProps';
+import PdfPreviewProps from '@/domain/props/PdfPreviewProps';
 
 import PdfLoader from './PdfLoader';
-
-interface PdfPreviewProps {
-  isModalOpen: boolean;
-  toggleModal: () => void;
-  pdfFile: PdfFile | null;
-  error: string | null;
-  onDownloadPdf: () => void;
-}
 
 export default function PdfPreview({ isModalOpen, toggleModal, pdfFile, error, onDownloadPdf }: PdfPreviewProps) {
   return (

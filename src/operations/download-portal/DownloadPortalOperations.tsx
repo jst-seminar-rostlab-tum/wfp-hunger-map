@@ -1,7 +1,9 @@
+import { CalendarDate } from '@internationalized/date';
 import { DocumentDownload, SearchNormal1 } from 'iconsax-react';
 import { Bot } from 'lucide-react';
 
 import { CountryCodesData } from '@/domain/entities/country/CountryCodesData';
+import { ICountryData } from '@/domain/entities/download/Country';
 import { CustomTableColumns } from '@/domain/props/CustomTableProps';
 
 export class DownloadPortalOperations {
@@ -49,6 +51,25 @@ export class DownloadPortalOperations {
         </div>
       ),
     }));
+  }
+
+  static downloadJsonFile(data: ICountryData[], country: string): void {
+    const a = document.createElement('a');
+    const file = new Blob([JSON.stringify(data)], { type: 'application/json' });
+    const url = URL.createObjectURL(file);
+    a.href = url;
+    a.download = `${country}_food_security_data.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  static calculateDateRange(start: CalendarDate, end: CalendarDate): number {
+    const startDate = new Date(start.toString());
+    const endDate = new Date(end.toString());
+    const diffTime = Math.abs(endDate.getTime() - startDate.getTime());
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   }
 
   static downloadPdf(country: CountryCodesData) {

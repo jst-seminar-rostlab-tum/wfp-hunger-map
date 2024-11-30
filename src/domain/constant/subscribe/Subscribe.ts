@@ -12,3 +12,5 @@ export const FOLLOW_US = 'Follow us on: ';
 export const SUCCESSFUL_SUBSCRIPTION = 'Successfully subscribed!';
 
 export const UNSUCCESSFUL_SUBSCRIPTION = 'Subscribed failed. Please try again later.';
+
+export const DOWNLOAD_DATA = 'Download Data';

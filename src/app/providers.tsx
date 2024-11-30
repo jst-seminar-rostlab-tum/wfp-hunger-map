@@ -14,7 +14,6 @@ import { SelectedMapProvider } from '@/domain/contexts/SelectedMapContext';
 import { SelectedMapVisibilityProvider } from '@/domain/contexts/SelectedMapVisibilityContext';
 import { SidebarProvider } from '@/domain/contexts/SidebarContext';
 
-const AnalyticsContainer = React.lazy(() => import('@/components/Analytics/AnalyticsContainer'));
 export interface ProvidersProps {
   children: React.ReactNode;
   themeProps?: ThemeProviderProps;
@@ -25,9 +24,6 @@ export function Providers({ children, themeProps }: ProvidersProps) {
 
   return (
     <NextUIProvider navigate={router.push}>
-      <React.Suspense fallback={null}>
-        <AnalyticsContainer />
-      </React.Suspense>
       <NextThemesProvider defaultTheme="system" {...themeProps}>
         <QueryClientProvider client={cachedQueryClient}>
           <SidebarProvider>

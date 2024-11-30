@@ -1,4 +1,3 @@
-import { sendGAEvent } from '@next/third-parties/google';
 import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
 
 import { AlertType } from '../enums/AlertType';
@@ -21,9 +20,7 @@ export function SelectedAlertProvider({ children }: { children: ReactNode }) {
       setSelectedAlert(null);
     } else {
       setSelectedAlert(alertType);
-      sendGAEvent('event', 'selectedAlertChanged', {
-        alertType,
-      });
+      window.gtag('event', `${alertType}_alert_selected`);
     }
   };
 

@@ -1,4 +1,3 @@
-import { sendGAEvent } from '@next/third-parties/google';
 import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
 
 import { GlobalInsight } from '../enums/GlobalInsight';
@@ -19,9 +18,7 @@ export function SelectedMapProvider({ children }: { children: ReactNode }) {
       setSelectedMapVisibility(true);
     }
     setSelectedMapTypeState(value);
-    sendGAEvent('event', 'selectedMapChanged', {
-      mapType: value,
-    });
+    window.gtag('event', `${value}_map_selected`);
   };
 
   const value = useMemo(

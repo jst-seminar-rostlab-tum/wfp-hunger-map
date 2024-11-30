@@ -8,7 +8,7 @@ import React, { RefObject, useEffect, useRef, useState } from 'react';
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSelectedMapVisibility } from '@/domain/contexts/SelectedMapVisibilityContext';
 import { MapProps } from '@/domain/props/MapProps';
-import { MapOperations } from '@/operations/map/MapOperations';
+import { MapboxMapOperations } from '@/operations/map/MapboxMapOperations';
 
 export default function VectorTileLayer({ countries, disputedAreas, ipcData, nutritionData }: MapProps) {
   const { theme } = useTheme();
@@ -22,7 +22,7 @@ export default function VectorTileLayer({ countries, disputedAreas, ipcData, nut
   mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 
   useEffect(() => {
-    const baseMap: mapboxgl.Map = MapOperations.createMapboxMap(
+    const baseMap: mapboxgl.Map = MapboxMapOperations.createMapboxMap(
       theme === 'dark',
       { countries, disputedAreas, ipcData, selectedMapType, nutritionData },
       mapContainer
@@ -33,11 +33,11 @@ export default function VectorTileLayer({ countries, disputedAreas, ipcData, nut
       setPopup(popover);
     });
 
-    MapOperations.synchronizeLeafletMapbox(baseMap, mapContainer, context);
+    MapboxMapOperations.synchronizeLeafletMapbox(baseMap, mapContainer, context);
     // The following layers currently don't work due to CORS issues.
-    MapOperations.initRainfallLayer(baseMap);
-    MapOperations.initVegetationLayer(baseMap);
-    MapOperations.initFCSLayer(baseMap);
+    MapboxMapOperations.initRainfallLayer(baseMap);
+    MapboxMapOperations.initVegetationLayer(baseMap);
+    MapboxMapOperations.initFCSLayer(baseMap);
 
     return () => {
       baseMap.remove();
@@ -48,16 +48,21 @@ export default function VectorTileLayer({ countries, disputedAreas, ipcData, nut
 
   useEffect(() => {
     if (map && popup && selectedMapVisibility) {
-      MapOperations.removeActiveMapLayer(map, theme === 'dark');
-      MapOperations.addMapAsLayer(map, theme === 'dark', { countries, ipcData, selectedMapType, nutritionData }, popup);
+      MapboxMapOperations.removeActiveMapLayer(map, theme === 'dark');
+      MapboxMapOperations.addMapAsLayer(
+        map,
+        theme === 'dark',
+        { countries, ipcData, selectedMapType, nutritionData },
+        popup
+      );
     } else if (map && popup) {
-      MapOperations.removeActiveMapLayer(map, theme === 'dark');
+      MapboxMapOperations.removeActiveMapLayer(map, theme === 'dark');
     }
   }, [map, selectedMapType, selectedMapVisibility]);
 
   useEffect(() => {
     if (map) {
-      MapOperations.changeMapTheme(map, theme === 'dark');
+      MapboxMapOperations.changeMapTheme(map, theme === 'dark');
     }
   }, [theme]);
 

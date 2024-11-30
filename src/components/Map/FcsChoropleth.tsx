@@ -1,11 +1,8 @@
-import { FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
 import L from 'leaflet';
 import { useTheme } from 'next-themes';
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { GeoJSON } from 'react-leaflet';
 
-import { CountryData } from '@/domain/entities/country/CountryData';
-import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data';
 import FcsChoroplethProps from '@/domain/props/FcsChoroplethProps';
 import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
 
@@ -19,13 +16,13 @@ export default function FcsChoropleth({
   setSelectedCountryId,
   setSelectedMapVisibility,
   toggleAlert,
+  loading,
+  regionData,
+  countryData,
+  countryIso3Data,
 }: FcsChoroplethProps) {
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
   const { theme } = useTheme();
-  const [countryData, setCountryData] = useState<CountryData | undefined>();
-  const [countryIso3Data, setCountryIso3Data] = useState<CountryIso3Data | undefined>();
-  const [regionData, setRegionData] = useState<FeatureCollection<Geometry, GeoJsonProperties> | undefined>();
-  const [loading, setLoading] = useState<boolean>(false);
 
   return (
     <div>
@@ -41,10 +38,6 @@ export default function FcsChoropleth({
             layer,
             selectedAlert,
             setSelectedCountryId,
-            setLoading,
-            setRegionData,
-            setCountryData,
-            setCountryIso3Data,
             setSelectedMapVisibility,
             toggleAlert,
             theme === 'dark'

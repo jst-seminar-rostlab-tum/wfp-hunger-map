@@ -1,7 +1,5 @@
-import { FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
-import { CountryData } from '@/domain/entities/country/CountryData';
 import { IpcChoroplethProps } from '@/domain/props/IpcChoroplethProps';
 
 import IpcCountryChoropleth from './IpcCountryChoropleth';
@@ -13,24 +11,15 @@ function IpcChoropleth({
   selectedCountryId,
   setSelectedCountryId,
   resetAlert,
+  countryData,
+  ipcRegionData,
 }: IpcChoroplethProps) {
-  const [ipcRegionData, setIpcRegionData] = useState<FeatureCollection<Geometry, GeoJsonProperties> | null>();
-  const [countryData, setCountryData] = useState<CountryData>();
-
-  useEffect(() => {
-    if (!selectedCountryId) {
-      setIpcRegionData(null);
-    }
-  }, [selectedCountryId]);
-
   return (
     <div>
       <IpcGlobalChoropleth
         ipcData={ipcData}
         countries={countries}
         setSelectedCountryId={setSelectedCountryId}
-        setIpcRegionData={setIpcRegionData}
-        setCountryData={setCountryData}
         resetAlert={resetAlert}
         selectedCountryId={selectedCountryId}
       />

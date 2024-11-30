@@ -9,8 +9,6 @@ function IpcGlobalChoropleth({
   ipcData,
   countries,
   setSelectedCountryId,
-  setIpcRegionData,
-  setCountryData,
   resetAlert,
   selectedCountryId,
 }: IpcGlobalChoroplethProps) {
@@ -25,15 +23,7 @@ function IpcGlobalChoropleth({
   };
 
   const handleCountryFeature = (feature: Feature<Geometry, GeoJsonProperties>, layer: L.Layer) => {
-    IpcChoroplethOperations.initializeCountryLayer(
-      feature,
-      layer,
-      ipcData,
-      setSelectedCountryId,
-      setIpcRegionData,
-      setCountryData,
-      resetAlert
-    );
+    IpcChoroplethOperations.initializeCountryLayer(feature, layer, ipcData, setSelectedCountryId, resetAlert);
   };
 
   return (

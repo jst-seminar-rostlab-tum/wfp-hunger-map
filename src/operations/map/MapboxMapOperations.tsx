@@ -9,7 +9,7 @@ import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
 import { MapProps } from '@/domain/props/MapProps';
 import { getColors } from '@/styles/MapColors.ts';
 
-export class MapOperations {
+export class MapboxMapOperations {
   static createMapboxMap(isDark: boolean, mapProps: MapProps, mapContainer: RefObject<HTMLDivElement>): mapboxgl.Map {
     const mapColors: MapColorsType = getColors(isDark);
 

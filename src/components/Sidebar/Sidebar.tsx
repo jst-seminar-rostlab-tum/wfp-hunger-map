@@ -31,7 +31,7 @@ export function Sidebar({ countryMapData }: SidebarProps) {
   const { selectedMapType, setSelectedMapType } = useSelectedMap();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isMobile = useMediaQuery('(max-width: 640px)');
-  const { setSelectedCountryId } = useSelectedCountryId();
+  const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
 
   const handleCountrySelect = (countryID: React.Key | null) => {
     if (countryID) {
@@ -68,6 +68,7 @@ export function Sidebar({ countryMapData }: SidebarProps) {
             classNames={{ popoverContent: 'bg-clickableSecondary' }}
             variant="faded"
             color="primary"
+            selectedKey={selectedCountryId !== null ? selectedCountryId.toString() : ''}
           >
             {countryMapData.features
               .sort((sortItemA, sortItemB) =>
@@ -76,7 +77,7 @@ export function Sidebar({ countryMapData }: SidebarProps) {
               .map((country) => (
                 <AutocompleteItem
                   className="transition-all hover:text-background dark:text-foreground"
-                  key={country.properties.adm0_id}
+                  key={country.properties.adm0_id.toString()}
                   aria-label={country.properties.adm0_name}
                 >
                   {country.properties.adm0_name}

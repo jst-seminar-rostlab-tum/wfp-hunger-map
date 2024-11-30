@@ -47,10 +47,12 @@ export default function Map({ countries, disputedAreas, ipcData, nutritionData }
     setCountryIso3Data(undefined);
     setRegionNutritionData(undefined);
     setIpcRegionData(undefined);
+    setCountryClickLoading(false);
   };
 
   useEffect(() => {
     if (selectedCountryId) {
+      setSelectedMapVisibility(false);
       const selectedCountryData: CountryMapData | undefined = countries.features.find(
         (country) => country.properties.adm0_id === Number(selectedCountryId)
       );

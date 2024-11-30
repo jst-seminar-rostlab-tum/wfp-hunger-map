@@ -14,7 +14,6 @@ class FcsChoroplethOperations {
     toggleAlert: (alertType: AlertType) => void
   ) {
     setSelectedCountryId(feature.properties?.adm0_id);
-    setSelectedMapVisibility(false);
     if (selectedAlert) {
       toggleAlert(selectedAlert);
     }

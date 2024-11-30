@@ -32,7 +32,7 @@ export default function DownloadPortal() {
   useEffect(() => {
     // since the country list too big and is not ready in the beginning
     // we need to wait for the map data to be ready
-    setIsCountryListReady(downloadCountryList === undefined);
+    setIsCountryListReady(downloadCountryList !== undefined);
     setCountries(
       downloadCountryList?.features.map((feature) => ({
         id: feature.properties.adm0_id,
@@ -41,14 +41,14 @@ export default function DownloadPortal() {
         iso2: feature.properties.STSCOD,
       })) as ICountry[]
     );
-  }, [downloadCountryList]);
+  }, [downloadCountryList, isMapDataLoading]);
 
   return (
     <div>
       <h1>Download Portal</h1>
       <div>
         <CustomAccordion
-          loading={isLoading && isMapDataLoading && isCountryListReady}
+          loading={isLoading || isMapDataLoading || !isCountryListReady}
           items={[
             {
               title: 'Pdf Reports',

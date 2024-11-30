@@ -1,6 +1,6 @@
 import { parseDate } from '@internationalized/date';
 import { Autocomplete, AutocompleteItem, DateRangePicker } from '@nextui-org/react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import container from '@/container';
 import { DOWNLOAD_DATA } from '@/domain/constant/subscribe/Subscribe';
@@ -24,8 +24,8 @@ export default function DownloadCountryAccordion({ countries }: DownloadCountryA
   const [isDateRangeInvalid, setIsDateRangeInvalid] = useState(false);
   const [isDateRangeTooLong, setIsDateRangeTooLong] = useState(false);
   const [value, setValue] = useState({
-    start: parseDate(new Date().toISOString().split('T')[0]),
-    end: parseDate(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]),
+    start: parseDate(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]),
+    end: parseDate(new Date().toISOString().split('T')[0]),
   }); // Default to 7 days
 
   const [downloadStatus, setDownloadStatus] = useState<SubmitStatus>(SubmitStatus.Idle);
@@ -70,10 +70,6 @@ export default function DownloadCountryAccordion({ countries }: DownloadCountryA
     }
   };
 
-  useEffect(() => {
-    console.log('countries', countries);
-  }, [countries]);
-
   return (
     <div className="flex flex-col gap-4 justify-center flex-wrap pb-8">
       <h6>{DESCRIPTION}</h6>
@@ -102,7 +98,8 @@ export default function DownloadCountryAccordion({ countries }: DownloadCountryA
           isRequired
           label="Select date Range"
           className="flex-1 mr-4"
-          visibleMonths={2}
+          visibleMonths={1}
+          maxValue={parseDate(new Date().toISOString().split('T')[0])}
           value={value}
           onChange={(selectDateRangeEvent) => setValue(selectDateRangeEvent)}
         />

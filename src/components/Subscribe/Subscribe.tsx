@@ -72,7 +72,7 @@ export default function SubscriptionForm() {
             email,
             topic_id: topic,
             organization,
-            options,
+            options_id: options,
           })
           .then((res) => {
             if (res) {
@@ -91,7 +91,7 @@ export default function SubscriptionForm() {
 
   const handleSelectionChange = (selectedTopic: ITopic | undefined) => {
     setTopic(selectedTopic?.topic_id);
-    setOptions(selectedTopic?.options);
+    setOptions(selectedTopic?.options?.map((option) => option.report_id));
   };
 
   // use subscribe.getSubscribeTopics() to get the topics, when the component initializes

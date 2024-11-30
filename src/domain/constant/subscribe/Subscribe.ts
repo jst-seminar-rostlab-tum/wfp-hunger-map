@@ -15,4 +15,4 @@ export const UNSUCCESSFUL_SUBSCRIPTION = 'Subscribed failed. Please try again la
 
 export const CLICK_TO_SELECT = 'Click to select topics';
 
-export const SELECTED_TOPICS = 'Selected topics: ';
+export const SELECTED_TOPICS = 'Selected topics';

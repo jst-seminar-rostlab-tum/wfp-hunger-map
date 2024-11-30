@@ -6,8 +6,10 @@ import { ArrowRight2 } from 'iconsax-react';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { CLICK_TO_SELECT, SELECTED_TOPICS } from '@/domain/constant/subscribe/Subscribe';
-import { ITopic } from '@/domain/entities/subscribe/Subscribe';
+import { IOption, ITopic } from '@/domain/entities/subscribe/Subscribe';
 import { NestedPopoverProps } from '@/domain/props/NestedPopoverProps';
+
+import { Tooltip } from '../Tooltip/Tooltip';
 
 /**
  * NestedPopover component
@@ -24,7 +26,7 @@ export function NestedPopover({ items, onSelectionChange }: NestedPopoverProps) 
   // store select topic
   const [selectedTopic, setSelectedTopic] = useState<ITopic | undefined>(undefined);
   // store selected options
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  const [selectedOptions, setSelectedOptions] = useState<IOption[]>([]);
 
   // refs for the main menu and nested menu
   const menuRef = useRef<HTMLDivElement>(null);
@@ -57,13 +59,18 @@ export function NestedPopover({ items, onSelectionChange }: NestedPopoverProps) 
   };
 
   // nested menu item click logic: to select the item since is multiple
-  const selectNestedOption = (option: string, topic: ITopic): void => {
-    setSelectedOptions((prev) => (prev.includes(option) ? prev.filter((item) => item !== option) : [...prev, option]));
+  const selectNestedOption = (option: IOption, topic: ITopic): void => {
+    setSelectedOptions((prev) =>
+      prev.some((item) => item.report_id === option.report_id)
+        ? prev.filter((item) => item.report_id !== option.report_id)
+        : [...prev, option]
+    );
     if (selectedTopic && selectedTopic.topic_id !== topic.topic_id) {
       // clear options if the topic is changed
       setSelectedOptions([option]);
     }
     setSelectedTopic({
+      is_country_selectable: topic.is_country_selectable,
       topic_id: topic.topic_id,
       topic_name: topic.topic_name,
       topic_description: topic.topic_description,
@@ -78,6 +85,10 @@ export function NestedPopover({ items, onSelectionChange }: NestedPopoverProps) 
   const handleNestedMenuToggle = (itemId: string): void => {
     setOpenNestedMenu(openNestedMenu === itemId ? null : itemId);
     setIsNestedOpen(true);
+  };
+
+  const ifOptionsSelected = (option: IOption): boolean => {
+    return selectedOptions.find((selectedItem) => selectedItem.report_id === option.report_id) !== undefined;
   };
 
   useEffect(() => {
@@ -96,18 +107,24 @@ export function NestedPopover({ items, onSelectionChange }: NestedPopoverProps) 
             className="w-full h-12 hover:bg-blue-100 dark:hover:bg-gray-700 border-gray-200 dark:border-gray-100"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            <div className="flex flex-row items-center">
+            <div className="flex flex-row items-center truncate">
               {selectedTopic ? <p>{SELECTED_TOPICS}</p> : <p>{CLICK_TO_SELECT}</p>}
-              {selectedTopic && <p className="text-sm text-gray-700 dark:text-gray-300">{selectedTopic?.topic_name}</p>}
+              {selectedTopic && (
+                <p className="text-sm text-gray-700 dark:text-gray-300">: {selectedTopic?.topic_description}</p>
+              )}
               {selectedOptions.length > 0 && (
-                <p className="text-sm text-gray-500 dark:text-gray-400">: {selectedOptions.join(', ')}</p>
+                <Tooltip text={selectedOptions.map((option) => option.report_name).join(', ')}>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                    : {selectedOptions.map((option) => option.report_name).join(', ')}
+                  </p>
+                </Tooltip>
               )}
             </div>
           </Button>
         </PopoverTrigger>
 
         {/* main menu items */}
-        <PopoverContent className="bg-white dark:bg-background shadow-lg rounded-md w-40 items-start p-0 border-[0.5px] border-solid border-gray-500">
+        <PopoverContent className="bg-white dark:bg-background shadow-lg rounded-md w-60 items-start p-0 border-[0.5px] border-solid border-gray-500">
           <ul className="w-full">
             {items.map((item) =>
               item.options === undefined || item.options.length === 0 ? (
@@ -116,7 +133,7 @@ export function NestedPopover({ items, onSelectionChange }: NestedPopoverProps) 
                   className="m-1 h-10 text-left text-gray-700 hover:bg-blue-100 hover:text-black dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white p-2"
                   onClick={() => selectMainMenuItem(item)}
                 >
-                  {item.topic_name}
+                  {item.topic_description}
                 </div>
               ) : null
             )}
@@ -139,23 +156,23 @@ export function NestedPopover({ items, onSelectionChange }: NestedPopoverProps) 
                   {isNestedOpen && openNestedMenu?.includes(item.topic_id) && (
                     <div
                       ref={nestedMenuRef}
-                      className="absolute top-0 left-full bg-white dark:bg-background shadow-lg rounded-md w-40 z-10 border-[0.5px] border-solid border-gray-500 p-1"
+                      className="absolute top-0 left-full bg-white dark:bg-background shadow-lg rounded-md w-56 z-10 border-[0.5px] border-solid border-gray-500 p-1"
                     >
                       <ul>
                         {item.options?.map((option) => (
                           <li
-                            key={option}
+                            key={option.report_id}
                             className={clsx(
                               'flex justify-between items-center',
-                              selectedOptions.includes(option)
+                              ifOptionsSelected(option)
                                 ? 'hover:bg-blue-100 text-black dark:hover:bg-gray-700 dark:text-white'
                                 : 'text-gray-700 hover:bg-blue-100 hover:text-black dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white'
                             )}
                           >
                             <div className="w-full text-left p-2" onClick={() => selectNestedOption(option, item)}>
-                              {option}
+                              {option.report_name}
                             </div>
-                            {selectedOptions.includes(option) && (
+                            {ifOptionsSelected(option) && (
                               <span className="mr-2 text-gray-500 dark:text-white">✔</span>
                             )}
                           </li>

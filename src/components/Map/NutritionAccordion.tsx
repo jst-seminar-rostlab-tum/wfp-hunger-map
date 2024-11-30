@@ -18,7 +18,7 @@ export default function NutritionAccordion({
       <CustomAccordion
         items={[
           {
-            title: <div className="text-4xl sm:text-5xl lg:text-3xl font-black font-sans">{countryName}</div>,
+            title: <div className="text-2xl font-black font-sans text-white">{countryName}</div>,
           },
         ]}
         noSelectionMode

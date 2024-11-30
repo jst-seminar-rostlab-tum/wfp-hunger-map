@@ -1,6 +1,5 @@
 import { GeoJsonProperties } from 'geojson';
 import L from 'leaflet';
-import { Undo } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { GeoJSON } from 'react-leaflet';
 
@@ -9,7 +8,6 @@ import { NutrientType } from '@/domain/enums/NutrientType.ts';
 import { LayerWithFeature, NutritionStateChoroplethProps } from '@/domain/props/NutritionStateProps';
 import NutritionStateChoroplethOperations from '@/operations/map/NutritionStateChoroplethOperations';
 
-import { CustomButton } from '../Buttons/CustomButton';
 import NutritionAccordion from './NutritionAccordion';
 
 export default function NutritionStateChoropleth({
@@ -17,7 +15,6 @@ export default function NutritionStateChoropleth({
   regionData,
   countryName,
   handleClick = () => {},
-  handleBackButtonClick,
   tooltip,
 }: NutritionStateChoroplethProps) {
   const layersRef = useRef<LayerWithFeature[]>([]);
@@ -64,14 +61,6 @@ export default function NutritionStateChoropleth({
 
   return (
     <>
-      <div className="absolute left-[1250px] top-[19px]" style={{ zIndex: 1000 }}>
-        <CustomButton variant="solid" onClick={handleBackButtonClick}>
-          <div className="flex items-center space-x-2 text-black dark:text-white">
-            <Undo />
-            <span>Global View</span>
-          </div>
-        </CustomButton>
-      </div>
       <NutritionAccordion
         setSelectedNutrient={setSelectedNutrient}
         selectedNutrient={selectedNutrient}

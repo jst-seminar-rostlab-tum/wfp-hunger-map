@@ -37,7 +37,7 @@ function CustomTable<D>({
 
   return (
     <Table
-      removeWrapper={!showBorders}
+      removeWrapper
       aria-label={ariaLabel}
       className={clsx(className, {
         'overflow-hidden': showBorders,

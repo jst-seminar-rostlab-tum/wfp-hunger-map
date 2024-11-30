@@ -33,28 +33,26 @@ export function CookieConsentPopup() {
     }
   }, [cookieConsent]);
 
+  if (cookieConsent !== null || !loaded) return null;
   return (
-    cookieConsent === null &&
-    loaded && (
-      <div className="absolute bottom-8 lg:bottom-4 left-1/2 p-4 items-center -translate-x-1/2 mx-auto rounded-md bg-content2 flex gap-2 justify-between z-cookieConsent w-full lg:w-2/5">
-        <p className="text-xs">
-          We use cookies to gather anonymized website traffic data to improve user experience. No personal information
-          is collected or shared.
-        </p>
-        <div className="flex flex-col md:flex-row lg:flex-col xl:flex-row gap-2 ">
-          <CustomButton size="sm" color="secondary" className="text-content1" onClick={() => setCookieConsent(false)}>
-            Decline
-          </CustomButton>
-          <CustomButton
-            color="primary"
-            size="sm"
-            className="-order-1 md:order-2 lg:-order-1 xl:order-2"
-            onClick={() => setCookieConsent(true)}
-          >
-            Allow Analytics
-          </CustomButton>
-        </div>
+    <div className="absolute bottom-8 lg:bottom-4 left-1/2 p-4 items-center -translate-x-1/2 mx-auto rounded-md bg-content2 flex gap-2 justify-between z-cookieConsent w-full lg:w-2/5">
+      <p className="text-xs">
+        We use cookies to gather anonymized website traffic data to improve user experience. No personal information is
+        collected or shared.
+      </p>
+      <div className="flex flex-col md:flex-row lg:flex-col xl:flex-row gap-2">
+        <CustomButton size="sm" color="secondary" className="text-content1" onClick={() => setCookieConsent(false)}>
+          Decline
+        </CustomButton>
+        <CustomButton
+          color="primary"
+          size="sm"
+          className="-order-1 md:order-2 lg:-order-1 xl:order-2"
+          onClick={() => setCookieConsent(true)}
+        >
+          Allow Analytics
+        </CustomButton>
       </div>
-    )
+    </div>
   );
 }

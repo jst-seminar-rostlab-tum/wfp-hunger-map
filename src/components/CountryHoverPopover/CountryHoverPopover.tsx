@@ -4,7 +4,7 @@ import { CountryHoverPopoverProps } from '@/domain/props/CountryHoverPopoverProp
 
 export default function CountryHoverPopover({ header, details, summary }: CountryHoverPopoverProps) {
   const headerOnly = header && !details && !summary;
-  const mainBoxPadding = headerOnly ? 2.5 : 4;
+  const mainBoxPadding = headerOnly ? 2 : 4;
 
   return (
     <div className={`p-${mainBoxPadding} bg-background text-foreground rounded-medium flex flex-col gap-2 z-[2000]`}>

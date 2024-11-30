@@ -109,7 +109,7 @@ path.leaflet-interactive:focus {
   box-shadow: none !important;
   border: none !important;
   border-radius: var(--nextui-radius-medium) !important;
-  padding: 0.625rem !important;
+  padding: 0.5rem !important;
   margin-right: 6px !important;
 
   color: hsl(var(--nextui-foreground));

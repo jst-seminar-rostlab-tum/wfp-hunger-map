@@ -17,6 +17,7 @@ import LineChartOperations from '@/operations/charts/LineChartOperations.ts';
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts from 'highcharts';
 import { useAccordionsModal } from '@/domain/contexts/AccodionsModalContext.tsx';
+import { CustomButton } from '@/components/Buttons/CustomButton.tsx';
 
 export default function CustomAccordion({
   items,
@@ -26,7 +27,8 @@ export default function CustomAccordion({
   color = 'bg-content1',
 }: AccordionsProps) {
   const isMobile = useMediaQuery('(max-width: 640px)');
-  const { isOpen, onOpen, onClose, onOpenChange } = useAccordionsModal();
+  const { isOpen, onClose, onOpenChange, setOpenButtonVisible } = useAccordionsModal();
+  setOpenButtonVisible(true); // todo linus
 
   const selectionMode = noSelectionMode ? 'none' : multipleSelectionMode ? 'multiple' : 'single';
   return !isMobile ? (
@@ -66,12 +68,11 @@ export default function CustomAccordion({
     </div>
   ) : (
     <Modal
-      size="5xl"
+      size="2xl"
       isOpen={isOpen}
       backdrop="blur"
       scrollBehavior="inside"
       onOpenChange={onOpenChange}
-      hideCloseButton
       className="bg-background"
     >
       <ModalContent>

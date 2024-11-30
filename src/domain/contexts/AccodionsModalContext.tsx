@@ -1,7 +1,9 @@
 import { useDisclosure } from '@nextui-org/modal';
-import { createContext, useContext, useMemo } from 'react';
+import { createContext, Dispatch, SetStateAction, useContext, useMemo, useState } from 'react';
 
 interface AccordionsModalState {
+  openButtonVisible: boolean;
+  setOpenButtonVisible: Dispatch<SetStateAction<boolean>>;
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
@@ -12,6 +14,7 @@ const AccordionsModalContext = createContext<AccordionsModalState | undefined>(u
 
 export function AccordionsModalProvider({ children }: { children: React.ReactNode }) {
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
+  const [openButtonVisible, setOpenButtonVisible] = useState<boolean>(false);
 
   const value = useMemo(
     () => ({
@@ -19,8 +22,10 @@ export function AccordionsModalProvider({ children }: { children: React.ReactNod
       onOpen,
       onClose,
       onOpenChange,
+      openButtonVisible,
+      setOpenButtonVisible,
     }),
-    [isOpen] // todo linus check
+    [isOpen, openButtonVisible]
   );
 
   return <AccordionsModalContext.Provider value={value}> {children} </AccordionsModalContext.Provider>;

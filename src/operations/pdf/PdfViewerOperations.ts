@@ -1,19 +1,14 @@
 export default class PdfViewerOperations {
-  static handleMouseWheelEvent(
-    document: Document,
-    updatePageNumber: (pageNumber: number) => void,
-    currentPageNumber: number
-  ): void {
+  static trackVisiblePage(document: Document, updatePageNumber: (pageNumber: number) => void): void {
     const pages = document.querySelectorAll('.react-pdf__Page');
-    let currentPage = currentPageNumber;
+    let largestVisibleArea = 0;
+    let currentPage = 1;
 
     pages.forEach((page, index) => {
       const rect = page.getBoundingClientRect();
-      const pageTop = rect.top;
-      const pageBottom = rect.bottom;
-      const viewportMidpoint = window.innerHeight / 2;
-
-      if (pageTop < viewportMidpoint && pageBottom > viewportMidpoint) {
+      const visibleHeight = Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
+      if (visibleHeight > largestVisibleArea && visibleHeight > 0) {
+        largestVisibleArea = visibleHeight;
         currentPage = index + 1;
       }
     });

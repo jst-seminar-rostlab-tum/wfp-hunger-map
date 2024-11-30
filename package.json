@@ -64,6 +64,7 @@
     "nextui-cli": "^0.3.4",
     "react": "18.3.1",
     "react-dom": "18.3.1",
+    "react-element-to-jsx-string": "^15.0.0",
     "react-leaflet": "^4.2.1",
     "react-leaflet-cluster": "^2.1.0",
     "react-markdown": "^9.0.1",

@@ -10,7 +10,6 @@ export default function PopupModal({
   modalTitle,
   modalSize,
   modalHeight,
-  scrollBehavior,
   children,
 }: PopupModalProps) {
   return (
@@ -18,7 +17,6 @@ export default function PopupModal({
       backdrop="opaque"
       isOpen={isModalOpen}
       onOpenChange={toggleModal}
-      scrollBehavior={scrollBehavior}
       classNames={{
         backdrop: 'bg-gradient-to-t from-zinc-900 to-zinc-900/10 backdrop-opacity-20',
         base: `xl:p-10 lg:p-8 md:p-6 sm:p-4 ${modalHeight}`,

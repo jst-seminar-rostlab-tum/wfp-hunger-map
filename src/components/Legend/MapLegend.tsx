@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import LegendContainer from '@/components/Legend/LegendContainer';
-import { mapLegendData } from '@/domain/constant/legend/mapLegendData.ts';
+import { mapLegendData } from '@/domain/constant/legend/mapLegendData';
 import { useSelectedAlert } from '@/domain/contexts/SelectedAlertContext';
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';

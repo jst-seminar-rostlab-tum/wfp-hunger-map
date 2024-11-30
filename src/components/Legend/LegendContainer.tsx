@@ -25,6 +25,7 @@ export default function LegendContainer({ items, loading = false }: LegendContai
           title: item.title,
           infoIcon: <CustomInfoCircle />,
           tooltipInfo: item.tooltipInfo,
+          popoverInfo: item.popoverInfo,
           content: LegendOperations.isGradientLegendContainerItem(item) ? (
             <GradientLegend {...item} />
           ) : (

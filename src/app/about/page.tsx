@@ -3,7 +3,7 @@ import React from 'react';
 import AboutText from '@/components/About/AboutText';
 import HungerMapLiveSuperscript from '@/components/About/HungerMapLiveSuperscript';
 import StyledLink from '@/components/About/StyledLink';
-import Accordion from '@/components/Accordions/Accordion';
+import AccordionContainer from '@/components/Accordions/AccordionContainer';
 import generalFaqItems from '@/domain/constant/about/generalFaqItems';
 import predictionFaqItems from '@/domain/constant/about/predictionFaqItems';
 import realTimeFaqItems from '@/domain/constant/about/realTimeFaqItems';
@@ -19,11 +19,11 @@ function Page() {
       </section>
       <section>
         <h2>General Questions</h2>
-        <Accordion items={generalFaqItems} multipleSelectionMode />
+        <AccordionContainer items={generalFaqItems} multipleSelectionMode />
       </section>
       <section>
         <h2> Near real-time food security continuous monitoring</h2>
-        <Accordion items={realTimeFaqItems} multipleSelectionMode />
+        <AccordionContainer items={realTimeFaqItems} multipleSelectionMode />
       </section>
       <section>
         <h2> Predictive analysis</h2>
@@ -39,7 +39,7 @@ function Page() {
           </StyledLink>{' '}
           ≥ 19 is estimated with a predictive model.
         </p>
-        <Accordion items={predictionFaqItems} multipleSelectionMode />
+        <AccordionContainer items={predictionFaqItems} multipleSelectionMode />
       </section>
     </>
   );

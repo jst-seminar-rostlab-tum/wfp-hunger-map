@@ -13,7 +13,7 @@ import { useMediaQuery } from '@/utils/resolution.ts';
  * The content for the modal, including the accordions, is provided via the 'userAccordionsModal' hook.
  */
 export default function AccordionModal() {
-  const isMobile = useMediaQuery('(max-width: 640px)');
+  const isMobile = useMediaQuery('(max-width: 700px)');
   const isMobileXS = useMediaQuery('(max-width: 450px)');
   const { modalContent, modalTitle } = useAccordionsModal();
   const {

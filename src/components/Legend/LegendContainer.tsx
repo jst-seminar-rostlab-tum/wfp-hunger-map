@@ -5,7 +5,7 @@ import LegendContainerProps from '@/domain/props/LegendContainerProps';
 import { LegendOperations } from '@/operations/legends/LegendOperations.ts';
 import { useMediaQuery } from '@/utils/resolution';
 
-import CustomAccordion from '../Accordions/Accordion';
+import AccordionContainer from '../Accordions/AccordionContainer';
 import CustomInfoCircle from '../CustomInfoCircle/CustomInfoCircle';
 import PopupModal from '../PopupModal/PopupModal';
 import { Tooltip } from '../Tooltip/Tooltip';
@@ -13,12 +13,12 @@ import GradientLegend from './GradientLegend';
 import PointLegend from './PointLegend';
 
 export default function LegendContainer({ items, loading = false }: LegendContainerProps) {
-  const isMobile = useMediaQuery('(max-width: 640px)');
+  const isMobile = useMediaQuery('(max-width: 700px)');
   const [showInfoPopup, setInfoPopup] = useState(false);
 
   return !isMobile ? (
     <div className="w-[450px] absolute bottom-3 right-20 z-legend">
-      <CustomAccordion
+      <AccordionContainer
         loading={loading}
         multipleSelectionMode
         items={items.map((item) => ({

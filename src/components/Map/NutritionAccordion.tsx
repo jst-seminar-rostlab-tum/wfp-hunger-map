@@ -2,7 +2,7 @@ import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@
 import { ArrowDown2 } from 'iconsax-react';
 import React from 'react';
 
-import CustomAccordion from '@/components/Accordions/Accordion';
+import AccordionContainer from '@/components/Accordions/AccordionContainer';
 import CustomInfoCircle from '@/components/CustomInfoCircle/CustomInfoCircle';
 import { NutrientType } from '@/domain/enums/NutrientType.ts';
 import NutritionAccordionProps from '@/domain/props/NutritionAccordionProps';
@@ -16,7 +16,7 @@ export default function NutritionAccordion({
   return (
     <div className="absolute left-[108px] top-6" style={{ zIndex: 1000 }}>
       <div className=" w-[350px] box-border mt-2">
-        <CustomAccordion
+        <AccordionContainer
           title={countryName ?? undefined}
           accordionModalActive
           items={[

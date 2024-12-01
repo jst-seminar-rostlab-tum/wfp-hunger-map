@@ -36,46 +36,49 @@ function CustomTable<D>({
   const leftAlignedColumns = new Set(columns.filter((c) => c.alignLeft).map((c) => c.columnId));
 
   return (
-    <Table
-      removeWrapper
-      aria-label={ariaLabel}
-      className={clsx(className, {
-        'overflow-hidden': showBorders,
-      })}
-      classNames={{
-        base: clsx({
-          'border-2 rounded-xl dark:border-default-200': showBorders,
-        }),
-        thead: clsx({
-          '[&>tr:last-child]:hidden': true,
-          'bg-background dark:bg-chatbotUserMsg': zebraRows,
-        }),
-        tr: clsx({
-          'even:bg-background dark:even:bg-chatbotUserMsg': zebraRows,
-        }),
-      }}
-    >
-      <TableHeader columns={columns}>
-        {(column) => (
-          <TableColumn
-            key={column.columnId}
-            className={clsx('text-wrap', {
-              'text-center': !leftAlignedColumns.has(column.columnId),
-              'border-b-2 dark:border-default-200': showBorders,
-            })}
-          >
-            {column.label}
-          </TableColumn>
-        )}
-      </TableHeader>
-      <TableBody items={rows} emptyContent="No rows to display">
-        {(row) => (
-          <TableRow key={`${row.groupKey}×${row.index}`}>
-            {(columnKey) => getTableCell(row, columnKey as string, !leftAlignedColumns.has(columnKey as string))}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+    <div className="w-full overflow-x-auto">
+      <Table
+        removeWrapper
+        aria-label={ariaLabel}
+        className={clsx(className, {
+          'overflow-hidden': showBorders,
+        })}
+        classNames={{
+          base: clsx({
+            'border-2 rounded-xl dark:border-default-200': showBorders,
+            'min-w-max': true,
+          }),
+          thead: clsx({
+            '[&>tr:last-child]:hidden': true,
+            'bg-background dark:bg-chatbotUserMsg': zebraRows,
+          }),
+          tr: clsx({
+            'even:bg-background dark:even:bg-chatbotUserMsg': zebraRows,
+          }),
+        }}
+      >
+        <TableHeader columns={columns}>
+          {(column) => (
+            <TableColumn
+              key={column.columnId}
+              className={clsx('text-wrap', {
+                'text-center': !leftAlignedColumns.has(column.columnId),
+                'border-b-2 dark:border-default-200': showBorders,
+              })}
+            >
+              {column.label}
+            </TableColumn>
+          )}
+        </TableHeader>
+        <TableBody items={rows} emptyContent="No rows to display">
+          {(row) => (
+            <TableRow key={`${row.groupKey}×${row.index}`}>
+              {(columnKey) => getTableCell(row, columnKey as string, !leftAlignedColumns.has(columnKey as string))}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </div>
   );
 }
 

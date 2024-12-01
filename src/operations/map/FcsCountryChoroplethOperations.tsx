@@ -31,7 +31,7 @@ export class FcsCountryChoroplethOperations {
     regionData: FeatureCollection<Geometry, GeoJsonProperties>
   ) {
     // Hover behavior
-    layer.on('mouseover', function () {
+    layer.on('mouseover', () => {
       const hoveredRegionFeature = regionData.features.find(
         (regionFeature: Feature<Geometry, GeoJsonProperties>) =>
           regionFeature.properties?.Code === feature.properties?.Code
@@ -54,7 +54,7 @@ export class FcsCountryChoroplethOperations {
     });
 
     // Mouseout behavior
-    layer.on('mouseout', function () {
+    layer.on('mouseout', () => {
       const pathLayer = layer as L.Path;
 
       pathLayer.setStyle({

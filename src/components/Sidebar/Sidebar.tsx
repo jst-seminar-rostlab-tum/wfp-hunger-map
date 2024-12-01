@@ -36,7 +36,7 @@ export function Sidebar() {
   }
 
   return (
-    <div className="w-screen h-screen absolute top-0 left-0 z-sidebarFullScreen sm:w-auto sm:h-[calc(100vh-3.5rem)] sm:z-sidebarExpanded sm:mt-4 sm:ml-4 sm:mb-10">
+    <div className="w-screen h-screen absolute top-0 left-0 z-sidebarFullScreen sm:w-auto sm:h-[calc(100vh-3.5rem)] sm:z-sidebarExpanded sm:pt-4 sm:pl-4 sm:pb-10">
       <Card
         classNames={{
           base: 'h-full rounded-none sm:rounded-large',
@@ -115,13 +115,15 @@ export function Sidebar() {
               <Subscribe />
             </PopupModal>
             <ul className="pl-3">
-              {pageLinks.map((page) => (
-                <li key={page.label}>
-                  <Link href={page.href} color="foreground" className="text-tiny text-opacity-80">
-                    {page.label}
-                  </Link>
-                </li>
-              ))}
+              {pageLinks
+                .filter((page) => page.label !== 'Home')
+                .map((page) => (
+                  <li key={page.label}>
+                    <Link href={page.href} color="foreground" className="text-tiny text-opacity-80">
+                      {page.label}
+                    </Link>
+                  </li>
+                ))}
             </ul>
           </div>
         </CardFooter>

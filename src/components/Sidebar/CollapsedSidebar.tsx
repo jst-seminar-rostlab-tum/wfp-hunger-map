@@ -12,7 +12,7 @@ export function CollapsedSidebar() {
   const { selectedMapType, setSelectedMapType } = useSelectedMap();
 
   return (
-    <div className="absolute top-0 left-0 z-sidebarCollapsed mt-4 ml-4">
+    <div className="absolute top-0 left-0 z-sidebarCollapsed pt-4 pl-4">
       <Card className="h-full">
         <CardHeader className="flex justify-center items-center">
           <Button isIconOnly variant="light" onClick={toggleSidebar} aria-label="Close sidebar">

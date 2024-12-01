@@ -198,7 +198,7 @@ const config = {
             //nutrition points
             nutritionActual: '#FFB74D',
             nutritionPredicted: '#E3F2FD',
-            nutritionNotAnalyzed: '#52525b',
+            nutritionNotAnalyzed: '#D2D1D1',
 
             countriesBase: '#fefeff',
             ocean: '#91cccb',
@@ -254,6 +254,7 @@ const config = {
             climateDryAlert: '#B95926',
             chartsLegendBackground: '#2a2a2a',
             chartsXAxisLine: '#757575',
+            nutritionNotAnalyzed: '#A69F9F',
           },
         },
       },

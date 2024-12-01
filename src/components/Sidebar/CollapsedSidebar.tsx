@@ -7,11 +7,17 @@ import { useAccordionsModal } from '@/domain/contexts/AccodionsModalContext';
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
+import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
 
 export function CollapsedSidebar() {
   const { toggleSidebar } = useSidebar();
   const { selectedMapType, setSelectedMapType } = useSelectedMap();
   const { clearAccordionModal } = useAccordionsModal();
+
+  const onMapTypeSelect = (mapType: GlobalInsight) => {
+    clearAccordionModal();
+    setSelectedMapType(mapType);
+  };
 
   return (
     <div className="absolute top-0 left-0 z-sidebarCollapsed pt-4 pl-4">
@@ -29,10 +35,7 @@ export function CollapsedSidebar() {
                 key={item.key}
                 variant={selectedMapType === item.key ? undefined : 'light'}
                 className={selectedMapType === item.key ? 'bg-primary' : undefined}
-                onClick={() => {
-                  clearAccordionModal();
-                  setSelectedMapType(item.key);
-                }}
+                onClick={() => onMapTypeSelect(item.key)}
               >
                 <NextImage unoptimized loading="eager" src={item.icon} alt={item.label} width={24} height={24} />
               </Button>

@@ -20,6 +20,7 @@ import { useAccordionsModal } from '@/domain/contexts/AccodionsModalContext';
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { AlertsMenuVariant } from '@/domain/enums/AlertsMenuVariant';
+import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
 import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
 import { useMediaQuery } from '@/utils/resolution';
 
@@ -36,6 +37,14 @@ export function Sidebar() {
   if (!isSidebarOpen) {
     return <CollapsedSidebar />;
   }
+
+  const onMapTypeSelect = (mapType: GlobalInsight) => {
+    clearAccordionModal();
+    setSelectedMapType(mapType);
+    if (isMobile) {
+      closeSidebar();
+    }
+  };
 
   return (
     <div className="w-screen h-screen absolute top-0 left-0 z-sidebarFullScreen sm:w-auto sm:h-[calc(100vh-3.5rem)] sm:z-sidebarExpanded sm:pt-4 sm:pl-4 sm:pb-10">
@@ -82,13 +91,7 @@ export function Sidebar() {
                       'justify-start dark:text-white',
                       selectedMapType === item.key ? 'bg-primary text-white' : 'text-black'
                     )}
-                    onClick={() => {
-                      clearAccordionModal();
-                      setSelectedMapType(item.key);
-                      if (isMobile) {
-                        closeSidebar();
-                      }
-                    }}
+                    onClick={() => onMapTypeSelect(item.key)}
                   >
                     {item.label}
                   </Button>

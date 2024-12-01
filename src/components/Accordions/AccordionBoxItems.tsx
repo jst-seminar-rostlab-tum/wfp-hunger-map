@@ -22,7 +22,7 @@ export default function AccordionBoxItems({
   return (
     <div className="w-full max-w-[600px] overflow-x-auto rounded-lg shadow-xl">
       {title && (
-        <div className="bg-primary p-4 break-words text-balance rounded-lg mb-6">
+        <div className="bg-primary p-4 break-words text-balance rounded-lg mb-2">
           <h1 className="text-2xl font-black font-sans text-white">{title}</h1>
         </div>
       )}

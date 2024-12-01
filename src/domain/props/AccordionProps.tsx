@@ -7,4 +7,5 @@ export interface AccordionsProps {
   multipleSelectionMode?: boolean;
   noSelectionMode?: boolean;
   color?: string;
+  accordionModalActive?: boolean;
 }

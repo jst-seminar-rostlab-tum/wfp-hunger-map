@@ -6,10 +6,14 @@ import { Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from '@nex
 import { useAccordionsModal } from '@/domain/contexts/AccodionsModalContext';
 import { useMediaQuery } from '@/utils/resolution.ts';
 
-// todo linus descr
+/**
+ * The accordions can be configured to be hidden in a modal on mobile screens, which can be accessed
+ * via a button at the bottom. This component provides the modal and the button to open it.
+ * The content for the modal, including the accordions, is provided via the 'userAccordionsModal' hook.
+ */
 export default function AccordionModal() {
   const isMobile = useMediaQuery('(max-width: 640px)');
-  const { modalContent } = useAccordionsModal();
+  const { modalContent, modalTitle } = useAccordionsModal();
   const {
     isOpen: isAccordionModalOpen,
     onOpen: onAccordionModalOpen,
@@ -36,7 +40,7 @@ export default function AccordionModal() {
         className="bg-background"
       >
         <ModalContent>
-          <ModalHeader className="flex flex-col gap-1">header</ModalHeader>
+          <ModalHeader className="flex flex-col gap-1">{modalTitle}</ModalHeader>
           <ModalBody>{modalContent}</ModalBody>
         </ModalContent>
       </Modal>

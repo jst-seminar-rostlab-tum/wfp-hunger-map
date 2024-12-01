@@ -3,6 +3,8 @@ import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useMemo
 interface AccordionsModalState {
   modalContent: ReactNode | null;
   setModalContent: Dispatch<SetStateAction<ReactNode | null>>;
+  modalTitle: string;
+  setModalTitle: Dispatch<SetStateAction<string>>;
   clearAccordionModal: () => void;
 }
 
@@ -10,6 +12,7 @@ const AccordionsModalContext = createContext<AccordionsModalState | undefined>(u
 
 export function AccordionsModalProvider({ children }: { children: React.ReactNode }) {
   const [modalContent, setModalContent] = useState<ReactNode | null>(null);
+  const [modalTitle, setModalTitle] = useState<string>('');
 
   const clearAccordionModal = () => setModalContent(null);
 
@@ -17,6 +20,8 @@ export function AccordionsModalProvider({ children }: { children: React.ReactNod
     () => ({
       modalContent,
       setModalContent,
+      modalTitle,
+      setModalTitle,
       clearAccordionModal,
     }),
     [modalContent]

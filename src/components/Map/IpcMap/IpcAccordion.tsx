@@ -17,6 +17,7 @@ export default function IpcAccordion({ countryData, countryName }: IpcAccordionP
     <div className="absolute w-[350px] left-[108px] top-4 z-9999">
       <CustomAccordion
         title={countryName ?? undefined}
+        accordionModalActive
         items={[
           {
             title: 'Food Security',

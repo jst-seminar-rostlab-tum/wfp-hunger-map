@@ -18,6 +18,7 @@ export default function NutritionAccordion({
       <div className=" w-[350px] box-border mt-2">
         <CustomAccordion
           title={countryName ?? undefined}
+          accordionModalActive
           items={[
             {
               title: 'Micronutrients',

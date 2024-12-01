@@ -3,10 +3,10 @@ import { Card, CardBody, CardHeader } from '@nextui-org/card';
 import { SidebarRight } from 'iconsax-react';
 import NextImage from 'next/image';
 
+import { useAccordionsModal } from '@/domain/contexts/AccodionsModalContext';
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
-import { useAccordionsModal } from '@/domain/contexts/AccodionsModalContext';
 
 export function CollapsedSidebar() {
   const { toggleSidebar } = useSidebar();

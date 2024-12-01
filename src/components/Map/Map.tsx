@@ -46,12 +46,13 @@ export default function Map({ countries, disputedAreas, ipcData, nutritionData }
   const onZoomThresholdReached = () => {
     setSelectedCountryId(null);
     setSelectedMapVisibility(true);
-    setCountryData(undefined);
-    setRegionData(undefined);
-    setCountryIso3Data(undefined);
-    setRegionNutritionData(undefined);
-    setIpcRegionData(undefined);
-    setCountryClickLoading(false);
+    MapOperations.resetSelectedCountryData(
+      setRegionData,
+      setCountryData,
+      setCountryIso3Data,
+      setRegionNutritionData,
+      setIpcRegionData
+    );
   };
 
   useEffect(() => {
@@ -59,8 +60,17 @@ export default function Map({ countries, disputedAreas, ipcData, nutritionData }
       setSelectedMapVisibility(false);
       closeSidebar();
       resetAlert();
+
+      MapOperations.resetSelectedCountryData(
+        setRegionData,
+        setCountryData,
+        setCountryIso3Data,
+        setRegionNutritionData,
+        setIpcRegionData
+      );
+
       const selectedCountryData: CountryMapData | undefined = countries.features.find(
-        (country) => country.properties.adm0_id === Number(selectedCountryId)
+        (country) => country.properties.adm0_id === selectedCountryId
       );
       if (selectedCountryData) {
         MapOperations.fetchCountryData(

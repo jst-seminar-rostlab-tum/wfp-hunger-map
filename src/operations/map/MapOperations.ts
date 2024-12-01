@@ -66,4 +66,18 @@ export class MapOperations {
       // Do nothing
     }
   }
+
+  static resetSelectedCountryData(
+    setRegionData: (regionData: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
+    setCountryData: (countryData: CountryData | undefined) => void,
+    setCountryIso3Data: (iso3Data: CountryIso3Data | undefined) => void,
+    setRegionNutritionData: (regionNutritionData: CountryMimiData | undefined) => void,
+    setIpcRegionData: (ipcRegionData: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void
+  ): void {
+    setCountryData(undefined);
+    setRegionData(undefined);
+    setCountryIso3Data(undefined);
+    setRegionNutritionData(undefined);
+    setIpcRegionData(undefined);
+  }
 }

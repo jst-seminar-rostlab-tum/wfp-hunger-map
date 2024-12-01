@@ -28,7 +28,7 @@ export default function NutritionAccordion({
                 <div className="flex flex-row gap-4 justify-center flex-wrap pb-8">
                   <Dropdown>
                     <DropdownTrigger>
-                      <Button variant="solid" color="default">
+                      <Button variant="solid" color="default" className="text-white min-w-[12rem]">
                         {NutritionStateChoroplethOperations.getNutrientLabel(selectedNutrient)}
                         <ArrowDown2 className="h-4 w-4" />
                       </Button>

@@ -55,7 +55,7 @@ export default function HungerAlert({ countryMapData }: HungerAlertProps) {
           <CustomTable
             columns={HungerAlertOperations.getHungerAlertModalColumns()}
             data={displayedRows}
-            className="mb-3 min-h-[28rem]"
+            className="mb-3 min-h-[26rem]"
           />
           <Pagination isCompact showControls page={page} total={totalPages} onChange={(newPage) => setPage(newPage)} />
         </div>

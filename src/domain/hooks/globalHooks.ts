@@ -18,11 +18,29 @@ export const useIpcQuery = () =>
     cachedQueryClient
   );
 
+export const useCountryCodesQuery = () =>
+  useQuery(
+    {
+      queryKey: ['fetchCountryCodes'],
+      queryFn: globalRepo.getCountryCodes,
+    },
+    cachedQueryClient
+  );
+
 export const useNutritionQuery = () =>
   useQuery<CountryNutrition>(
     {
       queryKey: ['fetchNutritionData'],
       queryFn: globalRepo.getNutritionData,
+    },
+    cachedQueryClient
+  );
+
+export const useMapDataForCountries = () =>
+  useQuery(
+    {
+      queryKey: ['fetchMapDataForCountry'],
+      queryFn: globalRepo.getMapDataForCountries,
     },
     cachedQueryClient
   );

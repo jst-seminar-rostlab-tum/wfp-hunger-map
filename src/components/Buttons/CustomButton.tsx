@@ -14,13 +14,13 @@ export function CustomButton({ children, ...attributes }: CustomButtonProps) {
 
   return (
     <Button
-      {...attributes}
       className={clsx({
         'hover:bg-outlinedHover': variant === 'bordered',
         'hover:bg-hover dark:text-foreground': variant === 'flat' || variant === 'solid',
         'bg-clickableSecondary hover:text-background ': variant === 'flat',
         'bg-primary dark:hover:bg-hover text-background': variant === 'solid',
       })}
+      {...attributes}
     >
       {children}
     </Button>

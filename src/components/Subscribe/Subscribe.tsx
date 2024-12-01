@@ -1,8 +1,8 @@
 'use client';
 
-import { Button, Divider, Input, Select, SelectItem } from '@nextui-org/react';
+import { Divider, Input } from '@nextui-org/react';
 import { motion } from 'framer-motion';
-import { ChartCircle, CloseCircle, Facebook, Instagram, TickCircle, Twitch, Youtube } from 'iconsax-react';
+import { Facebook, Instagram, Twitch, Youtube } from 'iconsax-react';
 import { useCallback, useState } from 'react';
 
 import container from '@/container';
@@ -13,9 +13,10 @@ import {
   SUCCESSFUL_SUBSCRIPTION,
   UNSUCCESSFUL_SUBSCRIPTION,
 } from '@/domain/constant/subscribe/Subscribe';
-import { SubscribeStatus, SubscribeTopic } from '@/domain/enums/SubscribeTopic';
+import { SubmitStatus } from '@/domain/enums/SubscribeTopic';
 import SubscriptionRepository from '@/domain/repositories/SubscriptionRepository';
 
+import { SubmitButton } from '../SubmitButton/SubmitButton';
 import { SocialLink } from './SocialLink';
 
 export default function SubscriptionForm() {
@@ -23,12 +24,12 @@ export default function SubscriptionForm() {
   const [name, setName] = useState('');
   const [organization, setOrganization] = useState('');
   const [email, setEmail] = useState('');
-  const [selectedTopic, setSelectedTopic] = useState<string>('');
+  const selectedTopic = '';
 
   const [isNameInvalid, setIsNameInvalid] = useState(false);
   const [isEmailInvalid, setIsEmailInvalid] = useState(false);
 
-  const [subscribeStatus, setSubscribeStatus] = useState<SubscribeStatus>(SubscribeStatus.Idle);
+  const [subscribeStatus, setSubscribeStatus] = useState<SubmitStatus>(SubmitStatus.Idle);
   const [isWaitingSubResponse, setIsWaitingSubResponse] = useState(false);
 
   const validateEmail = useCallback((newEmail: string): boolean => {
@@ -57,7 +58,7 @@ export default function SubscriptionForm() {
     setIsEmailInvalid(!validateEmail(email));
 
     if (!isEmailInvalid && !isNameInvalid && !isWaitingSubResponse && !isFormInvalid) {
-      setSubscribeStatus(SubscribeStatus.Loading);
+      setSubscribeStatus(SubmitStatus.Loading);
       // Handle form submission here and interact with the backend
       try {
         setIsWaitingSubResponse(true);
@@ -71,10 +72,10 @@ export default function SubscriptionForm() {
           })
           .then((res) => {
             if (res) {
-              setSubscribeStatus(SubscribeStatus.Success);
+              setSubscribeStatus(SubmitStatus.Success);
               setIsWaitingSubResponse(false);
             } else {
-              setSubscribeStatus(SubscribeStatus.Error);
+              setSubscribeStatus(SubmitStatus.Error);
               setIsWaitingSubResponse(false);
             }
           });
@@ -141,53 +142,13 @@ export default function SubscriptionForm() {
           onChange={(changeOrgEvent) => setOrganization(changeOrgEvent.target.value)}
           value={organization}
         />
-        <Select
-          label="Topic"
-          placeholder="Please select a topic"
-          selectedKeys={selectedTopic ? [selectedTopic] : []}
-          onSelectionChange={(keys) => setSelectedTopic(Array.from(keys)[0] as string)}
-          color="default"
-          variant="faded"
-          errorMessage="Please select a valid topic"
-          value={selectedTopic}
-        >
-          {Object.entries(SubscribeTopic).map(([key, value]) => (
-            <SelectItem key={key} value={value}>
-              {value}
-            </SelectItem>
-          ))}
-        </Select>
 
-        <Button
-          type="submit"
+        <SubmitButton
+          label={SUBSCRIBE}
+          submitStatus={subscribeStatus}
           className="w-full bg-subscribeText dark:bg-subscribeText text-white dark:text-black shadow-lg self-center"
-        >
-          <motion.span initial={{ opacity: 1 }} animate={{ opacity: subscribeStatus === SubscribeStatus.Idle ? 1 : 0 }}>
-            {SUBSCRIBE}
-          </motion.span>
-          <motion.span
-            className="absolute inset-0 flex items-center justify-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: subscribeStatus === SubscribeStatus.Loading ? 1 : 0 }}
-          >
-            <ChartCircle size={24} className="animate-spin" />
-          </motion.span>
-          <motion.span
-            className="absolute inset-0 flex items-center justify-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: subscribeStatus === SubscribeStatus.Success ? 1 : 0 }}
-          >
-            <TickCircle size={24} className="text-green-500" />
-          </motion.span>
-          <motion.span
-            className="absolute inset-0 flex items-center justify-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: subscribeStatus === SubscribeStatus.Error ? 1 : 0 }}
-          >
-            <CloseCircle size={24} className="text-red-500" />
-          </motion.span>
-        </Button>
-        {subscribeStatus === SubscribeStatus.Success && (
+        />
+        {subscribeStatus === SubmitStatus.Success && (
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -196,7 +157,7 @@ export default function SubscriptionForm() {
             {SUCCESSFUL_SUBSCRIPTION}
           </motion.p>
         )}
-        {subscribeStatus === SubscribeStatus.Error && (
+        {subscribeStatus === SubmitStatus.Error && (
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}

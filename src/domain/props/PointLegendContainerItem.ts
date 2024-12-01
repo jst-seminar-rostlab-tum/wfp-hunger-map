@@ -6,5 +6,6 @@ export default interface PointLegendContainerItem {
   title: string;
   records: PointLegendRecord[];
   tooltipInfo?: string;
+  popoverInfo?: ReactNode;
   renderItem?: (props: { record: PointLegendRecord }) => ReactNode;
 }

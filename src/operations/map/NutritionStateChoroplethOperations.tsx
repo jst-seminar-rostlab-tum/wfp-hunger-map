@@ -44,4 +44,46 @@ export default class NutritionStateChoroplethOperations {
       fillOpacity: 0.6,
     };
   }
+
+  public static addHoverEffect(
+    layer: L.Layer,
+    feature: GeoJSON.Feature<Geometry, GeoJsonProperties>,
+    regionNutri: CountryMimiData | undefined,
+    getCurrentNutrient: () => NutrientType
+  ): void {
+    const initialOpacity = 0.6;
+    const pathLayer = layer as L.Path;
+    // Add mouseover event
+    layer.on('mouseover', () => {
+      const dynamicNutrient = getCurrentNutrient();
+      const dynamicFillColor = this.nutritionFillColor(this.getNutritionValue(feature, regionNutri, dynamicNutrient));
+
+      pathLayer.setStyle({
+        fillOpacity: 0.8,
+        fillColor: dynamicFillColor,
+      });
+    });
+
+    // Add mouseout event
+    pathLayer.on('mouseout', () => {
+      const dynamicNutrient = getCurrentNutrient();
+      const dynamicFillColor = this.nutritionFillColor(this.getNutritionValue(feature, regionNutri, dynamicNutrient));
+      pathLayer.setStyle({
+        fillOpacity: initialOpacity,
+        fillColor: dynamicFillColor,
+      });
+    });
+  }
+
+  // Get the nutrition value for a region
+  private static getNutritionValue(
+    feature: GeoJSON.Feature<Geometry, GeoJsonProperties>,
+    regionNutri: CountryMimiData | undefined,
+    selectedNutrient: NutrientType
+  ): number | null {
+    if (!regionNutri) return null;
+    const stateId = feature.id || feature?.properties?.id;
+    const match = regionNutri?.features.find((item) => item.id === stateId);
+    return match ? match?.properties?.nutrition[selectedNutrient as keyof Nutrition] : null;
+  }
 }

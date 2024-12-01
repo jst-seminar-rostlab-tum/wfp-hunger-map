@@ -85,6 +85,7 @@ const config = {
         chatbotFullScreen: '41',
         alertsMenu: '40',
         legend: '40',
+        cookieConsent: '41',
       },
       animation: {
         blink: 'blink 1s step-end infinite',

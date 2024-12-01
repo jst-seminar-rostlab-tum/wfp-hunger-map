@@ -77,7 +77,6 @@ export class IpcChoroplethOperations {
   ) {
     const bounds = L.geoJSON(feature).getBounds();
     map.fitBounds(bounds);
-
     const countryRepository = container.resolve<CountryRepository>('CountryRepository');
     const [countryData, regionIpcData] = await Promise.all([
       countryRepository.getCountryData(feature?.properties?.adm0_id),
@@ -88,7 +87,6 @@ export class IpcChoroplethOperations {
       type: 'FeatureCollection',
       features: regionIpcData?.features as Feature<Geometry, GeoJsonProperties>[],
     });
-
     setCountryData(countryData);
   }
 
@@ -183,5 +181,18 @@ export class IpcChoroplethOperations {
     );
 
     layer.bindTooltip(tooltipContainer, { className: 'leaflet-tooltip', sticky: true, direction: 'top' });
+  }
+
+  static attachEventsRegion(feature: Feature<Geometry, GeoJsonProperties>, layer: L.Layer) {
+    const pathLayer = layer as L.Path;
+    const originalStyle = { ...pathLayer.options };
+    layer.on({
+      mouseover: () => {
+        pathLayer.setStyle({ ...originalStyle, fillOpacity: 0.7 });
+      },
+      mouseout: () => {
+        pathLayer.setStyle(originalStyle);
+      },
+    });
   }
 }

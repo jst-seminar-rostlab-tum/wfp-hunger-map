@@ -9,6 +9,11 @@ import { AccordionContainerProps } from '@/domain/props/AccordionContainerProps'
 
 import { Tooltip } from '../Tooltip/Tooltip';
 
+/**
+ * Accordion for the `AccordionModal` for mobile screen sizes. Accordion items are displayed as a list.
+ * If only one item is provided, it will be expanded by default;
+ * if multiple items are provided, they will all remain collapsed.
+ */
 export default function AccordionListItems({
   items,
   loading = false,
@@ -16,9 +21,16 @@ export default function AccordionListItems({
   noSelectionMode = false,
 }: AccordionContainerProps) {
   const selectionMode = noSelectionMode ? 'none' : multipleSelectionMode ? 'multiple' : 'single';
+  const defaultExpandedKeys =
+    items.length === 1 ? [typeof items[0].title === 'string' ? items[0].title : `accordion-item-0`] : [];
 
   return (
-    <Accordion variant="splitted" selectionMode={selectionMode} className="p-0 mb-4 gap-0">
+    <Accordion
+      variant="splitted"
+      selectionMode={selectionMode}
+      defaultExpandedKeys={defaultExpandedKeys}
+      className="p-0 mb-4 gap-0"
+    >
       {items.map((item, index) => (
         <AccordionItem
           key={typeof item.title === 'string' ? item.title : `accordion-item-${index}`}

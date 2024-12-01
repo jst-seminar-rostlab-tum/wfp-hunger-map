@@ -6,8 +6,8 @@ import NextImage from 'next/image';
 import { useAccordionsModal } from '@/domain/contexts/AccodionsModalContext';
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSidebar } from '@/domain/contexts/SidebarContext';
-import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
+import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
 
 export function CollapsedSidebar() {
   const { toggleSidebar } = useSidebar();

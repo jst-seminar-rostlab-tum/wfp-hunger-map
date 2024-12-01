@@ -8,6 +8,11 @@ import { useAccordionsModal } from '@/domain/contexts/AccodionsModalContext';
 import { AccordionContainerProps } from '@/domain/props/AccordionContainerProps';
 import { useMediaQuery } from '@/utils/resolution.ts';
 
+/**
+ * This container allows any number of items to be displayed in an accordion.
+ * If 'accordionModalActive' is selected, a button is rendered at the bottom of the screen
+ * for small screen sizes (mobile), allowing the accordions to open in a separate modal.
+ */
 export default function AccordionContainer({
   items,
   title,

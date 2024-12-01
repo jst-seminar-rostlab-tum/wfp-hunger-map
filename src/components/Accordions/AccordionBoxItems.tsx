@@ -9,6 +9,10 @@ import { AccordionContainerProps } from '@/domain/props/AccordionContainerProps'
 
 import { Tooltip } from '../Tooltip/Tooltip';
 
+/**
+ * Any number of items are displayed as collapsible accordion boxes stacked vertically.
+ * Important: Exclusively used by `AccordionContainer` component.
+ */
 export default function AccordionBoxItems({
   items,
   title,
@@ -20,7 +24,7 @@ export default function AccordionBoxItems({
   const selectionMode = noSelectionMode ? 'none' : multipleSelectionMode ? 'multiple' : 'single';
 
   return (
-    <div className="w-full max-w-[600px] overflow-x-auto rounded-lg shadow-xl">
+    <div className="w-full max-w-[600px] overflow-x-auto rounded-lg shadow-none">
       {title && (
         <div className="bg-primary p-4 break-words text-balance rounded-lg mb-2">
           <h1 className="text-2xl font-black font-sans text-white">{title}</h1>
@@ -31,7 +35,7 @@ export default function AccordionBoxItems({
           <AccordionItem
             key={typeof item.title === 'string' ? item.title : `accordion-item-${index}`}
             aria-label={typeof item.title === 'string' ? item.title : `Accordion Item ${index}`}
-            className={`last:border-b-0 ${color} white:bg-white overflow-hidden`}
+            className={`last:border-b-0 ${color} white:bg-white overflow-hidden shadow-md`}
             hideIndicator={noSelectionMode}
             title={
               <div className="flex justify-between items-center w-full">

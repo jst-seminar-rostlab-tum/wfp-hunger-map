@@ -11,6 +11,7 @@ import { useMediaQuery } from '@/utils/resolution.ts';
  * The accordions can be configured to be hidden in a modal on mobile screens, which can be accessed
  * via a button at the bottom. This component provides the modal and the button to open it.
  * The content for the modal, including the accordions, is provided via the 'userAccordionsModal' hook.
+ * Important: Exclusively used by `AccordionContainer` component.
  */
 export default function AccordionModal() {
   const isMobile = useMediaQuery('(max-width: 700px)');

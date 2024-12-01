@@ -253,6 +253,7 @@ export function mapLegendData(
       if (!selectedCountryId) {
         legendData.push({
           title: 'Number of people in IPC/CH Phase 3 or above (millions)',
+          hasNotAnalyzedPoint: true,
           colors: [
             'ipcGradient1',
             'ipcGradient2',

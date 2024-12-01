@@ -7,4 +7,5 @@ export interface GradientLegendContainerItem {
   endLabel: string;
   tooltipInfo?: string;
   popoverInfo?: ReactNode;
+  hasNotAnalyzedPoint?: boolean;
 }

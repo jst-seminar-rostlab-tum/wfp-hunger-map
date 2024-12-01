@@ -2,6 +2,7 @@
 
 import { Button } from '@nextui-org/button';
 import { Modal, ModalBody, ModalContent, ModalHeader, useDisclosure } from '@nextui-org/modal';
+import { ArrowUp2 } from 'iconsax-react';
 
 import { useAccordionsModal } from '@/domain/contexts/AccodionsModalContext';
 import { useMediaQuery } from '@/utils/resolution.ts';
@@ -13,6 +14,7 @@ import { useMediaQuery } from '@/utils/resolution.ts';
  */
 export default function AccordionModal() {
   const isMobile = useMediaQuery('(max-width: 640px)');
+  const isMobileXS = useMediaQuery('(max-width: 450px)');
   const { modalContent, modalTitle } = useAccordionsModal();
   const {
     isOpen: isAccordionModalOpen,
@@ -22,15 +24,27 @@ export default function AccordionModal() {
 
   return isMobile && modalContent !== null ? (
     <>
-      <Button
-        color="primary"
-        variant="solid"
-        className="absolute z-accordionsModalButton bottom-3 right-28 text-white"
-        onClick={onAccordionModalOpen}
-      >
-        Country Insights
-      </Button>
-
+      {isMobileXS ? (
+        <Button
+          color="primary"
+          variant="solid"
+          className="absolute z-accordionsModalButton bottom-10 right-28 rounded-full text-white"
+          isIconOnly
+          onClick={onAccordionModalOpen}
+        >
+          <ArrowUp2 className="h-5 w-5" />
+        </Button>
+      ) : (
+        <Button
+          color="primary"
+          variant="solid"
+          className="absolute z-accordionsModalButton bottom-10 right-28 text-white"
+          startContent={<ArrowUp2 className="h-5 w-5" />}
+          onClick={onAccordionModalOpen}
+        >
+          Insights
+        </Button>
+      )}
       <Modal
         size="2xl"
         isOpen={isAccordionModalOpen}

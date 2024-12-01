@@ -16,6 +16,7 @@ import { CollapsedSidebar } from '@/components/Sidebar/CollapsedSidebar';
 import { ThemeSwitch } from '@/components/Sidebar/ThemeSwitch';
 import { pageLinks } from '@/domain/constant/PageLinks';
 import { SUBSCRIBE_MODAL_TITLE } from '@/domain/constant/subscribe/Subscribe';
+import { useAccordionsModal } from '@/domain/contexts/AccodionsModalContext';
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { AlertsMenuVariant } from '@/domain/enums/AlertsMenuVariant';
@@ -30,6 +31,7 @@ export function Sidebar() {
   const { selectedMapType, setSelectedMapType } = useSelectedMap();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isMobile = useMediaQuery('(max-width: 640px)');
+  const { clearAccordionModal } = useAccordionsModal();
 
   if (!isSidebarOpen) {
     return <CollapsedSidebar />;
@@ -81,6 +83,7 @@ export function Sidebar() {
                       selectedMapType === item.key ? 'bg-primary text-white' : 'text-black'
                     )}
                     onClick={() => {
+                      clearAccordionModal();
                       setSelectedMapType(item.key);
                       if (isMobile) {
                         closeSidebar();

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useMap } from 'react-leaflet';
 
 import { MAP_MAX_ZOOM, MAP_MIN_ZOOM } from '@/domain/constant/map/Map';
+import { useAccordionsModal } from '@/domain/contexts/AccodionsModalContext';
 
 interface ZoomControlProps {
   threshold: number;
@@ -13,11 +14,13 @@ interface ZoomControlProps {
 export default function ZoomControl({ threshold, callback }: ZoomControlProps) {
   const map = useMap();
   const [zoomLevel, setZoomLevel] = useState(MAP_MIN_ZOOM);
+  const { clearAccordionModal } = useAccordionsModal();
 
   useEffect(() => {
     const handleZoomEnd = () => {
       const currentZoom = map.getZoom();
       if (currentZoom < threshold) {
+        clearAccordionModal();
         callback(currentZoom);
       }
       setZoomLevel(currentZoom);

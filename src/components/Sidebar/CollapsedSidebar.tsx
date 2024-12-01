@@ -6,10 +6,12 @@ import NextImage from 'next/image';
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
+import { useAccordionsModal } from '@/domain/contexts/AccodionsModalContext';
 
 export function CollapsedSidebar() {
   const { toggleSidebar } = useSidebar();
   const { selectedMapType, setSelectedMapType } = useSelectedMap();
+  const { clearAccordionModal } = useAccordionsModal();
 
   return (
     <div className="absolute top-0 left-0 z-sidebarCollapsed mt-4 ml-4">
@@ -27,7 +29,10 @@ export function CollapsedSidebar() {
                 key={item.key}
                 variant={selectedMapType === item.key ? undefined : 'light'}
                 className={selectedMapType === item.key ? 'bg-primary' : undefined}
-                onClick={() => setSelectedMapType(item.key)}
+                onClick={() => {
+                  clearAccordionModal();
+                  setSelectedMapType(item.key);
+                }}
               >
                 <NextImage unoptimized loading="eager" src={item.icon} alt={item.label} width={24} height={24} />
               </Button>

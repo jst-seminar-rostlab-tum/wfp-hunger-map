@@ -98,7 +98,7 @@ export function NestedPopover({ items, onSelectionChange }: NestedPopoverProps) 
   }, [selectedTopic]);
 
   return (
-    <div ref={menuRef} className="relative">
+    <div ref={menuRef} className="relative !mb-2">
       {/* main menu trigger */}
       <Popover placement="top-end" isOpen={isMenuOpen}>
         <PopoverTrigger className="w-full">
@@ -148,7 +148,7 @@ export function NestedPopover({ items, onSelectionChange }: NestedPopoverProps) 
                     onClick={() => handleNestedMenuToggle(item.topic_id)}
                     onMouseEnter={() => handleNestedMenuToggle(item.topic_id)}
                   >
-                    <p>{item.topic_name}</p>
+                    <p>{item.topic_description}</p>
                     <ArrowRight2 size={24} />
                   </div>
 

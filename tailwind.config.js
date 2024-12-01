@@ -67,6 +67,7 @@ const config = {
       height: {
         '657px': '657px',
         '600px': '600px',
+        '0.5px': '0.5px',
       },
       padding: {
         '179px': '179px',
@@ -74,6 +75,9 @@ const config = {
       },
       borderRadius: {
         '12px_0_0_12px': '12px 0 0 12px',
+      },
+      borderSize: {
+        '0.5px': '0.5px',
       },
       zIndex: {
         9999: '9999',

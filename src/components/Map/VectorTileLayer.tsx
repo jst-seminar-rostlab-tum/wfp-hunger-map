@@ -34,6 +34,7 @@ export default function VectorTileLayer({ countries, disputedAreas, ipcData, nut
     });
 
     MapboxMapOperations.synchronizeLeafletMapbox(baseMap, mapContainer, context);
+    MapboxMapOperations.initDisputedLayer(baseMap);
     // The following layers currently don't work due to CORS issues.
     MapboxMapOperations.initRainfallLayer(baseMap);
     MapboxMapOperations.initVegetationLayer(baseMap);

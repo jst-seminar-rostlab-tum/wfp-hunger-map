@@ -8,15 +8,17 @@ import { MapColorsType } from '@/domain/entities/map/MapColorsType.ts';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
 import { MapProps } from '@/domain/props/MapProps';
 import { getColors } from '@/styles/MapColors.ts';
+import disputedPattern from '../../../public/disputed_pattern.png';
+
 
 export class MapboxMapOperations {
   static createMapboxMap(isDark: boolean, mapProps: MapProps, mapContainer: RefObject<HTMLDivElement>): mapboxgl.Map {
     const mapColors: MapColorsType = getColors(isDark);
 
-    const { countries } = mapProps;
+    const { countries, disputedAreas } = mapProps;
     return new mapboxgl.Map({
       container: mapContainer.current as unknown as string | HTMLElement,
-      logoPosition: 'bottom-left',  // default which can be changed to 'bottom-right'
+      logoPosition: 'bottom-left', // default which can be changed to 'bottom-right'
       style: {
         version: 8,
         name: 'HungerMap LIVE',
@@ -25,6 +27,11 @@ export class MapboxMapOperations {
           countries: {
             type: 'geojson',
             data: countries as FeatureCollection,
+            generateId: true,
+          },
+          disputedAreas: {
+            type: 'geojson',
+            data: disputedAreas as FeatureCollection,
             generateId: true,
           },
           mapboxStreets: {
@@ -50,9 +57,20 @@ export class MapboxMapOperations {
             id: 'country-borders',
             type: 'line',
             source: 'countries',
+            filter: ['==', ['get', 'disp_area'], 'NO'],
             paint: {
               'line-color': mapColors.outline,
               'line-width': 0.7,
+            },
+          },
+          {
+            id: 'disputed-borders',
+            type: 'line',
+            source: 'disputedAreas',
+            paint: {
+              'line-color': mapColors.outline,
+              'line-width': 1.5,
+              'line-dasharray': [10, 10],
             },
           },
           {
@@ -142,7 +160,25 @@ export class MapboxMapOperations {
     baseMap.setPaintProperty('countries-inactive', 'fill-color', mapColors.inactiveCountriesOverlay);
     baseMap.setPaintProperty('countries-hover', 'fill-color', mapColors.outline);
     baseMap.setPaintProperty('country-borders', 'line-color', mapColors.outline);
+    baseMap.setPaintProperty('disputed-borders', 'line-color', mapColors.outline);
     baseMap.setPaintProperty('mapbox-roads', 'line-color', mapColors.roads);
+  }
+
+  static initDisputedLayer(baseMap: mapboxgl.Map) {
+    baseMap.on('load', () => {
+      baseMap.loadImage(disputedPattern.src, (error, image) => {
+        if (error) throw error;
+        baseMap.addImage('diagonal-stripe-pattern', image!, { pixelRatio: 8 });
+        baseMap.addLayer({
+          id: 'disputed-area-pattern',
+          type: 'fill',
+          source: 'disputedAreas',
+          paint: {
+            'fill-pattern': 'diagonal-stripe-pattern',
+          },
+        });
+      });
+    });
   }
 
   static FCS_RASTER = 'fcsRaster';

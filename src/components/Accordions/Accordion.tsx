@@ -1,6 +1,8 @@
 'use client';
 
 import { Accordion, AccordionItem } from '@nextui-org/accordion';
+import { Button } from '@nextui-org/button';
+import { Popover, PopoverContent, PopoverTrigger } from '@nextui-org/popover';
 import { Spinner } from '@nextui-org/spinner';
 
 import { AccordionsProps } from '@/domain/props/AccordionProps';
@@ -16,7 +18,7 @@ export default function CustomAccordion({
 }: AccordionsProps) {
   const selectionMode = noSelectionMode ? 'none' : multipleSelectionMode ? 'multiple' : 'single';
   return (
-    <div className="w-full max-w-[600px] overflow-x-auto p-2 rounded-lg">
+    <div className="w-full overflow-x-auto py-2 rounded-lg">
       <Accordion variant="splitted" selectionMode={selectionMode}>
         {items.map((item, index) => (
           <AccordionItem
@@ -30,12 +32,27 @@ export default function CustomAccordion({
                   <span>{item.title}</span>
                   {loading && <Spinner size="sm" />}
                 </div>
-                {item.tooltipInfo ? (
+                {item.tooltipInfo && (
                   <Tooltip text={item.tooltipInfo}>
                     {item.infoIcon && <span className="w-[37px] h-[37px] p-[5.5px]">{item.infoIcon}</span>}
                   </Tooltip>
-                ) : (
-                  item.infoIcon && <span className="w-[37px] h-[37px] p-[5.5px]">{item.infoIcon}</span>
+                )}
+                {item.popoverInfo && (
+                  <Popover>
+                    <PopoverTrigger>
+                      {item.infoIcon && (
+                        <Button isIconOnly className="w-[37px] h-[37px] p-[5.5px]" variant="light">
+                          {item.infoIcon}
+                        </Button>
+                      )}
+                    </PopoverTrigger>
+                    <PopoverContent>
+                      <div className="p-2 max-w-[400px] content">{item.popoverInfo}</div>
+                    </PopoverContent>
+                  </Popover>
+                )}
+                {!item.tooltipInfo && !item.popoverInfo && item.infoIcon && (
+                  <span className="w-[37px] h-[37px] p-[5.5px]">{item.infoIcon}</span>
                 )}
               </div>
             }

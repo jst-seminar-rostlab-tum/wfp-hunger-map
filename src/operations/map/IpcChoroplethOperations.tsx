@@ -135,4 +135,17 @@ export class IpcChoroplethOperations {
 
     layer.bindTooltip(tooltipContainer, { className: 'leaflet-tooltip', sticky: true, direction: 'top' });
   }
+
+  static attachEventsRegion(feature: Feature<Geometry, GeoJsonProperties>, layer: L.Layer) {
+    const pathLayer = layer as L.Path;
+    const originalStyle = { ...pathLayer.options };
+    layer.on({
+      mouseover: () => {
+        pathLayer.setStyle({ ...originalStyle, fillOpacity: 0.7 });
+      },
+      mouseout: () => {
+        pathLayer.setStyle(originalStyle);
+      },
+    });
+  }
 }

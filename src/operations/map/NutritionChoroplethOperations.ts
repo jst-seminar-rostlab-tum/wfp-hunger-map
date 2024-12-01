@@ -56,6 +56,36 @@ export default class NutritionChoroplethOperations {
         NutritionChoroplethOperations.handleCountryClick(feature, setSelectedCountryId);
       },
     });
+    layer.on('mouseover', () => {
+      if (
+        pathLayer.options.fillColor === '#FFB74D' ||
+        pathLayer.options.fillColor === '#E3F2FD' ||
+        pathLayer.options.fillColor === '#52525b'
+      ) {
+        pathLayer.setStyle({
+          fillOpacity: 0.8,
+        });
+      } else {
+        pathLayer.setStyle({
+          fillOpacity: 0.1,
+        });
+      }
+    });
+    pathLayer.on('mouseout', () => {
+      if (
+        pathLayer.options.fillColor === '#FFB74D' ||
+        pathLayer.options.fillColor === '#E3F2FD' ||
+        pathLayer.options.fillColor === '#52525b'
+      ) {
+        pathLayer.setStyle({
+          fillOpacity: 0.5,
+        });
+      } else {
+        pathLayer.setStyle({
+          fillOpacity: 0,
+        });
+      }
+    });
   }
 
   static countryStyle: L.PathOptions = {

@@ -57,7 +57,9 @@ export default function Map({ countries, disputedAreas, ipcData, nutritionData }
 
   useEffect(() => {
     if (selectedCountryId) {
-      setSelectedMapVisibility(false);
+      setSelectedMapVisibility(
+        selectedMapType === GlobalInsight.VEGETATION || selectedMapType === GlobalInsight.RAINFALL
+      );
       closeSidebar();
       resetAlert();
 

@@ -1,13 +1,18 @@
 import { ReactNode } from 'react';
 import reactElementToJsxString from 'react-element-to-jsx-string';
 
+import RecursiveHighlighter from '@/components/Search/RecursiveHighlighter';
 import { AccordionItemProps, SearchableAccordionItemProps } from '@/domain/entities/accordions/Accordions';
 import { DataSourceTableRow } from '@/domain/props/CustomTableProps';
 
 export class SearchOperations {
   static makeAccordionItemsSearchable(items: AccordionItemProps[]): SearchableAccordionItemProps[] {
     return items.map((item) => {
-      return { ...item, containedWords: SearchOperations.makeAccordionItemSearchable(item) };
+      return {
+        ...item,
+        containedWords: SearchOperations.makeAccordionItemSearchable(item),
+        content: <RecursiveHighlighter>{item.content}</RecursiveHighlighter>,
+      };
     });
   }
 

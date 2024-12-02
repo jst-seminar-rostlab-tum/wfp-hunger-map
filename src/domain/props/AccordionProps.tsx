@@ -5,4 +5,5 @@ export interface AccordionsProps {
   loading?: boolean;
   multipleSelectionMode?: boolean;
   expandAll?: boolean;
+  highlightedTitleWords?: string[];
 }

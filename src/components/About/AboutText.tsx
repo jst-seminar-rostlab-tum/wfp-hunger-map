@@ -1,6 +1,6 @@
 import React from 'react';
 
-import HungerMapLiveSuperscript from '@/components/About/HungerMapLiveSuperscript';
+import LiveSuperscript from '@/components/About/LiveSuperscript';
 import StyledLink from '@/components/About/StyledLink';
 
 export function AboutText() {
@@ -8,7 +8,8 @@ export function AboutText() {
     <>
       <p>
         <b>
-          <HungerMapLiveSuperscript /> is the World Food Programme (WFP)’s global hunger monitoring system.
+          HungerMap
+          <LiveSuperscript /> is the World Food Programme (WFP)’s global hunger monitoring system.
         </b>{' '}
         It combines key metrics from various data sources – such as food security information, weather, population size,
         conflict, hazards, nutrition information and macro-economic data – to help assess, monitor and predict the

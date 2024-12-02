@@ -3,6 +3,7 @@
 import { Accordion, AccordionItem } from '@nextui-org/accordion';
 import { Spinner } from '@nextui-org/spinner';
 import { useEffect, useState } from 'react';
+import Highlighter from 'react-highlight-words';
 
 import { AccordionsProps } from '@/domain/props/AccordionProps';
 
@@ -13,6 +14,7 @@ export default function CustomAccordion({
   loading = false,
   multipleSelectionMode = false,
   expandAll = false,
+  highlightedTitleWords = [],
 }: AccordionsProps) {
   const [expandedItems, setExpandedItems] = useState<Set<string> | string>(new Set());
   useEffect(() => {
@@ -36,7 +38,7 @@ export default function CustomAccordion({
             title={
               <div className="flex justify-between items-center w-full">
                 <div className="flex gap-4">
-                  <span>{item.title}</span>
+                  <Highlighter searchWords={highlightedTitleWords} textToHighlight={item.title} autoEscape />
                   {loading && <Spinner size="sm" />}
                 </div>
                 {item.tooltipInfo ? (

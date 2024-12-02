@@ -1,8 +1,9 @@
-import { GeoJsonProperties, Geometry } from 'geojson';
-import { PathOptions } from 'leaflet';
+import { Feature, GeoJsonProperties, Geometry } from 'geojson';
+import L, { PathOptions } from 'leaflet';
 
 import { NUTRIENT_LABELS } from '@/domain/constant/map/NutritionChoropleth.ts';
 import { CountryMimiData } from '@/domain/entities/country/CountryMimiData';
+import { LayerWithFeature } from '@/domain/entities/map/LayerWithFeature.ts';
 import { Nutrition } from '@/domain/entities/region/RegionNutritionProperties.ts';
 import { NutrientType } from '@/domain/enums/NutrientType.ts';
 
@@ -45,33 +46,15 @@ export default class NutritionStateChoroplethOperations {
     };
   }
 
-  public static addHoverEffect(
-    layer: L.Layer,
-    feature: GeoJSON.Feature<Geometry, GeoJsonProperties>,
-    regionNutri: CountryMimiData | undefined,
-    getCurrentNutrient: () => NutrientType
-  ): void {
-    const initialOpacity = 0.6;
+  public static addHoverEffect(layer: LayerWithFeature): void {
     const pathLayer = layer as L.Path;
-    // Add mouseover event
-    layer.on('mouseover', () => {
-      const dynamicNutrient = getCurrentNutrient();
-      const dynamicFillColor = this.nutritionFillColor(this.getNutritionValue(feature, regionNutri, dynamicNutrient));
-
-      pathLayer.setStyle({
-        fillOpacity: 0.8,
-        fillColor: dynamicFillColor,
-      });
-    });
-
-    // Add mouseout event
-    pathLayer.on('mouseout', () => {
-      const dynamicNutrient = getCurrentNutrient();
-      const dynamicFillColor = this.nutritionFillColor(this.getNutritionValue(feature, regionNutri, dynamicNutrient));
-      pathLayer.setStyle({
-        fillOpacity: initialOpacity,
-        fillColor: dynamicFillColor,
-      });
+    pathLayer.on({
+      mouseover: () => {
+        pathLayer.setStyle({ fillOpacity: 1 });
+      },
+      mouseout: () => {
+        pathLayer.setStyle({ fillOpacity: 0.6 });
+      },
     });
   }
 
@@ -85,5 +68,41 @@ export default class NutritionStateChoroplethOperations {
     const stateId = feature.id || feature?.properties?.id;
     const match = regionNutri?.features.find((item) => item.id === stateId);
     return match ? match?.properties?.nutrition[selectedNutrient as keyof Nutrition] : null;
+  }
+
+  // create and add state nutrition tooltip to the corresponding layer
+  static addNutritionTooltip(
+    layer: LayerWithFeature,
+    feature: Feature | undefined,
+    regionNutrition: CountryMimiData | undefined,
+    selectedNutrient: NutrientType
+  ) {
+    if (!feature) return;
+
+    const stateId = feature.id || feature.properties?.id;
+    const match = regionNutrition?.features.find((item) => item.id === stateId);
+    const nutrientValue = match ? match?.properties?.nutrition[selectedNutrient as keyof Nutrition] : null;
+
+    const formattedNutrientValue = NutritionStateChoroplethOperations.formatNutrientValue(nutrientValue);
+    const nutrientLabel = NutritionStateChoroplethOperations.getNutrientLabel(selectedNutrient);
+    const tooltipContent = `
+        <div class="bg-background text-foreground rounded-md shadow-md max-w-sm z-9999">
+          <div class="p-4">
+            <h3 class="text-lg text-foreground font-bold">${feature.properties?.Name}</h3>
+            <div class="mt-2 text-foreground">
+              Risk of inadequate intake of <strong>${nutrientLabel}</strong>: ${formattedNutrientValue}
+            </div>
+          </div>
+        </div>
+      `;
+
+    layer.unbindTooltip();
+    layer.bindTooltip(tooltipContent, {
+      className: 'state-tooltip',
+      direction: 'top',
+      offset: [0, -10],
+      permanent: false,
+      sticky: true,
+    });
   }
 }

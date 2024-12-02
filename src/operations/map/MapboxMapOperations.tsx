@@ -4,20 +4,20 @@ import { FeatureCollection } from 'geojson';
 import mapboxgl, { Popup } from 'mapbox-gl';
 import React, { RefObject } from 'react';
 
-import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 import { MapColorsType } from '@/domain/entities/map/MapColorsType.ts';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
 import { MapProps } from '@/domain/props/MapProps';
 import { getColors } from '@/styles/MapColors.ts';
+import disputedPattern from '../../../public/disputed_pattern.png';
 import { createRoot } from 'react-dom/client';
 import CountryHoverPopover from '@/components/CountryHoverPopover/CountryHoverPopover.tsx';
-import { pop } from '@jridgewell/set-array';
 
-export class MapOperations {
+
+export class MapboxMapOperations {
   static createMapboxMap(isDark: boolean, mapProps: MapProps, mapContainer: RefObject<HTMLDivElement>): mapboxgl.Map {
     const mapColors: MapColorsType = getColors(isDark);
 
-    const { countries } = mapProps;
+    const { countries, disputedAreas } = mapProps;
     return new mapboxgl.Map({
       container: mapContainer.current as unknown as string | HTMLElement,
       logoPosition: 'bottom-left', // default which can be changed to 'bottom-right'
@@ -29,6 +29,11 @@ export class MapOperations {
           countries: {
             type: 'geojson',
             data: countries as FeatureCollection,
+            generateId: true,
+          },
+          disputedAreas: {
+            type: 'geojson',
+            data: disputedAreas as FeatureCollection,
             generateId: true,
           },
           mapboxStreets: {
@@ -51,28 +56,23 @@ export class MapOperations {
           },
           // additional layers (FCS, vegetation etc.) are being placed here
           {
-            id: 'countries-inactive',
-            type: 'fill',
-            source: 'countries',
-            paint: { 'fill-color': mapColors.inactiveCountriesOverlay, 'fill-opacity': 0.5 },
-            filter: ['==', ['coalesce', ['get', 'interactive'], false], false],
-          },
-          {
-            id: 'countries-hover',
-            type: 'fill',
-            source: 'countries',
-            paint: {
-              'fill-color': mapColors.outline,
-              'fill-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 0.3, 0],
-            },
-          },
-          {
             id: 'country-borders',
             type: 'line',
             source: 'countries',
+            filter: ['==', ['get', 'disp_area'], 'NO'],
             paint: {
               'line-color': mapColors.outline,
               'line-width': 0.7,
+            },
+          },
+          {
+            id: 'disputed-borders',
+            type: 'line',
+            source: 'disputedAreas',
+            paint: {
+              'line-color': mapColors.outline,
+              'line-width': 1.5,
+              'line-dasharray': [10, 10],
             },
           },
           {
@@ -93,61 +93,27 @@ export class MapOperations {
     });
   }
 
-  static setMapInteractionFunctionality(baseMap: mapboxgl.Map, popover: Popup, selectedMapType: GlobalInsight): void {
-    let hoveredPolygonId: string | number | undefined;
+  static setMapCountryHoverPopup(baseMap: mapboxgl.Map, popover: Popup, selectedMapType: GlobalInsight): void {
 
-    baseMap.on('mousemove', 'countries-hover', (e: any) => {
-      const countryData = e.features && (e.features[0] as CountryMapData);
-
-      if (hoveredPolygonId && (!countryData || hoveredPolygonId !== countryData.id)) {
-        baseMap.setFeatureState({ source: 'countries', id: hoveredPolygonId }, { hover: false });
-        hoveredPolygonId = undefined;
-        baseMap.getCanvas().style.cursor = '';
-      }
-
-      // if no valid feature, remove the popup and return
-      if (!countryData) {
+    baseMap.on('mousemove', 'countries-base', (e) => {
+      const features = e.features;
+      if (!features || features.length !== 1 || !features[0].properties?.adm0_name) {
         popover.remove();
         return;
+      };
+      const countryName = features[0].properties.adm0_name;
+
+      // tooltip on country hover -> showing name;
+      // only for RAINFALL and VEGETATION cause the other Global Insights provide their own tooltips on hover;
+      // we are using the 'setText' functionality and not the generated DOM element of 'createCountryNameTooltipElement',
+      // because otherwise it would cause the popup to "flicker" when moving the mouse)
+      if (selectedMapType === GlobalInsight.RAINFALL || selectedMapType === GlobalInsight.VEGETATION) {
+        popover.setText(countryName).addTo(baseMap).setLngLat(e.lngLat);
       }
 
-      baseMap.getCanvas().style.cursor = 'pointer';
-      hoveredPolygonId = countryData.id;
-
-      if (hoveredPolygonId && (countryData as CountryMapData).properties.interactive) {
-        baseMap.setFeatureState({ source: 'countries', id: hoveredPolygonId }, { hover: true });
-
-        // tooltip on country hover -> showing name;
-        // only for RAINFALL and VEGETATION cause the other Global Insights provide their own tooltips on hover;
-        // we are using the 'setText' functionality and not the generated DOM element of 'createCountryNameTooltipElement',
-        // because otherwise it would cause the popup to "flicker" when moving the mouse)
-        if (selectedMapType === GlobalInsight.RAINFALL || selectedMapType === GlobalInsight.VEGETATION) {
-          const tooltipContainer = MapOperations.createCountryNameTooltipElement(countryData.properties.adm0_name);
-          popover.setText(countryData.properties.adm0_name).addTo(baseMap).setLngLat(e.lngLat);
-        }
-      }
-    });
-
-    baseMap.on('mouseleave', 'countries-hover', () => {
-      baseMap.getCanvas().style.cursor = '';
-      if (hoveredPolygonId) {
-        baseMap.setFeatureState({ source: 'countries', id: hoveredPolygonId }, { hover: false });
-        hoveredPolygonId = undefined;
-      }
-      popover.remove();
-    });
-
-    let isDragging = false;
-    baseMap.on('mousedown', () => {
-      isDragging = false;
-    });
-    baseMap.on('mousemove', () => {
-      isDragging = true;
-    });
-    baseMap.on('mouseup', 'countries-hover', (e: any) => {
-      if (!isDragging && e.features && (e.features[0] as CountryMapData).properties.interactive) {
-        // alert(`You clicked on ${(e.features[0] as CountryMapData).properties.adm0_name}`);
-      }
+      baseMap.on('mouseleave', 'countries-base', () => {
+        popover.remove();
+      });
     });
   }
 
@@ -220,7 +186,25 @@ export class MapOperations {
     baseMap.setPaintProperty('countries-inactive', 'fill-color', mapColors.inactiveCountriesOverlay);
     baseMap.setPaintProperty('countries-hover', 'fill-color', mapColors.outline);
     baseMap.setPaintProperty('country-borders', 'line-color', mapColors.outline);
+    baseMap.setPaintProperty('disputed-borders', 'line-color', mapColors.outline);
     baseMap.setPaintProperty('mapbox-roads', 'line-color', mapColors.roads);
+  }
+
+  static initDisputedLayer(baseMap: mapboxgl.Map) {
+    baseMap.on('load', () => {
+      baseMap.loadImage(disputedPattern.src, (error, image) => {
+        if (error) throw error;
+        baseMap.addImage('diagonal-stripe-pattern', image!, { pixelRatio: 8 });
+        baseMap.addLayer({
+          id: 'disputed-area-pattern',
+          type: 'fill',
+          source: 'disputedAreas',
+          paint: {
+            'fill-pattern': 'diagonal-stripe-pattern',
+          },
+        });
+      });
+    });
   }
 
   static FCS_RASTER = 'fcsRaster';
@@ -282,7 +266,7 @@ export class MapOperations {
             type: 'raster',
             source: this.FCS_RASTER,
           },
-          'countries-inactive'
+          'country-borders'
         );
         break;
       case GlobalInsight.VEGETATION:
@@ -292,7 +276,7 @@ export class MapOperations {
             type: 'raster',
             source: this.VEGETATION_RASTER,
           },
-          'countries-inactive'
+          'country-borders'
         );
         break;
       case GlobalInsight.RAINFALL:
@@ -302,7 +286,7 @@ export class MapOperations {
             type: 'raster',
             source: this.RAINFALL_RASTER,
           },
-          'countries-inactive'
+          'country-borders'
         );
         break;
       default:

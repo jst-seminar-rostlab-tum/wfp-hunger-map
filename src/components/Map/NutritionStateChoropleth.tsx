@@ -1,4 +1,4 @@
-import { GeoJsonProperties } from 'geojson';
+import { GeoJsonProperties, Geometry } from 'geojson';
 import L from 'leaflet';
 import React, { useEffect, useRef, useState } from 'react';
 import { GeoJSON } from 'react-leaflet';
@@ -13,12 +13,19 @@ import NutritionAccordion from './NutritionAccordion';
 export default function NutritionStateChoropleth({
   regionNutrition,
   regionData,
+  countryName,
   handleClick = () => {},
   tooltip,
 }: NutritionStateChoroplethProps) {
   const layersRef = useRef<LayerWithFeature[]>([]);
 
   const [selectedNutrient, setSelectedNutrient] = useState<NutrientType>(NutrientType.MINI_SIMPLE);
+
+  const selectedNutrientRef = useRef<NutrientType>(selectedNutrient);
+
+  useEffect(() => {
+    selectedNutrientRef.current = selectedNutrient;
+  }, [selectedNutrient]);
 
   // based on the selected nutrient -> setup heatmap layer
   useEffect(() => {
@@ -55,12 +62,22 @@ export default function NutritionStateChoropleth({
 
   const onEachFeature = (feature: GeoJsonProperties, layer: L.Layer): void => {
     layersRef.current.push(layer);
+    NutritionStateChoroplethOperations.addHoverEffect(
+      layer,
+      feature as GeoJSON.Feature<Geometry, GeoJsonProperties>,
+      regionNutrition,
+      () => selectedNutrientRef.current
+    );
     layer.on('click', () => handleClick(feature));
   };
 
   return (
     <>
-      <NutritionAccordion setSelectedNutrient={setSelectedNutrient} selectedNutrient={selectedNutrient} />
+      <NutritionAccordion
+        setSelectedNutrient={setSelectedNutrient}
+        selectedNutrient={selectedNutrient}
+        countryName={countryName}
+      />
       <GeoJSON
         data={regionData}
         style={(feature) => NutritionStateChoroplethOperations.dynamicStyle(feature, regionNutrition, selectedNutrient)}

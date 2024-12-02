@@ -9,8 +9,9 @@ import type { ThemeProviderProps } from 'next-themes/dist/types.d.ts';
 import * as React from 'react';
 
 import { cachedQueryClient } from '@/config/queryClient';
+import { AccordionsModalProvider } from '@/domain/contexts/AccodionsModalContext';
 import { SelectedAlertProvider } from '@/domain/contexts/SelectedAlertContext';
-import { SelectedCountryIdProvider } from '@/domain/contexts/SelectedCountryIdContext'; // Import the provider
+import { SelectedCountryIdProvider } from '@/domain/contexts/SelectedCountryIdContext';
 import { SelectedMapProvider } from '@/domain/contexts/SelectedMapContext';
 import { SelectedMapVisibilityProvider } from '@/domain/contexts/SelectedMapVisibilityContext';
 import { SidebarProvider } from '@/domain/contexts/SidebarContext';
@@ -31,7 +32,9 @@ export function Providers({ children, themeProps }: ProvidersProps) {
             <SelectedMapVisibilityProvider>
               <SelectedMapProvider>
                 <SelectedAlertProvider>
-                  <SelectedCountryIdProvider>{children}</SelectedCountryIdProvider>
+                  <SelectedCountryIdProvider>
+                    <AccordionsModalProvider>{children}</AccordionsModalProvider>
+                  </SelectedCountryIdProvider>
                 </SelectedAlertProvider>
               </SelectedMapProvider>
             </SelectedMapVisibilityProvider>

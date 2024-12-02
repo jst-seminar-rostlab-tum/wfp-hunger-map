@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@nextui-org/button';
 import { useState } from 'react';
 
@@ -5,7 +7,7 @@ import LegendContainerProps from '@/domain/props/LegendContainerProps';
 import { LegendOperations } from '@/operations/legends/LegendOperations.ts';
 import { useMediaQuery } from '@/utils/resolution';
 
-import CustomAccordion from '../Accordions/Accordion';
+import AccordionContainer from '../Accordions/AccordionContainer';
 import CustomInfoCircle from '../CustomInfoCircle/CustomInfoCircle';
 import PopupModal from '../PopupModal/PopupModal';
 import { Tooltip } from '../Tooltip/Tooltip';
@@ -13,18 +15,19 @@ import GradientLegend from './GradientLegend';
 import PointLegend from './PointLegend';
 
 export default function LegendContainer({ items, loading = false }: LegendContainerProps) {
-  const isMobile = useMediaQuery('(max-width: 640px)');
+  const isMobile = useMediaQuery('(max-width: 700px)');
   const [showInfoPopup, setInfoPopup] = useState(false);
 
   return !isMobile ? (
-    <div className="w-[450px] absolute bottom-5 right-0 z-legend mr-10">
-      <CustomAccordion
+    <div className="w-[450px] absolute bottom-3 right-20 z-legend">
+      <AccordionContainer
         loading={loading}
         multipleSelectionMode
         items={items.map((item) => ({
           title: item.title,
           infoIcon: <CustomInfoCircle />,
           tooltipInfo: item.tooltipInfo,
+          popoverInfo: item.popoverInfo,
           content: LegendOperations.isGradientLegendContainerItem(item) ? (
             <GradientLegend {...item} />
           ) : (
@@ -35,15 +38,15 @@ export default function LegendContainer({ items, loading = false }: LegendContai
     </div>
   ) : (
     <>
-      <div className="absolute z-legend bottom-3 right-16">
+      <div className="absolute z-legend bottom-0 pb-10 right-16">
         <Tooltip text={items.length > 1 ? 'Legends Information' : 'Legend Information'}>
           <Button
             onClick={() => setInfoPopup(true)}
             className="
-        relative flex items-center justify-center min-w-12 h-12 px-1 rounded-full bg-content1 shadow-md"
+        relative flex items-center justify-center min-w-10 h-10 px-1 rounded-full bg-content1 shadow-md"
           >
             {/* TODO: Icon to be modified */}
-            <CustomInfoCircle size={32} />
+            <CustomInfoCircle size={28} />
           </Button>
         </Tooltip>
       </div>

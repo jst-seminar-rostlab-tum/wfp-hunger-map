@@ -1,3 +1,4 @@
+import { Feature, GeoJsonProperties, Geometry } from 'geojson';
 import React from 'react';
 import { GeoJSON } from 'react-leaflet';
 
@@ -6,13 +7,19 @@ import { IpcChoroplethOperations } from '@/operations/map/IpcChoroplethOperation
 
 import IpcAccordion from './IpcAccordion';
 
-function IpcCountryChoropleth({ regionIpcData, countryData }: IpcCountryChoroplethProps) {
+function IpcCountryChoropleth({ regionIpcData, countryData, countryName }: IpcCountryChoroplethProps) {
+  const handleCountryFeature = (feature: Feature<Geometry, GeoJsonProperties>, layer: L.Layer) => {
+    IpcChoroplethOperations.attachEventsRegion(feature, layer);
+  };
   return (
     <>
-      <IpcAccordion countryData={countryData} />
-      <GeoJSON style={IpcChoroplethOperations.ipcCountryStyle} data={regionIpcData} />
+      <IpcAccordion countryData={countryData} countryName={countryName} />
+      <GeoJSON
+        style={IpcChoroplethOperations.ipcCountryStyle}
+        data={regionIpcData}
+        onEachFeature={handleCountryFeature}
+      />
     </>
   );
 }
-
 export default IpcCountryChoropleth;

@@ -7,12 +7,12 @@ import { cardsWrapperClass } from '@/utils/primitives';
 import { ReactComponent as FoodConsumption } from '../../../public/Images/FoodConsumption.svg';
 import { ReactComponent as Import } from '../../../public/Images/Import.svg';
 import { ReactComponent as Population } from '../../../public/Images/Population.svg';
-import CustomAccordion from '../Accordions/Accordion';
+import AccordionContainer from '../Accordions/AccordionContainer';
 import CustomCard from '../Cards/Card';
 import { LineChart } from '../Charts/LineChart';
 import CustomInfoCircle from '../CustomInfoCircle/CustomInfoCircle';
 
-export default function FcsAccordion({ countryData, loading, countryIso3Data }: FcsAccordionProps) {
+export default function FcsAccordion({ countryData, loading, countryIso3Data, countryName }: FcsAccordionProps) {
   const deltaOneMonth = countryData?.fcsMinus1 ? countryData.fcs - countryData.fcsMinus1 : null;
   const deltaThreeMonth = countryData?.fcsMinus3 ? countryData.fcs - countryData.fcsMinus3 : null;
   const fcsChartData = FcsAccordionOperations.getFcsChartData(countryData);
@@ -23,8 +23,10 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
     FcsAccordionOperations.getHeadlineAndFoodInflationChartData(countryIso3Data);
   return (
     <div className="absolute w-[350px] left-[108px] top-4 z-9999">
-      <CustomAccordion
+      <AccordionContainer
         loading={loading}
+        title={countryName ?? undefined}
+        accordionModalActive
         items={[
           {
             title: 'Food Security',

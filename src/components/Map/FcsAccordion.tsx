@@ -27,6 +27,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
         loading={loading}
         title={countryName ?? undefined}
         accordionModalActive
+        maxWidth={600}
         items={[
           {
             title: 'Food Security',

@@ -22,11 +22,13 @@ export default function AccordionBoxItems({
   multipleSelectionMode = false,
   noSelectionMode = false,
   color = 'bg-content1',
+  maxWidth,
 }: AccordionContainerProps) {
   const selectionMode = AccordionOperations.getSelectionModeType(noSelectionMode, multipleSelectionMode);
+  const maxWidthClass = maxWidth ? `max-w-[${maxWidth}px]` : '';
 
   return (
-    <div className="w-full max-w-[600px] overflow-x-auto rounded-lg shadow-none">
+    <div className={`w-full ${maxWidthClass} overflow-x-auto rounded-lg shadow-none`}>
       {title && (
         <div className="bg-primary p-4 break-words text-balance rounded-lg mb-2">
           <h1 className="text-2xl font-black font-sans text-white">{title}</h1>

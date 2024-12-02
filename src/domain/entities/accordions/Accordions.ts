@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactElement, ReactNode } from 'react';
 
 export interface AccordionItemProps {
   // there must not exist equal titles in the same Accordion
@@ -6,7 +6,7 @@ export interface AccordionItemProps {
   infoIcon?: ReactNode;
   tooltipInfo?: string;
   description?: ReactNode;
-  content: ReactNode;
+  content: string | ReactElement;
   containedWords?: string;
 }
 

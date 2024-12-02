@@ -11,9 +11,14 @@ function RecursiveHighlighter({ type = 'span', children, ...props }: RecursiveHi
 
   if (React.isValidElement(children)) {
     // if children is a JSX element (e.g. p or div), create the respective element and continue with the children
-    if (typeof children.type === 'string' && typeof children.props === 'object')
-      return React.createElement(type, props, <RecursiveHighlighter type={children.type} {...children.props} />);
-  } else if (Array.isArray(children)) {
+    // if (typeof children.type === 'string' && typeof children.props === 'object')
+    return React.createElement(
+      type,
+      props,
+      <RecursiveHighlighter type={children.type as string} {...(children.props as object)} />
+    );
+  }
+  if (Array.isArray(children)) {
     // if children is an array, create an element with given type and deal with all array items
     return React.createElement(
       type,
@@ -24,7 +29,8 @@ function RecursiveHighlighter({ type = 'span', children, ...props }: RecursiveHi
         <RecursiveHighlighter key={index}>{child}</RecursiveHighlighter>
       ))
     );
-  } else if (typeof children === 'string')
+  }
+  if (typeof children === 'string')
     // if children is a string, wrap it with a Highlighter
     return React.createElement(
       type,

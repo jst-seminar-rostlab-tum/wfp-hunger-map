@@ -7,3 +7,7 @@ export interface AccordionItemProps {
   content: React.ReactNode | string;
   containedWords?: string;
 }
+
+export interface SearchableAccordionItemProps extends AccordionItemProps {
+  containedWords: string;
+}

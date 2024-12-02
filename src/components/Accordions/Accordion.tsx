@@ -12,23 +12,13 @@ export default function CustomAccordion({
   items,
   loading = false,
   multipleSelectionMode = false,
-  searchWords = [],
+  expandAll = false,
 }: AccordionsProps) {
-  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
+  const [expandedItems, setExpandedItems] = useState<Set<string> | string>(new Set());
   useEffect(() => {
-    if (searchWords?.length) {
-      setExpandedItems(
-        new Set(
-          items
-            .filter(({ containedWords }) => {
-              if (!containedWords) return true;
-              return searchWords?.some((searchWord) => containedWords?.includes(searchWord));
-            })
-            .map((item) => item.title)
-        )
-      );
-    }
-  }, [searchWords]);
+    if (expandAll) setExpandedItems('all');
+    else setExpandedItems(new Set());
+  }, [expandAll]);
 
   return (
     <div className="w-full max-w-[600px] overflow-x-auto p-2 rounded-lg">

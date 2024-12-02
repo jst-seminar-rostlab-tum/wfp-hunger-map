@@ -1,11 +1,11 @@
 import { ReactNode } from 'react';
 import reactElementToJsxString from 'react-element-to-jsx-string';
 
-import { AccordionItemProps } from '@/domain/entities/accordions/Accordions';
+import { AccordionItemProps, SearchableAccordionItemProps } from '@/domain/entities/accordions/Accordions';
 import { DataSourceTableRow } from '@/domain/props/CustomTableProps';
 
 export class SearchOperations {
-  static makeAccordionItemsSearchable(items: AccordionItemProps[]): AccordionItemProps[] {
+  static makeAccordionItemsSearchable(items: AccordionItemProps[]): SearchableAccordionItemProps[] {
     return items.map((item) => {
       return { ...item, containedWords: SearchOperations.makeAccordionItemSearchable(item) };
     });

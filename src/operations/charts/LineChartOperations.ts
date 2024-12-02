@@ -9,6 +9,7 @@ import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchange
 import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
 import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
 import { LineChartDataType } from '@/domain/enums/LineChartDataType.ts';
+import { formatToMillion } from '@/utils/formatting.ts';
 
 if (typeof Highcharts === 'object') {
   highchartsMore(Highcharts);
@@ -85,11 +86,12 @@ export default class LineChartOperations {
         return {
           type: LineChartDataType.LINE_CHART_DATA,
           xAxisType: 'datetime',
+          yAxisLabel: 'Mill',
           lines: [
             {
               name: 'Balance of Trade',
               dataPoints: data.data.map((p) => {
-                return { x: new Date(p.x).getTime(), y: p.y };
+                return { x: new Date(p.x).getTime(), y: formatToMillion(p.y) };
               }),
             },
           ],
@@ -99,6 +101,7 @@ export default class LineChartOperations {
         return {
           type: LineChartDataType.LINE_CHART_DATA,
           xAxisType: 'datetime',
+          yAxisLabel: 'Exchange rate',
           lines: [
             {
               name: data.name,
@@ -113,6 +116,7 @@ export default class LineChartOperations {
         return {
           type: LineChartDataType.LINE_CHART_DATA,
           xAxisType: 'datetime',
+          yAxisLabel: 'Rate in %',
           lines: [
             {
               name: 'Headline Inflation',

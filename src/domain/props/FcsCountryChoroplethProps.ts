@@ -7,7 +7,7 @@ export default interface FscCountryChoroplethProps {
   regionData: FeatureCollection<Geometry, GeoJsonProperties>;
   countryData?: CountryData;
   countryIso3Data?: CountryIso3Data;
-  countryName: string | null;
+  countryName?: string;
   loading: boolean;
   handleBackButtonClick?: () => void;
 }

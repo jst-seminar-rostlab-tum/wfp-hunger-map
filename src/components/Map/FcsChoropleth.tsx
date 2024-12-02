@@ -1,11 +1,8 @@
-import { FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
 import L from 'leaflet';
 import { useTheme } from 'next-themes';
-import React, { useRef, useState } from 'react';
-import { GeoJSON, useMap } from 'react-leaflet';
+import React, { useRef } from 'react';
+import { GeoJSON } from 'react-leaflet';
 
-import { CountryData } from '@/domain/entities/country/CountryData';
-import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data';
 import FcsChoroplethProps from '@/domain/props/FcsChoroplethProps';
 import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
 
@@ -15,23 +12,18 @@ export default function FcsChoropleth({
   data,
   countryId,
   selectedCountryId,
-  selectedAlert,
   setSelectedCountryId,
-  setSelectedMapVisibility,
-  toggleAlert,
+  loading,
+  regionData,
+  countryData,
+  countryIso3Data,
+  selectedCountryName,
 }: FcsChoroplethProps) {
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
-  const map = useMap();
   const { theme } = useTheme();
-  const [countryData, setCountryData] = useState<CountryData | undefined>();
-  const [countryIso3Data, setCountryIso3Data] = useState<CountryIso3Data | undefined>();
-  const [regionData, setRegionData] = useState<FeatureCollection<Geometry, GeoJsonProperties> | undefined>();
-  const [selectedCountryName, setSelectedCountryName] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
 
   const handleBackClick = () => {
-    setRegionData(undefined);
-    setCountryData(undefined);
+    setSelectedCountryId(null);
   };
 
   return (
@@ -43,21 +35,7 @@ export default function FcsChoropleth({
         data={data}
         style={FcsChoroplethOperations.countryStyle}
         onEachFeature={(feature, layer) =>
-          FcsChoroplethOperations.onEachFeature(
-            feature,
-            layer,
-            map,
-            selectedAlert,
-            setSelectedCountryId,
-            setLoading,
-            setRegionData,
-            setCountryData,
-            setCountryIso3Data,
-            setSelectedMapVisibility,
-            setSelectedCountryName,
-            toggleAlert,
-            theme === 'dark'
-          )
+          FcsChoroplethOperations.onEachFeature(feature, layer, setSelectedCountryId, theme === 'dark')
         }
       />
       {regionData && countryId === selectedCountryId && (

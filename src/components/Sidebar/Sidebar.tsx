@@ -2,9 +2,8 @@
 
 import { Button } from '@nextui-org/button';
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
-import { Input } from '@nextui-org/input';
 import { Link } from '@nextui-org/link';
-import { ScrollShadow } from '@nextui-org/react';
+import { Autocomplete, AutocompleteItem, ScrollShadow } from '@nextui-org/react';
 import clsx from 'clsx';
 import { SidebarLeft } from 'iconsax-react';
 import NextImage from 'next/image';
@@ -17,22 +16,31 @@ import { ThemeSwitch } from '@/components/Sidebar/ThemeSwitch';
 import { pageLinks } from '@/domain/constant/PageLinks';
 import { SUBSCRIBE_MODAL_TITLE } from '@/domain/constant/subscribe/Subscribe';
 import { useAccordionsModal } from '@/domain/contexts/AccodionsModalContext';
+import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { AlertsMenuVariant } from '@/domain/enums/AlertsMenuVariant';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
+import SidebarProps from '@/domain/props/SidebarProps.ts';
 import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
 import { useMediaQuery } from '@/utils/resolution';
 
 import PopupModal from '../PopupModal/PopupModal';
 import Subscribe from '../Subscribe/Subscribe';
 
-export function Sidebar() {
+export function Sidebar({ countryMapData }: SidebarProps) {
   const { isSidebarOpen, toggleSidebar, closeSidebar } = useSidebar();
   const { selectedMapType, setSelectedMapType } = useSelectedMap();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isMobile = useMediaQuery('(max-width: 640px)');
+  const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
   const { clearAccordionModal } = useAccordionsModal();
+
+  const handleCountrySelect = (countryID: React.Key | null) => {
+    if (countryID) {
+      setSelectedCountryId(Number(countryID));
+    }
+  };
 
   if (!isSidebarOpen) {
     return <CollapsedSidebar />;
@@ -64,7 +72,29 @@ export function Sidebar() {
             </Button>
           </div>
           <ThemeSwitch />
-          <Input className="w-full" color="primary" placeholder="Search a country" variant="faded" />
+          <Autocomplete
+            placeholder="Search a country"
+            onSelectionChange={handleCountrySelect}
+            className="w-full"
+            classNames={{ popoverContent: 'bg-clickableSecondary' }}
+            variant="faded"
+            color="primary"
+            selectedKey={selectedCountryId !== null ? selectedCountryId.toString() : ''}
+          >
+            {countryMapData.features
+              .sort((sortItemA, sortItemB) =>
+                sortItemA.properties.adm0_name.localeCompare(sortItemB.properties.adm0_name)
+              )
+              .map((country) => (
+                <AutocompleteItem
+                  className="transition-all hover:text-background dark:text-foreground"
+                  key={country.properties.adm0_id.toString()}
+                  aria-label={country.properties.adm0_name}
+                >
+                  {country.properties.adm0_name}
+                </AutocompleteItem>
+              ))}
+          </Autocomplete>
         </CardHeader>
         <CardBody>
           <ScrollShadow className="w-full h-full">

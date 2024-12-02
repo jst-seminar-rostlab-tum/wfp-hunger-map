@@ -1,13 +1,10 @@
-import { Feature, FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
+import { Feature, GeoJsonProperties, Geometry } from 'geojson';
 import L from 'leaflet';
 import { createRoot } from 'react-dom/client';
 
 import CountryHoverPopover from '@/components/CountryHoverPopover/CountryHoverPopover';
-import container from '@/container';
-import { CountryData } from '@/domain/entities/country/CountryData';
 import { CountryIpcData } from '@/domain/entities/country/CountryIpcData';
 import { CountryMapData, CountryMapDataWrapper } from '@/domain/entities/country/CountryMapData';
-import CountryRepository from '@/domain/repositories/CountryRepository';
 
 export class IpcChoroplethOperations {
   static ipcGlobalStyle = (feature: Feature<Geometry, GeoJsonProperties> | undefined) => ({
@@ -69,71 +66,27 @@ export class IpcChoroplethOperations {
     return ipcData.find((currentCountry: CountryIpcData) => currentCountry.adm0_name === countryName) || null;
   };
 
-  static async onCountryClick(
-    feature: Feature<Geometry, GeoJsonProperties>,
-    setIpcRegionData: (data: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
-    setCountryData: (data: CountryData) => void,
-    map: L.Map
-  ) {
-    const bounds = L.geoJSON(feature).getBounds();
-    map.fitBounds(bounds);
-    const countryRepository = container.resolve<CountryRepository>('CountryRepository');
-    const [countryData, regionIpcData] = await Promise.all([
-      countryRepository.getCountryData(feature?.properties?.adm0_id),
-      countryRepository.getRegionIpcData(feature?.properties?.adm0_id),
-    ]);
-
-    setIpcRegionData({
-      type: 'FeatureCollection',
-      features: regionIpcData?.features as Feature<Geometry, GeoJsonProperties>[],
-    });
-    setCountryData(countryData);
-  }
-
   static initializeCountryLayer(
     feature: Feature<Geometry, GeoJsonProperties>,
     layer: L.Layer,
     ipcData: CountryIpcData[],
-    setSelectedCountryId: (id: number | null) => void,
-    setIpcRegionData: (data: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
-    setCountryData: (countryData: CountryData) => void,
-    setCountryName: (data: string | null) => void,
-    map: L.Map,
-    resetAlert: () => void
+    setSelectedCountryId: (id: number | null) => void
   ) {
     this.createTooltip(feature, layer, ipcData);
-    this.attachEvents(
-      feature,
-      layer,
-      setSelectedCountryId,
-      setIpcRegionData,
-      setCountryData,
-      setCountryName,
-      map,
-      resetAlert
-    );
+    this.attachEvents(feature, layer, setSelectedCountryId);
   }
 
   static attachEvents(
     feature: Feature<Geometry, GeoJsonProperties>,
     layer: L.Layer,
-    setSelectedCountryId: (id: number | null) => void,
-    setIpcRegionData: (data: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
-    setCountryData: (countryData: CountryData) => void,
-    setCountryName: (data: string | null) => void,
-    map: L.Map,
-    resetAlert: () => void
+    setSelectedCountryId: (id: number | null) => void
   ) {
     const pathLayer = layer as L.Path;
     const originalStyle = { ...pathLayer.options };
 
     layer.on({
       click: () => {
-        setIpcRegionData(undefined);
         setSelectedCountryId(feature?.properties?.adm0_id);
-        setCountryName(feature?.properties?.adm0_name);
-        this.onCountryClick(feature, setIpcRegionData, setCountryData, map);
-        resetAlert();
       },
       mouseover: () => {
         pathLayer.setStyle({ ...originalStyle, fillOpacity: 0.7 });

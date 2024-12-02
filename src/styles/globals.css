@@ -102,6 +102,31 @@ path.leaflet-interactive:focus {
   outline: none;
 }
 
+/* mapbox-popup showing country name - styling similar to 'CountryHoverPopover' */
+.mapbox-popup-transparent .mapboxgl-popup-content {
+  z-index: 2000 !important;
+  background-color: hsl(var(--nextui-background)) !important;
+  box-shadow: none !important;
+  border: none !important;
+  border-radius: var(--nextui-radius-medium) !important;
+  padding: 0.5rem !important;
+  margin-right: 6px !important;
+
+  color: hsl(var(--nextui-foreground));
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+}
+ /* shrink mapbox-popup tip triangle */
+.mapbox-popup-transparent .mapboxgl-popup-tip {
+  width: 6px !important;
+  height: 12px !important;
+  background: transparent !important;
+  border-top: 6px solid transparent !important;
+  border-bottom: 6px solid transparent !important;
+  border-left: 6px solid white !important;
+}
+
 /* .svg color */
 .svg-icon path {
   fill: black;

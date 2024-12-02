@@ -34,7 +34,7 @@ export default function HungerAlert({ countryFcsData, countryMapData }: HungerAl
   const totalPages = Math.ceil(countriesWithHighHunger.length / ROWS_PER_PAGE);
 
   return (
-    <div className="absolute bottom-0 left-0 z-10 cursor-pointer" style={{ bottom: '18rem', left: '1.86rem' }}>
+    <div className="absolute top-[calc(50dvh+90px)] left-7 z-10 cursor-pointer">
       <Tooltip text="Number of countries with high levels of hunger">
         <button
           className={HungerAlertOperations.getPulseClasses()}

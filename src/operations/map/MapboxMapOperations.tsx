@@ -1,15 +1,16 @@
 /* eslint-disable */
 import { LeafletContextInterface } from '@react-leaflet/core';
 import { FeatureCollection } from 'geojson';
-import mapboxgl, { Popup } from 'mapbox-gl';
-import { RefObject } from 'react';
+import mapboxgl from 'mapbox-gl';
+import React, { RefObject } from 'react';
 
 import { MapColorsType } from '@/domain/entities/map/MapColorsType.ts';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
-import { MapProps } from '@/domain/props/MapProps';
 import { getColors } from '@/styles/MapColors.ts';
 import disputedPattern from '../../../public/disputed_pattern.png';
 import { VectorTileLayerProps } from '@/domain/props/VectorTileLayerProps';
+import { createRoot } from 'react-dom/client';
+import CountryHoverPopover from '@/components/CountryHoverPopover/CountryHoverPopover.tsx';
 
 
 export class MapboxMapOperations {
@@ -278,5 +279,16 @@ export class MapboxMapOperations {
       return;
     }
     baseMap.removeLayer(layerToRemove.id);
+  }
+
+  /**
+   * Create a 'HTMLDivElement' rending the given 'countryName' within a 'CountryHoverPopover'.
+   * Needed cause leaflet tooltips or mapbox popups does not accept React components.
+   */
+  static createCountryNameTooltipElement(countryName: string): HTMLDivElement {
+    const tooltipContainer = document.createElement('div');
+    const root = createRoot(tooltipContainer);
+    root.render(<CountryHoverPopover header={countryName} />);
+    return tooltipContainer;
   }
 }

@@ -7,7 +7,7 @@ import { cardsWrapperClass } from '@/utils/primitives';
 import { ReactComponent as FoodConsumption } from '../../../public/Images/FoodConsumption.svg';
 import { ReactComponent as Import } from '../../../public/Images/Import.svg';
 import { ReactComponent as Population } from '../../../public/Images/Population.svg';
-import CustomAccordion from '../Accordions/Accordion';
+import AccordionContainer from '../Accordions/AccordionContainer';
 import CustomCard from '../Cards/Card';
 import { LineChart } from '../Charts/LineChart';
 import CustomInfoCircle from '../CustomInfoCircle/CustomInfoCircle';
@@ -23,21 +23,16 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
     FcsAccordionOperations.getHeadlineAndFoodInflationChartData(countryIso3Data);
   return (
     <div className="absolute w-[350px] left-[108px] top-4 z-9999">
-      <CustomAccordion
-        items={[
-          {
-            title: <div className="text-2xl font-black font-sans text-white">{countryName}</div>,
-          },
-        ]}
-        noSelectionMode
-        color="bg-primary"
-      />
-      <CustomAccordion
+      <AccordionContainer
         loading={loading}
+        title={countryName ?? undefined}
+        accordionModalActive
+        maxWidth={600}
         items={[
           {
             title: 'Food Security',
             infoIcon: <CustomInfoCircle />,
+            popoverInfo: FcsAccordionOperations.getFoodSecutriyPopoverInfo(),
             content: (
               <div className={cardsWrapperClass}>
                 <CustomCard
@@ -79,6 +74,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
           {
             title: 'Food Security Trends',
             infoIcon: <CustomInfoCircle />,
+            popoverInfo: FcsAccordionOperations.getFoodSecutriyTrendsPopoverInfo(),
             content: (
               <div>
                 {fcsChartData ? (
@@ -114,6 +110,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
           {
             title: 'Macro-economic',
             infoIcon: <CustomInfoCircle />,
+            popoverInfo: FcsAccordionOperations.getMacroEconomicPopoverInfo(),
             content: (
               <div className={cardsWrapperClass}>
                 <CustomCard
@@ -134,6 +131,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
           {
             title: 'Currency Exchange',
             infoIcon: <CustomInfoCircle />,
+            popoverInfo: FcsAccordionOperations.getCurrencyExchangePopoverInfo(),
             content: (
               <div>
                 {currencyExchangeChartData ? (
@@ -154,6 +152,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
           {
             title: 'Balance of Trade',
             infoIcon: <CustomInfoCircle />,
+            popoverInfo: FcsAccordionOperations.getBalanceOfTradePopoverInfo(),
             content: (
               <div>
                 {balanceOfTradeChartData ? (
@@ -174,6 +173,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
           {
             title: 'Headline and food inflation',
             infoIcon: <CustomInfoCircle />,
+            popoverInfo: FcsAccordionOperations.getHeadlineAndFoodInflationPopoverInfo(),
             content: (
               <div>
                 {headlineAndFoodInflationChartData ? (

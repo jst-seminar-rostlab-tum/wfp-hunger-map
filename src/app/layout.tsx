@@ -57,10 +57,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </Script>
         <link rel="preload" href="/wfp_logo.svg" as="image" />
       </head>
-      <body className={clsx('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
+      <body className={clsx('min-h-dvh bg-background font-sans antialiased', fontSans.variable)}>
         <CookieConsentPopup />
         <Providers themeProps={{ attribute: 'class', defaultTheme: 'dark' }}>
-          <div className="relative h-screen">
+          <div className="relative h-dvh">
             <main className="h-full w-full">{children}</main>
           </div>
         </Providers>

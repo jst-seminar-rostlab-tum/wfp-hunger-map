@@ -1,7 +1,8 @@
-import CustomAccordion from '@/components/Accordions/Accordion';
+import AccordionContainer from '@/components/Accordions/AccordionContainer';
 import CustomCard from '@/components/Cards/Card';
 import CustomInfoCircle from '@/components/CustomInfoCircle/CustomInfoCircle';
 import IpcAccordionProps from '@/domain/props/IpcAccordionProps';
+import { FcsAccordionOperations } from '@/operations/map/FcsAccordionOperations';
 import { cardsWrapperClass } from '@/utils/primitives';
 
 import { ReactComponent as FoodConsumption } from '../../../../public/Images/FoodConsumption.svg';
@@ -15,20 +16,15 @@ export default function IpcAccordion({ countryData, countryName }: IpcAccordionP
 
   return (
     <div className="absolute w-[350px] left-[108px] top-4 z-9999">
-      <CustomAccordion
-        items={[
-          {
-            title: <div className="text-2xl font-black font-sans text-white">{countryName}</div>,
-          },
-        ]}
-        noSelectionMode
-        color="bg-primary"
-      />
-      <CustomAccordion
+      <AccordionContainer
+        title={countryName ?? undefined}
+        accordionModalActive
+        maxWidth={600}
         items={[
           {
             title: 'Food Security',
             infoIcon: <CustomInfoCircle />,
+            popoverInfo: FcsAccordionOperations.getFoodSecutriyPopoverInfo(),
             content: !hasNoData ? (
               <div className={cardsWrapperClass}>
                 <CustomCard

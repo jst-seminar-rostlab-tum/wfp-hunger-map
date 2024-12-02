@@ -33,6 +33,10 @@ export default class NutritionChoroplethOperations {
     return {};
   }
 
+  public static allowCountryHover(nutritionData: CountryNutrition, countryId: number): boolean {
+    return nutritionData.body?.find((c) => c.adm0_code === countryId) !== undefined;
+  }
+
   private static async handleCountryClick(
     feature: Feature<Geometry, GeoJsonProperties>,
     setSelectedCountryId: (countryId: number | null) => void

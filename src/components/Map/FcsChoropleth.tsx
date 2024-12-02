@@ -5,6 +5,7 @@ import { GeoJSON } from 'react-leaflet';
 
 import FcsChoroplethProps from '@/domain/props/FcsChoroplethProps';
 import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
+import { MapboxMapOperations } from '@/operations/map/MapboxMapOperations';
 
 import FscCountryChoropleth from './FcsCountryChoropleth';
 
@@ -34,9 +35,13 @@ export default function FcsChoropleth({
         }}
         data={data}
         style={FcsChoroplethOperations.countryStyle}
-        onEachFeature={(feature, layer) =>
-          FcsChoroplethOperations.onEachFeature(feature, layer, setSelectedCountryId, theme === 'dark')
-        }
+        onEachFeature={(feature, layer) => {
+          // tooltip on country hover -> showing name
+          const tooltipContainer = MapboxMapOperations.createCountryNameTooltipElement(feature?.properties?.adm0_name);
+          layer.bindTooltip(tooltipContainer, { className: 'leaflet-tooltip', sticky: true });
+
+          FcsChoroplethOperations.onEachFeature(feature, layer, setSelectedCountryId, theme === 'dark');
+        }}
       />
       {regionData && countryId === selectedCountryId && (
         <FscCountryChoropleth

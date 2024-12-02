@@ -27,7 +27,7 @@ import NutritionChoropleth from './NutritionChoropleth';
 import VectorTileLayer from './VectorTileLayer';
 import ZoomControl from './ZoomControl';
 
-export default function Map({ countries, disputedAreas, ipcData, nutritionData }: MapProps) {
+export default function Map({ countries, disputedAreas, ipcData, fcsData, nutritionData, alertData }: MapProps) {
   const mapRef = useRef<LeafletMap | null>(null);
   const { selectedMapType } = useSelectedMap();
   const { setSelectedMapVisibility } = useSelectedMapVisibility();
@@ -108,20 +108,13 @@ export default function Map({ countries, disputedAreas, ipcData, nutritionData }
       zoomAnimation={false}
       style={{ height: '100%', width: '100%', zIndex: 1 }}
     >
-      <AlertContainer countries={countries} />
-      {countries && (
-        <VectorTileLayer
-          countries={countries}
-          disputedAreas={disputedAreas}
-          ipcData={ipcData}
-          nutritionData={nutritionData}
-        />
-      )}
+      <AlertContainer countries={countries} alertData={alertData} />
+      {countries && <VectorTileLayer countries={countries} disputedAreas={disputedAreas} />}
       {selectedMapType === GlobalInsight.FOOD &&
         countries.features &&
         countries.features
           .filter((country) => country.properties.interactive)
-          .filter((country) => country.properties.fcs !== null)
+          .filter((country) => fcsData[country.properties.adm0_id] !== null)
           .map((country) => (
             <FcsChoropleth
               key={country.properties.adm0_id}

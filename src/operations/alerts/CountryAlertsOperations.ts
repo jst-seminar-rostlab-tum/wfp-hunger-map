@@ -3,6 +3,8 @@ import { MultiPolygon, Polygon } from 'geojson';
 import L from 'leaflet';
 
 import { CountryAlert } from '@/domain/entities/alerts/CountryAlert';
+import { Coordinate } from '@/domain/entities/common/Coordinate';
+import { CountryAlertData } from '@/domain/entities/country/CountryAlertData';
 import { CountryMapData, CountryMapDataWrapper } from '@/domain/entities/country/CountryMapData';
 import { CountryAlertType } from '@/domain/enums/CountryAlertType';
 
@@ -30,9 +32,13 @@ export default class CountryAlertsOperations {
     return this.bearingsLookup;
   }
 
-  private static getRandomAroundCenter(country: CountryMapData, type: CountryAlertType): L.LatLngExpression {
+  private static getRandomAroundCenter(
+    country: CountryMapData,
+    centroid: Coordinate,
+    type: CountryAlertType
+  ): L.LatLngExpression {
     const countryGeometry = country.geometry as Polygon | MultiPolygon;
-    const center = [country.properties.centroid.longitude, country.properties.centroid.latitude];
+    const center = [centroid.longitude, centroid.latitude];
 
     const bearing = this.getBearingsLookup()[type];
 
@@ -52,42 +58,36 @@ export default class CountryAlertsOperations {
     return [center[1], center[0]];
   }
 
-  static getFromMapData(countries: CountryMapDataWrapper): CountryAlert[] {
+  static getFromMapData(alerts: CountryAlertData[], countries: CountryMapDataWrapper): CountryAlert[] {
     const result: CountryAlert[] = [];
 
     if (!countries.features) return result;
 
-    countries.features
-      .filter(
-        (country) =>
-          country.properties.alerts.conflict ||
-          country.properties.alerts.climateWet ||
-          country.properties.alerts.climateDry
-      )
-      .forEach((country) => {
-        const { alerts } = country.properties;
+    alerts.forEach((alertData) => {
+      const country = countries.features.find((c) => c.properties.adm0_id === alertData.adm0_code);
+      if (!country) return;
 
-        if (alerts.conflict) {
-          result.push({
-            type: CountryAlertType.FATALITY,
-            position: this.getRandomAroundCenter(country, CountryAlertType.FATALITY),
-          });
-        }
+      if (alertData.alerts.conflict) {
+        result.push({
+          type: CountryAlertType.FATALITY,
+          position: this.getRandomAroundCenter(country, alertData.centroid, CountryAlertType.FATALITY),
+        });
+      }
 
-        if (alerts.climateWet) {
-          result.push({
-            type: CountryAlertType.CLIMATE_WET,
-            position: this.getRandomAroundCenter(country, CountryAlertType.CLIMATE_WET),
-          });
-        }
+      if (alertData.alerts.climateWet) {
+        result.push({
+          type: CountryAlertType.CLIMATE_WET,
+          position: this.getRandomAroundCenter(country, alertData.centroid, CountryAlertType.CLIMATE_WET),
+        });
+      }
 
-        if (alerts.climateDry) {
-          result.push({
-            type: CountryAlertType.CLIMATE_DRY,
-            position: this.getRandomAroundCenter(country, CountryAlertType.CLIMATE_DRY),
-          });
-        }
-      });
+      if (alertData.alerts.climateDry) {
+        result.push({
+          type: CountryAlertType.CLIMATE_DRY,
+          position: this.getRandomAroundCenter(country, alertData.centroid, CountryAlertType.CLIMATE_DRY),
+        });
+      }
+    });
     return result;
   }
 }

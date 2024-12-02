@@ -9,13 +9,13 @@ import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
 import { MapProps } from '@/domain/props/MapProps';
 import { getColors } from '@/styles/MapColors.ts';
 import disputedPattern from '../../../public/disputed_pattern.png';
+import { VectorTileLayerProps } from '@/domain/props/VectorTileLayerProps';
 
 
 export class MapboxMapOperations {
-  static createMapboxMap(isDark: boolean, mapProps: MapProps, mapContainer: RefObject<HTMLDivElement>): mapboxgl.Map {
+  static createMapboxMap(isDark: boolean, { countries, disputedAreas }: VectorTileLayerProps, mapContainer: RefObject<HTMLDivElement>): mapboxgl.Map {
     const mapColors: MapColorsType = getColors(isDark);
 
-    const { countries, disputedAreas } = mapProps;
     return new mapboxgl.Map({
       container: mapContainer.current as unknown as string | HTMLElement,
       logoPosition: 'bottom-left', // default which can be changed to 'bottom-right'
@@ -230,9 +230,8 @@ export class MapboxMapOperations {
     });
   }
 
-  static addMapAsLayer(baseMap: mapboxgl.Map, isDark: boolean, mapProps: MapProps, popover: Popup) {
-    const mapColors: MapColorsType = getColors(isDark);
-    switch (mapProps.selectedMapType) {
+  static addMapAsLayer(baseMap: mapboxgl.Map, selectedMapType: GlobalInsight) {
+    switch (selectedMapType) {
       case GlobalInsight.FOOD:
         baseMap.addLayer(
           {
@@ -272,7 +271,6 @@ export class MapboxMapOperations {
     const layers = baseMap.getStyle()?.layers;
     if (!layers) return;
     const layerToRemove = layers.find((layer) =>
-      // TODO make sure to update this list with the new layers!
       [this.FCS_LAYER, this.VEGETATION_LAYER, this.RAINFALL_LAYER].includes(layer.id)
     );
     if (!layerToRemove) {

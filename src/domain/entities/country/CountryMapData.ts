@@ -1,6 +1,5 @@
 import { LatLngExpression } from 'leaflet';
 
-import { Coordinate } from '../common/Coordinate';
 import { Feature } from '../common/Feature';
 
 export type CountryMapData = Feature<
@@ -21,22 +20,7 @@ export type CountryMapData = Feature<
     Shape_Leng: number;
     Shape_Area: number;
     interactive?: boolean;
-    fcs?: number;
-    fcs_people_total?: number;
-    undernourishment?: number;
-    ipcPopulation?: number;
-    ipcAreasAnalysis?: string;
     incomeLevel?: string;
-    alerts: {
-      covid: boolean;
-      fcs: boolean;
-      marketAccess: boolean;
-      conflict: boolean;
-      ndvi: boolean;
-      climateDry: boolean;
-      climateWet: boolean;
-    };
-    centroid: Coordinate;
     dataType?: string;
   },
   LatLngExpression[][][] | LatLngExpression[][]

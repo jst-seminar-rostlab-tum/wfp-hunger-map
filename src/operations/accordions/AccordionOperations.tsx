@@ -4,6 +4,19 @@ import { AccordionItemProps } from '@/domain/entities/accordions/Accordions';
 import { cardsWrapperClass } from '@/utils/primitives';
 
 export default class AccordionOperations {
+  static getSelectionModeType(
+    noSelectionMode: boolean,
+    multipleSelectionMode: boolean
+  ): 'none' | 'multiple' | 'single' {
+    if (noSelectionMode) {
+      return 'none';
+    }
+    if (multipleSelectionMode) {
+      return 'multiple';
+    }
+    return 'single';
+  }
+
   static getAccordionData(): AccordionItemProps[] {
     return [
       {

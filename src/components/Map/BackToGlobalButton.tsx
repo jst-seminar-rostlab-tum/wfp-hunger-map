@@ -4,14 +4,17 @@ import { Button } from '@nextui-org/button';
 import { Undo } from 'lucide-react';
 import { useMap } from 'react-leaflet';
 
+import { useAccordionsModal } from '@/domain/contexts/AccodionsModalContext';
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 
 export default function BackToGlobalButton() {
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
+  const { clearAccordionModal } = useAccordionsModal();
   const map = useMap();
 
   const handleBackButtonClick = (): void => {
     map.zoomOut(4);
+    clearAccordionModal();
     setSelectedCountryId(null);
   };
 

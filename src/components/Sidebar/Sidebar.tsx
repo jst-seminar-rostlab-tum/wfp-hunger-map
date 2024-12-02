@@ -15,10 +15,12 @@ import { CollapsedSidebar } from '@/components/Sidebar/CollapsedSidebar';
 import { ThemeSwitch } from '@/components/Sidebar/ThemeSwitch';
 import { pageLinks } from '@/domain/constant/PageLinks';
 import { SUBSCRIBE_MODAL_TITLE } from '@/domain/constant/subscribe/Subscribe';
+import { useAccordionsModal } from '@/domain/contexts/AccodionsModalContext';
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { AlertsMenuVariant } from '@/domain/enums/AlertsMenuVariant';
+import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
 import SidebarProps from '@/domain/props/SidebarProps.ts';
 import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
 import { useMediaQuery } from '@/utils/resolution';
@@ -32,6 +34,7 @@ export function Sidebar({ countryMapData }: SidebarProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isMobile = useMediaQuery('(max-width: 640px)');
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
+  const { clearAccordionModal } = useAccordionsModal();
 
   const handleCountrySelect = (countryID: React.Key | null) => {
     if (countryID) {
@@ -42,6 +45,14 @@ export function Sidebar({ countryMapData }: SidebarProps) {
   if (!isSidebarOpen) {
     return <CollapsedSidebar />;
   }
+
+  const onMapTypeSelect = (mapType: GlobalInsight) => {
+    clearAccordionModal();
+    setSelectedMapType(mapType);
+    if (isMobile) {
+      closeSidebar();
+    }
+  };
 
   return (
     <div className="w-screen h-screen absolute top-0 left-0 z-sidebarFullScreen sm:w-auto sm:h-[calc(100vh-3.5rem)] sm:z-sidebarExpanded sm:pt-4 sm:pl-4 sm:pb-10">
@@ -110,12 +121,7 @@ export function Sidebar({ countryMapData }: SidebarProps) {
                       'justify-start dark:text-white',
                       selectedMapType === item.key ? 'bg-primary text-white' : 'text-black'
                     )}
-                    onClick={() => {
-                      setSelectedMapType(item.key);
-                      if (isMobile) {
-                        closeSidebar();
-                      }
-                    }}
+                    onClick={() => onMapTypeSelect(item.key)}
                   >
                     {item.label}
                   </Button>

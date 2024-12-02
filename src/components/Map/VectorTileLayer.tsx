@@ -38,7 +38,6 @@ export default function VectorTileLayer({ countries, disputedAreas, ipcData, nut
       setPopup(popover);
     });
 
-    MapboxMapOperations.setMapCountryHoverPopup(baseMap, popover, selectedMapType);
     MapboxMapOperations.synchronizeLeafletMapbox(baseMap, mapContainer, context);
     MapboxMapOperations.initDisputedLayer(baseMap);
     // The following layers currently don't work due to CORS issues.
@@ -51,7 +50,7 @@ export default function VectorTileLayer({ countries, disputedAreas, ipcData, nut
       context.map.off('move');
       setMap(undefined);
     };
-  }, [context, selectedMapType]);
+  }, [context]);
 
   useEffect(() => {
     if (map && popup && selectedMapVisibility) {

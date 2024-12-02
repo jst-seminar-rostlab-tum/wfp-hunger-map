@@ -93,30 +93,6 @@ export class MapboxMapOperations {
     });
   }
 
-  static setMapCountryHoverPopup(baseMap: mapboxgl.Map, popover: Popup, selectedMapType: GlobalInsight): void {
-
-    baseMap.on('mousemove', 'countries-base', (e) => {
-      const features = e.features;
-      if (!features || features.length !== 1 || !features[0].properties?.adm0_name) {
-        popover.remove();
-        return;
-      };
-      const countryName = features[0].properties.adm0_name;
-
-      // tooltip on country hover -> showing name;
-      // only for RAINFALL and VEGETATION cause the other Global Insights provide their own tooltips on hover;
-      // we are using the 'setText' functionality and not the generated DOM element of 'createCountryNameTooltipElement',
-      // because otherwise it would cause the popup to "flicker" when moving the mouse)
-      if (selectedMapType === GlobalInsight.RAINFALL || selectedMapType === GlobalInsight.VEGETATION) {
-        popover.setText(countryName).addTo(baseMap).setLngLat(e.lngLat);
-      }
-
-      baseMap.on('mouseleave', 'countries-base', () => {
-        popover.remove();
-      });
-    });
-  }
-
   static synchronizeLeafletMapbox(
     baseMap: mapboxgl.Map,
     mapContainer: RefObject<HTMLDivElement>,

@@ -163,7 +163,7 @@ export function LineChartModal({
               highcharts={Highcharts}
               options={chartOptions}
               ref={chartRef}
-              containerProps={{ style: { width: '100%', height: '45vh', borderRadius: '0 0 0.5rem 0.5rem' } }}
+              containerProps={{ style: { width: '100%', height: '45dvh', borderRadius: '0 0 0.5rem 0.5rem' } }}
             />
           </div>
         </ModalBody>

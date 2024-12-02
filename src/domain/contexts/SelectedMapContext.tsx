@@ -18,6 +18,7 @@ export function SelectedMapProvider({ children }: { children: ReactNode }) {
       setSelectedMapVisibility(true);
     }
     setSelectedMapTypeState(value);
+    window.gtag('event', `${value}_map_selected`);
   };
 
   const value = useMemo(

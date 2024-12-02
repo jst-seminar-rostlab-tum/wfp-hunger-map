@@ -1,3 +1,4 @@
+import AccordionModal from '@/components/Accordions/AccordionModal';
 import { AlertsMenuWrapper } from '@/components/AlertsMenu/AlertsMenuWrapper';
 import Chatbot from '@/components/Chatbot/Chatbot';
 import HungerAlertLoader from '@/components/HungerAlert/HungerAlertLoader';
@@ -22,7 +23,7 @@ export default async function Home() {
 
   return (
     <>
-      <Sidebar />
+      <Sidebar countryMapData={countryMapData} />
       <AlertsMenuWrapper />
       <Chatbot />
       <MapLoader
@@ -33,6 +34,7 @@ export default async function Home() {
       />
       <HungerAlertLoader countryMapData={countryMapData} />
       <MapLegend />
+      <AccordionModal />
     </>
   );
 }

@@ -1,6 +1,7 @@
 import { AlertRepositoryImpl } from './infrastructure/repositories/AlertRepositoryImpl';
 import ChatbotRepositoryImpl from './infrastructure/repositories/ChatbotRepositoryImpl';
 import CountryRepositoryImpl from './infrastructure/repositories/CountryRepositoryImpl';
+import DownloadRepositoryImpl from './infrastructure/repositories/DownloadRepositoryImpl';
 import GlobalDataRepositoryImpl from './infrastructure/repositories/GlobalDataRepositoryImpl';
 import SubscriptionRepositoryImpl from './infrastructure/repositories/SubscriptionRepositoryImpl';
 
@@ -26,5 +27,6 @@ container.register('AlertRepository', new AlertRepositoryImpl());
 container.register('GlobalDataRepository', new GlobalDataRepositoryImpl());
 container.register('ChatbotRepository', new ChatbotRepositoryImpl());
 container.register('SubscriptionRepository', new SubscriptionRepositoryImpl());
+container.register('DownloadRepository', new DownloadRepositoryImpl());
 
 export default container;

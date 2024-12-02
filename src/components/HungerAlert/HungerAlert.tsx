@@ -34,7 +34,7 @@ export default function HungerAlert({ countryMapData }: HungerAlertProps) {
   const totalPages = Math.ceil(countriesWithHighHunger.length / ROWS_PER_PAGE);
 
   return (
-    <div className="absolute bottom-0 left-0 z-10 cursor-pointer" style={{ bottom: '18rem', left: '1.86rem' }}>
+    <div className="absolute top-[calc(50dvh+90px)] left-7 z-10 cursor-pointer">
       <Tooltip text="Number of countries with high levels of hunger">
         <button
           className={HungerAlertOperations.getPulseClasses()}
@@ -55,7 +55,7 @@ export default function HungerAlert({ countryMapData }: HungerAlertProps) {
           <CustomTable
             columns={HungerAlertOperations.getHungerAlertModalColumns()}
             data={displayedRows}
-            className="mb-3 min-h-[28rem]"
+            className="mb-3 min-h-[26rem]"
           />
           <Pagination isCompact showControls page={page} total={totalPages} onChange={(newPage) => setPage(newPage)} />
         </div>

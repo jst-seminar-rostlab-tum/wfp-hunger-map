@@ -1,9 +1,10 @@
 import { AccordionItemProps } from '../entities/accordions/Accordions';
 
-export interface AccordionsProps {
+export interface AccordionProps {
   items: AccordionItemProps[];
+  title?: string;
   loading?: boolean;
   multipleSelectionMode?: boolean;
-  expandAll?: boolean;
-  highlightedTitleWords?: string[];
+  noSelectionMode?: boolean;
+  color?: string;
 }

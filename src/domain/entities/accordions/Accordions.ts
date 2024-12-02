@@ -5,8 +5,10 @@ export interface AccordionItemProps {
   title: string;
   infoIcon?: ReactNode;
   tooltipInfo?: string;
+  popoverInfo?: ReactNode;
   description?: ReactNode;
-  content: string | ReactElement;
+  content?: string | ReactElement;
+  hideIndicator?: boolean;
   containedWords?: string;
 }
 

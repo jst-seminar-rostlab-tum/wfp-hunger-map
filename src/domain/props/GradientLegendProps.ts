@@ -1,7 +1,6 @@
 export default interface GradientLegendProps {
-  startColor: string;
-  middleColor?: string;
-  endColor: string;
+  colors: string[];
   startLabel: string;
   endLabel: string;
+  hasNotAnalyzedPoint?: boolean;
 }

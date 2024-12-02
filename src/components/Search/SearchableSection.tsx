@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import Accordion from '@/components/Accordions/Accordion';
+import AccordionContainer from '@/components/Accordions/AccordionContainer';
 import { AccordionItemProps, SearchableAccordionItemProps } from '@/domain/entities/accordions/Accordions';
 import { SearchableElement, SearchableSectionProps } from '@/domain/props/SearchableSectionProps';
 import { filterSearchableItems } from '@/utils/searchUtils';
@@ -25,7 +25,7 @@ function SearchableSection({ heading, textElements, accordionItems, searchWords 
       {heading && <h2>{heading}</h2>}
       {textVisible ? (filteredTextElements ?? textElements)?.map((e) => e.element) : null}
       {accordionVisible ? (
-        <Accordion
+        <AccordionContainer
           items={filteredAccordionItems ?? accordionItems}
           multipleSelectionMode
           expandAll={!!filteredAccordionItems}

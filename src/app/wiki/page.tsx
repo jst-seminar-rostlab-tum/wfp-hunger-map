@@ -2,7 +2,7 @@ import React from 'react';
 
 import LiveSuperscript from '@/components/About/LiveSuperscript';
 import StyledLink from '@/components/About/StyledLink';
-import CustomAccordion from '@/components/Accordions/Accordion';
+import AccordionContainer from '@/components/Accordions/AccordionContainer';
 import wikiEntries from '@/domain/constant/wiki/wikiEntries';
 
 function Page() {
@@ -17,7 +17,7 @@ function Page() {
         </StyledLink>{' '}
         for a broader overview.
       </p>
-      <CustomAccordion items={wikiEntries} />
+      <AccordionContainer items={wikiEntries} />
     </section>
   );
 }

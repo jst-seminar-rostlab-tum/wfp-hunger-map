@@ -10,9 +10,11 @@ export interface NutrientOption {
 }
 
 export interface NutritionStateChoroplethProps {
-  regionNutri: CountryMimiData | undefined;
+  regionNutrition: CountryMimiData | undefined;
   regionData: FeatureCollection<Geometry, GeoJsonProperties>;
+  countryName?: string;
   handleClick?: (feature: GeoJsonProperties) => void;
+  handleBackButtonClick?: () => void;
   tooltip?: { className?: string };
 }
 

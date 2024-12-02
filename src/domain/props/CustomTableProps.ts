@@ -29,6 +29,8 @@ export default interface CustomTableProps<D> {
   format?: keyof typeof tableFormatters;
   ariaLabel?: string;
   className?: string;
+  zebraRows?: boolean;
+  showBorders?: boolean;
 }
 
 export type DataSourceTableRow = {

@@ -13,6 +13,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@internationalized/date": "^3.6.0",
     "@nextui-org/accordion": "^2.0.40",
     "@nextui-org/button": "^2.0.38",
     "@nextui-org/card": "^2.0.34",
@@ -79,6 +80,7 @@
   "devDependencies": {
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
+    "@tailwindcss/typography": "^0.5.15",
     "@types/geojson": "^7946.0.14",
     "@types/leaflet": "^1.9.14",
     "@types/leaflet.markercluster": "^1.5.5",

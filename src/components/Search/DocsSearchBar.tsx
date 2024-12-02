@@ -23,7 +23,7 @@ function DocsSearchBar({ setSearchWords }: DocsSearchBarProps) {
         setSearch(v);
         router.push(`${pathname}?search=${v}`);
       }}
-      className="max-w-md mx-auto pb-5"
+      className="max-w-md mx-auto"
     />
   );
 }

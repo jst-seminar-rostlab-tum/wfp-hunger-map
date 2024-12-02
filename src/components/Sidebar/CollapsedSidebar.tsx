@@ -3,16 +3,24 @@ import { Card, CardBody, CardHeader } from '@nextui-org/card';
 import { SidebarRight } from 'iconsax-react';
 import NextImage from 'next/image';
 
+import { useAccordionsModal } from '@/domain/contexts/AccodionsModalContext';
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSidebar } from '@/domain/contexts/SidebarContext';
+import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
 import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
 
 export function CollapsedSidebar() {
   const { toggleSidebar } = useSidebar();
   const { selectedMapType, setSelectedMapType } = useSelectedMap();
+  const { clearAccordionModal } = useAccordionsModal();
+
+  const onMapTypeSelect = (mapType: GlobalInsight) => {
+    clearAccordionModal();
+    setSelectedMapType(mapType);
+  };
 
   return (
-    <div className="absolute top-0 left-0 z-sidebarCollapsed mt-4 ml-4">
+    <div className="absolute top-0 left-0 z-sidebarCollapsed pt-4 pl-4">
       <Card className="h-full">
         <CardHeader className="flex justify-center items-center">
           <Button isIconOnly variant="light" onClick={toggleSidebar} aria-label="Close sidebar">
@@ -27,7 +35,7 @@ export function CollapsedSidebar() {
                 key={item.key}
                 variant={selectedMapType === item.key ? undefined : 'light'}
                 className={selectedMapType === item.key ? 'bg-primary' : undefined}
-                onClick={() => setSelectedMapType(item.key)}
+                onClick={() => onMapTypeSelect(item.key)}
               >
                 <NextImage unoptimized loading="eager" src={item.icon} alt={item.label} width={24} height={24} />
               </Button>

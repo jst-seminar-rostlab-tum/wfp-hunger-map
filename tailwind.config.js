@@ -67,6 +67,7 @@ const config = {
       height: {
         '657px': '657px',
         '600px': '600px',
+        '0.5px': '0.5px',
       },
       padding: {
         '179px': '179px',
@@ -74,6 +75,9 @@ const config = {
       },
       borderRadius: {
         '12px_0_0_12px': '12px 0 0 12px',
+      },
+      borderSize: {
+        '0.5px': '0.5px',
       },
       zIndex: {
         9999: '9999',
@@ -85,6 +89,8 @@ const config = {
         chatbotFullScreen: '41',
         alertsMenu: '40',
         legend: '40',
+        accordionsModalButton: '40',
+        cookieConsent: '41',
       },
       animation: {
         blink: 'blink 1s step-end infinite',
@@ -155,31 +161,58 @@ const config = {
             hazarAdvisory: '#57D66F',
             hazardInformation: '#0098EB',
             hazardTermination: '#B4B5B7',
-            fcsGreen: '#345d34',
-            fcsOrange: '#ea6a2c',
-            fcsRed: '#fa190e',
-            ipcStart: '#F6D1C1',
-            ipcMiddle: '#FB7453',
-            ipcEnd: '#710013',
-            rainfallLow: '#b99260',
-            rainfallNormal: '#fff',
-            rainfallHigh: '#4295d3',
-            vegetationLow: '#b99260',
-            vegetationNormal: '#fff',
-            vegetationHigh: '#b1dbb5',
+
+            //fcs gradient
+            fcsGradient1: '#29563a',
+            fcsGradient2: '#73b358',
+            fcsGradient3: '#cbcc58',
+            fcsGradient4: '#d5a137',
+            fcsGradient5: '#eb5a26',
+            fcsGradient6: '#d3130c',
+
+            //ipc global + nutrition country gradient
+            ipcGradient1: '#f6d1c1',
+            ipcGradient2: '#fc9b7d',
+            ipcGradient3: '#fb7453',
+            ipcGradient4: '#f24634',
+            ipcGradient5: '#d11f26',
+            ipcGradient6: '#ae151b',
+            ipcGradient7: '#710013',
+
+            //vegetation gradient
+            vegetationGradient1: '#B99260',
+            vegetationGradient2: '#B95926',
+            vegetationGradient3: '#A3731F',
+            vegetationGradient4: '#524C22',
+            vegetationGradient5: '#000000',
+            vegetationGradient6: '#729E13',
+            vegetationGradient7: '#22B72D',
+            vegetationGradient8: '#7BCB83',
+            vegetationGradient9: '#B1DBB5',
+
+            //rainfall gradient
+            rainfallGradient6: '#0F4343',
+            rainfallGradient7: '#25777D',
+            rainfallGradient8: '#3AB9D1',
+            rainfallGradient9: '#4295D3',
+
+            //nutrition points
+            nutritionActual: '#FFB74D',
+            nutritionPredicted: '#E3F2FD',
+            nutritionNotAnalyzed: '#D2D1D1',
+
             countriesBase: '#fefeff',
             ocean: '#91cccb',
             fatalityAlert: '#742280',
             climateWetAlert: '#4295D3',
             climateDryAlert: '#B95926',
+            ipcPhase1: '#d1fad1',
+            ipcPhase2: '#fae834',
+            ipcPhase3: '#e88519',
+            ipcPhase4: '#cd1919',
+            ipcPhase5: '#731919',
             chartsLegendBackground: '#F5F5F5',
             chartsXAxisLine: '#a6a6a6',
-            nutritionGradientStart: '#fff3f3ff',
-            nutritionGradientMiddle: '#fa9997',
-            nutritionGradientEnd: '#f32e27',
-            nutritionActual: '#FFB74D',
-            nutritionPredicted: '#E3F2FD',
-            nutritionNotAnalyzed: '#52525b',
           },
         },
         dark: {
@@ -222,10 +255,12 @@ const config = {
             climateDryAlert: '#B95926',
             chartsLegendBackground: '#2a2a2a',
             chartsXAxisLine: '#757575',
+            nutritionNotAnalyzed: '#A69F9F',
           },
         },
       },
     }),
+    require('@tailwindcss/typography'),
   ],
 };
 

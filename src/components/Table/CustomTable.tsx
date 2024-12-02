@@ -5,17 +5,21 @@
 
 import { Table, TableBody, TableColumn, TableHeader, TableRow } from '@nextui-org/table';
 import clsx from 'clsx';
-import React from 'react';
 
 import CustomTableProps, { CustomTableData, CustomTableRow } from '@/domain/props/CustomTableProps';
 import { getTableCell } from '@/operations/tables/groupedTableOperations';
 import tableFormatters from '@/operations/tables/tableFormatters';
 
-/**
- * A table with its rows grouped by the values in the first column (`keyColumn`).
- * For simple tables, each group has one row, i.e. 'groups' and 'rows' are equal.
- */
-function CustomTable<D>({ columns, data, ariaLabel, className, format = 'simple' }: CustomTableProps<D>) {
+function CustomTable<D>({
+  columns,
+  data,
+  ariaLabel,
+  className,
+  format = 'simple',
+  showBorders = true,
+  zebraRows = true,
+}: CustomTableProps<D>) {
+  // Formatting and data preparation
   const formattingFunction = tableFormatters[format] as (d: D) => CustomTableData;
   const rows = formattingFunction(data).flatMap(({ groupKey, groupName, attributeRows }) =>
     attributeRows.map((row, index) => ({
@@ -32,29 +36,49 @@ function CustomTable<D>({ columns, data, ariaLabel, className, format = 'simple'
   const leftAlignedColumns = new Set(columns.filter((c) => c.alignLeft).map((c) => c.columnId));
 
   return (
-    <Table
-      removeWrapper
-      aria-label={ariaLabel}
-      classNames={{ thead: '[&>tr:last-child]:hidden' }}
-      className={className}
-    >
-      <TableHeader columns={columns}>
-        {({ columnId, label, alignLeft }) => (
-          <TableColumn key={columnId} className={clsx('border-b-2 text-wrap', { 'text-center': !alignLeft })}>
-            {label}
-          </TableColumn>
-        )}
-      </TableHeader>
-      <TableBody items={rows}>
-        {(row) => {
-          return (
+    <div className="w-full overflow-x-auto">
+      <Table
+        removeWrapper
+        aria-label={ariaLabel}
+        className={clsx(className, {
+          'overflow-hidden': showBorders,
+        })}
+        classNames={{
+          base: clsx({
+            'border-2 rounded-xl dark:border-default-200': showBorders,
+            'min-w-[400px]': true, // Force horizontal scroll by setting a large min-width
+          }),
+          thead: clsx({
+            '[&>tr:last-child]:hidden': true,
+            'bg-background dark:bg-chatbotUserMsg': zebraRows,
+          }),
+          tr: clsx({
+            'even:bg-background dark:even:bg-chatbotUserMsg': zebraRows,
+          }),
+        }}
+      >
+        <TableHeader columns={columns}>
+          {(column) => (
+            <TableColumn
+              key={column.columnId}
+              className={clsx('text-wrap', {
+                'text-center': !leftAlignedColumns.has(column.columnId),
+                'border-b-2 dark:border-default-200': showBorders,
+              })}
+            >
+              {column.label}
+            </TableColumn>
+          )}
+        </TableHeader>
+        <TableBody items={rows} emptyContent="No rows to display">
+          {(row) => (
             <TableRow key={`${row.groupKey}×${row.index}`}>
               {(columnKey) => getTableCell(row, columnKey as string, !leftAlignedColumns.has(columnKey as string))}
             </TableRow>
-          );
-        }}
-      </TableBody>
-    </Table>
+          )}
+        </TableBody>
+      </Table>
+    </div>
   );
 }
 

@@ -4,12 +4,15 @@ import FcsAccordionProps from '@/domain/props/FcsAccordionProps';
 import { FcsAccordionOperations } from '@/operations/map/FcsAccordionOperations';
 import { cardsWrapperClass } from '@/utils/primitives';
 
-import CustomAccordion from '../Accordions/Accordion';
+import { ReactComponent as FoodConsumption } from '../../../public/Images/FoodConsumption.svg';
+import { ReactComponent as Import } from '../../../public/Images/Import.svg';
+import { ReactComponent as Population } from '../../../public/Images/Population.svg';
+import AccordionContainer from '../Accordions/AccordionContainer';
 import CustomCard from '../Cards/Card';
 import { LineChart } from '../Charts/LineChart';
 import CustomInfoCircle from '../CustomInfoCircle/CustomInfoCircle';
 
-export default function FcsAccordion({ countryData, loading, countryIso3Data }: FcsAccordionProps) {
+export default function FcsAccordion({ countryData, loading, countryIso3Data, countryName }: FcsAccordionProps) {
   const deltaOneMonth = countryData?.fcsMinus1 ? countryData.fcs - countryData.fcsMinus1 : null;
   const deltaThreeMonth = countryData?.fcsMinus3 ? countryData.fcs - countryData.fcsMinus3 : null;
   const fcsChartData = FcsAccordionOperations.getFcsChartData(countryData);
@@ -20,19 +23,23 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
     FcsAccordionOperations.getHeadlineAndFoodInflationChartData(countryIso3Data);
   return (
     <div className="absolute w-[350px] left-[108px] top-4 z-9999">
-      <CustomAccordion
+      <AccordionContainer
         loading={loading}
+        title={countryName ?? undefined}
+        accordionModalActive
+        maxWidth={600}
         items={[
           {
             title: 'Food Security',
             infoIcon: <CustomInfoCircle />,
+            popoverInfo: FcsAccordionOperations.getFoodSecutriyPopoverInfo(),
             content: (
               <div className={cardsWrapperClass}>
                 <CustomCard
                   title="Population"
                   content={[
                     {
-                      imageSrc: '/Images/Population.svg',
+                      svgIcon: <Population className="w-full h-full object-contain" />,
                       text: countryData?.population ? `${countryData.population.toFixed(2)} M` : 'N/A',
                       altText: 'Population Icon',
                     },
@@ -42,9 +49,9 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
                   title="People with insufficient food consumption"
                   content={[
                     {
-                      imageSrc: '/Images/FoodConsumption.svg',
+                      svgIcon: <FoodConsumption className="w-full h-full object-contain" />,
                       text: countryData?.fcs ? `${countryData.fcs.toFixed(2)} M` : 'N/A',
-                      altText: 'Population Icon',
+                      altText: 'Food Consumption Icon',
                     },
                     {
                       imageSrc: deltaOneMonth && deltaOneMonth > 0 ? '/Images/ArrowGreen.svg' : '/Images/ArrowRed.svg',
@@ -67,6 +74,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
           {
             title: 'Food Security Trends',
             infoIcon: <CustomInfoCircle />,
+            popoverInfo: FcsAccordionOperations.getFoodSecutriyTrendsPopoverInfo(),
             content: (
               <div>
                 {fcsChartData ? (
@@ -102,17 +110,18 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
           {
             title: 'Macro-economic',
             infoIcon: <CustomInfoCircle />,
+            popoverInfo: FcsAccordionOperations.getMacroEconomicPopoverInfo(),
             content: (
               <div className={cardsWrapperClass}>
                 <CustomCard
                   title="Import Dependency"
                   content={[
                     {
-                      imageSrc: '/Images/Import.svg',
+                      svgIcon: <Import className="w-full h-full object-contain" />,
                       text: countryData?.importDependency
                         ? `${countryData.importDependency.toFixed(1)}% of Cereals`
                         : 'N/A',
-                      altText: 'Icon',
+                      altText: 'Import Dependency Icon',
                     },
                   ]}
                 />
@@ -122,6 +131,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
           {
             title: 'Currency Exchange',
             infoIcon: <CustomInfoCircle />,
+            popoverInfo: FcsAccordionOperations.getCurrencyExchangePopoverInfo(),
             content: (
               <div>
                 {currencyExchangeChartData ? (
@@ -142,6 +152,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
           {
             title: 'Balance of Trade',
             infoIcon: <CustomInfoCircle />,
+            popoverInfo: FcsAccordionOperations.getBalanceOfTradePopoverInfo(),
             content: (
               <div>
                 {balanceOfTradeChartData ? (
@@ -162,6 +173,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data }: 
           {
             title: 'Headline and food inflation',
             infoIcon: <CustomInfoCircle />,
+            popoverInfo: FcsAccordionOperations.getHeadlineAndFoodInflationPopoverInfo(),
             content: (
               <div>
                 {headlineAndFoodInflationChartData ? (

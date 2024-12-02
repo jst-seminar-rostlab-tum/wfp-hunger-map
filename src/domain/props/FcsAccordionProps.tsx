@@ -5,4 +5,5 @@ export default interface FcsAccordionProps {
   countryData?: CountryData;
   countryIso3Data?: CountryIso3Data;
   loading: boolean;
+  countryName?: string;
 }

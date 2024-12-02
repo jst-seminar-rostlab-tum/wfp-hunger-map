@@ -9,6 +9,7 @@ import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchange
 import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
 import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
 import { LineChartDataType } from '@/domain/enums/LineChartDataType.ts';
+import { formatToMillion } from '@/utils/formatting.ts';
 
 if (typeof Highcharts === 'object') {
   highchartsMore(Highcharts);
@@ -43,12 +44,16 @@ export default class LineChartOperations {
   ) {
     let tooltip = '';
     if (xAxisType === 'datetime' && typeof x === 'number') {
-      tooltip = `<b>${Highcharts.dateFormat('%d.%m.%y', x)}</b><br/>`;
+      tooltip = `<b>${Highcharts.dateFormat('%d.%m.%y', x)}</b>`;
     } else {
-      tooltip = `<b>${x}</b><br/>`;
+      tooltip = `<b>${x}</b>`;
     }
     points?.forEach((p) => {
-      tooltip += `<span style="color:${p.series.color}">\u25CF</span> ${p.series.name}: <b>${p.y}</b><br/>`;
+      if (p.point.options.y) {
+        tooltip += `<br><span style="color:${p.series.color}">\u25CF</span> <div>${p.point.options.y}</div>`;
+      } else if (p.point.options.high !== undefined && p.point.options.low !== undefined) {
+        tooltip += `<div style="color: ${'hsl(var(--nextui-secondary))'}"> (<div>${p.point.options.low} - ${p.point.options.high}</div>)</div>`;
+      }
     });
     return tooltip;
   }
@@ -81,20 +86,22 @@ export default class LineChartOperations {
         return {
           type: LineChartDataType.LINE_CHART_DATA,
           xAxisType: 'datetime',
+          yAxisLabel: 'Mill',
           lines: [
             {
               name: 'Balance of Trade',
               dataPoints: data.data.map((p) => {
-                return { x: new Date(p.x).getTime(), y: p.y };
+                return { x: new Date(p.x).getTime(), y: formatToMillion(p.y) };
               }),
             },
           ],
         };
 
-      case LineChartDataType.CURRENCY_EXCHANGE_GRAPH:
+      case LineChartDataType.CURRENCY_EXCHANGE_CHART:
         return {
           type: LineChartDataType.LINE_CHART_DATA,
           xAxisType: 'datetime',
+          yAxisLabel: 'Exchange rate',
           lines: [
             {
               name: data.name,
@@ -105,10 +112,11 @@ export default class LineChartOperations {
           ],
         };
 
-      case LineChartDataType.INFLATION_GRAPHS:
+      case LineChartDataType.INFLATION_CHARTS:
         return {
           type: LineChartDataType.LINE_CHART_DATA,
           xAxisType: 'datetime',
+          yAxisLabel: 'Rate in %',
           lines: [
             {
               name: 'Headline Inflation',

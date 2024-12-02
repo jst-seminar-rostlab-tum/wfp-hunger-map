@@ -5,12 +5,14 @@ import { ReactNode, useEffect, useRef, useState } from 'react';
 export function ReadMore({
   children,
   maxHeight = 100,
+  maxExpandedHeight,
   className = '',
   expandButtonText = 'Read More',
   collapseButtonText = 'Show Less',
 }: {
   children: ReactNode;
   maxHeight?: number;
+  maxExpandedHeight?: number;
   className?: string;
   expandButtonText?: string;
   collapseButtonText?: string;
@@ -34,13 +36,15 @@ export function ReadMore({
     return () => window.removeEventListener('resize', updateHeight);
   }, [maxHeight, children]);
 
+  const expandedHeight = maxExpandedHeight ?? contentHeight;
+
   return (
     <div className={className}>
       <div
         ref={contentRef}
         style={{
-          maxHeight: isExpanded ? `${contentHeight}px` : `${maxHeight}px`,
-          overflow: 'hidden',
+          maxHeight: isExpanded ? `${expandedHeight}px` : `${maxHeight}px`,
+          overflow: isExpanded ? 'auto' : 'hidden',
           transition: 'max-height 0.3s ease-in-out',
         }}
         aria-expanded={isExpanded}

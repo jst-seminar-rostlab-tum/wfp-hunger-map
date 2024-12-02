@@ -8,6 +8,7 @@ import { Spinner } from '@nextui-org/spinner';
 import { AccordionContainerProps } from '@/domain/props/AccordionContainerProps';
 import AccordionOperations from '@/operations/accordions/AccordionOperations';
 
+import { ReadMore } from '../ReadMore/ReadMore';
 import { Tooltip } from '../Tooltip/Tooltip';
 
 /**
@@ -59,7 +60,11 @@ export default function AccordionBoxItems({
                       )}
                     </PopoverTrigger>
                     <PopoverContent>
-                      <div className="p-2 max-w-[400px] content">{item.popoverInfo}</div>
+                      <div className="p-2 max-w-[400px] prose prose-sm dark:prose-invert prose-headings:text-medium">
+                        <ReadMore maxHeight={100} maxExpandedHeight={500}>
+                          {item.popoverInfo}
+                        </ReadMore>
+                      </div>
                     </PopoverContent>
                   </Popover>
                 )}

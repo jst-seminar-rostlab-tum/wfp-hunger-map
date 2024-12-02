@@ -2,6 +2,7 @@ import CustomAccordion from '@/components/Accordions/Accordion';
 import CustomCard from '@/components/Cards/Card';
 import CustomInfoCircle from '@/components/CustomInfoCircle/CustomInfoCircle';
 import IpcAccordionProps from '@/domain/props/IpcAccordionProps';
+import { FcsAccordionOperations } from '@/operations/map/FcsAccordionOperations';
 import { cardsWrapperClass } from '@/utils/primitives';
 
 import { ReactComponent as FoodConsumption } from '../../../../public/Images/FoodConsumption.svg';
@@ -29,6 +30,7 @@ export default function IpcAccordion({ countryData, countryName }: IpcAccordionP
           {
             title: 'Food Security',
             infoIcon: <CustomInfoCircle />,
+            popoverInfo: FcsAccordionOperations.getFoodSecutriyPopoverInfo(),
             content: !hasNoData ? (
               <div className={cardsWrapperClass}>
                 <CustomCard

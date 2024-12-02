@@ -7,7 +7,7 @@ import FcsRegionTooltip from '@/components/Map/FcsRegionTooltip';
 
 export class FcsCountryChoroplethOperations {
   static fcsFill(fcs?: number): string {
-    if (fcs === undefined) return 'none';
+    if (fcs === undefined) return '#2D6092';
     if (fcs <= 0.05) return '#29563A';
     if (fcs <= 0.1) return '#73B358';
     if (fcs <= 0.2) return '#CBCC58';

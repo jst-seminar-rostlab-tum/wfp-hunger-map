@@ -6,6 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@nextui-org/popover';
 import { Spinner } from '@nextui-org/spinner';
 
 import { AccordionContainerProps } from '@/domain/props/AccordionContainerProps';
+import AccordionOperations from '@/operations/accordions/AccordionOperations';
 
 import { Tooltip } from '../Tooltip/Tooltip';
 
@@ -21,7 +22,7 @@ export default function AccordionBoxItems({
   noSelectionMode = false,
   color = 'bg-content1',
 }: AccordionContainerProps) {
-  const selectionMode = noSelectionMode ? 'none' : multipleSelectionMode ? 'multiple' : 'single';
+  const selectionMode = AccordionOperations.getSelectionModeType(noSelectionMode, multipleSelectionMode);
 
   return (
     <div className="w-full max-w-[600px] overflow-x-auto rounded-lg shadow-none">

@@ -6,6 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@nextui-org/popover';
 import { Spinner } from '@nextui-org/spinner';
 
 import { AccordionContainerProps } from '@/domain/props/AccordionContainerProps';
+import AccordionOperations from '@/operations/accordions/AccordionOperations';
 
 import { Tooltip } from '../Tooltip/Tooltip';
 
@@ -20,7 +21,7 @@ export default function AccordionListItems({
   multipleSelectionMode = false,
   noSelectionMode = false,
 }: AccordionContainerProps) {
-  const selectionMode = noSelectionMode ? 'none' : multipleSelectionMode ? 'multiple' : 'single';
+  const selectionMode = AccordionOperations.getSelectionModeType(noSelectionMode, multipleSelectionMode);
   const defaultExpandedKeys =
     items.length === 1 ? [typeof items[0].title === 'string' ? items[0].title : `accordion-item-0`] : [];
 

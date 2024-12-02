@@ -3,4 +3,4 @@ export interface CountryFcsData {
   fcs_people_total: number;
 }
 
-export type GlobalFcsData = Record<number, CountryFcsData>;
+export type GlobalFcsData = Record<string, CountryFcsData>;

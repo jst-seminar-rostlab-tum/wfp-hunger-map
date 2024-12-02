@@ -28,7 +28,9 @@ export default class GlobalDataRepositoryImpl implements GlobalDataRepository {
   }
 
   async getAlertData(): Promise<CountryAlertData[]> {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_V3_API_URL}/adm0/alertsAndCentroids.json`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_V3_API_URL}/adm0/alertsAndCentroids.json`, {
+      next: { revalidate: 3600 * 12 },
+    });
     const data: ResponseWrapper<CountryAlertData[]> = await response.json();
     return data.body;
   }

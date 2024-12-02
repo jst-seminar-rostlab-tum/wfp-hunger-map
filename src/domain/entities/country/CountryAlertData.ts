@@ -8,5 +8,5 @@ export interface CountryAlertData {
     climateDry: boolean;
     climateWet: boolean;
   };
-  centroid: Coordinate;
+  centroid?: Coordinate;
 }

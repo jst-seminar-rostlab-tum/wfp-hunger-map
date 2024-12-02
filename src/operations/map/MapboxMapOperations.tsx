@@ -4,7 +4,6 @@ import { FeatureCollection } from 'geojson';
 import mapboxgl, { Popup } from 'mapbox-gl';
 import { RefObject } from 'react';
 
-import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 import { MapColorsType } from '@/domain/entities/map/MapColorsType.ts';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
 import { MapProps } from '@/domain/props/MapProps';
@@ -12,7 +11,7 @@ import { getColors } from '@/styles/MapColors.ts';
 import disputedPattern from '../../../public/disputed_pattern.png';
 
 
-export class MapOperations {
+export class MapboxMapOperations {
   static createMapboxMap(isDark: boolean, mapProps: MapProps, mapContainer: RefObject<HTMLDivElement>): mapboxgl.Map {
     const mapColors: MapColorsType = getColors(isDark);
 
@@ -55,22 +54,6 @@ export class MapOperations {
           },
           // additional layers (FCS, vegetation etc.) are being placed here
           {
-            id: 'countries-inactive',
-            type: 'fill',
-            source: 'countries',
-            paint: { 'fill-color': mapColors.inactiveCountriesOverlay, 'fill-opacity': 0.5 },
-            filter: ['==', ['coalesce', ['get', 'interactive'], false], false],
-          },
-          {
-            id: 'countries-hover',
-            type: 'fill',
-            source: 'countries',
-            paint: {
-              'fill-color': mapColors.outline,
-              'fill-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 0.3, 0],
-            },
-          },
-          {
             id: 'country-borders',
             type: 'line',
             source: 'countries',
@@ -105,53 +88,6 @@ export class MapOperations {
         ],
       },
       interactive: false,
-    });
-  }
-
-  static setMapInteractionFunctionality(baseMap: mapboxgl.Map, popover: Popup): void {
-    let hoveredPolygonId: string | number | undefined;
-
-    baseMap.on('mousemove', 'countries-hover', (e: any) => {
-      const countryData = e.features && (e.features[0] as CountryMapData);
-
-      if (hoveredPolygonId && (!countryData || hoveredPolygonId !== countryData.id)) {
-        baseMap.setFeatureState({ source: 'countries', id: hoveredPolygonId }, { hover: false });
-        hoveredPolygonId = undefined;
-        baseMap.getCanvas().style.cursor = '';
-      }
-
-      if (!countryData) {
-        popover.remove();
-        return;
-      }
-
-      baseMap.getCanvas().style.cursor = 'pointer';
-      hoveredPolygonId = countryData.id;
-      if (hoveredPolygonId && (countryData as CountryMapData).properties.interactive) {
-        baseMap.setFeatureState({ source: 'countries', id: hoveredPolygonId }, { hover: true });
-      }
-    });
-
-    baseMap.on('mouseleave', 'countries-hover', () => {
-      baseMap.getCanvas().style.cursor = '';
-      if (hoveredPolygonId) {
-        baseMap.setFeatureState({ source: 'countries', id: hoveredPolygonId }, { hover: false });
-        hoveredPolygonId = undefined;
-      }
-      popover.remove();
-    });
-
-    let isDragging = false;
-    baseMap.on('mousedown', () => {
-      isDragging = false;
-    });
-    baseMap.on('mousemove', () => {
-      isDragging = true;
-    });
-    baseMap.on('mouseup', 'countries-hover', (e: any) => {
-      if (!isDragging && e.features && (e.features[0] as CountryMapData).properties.interactive) {
-        alert(`You clicked on ${(e.features[0] as CountryMapData).properties.adm0_name}`);
-      }
     });
   }
 
@@ -304,7 +240,7 @@ export class MapOperations {
             type: 'raster',
             source: this.FCS_RASTER,
           },
-          'countries-inactive'
+          'country-borders'
         );
         break;
       case GlobalInsight.VEGETATION:
@@ -314,7 +250,7 @@ export class MapOperations {
             type: 'raster',
             source: this.VEGETATION_RASTER,
           },
-          'countries-inactive'
+          'country-borders'
         );
         break;
       case GlobalInsight.RAINFALL:
@@ -324,7 +260,7 @@ export class MapOperations {
             type: 'raster',
             source: this.RAINFALL_RASTER,
           },
-          'countries-inactive'
+          'country-borders'
         );
         break;
       default:

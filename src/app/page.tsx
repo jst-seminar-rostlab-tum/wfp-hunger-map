@@ -22,7 +22,7 @@ export default async function Home() {
 
   return (
     <>
-      <Sidebar />
+      <Sidebar countryMapData={countryMapData} />
       <AlertsMenuWrapper />
       <Chatbot />
       <MapLoader

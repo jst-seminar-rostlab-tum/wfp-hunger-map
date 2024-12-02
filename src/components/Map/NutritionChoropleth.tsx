@@ -1,9 +1,7 @@
-import { FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
 import L from 'leaflet';
 import React, { useEffect, useRef, useState } from 'react';
-import { GeoJSON, useMap } from 'react-leaflet';
+import { GeoJSON } from 'react-leaflet';
 
-import { CountryMimiData } from '@/domain/entities/country/CountryMimiData';
 import NutritionChoroplethProps from '@/domain/props/NutritionChoroplethProps';
 import NutritionChoroplethOperations from '@/operations/map/NutritionChoroplethOperations';
 
@@ -13,18 +11,15 @@ export default function NutritionChoropleth({
   data,
   countryId,
   selectedCountryId,
-  selectedAlert,
   setSelectedCountryId,
-  toggleAlert,
   nutritionData,
+  regionNutritionData,
+  regionData,
+  selectedCountryName,
 }: NutritionChoroplethProps) {
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
-  const map = useMap();
 
-  const [regionData, setRegionData] = useState<FeatureCollection<Geometry, GeoJsonProperties> | undefined>();
-  const [regionNutritionData, setRegionNutritionData] = useState<CountryMimiData | undefined>();
   const [countryStyles, setCountryStyles] = useState<{ [key: number]: L.PathOptions }>({});
-  const [selectedCountryName, setSelectedCountryName] = useState<string | null>(null);
 
   // given the `CountryNutrition` data -> parse the data to map country styling
   useEffect(() => {
@@ -32,7 +27,6 @@ export default function NutritionChoropleth({
     setCountryStyles(parsedStyles);
   }, [nutritionData]);
   const handleBackClick = () => {
-    setRegionData(undefined);
     setSelectedCountryId(null);
   };
 
@@ -48,18 +42,7 @@ export default function NutritionChoropleth({
           return featureStyle || NutritionChoroplethOperations.countryStyle;
         }}
         onEachFeature={(feature, layer) =>
-          NutritionChoroplethOperations.onEachFeature(
-            feature,
-            layer,
-            map,
-            selectedAlert,
-            setSelectedCountryId,
-            setRegionData,
-            setRegionNutritionData,
-            countryStyles,
-            setSelectedCountryName,
-            toggleAlert
-          )
+          NutritionChoroplethOperations.onEachFeature(feature, layer, setSelectedCountryId, countryStyles)
         }
       />
       {

@@ -46,7 +46,7 @@ function CustomTable<D>({
         classNames={{
           base: clsx({
             'border-2 rounded-xl dark:border-default-200': showBorders,
-            'min-w-max': true,
+            'min-w-[400px]': true, // Force horizontal scroll by setting a large min-width
           }),
           thead: clsx({
             '[&>tr:last-child]:hidden': true,

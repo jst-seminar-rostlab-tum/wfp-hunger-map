@@ -2,7 +2,7 @@ import React from 'react';
 
 import HungerMapLiveSuperscript from '@/components/About/HungerMapLiveSuperscript';
 import StyledLink from '@/components/About/StyledLink';
-import CustomAccordion from '@/components/Accordions/Accordion';
+import AccordionContainer from '@/components/Accordions/AccordionContainer';
 import wikiEntries from '@/domain/constant/wiki/wikiEntries';
 
 function Page() {
@@ -17,7 +17,7 @@ function Page() {
         </StyledLink>{' '}
         for a broader overview.
       </p>
-      <CustomAccordion items={wikiEntries} />
+      <AccordionContainer items={wikiEntries} />
     </section>
   );
 }

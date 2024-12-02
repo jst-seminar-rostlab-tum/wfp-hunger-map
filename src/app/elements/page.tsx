@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import CustomAccordion from '@/components/Accordions/Accordion';
+import AccordionContainer from '@/components/Accordions/AccordionContainer';
 import { CustomButton } from '@/components/Buttons/CustomButton';
 import { LineChart } from '@/components/Charts/LineChart';
 import MapSkeleton from '@/components/Map/MapSkeleton';
@@ -194,7 +194,7 @@ export default async function Elements() {
         placeholder="Search a country"
         className="max-w-96 py-1"
       />
-      <CustomAccordion items={AccordionsOperations.getAccordionData()} />
+      <AccordionContainer items={AccordionsOperations.getAccordionData()} />
       <div className="w-full h-fit flex flex-row flex-wrap gap-10 justify-around px-8 pt-40 pb-16 border-b border-gray-800">
         <div className="w-250px h-fit">
           <LineChart data={simpleAndSmallLineChartData} small />

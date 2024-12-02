@@ -5,26 +5,38 @@ import { Button } from '@nextui-org/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@nextui-org/popover';
 import { Spinner } from '@nextui-org/spinner';
 
-import { AccordionsProps } from '@/domain/props/AccordionProps';
+import { AccordionContainerProps } from '@/domain/props/AccordionContainerProps';
+import AccordionOperations from '@/operations/accordions/AccordionOperations';
 
 import { Tooltip } from '../Tooltip/Tooltip';
 
-export default function CustomAccordion({
+/**
+ * Any number of items are displayed as collapsible accordion boxes stacked vertically.
+ * Important: Exclusively used by `AccordionContainer` component.
+ */
+export default function AccordionBoxItems({
   items,
+  title,
   loading = false,
   multipleSelectionMode = false,
   noSelectionMode = false,
   color = 'bg-content1',
-}: AccordionsProps) {
-  const selectionMode = noSelectionMode ? 'none' : multipleSelectionMode ? 'multiple' : 'single';
+}: AccordionContainerProps) {
+  const selectionMode = AccordionOperations.getSelectionModeType(noSelectionMode, multipleSelectionMode);
+
   return (
-    <div className="w-full overflow-x-auto py-2 rounded-lg">
-      <Accordion variant="splitted" selectionMode={selectionMode}>
+    <div className="w-full max-w-[600px] overflow-x-auto rounded-lg shadow-none">
+      {title && (
+        <div className="bg-primary p-4 break-words text-balance rounded-lg mb-2">
+          <h1 className="text-2xl font-black font-sans text-white">{title}</h1>
+        </div>
+      )}
+      <Accordion variant="splitted" selectionMode={selectionMode} className="p-0 mb-4">
         {items.map((item, index) => (
           <AccordionItem
             key={typeof item.title === 'string' ? item.title : `accordion-item-${index}`}
             aria-label={typeof item.title === 'string' ? item.title : `Accordion Item ${index}`}
-            className={`last:border-b-0 ${color} white:bg-white overflow-hidden`}
+            className={`last:border-b-0 ${color} white:bg-white overflow-hidden shadow-md`}
             hideIndicator={noSelectionMode}
             title={
               <div className="flex justify-between items-center w-full">
@@ -58,11 +70,7 @@ export default function CustomAccordion({
             }
           >
             {item.description && <p className="text-sm text-balance pb-8 text-center">{item.description}</p>}
-            {typeof item.content === 'string' ? (
-              <div className="p-4 break-words text-balance">{item.content}</div>
-            ) : (
-              item.content
-            )}
+            {item.content}
           </AccordionItem>
         ))}
       </Accordion>

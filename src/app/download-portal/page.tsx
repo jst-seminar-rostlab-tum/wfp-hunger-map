@@ -1,4 +1,4 @@
-import CustomAccordion from '@/components/Accordions/Accordion';
+import AccordionContainer from '@/components/Accordions/AccordionContainer';
 import DownloadCountryAccordion from '@/components/DownloadCountryAccordions/DownloadCountryAccordions';
 import CountryReports from '@/components/DownloadPortal/CountryReports';
 import container from '@/container';
@@ -23,7 +23,7 @@ export default async function DownloadPortal() {
     <div>
       <h1>Download Portal</h1>
       <div>
-        <CustomAccordion
+        <AccordionContainer
           items={[
             {
               title: 'Country Reports',

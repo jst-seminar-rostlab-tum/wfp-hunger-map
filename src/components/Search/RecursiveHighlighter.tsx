@@ -6,7 +6,7 @@ import { RecursiveHighlighterProps } from '@/domain/props/RecursiveHighlighterPr
 import { getSearchWords } from '@/utils/searchUtils';
 
 // only use if children does never change!
-function RecursiveHighlighter({ type = 'span', children, ...props }: RecursiveHighlighterProps) {
+function RecursiveHighlighter({ type = React.Fragment, children, ...props }: RecursiveHighlighterProps) {
   const searchWords = getSearchWords(useSearchParams().get('search') ?? '');
 
   if (React.isValidElement(children)) {

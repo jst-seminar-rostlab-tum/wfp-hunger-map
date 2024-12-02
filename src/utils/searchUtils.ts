@@ -1,5 +1,3 @@
-import { SearchableAccordionItemProps } from '@/domain/entities/accordions/Accordions';
-
 export const getSearchWords = (searchString: string): string[] => {
   return (
     searchString
@@ -10,14 +8,14 @@ export const getSearchWords = (searchString: string): string[] => {
   );
 };
 
-export const filterAccordionItems = (
-  accordionItems: SearchableAccordionItemProps[],
+export function filterSearchableItems<T extends { containedWords: string }>(
+  items: T[],
   searchWords: string[]
-): SearchableAccordionItemProps[] | null => {
+): T[] | null {
   if (searchWords?.length) {
-    return accordionItems.filter(({ containedWords }) => {
+    return items.filter(({ containedWords }) => {
       return searchWords?.some((searchWord) => containedWords?.includes(searchWord));
     });
   }
   return null;
-};
+}

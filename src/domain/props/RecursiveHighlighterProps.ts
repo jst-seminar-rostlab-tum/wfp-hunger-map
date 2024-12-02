@@ -1,7 +1,6 @@
-import { ReactElement } from 'react';
+import { ExoticComponent, ReactElement } from 'react';
 
 export interface RecursiveHighlighterProps {
-  type?: string;
-  keyCopy?: string;
+  type?: string | ExoticComponent;
   children?: ReactElement | string[] | string;
 }

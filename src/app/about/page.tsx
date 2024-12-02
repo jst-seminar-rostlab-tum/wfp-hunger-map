@@ -1,36 +1,28 @@
 'use client';
 
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
-import AboutText from '@/components/About/AboutText';
 import LiveSuperscript from '@/components/About/LiveSuperscript';
-import StyledLink from '@/components/About/StyledLink';
-import Accordion from '@/components/Accordions/Accordion';
+import SearchableSection from '@/components/Search/SearchableSection';
 import SearchBar from '@/components/Search/SearchBar';
+import { aboutTextItems } from '@/domain/constant/about/aboutTextItems';
 import generalFaqItems from '@/domain/constant/about/generalFaqItems';
-import predictionFaqItems from '@/domain/constant/about/predictionFaqItems';
+import predictionFaqItems, { predictionFaqText } from '@/domain/constant/about/predictionFaqItems';
 import realTimeFaqItems from '@/domain/constant/about/realTimeFaqItems';
-import { AccordionItemProps } from '@/domain/entities/accordions/Accordions';
-import { filterAccordionItems, getSearchWords } from '@/utils/searchUtils';
+import { getSearchWords } from '@/utils/searchUtils';
 
 function Page() {
-  const [search, setSearch] = useState('');
-  const [searchWords, setSearchWords] = useState<string[]>([]);
-  const [filteredGeneralFaqItems, setFilteredGeneralFaqItems] = useState<AccordionItemProps[] | null>(null);
-  const [filteredPredictionFaqItems, setFilteredPredictionFaqItems] = useState<AccordionItemProps[] | null>(null);
-  const [filteredRealTimeFaqItems, setFilteredRealTimeFaqItems] = useState<AccordionItemProps[] | null>(null);
-
+  const params = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
 
+  const [search, setSearch] = useState(params.get('search') ?? '');
+  const [searchWords, setSearchWords] = useState<string[]>([]);
+
   useEffect(() => {
-    const newSearchWords = getSearchWords(search);
-    setSearchWords(newSearchWords);
-    setFilteredGeneralFaqItems(filterAccordionItems(generalFaqItems, newSearchWords));
-    setFilteredPredictionFaqItems(filterAccordionItems(predictionFaqItems, newSearchWords));
-    setFilteredRealTimeFaqItems(filterAccordionItems(realTimeFaqItems, newSearchWords));
-  }, [search, generalFaqItems, predictionFaqItems, realTimeFaqItems]);
+    setSearchWords(getSearchWords(search));
+  }, [search]);
 
   return (
     <>
@@ -42,60 +34,27 @@ function Page() {
         }}
         className="max-w-md mx-auto pb-5"
       />
-      {!search && (
-        <section>
+      <div>
+        {!search && (
           <h1>
             About HungerMap
             <LiveSuperscript />
           </h1>
-          <AboutText />
-        </section>
-      )}
-      {(!filteredGeneralFaqItems || !!filteredGeneralFaqItems.length) && (
-        <section>
-          <h2>General Questions</h2>
-          <Accordion
-            items={filteredGeneralFaqItems ?? generalFaqItems}
-            multipleSelectionMode
-            expandAll={!!filteredGeneralFaqItems}
-            highlightedTitleWords={searchWords}
-          />
-        </section>
-      )}
-      {(!filteredRealTimeFaqItems || !!filteredRealTimeFaqItems.length) && (
-        <section>
-          <h2> Near real-time food security continuous monitoring</h2>
-          <Accordion
-            items={filteredRealTimeFaqItems ?? realTimeFaqItems}
-            multipleSelectionMode
-            expandAll={!!filteredRealTimeFaqItems}
-            highlightedTitleWords={searchWords}
-          />
-        </section>
-      )}
-      {(!filteredPredictionFaqItems || !!filteredPredictionFaqItems.length) && (
-        <section>
-          <h2> Predictive analysis</h2>
-          <p>
-            For first-level administrative areas where daily updated survey data is not available, the prevalence of
-            people with poor or borderline{' '}
-            <StyledLink href="https://documents.wfp.org/stellent/groups/public/documents/manual_guide_proced/wfp197216.pdf">
-              food consumption (FCS)
-            </StyledLink>{' '}
-            and the prevalence of people with{' '}
-            <StyledLink href="https://documents.wfp.org/stellent/groups/public/documents/manual_guide_proced/wfp211058.pdf">
-              reduced coping strategy index (rCSI)
-            </StyledLink>{' '}
-            ≥ 19 is estimated with a predictive model.
-          </p>
-          <Accordion
-            items={filteredPredictionFaqItems ?? predictionFaqItems}
-            multipleSelectionMode
-            expandAll={!!filteredPredictionFaqItems}
-            highlightedTitleWords={searchWords}
-          />
-        </section>
-      )}
+        )}
+        <SearchableSection textElements={aboutTextItems} searchWords={searchWords} />
+      </div>
+      <SearchableSection heading="General Questions" accordionItems={generalFaqItems} searchWords={searchWords} />
+      <SearchableSection
+        heading="Near real-time food security continuous monitoring"
+        accordionItems={realTimeFaqItems}
+        searchWords={searchWords}
+      />
+      <SearchableSection
+        heading="Predictive analysis"
+        textElements={predictionFaqText}
+        accordionItems={predictionFaqItems}
+        searchWords={searchWords}
+      />
     </>
   );
 }

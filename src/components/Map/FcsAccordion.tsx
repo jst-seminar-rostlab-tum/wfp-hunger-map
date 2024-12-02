@@ -38,6 +38,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
           {
             title: 'Food Security',
             infoIcon: <CustomInfoCircle />,
+            popoverInfo: FcsAccordionOperations.getFoodSecutriyPopoverInfo(),
             content: (
               <div className={cardsWrapperClass}>
                 <CustomCard
@@ -79,6 +80,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
           {
             title: 'Food Security Trends',
             infoIcon: <CustomInfoCircle />,
+            popoverInfo: FcsAccordionOperations.getFoodSecutriyTrendsPopoverInfo(),
             content: (
               <div>
                 {fcsChartData ? (
@@ -114,6 +116,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
           {
             title: 'Macro-economic',
             infoIcon: <CustomInfoCircle />,
+            popoverInfo: FcsAccordionOperations.getMacroEconomicPopoverInfo(),
             content: (
               <div className={cardsWrapperClass}>
                 <CustomCard
@@ -134,6 +137,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
           {
             title: 'Currency Exchange',
             infoIcon: <CustomInfoCircle />,
+            popoverInfo: FcsAccordionOperations.getCurrencyExchangePopoverInfo(),
             content: (
               <div>
                 {currencyExchangeChartData ? (
@@ -154,6 +158,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
           {
             title: 'Balance of Trade',
             infoIcon: <CustomInfoCircle />,
+            popoverInfo: FcsAccordionOperations.getBalanceOfTradePopoverInfo(),
             content: (
               <div>
                 {balanceOfTradeChartData ? (
@@ -174,6 +179,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
           {
             title: 'Headline and food inflation',
             infoIcon: <CustomInfoCircle />,
+            popoverInfo: FcsAccordionOperations.getHeadlineAndFoodInflationPopoverInfo(),
             content: (
               <div>
                 {headlineAndFoodInflationChartData ? (

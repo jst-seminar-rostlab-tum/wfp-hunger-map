@@ -1,15 +1,15 @@
+import { Feature } from 'geojson';
 import L from 'leaflet';
 import { useTheme } from 'next-themes';
 import React, { useEffect, useRef } from 'react';
 import { GeoJSON } from 'react-leaflet';
 
+import { LayerWithFeature } from '@/domain/entities/map/LayerWithFeature.ts';
 import FcsChoroplethProps from '@/domain/props/FcsChoroplethProps';
 import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
 import { MapboxMapOperations } from '@/operations/map/MapboxMapOperations';
 
 import FscCountryChoropleth from './FcsCountryChoropleth';
-import { Feature } from 'geojson';
-import NutritionChoroplethOperations from '@/operations/map/NutritionChoroplethOperations.ts';
 
 export default function FcsChoropleth({
   data,
@@ -31,18 +31,17 @@ export default function FcsChoropleth({
 
   // adding the country name as a tooltip to each layer (on hover); the tooltip is not shown if the country is selected
   useEffect(() => {
-    if (geoJsonRef.current) {
-      geoJsonRef.current.eachLayer((layer) => {
-        if (!('feature' in layer)) return;
-        const feature = layer.feature as Feature;
-        if (feature.properties?.adm0_id !== selectedCountryId) {
-          const tooltipContainer = MapboxMapOperations.createCountryNameTooltipElement(feature?.properties?.adm0_name);
-          layer.bindTooltip(tooltipContainer, { className: 'leaflet-tooltip', sticky: true });
-        } else {
-          layer.unbindTooltip();
-        }
-      });
-    }
+    if (!geoJsonRef.current) return;
+    geoJsonRef.current.eachLayer((layer: LayerWithFeature) => {
+      if (!layer) return;
+      const feature = layer.feature as Feature;
+      if (feature.properties?.adm0_id !== selectedCountryId) {
+        const tooltipContainer = MapboxMapOperations.createCountryNameTooltipElement(feature?.properties?.adm0_name);
+        layer.bindTooltip(tooltipContainer, { className: 'leaflet-tooltip', sticky: true });
+      } else {
+        layer.unbindTooltip();
+      }
+    });
   }, [selectedCountryId]);
 
   return (

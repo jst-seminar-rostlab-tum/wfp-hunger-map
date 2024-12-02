@@ -1,12 +1,13 @@
+import { Feature } from 'geojson';
 import L from 'leaflet';
 import React, { useEffect, useRef, useState } from 'react';
 import { GeoJSON } from 'react-leaflet';
 
+import { LayerWithFeature } from '@/domain/entities/map/LayerWithFeature.ts';
 import NutritionChoroplethProps from '@/domain/props/NutritionChoroplethProps';
 import { MapboxMapOperations } from '@/operations/map/MapboxMapOperations';
 import NutritionChoroplethOperations from '@/operations/map/NutritionChoroplethOperations';
 
-import { Feature } from 'geojson';
 import NutritionStateChoropleth from './NutritionStateChoropleth';
 
 export default function NutritionChoropleth({
@@ -28,27 +29,23 @@ export default function NutritionChoropleth({
     const parsedStyles = NutritionChoroplethOperations.getCountryStyles(nutritionData);
     setCountryStyles(parsedStyles);
   }, [nutritionData]);
-  const handleBackClick = () => {
-    setSelectedCountryId(null);
-  };
 
   // adding the country name as a tooltip to each layer (on hover)
   // the tooltip is not shown if the country is selected or there is no data available for the country
   useEffect(() => {
-    if (geoJsonRef.current) {
-      geoJsonRef.current.eachLayer((layer) => {
-        if (!('feature' in layer)) return;
-        const feature = layer.feature as Feature;
-        if (
-          NutritionChoroplethOperations.allowCountryHover(nutritionData, feature.properties?.adm0_id, selectedCountryId)
-        ) {
-          const tooltipContainer = MapboxMapOperations.createCountryNameTooltipElement(feature?.properties?.adm0_name);
-          layer.bindTooltip(tooltipContainer, { className: 'leaflet-tooltip', sticky: true });
-        } else {
-          layer.unbindTooltip();
-        }
-      });
-    }
+    if (!geoJsonRef.current) return;
+    geoJsonRef.current.eachLayer((layer: LayerWithFeature) => {
+      if (!layer) return;
+      const feature = layer.feature as Feature;
+      if (
+        NutritionChoroplethOperations.allowCountryHover(nutritionData, feature.properties?.adm0_id, selectedCountryId)
+      ) {
+        const tooltipContainer = MapboxMapOperations.createCountryNameTooltipElement(feature?.properties?.adm0_name);
+        layer.bindTooltip(tooltipContainer, { className: 'leaflet-tooltip', sticky: true });
+      } else {
+        layer.unbindTooltip();
+      }
+    });
   }, [selectedCountryId]);
 
   return (
@@ -73,7 +70,6 @@ export default function NutritionChoropleth({
             regionData={regionData}
             regionNutrition={regionNutritionData}
             countryName={selectedCountryName}
-            handleBackButtonClick={handleBackClick}
           />
         )
       }

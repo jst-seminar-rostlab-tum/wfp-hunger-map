@@ -33,7 +33,13 @@ export default class NutritionChoroplethOperations {
     return {};
   }
 
-  public static allowCountryHover(nutritionData: CountryNutrition, countryId: number): boolean {
+  // check if the country is not selected and if there is data available for the country
+  public static allowCountryHover(
+    nutritionData: CountryNutrition,
+    countryId: number,
+    selectedCountryId: number | null | undefined
+  ): boolean {
+    if (selectedCountryId === countryId) return false;
     return nutritionData.body?.find((c) => c.adm0_code === countryId) !== undefined;
   }
 

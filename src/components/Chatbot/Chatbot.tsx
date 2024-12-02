@@ -217,7 +217,7 @@ export default function HungerMapChatbot() {
           )}
           <Card
             className={clsx(
-              isFullScreen ? 'w-screen h-screen rounded-none' : 'w-[636px] h-[657px]',
+              isFullScreen ? 'w-screen h-dvh rounded-none' : 'w-[636px] h-[657px]',
               isSidebarOpen ? (isFullScreen ? 'sm:pl-[215px] pl-0' : 'sm:pl-[179px] pl-0') : 'pl-0',
               'overflow-hidden flex-1 flex flex-col text-black dark:text-white'
             )}

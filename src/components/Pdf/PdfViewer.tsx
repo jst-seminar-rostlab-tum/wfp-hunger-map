@@ -87,7 +87,7 @@ export default function PdfViewer({
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-start relative">
+    <div className="min-h-dvh flex flex-col items-center justify-start relative">
       {/* Top Bar */}
       <div ref={topBarRef} className="bg-background w-full py-4 flex justify-between items-center sticky top-0 z-10">
         <h1 className="text-lg font-semibold">Preview</h1>

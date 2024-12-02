@@ -8,4 +8,5 @@ export interface AccordionContainerProps {
   noSelectionMode?: boolean;
   color?: string;
   accordionModalActive?: boolean;
+  maxWidth?: number;
 }

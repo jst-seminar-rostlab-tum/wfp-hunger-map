@@ -20,6 +20,7 @@ export default function NutritionAccordion({
         <AccordionContainer
           title={countryName ?? undefined}
           accordionModalActive
+          maxWidth={600}
           items={[
             {
               title: 'Micronutrients',

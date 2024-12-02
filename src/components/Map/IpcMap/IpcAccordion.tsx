@@ -19,6 +19,7 @@ export default function IpcAccordion({ countryData, countryName }: IpcAccordionP
       <AccordionContainer
         title={countryName ?? undefined}
         accordionModalActive
+        maxWidth={600}
         items={[
           {
             title: 'Food Security',

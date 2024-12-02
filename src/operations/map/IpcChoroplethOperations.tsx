@@ -7,12 +7,15 @@ import { CountryIpcData } from '@/domain/entities/country/CountryIpcData';
 import { CountryMapData, CountryMapDataWrapper } from '@/domain/entities/country/CountryMapData';
 
 export class IpcChoroplethOperations {
-  static ipcGlobalStyle = (feature: Feature<Geometry, GeoJsonProperties> | undefined) => ({
-    color: '#000',
-    weight: 0.5,
-    fillOpacity: 1,
-    fillColor: IpcChoroplethOperations.fillGlobalIpc(feature?.properties?.ipcPopulation),
-  });
+  static ipcGlobalStyle = (adm0code: number, ipcData: CountryIpcData[]) => {
+    const country = ipcData.find((c) => parseInt(c.adm0_code, 10) === adm0code);
+    return {
+      color: '#000',
+      weight: 0.5,
+      fillOpacity: 1,
+      fillColor: IpcChoroplethOperations.fillGlobalIpc(country?.ipc_popnmbr ? country.ipc_popnmbr / 1000000 : null),
+    };
+  };
 
   static fillGlobalIpc = (ipcPopulation: number | null) => {
     if (ipcPopulation === null) return 'none';

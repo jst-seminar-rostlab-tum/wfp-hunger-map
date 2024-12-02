@@ -4,6 +4,7 @@ import { Accordion, AccordionItem } from '@nextui-org/accordion';
 import { Button } from '@nextui-org/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@nextui-org/popover';
 import { Spinner } from '@nextui-org/spinner';
+import { v4 as uuid } from 'uuid';
 
 import { AccordionContainerProps } from '@/domain/props/AccordionContainerProps';
 import AccordionOperations from '@/operations/accordions/AccordionOperations';
@@ -34,7 +35,7 @@ export default function AccordionBoxItems({
           <h1 className="text-2xl font-black font-sans text-white">{title}</h1>
         </div>
       )}
-      <Accordion variant="splitted" selectionMode={selectionMode} className="p-0 mb-4">
+      <Accordion key={uuid()} variant="splitted" selectionMode={selectionMode} className="p-0 mb-4">
         {items.map((item, index) => (
           <AccordionItem
             key={typeof item.title === 'string' ? item.title : `accordion-item-${index}`}

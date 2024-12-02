@@ -14,16 +14,14 @@ export default function NutritionStateChoropleth({
   countryName,
 }: NutritionStateChoroplethProps) {
   const layersRef = useRef<LayerWithFeature[]>([]);
-
   const [selectedNutrient, setSelectedNutrient] = useState<NutrientType>(NutrientType.MINI_SIMPLE);
-
   const selectedNutrientRef = useRef<NutrientType>(selectedNutrient);
 
   useEffect(() => {
     selectedNutrientRef.current = selectedNutrient;
   }, [selectedNutrient]);
 
-  // based on the selected nutrient -> setup heatmap layer and update tooltip
+  // based on the selected nutrient -> update tooltip
   useEffect(() => {
     layersRef.current.forEach((layer) => {
       const { feature } = layer;

@@ -15,8 +15,8 @@ export default function NutritionAccordion({
   countryName,
 }: NutritionAccordionProps) {
   return (
-    <div className="absolute left-[108px] top-6" style={{ zIndex: 1000 }}>
-      <div className=" w-[350px] box-border mt-2">
+    <div className="absolute left-[108px] top-4" style={{ zIndex: 1000 }}>
+      <div className=" w-[350px] box-border">
         <AccordionContainer
           title={countryName ?? undefined}
           accordionModalActive

@@ -1,6 +1,9 @@
 import { Feature, GeoJsonProperties, Geometry } from 'geojson';
 import L, { PathOptions } from 'leaflet';
+import React from 'react';
+import { createRoot } from 'react-dom/client';
 
+import NutritionRegionTooltip from '@/components/Map/NutritionRegionTooltip';
 import { NUTRIENT_LABELS } from '@/domain/constant/map/NutritionChoropleth.ts';
 import { CountryMimiData } from '@/domain/entities/country/CountryMimiData';
 import { LayerWithFeature } from '@/domain/entities/map/LayerWithFeature.ts';
@@ -58,18 +61,6 @@ export default class NutritionStateChoroplethOperations {
     });
   }
 
-  // Get the nutrition value for a region
-  private static getNutritionValue(
-    feature: GeoJSON.Feature<Geometry, GeoJsonProperties>,
-    regionNutri: CountryMimiData | undefined,
-    selectedNutrient: NutrientType
-  ): number | null {
-    if (!regionNutri) return null;
-    const stateId = feature.id || feature?.properties?.id;
-    const match = regionNutri?.features.find((item) => item.id === stateId);
-    return match ? match?.properties?.nutrition[selectedNutrient as keyof Nutrition] : null;
-  }
-
   // create and add state nutrition tooltip to the corresponding layer
   static addNutritionTooltip(
     layer: LayerWithFeature,
@@ -79,25 +70,14 @@ export default class NutritionStateChoroplethOperations {
   ) {
     if (!feature) return;
 
-    const stateId = feature.id || feature.properties?.id;
-    const match = regionNutrition?.features.find((item) => item.id === stateId);
-    const nutrientValue = match ? match?.properties?.nutrition[selectedNutrient as keyof Nutrition] : null;
-
-    const formattedNutrientValue = NutritionStateChoroplethOperations.formatNutrientValue(nutrientValue);
-    const nutrientLabel = NutritionStateChoroplethOperations.getNutrientLabel(selectedNutrient);
-    const tooltipContent = `
-        <div class="bg-background text-foreground rounded-md shadow-md max-w-sm z-9999">
-          <div class="p-4">
-            <h3 class="text-lg text-foreground font-bold">${feature.properties?.Name}</h3>
-            <div class="mt-2 text-foreground">
-              Risk of inadequate intake of <strong>${nutrientLabel}</strong>: ${formattedNutrientValue}
-            </div>
-          </div>
-        </div>
-      `;
+    const tooltipContainer = document.createElement('div');
+    const root = createRoot(tooltipContainer);
+    root.render(
+      <NutritionRegionTooltip feature={feature} regionNutrition={regionNutrition} selectedNutrient={selectedNutrient} />
+    );
 
     layer.unbindTooltip();
-    layer.bindTooltip(tooltipContent, {
+    layer.bindTooltip(tooltipContainer, {
       className: 'state-tooltip',
       direction: 'top',
       offset: [0, -10],

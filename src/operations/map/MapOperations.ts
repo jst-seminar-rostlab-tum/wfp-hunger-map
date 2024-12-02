@@ -33,6 +33,17 @@ export class MapOperations {
         }
       }
 
+      if (selectedMapType === GlobalInsight.IPC) {
+        setIpcRegionData(undefined);
+        const newIpcRegionData = await countryRepository.getRegionIpcData(selectedCountryData.properties.adm0_id);
+        if (newIpcRegionData && newIpcRegionData.features) {
+          setIpcRegionData({
+            type: 'FeatureCollection',
+            features: newIpcRegionData?.features as Feature<Geometry, GeoJsonProperties>[],
+          });
+        }
+      }
+
       if (selectedMapType === GlobalInsight.FOOD || selectedMapType === GlobalInsight.IPC) {
         const newCountryData = await countryRepository.getCountryData(selectedCountryData.properties.adm0_id);
         setCountryData(newCountryData);
@@ -48,17 +59,6 @@ export class MapOperations {
           selectedCountryData.properties.adm0_id
         );
         setRegionNutritionData(newRegionNutritionData);
-      }
-
-      if (selectedMapType === GlobalInsight.IPC) {
-        setIpcRegionData(undefined);
-        const newIpcRegionData = await countryRepository.getRegionIpcData(selectedCountryData.properties.adm0_id);
-        if (newIpcRegionData && newIpcRegionData.features) {
-          setIpcRegionData({
-            type: 'FeatureCollection',
-            features: newIpcRegionData?.features as Feature<Geometry, GeoJsonProperties>[],
-          });
-        }
       }
 
       setCountryClickLoading(false);

@@ -28,6 +28,7 @@
     "@nextui-org/modal": "^2.0.41",
     "@nextui-org/navbar": "2.0.37",
     "@nextui-org/popover": "^2.1.29",
+    "@nextui-org/progress": "2.0.34",
     "@nextui-org/react": "^2.4.8",
     "@nextui-org/skeleton": "^2.0.32",
     "@nextui-org/slider": "^2.2.17",

@@ -28,11 +28,11 @@ export const getSnackbarPositionClass = (position: SnackbarPosition): string => 
 export const getStatusColorClass = (status: SnackbarStatus): string => {
   switch (status) {
     case SnackbarStatus.Success:
-      return 'bg-green-500';
+      return 'bg-success';
     case SnackbarStatus.Warning:
-      return 'bg-yellow-500';
+      return 'bg-warning';
     case SnackbarStatus.Error:
-      return 'bg-red-500';
+      return 'bg-error';
     case SnackbarStatus.Default:
     default:
       return 'bg-gray-500';
@@ -40,7 +40,6 @@ export const getStatusColorClass = (status: SnackbarStatus): string => {
 };
 
 export interface SnackbarProps {
-  title: string;
   message: string;
   status: SnackbarStatus;
   position: SnackbarPosition;

@@ -37,6 +37,10 @@ const config = {
     'bg-fatalityAlert',
     'bg-climateWetAlert',
     'bg-climateDryAlert',
+    'bg-error',
+    'bg-success',
+    'bg-warning',
+    'bg-default',
   ],
   content: [
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -213,6 +217,12 @@ const config = {
             ipcPhase5: '#731919',
             chartsLegendBackground: '#F5F5F5',
             chartsXAxisLine: '#a6a6a6',
+
+            //snackbar
+            success: '#4CAF50',
+            error: '#F44336',
+            warning: '#FFEB3B',
+            default: '#157DBC',
           },
         },
         dark: {
@@ -256,6 +266,12 @@ const config = {
             chartsLegendBackground: '#2a2a2a',
             chartsXAxisLine: '#757575',
             nutritionNotAnalyzed: '#A69F9F',
+
+            //snackbar
+            success: '#4CAF50',
+            error: '#F44336',
+            warning: '#FFEB3B',
+            default: '#157DBC',
           },
         },
       },

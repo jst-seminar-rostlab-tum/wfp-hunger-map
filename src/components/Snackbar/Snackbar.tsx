@@ -1,16 +1,17 @@
 'use client';
 
-import { Progress } from '@nextui-org/progress';
 import clsx from 'clsx';
-import React, { useEffect, useState } from 'react';
+import { ArrowCircleDown, CloseCircle, InfoCircle, TickCircle } from 'iconsax-react';
+import React, { useEffect } from 'react';
 
 import { useSnackbar } from '@/domain/contexts/SnackbarContext';
+import { SnackbarStatus } from '@/domain/enums/Snackbar';
 import { getSnackbarPositionClass, getStatusColorClass } from '@/domain/props/SnackbarProps';
 
 export function Snackbar() {
   const { isSnackBarOpen, snackBarProps, closeSnackBar } = useSnackbar();
-  const { title, message, status, position, duration } = snackBarProps;
-  const [progress, setProgress] = useState(100);
+  const { message, status, position, duration } = snackBarProps;
+  // const [progress, setProgress] = useState(100);
 
   const positionClass = getSnackbarPositionClass(position);
   const statusClass = getStatusColorClass(status);
@@ -19,11 +20,6 @@ export function Snackbar() {
     if (isSnackBarOpen) {
       let interval: NodeJS.Timeout;
       if (duration && duration > 0) {
-        const step = 100 / (duration / 100);
-        interval = setInterval(() => {
-          setProgress((prev) => Math.max(prev - step, 0));
-        }, 100);
-
         const timer = setTimeout(() => {
           closeSnackBar();
           clearInterval(interval);
@@ -39,18 +35,33 @@ export function Snackbar() {
     return () => {};
   }, [isSnackBarOpen, duration, closeSnackBar]);
 
+  const getStatusIcon = () => {
+    switch (status) {
+      case SnackbarStatus.Success:
+        return <TickCircle size={24} className="text-white" />;
+      case SnackbarStatus.Warning:
+        return <InfoCircle size={24} className="text-white" />;
+      case SnackbarStatus.Error:
+        return <CloseCircle size={24} className="text-white" />;
+      case SnackbarStatus.Default:
+      default:
+        return <ArrowCircleDown size={24} />;
+    }
+  };
+
   if (!isSnackBarOpen) return null;
 
   return (
-    <div className={clsx(positionClass, 'fixed z-[9999]')}>
-      <div className={clsx('rounded-md shadow-lg overflow-hidden', statusClass)}>
-        <div className="px-4 py-2">
-          <h3 className="font-bold text-white">{title}</h3>
-          <p className="text-white">{message}</p>
-        </div>
-        {duration && duration > 0 && (
-          <Progress value={progress} color="default" className="h-1 rounded-none" aria-label="Snackbar timer" />
-        )}
+    <div
+      className={clsx(
+        'absolute z-[9999] flex p-2 rounded-md shadow-lg overflow-hidden h-12',
+        statusClass,
+        positionClass
+      )}
+    >
+      <div className="flex flex-row items-center mr-4">
+        {getStatusIcon()}
+        <p className="ml-2 text-white">{message}</p>
       </div>
     </div>
   );

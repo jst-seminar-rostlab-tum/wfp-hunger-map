@@ -17,7 +17,9 @@ import {
   TOPIC_MANDATORY_MSG,
   UNSUCCESSFUL_SUBSCRIPTION,
 } from '@/domain/constant/subscribe/Subscribe';
+import { useSnackbar } from '@/domain/contexts/SnackbarContext';
 import { ITopic } from '@/domain/entities/subscribe/Subscribe';
+import { SnackbarPosition, SnackbarStatus } from '@/domain/enums/Snackbar';
 import { SubmitStatus } from '@/domain/enums/SubscribeTopic';
 import SubscriptionRepository from '@/domain/repositories/SubscriptionRepository';
 
@@ -41,6 +43,8 @@ export default function SubscriptionForm() {
 
   const [subscribeStatus, setSubscribeStatus] = useState<SubmitStatus>(SubmitStatus.Idle);
   const [isWaitingSubResponse, setIsWaitingSubResponse] = useState(false);
+
+  const { showSnackBar } = useSnackbar();
 
   const validateEmail = useCallback((newEmail: string): boolean => {
     return !!newEmail.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i);
@@ -104,9 +108,21 @@ export default function SubscriptionForm() {
             if (res) {
               setSubscribeStatus(SubmitStatus.Success);
               setIsWaitingSubResponse(false);
+              showSnackBar({
+                message: 'Your action was successful!',
+                status: SnackbarStatus.Success,
+                position: SnackbarPosition.RightMiddle,
+                duration: 300000,
+              });
             } else {
               setSubscribeStatus(SubmitStatus.Error);
               setIsWaitingSubResponse(false);
+              showSnackBar({
+                message: 'Your action was failed!',
+                status: SnackbarStatus.Success,
+                position: SnackbarPosition.RightMiddle,
+                duration: 300000,
+              });
             }
           });
       } catch (err) {

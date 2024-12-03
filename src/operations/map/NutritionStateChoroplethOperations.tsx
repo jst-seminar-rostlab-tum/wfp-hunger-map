@@ -1,8 +1,12 @@
-import { GeoJsonProperties, Geometry } from 'geojson';
-import { PathOptions } from 'leaflet';
+import { Feature, GeoJsonProperties, Geometry } from 'geojson';
+import L, { PathOptions } from 'leaflet';
+import React from 'react';
+import { createRoot } from 'react-dom/client';
 
+import NutritionRegionTooltip from '@/components/Map/NutritionRegionTooltip';
 import { NUTRIENT_LABELS } from '@/domain/constant/map/NutritionChoropleth.ts';
 import { CountryMimiData } from '@/domain/entities/country/CountryMimiData';
+import { LayerWithFeature } from '@/domain/entities/map/LayerWithFeature.ts';
 import { Nutrition } from '@/domain/entities/region/RegionNutritionProperties.ts';
 import { NutrientType } from '@/domain/enums/NutrientType.ts';
 
@@ -45,45 +49,40 @@ export default class NutritionStateChoroplethOperations {
     };
   }
 
-  public static addHoverEffect(
-    layer: L.Layer,
-    feature: GeoJSON.Feature<Geometry, GeoJsonProperties>,
-    regionNutri: CountryMimiData | undefined,
-    getCurrentNutrient: () => NutrientType
-  ): void {
-    const initialOpacity = 0.6;
+  public static addHoverEffect(layer: LayerWithFeature): void {
     const pathLayer = layer as L.Path;
-    // Add mouseover event
-    layer.on('mouseover', () => {
-      const dynamicNutrient = getCurrentNutrient();
-      const dynamicFillColor = this.nutritionFillColor(this.getNutritionValue(feature, regionNutri, dynamicNutrient));
-
-      pathLayer.setStyle({
-        fillOpacity: 0.8,
-        fillColor: dynamicFillColor,
-      });
-    });
-
-    // Add mouseout event
-    pathLayer.on('mouseout', () => {
-      const dynamicNutrient = getCurrentNutrient();
-      const dynamicFillColor = this.nutritionFillColor(this.getNutritionValue(feature, regionNutri, dynamicNutrient));
-      pathLayer.setStyle({
-        fillOpacity: initialOpacity,
-        fillColor: dynamicFillColor,
-      });
+    pathLayer.on({
+      mouseover: () => {
+        pathLayer.setStyle({ fillOpacity: 1 });
+      },
+      mouseout: () => {
+        pathLayer.setStyle({ fillOpacity: 0.6 });
+      },
     });
   }
 
-  // Get the nutrition value for a region
-  private static getNutritionValue(
-    feature: GeoJSON.Feature<Geometry, GeoJsonProperties>,
-    regionNutri: CountryMimiData | undefined,
+  // create and add state nutrition tooltip to the corresponding layer
+  static addNutritionTooltip(
+    layer: LayerWithFeature,
+    feature: Feature | undefined,
+    regionNutrition: CountryMimiData | undefined,
     selectedNutrient: NutrientType
-  ): number | null {
-    if (!regionNutri) return null;
-    const stateId = feature.id || feature?.properties?.id;
-    const match = regionNutri?.features.find((item) => item.id === stateId);
-    return match ? match?.properties?.nutrition[selectedNutrient as keyof Nutrition] : null;
+  ) {
+    if (!feature) return;
+
+    const tooltipContainer = document.createElement('div');
+    const root = createRoot(tooltipContainer);
+    root.render(
+      <NutritionRegionTooltip feature={feature} regionNutrition={regionNutrition} selectedNutrient={selectedNutrient} />
+    );
+
+    layer.unbindTooltip();
+    layer.bindTooltip(tooltipContainer, {
+      className: 'state-tooltip',
+      direction: 'top',
+      offset: [0, -10],
+      permanent: false,
+      sticky: true,
+    });
   }
 }

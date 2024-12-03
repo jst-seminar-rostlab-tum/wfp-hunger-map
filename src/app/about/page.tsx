@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 
 import LiveSuperscript from '@/components/About/LiveSuperscript';
 import DocsSearchBar from '@/components/Search/DocsSearchBar';
@@ -14,7 +14,7 @@ function Page() {
   const [searchWords, setSearchWords] = useState<string[]>([]);
 
   return (
-    <>
+    <Suspense>
       <DocsSearchBar setSearchWords={setSearchWords} />
       <div>
         {!searchWords.length && (
@@ -37,7 +37,7 @@ function Page() {
         accordionItems={predictionFaqItems}
         searchWords={searchWords}
       />
-    </>
+    </Suspense>
   );
 }
 

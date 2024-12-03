@@ -46,14 +46,14 @@ export default function IpcAccordion({ countryData, countryName }: IpcAccordionP
                       altText: 'Food Consumption Icon',
                     },
                     {
-                      imageSrc: deltaOneMonth && deltaOneMonth > 0 ? '/Images/ArrowGreen.svg' : '/Images/ArrowRed.svg',
+                      imageSrc: deltaOneMonth && deltaOneMonth > 0 ? '/Images/ArrowUp.svg' : '/Images/ArrowDown.svg',
                       text: deltaOneMonth ? `${deltaOneMonth.toFixed(2)} M` : 'N/A',
                       timeText: '1 Months ago',
                       altText: 'Other Icon',
                     },
                     {
                       imageSrc:
-                        deltaThreeMonth && deltaThreeMonth > 0 ? '/Images/ArrowGreen.svg' : '/Images/ArrowRed.svg',
+                        deltaThreeMonth && deltaThreeMonth > 0 ? '/Images/ArrowUp.svg' : '/Images/ArrowDown.svg',
                       text: deltaThreeMonth ? `${deltaThreeMonth.toFixed(2)} M` : 'N/A',
                       timeText: '3 Month ago',
                       altText: 'Other Icon',

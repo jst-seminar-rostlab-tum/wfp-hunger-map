@@ -12,4 +12,5 @@ export interface SearchableSectionProps {
   textElements?: SearchableElement[];
   accordionItems?: SearchableAccordionItemProps[];
   searchWords: string[];
+  setVisibilityCount?: (updateFn: (prevCount: number) => number) => void;
 }

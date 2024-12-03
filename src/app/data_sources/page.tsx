@@ -9,18 +9,19 @@ import { dataSourcesTextElements } from '@/domain/constant/dataSources/dataSourc
 
 function Page() {
   const [searchWords, setSearchWords] = useState<string[]>([]);
+  const [nVisibleAccordions, setNVisibleAccordions] = useState(0);
 
   return (
     <Suspense>
       <DocsSearchBar setSearchWords={setSearchWords} />
-      <div>
-        {!searchWords.length && <h1>Data Sources</h1>}
-        <SearchableSection
-          textElements={dataSourcesTextElements}
-          searchWords={searchWords}
-          accordionItems={dataSourceAccordionItems}
-        />
-      </div>
+      {!searchWords.length && <h1 className="!mb-0">Data Sources</h1>}
+      <SearchableSection
+        textElements={dataSourcesTextElements}
+        searchWords={searchWords}
+        accordionItems={dataSourceAccordionItems}
+        setVisibilityCount={setNVisibleAccordions}
+      />
+      {!nVisibleAccordions && !!searchWords.length && <p className="text-center">No results</p>}
     </Suspense>
   );
 }

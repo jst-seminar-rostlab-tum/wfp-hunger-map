@@ -11,32 +11,35 @@ import predictionFaqItems, { predictionFaqText } from '@/domain/constant/about/p
 import realTimeFaqItems from '@/domain/constant/about/realTimeFaqItems';
 
 function Page() {
+  const SECTIONS = [
+    { textElements: aboutTextElements },
+    { heading: 'General Questions', accordionItems: generalFaqItems },
+    { heading: 'Near real-time food security continuous monitoring', accordionItems: realTimeFaqItems },
+    { heading: 'Predictive analysis', textElements: predictionFaqText, accordionItems: predictionFaqItems },
+  ];
+
   const [searchWords, setSearchWords] = useState<string[]>([]);
+  const [nVisibleAccordions, setNVisibleAccordions] = useState(0);
 
   return (
     <Suspense>
       <DocsSearchBar setSearchWords={setSearchWords} />
-      <div>
-        {!searchWords.length && (
-          <h1>
-            About HungerMap
-            <LiveSuperscript />
-          </h1>
-        )}
-        <SearchableSection textElements={aboutTextElements} searchWords={searchWords} />
-      </div>
-      <SearchableSection heading="General Questions" accordionItems={generalFaqItems} searchWords={searchWords} />
-      <SearchableSection
-        heading="Near real-time food security continuous monitoring"
-        accordionItems={realTimeFaqItems}
-        searchWords={searchWords}
-      />
-      <SearchableSection
-        heading="Predictive analysis"
-        textElements={predictionFaqText}
-        accordionItems={predictionFaqItems}
-        searchWords={searchWords}
-      />
+      {!searchWords.length && (
+        <h1 className="!mb-0">
+          About HungerMap
+          <LiveSuperscript />
+        </h1>
+      )}
+      {SECTIONS.map(({ heading, textElements, accordionItems }) => (
+        <SearchableSection
+          heading={heading}
+          textElements={textElements}
+          accordionItems={accordionItems}
+          searchWords={searchWords}
+          setVisibilityCount={setNVisibleAccordions}
+        />
+      ))}
+      {!nVisibleAccordions && !!searchWords.length && <p className="text-center">No results</p>}
     </Suspense>
   );
 }

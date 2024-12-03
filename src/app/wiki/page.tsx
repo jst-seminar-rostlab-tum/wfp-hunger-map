@@ -9,14 +9,19 @@ import { wikiTextElements } from '@/domain/constant/wiki/wikiTextElements';
 
 function Page() {
   const [searchWords, setSearchWords] = useState<string[]>([]);
+  const [nVisibleAccordions, setNVisibleAccordions] = useState(0);
 
   return (
     <Suspense>
       <DocsSearchBar setSearchWords={setSearchWords} />
-      <div>
-        {!searchWords.length && <h1>Wiki</h1>}
-        <SearchableSection textElements={wikiTextElements} searchWords={searchWords} accordionItems={wikiEntries} />
-      </div>
+      {!searchWords.length && <h1 className="!mb-0">Wiki</h1>}
+      <SearchableSection
+        textElements={wikiTextElements}
+        searchWords={searchWords}
+        accordionItems={wikiEntries}
+        setVisibilityCount={setNVisibleAccordions}
+      />
+      {!nVisibleAccordions && !!searchWords.length && <p className="text-center">No results</p>}
     </Suspense>
   );
 }

@@ -201,6 +201,7 @@ export class MapboxMapOperations {
         tiles: ['https://static.hungermapdata.org/proteus_tiles/{z}/{x}/{y}.png'],
         tileSize: 256,
         scheme: 'tms',
+        maxzoom: 6
       });
     });
   }

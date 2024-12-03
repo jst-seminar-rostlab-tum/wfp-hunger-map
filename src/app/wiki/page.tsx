@@ -1,24 +1,23 @@
-import React from 'react';
+'use client';
 
-import LiveSuperscript from '@/components/About/LiveSuperscript';
-import StyledLink from '@/components/About/StyledLink';
-import AccordionContainer from '@/components/Accordions/AccordionContainer';
+import React, { Suspense, useState } from 'react';
+
+import DocsSearchBar from '@/components/Search/DocsSearchBar';
+import SearchableSection from '@/components/Search/SearchableSection';
 import wikiEntries from '@/domain/constant/wiki/wikiEntries';
+import { wikiTextElements } from '@/domain/constant/wiki/wikiTextElements';
 
 function Page() {
+  const [searchWords, setSearchWords] = useState<string[]>([]);
+
   return (
-    <section>
-      <h1>Wiki</h1>
-      <p>
-        This page contains more detailed explanations for some of the concepts behind the HungerMap
-        <LiveSuperscript />. See{' '}
-        <StyledLink href="/about" isInternal>
-          About
-        </StyledLink>{' '}
-        for a broader overview.
-      </p>
-      <AccordionContainer items={wikiEntries} />
-    </section>
+    <Suspense>
+      <DocsSearchBar setSearchWords={setSearchWords} />
+      <div>
+        {!searchWords.length && <h1>Wiki</h1>}
+        <SearchableSection textElements={wikiTextElements} searchWords={searchWords} accordionItems={wikiEntries} />
+      </div>
+    </Suspense>
   );
 }
 

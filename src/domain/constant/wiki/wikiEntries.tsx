@@ -1,6 +1,7 @@
 import LiveSuperscript from '@/components/About/LiveSuperscript';
 import StyledLink from '@/components/About/StyledLink';
 import { WikiEntry } from '@/domain/entities/wiki/WikiEntry';
+import { SearchOperations } from '@/operations/Search/SearchOperations';
 
 const wikiEntries = (
   [
@@ -155,4 +156,4 @@ const wikiEntries = (
   ] as WikiEntry[]
 ).sort((a, b) => a.title?.localeCompare(b.title));
 
-export default wikiEntries;
+export default SearchOperations.makeAccordionItemsSearchable(wikiEntries);

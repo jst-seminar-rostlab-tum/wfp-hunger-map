@@ -3,7 +3,7 @@ import reactElementToJsxString from 'react-element-to-jsx-string';
 
 import RecursiveHighlighter from '@/components/Search/RecursiveHighlighter';
 import { AccordionItemProps, SearchableAccordionItemProps } from '@/domain/entities/accordions/Accordions';
-import { DataSourceTableRow } from '@/domain/props/CustomTableProps';
+import { DataSourceTableData, DataSourceTableRow } from '@/domain/props/CustomTableProps';
 
 export class SearchOperations {
   // textElements should not be changed during runtime
@@ -17,26 +17,35 @@ export class SearchOperations {
     });
   }
 
+  static makeDataSourceAccordionSearchable(items: AccordionItemProps[]): SearchableAccordionItemProps[] {
+    return items.map((item) => {
+      const tableData: DataSourceTableData | undefined = (item.content as ReactElement)?.props?.data;
+      if (!tableData) return { ...item, containedWords: '' };
+      const sanitizedTable = tableData.map(SearchOperations.sanitizeTableRow).join(' ');
+      return { ...item, containedWords: `${item.title} ${sanitizedTable}` };
+    });
+  }
+
   static makeAccordionItemsSearchable(items: AccordionItemProps[]): SearchableAccordionItemProps[] {
     return items.map((item) => {
       return {
         ...item,
-        containedWords: SearchOperations.makeAccordionItemSearchable(item),
+        containedWords: SearchOperations.sanitizeAccordionItem(item),
         content: <RecursiveHighlighter>{item.content}</RecursiveHighlighter>,
       };
     });
   }
 
-  static makeAccordionItemSearchable(item: AccordionItemProps): string {
+  private static sanitizeAccordionItem(item: AccordionItemProps): string {
     return SearchOperations.sanitizeText(
       `${item.title} ${item.description ?? ''} ${SearchOperations.sanitizeReactNode(item.content)}`
     );
   }
 
-  static makeTableRowSearchable(item: DataSourceTableRow): string {
+  private static sanitizeTableRow(item: DataSourceTableRow): string {
     return SearchOperations.sanitizeText(`${item.label}
-      ${this.sanitizeReactNode(item.description)}
-      ${this.sanitizeReactNode(item.dataSource)}
+      ${SearchOperations.sanitizeReactNode(item.description)}
+      ${SearchOperations.sanitizeReactNode(item.dataSource)}
       ${item.updateInterval?.toLowerCase() ?? ''}
       ${item.updateDetails?.map((d) => `${d.interval} ${SearchOperations.sanitizeReactNode(d.label)}`)?.join(' ') ?? ''}`);
   }
@@ -45,6 +54,7 @@ export class SearchOperations {
     return reactElementToJsxString(item)
       .replace(/<Abbreviation abbreviation="([^"]*)" \/>/g, '$1')
       .replace(/<[^>]*>/g, '')
+      .replace("{' '}", ' ')
       .replace(/{[^}]*}/g, '');
   }
 

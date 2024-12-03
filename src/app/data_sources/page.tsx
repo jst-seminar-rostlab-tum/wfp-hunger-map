@@ -1,28 +1,27 @@
-import React from 'react';
+'use client';
 
-import LiveSuperscript from '@/components/About/LiveSuperscript';
-import StyledLink from '@/components/About/StyledLink';
-import AccordionContainer from '@/components/Accordions/AccordionContainer';
+import React, { Suspense, useState } from 'react';
+
+import DocsSearchBar from '@/components/Search/DocsSearchBar';
+import SearchableSection from '@/components/Search/SearchableSection';
 import dataSourceAccordionItems from '@/domain/constant/dataSources/dataSourceAccordionItems';
+import { dataSourcesTextElements } from '@/domain/constant/dataSources/dataSourcesTextElements';
 
 function Page() {
+  const [searchWords, setSearchWords] = useState<string[]>([]);
+
   return (
-    <section>
-      <h1>Data Sources</h1>
-      <p>
-        <b>
-          This section includes all indicators and data sources displayed on HungerMap
-          <LiveSuperscript /> (global and country pages).
-        </b>{' '}
-        Additional sources used as input variables for the predictive model but not for display purposes are listed on
-        the{' '}
-        <StyledLink href="/about" isInternal>
-          About page
-        </StyledLink>
-        .
-      </p>
-      <AccordionContainer items={dataSourceAccordionItems} multipleSelectionMode />
-    </section>
+    <Suspense>
+      <DocsSearchBar setSearchWords={setSearchWords} />
+      <div>
+        {!searchWords.length && <h1>Data Sources</h1>}
+        <SearchableSection
+          textElements={dataSourcesTextElements}
+          searchWords={searchWords}
+          accordionItems={dataSourceAccordionItems}
+        />
+      </div>
+    </Suspense>
   );
 }
 

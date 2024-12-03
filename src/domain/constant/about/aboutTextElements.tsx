@@ -4,7 +4,7 @@ import LiveSuperscript from '@/components/About/LiveSuperscript';
 import StyledLink from '@/components/About/StyledLink';
 import { SearchOperations } from '@/operations/Search/SearchOperations';
 
-export const aboutTextItems = SearchOperations.makeTextElementsSearchable([
+export const aboutTextElements = SearchOperations.makeTextElementsSearchable([
   <p>
     <b>
       HungerMap

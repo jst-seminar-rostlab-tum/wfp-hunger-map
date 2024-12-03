@@ -4,6 +4,7 @@ import CustomTable from '@/components/Table/CustomTable';
 import Abbreviation from '@/components/Tooltip/Abbreviation';
 import { AccordionItemProps } from '@/domain/entities/accordions/Accordions';
 import { CustomTableColumns, DataSourceTableData } from '@/domain/props/CustomTableProps';
+import { SearchOperations } from '@/operations/Search/SearchOperations';
 
 const dataSourceTableColumns = [
   { columnId: 'keyColumn', label: 'Data type', alignLeft: true },
@@ -266,4 +267,4 @@ const dataSourceAccordionItems: AccordionItemProps[] = [
   },
 ];
 
-export default dataSourceAccordionItems;
+export default SearchOperations.makeDataSourceAccordionSearchable(dataSourceAccordionItems);

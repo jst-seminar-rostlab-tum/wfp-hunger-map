@@ -8,7 +8,7 @@ import CountryRepository from '@/domain/repositories/CountryRepository';
 
 export default class CountryRepositoryImpl implements CountryRepository {
   async getCountryData(countryId: number): Promise<CountryData> {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_V3_API_URL}/adm0/${countryId}/countryData.json`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/adm0/${countryId}/countryData.json`);
     return response.json();
   }
 

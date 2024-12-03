@@ -32,9 +32,9 @@ export default class AccordionOperations {
               title="Food Consumption"
               content={[
                 { imageSrc: '/Images/FoodConsumption.svg', text: '11.2 Mio', altText: 'Population Icon' },
-                { imageSrc: '/Images/ArrowRed.svg', text: '+ 0.19 Mio', timeText: '3 Months ago', altText: 'Icon' },
+                { imageSrc: '/Images/ArrowDown.svg', text: '+ 0.19 Mio', timeText: '3 Months ago', altText: 'Icon' },
                 {
-                  imageSrc: '/Images/ArrowGreen.svg',
+                  imageSrc: '/Images/ArrowUp.svg',
                   text: '- 2.5 Mio ',
                   timeText: 'A Month ago',
                   altText: 'Other Icon',

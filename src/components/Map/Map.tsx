@@ -114,7 +114,7 @@ export default function Map({ countries, disputedAreas, ipcData, fcsData, nutrit
         countries.features &&
         countries.features
           .filter((country) => country.properties.interactive)
-          .filter((country) => fcsData[country.properties.adm0_id] !== null)
+          .filter((country) => fcsData[country.properties.adm0_id]?.fcs)
           .map((country) => (
             <FcsChoropleth
               key={country.properties.adm0_id}

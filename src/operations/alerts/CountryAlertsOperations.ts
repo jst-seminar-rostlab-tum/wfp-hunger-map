@@ -3,6 +3,8 @@ import { MultiPolygon, Polygon } from 'geojson';
 import L from 'leaflet';
 
 import { CountryAlert } from '@/domain/entities/alerts/CountryAlert';
+import { Coordinate } from '@/domain/entities/common/Coordinate';
+import { CountryAlertData } from '@/domain/entities/country/CountryAlertData';
 import { CountryMapData, CountryMapDataWrapper } from '@/domain/entities/country/CountryMapData';
 import { CountryAlertType } from '@/domain/enums/CountryAlertType';
 
@@ -30,9 +32,13 @@ export default class CountryAlertsOperations {
     return this.bearingsLookup;
   }
 
-  private static getRandomAroundCenter(country: CountryMapData, type: CountryAlertType): L.LatLngExpression {
+  private static getRandomAroundCenter(
+    country: CountryMapData,
+    centroid: Coordinate,
+    type: CountryAlertType
+  ): L.LatLngExpression {
     const countryGeometry = country.geometry as Polygon | MultiPolygon;
-    const center = [country.properties.centroid.longitude, country.properties.centroid.latitude];
+    const center = [centroid.longitude, centroid.latitude];
 
     const bearing = this.getBearingsLookup()[type];
 
@@ -52,39 +58,40 @@ export default class CountryAlertsOperations {
     return [center[1], center[0]];
   }
 
-  static getFromMapData(countries: CountryMapDataWrapper): CountryAlert[] {
+  static getFromMapData(alerts: CountryAlertData[], countries: CountryMapDataWrapper): CountryAlert[] {
     const result: CountryAlert[] = [];
 
     if (!countries.features) return result;
 
-    countries.features
-      .filter(
-        (country) =>
-          country.properties.alerts.conflict ||
-          country.properties.alerts.climateWet ||
-          country.properties.alerts.climateDry
-      )
-      .forEach((country) => {
-        const { alerts } = country.properties;
+    // TODO remove this weird logic once the backend endpoint is fixed!
+    alerts
+      .filter((alertData) => typeof alertData.adm0_code === 'number')
+      .forEach((alertData) => {
+        const country = countries.features.find((c) => c.properties.adm0_id === parseInt(alertData.adm0_code, 10));
+        const centroid = alerts.find(
+          // eslint-disable-next-line eqeqeq
+          (ad) => typeof ad.adm0_code === 'string' && ad.adm0_code == alertData.adm0_code
+        )?.centroid;
+        if (!country || !centroid) return;
 
-        if (alerts.conflict) {
+        if (alertData.alerts.conflict) {
           result.push({
             type: CountryAlertType.FATALITY,
-            position: this.getRandomAroundCenter(country, CountryAlertType.FATALITY),
+            position: this.getRandomAroundCenter(country, centroid, CountryAlertType.FATALITY),
           });
         }
 
-        if (alerts.climateWet) {
+        if (alertData.alerts.climateWet) {
           result.push({
             type: CountryAlertType.CLIMATE_WET,
-            position: this.getRandomAroundCenter(country, CountryAlertType.CLIMATE_WET),
+            position: this.getRandomAroundCenter(country, centroid, CountryAlertType.CLIMATE_WET),
           });
         }
 
-        if (alerts.climateDry) {
+        if (alertData.alerts.climateDry) {
           result.push({
             type: CountryAlertType.CLIMATE_DRY,
-            position: this.getRandomAroundCenter(country, CountryAlertType.CLIMATE_DRY),
+            position: this.getRandomAroundCenter(country, centroid, CountryAlertType.CLIMATE_DRY),
           });
         }
       });

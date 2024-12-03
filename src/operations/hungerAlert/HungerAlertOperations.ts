@@ -1,20 +1,26 @@
+import { GlobalFcsData } from '@/domain/entities/country/CountryFcsData';
 import { CountryMapDataWrapper } from '@/domain/entities/country/CountryMapData';
 import { CustomTableColumns, SimpleTableData } from '@/domain/props/CustomTableProps';
 
 export default class HungerAlertOperations {
-  static getHungerAlertData(countryMapData: CountryMapDataWrapper): SimpleTableData {
+  static getHungerAlertData(countryFcsData: GlobalFcsData, countries: CountryMapDataWrapper): SimpleTableData {
     try {
-      return countryMapData.features
-        .filter(({ properties: { fcs } }) => typeof fcs === 'number' && fcs >= 0.4)
-        .sort((country1, country2) => (country2.properties.fcs as number) - (country1.properties.fcs as number))
-        .map(({ properties: { adm0_name: countryName, fcs } }, index) => ({
+      return Object.keys(countryFcsData)
+        .map((countryCode) => parseInt(countryCode, 10))
+        .filter((countryCode) => countryFcsData[countryCode].fcs >= 0.4)
+        .sort((countryCode1, countryCode2) => countryFcsData[countryCode2].fcs - countryFcsData[countryCode1].fcs)
+        .map((countryCode, index) => ({
           keyColumn: index + 1,
-          country: countryName,
-          fcs: `${Math.floor((fcs as number) * 100)}%`,
+          country: HungerAlertOperations.getCountryName(countryCode, countries),
+          fcs: `${Math.floor(countryFcsData[countryCode].fcs * 100)}%`,
         }));
     } catch {
       return [];
     }
+  }
+
+  private static getCountryName(countryCode: number, countries: CountryMapDataWrapper): string {
+    return countries.features.find((country) => country.properties.adm0_id === countryCode)?.properties.adm0_name ?? '';
   }
 
   static getHungerAlertModalColumns() {

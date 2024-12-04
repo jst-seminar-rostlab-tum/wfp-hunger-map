@@ -1,4 +1,4 @@
-import { Feature, GeoJsonProperties, Geometry } from 'geojson';
+import { Feature, GeoJsonProperties } from 'geojson';
 import L from 'leaflet';
 import React, { useEffect, useRef, useState } from 'react';
 import { GeoJSON } from 'react-leaflet';
@@ -12,7 +12,6 @@ import NutritionAccordion from './NutritionAccordion';
 
 export default function NutritionStateChoropleth({
   regionNutrition,
-  regionData,
   countryName,
   handleClick = () => {},
   tooltip,

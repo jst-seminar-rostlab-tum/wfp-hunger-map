@@ -161,7 +161,6 @@ export default function Map({ countries, disputedAreas, ipcData, nutritionData }
               setSelectedCountryId={setSelectedCountryId}
               nutritionData={nutritionData}
               regionNutritionData={regionNutritionData}
-              regionData={regionData}
               selectedCountryName={selectedCountryName}
             />
           ))}

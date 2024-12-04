@@ -13,7 +13,6 @@ export interface CountryMimiData {
     };
   };
   features: (Feature<RegionNutritionProperties> & {
-    // type: string; // todo linus check
     geometry: Geometry<LatLngExpression[][][]>;
     id: string;
   })[];

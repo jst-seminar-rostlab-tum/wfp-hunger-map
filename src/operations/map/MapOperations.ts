@@ -29,7 +29,6 @@ export class MapOperations {
             type: 'FeatureCollection',
             features: newRegionData.features as Feature<Geometry, GeoJsonProperties>[],
           });
-          console.log(newRegionData.features);
         }
       }
 

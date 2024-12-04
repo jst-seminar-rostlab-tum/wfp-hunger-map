@@ -4,9 +4,10 @@ import React from 'react';
 
 import { SearchBarProps } from '@/domain/props/SearchBarProps';
 
-export default function SearchBar({ value, onValueChange, placeholder, className }: SearchBarProps) {
+export default function SearchBar({ value, onValueChange, placeholder, className, inputClassName }: SearchBarProps) {
   return (
     <Input
+      className={className}
       isClearable
       placeholder={placeholder || 'Search...'}
       value={value}
@@ -14,7 +15,7 @@ export default function SearchBar({ value, onValueChange, placeholder, className
       radius="lg"
       startContent={<SearchNormal1 className="text-secondary dark:text-foreground text-lg flex-shrink-0" />}
       classNames={{
-        inputWrapper: ['border', 'hover:border-primary', 'rounded-lg', className],
+        inputWrapper: ['border', 'hover:border-primary', 'rounded-lg', inputClassName],
       }}
     />
   );

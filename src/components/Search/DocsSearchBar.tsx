@@ -17,14 +17,17 @@ function DocsSearchBar({ setSearchWords }: DocsSearchBarProps) {
   }, [search]);
 
   return (
-    <SearchBar
-      value={search}
-      onValueChange={(v) => {
-        setSearch(v);
-        router.push(`${pathname}?search=${v}`);
-      }}
-      className="max-w-md mx-auto"
-    />
+    <div className="h-10">
+      <SearchBar
+        value={search}
+        onValueChange={(v) => {
+          setSearch(v);
+          router.push(`${pathname}?search=${v}`);
+        }}
+        className="fixed left-0 z-10"
+        inputClassName="max-w-md mx-auto backdrop-blur-lg backdrop-saturate-150 bg-background/70"
+      />
+    </div>
   );
 }
 

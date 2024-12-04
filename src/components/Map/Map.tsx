@@ -27,7 +27,7 @@ import NutritionChoropleth from './NutritionChoropleth';
 import VectorTileLayer from './VectorTileLayer';
 import ZoomControl from './ZoomControl';
 
-export default function Map({ countries, disputedAreas, ipcData, fcsData, nutritionData, alertData }: MapProps) {
+export default function Map({ countries, disputedAreas, fcsData, alertData }: MapProps) {
   const mapRef = useRef<LeafletMap | null>(null);
   const { selectedMapType } = useSelectedMap();
   const { setSelectedMapVisibility } = useSelectedMapVisibility();
@@ -133,7 +133,6 @@ export default function Map({ countries, disputedAreas, ipcData, fcsData, nutrit
       {selectedMapType === GlobalInsight.IPC && (
         <IpcChoropleth
           countries={countries}
-          ipcData={ipcData}
           selectedCountryId={selectedCountryId}
           setSelectedCountryId={setSelectedCountryId}
           countryData={countryData}
@@ -153,7 +152,6 @@ export default function Map({ countries, disputedAreas, ipcData, fcsData, nutrit
               data={{ type: 'FeatureCollection', features: [country as Feature<Geometry, GeoJsonProperties>] }}
               selectedCountryId={selectedCountryId}
               setSelectedCountryId={setSelectedCountryId}
-              nutritionData={nutritionData}
               regionNutritionData={regionNutritionData}
               regionData={regionData}
               selectedCountryName={selectedCountryName}

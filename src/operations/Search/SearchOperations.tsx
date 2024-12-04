@@ -42,7 +42,7 @@ export class SearchOperations {
     );
   }
 
-  private static sanitizeTableRow(item: DataSourceTableRow): string {
+  static sanitizeTableRow(item: DataSourceTableRow): string {
     return SearchOperations.sanitizeText(`${item.label}
       ${SearchOperations.sanitizeReactNode(item.description)}
       ${SearchOperations.sanitizeReactNode(item.dataSource)}

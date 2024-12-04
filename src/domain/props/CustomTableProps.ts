@@ -10,6 +10,7 @@ export type CustomTableRow = {
     keyColumn: ReactNode;
     [columnKey: string]: ReactNode;
   };
+  containedWords?: string;
 };
 
 export type CustomTableColumns = { columnId: string; label: ReactNode; alignLeft?: boolean }[] & {
@@ -21,6 +22,7 @@ export type CustomTableData = {
   groupKey: string | number;
   groupName: ReactNode;
   attributeRows: readonly { [columnId: string]: ReactNode }[];
+  containedWords?: string;
 }[];
 
 export default interface CustomTableProps<D> {

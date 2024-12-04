@@ -21,6 +21,7 @@ export default function FcsChoropleth({
   countryData,
   countryIso3Data,
   selectedCountryName,
+  fcsData,
 }: FcsChoroplethProps) {
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
   const { theme } = useTheme();
@@ -51,9 +52,9 @@ export default function FcsChoropleth({
           geoJsonRef.current = instance;
         }}
         data={data}
-        style={FcsChoroplethOperations.countryStyle}
+        style={FcsChoroplethOperations.countryStyle(data.features[0], theme === 'dark', fcsData)}
         onEachFeature={(feature, layer) =>
-          FcsChoroplethOperations.onEachFeature(feature, layer, setSelectedCountryId, theme === 'dark')
+          FcsChoroplethOperations.onEachFeature(feature, layer, setSelectedCountryId, theme === 'dark', fcsData)
         }
       />
       {regionData && countryId === selectedCountryId && (

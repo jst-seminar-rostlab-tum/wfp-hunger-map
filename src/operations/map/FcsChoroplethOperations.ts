@@ -3,7 +3,7 @@ import L from 'leaflet';
 
 import { CountryFcsData } from '@/domain/entities/country/CountryFcsData.ts';
 import { MapColorsType } from '@/domain/entities/map/MapColorsType';
-import { getColors } from '@/styles/MapColors';
+import { getColors, inactiveCountryOverlayStyling } from '@/styles/MapColors';
 
 class FcsChoroplethOperations {
   static async handleCountryClick(
@@ -60,11 +60,7 @@ class FcsChoroplethOperations {
           color: undefined,
           fillOpacity: 0,
         }
-      : {
-          color: getColors(isDark).inactiveCountriesOverlay,
-          fillOpacity: 0.5,
-          stroke: false,
-        };
+      : inactiveCountryOverlayStyling(isDark);
   }
 }
 

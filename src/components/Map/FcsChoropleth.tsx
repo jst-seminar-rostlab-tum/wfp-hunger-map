@@ -36,7 +36,7 @@ export default function FcsChoropleth({
     geoJsonRef.current.eachLayer((layer: LayerWithFeature) => {
       if (!layer) return;
       const feature = layer.feature as Feature;
-      if (feature.properties?.adm0_id !== selectedCountryId) {
+      if (FcsChoroplethOperations.checkIfActive(data.features[0], fcsData)) {
         const tooltipContainer = MapboxMapOperations.createCountryNameTooltipElement(feature?.properties?.adm0_name);
         layer.bindTooltip(tooltipContainer, { className: 'leaflet-tooltip', sticky: true });
       } else {

@@ -2,7 +2,7 @@ import L from 'leaflet';
 
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 import { CountryNutrition } from '@/domain/entities/country/CountryNutrition.ts';
-import { getColors } from '@/styles/MapColors.ts';
+import { inactiveCountryOverlayStyling } from '@/styles/MapColors.ts';
 
 export default class NutritionChoroplethOperations {
   private static getFillColor(dataType: string | undefined): string {
@@ -68,10 +68,6 @@ export default class NutritionChoroplethOperations {
             nutritionData.body?.find((c) => c.adm0_code === feature.properties.adm0_id)?.data_type
           ),
         }
-      : {
-          color: getColors(isDark).inactiveCountriesOverlay,
-          fillOpacity: 0.5,
-          stroke: false,
-        };
+      : inactiveCountryOverlayStyling(isDark);
   }
 }

@@ -15,7 +15,6 @@ import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { CountryData } from '@/domain/entities/country/CountryData.ts';
 import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data.ts';
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
-import { CountryMimiData } from '@/domain/entities/country/CountryMimiData.ts';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight';
 import { MapProps } from '@/domain/props/MapProps';
 import { MapOperations } from '@/operations/map/MapOperations.ts';
@@ -39,7 +38,7 @@ export default function Map({ countries, disputedAreas, ipcData, nutritionData }
   const [countryIso3Data, setCountryIso3Data] = useState<CountryIso3Data | undefined>();
   const [regionData, setRegionData] = useState<FeatureCollection<Geometry, GeoJsonProperties> | undefined>();
   const [countryClickLoading, setCountryClickLoading] = useState<boolean>(false);
-  const [regionNutritionData, setRegionNutritionData] = useState<CountryMimiData | undefined>();
+  const [regionNutritionData, setRegionNutritionData] = useState<FeatureCollection | undefined>();
   const [ipcRegionData, setIpcRegionData] = useState<FeatureCollection<Geometry, GeoJsonProperties> | undefined>();
   const [selectedCountryName, setSelectedCountryName] = useState<string | undefined>(undefined);
 

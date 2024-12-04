@@ -1,6 +1,5 @@
 import { FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
 
-import { CountryMimiData } from '@/domain/entities/country/CountryMimiData.ts';
 import { CountryNutrition } from '@/domain/entities/country/CountryNutrition.ts';
 
 export default interface NutritionChoroplethProps {
@@ -9,7 +8,7 @@ export default interface NutritionChoroplethProps {
   selectedCountryId?: number | null;
   setSelectedCountryId: (countryId: number | null) => void;
   nutritionData: CountryNutrition;
-  regionNutritionData: CountryMimiData | undefined;
+  regionNutritionData: FeatureCollection | undefined;
   regionData?: FeatureCollection<Geometry, GeoJsonProperties>;
   selectedCountryName?: string;
 }

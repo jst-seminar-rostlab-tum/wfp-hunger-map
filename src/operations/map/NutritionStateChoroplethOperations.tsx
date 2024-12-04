@@ -1,8 +1,7 @@
-import { GeoJsonProperties, Geometry } from 'geojson';
+import { Feature } from 'geojson';
 import { PathOptions } from 'leaflet';
 
 import { NUTRIENT_LABELS } from '@/domain/constant/map/NutritionChoropleth.ts';
-import { CountryMimiData } from '@/domain/entities/country/CountryMimiData';
 import { Nutrition } from '@/domain/entities/region/RegionNutritionProperties.ts';
 import { NutrientType } from '@/domain/enums/NutrientType.ts';
 
@@ -26,16 +25,9 @@ export default class NutritionStateChoroplethOperations {
     return '#A0A0A0';
   }
 
-  public static dynamicStyle(
-    feature: GeoJSON.Feature<Geometry, GeoJsonProperties> | undefined,
-    regionNutri: CountryMimiData | undefined,
-    selectedNutrient: NutrientType
-  ): PathOptions {
-    if (!feature) return {};
-
-    const stateId = feature.id || feature?.properties?.id;
-    const match = regionNutri?.features.find((item) => item.id === stateId);
-    const value = match ? match?.properties?.nutrition[selectedNutrient as keyof Nutrition] : null;
+  public static dynamicStyle(feature: Feature | undefined, selectedNutrient: NutrientType): PathOptions {
+    if (!feature?.properties) return {};
+    const value = feature.properties.nutrition[selectedNutrient as keyof Nutrition] || null;
 
     return {
       fillColor: this.nutritionFillColor(value),
@@ -45,18 +37,13 @@ export default class NutritionStateChoroplethOperations {
     };
   }
 
-  public static addHoverEffect(
-    layer: L.Layer,
-    feature: GeoJSON.Feature<Geometry, GeoJsonProperties>,
-    regionNutri: CountryMimiData | undefined,
-    getCurrentNutrient: () => NutrientType
-  ): void {
+  public static addHoverEffect(layer: L.Layer, feature: Feature, getCurrentNutrient: () => NutrientType): void {
     const initialOpacity = 0.6;
     const pathLayer = layer as L.Path;
     // Add mouseover event
     layer.on('mouseover', () => {
       const dynamicNutrient = getCurrentNutrient();
-      const dynamicFillColor = this.nutritionFillColor(this.getNutritionValue(feature, regionNutri, dynamicNutrient));
+      const dynamicFillColor = this.nutritionFillColor(this.getNutritionValue(feature, dynamicNutrient));
 
       pathLayer.setStyle({
         fillOpacity: 0.8,
@@ -67,7 +54,7 @@ export default class NutritionStateChoroplethOperations {
     // Add mouseout event
     pathLayer.on('mouseout', () => {
       const dynamicNutrient = getCurrentNutrient();
-      const dynamicFillColor = this.nutritionFillColor(this.getNutritionValue(feature, regionNutri, dynamicNutrient));
+      const dynamicFillColor = this.nutritionFillColor(this.getNutritionValue(feature, dynamicNutrient));
       pathLayer.setStyle({
         fillOpacity: initialOpacity,
         fillColor: dynamicFillColor,
@@ -76,14 +63,7 @@ export default class NutritionStateChoroplethOperations {
   }
 
   // Get the nutrition value for a region
-  private static getNutritionValue(
-    feature: GeoJSON.Feature<Geometry, GeoJsonProperties>,
-    regionNutri: CountryMimiData | undefined,
-    selectedNutrient: NutrientType
-  ): number | null {
-    if (!regionNutri) return null;
-    const stateId = feature.id || feature?.properties?.id;
-    const match = regionNutri?.features.find((item) => item.id === stateId);
-    return match ? match?.properties?.nutrition[selectedNutrient as keyof Nutrition] : null;
+  private static getNutritionValue(feature: Feature, selectedNutrient: NutrientType): number | null {
+    return feature ? feature.properties?.nutrition[selectedNutrient as keyof Nutrition] : null;
   }
 }

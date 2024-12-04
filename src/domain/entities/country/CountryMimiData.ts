@@ -1,5 +1,7 @@
 import { LatLngExpression } from 'leaflet';
 
+import { Feature } from '@/domain/entities/common/Feature.ts';
+
 import { Geometry } from '../common/Geometry';
 import { RegionNutritionProperties } from '../region/RegionNutritionProperties';
 
@@ -10,10 +12,9 @@ export interface CountryMimiData {
       crs: string;
     };
   };
-  features: {
-    type: string;
+  features: (Feature<RegionNutritionProperties> & {
+    // type: string; // todo linus check
     geometry: Geometry<LatLngExpression[][][]>;
-    properties: RegionNutritionProperties;
     id: string;
-  }[];
+  })[];
 }

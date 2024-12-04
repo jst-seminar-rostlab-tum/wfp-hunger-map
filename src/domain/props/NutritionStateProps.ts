@@ -2,15 +2,13 @@ import { Feature, FeatureCollection, GeoJsonProperties, Geometry } from 'geojson
 import { Layer } from 'leaflet';
 import React from 'react';
 
-import { CountryMimiData } from '../entities/country/CountryMimiData';
-
 export interface NutrientOption {
   label: string;
   key: string;
 }
 
 export interface NutritionStateChoroplethProps {
-  regionNutrition: CountryMimiData | undefined;
+  regionNutrition: FeatureCollection | undefined;
   regionData: FeatureCollection<Geometry, GeoJsonProperties>;
   countryName?: string;
   handleClick?: (feature: GeoJsonProperties) => void;
@@ -19,7 +17,7 @@ export interface NutritionStateChoroplethProps {
 }
 
 export interface NutrientAccordionProps {
-  selectedNutrient: string;
+  selectedNutrient: string;  // todo linus delete
   setSelectedNutrient: React.Dispatch<React.SetStateAction<string>>;
   selectedLabel: string;
   setSelectedLabel: React.Dispatch<React.SetStateAction<string>>;

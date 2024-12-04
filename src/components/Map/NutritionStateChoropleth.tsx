@@ -1,4 +1,4 @@
-import { GeoJsonProperties, Geometry } from 'geojson';
+import { Feature, GeoJsonProperties, Geometry } from 'geojson';
 import L from 'leaflet';
 import React, { useEffect, useRef, useState } from 'react';
 import { GeoJSON } from 'react-leaflet';
@@ -33,7 +33,7 @@ export default function NutritionStateChoropleth({
       const { feature } = layer;
       if (feature) {
         const stateId = feature.id || feature.properties?.id;
-        const match = regionNutrition?.features.find((item) => item.id === stateId);
+        const match = regionNutrition?.features?.find((item) => item.id === stateId);
         const nutrientValue = match ? match?.properties?.nutrition[selectedNutrient as keyof Nutrition] : null;
         const formattedNutrientValue = NutritionStateChoroplethOperations.formatNutrientValue(nutrientValue);
         const nutrientLabel = NutritionStateChoroplethOperations.getNutrientLabel(selectedNutrient);
@@ -62,12 +62,7 @@ export default function NutritionStateChoropleth({
 
   const onEachFeature = (feature: GeoJsonProperties, layer: L.Layer): void => {
     layersRef.current.push(layer);
-    NutritionStateChoroplethOperations.addHoverEffect(
-      layer,
-      feature as GeoJSON.Feature<Geometry, GeoJsonProperties>,
-      regionNutrition,
-      () => selectedNutrientRef.current
-    );
+    NutritionStateChoroplethOperations.addHoverEffect(layer, feature as Feature, () => selectedNutrientRef.current);
     layer.on('click', () => handleClick(feature));
   };
 
@@ -78,11 +73,13 @@ export default function NutritionStateChoropleth({
         selectedNutrient={selectedNutrient}
         countryName={countryName}
       />
-      <GeoJSON
-        data={regionData}
-        style={(feature) => NutritionStateChoroplethOperations.dynamicStyle(feature, regionNutrition, selectedNutrient)}
-        onEachFeature={onEachFeature}
-      />
+      {regionNutrition && (
+        <GeoJSON
+          data={regionNutrition}
+          style={(feature) => NutritionStateChoroplethOperations.dynamicStyle(feature, selectedNutrient)}
+          onEachFeature={onEachFeature}
+        />
+      )}
     </>
   );
 }

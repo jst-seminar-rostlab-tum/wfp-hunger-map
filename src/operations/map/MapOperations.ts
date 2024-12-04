@@ -4,7 +4,6 @@ import container from '@/container';
 import { CountryData } from '@/domain/entities/country/CountryData.ts';
 import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data.ts';
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
-import { CountryMimiData } from '@/domain/entities/country/CountryMimiData.ts';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
 import CountryRepository from '@/domain/repositories/CountryRepository.ts';
 
@@ -16,7 +15,7 @@ export class MapOperations {
     setRegionData: (regionData: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
     setCountryData: (countryData: CountryData | undefined) => void,
     setCountryIso3Data: (iso3Data: CountryIso3Data | undefined) => void,
-    setRegionNutritionData: (regionNutritionData: CountryMimiData | undefined) => void,
+    setRegionNutritionData: (regionNutritionData: FeatureCollection | undefined) => void,
     setIpcRegionData: (ipcRegionData: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void
   ) {
     setCountryClickLoading(true);
@@ -30,6 +29,7 @@ export class MapOperations {
             type: 'FeatureCollection',
             features: newRegionData.features as Feature<Geometry, GeoJsonProperties>[],
           });
+          console.log(newRegionData.features);
         }
       }
 
@@ -58,7 +58,12 @@ export class MapOperations {
         const newRegionNutritionData = await countryRepository.getRegionNutritionData(
           selectedCountryData.properties.adm0_id
         );
-        setRegionNutritionData(newRegionNutritionData);
+        if (newRegionNutritionData && newRegionNutritionData.features) {
+          setRegionNutritionData({
+            type: 'FeatureCollection',
+            features: newRegionNutritionData.features as Feature<Geometry, GeoJsonProperties>[],
+          });
+        }
       }
 
       setCountryClickLoading(false);
@@ -71,7 +76,7 @@ export class MapOperations {
     setRegionData: (regionData: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
     setCountryData: (countryData: CountryData | undefined) => void,
     setCountryIso3Data: (iso3Data: CountryIso3Data | undefined) => void,
-    setRegionNutritionData: (regionNutritionData: CountryMimiData | undefined) => void,
+    setRegionNutritionData: (regionNutritionData: FeatureCollection | undefined) => void,
     setIpcRegionData: (ipcRegionData: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void
   ): void {
     setCountryData(undefined);

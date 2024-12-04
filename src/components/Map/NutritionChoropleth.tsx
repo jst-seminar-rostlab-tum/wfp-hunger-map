@@ -3,7 +3,9 @@ import L from 'leaflet';
 import React, { useEffect, useRef, useState } from 'react';
 import { GeoJSON } from 'react-leaflet';
 
+import { CountryNutrition } from '@/domain/entities/country/CountryNutrition';
 import { LayerWithFeature } from '@/domain/entities/map/LayerWithFeature.ts';
+import { useNutritionQuery } from '@/domain/hooks/globalHooks';
 import NutritionChoroplethProps from '@/domain/props/NutritionChoroplethProps';
 import { MapboxMapOperations } from '@/operations/map/MapboxMapOperations';
 import NutritionChoroplethOperations from '@/operations/map/NutritionChoroplethOperations';
@@ -15,7 +17,6 @@ export default function NutritionChoropleth({
   countryId,
   selectedCountryId,
   setSelectedCountryId,
-  nutritionData,
   regionNutritionData,
   regionData,
   selectedCountryName,
@@ -23,22 +24,27 @@ export default function NutritionChoropleth({
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
 
   const [countryStyles, setCountryStyles] = useState<{ [key: number]: L.PathOptions }>({});
+  const { data: nutritionData } = useNutritionQuery(true);
 
   // given the `CountryNutrition` data -> parse the data to map country styling
   useEffect(() => {
-    const parsedStyles = NutritionChoroplethOperations.getCountryStyles(nutritionData);
+    const parsedStyles = NutritionChoroplethOperations.getCountryStyles(nutritionData as CountryNutrition);
     setCountryStyles(parsedStyles);
   }, [nutritionData]);
 
   // adding the country name as a tooltip to each layer (on hover)
   // the tooltip is not shown if the country is selected or there is no data available for the country
   useEffect(() => {
-    if (!geoJsonRef.current) return;
+    if (!geoJsonRef.current || !nutritionData) return;
     geoJsonRef.current.eachLayer((layer: LayerWithFeature) => {
       if (!layer) return;
       const feature = layer.feature as Feature;
       if (
-        NutritionChoroplethOperations.allowCountryHover(nutritionData, feature.properties?.adm0_id, selectedCountryId)
+        NutritionChoroplethOperations.allowCountryHover(
+          nutritionData as CountryNutrition,
+          feature.properties?.adm0_id,
+          selectedCountryId
+        )
       ) {
         const tooltipContainer = MapboxMapOperations.createCountryNameTooltipElement(feature?.properties?.adm0_name);
         layer.bindTooltip(tooltipContainer, { className: 'leaflet-tooltip', sticky: true });

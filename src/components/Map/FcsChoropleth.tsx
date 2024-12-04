@@ -47,16 +47,18 @@ export default function FcsChoropleth({
 
   return (
     <div>
-      <GeoJSON
-        ref={(instance) => {
-          geoJsonRef.current = instance;
-        }}
-        data={data}
-        style={FcsChoroplethOperations.countryStyle(data.features[0], theme === 'dark', fcsData)}
-        onEachFeature={(feature, layer) =>
-          FcsChoroplethOperations.onEachFeature(feature, layer, setSelectedCountryId, theme === 'dark', fcsData)
-        }
-      />
+      {countryId !== selectedCountryId && (
+        <GeoJSON
+          ref={(instance) => {
+            geoJsonRef.current = instance;
+          }}
+          data={data}
+          style={FcsChoroplethOperations.countryStyle(data.features[0], theme === 'dark', fcsData)}
+          onEachFeature={(feature, layer) =>
+            FcsChoroplethOperations.onEachFeature(feature, layer, setSelectedCountryId, theme === 'dark', fcsData)
+          }
+        />
+      )}
       {regionData && countryId === selectedCountryId && (
         <FscCountryChoropleth
           regionData={regionData}

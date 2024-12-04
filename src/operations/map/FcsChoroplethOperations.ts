@@ -39,7 +39,7 @@ class FcsChoroplethOperations {
       },
       mouseover: () => {
         if (this.checkIfActive(feature, fcsData)) {
-          pathLayer.setStyle({ fillOpacity: 0.3, fillColor: mapColors.outline });
+          pathLayer.setStyle({ fillOpacity: 0.5, fillColor: mapColors.outline });
         }
       },
       mouseout: () => {

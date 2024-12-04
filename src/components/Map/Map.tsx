@@ -142,21 +142,19 @@ export default function Map({ countries, disputedAreas, ipcData, fcsData, nutrit
 
       {selectedMapType === GlobalInsight.NUTRITION &&
         countries.features &&
-        countries.features
-          .filter((country) => country.properties.interactive)
-          .map((country) => (
-            <NutritionChoropleth
-              key={country.properties.adm0_id}
-              countryId={country.properties.adm0_id}
-              data={{ type: 'FeatureCollection', features: [country as Feature<Geometry, GeoJsonProperties>] }}
-              selectedCountryId={selectedCountryId}
-              setSelectedCountryId={setSelectedCountryId}
-              nutritionData={nutritionData}
-              regionNutritionData={regionNutritionData}
-              regionData={regionData}
-              selectedCountryName={selectedCountryName}
-            />
-          ))}
+        countries.features.map((country) => (
+          <NutritionChoropleth
+            key={country.properties.adm0_id}
+            countryId={country.properties.adm0_id}
+            data={{ type: 'FeatureCollection', features: [country as Feature<Geometry, GeoJsonProperties>] }}
+            selectedCountryId={selectedCountryId}
+            setSelectedCountryId={setSelectedCountryId}
+            nutritionData={nutritionData}
+            regionNutritionData={regionNutritionData}
+            regionData={regionData}
+            selectedCountryName={selectedCountryName}
+          />
+        ))}
       <ZoomControl threshold={5} callback={onZoomThresholdReached} />
       <BackToGlobalButton />
     </MapContainer>

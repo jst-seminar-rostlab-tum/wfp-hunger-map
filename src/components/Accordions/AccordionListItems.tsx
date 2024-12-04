@@ -27,8 +27,7 @@ export default function AccordionListItems({
 }: AccordionContainerProps) {
   const [expandedItems, setExpandedItems] = useState<Set<string> | 'all'>(new Set());
   const selectionMode = AccordionOperations.getSelectionModeType(noSelectionMode, multipleSelectionMode);
-  const defaultExpandedKeys =
-    items.length === 1 ? [typeof items[0].title === 'string' ? items[0].title : `accordion-item-0`] : [];
+  const defaultExpandedKeys = items.length === 1 ? [items[0].title] : [];
 
   useEffect(() => {
     if (expandAll) setExpandedItems('all');
@@ -44,10 +43,10 @@ export default function AccordionListItems({
       selectedKeys={expandedItems}
       onSelectionChange={(keys) => setExpandedItems(keys as Set<string>)}
     >
-      {items.map((item, index) => (
+      {items.map((item) => (
         <AccordionItem
-          key={typeof item.title === 'string' ? item.title : `accordion-item-${index}`}
-          aria-label={typeof item.title === 'string' ? item.title : `Accordion Item ${index}`}
+          key={item.title}
+          aria-label={item.title}
           className="bg-transparent overflow-hidden p-0 border-t-1 border-clickableSecondary rounded-none shadow-none"
           hideIndicator={noSelectionMode}
           title={

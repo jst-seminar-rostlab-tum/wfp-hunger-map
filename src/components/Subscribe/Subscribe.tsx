@@ -1,7 +1,6 @@
 'use client';
 
 import { Divider, Input } from '@nextui-org/react';
-import { motion } from 'framer-motion';
 import { Facebook, Instagram, Twitch, Youtube } from 'iconsax-react';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -106,22 +105,22 @@ export default function SubscriptionForm() {
           })
           .then((res) => {
             if (res) {
-              setSubscribeStatus(SubmitStatus.Success);
+              setSubscribeStatus(SubmitStatus.Idle);
               setIsWaitingSubResponse(false);
               showSnackBar({
-                message: 'Your action was successful!',
+                message: SUCCESSFUL_SUBSCRIPTION,
                 status: SnackbarStatus.Success,
-                position: SnackbarPosition.RightMiddle,
-                duration: 300000,
+                position: SnackbarPosition.TopMiddle,
+                duration: 3000,
               });
             } else {
-              setSubscribeStatus(SubmitStatus.Error);
+              setSubscribeStatus(SubmitStatus.Idle);
               setIsWaitingSubResponse(false);
               showSnackBar({
-                message: 'Your action was failed!',
-                status: SnackbarStatus.Success,
-                position: SnackbarPosition.RightMiddle,
-                duration: 300000,
+                message: UNSUCCESSFUL_SUBSCRIPTION,
+                status: SnackbarStatus.Error,
+                position: SnackbarPosition.TopMiddle,
+                duration: 3000,
               });
             }
           });
@@ -186,24 +185,6 @@ export default function SubscriptionForm() {
           submitStatus={subscribeStatus}
           className="w-full bg-subscribeText dark:bg-subscribeText text-white dark:text-black shadow-lg self-center"
         />
-        {subscribeStatus === SubmitStatus.Success && (
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-green-500 mt-4 text-center"
-          >
-            {SUCCESSFUL_SUBSCRIPTION}
-          </motion.p>
-        )}
-        {subscribeStatus === SubmitStatus.Error && (
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-red-500 mt-4 text-center"
-          >
-            {UNSUCCESSFUL_SUBSCRIPTION}
-          </motion.p>
-        )}
       </form>
 
       <div className="flex gap-1">

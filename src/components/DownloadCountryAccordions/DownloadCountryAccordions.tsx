@@ -63,7 +63,7 @@ export default function DownloadCountryAccordion({ countries }: DownloadCountryA
         await download.getDownLoadCountryData(country, start, end).then((res) => {
           // only download if there is data
           if (res && res.length > 0) {
-            setDownloadStatus(SubmitStatus.Success);
+            setDownloadStatus(SubmitStatus.Idle);
             setIsWaitingDownloadResponse(false);
             DownloadPortalOperations.downloadJsonFile(res, country);
 
@@ -74,7 +74,7 @@ export default function DownloadCountryAccordion({ countries }: DownloadCountryA
               duration: 3000,
             });
           } else {
-            setDownloadStatus(SubmitStatus.Error);
+            setDownloadStatus(SubmitStatus.Idle);
             setIsWaitingDownloadResponse(false);
 
             showSnackBar({

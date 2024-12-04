@@ -19,7 +19,7 @@ const SnackbarContext = createContext<SnackBarState | undefined>(undefined);
 export function SnackbarProvider({ children }: { children: ReactNode }) {
   const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
   const [snackBarProps, setSnackBarProps] = useState<SnackbarProps>(defaultSnackbarProps);
-  const showSnackBar = (props: SnackbarProps) => {
+  const showSnackBar = (props: SnackbarProps): void => {
     setSnackBarProps(props);
     setIsSnackBarOpen(true);
 
@@ -31,7 +31,7 @@ export function SnackbarProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const closeSnackBar = () => {
+  const closeSnackBar = (): void => {
     setIsSnackBarOpen(false);
   };
 

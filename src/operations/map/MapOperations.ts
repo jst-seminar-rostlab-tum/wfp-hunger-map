@@ -22,7 +22,7 @@ export class MapOperations {
 
     const countryRepository = container.resolve<CountryRepository>('CountryRepository');
     try {
-      if (selectedMapType === GlobalInsight.FOOD || selectedMapType === GlobalInsight.NUTRITION) {
+      if (selectedMapType === GlobalInsight.FOOD) {
         const newRegionData = await countryRepository.getRegionData(selectedCountryData.properties.adm0_id);
         if (newRegionData && newRegionData.features) {
           setRegionData({

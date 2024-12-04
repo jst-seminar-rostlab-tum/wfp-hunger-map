@@ -37,10 +37,13 @@ const config = {
     'bg-fatalityAlert',
     'bg-climateWetAlert',
     'bg-climateDryAlert',
-    'bg-error',
+    'bg-danger',
     'bg-success',
     'bg-warning',
     'bg-default',
+    // for snackbar position
+    'bottom-4',
+    'left-4',
   ],
   content: [
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -140,6 +143,7 @@ const config = {
             clickableSecondary: '#E6E6E6',
             danger: '#D32F2F',
             warning: '#FFB600',
+            success: '#4CAF50',
             clusterGreen: '#85E77C',
             clusterOrange: '#FFB74D',
             clusterRed: '#FF5252',
@@ -217,12 +221,6 @@ const config = {
             ipcPhase5: '#731919',
             chartsLegendBackground: '#F5F5F5',
             chartsXAxisLine: '#a6a6a6',
-
-            //snackbar
-            success: '#4CAF50',
-            error: '#F44336',
-            warning: '#FFEB3B',
-            default: '#157DBC',
           },
         },
         dark: {
@@ -238,6 +236,7 @@ const config = {
             clickableSecondary: '#424242',
             danger: '#EF5350',
             warning: '#FFEB3B',
+            success: '#4CAF50',
             clusterGreen: '#A3F39C',
             clusterOrange: '#FFB74D',
             clusterRed: '#FF5252',
@@ -266,12 +265,6 @@ const config = {
             chartsLegendBackground: '#2a2a2a',
             chartsXAxisLine: '#757575',
             nutritionNotAnalyzed: '#A69F9F',
-
-            //snackbar
-            success: '#4CAF50',
-            error: '#F44336',
-            warning: '#FFEB3B',
-            default: '#157DBC',
           },
         },
       },

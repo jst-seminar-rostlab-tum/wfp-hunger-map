@@ -1,7 +1,8 @@
 'use client';
 
 import clsx from 'clsx';
-import { ArrowCircleDown, CloseCircle, InfoCircle, TickCircle } from 'iconsax-react';
+import { InfoCircle, TickCircle } from 'iconsax-react';
+import { TriangleAlert, X } from 'lucide-react';
 import React, { useEffect } from 'react';
 
 import { useSnackbar } from '@/domain/contexts/SnackbarContext';
@@ -40,28 +41,23 @@ export function Snackbar() {
       case SnackbarStatus.Success:
         return <TickCircle size={24} className="text-white" />;
       case SnackbarStatus.Warning:
-        return <InfoCircle size={24} className="text-white" />;
+        return <TriangleAlert size={24} className="text-white" />;
       case SnackbarStatus.Error:
-        return <CloseCircle size={24} className="text-white" />;
+        return <InfoCircle size={24} className="text-white" />;
       case SnackbarStatus.Default:
       default:
-        return <ArrowCircleDown size={24} />;
+        return null;
     }
   };
 
   if (!isSnackBarOpen) return null;
 
   return (
-    <div
-      className={clsx(
-        'absolute z-[9999] flex p-2 rounded-md shadow-lg overflow-hidden h-12',
-        statusClass,
-        positionClass
-      )}
-    >
-      <div className="flex flex-row items-center mr-4">
+    <div className={clsx('absolute z-[9999] flex p-2 rounded-md shadow-lg h-12', statusClass, positionClass)}>
+      <div className="flex flex-1 flex-row items-center">
         {getStatusIcon()}
-        <p className="ml-2 text-white">{message}</p>
+        <p className="ml-2 text-white mr-8">{message}</p>
+        <X size={24} className="text-white ml-auto mr-1" onClick={closeSnackBar} />
       </div>
     </div>
   );

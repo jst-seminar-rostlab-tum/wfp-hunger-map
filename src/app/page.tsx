@@ -5,7 +5,6 @@ import HungerAlertLoader from '@/components/HungerAlert/HungerAlertLoader';
 import MapLegend from '@/components/Legend/MapLegend';
 import MapLoader from '@/components/Map/MapLoader';
 import { Sidebar } from '@/components/Sidebar/Sidebar';
-import { Snackbar } from '@/components/Snackbar/Snackbar';
 import container from '@/container';
 import { GlobalDataRepository } from '@/domain/repositories/GlobalDataRepository';
 
@@ -31,7 +30,6 @@ export default async function Home() {
       <Sidebar countryMapData={countryMapData} />
       <AlertsMenuWrapper />
       <Chatbot />
-      <Snackbar />
       <MapLoader
         countries={countryMapData}
         fcsData={fcsData}

@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */ // disable prop-types as they are not needed for this file especially for props.duration
+
 'use client';
 
 import React, { createContext, ReactNode, useContext, useMemo, useState } from 'react';

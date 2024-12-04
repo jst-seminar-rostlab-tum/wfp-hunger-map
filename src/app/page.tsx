@@ -11,14 +11,18 @@ import { GlobalDataRepository } from '@/domain/repositories/GlobalDataRepository
 export default async function Home() {
   const globalRepo = container.resolve<GlobalDataRepository>('GlobalDataRepository');
   const countryMapDataPromise = globalRepo.getMapDataForCountries();
+  const countryFcsDataPromise = globalRepo.getFcsData();
   const disputedAreasPromise = globalRepo.getDisputedAreas();
   const ipcDataPromise = globalRepo.getIpcData();
   const nutritionDataPromise = globalRepo.getNutritionData();
-  const [countryMapData, disputedAreas, ipcData, nutritionData] = await Promise.all([
+  const alertDataPromise = globalRepo.getAlertData();
+  const [countryMapData, fcsData, disputedAreas, ipcData, nutritionData, alertData] = await Promise.all([
     countryMapDataPromise,
+    countryFcsDataPromise,
     disputedAreasPromise,
     ipcDataPromise,
     nutritionDataPromise,
+    alertDataPromise,
   ]);
 
   return (
@@ -28,11 +32,13 @@ export default async function Home() {
       <Chatbot />
       <MapLoader
         countries={countryMapData}
+        fcsData={fcsData}
         disputedAreas={disputedAreas}
         ipcData={ipcData}
         nutritionData={nutritionData}
+        alertData={alertData}
       />
-      <HungerAlertLoader countryMapData={countryMapData} />
+      <HungerAlertLoader countryMapData={countryMapData} countryFcsData={fcsData} />
       <MapLegend />
       <AccordionModal />
     </>

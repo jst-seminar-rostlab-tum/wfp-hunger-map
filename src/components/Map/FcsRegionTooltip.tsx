@@ -18,7 +18,7 @@ export default function FcsRegionTooltip({ feature }: FcsRegionTooltipProps) {
   const rcsiRatio = feature?.properties?.rcsi?.ratio || null;
   return (
     <div className="bg-background text-foreground rounded-md shadow-md max-w-sm z-9999">
-      <div className="px-4 pt-4">
+      <div className="px-4 py-4">
         <h3 className="text-lg text-foreground font-bold">{feature.properties?.Name}</h3>
         <div className="mt-2 text-foreground">
           <p>
@@ -30,7 +30,7 @@ export default function FcsRegionTooltip({ feature }: FcsRegionTooltipProps) {
                 with insufficient food consumption
               </>
             ) : (
-              'No data about insufficient food consumption'
+              'No data about insufficient food consumption.'
             )}
           </p>
           <p>
@@ -42,7 +42,7 @@ export default function FcsRegionTooltip({ feature }: FcsRegionTooltipProps) {
                 with crisis or above crisis food-based coping
               </>
             ) : (
-              'No data about crisis or above crisis food-based coping'
+              'No data about crisis or above crisis food-based coping.'
             )}
           </p>
         </div>

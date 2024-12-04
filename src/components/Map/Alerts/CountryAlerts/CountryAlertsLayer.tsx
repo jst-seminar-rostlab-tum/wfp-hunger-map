@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
 
-import { CountryMapDataWrapper } from '@/domain/entities/country/CountryMapData';
+import { CountryAlertsLayerProps } from '@/domain/props/CountryAlertsLayerProps';
 import CountryAlertsOperations from '@/operations/alerts/CountryAlertsOperations';
 
 import { PulsingAlertMarker } from './PulsingAlertMarker';
 
-export function CountryAlertsLayer({ countries }: { countries: CountryMapDataWrapper }) {
-  const countryAlerts = useMemo(() => CountryAlertsOperations.getFromMapData(countries), [countries]);
+export function CountryAlertsLayer({ countries, alerts }: CountryAlertsLayerProps) {
+  const countryAlerts = useMemo(() => CountryAlertsOperations.getFromMapData(alerts, countries), [countries, alerts]);
 
   return (
     <div>

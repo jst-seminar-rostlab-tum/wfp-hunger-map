@@ -1,7 +1,10 @@
 import { Feature } from 'geojson';
 import { PathOptions } from 'leaflet';
+import { createRoot } from 'react-dom/client';
 
+import NutritionRegionTooltip from '@/components/Map/NutritionRegionTooltip';
 import { NUTRIENT_LABELS } from '@/domain/constant/map/NutritionChoropleth.ts';
+import { LayerWithFeature } from '@/domain/entities/map/LayerWithFeature.ts';
 import { Nutrition } from '@/domain/entities/region/RegionNutritionProperties.ts';
 import { NutrientType } from '@/domain/enums/NutrientType.ts';
 
@@ -37,33 +40,33 @@ export default class NutritionStateChoroplethOperations {
     };
   }
 
-  public static addHoverEffect(layer: L.Layer, feature: Feature, getCurrentNutrient: () => NutrientType): void {
-    const initialOpacity = 0.6;
+  public static addHoverEffect(layer: LayerWithFeature): void {
     const pathLayer = layer as L.Path;
-    // Add mouseover event
-    layer.on('mouseover', () => {
-      const dynamicNutrient = getCurrentNutrient();
-      const dynamicFillColor = this.nutritionFillColor(this.getNutritionValue(feature, dynamicNutrient));
-
-      pathLayer.setStyle({
-        fillOpacity: 0.8,
-        fillColor: dynamicFillColor,
-      });
-    });
-
-    // Add mouseout event
-    pathLayer.on('mouseout', () => {
-      const dynamicNutrient = getCurrentNutrient();
-      const dynamicFillColor = this.nutritionFillColor(this.getNutritionValue(feature, dynamicNutrient));
-      pathLayer.setStyle({
-        fillOpacity: initialOpacity,
-        fillColor: dynamicFillColor,
-      });
+    pathLayer.on({
+      mouseover: () => {
+        pathLayer.setStyle({ fillOpacity: 1 });
+      },
+      mouseout: () => {
+        pathLayer.setStyle({ fillOpacity: 0.6 });
+      },
     });
   }
 
-  // Get the nutrition value for a region
-  private static getNutritionValue(feature: Feature, selectedNutrient: NutrientType): number | null {
-    return feature ? feature.properties?.nutrition[selectedNutrient as keyof Nutrition] : null;
+  // create and add state nutrition tooltip to the corresponding layer
+  static addNutritionTooltip(layer: LayerWithFeature, feature: Feature | undefined, selectedNutrient: NutrientType) {
+    if (!feature) return;
+
+    const tooltipContainer = document.createElement('div');
+    const root = createRoot(tooltipContainer);
+    root.render(<NutritionRegionTooltip feature={feature} selectedNutrient={selectedNutrient} />);
+
+    layer.unbindTooltip();
+    layer.bindTooltip(tooltipContainer, {
+      className: 'state-tooltip',
+      direction: 'top',
+      offset: [0, -10],
+      permanent: false,
+      sticky: true,
+    });
   }
 }

@@ -28,7 +28,7 @@ function IpcGlobalChoropleth({
   return (
     <GeoJSON
       key={selectedCountryId}
-      style={IpcChoroplethOperations.ipcGlobalStyle}
+      style={(feature) => IpcChoroplethOperations.ipcGlobalStyle(feature?.properties.adm0_id, ipcData)}
       data={filteredIpcColorData}
       onEachFeature={handleCountryFeature}
     />

@@ -1,69 +1,29 @@
-import { Feature, GeoJsonProperties } from 'geojson';
-import L from 'leaflet';
 import React, { useEffect, useRef, useState } from 'react';
 import { GeoJSON } from 'react-leaflet';
 
-import { Nutrition } from '@/domain/entities/region/RegionNutritionProperties.ts';
+import { LayerWithFeature } from '@/domain/entities/map/LayerWithFeature.ts';
 import { NutrientType } from '@/domain/enums/NutrientType.ts';
-import { LayerWithFeature, NutritionStateChoroplethProps } from '@/domain/props/NutritionStateProps';
+import { NutritionStateChoroplethProps } from '@/domain/props/NutritionStateProps';
 import NutritionStateChoroplethOperations from '@/operations/map/NutritionStateChoroplethOperations';
 
 import NutritionAccordion from './NutritionAccordion';
 
-export default function NutritionStateChoropleth({
-  regionNutrition,
-  countryName,
-  handleClick = () => {},
-  tooltip,
-}: NutritionStateChoroplethProps) {
+export default function NutritionStateChoropleth({ regionNutrition, countryName }: NutritionStateChoroplethProps) {
   const layersRef = useRef<LayerWithFeature[]>([]);
-
   const [selectedNutrient, setSelectedNutrient] = useState<NutrientType>(NutrientType.MINI_SIMPLE);
-
   const selectedNutrientRef = useRef<NutrientType>(selectedNutrient);
 
   useEffect(() => {
     selectedNutrientRef.current = selectedNutrient;
   }, [selectedNutrient]);
 
-  // based on the selected nutrient -> setup heatmap layer
+  // based on the selected nutrient -> update tooltip
   useEffect(() => {
     layersRef.current.forEach((layer) => {
       const { feature } = layer;
-      if (feature) {
-        const stateId = feature.id || feature.properties?.id;
-        const match = regionNutrition?.features?.find((item) => item.id === stateId);
-        const nutrientValue = match ? match?.properties?.nutrition[selectedNutrient as keyof Nutrition] : null;
-        const formattedNutrientValue = NutritionStateChoroplethOperations.formatNutrientValue(nutrientValue);
-        const nutrientLabel = NutritionStateChoroplethOperations.getNutrientLabel(selectedNutrient);
-        const tooltipContent = `
-          <div class="bg-background text-foreground rounded-md shadow-md max-w-sm z-9999">
-            <div class="p-4">
-              <h3 class="text-lg text-foreground font-bold">${feature.properties?.Name}</h3>
-              <div class="mt-2 text-foreground">
-                Risk of inadequate intake of <strong>${nutrientLabel}</strong>: ${formattedNutrientValue}
-              </div>
-            </div>
-          </div>
-        `;
-
-        layer.unbindTooltip();
-        layer.bindTooltip(tooltipContent, {
-          className: tooltip?.className || 'state-tooltip',
-          direction: 'top',
-          offset: [0, -10],
-          permanent: false,
-          sticky: true,
-        });
-      }
+      NutritionStateChoroplethOperations.addNutritionTooltip(layer, feature, selectedNutrient);
     });
-  }, [selectedNutrient]);
-
-  const onEachFeature = (feature: GeoJsonProperties, layer: L.Layer): void => {
-    layersRef.current.push(layer);
-    NutritionStateChoroplethOperations.addHoverEffect(layer, feature as Feature, () => selectedNutrientRef.current);
-    layer.on('click', () => handleClick(feature));
-  };
+  }, [selectedNutrient, regionNutrition]);
 
   return (
     <>
@@ -76,7 +36,11 @@ export default function NutritionStateChoropleth({
         <GeoJSON
           data={regionNutrition}
           style={(feature) => NutritionStateChoroplethOperations.dynamicStyle(feature, selectedNutrient)}
-          onEachFeature={onEachFeature}
+          onEachFeature={(feature, layer) => {
+            layersRef.current.push(layer);
+            NutritionStateChoroplethOperations.addNutritionTooltip(layer, feature, selectedNutrient);
+            NutritionStateChoroplethOperations.addHoverEffect(layer);
+          }}
         />
       )}
     </>

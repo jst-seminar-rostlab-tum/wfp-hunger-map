@@ -1,8 +1,10 @@
+import { Feature } from 'geojson';
 import L from 'leaflet';
 import { useTheme } from 'next-themes';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { GeoJSON } from 'react-leaflet';
 
+import { LayerWithFeature } from '@/domain/entities/map/LayerWithFeature.ts';
 import FcsChoroplethProps from '@/domain/props/FcsChoroplethProps';
 import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
 import { MapboxMapOperations } from '@/operations/map/MapboxMapOperations';
@@ -27,6 +29,21 @@ export default function FcsChoropleth({
     setSelectedCountryId(null);
   };
 
+  // adding the country name as a tooltip to each layer (on hover); the tooltip is not shown if the country is selected
+  useEffect(() => {
+    if (!geoJsonRef.current) return;
+    geoJsonRef.current.eachLayer((layer: LayerWithFeature) => {
+      if (!layer) return;
+      const feature = layer.feature as Feature;
+      if (feature.properties?.adm0_id !== selectedCountryId) {
+        const tooltipContainer = MapboxMapOperations.createCountryNameTooltipElement(feature?.properties?.adm0_name);
+        layer.bindTooltip(tooltipContainer, { className: 'leaflet-tooltip', sticky: true });
+      } else {
+        layer.unbindTooltip();
+      }
+    });
+  }, [selectedCountryId]);
+
   return (
     <div>
       <GeoJSON
@@ -35,13 +52,9 @@ export default function FcsChoropleth({
         }}
         data={data}
         style={FcsChoroplethOperations.countryStyle}
-        onEachFeature={(feature, layer) => {
-          // tooltip on country hover -> showing name
-          const tooltipContainer = MapboxMapOperations.createCountryNameTooltipElement(feature?.properties?.adm0_name);
-          layer.bindTooltip(tooltipContainer, { className: 'leaflet-tooltip', sticky: true });
-
-          FcsChoroplethOperations.onEachFeature(feature, layer, setSelectedCountryId, theme === 'dark');
-        }}
+        onEachFeature={(feature, layer) =>
+          FcsChoroplethOperations.onEachFeature(feature, layer, setSelectedCountryId, theme === 'dark')
+        }
       />
       {regionData && countryId === selectedCountryId && (
         <FscCountryChoropleth

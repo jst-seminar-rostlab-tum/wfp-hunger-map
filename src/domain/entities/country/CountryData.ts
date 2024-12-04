@@ -1,6 +1,5 @@
 import { FcsChartData } from '../charts/FcsChartData';
 import { RcsiChartData } from '../charts/RcsiChartData';
-import { CountryNews } from './CountryNews';
 
 export interface CountryData {
   fcs: number;
@@ -11,5 +10,4 @@ export interface CountryData {
   populationSource: string;
   rcsiGraph: RcsiChartData[];
   fcsGraph: FcsChartData[];
-  news: CountryNews[];
 }

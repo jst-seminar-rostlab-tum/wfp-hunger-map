@@ -1,22 +1,21 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 import { LeafletContextInterface, useLeafletContext } from '@react-leaflet/core';
-import mapboxgl, { Popup } from 'mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
+import mapboxgl from 'mapbox-gl';
 import { useTheme } from 'next-themes';
 import React, { RefObject, useEffect, useRef, useState } from 'react';
 
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSelectedMapVisibility } from '@/domain/contexts/SelectedMapVisibilityContext';
-import { MapProps } from '@/domain/props/MapProps';
+import { VectorTileLayerProps } from '@/domain/props/VectorTileLayerProps';
 import { MapboxMapOperations } from '@/operations/map/MapboxMapOperations';
 
-export default function VectorTileLayer({ countries, disputedAreas, ipcData, nutritionData }: MapProps) {
+export default function VectorTileLayer({ countries, disputedAreas }: VectorTileLayerProps) {
   const { theme } = useTheme();
   const context: LeafletContextInterface = useLeafletContext();
   const mapContainer: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
   const { selectedMapType } = useSelectedMap();
   const [map, setMap] = useState<mapboxgl.Map>();
-  const [popup, setPopup] = useState<Popup>();
   const { selectedMapVisibility } = useSelectedMapVisibility();
 
   mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
@@ -24,18 +23,11 @@ export default function VectorTileLayer({ countries, disputedAreas, ipcData, nut
   useEffect(() => {
     const baseMap: mapboxgl.Map = MapboxMapOperations.createMapboxMap(
       theme === 'dark',
-      { countries, disputedAreas, ipcData, selectedMapType, nutritionData },
+      { countries, disputedAreas },
       mapContainer
     );
-    const popover = new mapboxgl.Popup({
-      closeButton: false,
-      closeOnClick: false,
-      anchor: 'right',
-      className: 'mapbox-popup-transparent',
-    });
     baseMap.on('load', () => {
       setMap(baseMap);
-      setPopup(popover);
     });
 
     MapboxMapOperations.synchronizeLeafletMapbox(baseMap, mapContainer, context);
@@ -53,15 +45,10 @@ export default function VectorTileLayer({ countries, disputedAreas, ipcData, nut
   }, [context]);
 
   useEffect(() => {
-    if (map && popup && selectedMapVisibility) {
+    if (map && selectedMapVisibility) {
       MapboxMapOperations.removeActiveMapLayer(map, theme === 'dark');
-      MapboxMapOperations.addMapAsLayer(
-        map,
-        theme === 'dark',
-        { countries, ipcData, selectedMapType, nutritionData },
-        popup
-      );
-    } else if (map && popup) {
+      MapboxMapOperations.addMapAsLayer(map, selectedMapType);
+    } else if (map) {
       MapboxMapOperations.removeActiveMapLayer(map, theme === 'dark');
     }
   }, [map, selectedMapType, selectedMapVisibility]);

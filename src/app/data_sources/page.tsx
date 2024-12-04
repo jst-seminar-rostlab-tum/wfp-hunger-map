@@ -9,7 +9,7 @@ import { dataSourcesTextElements } from '@/domain/constant/dataSources/dataSourc
 
 function Page() {
   const [searchWords, setSearchWords] = useState<string[]>([]);
-  const [nVisibleAccordions, setNVisibleAccordions] = useState(0);
+  const [sectionIsVisible, setSectionIsVisible] = useState(true);
 
   return (
     <Suspense>
@@ -19,9 +19,9 @@ function Page() {
         textElements={dataSourcesTextElements}
         searchWords={searchWords}
         accordionItems={dataSourceAccordionItems}
-        setVisibilityCount={setNVisibleAccordions}
+        onVisibilityChange={setSectionIsVisible}
       />
-      {!nVisibleAccordions && !!searchWords.length && <p className="text-center">No results</p>}
+      {!sectionIsVisible && !!searchWords.length && <p className="text-center">No results</p>}
     </Suspense>
   );
 }

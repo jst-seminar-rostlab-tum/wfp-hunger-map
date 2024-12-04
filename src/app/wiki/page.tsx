@@ -9,7 +9,7 @@ import { wikiTextElements } from '@/domain/constant/wiki/wikiTextElements';
 
 function Page() {
   const [searchWords, setSearchWords] = useState<string[]>([]);
-  const [nVisibleAccordions, setNVisibleAccordions] = useState(0);
+  const [sectionIsVisible, setSectionIsVisible] = useState(true);
 
   return (
     <Suspense>
@@ -19,9 +19,9 @@ function Page() {
         textElements={wikiTextElements}
         searchWords={searchWords}
         accordionItems={wikiEntries}
-        setVisibilityCount={setNVisibleAccordions}
+        onVisibilityChange={setSectionIsVisible}
       />
-      {!nVisibleAccordions && !!searchWords.length && <p className="text-center">No results</p>}
+      {!sectionIsVisible && !!searchWords.length && <p className="text-center">No results</p>}
     </Suspense>
   );
 }

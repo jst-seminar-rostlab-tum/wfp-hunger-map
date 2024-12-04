@@ -10,7 +10,7 @@ function SearchableSection({
   textElements,
   accordionItems,
   searchWords,
-  setVisibilityCount,
+  onVisibilityChange,
 }: SearchableSectionProps) {
   const [filteredAccordionItems, setFilteredAccordionItems] = useState<AccordionItemProps[] | null>(null);
   const [filteredTextElements, setFilteredTextElements] = useState<SearchableElement[] | null>(null);
@@ -29,21 +29,17 @@ function SearchableSection({
   const textVisible = textElements && (!filteredTextElements || filteredTextElements.length);
 
   useEffect(() => {
-    if (setVisibilityCount) {
-      setVisibilityCount((v) => v + 1);
+    if (onVisibilityChange) {
+      onVisibilityChange(true);
     }
   }, []);
 
   useEffect(() => {
     const newVisibility = !!(accordionVisible || textVisible);
-    setIsVisible((prevVisibility) => {
-      if (prevVisibility !== newVisibility) {
-        if (setVisibilityCount) {
-          setVisibilityCount((prevCount) => prevCount - Number(isVisible) + Number(newVisibility));
-        }
-      }
-      return newVisibility;
-    });
+    setIsVisible(newVisibility);
+    if (onVisibilityChange) {
+      onVisibilityChange(newVisibility);
+    }
   }, [accordionVisible, textVisible]);
 
   return isVisible ? (

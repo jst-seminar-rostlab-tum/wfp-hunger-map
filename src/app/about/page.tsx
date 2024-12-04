@@ -19,7 +19,7 @@ function Page() {
   ];
 
   const [searchWords, setSearchWords] = useState<string[]>([]);
-  const [nVisibleAccordions, setNVisibleAccordions] = useState(0);
+  const [visibleAccordions, setVisibleAccordions] = useState<Set<string>>(new Set());
 
   return (
     <Suspense>
@@ -30,16 +30,26 @@ function Page() {
           <LiveSuperscript />
         </h1>
       )}
-      {SECTIONS.map(({ heading, textElements, accordionItems }) => (
-        <SearchableSection
-          heading={heading}
-          textElements={textElements}
-          accordionItems={accordionItems}
-          searchWords={searchWords}
-          setVisibilityCount={setNVisibleAccordions}
-        />
-      ))}
-      {!nVisibleAccordions && !!searchWords.length && <p className="text-center">No results</p>}
+      {SECTIONS.map(({ heading, textElements, accordionItems }, index) => {
+        const key = heading ?? `section-${index}`;
+        return (
+          <SearchableSection
+            key={key}
+            heading={heading}
+            textElements={textElements}
+            accordionItems={accordionItems}
+            searchWords={searchWords}
+            onVisibilityChange={(visible: boolean) =>
+              setVisibleAccordions((prevState) => {
+                if (visible) prevState.add(key);
+                else prevState.delete(key);
+                return prevState;
+              })
+            }
+          />
+        );
+      })}
+      {!visibleAccordions.size && !!searchWords.length && <p className="text-center">No results</p>}
     </Suspense>
   );
 }

@@ -80,4 +80,9 @@ export class MapOperations {
     setRegionNutritionData(undefined);
     setIpcRegionData(undefined);
   }
+
+  static convertCountriesToFeatureCollection = (countryFeatures: CountryMapData[]): FeatureCollection => ({
+    type: 'FeatureCollection',
+    features: countryFeatures as Feature<Geometry, GeoJsonProperties>[],
+  });
 }

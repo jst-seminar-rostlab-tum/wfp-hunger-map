@@ -3,10 +3,16 @@ import 'leaflet/dist/leaflet.css';
 import { Feature, FeatureCollection, GeoJSON, GeoJsonProperties, Geometry } from 'geojson';
 import L, { Map as LeafletMap } from 'leaflet';
 import { useEffect, useRef, useState } from 'react';
-import { MapContainer } from 'react-leaflet';
+import { GeoJSON as LeafletGeoJSON, MapContainer, Pane, SVGOverlay, TileLayer } from 'react-leaflet';
 
 import BackToGlobalButton from '@/components/Map/BackToGlobalButton';
-import { MAP_MAX_ZOOM, MAP_MIN_ZOOM } from '@/domain/constant/map/Map';
+import {
+  countryBaseStyle,
+  countryBorderStyle,
+  MAP_MAX_ZOOM,
+  MAP_MIN_ZOOM,
+  oceanBounds,
+} from '@/domain/constant/map/Map';
 import { useSelectedAlert } from '@/domain/contexts/SelectedAlertContext';
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
@@ -24,10 +30,15 @@ import { AlertContainer } from './Alerts/AlertContainer';
 import FcsChoropleth from './FcsChoropleth';
 import IpcChoropleth from './IpcMap/IpcChoropleth';
 import NutritionChoropleth from './NutritionChoropleth';
-import VectorTileLayer from './VectorTileLayer';
 import ZoomControl from './ZoomControl';
 
-export default function Map({ countries, disputedAreas, ipcData, fcsData, nutritionData, alertData }: MapProps) {
+export default function Map({
+  countries,
+  /* TODO disputedAreas, */ ipcData,
+  fcsData,
+  nutritionData,
+  alertData,
+}: MapProps) {
   const mapRef = useRef<LeafletMap | null>(null);
   const { selectedMapType } = useSelectedMap();
   const { setSelectedMapVisibility } = useSelectedMapVisibility();
@@ -104,42 +115,48 @@ export default function Map({ countries, disputedAreas, ipcData, fcsData, nutrit
       maxZoom={MAP_MAX_ZOOM}
       maxBoundsViscosity={1.0}
       zoomControl={false}
-      markerZoomAnimation={false}
-      zoomAnimation={false}
       style={{ height: '100%', width: '100%', zIndex: 1 }}
     >
       <AlertContainer countries={countries} alertData={alertData} />
-      {countries && <VectorTileLayer countries={countries} disputedAreas={disputedAreas} />}
-      {selectedMapType === GlobalInsight.FOOD &&
-        countries.features &&
-        countries.features
-          .filter((country) => country.properties.interactive)
-          .filter((country) => fcsData[country.properties.adm0_id]?.fcs)
-          .map((country) => (
-            <FcsChoropleth
-              key={country.properties.adm0_id}
-              countryId={country.properties.adm0_id}
-              data={{ type: 'FeatureCollection', features: [country as Feature<Geometry, GeoJsonProperties>] }}
-              selectedCountryId={selectedCountryId}
-              setSelectedCountryId={setSelectedCountryId}
-              loading={countryClickLoading}
-              countryData={countryData}
-              countryIso3Data={countryIso3Data}
-              regionData={regionData}
-              selectedCountryName={selectedCountryName}
-            />
-          ))}
+      <ZoomControl threshold={5} callback={onZoomThresholdReached} />
+      <BackToGlobalButton />
 
-      {selectedMapType === GlobalInsight.IPC && (
-        <IpcChoropleth
-          countries={countries}
-          ipcData={ipcData}
-          selectedCountryId={selectedCountryId}
-          setSelectedCountryId={setSelectedCountryId}
-          countryData={countryData}
-          ipcRegionData={ipcRegionData}
-          selectedCountryName={selectedCountryName}
+      <Pane name="ocean" style={{ zIndex: 0 }}>
+        <SVGOverlay bounds={oceanBounds}>
+          <rect width="100%" height="100%" fill="hsl(var(--nextui-ocean))" />
+        </SVGOverlay>
+      </Pane>
+      <Pane name="countries_base" style={{ zIndex: 1 }}>
+        <LeafletGeoJSON
+          data={MapOperations.convertCountriesToFeatureCollection(countries.features)}
+          style={countryBaseStyle}
         />
+      </Pane>
+      {selectedMapType === GlobalInsight.FOOD && countries.features && (
+        <>
+          {countries.features
+            .filter((country) => country.properties.interactive)
+            .filter((country) => fcsData[country.properties.adm0_id]?.fcs)
+            .map((country) => (
+              <FcsChoropleth
+                key={country.properties.adm0_id}
+                countryId={country.properties.adm0_id}
+                data={{ type: 'FeatureCollection', features: [country as Feature<Geometry, GeoJsonProperties>] }}
+                selectedCountryId={selectedCountryId}
+                setSelectedCountryId={setSelectedCountryId}
+                loading={countryClickLoading}
+                countryData={countryData}
+                countryIso3Data={countryIso3Data}
+                regionData={regionData}
+                selectedCountryName={selectedCountryName}
+              />
+            ))}
+          {!selectedCountryId && (
+            <Pane name="fcs_raster" style={{ zIndex: 2 }}>
+              <TileLayer url="https://static.hungermapdata.org/proteus_tiles/{z}/{x}/{y}.png" tms />
+            </Pane>
+          )}
+        </>
       )}
 
       {selectedMapType === GlobalInsight.NUTRITION &&
@@ -159,8 +176,37 @@ export default function Map({ countries, disputedAreas, ipcData, fcsData, nutrit
               selectedCountryName={selectedCountryName}
             />
           ))}
-      <ZoomControl threshold={5} callback={onZoomThresholdReached} />
-      <BackToGlobalButton />
+
+      {selectedMapType === GlobalInsight.VEGETATION && (
+        <Pane name="vegetation_raster" style={{ zIndex: 2 }}>
+          <TileLayer url="https://dev.api.earthobservation.vam.wfp.org/tiles/latest/viq_dekad/{z}/{x}/{y}.png" />
+        </Pane>
+      )}
+
+      {selectedMapType === GlobalInsight.RAINFALL && (
+        <Pane name="vegetation_raster" style={{ zIndex: 2 }}>
+          <TileLayer url="https://dev.api.earthobservation.vam.wfp.org/tiles/latest/r3q_dekad/{z}/{x}/{y}.png" />
+        </Pane>
+      )}
+
+      {selectedMapType === GlobalInsight.IPC && (
+        <IpcChoropleth
+          countries={countries}
+          ipcData={ipcData}
+          selectedCountryId={selectedCountryId}
+          setSelectedCountryId={setSelectedCountryId}
+          countryData={countryData}
+          ipcRegionData={ipcRegionData}
+          selectedCountryName={selectedCountryName}
+        />
+      )}
+
+      <Pane name="countries_border" style={{ zIndex: 3 }}>
+        <LeafletGeoJSON
+          data={MapOperations.convertCountriesToFeatureCollection(countries.features)}
+          style={countryBorderStyle}
+        />
+      </Pane>
     </MapContainer>
   );
 }

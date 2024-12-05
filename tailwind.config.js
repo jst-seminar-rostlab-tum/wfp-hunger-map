@@ -202,6 +202,7 @@ const config = {
             nutritionNotAnalyzed: '#D2D1D1',
 
             countriesBase: '#fefeff',
+            countryBorders: '#6f7475',
             ocean: '#91cccb',
             fatalityAlert: '#742280',
             climateWetAlert: '#4295D3',
@@ -248,8 +249,8 @@ const config = {
             conflictCivil: '#96badc',
             conflictExplosion: '#eaaf75',
             conflictStrategic: '#bec0c1',
-            countriesBase: '#0e6397',
-            ocean: '#111111',
+            countriesBase: '#002129',
+            ocean: '#002a38',
             fatalityAlert: '#742280',
             climateWetAlert: '#4295D3',
             climateDryAlert: '#B95926',

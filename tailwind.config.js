@@ -203,6 +203,7 @@ const config = {
 
             countriesBase: '#fefeff',
             countryBorders: '#6f7475',
+            countryHover: '#8a8a8a',
             ocean: '#91cccb',
             fatalityAlert: '#742280',
             climateWetAlert: '#4295D3',

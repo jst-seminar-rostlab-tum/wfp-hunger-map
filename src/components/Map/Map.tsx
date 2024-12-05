@@ -123,6 +123,7 @@ export default function Map({ countries, disputedAreas, ipcData, fcsData, nutrit
       </Pane>
       <Pane name="countries_base" style={{ zIndex: 1 }}>
         <LeafletGeoJSON
+          interactive={false}
           data={MapOperations.convertCountriesToFeatureCollection(countries.features)}
           style={countryBaseStyle}
         />

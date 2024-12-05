@@ -1,6 +1,7 @@
-import { Feature, FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
+import { Feature as GeoJsonFeature, FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
 
 import container from '@/container';
+import { Feature } from '@/domain/entities/common/Feature';
 import { CountryData } from '@/domain/entities/country/CountryData.ts';
 import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data.ts';
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
@@ -27,7 +28,7 @@ export class MapOperations {
         if (newRegionData && newRegionData.features) {
           setRegionData({
             type: 'FeatureCollection',
-            features: newRegionData.features as Feature<Geometry, GeoJsonProperties>[],
+            features: newRegionData.features as GeoJsonFeature<Geometry, GeoJsonProperties>[],
           });
         }
       }
@@ -38,7 +39,7 @@ export class MapOperations {
         if (newIpcRegionData && newIpcRegionData.features) {
           setIpcRegionData({
             type: 'FeatureCollection',
-            features: newIpcRegionData?.features as Feature<Geometry, GeoJsonProperties>[],
+            features: newIpcRegionData?.features as GeoJsonFeature<Geometry, GeoJsonProperties>[],
           });
         }
       }
@@ -84,4 +85,9 @@ export class MapOperations {
     setRegionNutritionData(undefined);
     setIpcRegionData(undefined);
   }
+
+  static convertCountriesToFeatureCollection = <T, U>(countryFeatures: Feature<T, U>[]): FeatureCollection => ({
+    type: 'FeatureCollection',
+    features: countryFeatures as GeoJsonFeature<Geometry, GeoJsonProperties>[],
+  });
 }

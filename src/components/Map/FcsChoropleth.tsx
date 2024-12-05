@@ -1,6 +1,5 @@
 import { Feature } from 'geojson';
 import L from 'leaflet';
-import { useTheme } from 'next-themes';
 import React, { useEffect, useRef } from 'react';
 import { GeoJSON } from 'react-leaflet';
 
@@ -23,7 +22,6 @@ export default function FcsChoropleth({
   selectedCountryName,
 }: FcsChoroplethProps) {
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
-  const { theme } = useTheme();
 
   const handleBackClick = () => {
     setSelectedCountryId(null);
@@ -52,9 +50,7 @@ export default function FcsChoropleth({
         }}
         data={data}
         style={FcsChoroplethOperations.countryStyle}
-        onEachFeature={(feature, layer) =>
-          FcsChoroplethOperations.onEachFeature(feature, layer, setSelectedCountryId, theme === 'dark')
-        }
+        onEachFeature={(feature, layer) => FcsChoroplethOperations.onEachFeature(feature, layer, setSelectedCountryId)}
       />
       {regionData && countryId === selectedCountryId && (
         <FscCountryChoropleth

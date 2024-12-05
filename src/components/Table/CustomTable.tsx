@@ -36,8 +36,12 @@ function CustomTable<D>({
       containedWords,
     }))
   ) as CustomTableRow[];
-  if (format === 'dataSources') {
-    rows = rows.filter((row) => searchWords.some((w) => row.containedWords?.includes(w)));
+
+  if (format === 'dataSources' && searchWords.length) {
+    const noLabelMatch = searchWords.every((w) => !ariaLabel?.toLowerCase().includes(w));
+    if (noLabelMatch) {
+      rows = rows.filter((row) => searchWords.some((w) => row.containedWords?.includes(w)));
+    }
   }
 
   const leftAlignedColumns = new Set(columns.filter((c) => c.alignLeft).map((c) => c.columnId));

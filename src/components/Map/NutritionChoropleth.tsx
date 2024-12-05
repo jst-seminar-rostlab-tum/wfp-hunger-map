@@ -27,8 +27,10 @@ export default function NutritionChoropleth({
 
   // given the `CountryNutrition` data -> parse the data to map country styling
   useEffect(() => {
-    const parsedStyles = NutritionChoroplethOperations.getCountryStyles(nutritionData as CountryNutrition);
-    setCountryStyles(parsedStyles);
+    if (nutritionData) {
+      const parsedStyles = NutritionChoroplethOperations?.getCountryStyles(nutritionData);
+      setCountryStyles(parsedStyles);
+    }
   }, [nutritionData]);
 
   // adding the country name as a tooltip to each layer (on hover)

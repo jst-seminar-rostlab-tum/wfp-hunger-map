@@ -9,6 +9,7 @@ import BackToGlobalButton from '@/components/Map/BackToGlobalButton';
 import {
   countryBaseStyle,
   countryBorderStyle,
+  disputedAreaStyle,
   MAP_MAX_ZOOM,
   MAP_MIN_ZOOM,
   oceanBounds,
@@ -32,13 +33,7 @@ import IpcChoropleth from './IpcMap/IpcChoropleth';
 import NutritionChoropleth from './NutritionChoropleth';
 import ZoomControl from './ZoomControl';
 
-export default function Map({
-  countries,
-  /* TODO disputedAreas, */ ipcData,
-  fcsData,
-  nutritionData,
-  alertData,
-}: MapProps) {
+export default function Map({ countries, disputedAreas, ipcData, fcsData, nutritionData, alertData }: MapProps) {
   const mapRef = useRef<LeafletMap | null>(null);
   const { selectedMapType } = useSelectedMap();
   const { setSelectedMapVisibility } = useSelectedMapVisibility();
@@ -205,6 +200,12 @@ export default function Map({
         <LeafletGeoJSON
           data={MapOperations.convertCountriesToFeatureCollection(countries.features)}
           style={countryBorderStyle}
+        />
+      </Pane>
+      <Pane name="disputed_areas" style={{ zIndex: 4 }}>
+        <LeafletGeoJSON
+          data={MapOperations.convertCountriesToFeatureCollection(disputedAreas.features)}
+          style={disputedAreaStyle}
         />
       </Pane>
     </MapContainer>

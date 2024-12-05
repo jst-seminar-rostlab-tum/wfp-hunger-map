@@ -17,3 +17,9 @@ export const countryBorderStyle = {
   weight: 1,
   fillOpacity: 0,
 };
+export const disputedAreaStyle = {
+  fillOpacity: 0,
+  color: 'black',
+  weight: 1,
+  dashArray: '5,5',
+};

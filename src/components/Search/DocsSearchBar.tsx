@@ -2,6 +2,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
 import SearchBar from '@/components/Search/SearchBar';
+import { useDebounce } from '@/domain/hooks/searchHooks.ts';
 import { DocsSearchBarProps } from '@/domain/props/DocsSearchBarProps';
 import { getSearchWords } from '@/utils/searchUtils';
 
@@ -11,10 +12,11 @@ function DocsSearchBar({ setSearchWords }: DocsSearchBarProps) {
   const pathname = usePathname();
 
   const [search, setSearch] = useState(params.get('search') ?? '');
+  const debouncedSearch = useDebounce(search, 350);
 
   useEffect(() => {
-    setSearchWords(getSearchWords(search));
-  }, [search]);
+    router.push(`${pathname}?search=${debouncedSearch}`);
+  }, [debouncedSearch]);
 
   return (
     <div className="h-10">
@@ -22,7 +24,7 @@ function DocsSearchBar({ setSearchWords }: DocsSearchBarProps) {
         value={search}
         onValueChange={(v) => {
           setSearch(v);
-          router.push(`${pathname}?search=${v}`);
+          setSearchWords(getSearchWords(v));
         }}
         className="fixed left-0 z-10"
         inputClassName="max-w-md mx-auto backdrop-blur-lg backdrop-saturate-150 bg-background/70"

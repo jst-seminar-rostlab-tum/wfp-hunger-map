@@ -81,7 +81,7 @@ function CustomTable<D>({
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody items={rows} emptyContent="No rows to display">
+        <TableBody items={rows} emptyContent={format === 'dataSources' ? 'Searching...' : 'No rows to display'}>
           {(row) => {
             return (
               <TableRow key={`${row.groupKey}×${row.index}`}>

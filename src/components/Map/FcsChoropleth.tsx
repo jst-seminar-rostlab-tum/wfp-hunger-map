@@ -4,6 +4,7 @@ import { useTheme } from 'next-themes';
 import React, { useEffect, useRef } from 'react';
 import { GeoJSON } from 'react-leaflet';
 
+import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 import { LayerWithFeature } from '@/domain/entities/map/LayerWithFeature.ts';
 import FcsChoroplethProps from '@/domain/props/FcsChoroplethProps';
 import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
@@ -36,7 +37,7 @@ export default function FcsChoropleth({
     geoJsonRef.current.eachLayer((layer: LayerWithFeature) => {
       if (!layer) return;
       const feature = layer.feature as Feature;
-      if (FcsChoroplethOperations.checkIfActive(data.features[0], fcsData)) {
+      if (FcsChoroplethOperations.checkIfActive(data.features[0] as CountryMapData, fcsData)) {
         const tooltipContainer = MapboxMapOperations.createCountryNameTooltipElement(feature?.properties?.adm0_name);
         layer.bindTooltip(tooltipContainer, { className: 'leaflet-tooltip', sticky: true });
       } else {

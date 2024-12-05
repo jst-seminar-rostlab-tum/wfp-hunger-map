@@ -36,15 +36,13 @@ export function Sidebar({ countryMapData, fcsData }: SidebarProps) {
   const isMobile = useMediaQuery('(max-width: 640px)');
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
   const { clearAccordionModal } = useAccordionsModal();
-  const { isFetching: ipcDataIsFetching } = useIpcQuery(false);
-  const { isFetching: nutritionDataIsFetching } = useNutritionQuery(false);
+  const { isFetching: ipcDataIsFetching, data: ipcData } = useIpcQuery(false);
+  const { isFetching: nutritionDataIsFetching, data: nutritionData } = useNutritionQuery(false);
 
   const mapDataFetching: Partial<Record<GlobalInsight, boolean>> = {
     [GlobalInsight.IPC]: ipcDataIsFetching,
     [GlobalInsight.NUTRITION]: nutritionDataIsFetching,
   };
-  const ipcData = useIpcQuery().data;
-  const nutritionData = useNutritionQuery().data;
 
   const handleCountrySelect = (countryID: React.Key | null) => {
     if (countryID) {

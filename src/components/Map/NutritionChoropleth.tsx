@@ -44,7 +44,7 @@ export default function NutritionChoropleth({
 
   return (
     <div>
-      {countryId !== selectedCountryId && (
+      {countryId !== selectedCountryId && nutritionData && (
         <GeoJSON
           ref={(instance) => {
             geoJsonRef.current = instance;

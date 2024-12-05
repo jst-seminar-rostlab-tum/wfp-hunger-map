@@ -9,11 +9,12 @@ import { GlobalDataRepository } from '../repositories/GlobalDataRepository';
 
 const globalRepo = container.resolve<GlobalDataRepository>('GlobalDataRepository');
 
-export const useIpcQuery = () =>
+export const useIpcQuery = (enabled: boolean) =>
   useQuery<CountryIpcData[]>(
     {
       queryKey: ['fetchIpcData'],
       queryFn: globalRepo.getIpcData,
+      enabled,
     },
     cachedQueryClient
   );
@@ -27,11 +28,12 @@ export const useCountryCodesQuery = () =>
     cachedQueryClient
   );
 
-export const useNutritionQuery = () =>
+export const useNutritionQuery = (enabled: boolean) =>
   useQuery<CountryNutrition>(
     {
       queryKey: ['fetchNutritionData'],
       queryFn: globalRepo.getNutritionData,
+      enabled,
     },
     cachedQueryClient
   );

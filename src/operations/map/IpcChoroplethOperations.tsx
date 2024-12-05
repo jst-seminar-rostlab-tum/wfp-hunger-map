@@ -5,16 +5,24 @@ import { createRoot } from 'react-dom/client';
 import CountryHoverPopover from '@/components/CountryHoverPopover/CountryHoverPopover';
 import { CountryIpcData } from '@/domain/entities/country/CountryIpcData';
 import { CountryMapData, CountryMapDataWrapper } from '@/domain/entities/country/CountryMapData';
+import { inactiveCountryOverlayStyling } from '@/styles/MapColors.ts';
 
 export class IpcChoroplethOperations {
-  static ipcGlobalStyle = (adm0code: number, ipcData: CountryIpcData[]) => {
+  static ipcGlobalStyle = (
+    feature: Feature<Geometry, GeoJsonProperties>,
+    adm0code: number,
+    ipcData: CountryIpcData[],
+    isDark: boolean
+  ) => {
     const country = ipcData.find((c) => parseInt(c.adm0_code, 10) === adm0code);
-    return {
-      color: '#000',
-      weight: 0.5,
-      fillOpacity: 1,
-      fillColor: IpcChoroplethOperations.fillGlobalIpc(country?.ipc_popnmbr ? country.ipc_popnmbr / 1000000 : null),
-    };
+    return feature.properties?.ipcData
+      ? {
+          color: '#000',
+          weight: 0.5,
+          fillOpacity: 1,
+          fillColor: IpcChoroplethOperations.fillGlobalIpc(country?.ipc_popnmbr ? country.ipc_popnmbr / 1000000 : null),
+        }
+      : inactiveCountryOverlayStyling(isDark);
   };
 
   static fillGlobalIpc = (ipcPopulation: number | null) => {
@@ -50,11 +58,7 @@ export class IpcChoroplethOperations {
   static generateColorMap = (ipcData: CountryIpcData[], mapData: CountryMapDataWrapper) => {
     const ipcDataById = Object.fromEntries(ipcData.map((data: CountryIpcData) => [data.adm0_code, data]));
 
-    const filteredFeatures = mapData.features.filter(
-      (feature: CountryMapData) => ipcDataById[feature.properties.adm0_id]
-    );
-
-    const updatedFeatures = filteredFeatures.map((feature: CountryMapData) => ({
+    const updatedFeatures = mapData.features.map((feature: CountryMapData) => ({
       ...feature,
       properties: {
         ...feature.properties,
@@ -75,8 +79,10 @@ export class IpcChoroplethOperations {
     ipcData: CountryIpcData[],
     setSelectedCountryId: (id: number | null) => void
   ) {
-    this.createTooltip(feature, layer, ipcData);
-    this.attachEvents(feature, layer, setSelectedCountryId);
+    if (this.checkIfActive(feature as CountryMapData, ipcData)) {
+      this.createTooltip(feature, layer, ipcData);
+      this.attachEvents(feature, layer, setSelectedCountryId);
+    }
   }
 
   static attachEvents(
@@ -100,6 +106,11 @@ export class IpcChoroplethOperations {
         pathLayer.closeTooltip();
       },
     });
+  }
+
+  static checkIfActive(feature: CountryMapData, ipcData: CountryIpcData[]): boolean {
+    const ipcDataById = Object.fromEntries(ipcData.map((data: CountryIpcData) => [data.adm0_code, data]));
+    return ipcDataById[feature.properties.adm0_id] !== undefined;
   }
 
   static createTooltip(feature: Feature<Geometry, GeoJsonProperties>, layer: L.Layer, ipcData: CountryIpcData[]) {

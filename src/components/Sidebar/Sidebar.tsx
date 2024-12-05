@@ -3,7 +3,7 @@
 import { Button } from '@nextui-org/button';
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
 import { Link } from '@nextui-org/link';
-import { Autocomplete, AutocompleteItem, ScrollShadow } from '@nextui-org/react';
+import { Autocomplete, AutocompleteItem, ScrollShadow, Spinner } from '@nextui-org/react';
 import clsx from 'clsx';
 import { SidebarLeft } from 'iconsax-react';
 import NextImage from 'next/image';
@@ -36,6 +36,13 @@ export function Sidebar({ countryMapData, fcsData }: SidebarProps) {
   const isMobile = useMediaQuery('(max-width: 640px)');
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
   const { clearAccordionModal } = useAccordionsModal();
+  const { isFetching: ipcDataIsFetching } = useIpcQuery(false);
+  const { isFetching: nutritionDataIsFetching } = useNutritionQuery(false);
+
+  const mapDataFetching: Partial<Record<GlobalInsight, boolean>> = {
+    [GlobalInsight.IPC]: ipcDataIsFetching,
+    [GlobalInsight.NUTRITION]: nutritionDataIsFetching,
+  };
   const ipcData = useIpcQuery().data;
   const nutritionData = useNutritionQuery().data;
 
@@ -46,7 +53,7 @@ export function Sidebar({ countryMapData, fcsData }: SidebarProps) {
   };
 
   if (!isSidebarOpen) {
-    return <CollapsedSidebar />;
+    return <CollapsedSidebar mapDataFetching={mapDataFetching} />;
   }
 
   const onMapTypeSelect = (mapType: GlobalInsight) => {
@@ -128,14 +135,17 @@ export function Sidebar({ countryMapData, fcsData }: SidebarProps) {
                   <Button
                     startContent={
                       item.icon && (
-                        <NextImage
-                          unoptimized
-                          loading="eager"
-                          src={item.icon}
-                          alt={item.label}
-                          width={24}
-                          height={24}
-                        />
+                        <div className="flex items-center justify-center relative">
+                          <NextImage
+                            unoptimized
+                            loading="eager"
+                            src={item.icon}
+                            alt={item.label}
+                            width={24}
+                            height={24}
+                          />
+                          {mapDataFetching[item.key] && <Spinner className="absolute" color="white" />}
+                        </div>
                       )
                     }
                     key={item.key}

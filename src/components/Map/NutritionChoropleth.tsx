@@ -6,6 +6,7 @@ import { GeoJSON } from 'react-leaflet';
 
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 import { LayerWithFeature } from '@/domain/entities/map/LayerWithFeature.ts';
+import { useNutritionQuery } from '@/domain/hooks/globalHooks';
 import NutritionChoroplethProps from '@/domain/props/NutritionChoroplethProps';
 import { MapboxMapOperations } from '@/operations/map/MapboxMapOperations';
 import NutritionChoroplethOperations from '@/operations/map/NutritionChoroplethOperations';
@@ -17,18 +18,18 @@ export default function NutritionChoropleth({
   countryId,
   selectedCountryId,
   setSelectedCountryId,
-  nutritionData,
   regionNutritionData,
   regionData,
   selectedCountryName,
 }: NutritionChoroplethProps) {
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
   const { theme } = useTheme();
+  const { data: nutritionData } = useNutritionQuery(true);
 
   // adding the country name as a tooltip to each layer (on hover)
   // the tooltip is not shown if the country is selected or there is no data available for the country
   useEffect(() => {
-    if (!geoJsonRef.current) return;
+    if (!geoJsonRef.current || !nutritionData) return;
     geoJsonRef.current.eachLayer((layer: LayerWithFeature) => {
       if (!layer) return;
       const feature = layer.feature as Feature;

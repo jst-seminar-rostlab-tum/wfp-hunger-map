@@ -13,13 +13,11 @@ export default async function Home() {
   const countryMapDataPromise = globalRepo.getMapDataForCountries();
   const countryFcsDataPromise = globalRepo.getFcsData();
   const disputedAreasPromise = globalRepo.getDisputedAreas();
-  const nutritionDataPromise = globalRepo.getNutritionData();
   const alertDataPromise = globalRepo.getAlertData();
-  const [countryMapData, fcsData, disputedAreas, nutritionData, alertData] = await Promise.all([
+  const [countryMapData, fcsData, disputedAreas, alertData] = await Promise.all([
     countryMapDataPromise,
     countryFcsDataPromise,
     disputedAreasPromise,
-    nutritionDataPromise,
     alertDataPromise,
   ]);
 
@@ -28,13 +26,7 @@ export default async function Home() {
       <Sidebar countryMapData={countryMapData} fcsData={fcsData} />
       <AlertsMenuWrapper />
       <Chatbot />
-      <MapLoader
-        countries={countryMapData}
-        fcsData={fcsData}
-        disputedAreas={disputedAreas}
-        nutritionData={nutritionData}
-        alertData={alertData}
-      />
+      <MapLoader countries={countryMapData} fcsData={fcsData} disputedAreas={disputedAreas} alertData={alertData} />
       <HungerAlertLoader countryMapData={countryMapData} countryFcsData={fcsData} />
       <MapLegend />
       <AccordionModal />

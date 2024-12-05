@@ -9,6 +9,7 @@ export default function SearchBar({ value, onValueChange, placeholder, className
     <Input
       className={className}
       isClearable
+      onClear={() => onValueChange('')}
       placeholder={placeholder || 'Search...'}
       value={value}
       onChange={(e) => onValueChange(e.target.value)}

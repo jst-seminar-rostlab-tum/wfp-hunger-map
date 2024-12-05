@@ -1,12 +1,12 @@
 import React from 'react';
 
+import { useIpcQuery } from '@/domain/hooks/globalHooks.ts';
 import { IpcChoroplethProps } from '@/domain/props/IpcChoroplethProps';
 
 import IpcCountryChoropleth from './IpcCountryChoropleth';
 import IpcGlobalChoropleth from './IpcGlobalChoropleth';
 
 function IpcChoropleth({
-  ipcData,
   countries,
   selectedCountryId,
   setSelectedCountryId,
@@ -14,18 +14,22 @@ function IpcChoropleth({
   ipcRegionData,
   selectedCountryName,
 }: IpcChoroplethProps) {
+  const ipcData = useIpcQuery().data;
+
   const handleBackClick = () => {
     setSelectedCountryId(null);
   };
 
   return (
     <div>
-      <IpcGlobalChoropleth
-        ipcData={ipcData}
-        countries={countries}
-        setSelectedCountryId={setSelectedCountryId}
-        selectedCountryId={selectedCountryId}
-      />
+      {ipcData && (
+        <IpcGlobalChoropleth
+          ipcData={ipcData}
+          countries={countries}
+          setSelectedCountryId={setSelectedCountryId}
+          selectedCountryId={selectedCountryId}
+        />
+      )}
 
       {ipcRegionData && (
         <IpcCountryChoropleth

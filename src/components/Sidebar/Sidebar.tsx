@@ -21,6 +21,7 @@ import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { AlertsMenuVariant } from '@/domain/enums/AlertsMenuVariant';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
+import { useIpcQuery, useNutritionQuery } from '@/domain/hooks/globalHooks.ts';
 import SidebarProps from '@/domain/props/SidebarProps.ts';
 import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
 import { useMediaQuery } from '@/utils/resolution';
@@ -28,13 +29,15 @@ import { useMediaQuery } from '@/utils/resolution';
 import PopupModal from '../PopupModal/PopupModal';
 import Subscribe from '../Subscribe/Subscribe';
 
-export function Sidebar({ countryMapData }: SidebarProps) {
+export function Sidebar({ countryMapData, fcsData }: SidebarProps) {
   const { isSidebarOpen, toggleSidebar, closeSidebar } = useSidebar();
   const { selectedMapType, setSelectedMapType } = useSelectedMap();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isMobile = useMediaQuery('(max-width: 640px)');
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
   const { clearAccordionModal } = useAccordionsModal();
+  const ipcData = useIpcQuery().data;
+  const nutritionData = useNutritionQuery().data;
 
   const handleCountrySelect = (countryID: React.Key | null) => {
     if (countryID) {
@@ -90,6 +93,26 @@ export function Sidebar({ countryMapData }: SidebarProps) {
                   className="transition-all hover:text-background dark:text-foreground"
                   key={country.properties.adm0_id.toString()}
                   aria-label={country.properties.adm0_name}
+                  isDisabled={
+                    !SidebarOperations.checkAvailabilityOfData(
+                      country,
+                      selectedMapType,
+                      fcsData,
+                      nutritionData,
+                      ipcData
+                    )
+                  }
+                  endContent={
+                    !SidebarOperations.checkAvailabilityOfData(
+                      country,
+                      selectedMapType,
+                      fcsData,
+                      nutritionData,
+                      ipcData
+                    )
+                      ? 'No data!'
+                      : undefined
+                  }
                 >
                   {country.properties.adm0_name}
                 </AutocompleteItem>

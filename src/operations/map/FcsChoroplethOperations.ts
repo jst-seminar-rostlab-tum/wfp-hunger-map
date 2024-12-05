@@ -2,6 +2,7 @@ import { Feature, GeoJsonProperties, Geometry } from 'geojson';
 import L from 'leaflet';
 
 import { CountryFcsData } from '@/domain/entities/country/CountryFcsData.ts';
+import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 import { MapColorsType } from '@/domain/entities/map/MapColorsType';
 import { getColors, inactiveCountryOverlayStyling } from '@/styles/MapColors';
 
@@ -13,7 +14,7 @@ class FcsChoroplethOperations {
     setSelectedCountryId(feature.properties?.adm0_id);
   }
 
-  static checkIfActive(feature: Feature, fcsData: Record<string, CountryFcsData>): boolean {
+  static checkIfActive(feature: CountryMapData, fcsData: Record<string, CountryFcsData>): boolean {
     return (
       feature.properties?.interactive === true &&
       fcsData[feature.properties.adm0_id]?.fcs !== null &&
@@ -33,17 +34,17 @@ class FcsChoroplethOperations {
 
     pathLayer.on({
       click: async () => {
-        if (this.checkIfActive(feature, fcsData)) {
+        if (this.checkIfActive(feature as CountryMapData, fcsData)) {
           FcsChoroplethOperations.handleCountryClick(feature, setSelectedCountryId);
         }
       },
       mouseover: () => {
-        if (this.checkIfActive(feature, fcsData)) {
+        if (this.checkIfActive(feature as CountryMapData, fcsData)) {
           pathLayer.setStyle({ fillOpacity: 0.5, fillColor: mapColors.outline });
         }
       },
       mouseout: () => {
-        if (this.checkIfActive(feature, fcsData)) {
+        if (this.checkIfActive(feature as CountryMapData, fcsData)) {
           pathLayer.setStyle({ fillOpacity: 0 });
         }
       },
@@ -55,7 +56,7 @@ class FcsChoroplethOperations {
     isDark: boolean,
     fcsData: Record<string, CountryFcsData>
   ): L.PathOptions {
-    return this.checkIfActive(feature, fcsData)
+    return this.checkIfActive(feature as CountryMapData, fcsData)
       ? {
           color: undefined,
           fillOpacity: 0,

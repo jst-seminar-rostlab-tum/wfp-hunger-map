@@ -15,6 +15,10 @@ function DocsSearchBar({ setSearchWords }: DocsSearchBarProps) {
   const debouncedSearch = useDebounce(search, 350);
 
   useEffect(() => {
+    if (search) setSearchWords(getSearchWords(search));
+  }, []);
+
+  useEffect(() => {
     router.push(`${pathname}?search=${debouncedSearch}`);
   }, [debouncedSearch]);
 

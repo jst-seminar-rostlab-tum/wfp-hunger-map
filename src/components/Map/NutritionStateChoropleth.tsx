@@ -8,11 +8,7 @@ import NutritionStateChoroplethOperations from '@/operations/map/NutritionStateC
 
 import NutritionAccordion from './NutritionAccordion';
 
-export default function NutritionStateChoropleth({
-  regionNutrition,
-  regionData,
-  countryName,
-}: NutritionStateChoroplethProps) {
+export default function NutritionStateChoropleth({ regionNutrition, countryName }: NutritionStateChoroplethProps) {
   const layersRef = useRef<LayerWithFeature[]>([]);
   const [selectedNutrient, setSelectedNutrient] = useState<NutrientType>(NutrientType.MINI_SIMPLE);
   const selectedNutrientRef = useRef<NutrientType>(selectedNutrient);
@@ -25,9 +21,9 @@ export default function NutritionStateChoropleth({
   useEffect(() => {
     layersRef.current.forEach((layer) => {
       const { feature } = layer;
-      NutritionStateChoroplethOperations.addNutritionTooltip(layer, feature, regionNutrition, selectedNutrient);
+      NutritionStateChoroplethOperations.addNutritionTooltip(layer, feature, selectedNutrient);
     });
-  }, [selectedNutrient, regionData, regionNutrition]);
+  }, [selectedNutrient, regionNutrition]);
 
   return (
     <>
@@ -36,15 +32,17 @@ export default function NutritionStateChoropleth({
         selectedNutrient={selectedNutrient}
         countryName={countryName}
       />
-      <GeoJSON
-        data={regionData}
-        style={(feature) => NutritionStateChoroplethOperations.dynamicStyle(feature, regionNutrition, selectedNutrient)}
-        onEachFeature={(feature, layer) => {
-          layersRef.current.push(layer);
-          NutritionStateChoroplethOperations.addNutritionTooltip(layer, feature, regionNutrition, selectedNutrient);
-          NutritionStateChoroplethOperations.addHoverEffect(layer);
-        }}
-      />
+      {regionNutrition && (
+        <GeoJSON
+          data={regionNutrition}
+          style={(feature) => NutritionStateChoroplethOperations.dynamicStyle(feature, selectedNutrient)}
+          onEachFeature={(feature, layer) => {
+            layersRef.current.push(layer);
+            NutritionStateChoroplethOperations.addNutritionTooltip(layer, feature, selectedNutrient);
+            NutritionStateChoroplethOperations.addHoverEffect(layer);
+          }}
+        />
+      )}
     </>
   );
 }

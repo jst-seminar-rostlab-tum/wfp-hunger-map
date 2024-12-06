@@ -11862,7 +11862,6 @@ __metadata:
     "@nextui-org/modal": "npm:^2.0.41"
     "@nextui-org/navbar": "npm:2.0.37"
     "@nextui-org/popover": "npm:^2.1.29"
-    "@nextui-org/progress": "npm:2.0.34"
     "@nextui-org/react": "npm:^2.4.8"
     "@nextui-org/skeleton": "npm:^2.0.32"
     "@nextui-org/slider": "npm:^2.2.17"

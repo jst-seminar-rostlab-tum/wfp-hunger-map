@@ -9,6 +9,28 @@ import { useSnackbar } from '@/domain/contexts/SnackbarContext';
 import { SnackbarStatus } from '@/domain/enums/Snackbar';
 import { getSnackbarPositionClass, getStatusColorClass } from '@/domain/props/SnackbarProps';
 
+/**
+ * Below is an example of how to use the Snackbar componenet and useSnackbar hooks:
+ *
+ * 1. Extract showSnackBar and closeSnackBar from the snackbar context
+ * const { showSnackBar, closeSnackBar } = useSnackbar();
+ *
+ * 2. Function to handle showing the snackbar
+ * const handleShowSnackbar = () => {
+ *    // Call showSnackBar with appropriate props to display a snackbar
+ *    showSnackBar({
+ *      message: 'This is a success message!', // Message to be displayed
+ *      status: SnackbarStatus.Success, // Set status (Success, Warning, Error, Default)
+ *      position: SnackbarPosition.BottomRight, // Position of the snackbar on the screen (check enum for all positions)
+ *      duration: 3000, // Duration for which the snackbar is displayed (in milliseconds)
+ *    });
+ *  };
+ *
+ *  3. Optional: Function to manually close the snackbar before the duration ends or to close it immediately and add your own logic
+ *  const handleCloseSnackbar = () => {
+ *    closeSnackBar(); // Call to manually close the snackbar
+ *  };
+ */
 export function Snackbar() {
   const { isSnackBarOpen, snackBarProps, closeSnackBar } = useSnackbar();
   const { message, status, position } = snackBarProps;

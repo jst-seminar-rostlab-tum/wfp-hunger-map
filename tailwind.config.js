@@ -41,7 +41,6 @@ const config = {
     'bg-success',
     'bg-warning',
     'bg-default',
-    // for snackbar position
     'bottom-4',
     'left-4',
   ],

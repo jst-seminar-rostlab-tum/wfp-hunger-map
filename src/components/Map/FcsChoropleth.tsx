@@ -1,4 +1,4 @@
-import { Feature } from 'geojson';
+import { Feature, FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
 import L from 'leaflet';
 import { useTheme } from 'next-themes';
 import React, { useEffect, useRef } from 'react';
@@ -56,6 +56,23 @@ export default function FcsChoropleth({
           FcsChoroplethOperations.onEachFeature(feature, layer, setSelectedCountryId, theme === 'dark')
         }
       />
+      {/* Animated GeoJSON layer for the selected country */}
+      {!regionData && selectedCountryId && (
+        <GeoJSON
+          data={
+            {
+              type: 'FeatureCollection',
+              features: data.features.filter((feature) => feature?.properties?.adm0_id === selectedCountryId),
+            } as FeatureCollection<Geometry, GeoJsonProperties>
+          } // Explicitly type as FeatureCollection
+          style={{
+            color: 'undefined',
+            fillOpacity: 0.3,
+            fillColor: '#338ef7',
+            className: 'animate-opacityPulse',
+          }}
+        />
+      )}
       {regionData && countryId === selectedCountryId && (
         <FscCountryChoropleth
           regionData={regionData}

@@ -1,4 +1,6 @@
+import { FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
 import React from 'react';
+import { GeoJSON } from 'react-leaflet';
 
 import { IpcChoroplethProps } from '@/domain/props/IpcChoroplethProps';
 
@@ -26,6 +28,22 @@ function IpcChoropleth({
         setSelectedCountryId={setSelectedCountryId}
         selectedCountryId={selectedCountryId}
       />
+      {!ipcRegionData && selectedCountryId && (
+        <GeoJSON
+          data={
+            {
+              type: 'FeatureCollection',
+              features: countries.features.filter((feature) => feature?.properties?.adm0_id === selectedCountryId),
+            } as FeatureCollection<Geometry, GeoJsonProperties>
+          }
+          style={{
+            color: 'undefined',
+            fillOpacity: 0.3,
+            fillColor: '#cd1919',
+            className: 'animate-opacityPulse',
+          }}
+        />
+      )}
 
       {ipcRegionData && (
         <IpcCountryChoropleth

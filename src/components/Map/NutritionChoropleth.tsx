@@ -1,4 +1,4 @@
-import { Feature } from 'geojson';
+import { Feature, FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
 import L from 'leaflet';
 import React, { useEffect, useRef, useState } from 'react';
 import { GeoJSON } from 'react-leaflet';
@@ -62,6 +62,23 @@ export default function NutritionChoropleth({
           NutritionChoroplethOperations.onEachFeature(feature, layer, setSelectedCountryId, countryStyles)
         }
       />
+      {/* Animated GeoJSON layer for the selected country */}
+      {!regionNutritionData && selectedCountryId && (
+        <GeoJSON
+          data={
+            {
+              type: 'FeatureCollection',
+              features: data.features.filter((feature) => feature?.properties?.adm0_id === selectedCountryId),
+            } as FeatureCollection<Geometry, GeoJsonProperties>
+          }
+          style={{
+            color: 'undefined',
+            fillOpacity: 0.3,
+            fillColor: '#F7B750',
+            className: 'animate-opacityPulse',
+          }}
+        />
+      )}
       {
         // if this country ('countryId') is selected and data is loaded ('regionNutritionData') show Choropleth for all states
         regionNutritionData && countryId === selectedCountryId && (

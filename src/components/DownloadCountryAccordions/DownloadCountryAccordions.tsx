@@ -71,6 +71,7 @@ export default function DownloadCountryAccordion({ countries }: DownloadCountryA
     }
   };
 
+  // TODO: Add a spinner for loading state
   return (
     <div className="flex flex-col gap-4 justify-center flex-wrap pb-8">
       <h6>{DESCRIPTION}</h6>

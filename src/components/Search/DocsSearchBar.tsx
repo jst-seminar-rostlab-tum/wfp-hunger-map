@@ -27,7 +27,7 @@ function DocsSearchBar({ setSearchWords }: DocsSearchBarProps) {
           setSearchWords(getSearchWords(newValue));
         }}
         className="fixed left-0 z-10"
-        inputClassName="max-w-md mx-auto backdrop-blur-lg backdrop-saturate-150 bg-background/70"
+        inputClassName="max-w-[90%] px-2 sm:max-w-md mx-auto backdrop-blur-lg backdrop-saturate-150 bg-background/70"
       />
     </div>
   );

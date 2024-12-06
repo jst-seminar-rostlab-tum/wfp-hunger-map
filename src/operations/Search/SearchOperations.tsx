@@ -11,9 +11,9 @@ export class SearchOperations {
     return textElements.map((item, index) => {
       return {
         element: (
-          <Suspense fallback={item}>
-            {/* eslint-disable-next-line react/no-array-index-key */}
-            <RecursiveHighlighter key={index}>{item}</RecursiveHighlighter>
+          // eslint-disable-next-line react/no-array-index-key
+          <Suspense fallback={item} key={index}>
+            <RecursiveHighlighter>{item}</RecursiveHighlighter>
           </Suspense>
         ),
         containedWords: SearchOperations.sanitizeText(SearchOperations.sanitizeReactNode(item)),

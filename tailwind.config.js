@@ -41,6 +41,8 @@ const config = {
     'bg-success',
     'bg-warning',
     'bg-default',
+    'bottom-4',
+    'left-4',
   ],
   content: [
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',

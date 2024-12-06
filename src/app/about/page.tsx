@@ -1,11 +1,11 @@
 'use client';
 
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useCallback, useState } from 'react';
 
 import LiveSuperscript from '@/components/About/LiveSuperscript';
 import DocsSearchBar from '@/components/Search/DocsSearchBar';
 import SearchableSection from '@/components/Search/SearchableSection';
-import { aboutTextElements } from '@/domain/constant/about/aboutTextElements';
+import aboutTextElements from '@/domain/constant/about/aboutTextElements';
 import generalFaqItems from '@/domain/constant/about/generalFaqItems';
 import predictionFaqItems, { predictionFaqText } from '@/domain/constant/about/predictionFaqItems';
 import realTimeFaqItems from '@/domain/constant/about/realTimeFaqItems';
@@ -20,6 +20,16 @@ function Page() {
 
   const [searchWords, setSearchWords] = useState<string[]>([]);
   const [visibleAccordions, setVisibleAccordions] = useState<Set<string>>(new Set());
+
+  const handleVisibilityChange = useCallback(
+    (key: string, isVisible: boolean) =>
+      setVisibleAccordions((prevState) => {
+        if (isVisible) prevState.add(key);
+        else prevState.delete(key);
+        return prevState;
+      }),
+    []
+  );
 
   return (
     <Suspense>
@@ -39,13 +49,7 @@ function Page() {
             textElements={textElements}
             accordionItems={accordionItems}
             searchWords={searchWords}
-            onVisibilityChange={(visible: boolean) =>
-              setVisibleAccordions((prevState) => {
-                if (visible) prevState.add(key);
-                else prevState.delete(key);
-                return prevState;
-              })
-            }
+            onVisibilityChange={(isVisible) => handleVisibilityChange(key, isVisible)}
           />
         );
       })}

@@ -4,7 +4,7 @@ import LiveSuperscript from '@/components/About/LiveSuperscript';
 import StyledLink from '@/components/About/StyledLink';
 import { SearchOperations } from '@/operations/Search/SearchOperations';
 
-export const aboutTextElements = SearchOperations.makeTextElementsSearchable([
+const aboutTextElements = [
   <p>
     <b>
       HungerMap
@@ -29,4 +29,6 @@ export const aboutTextElements = SearchOperations.makeTextElementsSearchable([
     (as classified by the World Bank). For any questions, comments, or if you would like further information, please get
     in touch by sending an email to <StyledLink href="mailto:wfp.mvam@wfp.org">wfp.mvam@wfp.org</StyledLink>.
   </p>,
-]);
+];
+
+export default SearchOperations.makeTextElementsSearchable(aboutTextElements);

@@ -22,9 +22,9 @@ function DocsSearchBar({ setSearchWords }: DocsSearchBarProps) {
     <div className="h-10">
       <SearchBar
         value={search}
-        onValueChange={(v) => {
-          setSearch(v);
-          setSearchWords(getSearchWords(v));
+        onValueChange={(newValue) => {
+          setSearch(newValue);
+          setSearchWords(getSearchWords(newValue));
         }}
         className="fixed left-0 z-10"
         inputClassName="max-w-md mx-auto backdrop-blur-lg backdrop-saturate-150 bg-background/70"

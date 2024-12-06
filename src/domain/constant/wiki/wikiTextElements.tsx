@@ -4,7 +4,7 @@ import LiveSuperscript from '@/components/About/LiveSuperscript';
 import StyledLink from '@/components/About/StyledLink';
 import { SearchOperations } from '@/operations/Search/SearchOperations';
 
-export const wikiTextElements = SearchOperations.makeTextElementsSearchable([
+const wikiTextElements = [
   <p>
     This page contains more detailed explanations for some of the concepts behind the HungerMap
     <LiveSuperscript />. See{' '}
@@ -13,4 +13,6 @@ export const wikiTextElements = SearchOperations.makeTextElementsSearchable([
     </StyledLink>{' '}
     for a broader overview.
   </p>,
-]);
+];
+
+export default SearchOperations.makeTextElementsSearchable(wikiTextElements);

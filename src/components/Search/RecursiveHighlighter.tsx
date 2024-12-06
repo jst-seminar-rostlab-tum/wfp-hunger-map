@@ -11,7 +11,6 @@ function RecursiveHighlighter({ type = React.Fragment, children, ...props }: Rec
 
   if (React.isValidElement(children)) {
     // if children is a JSX element (e.g. p or div), create the respective element and continue with the children
-    // if (typeof children.type === 'string' && typeof children.props === 'object')
     return React.createElement(
       type,
       props,

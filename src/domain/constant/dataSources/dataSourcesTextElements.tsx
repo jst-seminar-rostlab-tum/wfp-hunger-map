@@ -4,7 +4,7 @@ import LiveSuperscript from '@/components/About/LiveSuperscript';
 import StyledLink from '@/components/About/StyledLink';
 import { SearchOperations } from '@/operations/Search/SearchOperations';
 
-export const dataSourcesTextElements = SearchOperations.makeTextElementsSearchable([
+const dataSourcesTextElements = [
   <p>
     <b>
       This section includes all indicators and data sources displayed on HungerMap
@@ -16,4 +16,6 @@ export const dataSourcesTextElements = SearchOperations.makeTextElementsSearchab
     </StyledLink>
     .
   </p>,
-]);
+];
+
+export default SearchOperations.makeTextElementsSearchable(dataSourcesTextElements);

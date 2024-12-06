@@ -5,7 +5,7 @@ import React, { Suspense, useState } from 'react';
 import DocsSearchBar from '@/components/Search/DocsSearchBar';
 import SearchableSection from '@/components/Search/SearchableSection';
 import dataSourceAccordionItems from '@/domain/constant/dataSources/dataSourceAccordionItems';
-import { dataSourcesTextElements } from '@/domain/constant/dataSources/dataSourcesTextElements';
+import dataSourcesTextElements from '@/domain/constant/dataSources/dataSourcesTextElements';
 
 function Page() {
   const [searchWords, setSearchWords] = useState<string[]>([]);

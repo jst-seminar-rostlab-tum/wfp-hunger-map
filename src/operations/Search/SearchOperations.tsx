@@ -11,7 +11,7 @@ export class SearchOperations {
     return textElements.map((item, index) => {
       return {
         element: (
-          <Suspense>
+          <Suspense fallback={item}>
             {/* eslint-disable-next-line react/no-array-index-key */}
             <RecursiveHighlighter key={index}>{item}</RecursiveHighlighter>
           </Suspense>
@@ -37,7 +37,7 @@ export class SearchOperations {
         ...item,
         containedWords: SearchOperations.sanitizeAccordionItem(item),
         content: (
-          <Suspense>
+          <Suspense fallback={item.content}>
             <RecursiveHighlighter>{item.content}</RecursiveHighlighter>
           </Suspense>
         ),

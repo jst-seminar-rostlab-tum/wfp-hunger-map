@@ -5,16 +5,19 @@ import { Forbidden2 } from 'iconsax-react';
 import { useState } from 'react';
 import { v4 as uuid } from 'uuid';
 
+import { GlobalFcsData } from '@/domain/entities/country/CountryFcsData';
 import { CountryMapData, CountryMapDataWrapper } from '@/domain/entities/country/CountryMapData';
 
 interface CountrySelectionProps {
   countryMapData: CountryMapDataWrapper;
+  globalFcsData: GlobalFcsData;
   selectedCountries: CountryMapData[];
   setSelectedCountries: (countries: CountryMapData[]) => void;
 }
 
 export default function CountrySelection({
   countryMapData,
+  globalFcsData,
   selectedCountries,
   setSelectedCountries,
 }: CountrySelectionProps) {
@@ -69,6 +72,10 @@ export default function CountrySelection({
                   ? selectedCountries[autocompleteIndex].properties.adm0_id.toString()
                   : ''
               }
+              disabledKeys={countryMapData.features
+                .filter((country) => !globalFcsData[country.properties.adm0_id]?.fcs)
+                .map((country) => country.properties.adm0_id.toString())
+                .concat(selectedCountries.map((country) => country.properties.adm0_id.toString()))}
             >
               {countryMapData.features
                 .sort((a, b) => a.properties.adm0_name.localeCompare(b.properties.adm0_name))

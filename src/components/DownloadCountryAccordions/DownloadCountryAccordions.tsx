@@ -15,6 +15,7 @@ import {
   DOWNLOAD_ERROR_MSG,
   DOWNLOAD_SUCCESS_MSG,
 } from '@/domain/entities/download/Country';
+import { SNACKBAR_SHORT_DURATION } from '@/domain/entities/snackbar/Snackbar';
 import { SnackbarPosition, SnackbarStatus } from '@/domain/enums/Snackbar';
 import { SubmitStatus } from '@/domain/enums/SubscribeTopic';
 import DownloadCountryAccordionProps from '@/domain/props/DownloadCountryAccordionProps';
@@ -70,8 +71,8 @@ export default function DownloadCountryAccordion({ countries }: DownloadCountryA
             showSnackBar({
               message: DOWNLOAD_SUCCESS_MSG,
               status: SnackbarStatus.Success,
-              position: SnackbarPosition.BottomMiddle,
-              duration: 3000,
+              position: SnackbarPosition.TopMiddle,
+              duration: SNACKBAR_SHORT_DURATION,
             });
           } else {
             setDownloadStatus(SubmitStatus.Idle);
@@ -80,8 +81,8 @@ export default function DownloadCountryAccordion({ countries }: DownloadCountryA
             showSnackBar({
               message: DOWNLOAD_ERROR_MSG,
               status: SnackbarStatus.Error,
-              position: SnackbarPosition.BottomMiddle,
-              duration: 3000,
+              position: SnackbarPosition.TopMiddle,
+              duration: SNACKBAR_SHORT_DURATION,
             });
           }
         });

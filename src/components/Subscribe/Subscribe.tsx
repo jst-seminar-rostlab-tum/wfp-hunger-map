@@ -17,6 +17,7 @@ import {
   UNSUCCESSFUL_SUBSCRIPTION,
 } from '@/domain/constant/subscribe/Subscribe';
 import { useSnackbar } from '@/domain/contexts/SnackbarContext';
+import { SNACKBAR_SHORT_DURATION } from '@/domain/entities/snackbar/Snackbar';
 import { ITopic } from '@/domain/entities/subscribe/Subscribe';
 import { SnackbarPosition, SnackbarStatus } from '@/domain/enums/Snackbar';
 import { SubmitStatus } from '@/domain/enums/SubscribeTopic';
@@ -111,7 +112,7 @@ export default function SubscriptionForm() {
                 message: SUCCESSFUL_SUBSCRIPTION,
                 status: SnackbarStatus.Success,
                 position: SnackbarPosition.TopMiddle,
-                duration: 3000,
+                duration: SNACKBAR_SHORT_DURATION,
               });
             } else {
               setSubscribeStatus(SubmitStatus.Idle);
@@ -120,7 +121,7 @@ export default function SubscriptionForm() {
                 message: UNSUCCESSFUL_SUBSCRIPTION,
                 status: SnackbarStatus.Error,
                 position: SnackbarPosition.TopMiddle,
-                duration: 3000,
+                duration: SNACKBAR_SHORT_DURATION,
               });
             }
           });

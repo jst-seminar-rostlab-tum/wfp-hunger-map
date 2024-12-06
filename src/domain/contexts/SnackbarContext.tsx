@@ -2,7 +2,7 @@
 
 'use client';
 
-import React, { createContext, ReactNode, useContext, useMemo, useState } from 'react';
+import React, { createContext, ReactNode, useContext, useMemo, useRef, useState } from 'react';
 
 import { defaultSnackbarProps } from '../entities/snackbar/Snackbar';
 import { SnackbarProps } from '../props/SnackbarProps';
@@ -19,20 +19,41 @@ const SnackbarContext = createContext<SnackBarState | undefined>(undefined);
 export function SnackbarProvider({ children }: { children: ReactNode }) {
   const [isSnackBarOpen, setIsSnackBarOpen] = useState(false);
   const [snackBarProps, setSnackBarProps] = useState<SnackbarProps>(defaultSnackbarProps);
-  const showSnackBar = (props: SnackbarProps): void => {
-    setSnackBarProps(props);
-    setIsSnackBarOpen(true);
 
-    // Automatically close after duration
-    if (props.duration !== 0) {
-      setTimeout(() => {
-        setIsSnackBarOpen(false);
-      }, props.duration || defaultSnackbarProps.duration);
-    }
-  };
+  const timerRef = useRef<NodeJS.Timeout | null>(null); // Ref to store timer
 
   const closeSnackBar = (): void => {
     setIsSnackBarOpen(false);
+    // Clear timer after closing snackbar
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+  };
+
+  const showSnackBar = (props: SnackbarProps): void => {
+    // Clear previous snackbar
+    if (isSnackBarOpen) {
+      closeSnackBar();
+    }
+
+    // set a timeout to update UI after closing previous snackbar
+    setTimeout(() => {
+      setSnackBarProps(props);
+      setIsSnackBarOpen(true);
+
+      // Clear previous timer if exists in order to prevent multiple timers
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+
+      // Automatically close after duration
+      if (props.duration !== 0) {
+        timerRef.current = setTimeout(() => {
+          setIsSnackBarOpen(false);
+        }, props.duration || defaultSnackbarProps.duration);
+      }
+    }, 100);
   };
 
   const value = useMemo(

@@ -4,7 +4,6 @@ import clsx from 'clsx';
 import { motion } from 'framer-motion';
 import { InfoCircle, TickCircle } from 'iconsax-react';
 import { TriangleAlert, X } from 'lucide-react';
-import React, { useEffect } from 'react';
 
 import { useSnackbar } from '@/domain/contexts/SnackbarContext';
 import { SnackbarStatus } from '@/domain/enums/Snackbar';
@@ -12,30 +11,10 @@ import { getSnackbarPositionClass, getStatusColorClass } from '@/domain/props/Sn
 
 export function Snackbar() {
   const { isSnackBarOpen, snackBarProps, closeSnackBar } = useSnackbar();
-  const { message, status, position, duration } = snackBarProps;
+  const { message, status, position } = snackBarProps;
 
   const positionClass = getSnackbarPositionClass(position);
   const statusClass = getStatusColorClass(status);
-
-  useEffect(() => {
-    if (isSnackBarOpen) {
-      let interval: NodeJS.Timeout;
-      if (duration && duration > 0) {
-        const timer = setTimeout(() => {
-          closeSnackBar();
-          clearInterval(interval);
-        }, duration);
-
-        return () => {
-          clearTimeout(timer);
-          clearInterval(interval);
-        };
-      }
-    }
-
-    return () => {};
-  }, [isSnackBarOpen, duration, closeSnackBar]);
-
   const getStatusIcon = () => {
     switch (status) {
       case SnackbarStatus.Success:

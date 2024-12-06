@@ -4,6 +4,7 @@ import React, { Suspense, useCallback, useState } from 'react';
 
 import LiveSuperscript from '@/components/About/LiveSuperscript';
 import DocsSearchBar from '@/components/Search/DocsSearchBar';
+import DocsSearchBarSkeleton from '@/components/Search/DocsSearchBarSkeleton';
 import SearchableSection from '@/components/Search/SearchableSection';
 import aboutTextElements from '@/domain/constant/about/aboutTextElements';
 import generalFaqItems from '@/domain/constant/about/generalFaqItems';
@@ -32,8 +33,10 @@ function Page() {
   );
 
   return (
-    <Suspense>
-      <DocsSearchBar setSearchWords={setSearchWords} />
+    <>
+      <Suspense fallback={<DocsSearchBarSkeleton />}>
+        <DocsSearchBar setSearchWords={setSearchWords} />
+      </Suspense>
       {!searchWords.length && (
         <h1 className="!mb-0">
           About HungerMap
@@ -54,7 +57,7 @@ function Page() {
         );
       })}
       {!visibleAccordions.size && !!searchWords.length && <p className="text-center">No results</p>}
-    </Suspense>
+    </>
   );
 }
 

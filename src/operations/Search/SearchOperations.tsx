@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode } from 'react';
+import { ReactElement, ReactNode, Suspense } from 'react';
 import reactElementToJsxString from 'react-element-to-jsx-string';
 
 import RecursiveHighlighter from '@/components/Search/RecursiveHighlighter';
@@ -10,8 +10,12 @@ export class SearchOperations {
   static makeTextElementsSearchable(textElements: ReactElement[]) {
     return textElements.map((item, index) => {
       return {
-        // eslint-disable-next-line react/no-array-index-key
-        element: <RecursiveHighlighter key={index}>{item}</RecursiveHighlighter>,
+        element: (
+          <Suspense>
+            {/* eslint-disable-next-line react/no-array-index-key */}
+            <RecursiveHighlighter key={index}>{item}</RecursiveHighlighter>
+          </Suspense>
+        ),
         containedWords: SearchOperations.sanitizeText(SearchOperations.sanitizeReactNode(item)),
       };
     });
@@ -32,7 +36,11 @@ export class SearchOperations {
       return {
         ...item,
         containedWords: SearchOperations.sanitizeAccordionItem(item),
-        content: <RecursiveHighlighter>{item.content}</RecursiveHighlighter>,
+        content: (
+          <Suspense>
+            <RecursiveHighlighter>{item.content}</RecursiveHighlighter>
+          </Suspense>
+        ),
       };
     });
   }

@@ -1,11 +1,9 @@
-import { Feature, GeoJsonProperties, Geometry } from 'geojson';
-import L, { PathOptions } from 'leaflet';
-import React from 'react';
+import { Feature } from 'geojson';
+import { PathOptions } from 'leaflet';
 import { createRoot } from 'react-dom/client';
 
 import NutritionRegionTooltip from '@/components/Map/NutritionRegionTooltip';
 import { NUTRIENT_LABELS } from '@/domain/constant/map/NutritionChoropleth.ts';
-import { CountryMimiData } from '@/domain/entities/country/CountryMimiData';
 import { LayerWithFeature } from '@/domain/entities/map/LayerWithFeature.ts';
 import { Nutrition } from '@/domain/entities/region/RegionNutritionProperties.ts';
 import { NutrientType } from '@/domain/enums/NutrientType.ts';
@@ -30,16 +28,9 @@ export default class NutritionStateChoroplethOperations {
     return '#A0A0A0';
   }
 
-  public static dynamicStyle(
-    feature: GeoJSON.Feature<Geometry, GeoJsonProperties> | undefined,
-    regionNutri: CountryMimiData | undefined,
-    selectedNutrient: NutrientType
-  ): PathOptions {
-    if (!feature) return {};
-
-    const stateId = feature.id || feature?.properties?.id;
-    const match = regionNutri?.features.find((item) => item.id === stateId);
-    const value = match ? match?.properties?.nutrition[selectedNutrient as keyof Nutrition] : null;
+  public static dynamicStyle(feature: Feature | undefined, selectedNutrient: NutrientType): PathOptions {
+    if (!feature?.properties) return {};
+    const value = feature.properties.nutrition[selectedNutrient as keyof Nutrition] || null;
 
     return {
       fillColor: this.nutritionFillColor(value),
@@ -62,19 +53,12 @@ export default class NutritionStateChoroplethOperations {
   }
 
   // create and add state nutrition tooltip to the corresponding layer
-  static addNutritionTooltip(
-    layer: LayerWithFeature,
-    feature: Feature | undefined,
-    regionNutrition: CountryMimiData | undefined,
-    selectedNutrient: NutrientType
-  ) {
+  static addNutritionTooltip(layer: LayerWithFeature, feature: Feature | undefined, selectedNutrient: NutrientType) {
     if (!feature) return;
 
     const tooltipContainer = document.createElement('div');
     const root = createRoot(tooltipContainer);
-    root.render(
-      <NutritionRegionTooltip feature={feature} regionNutrition={regionNutrition} selectedNutrient={selectedNutrient} />
-    );
+    root.render(<NutritionRegionTooltip feature={feature} selectedNutrient={selectedNutrient} />);
 
     layer.unbindTooltip();
     layer.bindTooltip(tooltipContainer, {

@@ -347,15 +347,6 @@ export default class LineChartOperations {
           color: l.color || 'hsl(var(--nextui-chartsGridLine))',
           dashStyle: l.dashStyle,
           zIndex: 2,
-          label: {
-            text: l.label || '',
-            style: {
-              color: 'hsl(var(--nextui-secondary))',
-              fontSize: '0.7rem',
-            },
-            verticalAlign: 'middle',
-            align: 'center',
-          },
         })),
       },
       yAxis: {

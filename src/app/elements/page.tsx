@@ -75,6 +75,7 @@ export default async function Elements() {
           { x: 2, y: 5 },
           { x: 3, y: 2 },
         ],
+        dashStyle: 'LongDash',
       },
       {
         name: 'Category C',
@@ -83,11 +84,35 @@ export default async function Elements() {
           { x: 1, y: 2 },
           { x: 3, y: 3 },
         ],
+        dashStyle: 'Dot',
+      },
+    ],
+    verticalLines: [
+      {
+        x: 1,
+      },
+      {
+        x: 1.5,
+        dashStyle: 'LongDash',
+        color: 'rgba(129,27,27,0.53)',
+      },
+    ],
+    verticalBands: [
+      {
+        xStart: -1,
+        xEnd: 1,
+        label: 'AB',
+      },
+      {
+        xStart: 1,
+        xEnd: 4,
+        color: 'rgba(129,27,27,0.13)',
+        label: 'EF',
       },
     ],
   };
 
-  const predictionDummyChartData: LineChartData = {
+  const predictionDummyChartData1: LineChartData = {
     type: LineChartDataType.LINE_CHART_DATA,
     xAxisType: 'linear',
     yAxisLabel: 'Mill',
@@ -119,15 +144,92 @@ export default async function Elements() {
     verticalLines: [
       {
         x: 3,
-        label: "Future"
+      },
+    ],
+  };
 
+  const predictionDummyChartData2: LineChartData = {
+    type: LineChartDataType.LINE_CHART_DATA,
+    xAxisType: 'linear',
+    yAxisLabel: 'Mill',
+    lines: [
+      {
+        name: 'Category A',
+        showRange: true,
+        dataPoints: [
+          { x: 0, y: 4, yRangeMin: 3.5, yRangeMax: 5 },
+          { x: 1, y: 3, yRangeMin: 2, yRangeMax: 4 },
+          { x: 2, y: 4, yRangeMin: 3.5, yRangeMax: 4.5 },
+          { x: 3, y: 8, yRangeMin: 7.5, yRangeMax: 8.5 },
+        ],
+      },
+      {
+        name: 'Prediction',
+        dashStyle: 'Dash',
+        dataPoints: [
+          { x: 0, y: 4 },
+          { x: 1, y: 7 },
+          { x: 2, y: 5 },
+          { x: 3, y: 7 },
+          { x: 4, y: 8 },
+          { x: 5, y: 5 },
+          { x: 6, y: 6 },
+        ],
+      },
+    ],
+    verticalLines: [
+      {
+        x: 3,
       },
     ],
     verticalBands: [
       {
         xStart: 3,
         xEnd: 7,
-        label: "Future"
+        label: 'Future',
+      },
+    ],
+  };
+
+  const predictionDummyChartData3: LineChartData = {
+    type: LineChartDataType.LINE_CHART_DATA,
+    xAxisType: 'linear',
+    yAxisLabel: 'Mill',
+    lines: [
+      {
+        name: 'Category A',
+        showRange: true,
+        dataPoints: [
+          { x: 0, y: 4, yRangeMin: 3.5, yRangeMax: 5 },
+          { x: 1, y: 3, yRangeMin: 2, yRangeMax: 4 },
+          { x: 2, y: 4, yRangeMin: 3.5, yRangeMax: 4.5 },
+          { x: 3, y: 8, yRangeMin: 7.5, yRangeMax: 8.5 },
+        ],
+      },
+      {
+        name: 'Prediction',
+        dashStyle: 'Dash',
+        dataPoints: [
+          { x: 0, y: 4 },
+          { x: 1, y: 7 },
+          { x: 2, y: 5 },
+          { x: 3, y: 7 },
+          { x: 4, y: 8 },
+          { x: 5, y: 5 },
+          { x: 6, y: 6 },
+        ],
+      },
+    ],
+    verticalLines: [
+      {
+        x: 3,
+      },
+    ],
+    verticalBands: [
+      {
+        xStart: 2.5,
+        xEnd: 3.5,
+        label: 'Today',
       },
     ],
   };
@@ -172,7 +274,13 @@ export default async function Elements() {
           />
         </div>
         <div className="w-400px h-fit">
-          <LineChart title="Balance of trade" data={predictionDummyChartData} expandable xAxisSlider barChartSwitch />
+          <LineChart title="" data={predictionDummyChartData1} expandable xAxisSlider barChartSwitch />
+        </div>
+        <div className="w-400px h-fit">
+          <LineChart title="" data={predictionDummyChartData2} expandable xAxisSlider barChartSwitch />
+        </div>
+        <div className="w-400px h-fit">
+          <LineChart title="" data={predictionDummyChartData3} expandable xAxisSlider barChartSwitch />
         </div>
       </div>
       <MapSkeleton />

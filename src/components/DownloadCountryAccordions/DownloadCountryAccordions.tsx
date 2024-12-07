@@ -71,7 +71,6 @@ export default function DownloadCountryAccordion({ countries }: DownloadCountryA
     }
   };
 
-  // test
   return (
     <div className="flex flex-col gap-4 justify-center flex-wrap pb-8">
       <h6>{DESCRIPTION}</h6>

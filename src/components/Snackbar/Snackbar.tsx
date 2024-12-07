@@ -33,10 +33,10 @@ import { getSnackbarPositionClass, getStatusColorClass } from '@/domain/props/Sn
  */
 export function Snackbar() {
   const { isSnackBarOpen, snackBarProps, closeSnackBar } = useSnackbar();
-  const { message, status, position } = snackBarProps;
+  const { message, status } = snackBarProps;
 
-  const positionClass = getSnackbarPositionClass(position);
-  const statusClass = getStatusColorClass(status);
+  // const positionClass = getSnackbarPositionClass(position);
+  // const statusClass = getStatusColorClass(status);
   const getStatusIcon = () => {
     switch (status) {
       case SnackbarStatus.Success:
@@ -59,11 +59,7 @@ export function Snackbar() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className={clsx(
-        'absolute z-[9999] flex p-2 rounded-md shadow-lg h-12 flex-1 sm:w-[500px] w-full',
-        statusClass,
-        positionClass
-      )}
+      className={clsx('absolute z-[9999] flex p-2 rounded-md shadow-lg h-12 flex-1 sm:w-[500px] w-full')}
     >
       <div className="flex flex-1 flex-row items-center">
         {getStatusIcon()}

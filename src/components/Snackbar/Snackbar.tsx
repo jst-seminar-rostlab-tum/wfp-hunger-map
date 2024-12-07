@@ -7,7 +7,7 @@ import { TriangleAlert, X } from 'lucide-react';
 
 import { useSnackbar } from '@/domain/contexts/SnackbarContext';
 import { SnackbarStatus } from '@/domain/enums/Snackbar';
-import { getSnackbarPositionClass, getStatusColorClass } from '@/domain/props/SnackbarProps';
+// import { getSnackbarPositionClass, getStatusColorClass } from '@/domain/props/SnackbarProps';
 
 /**
  * Below is an example of how to use the Snackbar componenet and useSnackbar hooks:

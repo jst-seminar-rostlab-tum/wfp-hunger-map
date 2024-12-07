@@ -1,8 +1,14 @@
 'use client';
 
-import Highcharts, { AxisTypeValue, SeriesOptionsType, TooltipFormatterContextObject } from 'highcharts';
+import Highcharts, {
+  AxisTypeValue,
+  DashStyleValue,
+  SeriesOptionsType,
+  TooltipFormatterContextObject,
+} from 'highcharts';
 import highchartsMore from 'highcharts/highcharts-more';
 import HighchartsReact from 'highcharts-react-official';
+import patternFill from 'highcharts/modules/pattern-fill';
 
 import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph.ts';
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph.ts';
@@ -13,6 +19,7 @@ import { formatToMillion } from '@/utils/formatting.ts';
 
 if (typeof Highcharts === 'object') {
   highchartsMore(Highcharts);
+  patternFill(Highcharts);
 }
 
 /**
@@ -211,14 +218,31 @@ export default class LineChartOperations {
       seriesData.sort((a, b) => a.x! - b.x!);
 
       // build series object for highchart
+      const dashStyle: DashStyleValue = lineData.dashStyle ? lineData.dashStyle : 'Solid';
       if (barChart) {
         // plot series as bars
         series.push({
           name: lineData.name,
           type: 'column',
           data: seriesData,
-          color: categoryColor,
-          opacity: lineData.showRange ? 0.7 : 1,
+          color:
+            // if the dashStyle is not solid we fill the bars with diagonal lines
+            dashStyle !== 'Solid'
+              ? {
+                  pattern: {
+                    path: {
+                      d: 'M 0 0 L 8 8 M -8 8 L 8 -8',
+                      stroke: categoryColor,
+                      strokeWidth: 1,
+                    },
+                    width: 8,
+                    height: 8,
+                  },
+                }
+              : categoryColor,
+          opacity: lineData.showRange ? 0.75 : 1,
+          borderColor: categoryColor,
+          dashStyle: 'Solid',
         });
       } else {
         // plot series as line
@@ -227,6 +251,7 @@ export default class LineChartOperations {
           name: lineData.name,
           data: seriesData,
           color: categoryColor,
+          dashStyle,
         });
       }
 
@@ -257,6 +282,7 @@ export default class LineChartOperations {
             data: areaSeriesData,
             linkedTo: ':previous',
             color: categoryColor,
+            dashStyle: 'Solid',
           });
         } else {
           // add area around line
@@ -266,6 +292,7 @@ export default class LineChartOperations {
             data: areaSeriesData,
             color: categoryColor,
             linkedTo: ':previous',
+            dashStyle: lineData.dashStyle,
           });
         }
       }
@@ -302,6 +329,18 @@ export default class LineChartOperations {
         lineColor: 'hsl(var(--nextui-chartsXAxisLine))',
         tickColor: 'hsl(var(--nextui-chartsXAxisLine))',
         tickLength: 4,
+        plotBands: data.verticalBands?.map((b) => ({
+          from: b.xStart,
+          to: b.xEnd,
+          color: b.color || 'rgba(140,140,140,0.07)',
+          zIndex: 1,
+        })),
+        plotLines: data.verticalLines?.map((l) => ({
+          value: l.x,
+          color: l.color || 'hsl(var(--nextui-chartsGridLine))',
+          dashStyle: l.dashStyle,
+          zIndex: 2,
+        })),
       },
       yAxis: {
         title: {
@@ -320,7 +359,7 @@ export default class LineChartOperations {
           },
         },
         lineColor: 'transparent',
-        gridLineColor: 'hsl(var(--nextui-clickableSecondary))',
+        gridLineColor: 'hsl(var(--nextui-chartsGridLine))',
       },
       tooltip: {
         shared: true,
@@ -371,7 +410,7 @@ export default class LineChartOperations {
           animation: true,
           grouping: true,
           shadow: false,
-          borderWidth: 0,
+          borderWidth: 1,
         },
         errorbar: {
           animation: true,

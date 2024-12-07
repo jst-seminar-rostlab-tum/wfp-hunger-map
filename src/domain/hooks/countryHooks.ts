@@ -1,10 +1,11 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQueries, useQuery, UseQueryResult } from '@tanstack/react-query';
 
 import { cachedQueryClient } from '@/config/queryClient';
 import container from '@/container';
 
+import { isApiError } from '../entities/ApiError';
 import { AdditionalCountryData } from '../entities/country/AdditionalCountryData';
-import { CountryData } from '../entities/country/CountryData';
+import { CountryData, CountryDataRecord } from '../entities/country/CountryData';
 import { CountryIso3Data } from '../entities/country/CountryIso3Data';
 import { RegionIpc } from '../entities/region/RegionIpc';
 import CountryRepository from '../repositories/CountryRepository';
@@ -16,6 +17,24 @@ export const useCountryDataQuery = (countryId: number) =>
     {
       queryKey: ['fetchCountryData', countryId],
       queryFn: async () => countryRepo.getCountryData(countryId),
+    },
+    cachedQueryClient
+  );
+
+export const useCountryDataListQuery = (countryIds: number[], onCountryDataNotFound: (countryId: number) => void) =>
+  useQueries<number[], UseQueryResult<CountryDataRecord | null>[]>(
+    {
+      queries: countryIds.map((countryId) => ({
+        queryKey: ['fetchCountryData', countryId],
+        queryFn: async () => {
+          const countryData = await countryRepo.getCountryData(countryId);
+          if (isApiError(countryData)) {
+            onCountryDataNotFound(countryId);
+            return null;
+          }
+          return { ...countryData, id: countryId.toString() };
+        },
+      })),
     },
     cachedQueryClient
   );

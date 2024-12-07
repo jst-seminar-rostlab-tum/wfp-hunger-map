@@ -11,3 +11,5 @@ export interface CountryData {
   rcsiGraph: RcsiChartData[];
   fcsGraph: FcsChartData[];
 }
+
+export type CountryDataRecord = CountryData & { id: string };

@@ -1,4 +1,4 @@
-import { Feature, FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
+import { Feature } from 'geojson';
 import L from 'leaflet';
 import React, { useEffect, useRef, useState } from 'react';
 import { GeoJSON } from 'react-leaflet';
@@ -8,6 +8,7 @@ import NutritionChoroplethProps from '@/domain/props/NutritionChoroplethProps';
 import { MapboxMapOperations } from '@/operations/map/MapboxMapOperations';
 import NutritionChoroplethOperations from '@/operations/map/NutritionChoroplethOperations';
 
+import CountryLoadingLayer from './CountryLoading';
 import NutritionStateChoropleth from './NutritionStateChoropleth';
 
 export default function NutritionChoropleth({
@@ -64,19 +65,10 @@ export default function NutritionChoropleth({
       />
       {/* Animated GeoJSON layer for the selected country */}
       {!regionNutritionData && selectedCountryId && (
-        <GeoJSON
-          data={
-            {
-              type: 'FeatureCollection',
-              features: data.features.filter((feature) => feature?.properties?.adm0_id === selectedCountryId),
-            } as FeatureCollection<Geometry, GeoJsonProperties>
-          }
-          style={{
-            color: 'undefined',
-            fillOpacity: 0.3,
-            fillColor: '#F7B750',
-            className: 'animate-opacityPulse',
-          }}
+        <CountryLoadingLayer
+          data={data}
+          selectedCountryId={selectedCountryId}
+          color="hsl(var(--nextui-nutritionAnimation))"
         />
       )}
       {

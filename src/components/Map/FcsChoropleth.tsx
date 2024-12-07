@@ -1,4 +1,4 @@
-import { Feature, FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
+import { Feature } from 'geojson';
 import L from 'leaflet';
 import { useTheme } from 'next-themes';
 import React, { useEffect, useRef } from 'react';
@@ -9,6 +9,7 @@ import FcsChoroplethProps from '@/domain/props/FcsChoroplethProps';
 import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
 import { MapboxMapOperations } from '@/operations/map/MapboxMapOperations';
 
+import CountryLoadingLayer from './CountryLoading';
 import FscCountryChoropleth from './FcsCountryChoropleth';
 
 export default function FcsChoropleth({
@@ -58,19 +59,10 @@ export default function FcsChoropleth({
       />
       {/* Animated GeoJSON layer for the selected country */}
       {!regionData && selectedCountryId && (
-        <GeoJSON
-          data={
-            {
-              type: 'FeatureCollection',
-              features: data.features.filter((feature) => feature?.properties?.adm0_id === selectedCountryId),
-            } as FeatureCollection<Geometry, GeoJsonProperties>
-          } // Explicitly type as FeatureCollection
-          style={{
-            color: 'undefined',
-            fillOpacity: 0.3,
-            fillColor: '#338ef7',
-            className: 'animate-opacityPulse',
-          }}
+        <CountryLoadingLayer
+          data={data}
+          selectedCountryId={selectedCountryId}
+          color="hsl(var(--nextui-fcsAnimation))"
         />
       )}
       {regionData && countryId === selectedCountryId && (

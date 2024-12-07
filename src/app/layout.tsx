@@ -5,7 +5,6 @@ import { Metadata, Viewport } from 'next';
 import Script from 'next/script';
 
 import { CookieConsentPopup } from '@/components/Analytics/CookieConsentPopup';
-import { Snackbar } from '@/components/Snackbar/Snackbar';
 import { fontSans } from '@/config/fonts';
 import { siteConfig } from '@/config/site';
 
@@ -62,7 +61,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <CookieConsentPopup />
         <Providers themeProps={{ attribute: 'class', defaultTheme: 'dark' }}>
           <div className="relative h-dvh">
-            <Snackbar />
             <main className="h-full w-full">{children}</main>
           </div>
         </Providers>

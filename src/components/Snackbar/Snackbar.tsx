@@ -7,7 +7,7 @@ import { TriangleAlert, X } from 'lucide-react';
 
 import { useSnackbar } from '@/domain/contexts/SnackbarContext';
 import { SnackbarStatus } from '@/domain/enums/Snackbar';
-// import { getSnackbarPositionClass, getStatusColorClass } from '@/domain/props/SnackbarProps';
+import { getSnackbarPositionClass, getStatusColorClass } from '@/domain/props/SnackbarProps';
 
 /**
  * Below is an example of how to use the Snackbar componenet and useSnackbar hooks:
@@ -33,10 +33,10 @@ import { SnackbarStatus } from '@/domain/enums/Snackbar';
  */
 export function Snackbar() {
   const { isSnackBarOpen, snackBarProps, closeSnackBar } = useSnackbar();
-  const { message, status } = snackBarProps;
+  const { message, status, position } = snackBarProps;
 
-  // const positionClass = getSnackbarPositionClass(position);
-  // const statusClass = getStatusColorClass(status);
+  const positionClass = getSnackbarPositionClass(position);
+  const statusClass = getStatusColorClass(status);
   const getStatusIcon = () => {
     switch (status) {
       case SnackbarStatus.Success:
@@ -59,7 +59,11 @@ export function Snackbar() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className={clsx('absolute z-[9999] flex p-2 rounded-md shadow-lg h-12 flex-1 sm:w-[500px] w-full')}
+      className={clsx(
+        'absolute z-[9999] flex p-2 rounded-md shadow-lg h-12 flex-1 sm:w-[500px] w-full',
+        positionClass,
+        statusClass
+      )}
     >
       <div className="flex flex-1 flex-row items-center">
         {getStatusIcon()}

@@ -19,7 +19,7 @@ export default function CountrySelection({
   }, [countryMapData, globalFcsData, selectedCountries]);
 
   return (
-    <div className="p-4 space-y-6">
+    <div className="pb-4 space-y-6">
       <Select
         placeholder="Select up to 5 countries"
         aria-label="Select countries for comparison"

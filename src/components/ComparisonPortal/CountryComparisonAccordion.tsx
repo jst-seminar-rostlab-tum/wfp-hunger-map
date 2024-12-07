@@ -2,7 +2,6 @@
 
 import { Spacer } from '@nextui-org/react';
 import { useMemo, useState } from 'react';
-import { v4 as uuid } from 'uuid';
 
 import { CountryDataRecord } from '@/domain/entities/country/CountryData';
 import { CountryMapData } from '@/domain/entities/country/CountryMapData';
@@ -10,6 +9,7 @@ import { useCountryDataListQuery } from '@/domain/hooks/countryHooks';
 import { CountryComparisonOperations } from '@/operations/comparison-portal/CountryComparisonOperations';
 
 import AccordionContainer from '../Accordions/AccordionContainer';
+import CustomAlert from '../Alert/Alert';
 import { LineChart } from '../Charts/LineChart';
 
 interface CountryComparisonAccordionProps {
@@ -42,8 +42,7 @@ export default function CountryComparisonAccordion({ selectedCountries }: Countr
   return (
     <div>
       {errorMessages.map((message) => (
-        // <Alert key={uuid()} description={message} title="Error" />
-        <div key={uuid()}>{message}</div>
+        <CustomAlert className="py-2" description={message} title="Error" />
       ))}
       {countryDataList.length > 1 && (
         <AccordionContainer

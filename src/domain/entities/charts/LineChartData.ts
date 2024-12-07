@@ -34,10 +34,12 @@ export interface LineChartData {
     x: number;
     color?: string;
     dashStyle?: DashStyleValue;
+    label?: string;
   }[];
   verticalBands?: {
     xStart: number;
     xEnd: number;
     color?: string;
+    label?: string;
   }[];
 }

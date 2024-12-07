@@ -119,12 +119,15 @@ export default async function Elements() {
     verticalLines: [
       {
         x: 3,
+        label: "Future"
+
       },
     ],
     verticalBands: [
       {
         xStart: 3,
-        xEnd: 6,
+        xEnd: 7,
+        label: "Future"
       },
     ],
   };

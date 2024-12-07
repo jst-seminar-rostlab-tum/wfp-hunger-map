@@ -7,8 +7,8 @@ import Highcharts, {
   TooltipFormatterContextObject,
 } from 'highcharts';
 import highchartsMore from 'highcharts/highcharts-more';
-import HighchartsReact from 'highcharts-react-official';
 import patternFill from 'highcharts/modules/pattern-fill';
+import HighchartsReact from 'highcharts-react-official';
 
 import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph.ts';
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph.ts';
@@ -334,12 +334,28 @@ export default class LineChartOperations {
           to: b.xEnd,
           color: b.color || 'rgba(140,140,140,0.07)',
           zIndex: 1,
+          label: {
+            text: b.label || '',
+            style: {
+              color: 'hsl(var(--nextui-secondary))',
+              fontSize: '0.7rem',
+            },
+          },
         })),
         plotLines: data.verticalLines?.map((l) => ({
           value: l.x,
           color: l.color || 'hsl(var(--nextui-chartsGridLine))',
           dashStyle: l.dashStyle,
           zIndex: 2,
+          label: {
+            text: l.label || '',
+            style: {
+              color: 'hsl(var(--nextui-secondary))',
+              fontSize: '0.7rem',
+            },
+            verticalAlign: 'middle',
+            align: 'center',
+          },
         })),
       },
       yAxis: {

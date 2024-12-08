@@ -2,40 +2,42 @@ import { Chip } from '@nextui-org/chip';
 import clsx from 'clsx';
 
 import StyledLink from '@/components/About/StyledLink';
+import RecursiveHighlighter from '@/components/Search/RecursiveHighlighter';
 import { CustomTableData, DataSourceTableData } from '@/domain/props/CustomTableProps';
+import { SearchOperations } from '@/operations/Search/SearchOperations';
 
 function formatDataSourceTable(dataSources: DataSourceTableData) {
-  return dataSources.map(
-    ({ label, description, updateInterval, updateDetails, dataSource, dataSourceLink, readMoreLink }) => {
-      // remove leading http[s]:// and trailing slash
-      const linkDisplayText = dataSourceLink?.split('//')?.pop()?.replace(/\/$/, '');
-      return {
-        groupKey: label,
-        updateDetails,
-        groupName: (
+  return dataSources.map((item) => {
+    // remove leading http[s]:// and trailing slash
+    const linkDisplayText = item.dataSourceLink?.split('//')?.pop()?.replace(/\/$/, '');
+    return {
+      groupKey: item.label,
+      updateDetails: item.updateDetails,
+      groupName: (
+        <RecursiveHighlighter>
           <>
             <div className="text-base pb-3 block">
-              <b className={clsx('block pt-0.5 pr-2', { 'float-left': updateInterval })}>{label}</b>{' '}
-              {updateInterval && (
+              <b className={clsx('block pt-0.5 pr-2', { 'float-left': item.updateInterval })}>{item.label}</b>{' '}
+              {item.updateInterval && (
                 <Chip size="sm" color="primary">
-                  {updateInterval}
+                  {item.updateInterval}
                 </Chip>
               )}
             </div>
             <span>
-              {description}
-              {readMoreLink && (
+              {item.description}
+              {item.readMoreLink && (
                 <>
                   {' '}
-                  <StyledLink href={readMoreLink} className="text-sm">
+                  <StyledLink href={item.readMoreLink} className="text-sm">
                     Read more...
                   </StyledLink>
                 </>
               )}
             </span>
-            {updateDetails && (
+            {item.updateDetails && (
               <ul className="mt-2 !pb-0">
-                {updateDetails.map(({ label: detailLabel, interval }) => (
+                {item.updateDetails.map(({ label: detailLabel, interval }) => (
                   <li className="text-sm" key={JSON.stringify(detailLabel)}>
                     {detailLabel}{' '}
                     <Chip className="my-1" color="primary" size="sm">
@@ -46,27 +48,30 @@ function formatDataSourceTable(dataSources: DataSourceTableData) {
               </ul>
             )}
           </>
-        ),
-        attributeRows: [
-          {
-            source: (
+        </RecursiveHighlighter>
+      ),
+      attributeRows: [
+        {
+          source: (
+            <RecursiveHighlighter>
               <>
-                {dataSource}
-                {dataSourceLink && (
+                {item.dataSource}
+                {item.dataSourceLink && (
                   <>
                     <br />
-                    <StyledLink href={dataSourceLink} className="text-sm">
+                    <StyledLink href={item.dataSourceLink} className="text-sm">
                       {linkDisplayText}
                     </StyledLink>
                   </>
                 )}
               </>
-            ),
-          },
-        ],
-      };
-    }
-  ) as CustomTableData;
+            </RecursiveHighlighter>
+          ),
+        },
+      ],
+      containedWords: SearchOperations.sanitizeTableRow(item),
+    };
+  }) as CustomTableData;
 }
 
 export default formatDataSourceTable;

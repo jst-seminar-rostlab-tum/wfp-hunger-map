@@ -3,4 +3,5 @@ export interface SearchBarProps {
   onValueChange: (value: string) => void;
   placeholder?: string;
   className?: string;
+  inputClassName?: string;
 }

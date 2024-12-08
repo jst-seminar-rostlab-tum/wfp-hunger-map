@@ -3,40 +3,6 @@
 @tailwind utilities;
 
 @layer base {
-  .about-page {
-    @apply max-w-screen-lg mx-auto;
-  }
-
-  .about-page h1 {
-    @apply text-4xl sm:text-5xl lg:text-7xl font-black mb-8;
-  }
-
-  .about-page h2 {
-    @apply text-2xl lg:text-3xl mb-3;
-  }
-
-  .about-page p,
-  .about-page ol,
-  .about-page ul {
-    @apply text-large leading-relaxed pb-6;
-  }
-
-  .about-page p:last-child {
-    @apply pb-0;
-  }
-
-  .about-page ol,
-  .about-page ul {
-    @apply pl-8;
-  }
-
-  .about-page ol {
-    @apply list-decimal;
-  }
-
-  .about-page ul {
-    @apply list-disc;
-  }
   .text-content {
     @apply max-w-screen-lg mx-auto;
   }

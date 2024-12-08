@@ -9,4 +9,6 @@ export interface AccordionContainerProps {
   color?: string;
   accordionModalActive?: boolean;
   maxWidth?: number;
+  expandAll?: boolean;
+  highlightedTitleWords?: string[];
 }

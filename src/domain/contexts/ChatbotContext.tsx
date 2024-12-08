@@ -1,7 +1,8 @@
-import React, { createContext, ReactNode, useContext, useMemo, useState } from 'react';
+import React, { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
 
 import { IChat } from '@/domain/entities/chatbot/Chatbot';
 import { SenderRole } from '@/domain/enums/SenderRole';
+import ChatbotOperations from '@/operations/chatbot/Chatbot';
 import { DownloadPortalOperations } from '@/operations/download-portal/DownloadPortalOperations';
 import { useMediaQuery } from '@/utils/resolution';
 
@@ -27,14 +28,12 @@ export function ChatbotProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
   const isMobile = useMediaQuery('(max-width: 640px)');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [chats, setChats] = useState<IChat[]>([
-    {
-      id: 1,
-      title: 'Chat 1',
-      messages: [],
-      isTyping: false,
-    },
-  ]);
+  const [chats, setChats] = useState<IChat[]>(ChatbotOperations.loadChatsFromStorage());
+
+  // Save chats to localStorage whenever they change
+  useEffect(() => {
+    ChatbotOperations.saveChatsToStorage(chats);
+  }, [chats]);
 
   const openChat = (chatIndex: number) => {
     setCurrentChatIndex(chatIndex);
@@ -50,13 +49,18 @@ export function ChatbotProvider({ children }: { children: ReactNode }) {
         title: `Chat ${chats.length + 1}`,
         messages: [],
         isTyping: false,
+        timestamp: Date.now(),
       };
     } else {
-      chatToAdd = newChat;
+      chatToAdd = {
+        ...newChat,
+        timestamp: Date.now(),
+      };
     }
 
-    setChats((prevChats) => [...prevChats, chatToAdd]);
-    setCurrentChatIndex(chats.length);
+    const updatedChats = [...chats, chatToAdd];
+    setChats(updatedChats);
+    setCurrentChatIndex(updatedChats.length - 1);
 
     if (openNewChat) {
       setIsOpen(true);
@@ -68,7 +72,6 @@ export function ChatbotProvider({ children }: { children: ReactNode }) {
   };
 
   const chatWithReport = async (countryName: string, report: string) => {
-    // Don't create new chat if chat with report was started before
     const reportChatIndex = chats.findIndex((chat) => chat.title === `Report ${countryName}`);
     const reportChatExists = reportChatIndex !== -1;
     if (reportChatExists) {
@@ -93,6 +96,7 @@ export function ChatbotProvider({ children }: { children: ReactNode }) {
       isReportStarter: true,
       messages: [assistantMessage],
       isTyping: false,
+      timestamp: Date.now(),
     };
 
     startNewChat(newChat, true);

@@ -14,4 +14,5 @@ export interface IChat {
   isReportStarter?: boolean;
   messages: IMessage[];
   isTyping: boolean;
+  timestamp: number;
 }

@@ -129,7 +129,8 @@ export default async function Elements() {
       },
       {
         name: 'Prediction',
-        dashStyle: 'Dash',
+        dashStyle: 'LongDash',
+        color: 'hsl(var(--nextui-chartForecast))',
         dataPoints: [
           { x: 0, y: 4 },
           { x: 1, y: 7 },
@@ -166,6 +167,7 @@ export default async function Elements() {
       {
         name: 'Prediction',
         dashStyle: 'Dash',
+        color: 'hsl(var(--nextui-chartForecast))',
         dataPoints: [
           { x: 0, y: 4 },
           { x: 1, y: 7 },
@@ -208,7 +210,8 @@ export default async function Elements() {
       },
       {
         name: 'Prediction',
-        dashStyle: 'Dash',
+        dashStyle: 'Dot',
+        color: 'hsl(var(--nextui-chartForecast))',
         dataPoints: [
           { x: 0, y: 4 },
           { x: 1, y: 7 },

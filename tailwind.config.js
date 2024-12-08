@@ -161,6 +161,7 @@ const config = {
             hazarAdvisory: '#57D66F',
             hazardInformation: '#0098EB',
             hazardTermination: '#B4B5B7',
+            chartForecast: '#3896a2',
 
             //fcs gradient
             fcsGradient1: '#29563a',
@@ -257,6 +258,7 @@ const config = {
             chartsLegendBackground: '#2a2a2a',
             chartsXAxisLine: '#757575',
             chartsGridLine: '#424242',
+            chartForecast: '#0e6983',
             nutritionNotAnalyzed: '#A69F9F',
           },
         },

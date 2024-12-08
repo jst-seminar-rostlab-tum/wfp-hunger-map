@@ -64,6 +64,7 @@
     "next": "14.2.10",
     "next-themes": "^0.2.1",
     "nextui-cli": "^0.3.4",
+    "pdfjs-dist": "3.11.174",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-element-to-jsx-string": "^15.0.0",

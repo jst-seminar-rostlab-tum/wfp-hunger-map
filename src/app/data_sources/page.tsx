@@ -1,28 +1,31 @@
-import React from 'react';
+'use client';
 
-import HungerMapLiveSuperscript from '@/components/About/HungerMapLiveSuperscript';
-import StyledLink from '@/components/About/StyledLink';
-import AccordionContainer from '@/components/Accordions/AccordionContainer';
+import React, { Suspense, useState } from 'react';
+
+import DocsSearchBar from '@/components/Search/DocsSearchBar';
+import DocsSearchBarSkeleton from '@/components/Search/DocsSearchBarSkeleton';
+import SearchableSection from '@/components/Search/SearchableSection';
 import dataSourceAccordionItems from '@/domain/constant/dataSources/dataSourceAccordionItems';
+import dataSourcesTextElements from '@/domain/constant/dataSources/dataSourcesTextElements';
 
 function Page() {
+  const [searchWords, setSearchWords] = useState<string[]>([]);
+  const [sectionIsVisible, setSectionIsVisible] = useState(true);
+
   return (
-    <section>
-      <h1>Data Sources</h1>
-      <p>
-        <b>
-          This section includes all indicators and data sources displayed on <HungerMapLiveSuperscript /> (global and
-          country pages).
-        </b>{' '}
-        Additional sources used as input variables for the predictive model but not for display purposes are listed on
-        the{' '}
-        <StyledLink href="/about" isInternal>
-          About page
-        </StyledLink>
-        .
-      </p>
-      <AccordionContainer items={dataSourceAccordionItems} multipleSelectionMode />
-    </section>
+    <>
+      <Suspense fallback={<DocsSearchBarSkeleton />}>
+        <DocsSearchBar setSearchWords={setSearchWords} />
+      </Suspense>
+      {!searchWords.length && <h1 className="!mb-0">Data Sources</h1>}
+      <SearchableSection
+        textElements={dataSourcesTextElements}
+        searchWords={searchWords}
+        accordionItems={dataSourceAccordionItems}
+        onVisibilityChange={setSectionIsVisible}
+      />
+      {!sectionIsVisible && !!searchWords.length && <p className="text-center">No results</p>}
+    </>
   );
 }
 

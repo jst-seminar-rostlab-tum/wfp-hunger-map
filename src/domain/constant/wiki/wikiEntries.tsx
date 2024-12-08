@@ -1,6 +1,7 @@
-import HungerMapLiveSuperscript from '@/components/About/HungerMapLiveSuperscript';
+import LiveSuperscript from '@/components/About/LiveSuperscript';
 import StyledLink from '@/components/About/StyledLink';
 import { WikiEntry } from '@/domain/entities/wiki/WikiEntry';
+import { SearchOperations } from '@/operations/Search/SearchOperations';
 
 const wikiEntries = (
   [
@@ -131,7 +132,8 @@ const wikiEntries = (
             provide the dietary energy required to maintain a normal, active and healthy life.
           </p>
           <p>
-            <HungerMapLiveSuperscript /> is reporting an estimate for the percentage of individuals in a condition of
+            HungerMap
+            <LiveSuperscript /> is reporting an estimate for the percentage of individuals in a condition of
             undernourishment (Prevalence of undernourishment/PoU). To reduce the influence of estimation errors in the
             underlying parameters, national estimates are reported as a three-year{' '}
             <StyledLink href="https://en.wikipedia.org/wiki/Moving_average">moving average</StyledLink>.
@@ -154,4 +156,4 @@ const wikiEntries = (
   ] as WikiEntry[]
 ).sort((a, b) => a.title?.localeCompare(b.title));
 
-export default wikiEntries;
+export default SearchOperations.makeAccordionItemsSearchable(wikiEntries);

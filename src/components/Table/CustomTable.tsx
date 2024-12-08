@@ -5,10 +5,12 @@
 
 import { Table, TableBody, TableColumn, TableHeader, TableRow } from '@nextui-org/table';
 import clsx from 'clsx';
+import { useSearchParams } from 'next/navigation';
 
 import CustomTableProps, { CustomTableData, CustomTableRow } from '@/domain/props/CustomTableProps';
 import { getTableCell } from '@/operations/tables/groupedTableOperations';
 import tableFormatters from '@/operations/tables/tableFormatters';
+import { getSearchWords } from '@/utils/searchUtils';
 
 function CustomTable<D>({
   columns,
@@ -19,9 +21,10 @@ function CustomTable<D>({
   showBorders = true,
   zebraRows = true,
 }: CustomTableProps<D>) {
-  // Formatting and data preparation
+  const searchWords = getSearchWords(useSearchParams().get('search') ?? '');
   const formattingFunction = tableFormatters[format] as (d: D) => CustomTableData;
-  const rows = formattingFunction(data).flatMap(({ groupKey, groupName, attributeRows }) =>
+
+  let rows = formattingFunction(data).flatMap(({ groupKey, groupName, attributeRows, containedWords }) =>
     attributeRows.map((row, index) => ({
       index,
       groupKey,
@@ -30,8 +33,16 @@ function CustomTable<D>({
         keyColumn: groupName,
         ...row,
       },
+      containedWords,
     }))
   ) as CustomTableRow[];
+
+  if (format === 'dataSources' && searchWords.length) {
+    const noLabelMatch = searchWords.every((w) => !ariaLabel?.toLowerCase().includes(w));
+    if (noLabelMatch) {
+      rows = rows.filter((row) => searchWords.some((w) => row.containedWords?.includes(w)));
+    }
+  }
 
   const leftAlignedColumns = new Set(columns.filter((c) => c.alignLeft).map((c) => c.columnId));
 
@@ -70,12 +81,14 @@ function CustomTable<D>({
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody items={rows} emptyContent="No rows to display">
-          {(row) => (
-            <TableRow key={`${row.groupKey}×${row.index}`}>
-              {(columnKey) => getTableCell(row, columnKey as string, !leftAlignedColumns.has(columnKey as string))}
-            </TableRow>
-          )}
+        <TableBody items={rows} emptyContent={format === 'dataSources' ? 'Searching...' : 'No rows to display'}>
+          {(row) => {
+            return (
+              <TableRow key={`${row.groupKey}×${row.index}`}>
+                {(columnKey) => getTableCell(row, columnKey as string, !leftAlignedColumns.has(columnKey as string))}
+              </TableRow>
+            );
+          }}
         </TableBody>
       </Table>
     </div>

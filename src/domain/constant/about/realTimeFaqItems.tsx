@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { AccordionItemProps } from '@/domain/entities/accordions/Accordions';
+import { SearchOperations } from '@/operations/Search/SearchOperations';
 
 const generalQuestionItems: AccordionItemProps[] = [
   {
@@ -59,4 +60,4 @@ const generalQuestionItems: AccordionItemProps[] = [
   },
 ];
 
-export default generalQuestionItems;
+export default SearchOperations.makeAccordionItemsSearchable(generalQuestionItems);

@@ -7,14 +7,12 @@ import { CustomButton } from '@/components/Buttons/CustomButton';
 import { LineChart } from '@/components/Charts/LineChart';
 import MapSkeleton from '@/components/Map/MapSkeleton';
 import SearchBar from '@/components/Search/SearchBar';
-import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph.ts';
-import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph.ts';
-import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
 import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
 import { LineChartDataType } from '@/domain/enums/LineChartDataType.ts';
 import AccordionsOperations from '@/operations/accordions/AccordionOperations';
 
 import { ReactComponent as FoodSvg } from '../../../public/Images/FoodConsumption.svg';
+
 /**
  * You can use this page to try and show off your components.
  * It's not accessible from the UI, but you can reach it by manually navigating to /elements
@@ -77,6 +75,7 @@ export default async function Elements() {
           { x: 2, y: 5 },
           { x: 3, y: 2 },
         ],
+        dashStyle: 'LongDash',
       },
       {
         name: 'Category C',
@@ -85,99 +84,157 @@ export default async function Elements() {
           { x: 1, y: 2 },
           { x: 3, y: 3 },
         ],
+        dashStyle: 'Dot',
+      },
+    ],
+    verticalLines: [
+      {
+        x: 1,
+      },
+      {
+        x: 1.5,
+        dashStyle: 'LongDash',
+        color: 'rgba(129,27,27,0.53)',
+      },
+    ],
+    verticalBands: [
+      {
+        xStart: -1,
+        xEnd: 1,
+        label: 'AB',
+      },
+      {
+        xStart: 1,
+        xEnd: 4,
+        color: 'rgba(129,27,27,0.13)',
+        label: 'EF',
       },
     ],
   };
 
-  const balanceOfTradeGraphData: BalanceOfTradeGraph = {
-    type: LineChartDataType.BALANCE_OF_TRADE_CHART,
-    data: [
+  const predictionDummyChartData1: LineChartData = {
+    type: LineChartDataType.LINE_CHART_DATA,
+    xAxisType: 'linear',
+    yAxisLabel: 'Mill',
+    lines: [
       {
-        x: '2023-10-01',
-        y: -5345789,
+        name: 'Category A',
+        showRange: true,
+        dataPoints: [
+          { x: 0, y: 4, yRangeMin: 3.5, yRangeMax: 5 },
+          { x: 1, y: 3, yRangeMin: 2, yRangeMax: 4 },
+          { x: 2, y: 4, yRangeMin: 3.5, yRangeMax: 4.5 },
+          { x: 3, y: 8, yRangeMin: 7.5, yRangeMax: 8.5 },
+        ],
       },
       {
-        x: '2023-12-01',
-        y: -1235478,
+        name: 'Prediction',
+        dashStyle: 'LongDash',
+        color: 'hsl(var(--nextui-chartForecast))',
+        dataPoints: [
+          { x: 0, y: 4 },
+          { x: 1, y: 7 },
+          { x: 2, y: 5 },
+          { x: 3, y: 7 },
+          { x: 4, y: 8 },
+          { x: 5, y: 5 },
+          { x: 6, y: 6 },
+        ],
       },
+    ],
+    verticalLines: [
       {
-        x: '2024-02-01',
-        y: 690234,
-      },
-      {
-        x: '2024-04-01',
-        y: 3945574,
+        x: 3,
       },
     ],
   };
 
-  const currencyExchangeGraphData: CurrencyExchangeGraph = {
-    type: LineChartDataType.CURRENCY_EXCHANGE_CHART,
-    name: 'Exchange Rate (USD/NGN)',
-    source: '',
-    updated: '',
-    data: [
+  const predictionDummyChartData2: LineChartData = {
+    type: LineChartDataType.LINE_CHART_DATA,
+    xAxisType: 'linear',
+    yAxisLabel: 'Mill',
+    lines: [
       {
-        x: '2023-10-01',
-        y: 1.421234,
+        name: 'Category A',
+        showRange: true,
+        dataPoints: [
+          { x: 0, y: 4, yRangeMin: 3.5, yRangeMax: 5 },
+          { x: 1, y: 3, yRangeMin: 2, yRangeMax: 4 },
+          { x: 2, y: 4, yRangeMin: 3.5, yRangeMax: 4.5 },
+          { x: 3, y: 8, yRangeMin: 7.5, yRangeMax: 8.5 },
+        ],
       },
       {
-        x: '2023-12-01',
-        y: 1.597552,
+        name: 'Prediction',
+        dashStyle: 'Dash',
+        color: 'hsl(var(--nextui-chartForecast))',
+        dataPoints: [
+          { x: 0, y: 4 },
+          { x: 1, y: 7 },
+          { x: 2, y: 5 },
+          { x: 3, y: 7 },
+          { x: 4, y: 8 },
+          { x: 5, y: 5 },
+          { x: 6, y: 6 },
+        ],
       },
+    ],
+    verticalLines: [
       {
-        x: '2024-02-01',
-        y: 1.687564,
+        x: 3,
       },
+    ],
+    verticalBands: [
       {
-        x: '2024-04-01',
-        y: 1.665345,
+        xStart: 3,
+        xEnd: 7,
+        label: 'Future',
       },
     ],
   };
 
-  const inflationGraphsData: InflationGraphs = {
-    type: LineChartDataType.INFLATION_CHARTS,
-    headline: {
-      data: [
-        {
-          x: '2023-10-01',
-          y: 26.2,
-        },
-        {
-          x: '2023-12-01',
-          y: 30.2,
-        },
-        {
-          x: '2024-02-01',
-          y: 37.1,
-        },
-        {
-          x: '2024-04-01',
-          y: 37.9,
-        },
-      ],
-    },
-    food: {
-      data: [
-        {
-          x: '2023-10-01',
-          y: 25.2,
-        },
-        {
-          x: '2023-12-01',
-          y: 29.2,
-        },
-        {
-          x: '2024-02-01',
-          y: 36.1,
-        },
-        {
-          x: '2024-04-01',
-          y: 36.9,
-        },
-      ],
-    },
+  const predictionDummyChartData3: LineChartData = {
+    type: LineChartDataType.LINE_CHART_DATA,
+    xAxisType: 'linear',
+    yAxisLabel: 'Mill',
+    lines: [
+      {
+        name: 'Category A',
+        showRange: true,
+        dataPoints: [
+          { x: 0, y: 4, yRangeMin: 3.5, yRangeMax: 5 },
+          { x: 1, y: 3, yRangeMin: 2, yRangeMax: 4 },
+          { x: 2, y: 4, yRangeMin: 3.5, yRangeMax: 4.5 },
+          { x: 3, y: 8, yRangeMin: 7.5, yRangeMax: 8.5 },
+        ],
+      },
+      {
+        name: 'Prediction',
+        dashStyle: 'Dot',
+        color: 'hsl(var(--nextui-chartForecast))',
+        dataPoints: [
+          { x: 0, y: 4 },
+          { x: 1, y: 7 },
+          { x: 2, y: 5 },
+          { x: 3, y: 7 },
+          { x: 4, y: 8 },
+          { x: 5, y: 5 },
+          { x: 6, y: 6 },
+        ],
+      },
+    ],
+    verticalLines: [
+      {
+        x: 3,
+      },
+    ],
+    verticalBands: [
+      {
+        xStart: 2.5,
+        xEnd: 3.5,
+        label: 'Today',
+      },
+    ],
   };
 
   return (
@@ -220,13 +277,13 @@ export default async function Elements() {
           />
         </div>
         <div className="w-400px h-fit">
-          <LineChart title="Balance of trade" data={balanceOfTradeGraphData} expandable />
+          <LineChart title="" data={predictionDummyChartData1} expandable xAxisSlider barChartSwitch />
         </div>
         <div className="w-400px h-fit">
-          <LineChart title="Currency exchange" data={currencyExchangeGraphData} expandable />
+          <LineChart title="" data={predictionDummyChartData2} expandable xAxisSlider barChartSwitch />
         </div>
         <div className="w-400px h-fit">
-          <LineChart title="Headline and food inflation" data={inflationGraphsData} expandable barChartSwitch />
+          <LineChart title="" data={predictionDummyChartData3} expandable xAxisSlider barChartSwitch />
         </div>
       </div>
       <MapSkeleton />

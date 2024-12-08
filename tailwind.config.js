@@ -55,6 +55,9 @@ const config = {
         brand: '#157DBC',
         brandHover: '#0F6396',
       },
+      screens: {
+        sm700: '700px',
+      },
       width: {
         '215px': '215px',
         '179px': '179px',
@@ -201,7 +204,7 @@ const config = {
             nutritionPredicted: '#E3F2FD',
             nutritionNotAnalyzed: '#D2D1D1',
 
-            //animation 
+            //animation
             nutritionAnimation: '#F7B750',
             fcsAnimation: '#338ef7',
             ipcAnimation: '#cd1919',

@@ -105,11 +105,11 @@ export default function SubscriptionForm() {
             topic_id: topic,
           })
           .then((res) => {
-            if (res) {
+            if (res.ok) {
               setSubscribeStatus(SubmitStatus.Idle);
               setIsWaitingSubResponse(false);
               showSnackBar({
-                message: SUCCESSFUL_SUBSCRIPTION,
+                message: res.message ? res.message : SUCCESSFUL_SUBSCRIPTION, // if the response message is empty, show the default message
                 status: SnackbarStatus.Success,
                 position: SnackbarPosition.BottomRight,
                 duration: SNACKBAR_SHORT_DURATION,
@@ -118,7 +118,7 @@ export default function SubscriptionForm() {
               setSubscribeStatus(SubmitStatus.Idle);
               setIsWaitingSubResponse(false);
               showSnackBar({
-                message: UNSUCCESSFUL_SUBSCRIPTION,
+                message: res.message ? res.message : UNSUCCESSFUL_SUBSCRIPTION, // if the response message is empty, show the default message
                 status: SnackbarStatus.Error,
                 position: SnackbarPosition.BottomRight,
                 duration: SNACKBAR_SHORT_DURATION,

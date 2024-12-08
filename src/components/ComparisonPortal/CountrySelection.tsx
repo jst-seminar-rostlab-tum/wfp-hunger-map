@@ -14,7 +14,16 @@ export default function CountrySelection({
 }: CountrySelectionProps) {
   const disabledKeys = useMemo(() => {
     return countryMapData.features
-      .filter((country) => !globalFcsData[country.properties.adm0_id]?.fcs || selectedCountries.length >= 5)
+      .filter(
+        (country) =>
+          // filter out countries that don't have fcs data
+          !globalFcsData[country.properties.adm0_id]?.fcs ||
+          // if there are already 5 selected countries, disable the rest
+          (selectedCountries.length >= 5 &&
+            !selectedCountries.find(
+              (selectedCountry) => selectedCountry.properties.adm0_id === country.properties.adm0_id
+            ))
+      )
       .map((country) => country.properties.adm0_id.toString());
   }, [countryMapData, globalFcsData, selectedCountries]);
 

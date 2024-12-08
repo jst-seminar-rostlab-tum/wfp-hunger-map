@@ -32,7 +32,7 @@ export const useCountryDataListQuery = (countryIds: number[], onCountryDataNotFo
             onCountryDataNotFound(countryId);
             return null;
           }
-          return { ...countryData, id: countryId.toString() };
+          return { ...countryData, id: countryId };
         },
       })),
     },

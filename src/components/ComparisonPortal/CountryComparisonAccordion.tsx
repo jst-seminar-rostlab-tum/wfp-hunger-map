@@ -33,15 +33,25 @@ export default function CountryComparisonAccordion({ selectedCountries }: Countr
       .filter((data): data is CountryDataRecord => data !== null && data !== undefined);
   }, [queryResultList]);
   const fcsChartData = useMemo(() => {
-    return countryDataList.length > 1 ? CountryComparisonOperations.getFcsChartData(countryDataList) : undefined;
+    return countryDataList.length > 1
+      ? CountryComparisonOperations.getFcsChartData(countryDataList, selectedCountries)
+      : undefined;
   }, [countryDataList]);
   const rcsiChartData = useMemo(() => {
-    return countryDataList.length > 1 ? CountryComparisonOperations.getRcsiChartData(countryDataList) : undefined;
+    return countryDataList.length > 1
+      ? CountryComparisonOperations.getRcsiChartData(countryDataList, selectedCountries)
+      : undefined;
+  }, [countryDataList]);
+  const foodSecurityBarChartData = useMemo(() => {
+    return countryDataList.length > 1
+      ? CountryComparisonOperations.getFoodSecurityBarChartData(countryDataList, selectedCountries)
+      : undefined;
   }, [countryDataList]);
 
   return (
     <div>
       {errorMessages.map((message) => (
+        // TODO: integrate snackbar instead of alert - depends on f-129
         <CustomAlert className="py-2" description={message} title="Error" />
       ))}
       {countryDataList.length > 1 && (
@@ -52,8 +62,17 @@ export default function CountryComparisonAccordion({ selectedCountries }: Countr
               title: 'Food Security',
               content: (
                 <div>
-                  <p>Food security content</p>
-                  <div>Bar chart here</div>
+                  {foodSecurityBarChartData && (
+                    <LineChart
+                      title="Food Security"
+                      data={foodSecurityBarChartData}
+                      expandable
+                      small
+                      noPadding
+                      transparentBackground
+                      // TODO: f-165 barChartOnly
+                    />
+                  )}
                 </div>
               ),
             },

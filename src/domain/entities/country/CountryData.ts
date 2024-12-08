@@ -12,4 +12,4 @@ export interface CountryData {
   fcsGraph: FcsChartData[];
 }
 
-export type CountryDataRecord = CountryData & { id: string };
+export type CountryDataRecord = CountryData & { id: number };

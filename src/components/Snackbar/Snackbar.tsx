@@ -2,12 +2,11 @@
 
 import clsx from 'clsx';
 import { motion } from 'framer-motion';
-import { InfoCircle, TickCircle } from 'iconsax-react';
-import { TriangleAlert, X } from 'lucide-react';
+import { X } from 'lucide-react';
 
 import { useSnackbar } from '@/domain/contexts/SnackbarContext';
-import { SnackbarStatus } from '@/domain/enums/Snackbar';
 import { getSnackbarPositionClass, getStatusColorClass } from '@/domain/props/SnackbarProps';
+import { SnackbarOperations } from '@/operations/snackbar/SnackbarOperations';
 
 /**
  * Below is an example of how to use the Snackbar componenet and useSnackbar hooks:
@@ -37,19 +36,6 @@ export function Snackbar() {
 
   const positionClass = getSnackbarPositionClass(position);
   const statusClass = getStatusColorClass(status);
-  const getStatusIcon = () => {
-    switch (status) {
-      case SnackbarStatus.Success:
-        return <TickCircle size={24} className="text-white" />;
-      case SnackbarStatus.Warning:
-        return <TriangleAlert size={24} className="text-white" />;
-      case SnackbarStatus.Error:
-        return <InfoCircle size={24} className="text-white" />;
-      case SnackbarStatus.Default:
-      default:
-        return null;
-    }
-  };
 
   if (!isSnackBarOpen) return null;
 
@@ -66,7 +52,7 @@ export function Snackbar() {
       )}
     >
       <div className="flex flex-1 flex-row items-center">
-        {getStatusIcon()}
+        {SnackbarOperations.getStatusIcon(status)}
         <p className="ml-2 text-white mr-8">{message}</p>
         <X size={24} className="text-white ml-auto mr-1" onClick={closeSnackBar} />
       </div>

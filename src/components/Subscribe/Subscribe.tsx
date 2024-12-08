@@ -111,7 +111,7 @@ export default function SubscriptionForm() {
               showSnackBar({
                 message: SUCCESSFUL_SUBSCRIPTION,
                 status: SnackbarStatus.Success,
-                position: SnackbarPosition.TopMiddle,
+                position: SnackbarPosition.BottomRight,
                 duration: SNACKBAR_SHORT_DURATION,
               });
             } else {
@@ -120,7 +120,7 @@ export default function SubscriptionForm() {
               showSnackBar({
                 message: UNSUCCESSFUL_SUBSCRIPTION,
                 status: SnackbarStatus.Error,
-                position: SnackbarPosition.TopMiddle,
+                position: SnackbarPosition.BottomRight,
                 duration: SNACKBAR_SHORT_DURATION,
               });
             }

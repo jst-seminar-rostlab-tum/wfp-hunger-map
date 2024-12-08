@@ -1,6 +1,7 @@
 import { CalendarDate } from '@internationalized/date';
 import { DocumentDownload, SearchNormal1 } from 'iconsax-react';
 import { Bot } from 'lucide-react';
+import pdfToText from 'react-pdftotext';
 
 import { CountryCodesData } from '@/domain/entities/country/CountryCodesData';
 import { ICountryData } from '@/domain/entities/download/Country';
@@ -19,6 +20,7 @@ export class DownloadPortalOperations {
   static formatTableData(
     data: CountryCodesData[],
     setSelectedCountry: (countryData: CountryCodesData) => void,
+    chatWithReport: (country: string, report: string) => Promise<void>,
     setPdfFile: (file: Blob | null) => void,
     setError: (error: string | null) => void,
     toggleModal: () => void
@@ -47,7 +49,11 @@ export class DownloadPortalOperations {
       ),
       chat: (
         <div className="flex justify-center items-center">
-          <Bot size={20} className="cursor-pointer" />
+          <Bot
+            size={20}
+            onClick={() => chatWithReport(item.country.name, item.url.summary)}
+            className="cursor-pointer"
+          />
         </div>
       ),
     }));
@@ -120,5 +126,17 @@ export class DownloadPortalOperations {
     setSelectedCountry(country);
     DownloadPortalOperations.handlePreview(country.url.summary, setPdfFile, setError);
     toggleModal();
+  }
+
+  static async extractTextFromPdf(url: string): Promise<string> {
+    let text = '';
+
+    try {
+      const file = await fetch(url).then((res) => res.blob());
+      text = await pdfToText(file);
+    } catch {
+      text = '';
+    }
+    return text;
   }
 }

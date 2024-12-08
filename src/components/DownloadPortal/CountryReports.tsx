@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react';
 import PdfPreview from '@/components/Pdf/PdfPreview';
 import SearchBar from '@/components/Search/SearchBar';
 import CustomTable from '@/components/Table/CustomTable';
+import { useChatbot } from '@/domain/contexts/ChatbotContext';
 import { CountryCodesData } from '@/domain/entities/country/CountryCodesData';
 import CountryReportsProps from '@/domain/props/CountryReportsProps';
 import { PdfFile } from '@/domain/props/PdfViewerProps';
@@ -33,6 +34,7 @@ export default function CountryReports({ countryCodesData }: CountryReportsProps
         data={DownloadPortalOperations.formatTableData(
           filteredData,
           setSelectedCountry,
+          useChatbot().chatWithReport,
           setPdfFile,
           setError,
           toggleModal

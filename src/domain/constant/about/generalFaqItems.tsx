@@ -1,8 +1,9 @@
 import React from 'react';
 
-import HungerMapLiveSuperscript from '@/components/About/HungerMapLiveSuperscript';
+import LiveSuperscript from '@/components/About/LiveSuperscript';
 import StyledLink from '@/components/About/StyledLink';
 import { AccordionItemProps } from '@/domain/entities/accordions/Accordions';
+import { SearchOperations } from '@/operations/Search/SearchOperations';
 
 const generalFaqItems: AccordionItemProps[] = [
   {
@@ -10,7 +11,8 @@ const generalFaqItems: AccordionItemProps[] = [
     content: (
       <>
         <p>
-          The global view of the <HungerMapLiveSuperscript /> visualizes two data streams:
+          The global view of the HungerMap
+          <LiveSuperscript /> visualizes two data streams:
         </p>
         <ul>
           <li>Prevalence of insufficient food intake at administrative level 1 (green, yellow, and red color)</li>
@@ -40,7 +42,8 @@ const generalFaqItems: AccordionItemProps[] = [
         <p>
           You might notice that the figures in the trends of the number of people with insufficient food consumption and
           of the number of people using crisis or above crisis food-based coping might have changed from the last time
-          you accessed the <HungerMapLiveSuperscript />. These are several reasons why this might have happened.
+          you accessed the HungerMap
+          <LiveSuperscript />. These are several reasons why this might have happened.
         </p>
         <ul>
           <li>
@@ -76,4 +79,4 @@ const generalFaqItems: AccordionItemProps[] = [
   },
 ];
 
-export default generalFaqItems;
+export default SearchOperations.makeAccordionItemsSearchable(generalFaqItems);

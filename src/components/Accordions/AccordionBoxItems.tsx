@@ -4,7 +4,8 @@ import { Accordion, AccordionItem } from '@nextui-org/accordion';
 import { Button } from '@nextui-org/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@nextui-org/popover';
 import { Spinner } from '@nextui-org/spinner';
-import { v4 as uuid } from 'uuid';
+import { useEffect, useState } from 'react';
+import Highlighter from 'react-highlight-words';
 
 import { AccordionContainerProps } from '@/domain/props/AccordionContainerProps';
 import AccordionOperations from '@/operations/accordions/AccordionOperations';
@@ -24,9 +25,17 @@ export default function AccordionBoxItems({
   noSelectionMode = false,
   color = 'bg-content1',
   maxWidth,
+  expandAll = false,
+  highlightedTitleWords = [],
 }: AccordionContainerProps) {
+  const [expandedItems, setExpandedItems] = useState<Set<string> | 'all'>(new Set());
   const selectionMode = AccordionOperations.getSelectionModeType(noSelectionMode, multipleSelectionMode);
   const maxWidthClass = maxWidth ? `max-w-[${maxWidth}px]` : '';
+
+  useEffect(() => {
+    if (expandAll) setExpandedItems('all');
+    else setExpandedItems(new Set());
+  }, [expandAll]);
 
   return (
     <div className={`w-full ${maxWidthClass} overflow-x-auto rounded-lg shadow-none`}>
@@ -35,7 +44,13 @@ export default function AccordionBoxItems({
           <h1 className="text-2xl font-black font-sans text-white">{title}</h1>
         </div>
       )}
-      <Accordion key={uuid()} variant="splitted" selectionMode={selectionMode} className="p-0 mb-4">
+      <Accordion
+        variant="splitted"
+        selectionMode={selectionMode}
+        className="p-0 mb-4"
+        selectedKeys={expandedItems}
+        onSelectionChange={(keys) => setExpandedItems(keys as Set<string>)}
+      >
         {items.map((item, index) => (
           <AccordionItem
             key={typeof item.title === 'string' ? item.title : `accordion-item-${index}`}
@@ -45,7 +60,7 @@ export default function AccordionBoxItems({
             title={
               <div className="flex justify-between items-center w-full">
                 <div className="flex gap-4">
-                  <span>{item.title}</span>
+                  <Highlighter searchWords={highlightedTitleWords} textToHighlight={item.title} autoEscape />
                   {loading && <Spinner size="sm" />}
                 </div>
                 {item.tooltipInfo && (

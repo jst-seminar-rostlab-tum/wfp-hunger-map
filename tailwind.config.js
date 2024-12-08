@@ -201,6 +201,11 @@ const config = {
             nutritionPredicted: '#E3F2FD',
             nutritionNotAnalyzed: '#D2D1D1',
 
+            //animation 
+            nutritionAnimation: '#F7B750',
+            fcsAnimation: '#338ef7',
+            ipcAnimation: '#cd1919',
+
             countriesBase: '#fefeff',
             ocean: '#91cccb',
             fatalityAlert: '#742280',

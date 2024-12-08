@@ -1,24 +1,31 @@
-import React from 'react';
+'use client';
 
-import HungerMapLiveSuperscript from '@/components/About/HungerMapLiveSuperscript';
-import StyledLink from '@/components/About/StyledLink';
-import AccordionContainer from '@/components/Accordions/AccordionContainer';
+import React, { Suspense, useState } from 'react';
+
+import DocsSearchBar from '@/components/Search/DocsSearchBar';
+import DocsSearchBarSkeleton from '@/components/Search/DocsSearchBarSkeleton';
+import SearchableSection from '@/components/Search/SearchableSection';
 import wikiEntries from '@/domain/constant/wiki/wikiEntries';
+import wikiTextElements from '@/domain/constant/wiki/wikiTextElements';
 
 function Page() {
+  const [searchWords, setSearchWords] = useState<string[]>([]);
+  const [sectionIsVisible, setSectionIsVisible] = useState(true);
+
   return (
-    <section>
-      <h1>Wiki</h1>
-      <p>
-        This page contains more detailed explanations for some of the concepts behind the <HungerMapLiveSuperscript />.
-        See{' '}
-        <StyledLink href="/about" isInternal>
-          About
-        </StyledLink>{' '}
-        for a broader overview.
-      </p>
-      <AccordionContainer items={wikiEntries} />
-    </section>
+    <>
+      <Suspense fallback={<DocsSearchBarSkeleton />}>
+        <DocsSearchBar setSearchWords={setSearchWords} />
+      </Suspense>
+      {!searchWords.length && <h1 className="!mb-0">Wiki</h1>}
+      <SearchableSection
+        textElements={wikiTextElements}
+        searchWords={searchWords}
+        accordionItems={wikiEntries}
+        onVisibilityChange={setSectionIsVisible}
+      />
+      {!sectionIsVisible && !!searchWords.length && <p className="text-center">No results</p>}
+    </>
   );
 }
 

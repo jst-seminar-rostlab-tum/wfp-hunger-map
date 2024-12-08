@@ -4,8 +4,24 @@ import StyledLink from '@/components/About/StyledLink';
 import CustomTable from '@/components/Table/CustomTable';
 import { accuracyTableColumns, accuracyTableContents } from '@/domain/constant/about/accuracyTableContents';
 import { AccordionItemProps } from '@/domain/entities/accordions/Accordions';
+import { SearchOperations } from '@/operations/Search/SearchOperations';
 
-const generalQuestionItems: AccordionItemProps[] = [
+export const predictionFaqText = SearchOperations.makeTextElementsSearchable([
+  <p>
+    For first-level administrative areas where daily updated survey data is not available, the prevalence of people with
+    poor or borderline{' '}
+    <StyledLink href="https://documents.wfp.org/stellent/groups/public/documents/manual_guide_proced/wfp197216.pdf">
+      food consumption (FCS)
+    </StyledLink>{' '}
+    and the prevalence of people with{' '}
+    <StyledLink href="https://documents.wfp.org/stellent/groups/public/documents/manual_guide_proced/wfp211058.pdf">
+      reduced coping strategy index (rCSI)
+    </StyledLink>{' '}
+    ≥ 19 is estimated with a predictive model.
+  </p>,
+]);
+
+const predictionFaqItems: AccordionItemProps[] = [
   {
     title: 'What data are used for training the models?',
     content: (
@@ -91,4 +107,4 @@ const generalQuestionItems: AccordionItemProps[] = [
   },
 ];
 
-export default generalQuestionItems;
+export default SearchOperations.makeAccordionItemsSearchable(predictionFaqItems);

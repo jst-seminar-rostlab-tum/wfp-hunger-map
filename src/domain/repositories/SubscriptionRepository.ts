@@ -1,4 +1,4 @@
-import { ISubscribe, ITopic } from '../entities/subscribe/Subscribe';
+import { ISubscribe, ISubscribeResponse, ITopic } from '../entities/subscribe/Subscribe';
 
 export default interface SubscriptionRepository {
   /**
@@ -6,7 +6,7 @@ export default interface SubscriptionRepository {
    * @param subscribe is the subscription details.
    * @returns A promise that resolves to a boolean indicating the success of the operation.
    */
-  subscribe(subscribe: ISubscribe): Promise<boolean>;
+  subscribe(subscribe: ISubscribe): Promise<ISubscribeResponse>;
 
   /**
    * get all the topics that a user can subscribe to.

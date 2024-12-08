@@ -1,8 +1,8 @@
-import { ISubscribe, ITopic } from '@/domain/entities/subscribe/Subscribe';
+import { ISubscribe, ISubscribeResponse, ITopic } from '@/domain/entities/subscribe/Subscribe';
 import SubscriptionRepository from '@/domain/repositories/SubscriptionRepository';
 
 export default class SubscriptionRepositoryImpl implements SubscriptionRepository {
-  async subscribe(subscribe: ISubscribe): Promise<boolean> {
+  async subscribe(subscribe: ISubscribe): Promise<ISubscribeResponse> {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_EMAIL_SERVICE}/subscribe`, {
         method: 'POST',
@@ -12,10 +12,11 @@ export default class SubscriptionRepositoryImpl implements SubscriptionRepositor
         body: JSON.stringify(subscribe),
       });
 
-      if (response.ok) {
-        return Promise.resolve(true);
-      }
-      return Promise.resolve(false);
+      // TODO: wait backend to return the failed message when subscribe failed
+      return Promise.resolve({
+        ok: response.ok,
+        message: response.ok ? 'Subscribed successfully' : 'Failed to subscribe',
+      });
     } catch (error) {
       return Promise.reject(error);
     }

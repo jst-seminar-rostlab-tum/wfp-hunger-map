@@ -15,6 +15,7 @@ import { SelectedCountryIdProvider } from '@/domain/contexts/SelectedCountryIdCo
 import { SelectedMapProvider } from '@/domain/contexts/SelectedMapContext';
 import { SelectedMapVisibilityProvider } from '@/domain/contexts/SelectedMapVisibilityContext';
 import { SidebarProvider } from '@/domain/contexts/SidebarContext';
+import { SnackbarProvider } from '@/domain/contexts/SnackbarContext';
 
 export interface ProvidersProps {
   children: React.ReactNode;
@@ -33,7 +34,9 @@ export function Providers({ children, themeProps }: ProvidersProps) {
               <SelectedMapProvider>
                 <SelectedAlertProvider>
                   <SelectedCountryIdProvider>
-                    <AccordionsModalProvider>{children}</AccordionsModalProvider>
+                    <AccordionsModalProvider>
+                      <SnackbarProvider>{children}</SnackbarProvider>
+                    </AccordionsModalProvider>
                   </SelectedCountryIdProvider>
                 </SelectedAlertProvider>
               </SelectedMapProvider>

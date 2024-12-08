@@ -18,3 +18,8 @@ export interface ISubscribe {
   country_ids?: string[];
   topic_id?: string;
 }
+
+export interface ISubscribeResponse {
+  ok: boolean;
+  message: string;
+}

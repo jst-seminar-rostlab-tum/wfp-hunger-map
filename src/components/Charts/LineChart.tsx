@@ -8,9 +8,10 @@ import OfflineExporting from 'highcharts/modules/offline-exporting';
 import HighchartsReact from 'highcharts-react-official';
 import { Maximize4 } from 'iconsax-react';
 import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import LineChartBarLineSwitchButton from '@/components/Charts/helpers/LineChartBarLineSwitchButton';
+import LineChartDownloadButton from '@/components/Charts/helpers/LineChartDownloadButton';
 import LineChartSliderButton from '@/components/Charts/helpers/LineChartSliderButton';
 import LineChartXAxisSlider from '@/components/Charts/helpers/LineChartXAxisSlider';
 import { LineChartModal } from '@/components/Charts/LineChartModal';
@@ -88,6 +89,8 @@ export function LineChart({
   // handling the x-axis range slider visibility
   const [showXAxisSlider, setShowXAxisSlider] = useState(false);
 
+  const chartRef = useRef<HighchartsReact.RefObject | null>(null);
+
   // handling the line and bar chart switch and the theme switch;
   // also handling changing the x-axis range using the `LineChartXAxisSlider`;
   // special: if the selected x-axis range has length 1 -> bar chart is displayed
@@ -121,27 +124,24 @@ export function LineChart({
           <div
             className={`flex flex-row gap-0.5 pt-${0.5 * MAIN_BOX_PADDING_FACTOR} pr-${0.5 * MAIN_BOX_PADDING_FACTOR}`}
           >
-            {
-              // button to hide/show the slider to manipulate the plotted x-axis range of the chart;
-              // can be disabled via `xAxisSlider`
-              xAxisSlider && (
-                <LineChartSliderButton
-                  showXAxisSlider={showXAxisSlider}
-                  setShowXAxisSlider={setShowXAxisSlider}
-                  size={ICON_BUTTON_SIZE}
-                />
-              )
-            }
-            {
-              // button to switch between line and bar chart; can be disabled via `barChartSwitch`
-              barChartSwitch && (
-                <LineChartBarLineSwitchButton
-                  showBarChart={showBarChart}
-                  setShowBarChart={setShowBarChart}
-                  size={ICON_BUTTON_SIZE}
-                />
-              )
-            }
+            {xAxisSlider && (
+              <LineChartSliderButton
+                showXAxisSlider={showXAxisSlider}
+                setShowXAxisSlider={setShowXAxisSlider}
+                size={ICON_BUTTON_SIZE}
+              />
+            )}
+
+            {barChartSwitch && (
+              <LineChartBarLineSwitchButton
+                showBarChart={showBarChart}
+                setShowBarChart={setShowBarChart}
+                size={ICON_BUTTON_SIZE}
+              />
+            )}
+
+            <LineChartDownloadButton chartRef={chartRef} lineChartData={lineChartData} />
+
             {
               // button to trigger the full screen modal; rendered if `expandable`
               expandable && (
@@ -166,6 +166,7 @@ export function LineChart({
         <HighchartsReact
           highcharts={Highcharts}
           options={chartOptions}
+          ref={chartRef}
           containerProps={{
             style: {
               width: '100%',

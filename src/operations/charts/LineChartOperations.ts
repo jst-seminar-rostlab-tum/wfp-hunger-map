@@ -390,6 +390,7 @@ export default class LineChartOperations {
     chart.chart.exportChartLocal({
       type: 'image/png',
       filename: 'chart-download',
+      enabled: true,
     });
   }
 

@@ -115,7 +115,7 @@ export function Sidebar({ countryMapData, fcsData }: SidebarProps) {
                       nutritionData,
                       ipcData
                     )
-                      ? 'No data!'
+                      ? 'No data'
                       : undefined
                   }
                 >

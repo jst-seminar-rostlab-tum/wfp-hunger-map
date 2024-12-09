@@ -2,7 +2,6 @@ import { FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
 import React from 'react';
 
 import CountryLoadingLayer from '@/components/Map/CountryLoading';
-import { CountryIpcData } from '@/domain/entities/country/CountryIpcData.ts';
 import { useIpcQuery } from '@/domain/hooks/globalHooks';
 import { IpcChoroplethProps } from '@/domain/props/IpcChoroplethProps';
 
@@ -27,7 +26,7 @@ function IpcChoropleth({
     <>
       {ipcData && (
         <IpcGlobalChoropleth
-          ipcData={ipcData as CountryIpcData[]}
+          ipcData={ipcData}
           countries={countries}
           setSelectedCountryId={setSelectedCountryId}
           selectedCountryId={selectedCountryId}

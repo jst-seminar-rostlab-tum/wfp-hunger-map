@@ -4,6 +4,7 @@ import { useTheme } from 'next-themes';
 import React, { useEffect, useRef } from 'react';
 import { GeoJSON } from 'react-leaflet';
 
+import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 import { LayerWithFeature } from '@/domain/entities/map/LayerWithFeature.ts';
 import FcsChoroplethProps from '@/domain/props/FcsChoroplethProps';
 import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
@@ -22,6 +23,7 @@ export default function FcsChoropleth({
   countryData,
   countryIso3Data,
   selectedCountryName,
+  fcsData,
 }: FcsChoroplethProps) {
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
   const { theme } = useTheme();
@@ -36,7 +38,7 @@ export default function FcsChoropleth({
     geoJsonRef.current.eachLayer((layer: LayerWithFeature) => {
       if (!layer) return;
       const feature = layer.feature as Feature;
-      if (feature.properties?.adm0_id !== selectedCountryId) {
+      if (FcsChoroplethOperations.checkIfActive(data.features[0] as CountryMapData, fcsData)) {
         const tooltipContainer = MapboxMapOperations.createCountryNameTooltipElement(feature?.properties?.adm0_name);
         layer.bindTooltip(tooltipContainer, { className: 'leaflet-tooltip', sticky: true });
       } else {
@@ -47,16 +49,18 @@ export default function FcsChoropleth({
 
   return (
     <div>
-      <GeoJSON
-        ref={(instance) => {
-          geoJsonRef.current = instance;
-        }}
-        data={data}
-        style={FcsChoroplethOperations.countryStyle}
-        onEachFeature={(feature, layer) =>
-          FcsChoroplethOperations.onEachFeature(feature, layer, setSelectedCountryId, theme === 'dark')
-        }
-      />
+      {countryId !== selectedCountryId && (
+        <GeoJSON
+          ref={(instance) => {
+            geoJsonRef.current = instance;
+          }}
+          data={data}
+          style={FcsChoroplethOperations.countryStyle(data.features[0], theme === 'dark', fcsData)}
+          onEachFeature={(feature, layer) =>
+            FcsChoroplethOperations.onEachFeature(feature, layer, setSelectedCountryId, theme === 'dark', fcsData)
+          }
+        />
+      )}
       {/* Animated GeoJSON layer for the selected country */}
       {!regionData && selectedCountryId && (
         <CountryLoadingLayer

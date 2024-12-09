@@ -107,7 +107,7 @@ export function LineChart({
         LineChartOperations.getHighChartOptions(lineChartData, roundLines, selectedXAxisRange[0], selectedXAxisRange[1])
       );
     }
-  }, [showBarChart, theme, selectedXAxisRange]);
+  }, [showBarChart, theme, selectedXAxisRange, lineChartData]);
 
   return (
     <>

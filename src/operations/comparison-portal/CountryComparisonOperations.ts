@@ -18,9 +18,9 @@ export class CountryComparisonOperations {
         showRange: true,
         dataPoints: countryData.fcsGraph.map((fcsChartData) => ({
           x: new Date(fcsChartData.x).getTime(),
-          y: fcsChartData.fcs,
-          yRangeMin: fcsChartData.fcsLow,
-          yRangeMax: fcsChartData.fcsHigh,
+          y: formatToMillion(fcsChartData.fcs),
+          yRangeMin: formatToMillion(fcsChartData.fcsLow),
+          yRangeMax: formatToMillion(fcsChartData.fcsHigh),
         })),
       })),
     };
@@ -37,9 +37,9 @@ export class CountryComparisonOperations {
         showRange: true,
         dataPoints: countryData.rcsiGraph.map((rcsiChartData) => ({
           x: new Date(rcsiChartData.x).getTime(),
-          y: rcsiChartData.rcsi,
-          yRangeMin: rcsiChartData.rcsiLow,
-          yRangeMax: rcsiChartData.rcsiHigh,
+          y: formatToMillion(rcsiChartData.rcsi),
+          yRangeMin: formatToMillion(rcsiChartData.rcsiLow),
+          yRangeMax: formatToMillion(rcsiChartData.rcsiHigh),
         })),
       })),
     };

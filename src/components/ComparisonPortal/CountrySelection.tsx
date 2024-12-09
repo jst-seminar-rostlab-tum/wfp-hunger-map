@@ -5,6 +5,7 @@ import { useMemo } from 'react';
 
 import { CountrySelectionProps } from '@/domain/props/CountrySelectionProps';
 import { CountrySelectionOperations } from '@/operations/comparison-portal/CountrySelectionOperations';
+import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
 
 export default function CountrySelection({
   countryMapData,
@@ -17,7 +18,7 @@ export default function CountrySelection({
       .filter(
         (country) =>
           // filter out countries that don't have fcs data
-          !globalFcsData[country.properties.adm0_id]?.fcs ||
+          !FcsChoroplethOperations.checkIfActive(country, globalFcsData) ||
           // if there are already 5 selected countries, disable the rest
           (selectedCountries.length >= 5 &&
             !selectedCountries.find(

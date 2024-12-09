@@ -10,6 +10,9 @@ export interface IMessage {
 export interface IChat {
   id: number;
   title: string;
+  context?: string;
+  isReportStarter?: boolean;
   messages: IMessage[];
   isTyping: boolean;
+  timestamp: number;
 }

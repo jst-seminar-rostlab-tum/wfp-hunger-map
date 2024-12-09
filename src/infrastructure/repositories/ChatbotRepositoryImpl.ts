@@ -14,6 +14,7 @@ export default class ChatbotRepositoryImpl implements ChatbotRepository {
   async sendMessage(message: string, options: Partial<Omit<QueryRequest, 'query'>>): Promise<QueryResponse> {
     try {
       const payload: QueryRequest = {
+        context: options.context || '',
         query: message,
         version: options.version || 1,
         chatbot_type: options.chatbot_type || 'gpt-4',

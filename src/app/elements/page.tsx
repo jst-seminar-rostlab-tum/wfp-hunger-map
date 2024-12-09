@@ -112,10 +112,11 @@ export default async function Elements() {
     ],
   };
 
-  const predictionDummyChartData1: LineChartData = {
+  const predictionDummyChartData: LineChartData = {
     type: LineChartDataType.LINE_CHART_DATA,
     xAxisType: 'linear',
     yAxisLabel: 'Mill',
+    predictionVerticalLineX: 3,
     lines: [
       {
         name: 'Category A',
@@ -129,8 +130,7 @@ export default async function Elements() {
       },
       {
         name: 'Prediction',
-        dashStyle: 'LongDash',
-        color: 'hsl(var(--nextui-chartForecast))',
+        prediction: true,
         dataPoints: [
           { x: 0, y: 4 },
           { x: 1, y: 7 },
@@ -140,99 +140,6 @@ export default async function Elements() {
           { x: 5, y: 5 },
           { x: 6, y: 6 },
         ],
-      },
-    ],
-    verticalLines: [
-      {
-        x: 3,
-      },
-    ],
-  };
-
-  const predictionDummyChartData2: LineChartData = {
-    type: LineChartDataType.LINE_CHART_DATA,
-    xAxisType: 'linear',
-    yAxisLabel: 'Mill',
-    lines: [
-      {
-        name: 'Category A',
-        showRange: true,
-        dataPoints: [
-          { x: 0, y: 4, yRangeMin: 3.5, yRangeMax: 5 },
-          { x: 1, y: 3, yRangeMin: 2, yRangeMax: 4 },
-          { x: 2, y: 4, yRangeMin: 3.5, yRangeMax: 4.5 },
-          { x: 3, y: 8, yRangeMin: 7.5, yRangeMax: 8.5 },
-        ],
-      },
-      {
-        name: 'Prediction',
-        dashStyle: 'Dash',
-        color: 'hsl(var(--nextui-chartForecast))',
-        dataPoints: [
-          { x: 0, y: 4 },
-          { x: 1, y: 7 },
-          { x: 2, y: 5 },
-          { x: 3, y: 7 },
-          { x: 4, y: 8 },
-          { x: 5, y: 5 },
-          { x: 6, y: 6 },
-        ],
-      },
-    ],
-    verticalLines: [
-      {
-        x: 3,
-      },
-    ],
-    verticalBands: [
-      {
-        xStart: 3,
-        xEnd: 7,
-        label: 'Future',
-      },
-    ],
-  };
-
-  const predictionDummyChartData3: LineChartData = {
-    type: LineChartDataType.LINE_CHART_DATA,
-    xAxisType: 'linear',
-    yAxisLabel: 'Mill',
-    lines: [
-      {
-        name: 'Category A',
-        showRange: true,
-        dataPoints: [
-          { x: 0, y: 4, yRangeMin: 3.5, yRangeMax: 5 },
-          { x: 1, y: 3, yRangeMin: 2, yRangeMax: 4 },
-          { x: 2, y: 4, yRangeMin: 3.5, yRangeMax: 4.5 },
-          { x: 3, y: 8, yRangeMin: 7.5, yRangeMax: 8.5 },
-        ],
-      },
-      {
-        name: 'Prediction',
-        dashStyle: 'Dot',
-        color: 'hsl(var(--nextui-chartForecast))',
-        dataPoints: [
-          { x: 0, y: 4 },
-          { x: 1, y: 7 },
-          { x: 2, y: 5 },
-          { x: 3, y: 7 },
-          { x: 4, y: 8 },
-          { x: 5, y: 5 },
-          { x: 6, y: 6 },
-        ],
-      },
-    ],
-    verticalLines: [
-      {
-        x: 3,
-      },
-    ],
-    verticalBands: [
-      {
-        xStart: 2.5,
-        xEnd: 3.5,
-        label: 'Today',
       },
     ],
   };
@@ -277,13 +184,7 @@ export default async function Elements() {
           />
         </div>
         <div className="w-400px h-fit">
-          <LineChart title="" data={predictionDummyChartData1} expandable xAxisSlider barChartSwitch />
-        </div>
-        <div className="w-400px h-fit">
-          <LineChart title="" data={predictionDummyChartData2} expandable xAxisSlider barChartSwitch />
-        </div>
-        <div className="w-400px h-fit">
-          <LineChart title="" data={predictionDummyChartData3} expandable xAxisSlider barChartSwitch />
+          <LineChart title="" data={predictionDummyChartData} expandable xAxisSlider barChartSwitch />
         </div>
       </div>
       <MapSkeleton />

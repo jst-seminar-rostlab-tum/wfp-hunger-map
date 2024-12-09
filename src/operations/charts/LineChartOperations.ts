@@ -35,15 +35,9 @@ export default class LineChartOperations {
    * All lines that are marked as `prediction` are colored with the same predictions color,
    * to distinguish multiple predictions data series we use different dash styling.
    */
-  private static PREDICTIONS_DASH_STYLES: DashStyleValue[] = [
-    'Dash',
-    'Dot',
-    'DashDot',
-    'LongDash',
-    'LongDashDotDot',
-    'ShortDash',
-    'ShortDashDotDot',
-  ];
+  private static getPredictionsDashStyles(): DashStyleValue[] {
+    return ['ShortDashDotDot', 'ShortDash', 'LongDashDotDot', 'LongDash', 'DashDot', 'Dot', 'Dash'];
+  }
 
   /**
    * The first four line colors are fixed; if more than four lines are rendered,
@@ -51,10 +45,10 @@ export default class LineChartOperations {
    */
   private static getLineColorList() {
     return [
-      'hsl(var(--nextui-clusterOrange))',
-      'hsl(var(--nextui-clusterBlue))',
-      'hsl(var(--nextui-clusterGreen))',
       'hsl(var(--nextui-clusterRed))',
+      'hsl(var(--nextui-clusterGreen))',
+      'hsl(var(--nextui-clusterBlue))',
+      'hsl(var(--nextui-clusterOrange))',
     ];
   }
 
@@ -208,6 +202,7 @@ export default class LineChartOperations {
     // parsing all given data series
     const series: SeriesOptionsType[] = [];
     const defaultLineColors = LineChartOperations.getLineColorList();
+    const defaultPredictionsDashStyles = LineChartOperations.getPredictionsDashStyles();
     for (let i = 0; i < data.lines.length; i += 1) {
       const lineData = data.lines[i];
 
@@ -215,23 +210,20 @@ export default class LineChartOperations {
       // if `prediction` is set, the standard predictions color is used
       // if more than four lines are rendered the default Highcharts colors will be used (`categoryColor` stays undefined)
       let categoryColor;
-      if (lineData.prediction) {
-        categoryColor = 'hsl(var(--nextui-chartForecast))';
-      } else if (lineData.color) {
+      if (lineData.color) {
         categoryColor = lineData.color;
+      } else if (lineData.prediction) {
+        categoryColor = 'hsl(var(--nextui-chartForecast))';
       } else {
         categoryColor = defaultLineColors.pop();
       }
 
       // select dash style
-      let categoryDashStyle: DashStyleValue;
-      if (lineData.prediction) {
-        categoryDashStyle =
-          LineChartOperations.PREDICTIONS_DASH_STYLES[i % LineChartOperations.PREDICTIONS_DASH_STYLES.length];
-      } else if (lineData.dashStyle) {
+      let categoryDashStyle: DashStyleValue = 'Solid';
+      if (lineData.dashStyle) {
         categoryDashStyle = lineData.dashStyle;
-      } else {
-        categoryDashStyle = 'Solid';
+      } else if (lineData.prediction) {
+        categoryDashStyle = defaultPredictionsDashStyles.pop() || 'Solid';
       }
 
       // collect series data
@@ -282,7 +274,7 @@ export default class LineChartOperations {
           name: lineData.name,
           data: seriesData,
           color: categoryColor,
-          categoryDashStyle,
+          dashStyle: categoryDashStyle,
         });
       }
 
@@ -329,6 +321,43 @@ export default class LineChartOperations {
       }
     }
 
+    // build all vertical lines and plot bands
+    const verticalBands = data.verticalBands ? [...data.verticalBands] : [];
+    const verticalLines = data.verticalLines ? [...data.verticalLines] : [];
+    if (data.predictionVerticalLineX) {
+      // get max x value
+      const xMax = Math.max(...data.lines.flatMap((l) => l.dataPoints.map((p) => p.x)));
+      verticalBands.push({
+        xStart: data.predictionVerticalLineX,
+        xEnd: xMax,
+        label: 'Future',
+      });
+    }
+    if (data.predictionVerticalLineX) {
+      verticalLines.push({
+        x: data.predictionVerticalLineX,
+      });
+    }
+    const plotBands = verticalBands.map((b) => ({
+      from: b.xStart,
+      to: b.xEnd,
+      color: b.color || 'rgba(140,140,140,0.07)',
+      zIndex: 1,
+      label: {
+        text: b.label || '',
+        style: {
+          color: 'hsl(var(--nextui-secondary))',
+          fontSize: '0.7rem',
+        },
+      },
+    }));
+    const plotLines = verticalLines.map((l) => ({
+      value: l.x,
+      color: l.color || 'hsl(var(--nextui-chartsGridLine))',
+      dashStyle: l.dashStyle,
+      zIndex: 2,
+    }));
+
     // constructing the final HighCharts.Options
     return {
       title: {
@@ -360,25 +389,8 @@ export default class LineChartOperations {
         lineColor: 'hsl(var(--nextui-chartsXAxisLine))',
         tickColor: 'hsl(var(--nextui-chartsXAxisLine))',
         tickLength: 4,
-        plotBands: data.verticalBands?.map((b) => ({
-          from: b.xStart,
-          to: b.xEnd,
-          color: b.color || 'rgba(140,140,140,0.07)',
-          zIndex: 1,
-          label: {
-            text: b.label || '',
-            style: {
-              color: 'hsl(var(--nextui-secondary))',
-              fontSize: '0.7rem',
-            },
-          },
-        })),
-        plotLines: data.verticalLines?.map((l) => ({
-          value: l.x,
-          color: l.color || 'hsl(var(--nextui-chartsGridLine))',
-          dashStyle: l.dashStyle,
-          zIndex: 2,
-        })),
+        plotBands,
+        plotLines,
       },
       yAxis: {
         title: {

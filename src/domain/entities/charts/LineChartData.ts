@@ -9,6 +9,19 @@ export interface LineChartDataPoint {
   yRangeMax?: number;
 }
 
+export interface ChartVerticalLine {
+  x: number;
+  color?: string;
+  dashStyle?: DashStyleValue;
+}
+
+export interface ChartVerticalBand {
+  xStart?: number; // if null -> band extends to the end of the axis dynamically
+  xEnd?: number; // if null -> band extends to the end of the axis dynamically
+  color?: string;
+  label?: string;
+}
+
 /**
  * Important: if xAxisType=AxisTypeValue.datetime is selected the lines.dataPoints x values should be
  * formatted as milliseconds: new Date(x).getTime() (example: new Date('2024-06-14').getTime()
@@ -18,7 +31,6 @@ export interface LineChartDataPoint {
  * Important: if the `dashStyle` is not defined or 'Solid' the bars are filled entirely,
  * if any other `dashStyle` is chosen the bars are always filled with a "striped" pattern.
  *
- * todo explain prediction and predictionStart
  * If a line is marked as `prediction` the color and dash-style todo
  */
 export interface LineChartData {
@@ -26,7 +38,7 @@ export interface LineChartData {
   xAxisType: AxisTypeValue;
   yAxisLabel?: string;
   roundLines?: boolean;
-  predictionsVerticalLineX?: number;
+  predictionVerticalLineX?: number;
   lines: {
     name: string;
     dataPoints: LineChartDataPoint[];
@@ -35,15 +47,6 @@ export interface LineChartData {
     dashStyle?: DashStyleValue;
     prediction?: boolean;
   }[];
-  verticalLines?: {
-    x: number;
-    color?: string;
-    dashStyle?: DashStyleValue;
-  }[];
-  verticalBands?: {
-    xStart: number;
-    xEnd: number;
-    color?: string;
-    label?: string;
-  }[];
+  verticalLines?: ChartVerticalLine[];
+  verticalBands?: ChartVerticalBand[];
 }

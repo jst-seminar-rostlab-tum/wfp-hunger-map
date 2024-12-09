@@ -1,5 +1,6 @@
 import { Button } from '@nextui-org/button';
 import { Card, CardBody, CardHeader } from '@nextui-org/card';
+import { Spinner } from '@nextui-org/spinner';
 import { SidebarRight } from 'iconsax-react';
 import NextImage from 'next/image';
 
@@ -7,9 +8,10 @@ import { useAccordionsModal } from '@/domain/contexts/AccodionsModalContext';
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
+import { CollapsedSidebarProps } from '@/domain/props/CollapsedSidebarProps';
 import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
 
-export function CollapsedSidebar() {
+export function CollapsedSidebar({ mapDataFetching }: CollapsedSidebarProps) {
   const { toggleSidebar } = useSidebar();
   const { selectedMapType, setSelectedMapType } = useSelectedMap();
   const { clearAccordionModal } = useAccordionsModal();
@@ -37,7 +39,10 @@ export function CollapsedSidebar() {
                 className={selectedMapType === item.key ? 'bg-primary' : undefined}
                 onClick={() => onMapTypeSelect(item.key)}
               >
-                <NextImage unoptimized loading="eager" src={item.icon} alt={item.label} width={24} height={24} />
+                <div className="flex items-center justify-center relative">
+                  <NextImage unoptimized loading="eager" src={item.icon} alt={item.label} width={24} height={24} />
+                  {mapDataFetching[item.key] && <Spinner className="absolute" color="white" />}
+                </div>
               </Button>
             ))}
           </div>

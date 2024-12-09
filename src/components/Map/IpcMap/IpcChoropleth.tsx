@@ -1,12 +1,15 @@
+import { FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
 import React from 'react';
 
+import CountryLoadingLayer from '@/components/Map/CountryLoading';
+import { CountryIpcData } from '@/domain/entities/country/CountryIpcData.ts';
+import { useIpcQuery } from '@/domain/hooks/globalHooks';
 import { IpcChoroplethProps } from '@/domain/props/IpcChoroplethProps';
 
 import IpcCountryChoropleth from './IpcCountryChoropleth';
 import IpcGlobalChoropleth from './IpcGlobalChoropleth';
 
 function IpcChoropleth({
-  ipcData,
   countries,
   selectedCountryId,
   setSelectedCountryId,
@@ -18,14 +21,30 @@ function IpcChoropleth({
     setSelectedCountryId(null);
   };
 
+  const { data: ipcData } = useIpcQuery(true);
+
   return (
-    <div>
-      <IpcGlobalChoropleth
-        ipcData={ipcData}
-        countries={countries}
-        setSelectedCountryId={setSelectedCountryId}
-        selectedCountryId={selectedCountryId}
-      />
+    <>
+      {ipcData && (
+        <IpcGlobalChoropleth
+          ipcData={ipcData as CountryIpcData[]}
+          countries={countries}
+          setSelectedCountryId={setSelectedCountryId}
+          selectedCountryId={selectedCountryId}
+        />
+      )}
+      {!ipcRegionData && selectedCountryId && (
+        <CountryLoadingLayer
+          data={
+            {
+              type: 'FeatureCollection',
+              features: countries.features.filter((feature) => feature?.properties?.adm0_id === selectedCountryId),
+            } as FeatureCollection<Geometry, GeoJsonProperties>
+          }
+          selectedCountryId={selectedCountryId}
+          color="hsl(var(--nextui-ipcAnimation))"
+        />
+      )}
 
       {ipcRegionData && (
         <IpcCountryChoropleth
@@ -35,7 +54,7 @@ function IpcChoropleth({
           handleBackButtonClick={handleBackClick}
         />
       )}
-    </div>
+    </>
   );
 }
 

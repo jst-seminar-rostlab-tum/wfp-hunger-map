@@ -1,9 +1,6 @@
-import { FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
-
-import { CountryMimiData } from '../entities/country/CountryMimiData';
+import { FeatureCollection } from 'geojson';
 
 export interface NutritionStateChoroplethProps {
-  regionNutrition: CountryMimiData | undefined;
-  regionData: FeatureCollection<Geometry, GeoJsonProperties>;
+  regionNutrition?: FeatureCollection;
   countryName?: string;
 }

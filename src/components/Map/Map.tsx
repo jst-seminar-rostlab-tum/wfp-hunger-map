@@ -22,7 +22,6 @@ import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { CountryData } from '@/domain/entities/country/CountryData.ts';
 import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data.ts';
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
-import { CountryMimiData } from '@/domain/entities/country/CountryMimiData.ts';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight';
 import { MapProps } from '@/domain/props/MapProps';
 import { MapOperations } from '@/operations/map/MapOperations.ts';
@@ -33,7 +32,7 @@ import IpcChoropleth from './IpcMap/IpcChoropleth';
 import NutritionChoropleth from './NutritionChoropleth';
 import ZoomControl from './ZoomControl';
 
-export default function Map({ countries, disputedAreas, ipcData, fcsData, nutritionData, alertData }: MapProps) {
+export default function Map({ countries, disputedAreas, fcsData, alertData }: MapProps) {
   const mapRef = useRef<LeafletMap | null>(null);
   const { selectedMapType } = useSelectedMap();
   const { setSelectedMapVisibility } = useSelectedMapVisibility();
@@ -45,7 +44,7 @@ export default function Map({ countries, disputedAreas, ipcData, fcsData, nutrit
   const [countryIso3Data, setCountryIso3Data] = useState<CountryIso3Data | undefined>();
   const [regionData, setRegionData] = useState<FeatureCollection<Geometry, GeoJsonProperties> | undefined>();
   const [countryClickLoading, setCountryClickLoading] = useState<boolean>(false);
-  const [regionNutritionData, setRegionNutritionData] = useState<CountryMimiData | undefined>();
+  const [regionNutritionData, setRegionNutritionData] = useState<FeatureCollection | undefined>();
   const [ipcRegionData, setIpcRegionData] = useState<FeatureCollection<Geometry, GeoJsonProperties> | undefined>();
   const [selectedCountryName, setSelectedCountryName] = useState<string | undefined>(undefined);
 
@@ -166,9 +165,7 @@ export default function Map({ countries, disputedAreas, ipcData, fcsData, nutrit
               data={{ type: 'FeatureCollection', features: [country as Feature<Geometry, GeoJsonProperties>] }}
               selectedCountryId={selectedCountryId}
               setSelectedCountryId={setSelectedCountryId}
-              nutritionData={nutritionData}
               regionNutritionData={regionNutritionData}
-              regionData={regionData}
               selectedCountryName={selectedCountryName}
             />
           ))}
@@ -188,7 +185,6 @@ export default function Map({ countries, disputedAreas, ipcData, fcsData, nutrit
       {selectedMapType === GlobalInsight.IPC && (
         <IpcChoropleth
           countries={countries}
-          ipcData={ipcData}
           selectedCountryId={selectedCountryId}
           setSelectedCountryId={setSelectedCountryId}
           countryData={countryData}

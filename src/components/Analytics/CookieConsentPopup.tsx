@@ -35,7 +35,7 @@ export function CookieConsentPopup() {
 
   if (cookieConsent !== null || !loaded) return null;
   return (
-    <div className="absolute bottom-8 lg:bottom-4 left-1/2 p-4 items-center -translate-x-1/2 mx-auto rounded-md bg-content2 flex gap-2 justify-between z-cookieConsent w-full lg:w-2/5">
+    <div className="fixed bottom-8 lg:bottom-4 left-1/2 p-4 items-center -translate-x-1/2 mx-auto rounded-md bg-content2 flex gap-2 justify-between z-cookieConsent w-full lg:w-2/5">
       <p className="text-xs">
         We use cookies to gather anonymized website traffic data to improve user experience. No personal information is
         collected or shared.

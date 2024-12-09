@@ -8,6 +8,7 @@ import FcsChoroplethProps from '@/domain/props/FcsChoroplethProps';
 import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
 import { MapboxMapOperations } from '@/operations/map/MapboxMapOperations';
 
+import CountryLoadingLayer from './CountryLoading';
 import FscCountryChoropleth from './FcsCountryChoropleth';
 
 export default function FcsChoropleth({
@@ -52,6 +53,14 @@ export default function FcsChoropleth({
         style={FcsChoroplethOperations.countryStyle}
         onEachFeature={(feature, layer) => FcsChoroplethOperations.onEachFeature(feature, layer, setSelectedCountryId)}
       />
+      {/* Animated GeoJSON layer for the selected country */}
+      {!regionData && selectedCountryId && (
+        <CountryLoadingLayer
+          data={data}
+          selectedCountryId={selectedCountryId}
+          color="hsl(var(--nextui-fcsAnimation))"
+        />
+      )}
       {regionData && countryId === selectedCountryId && (
         <FscCountryChoropleth
           regionData={regionData}

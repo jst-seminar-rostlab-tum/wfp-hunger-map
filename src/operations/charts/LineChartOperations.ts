@@ -31,15 +31,32 @@ if (typeof Highcharts === 'object') {
  */
 export default class LineChartOperations {
   /**
+   * List of different dash styles for visualizing prediction data.
+   * All lines that are marked as `prediction` are colored with the same predictions color,
+   * to distinguish multiple predictions data series we use different dash styling.
+   */
+  private static PREDICTIONS_DASH_STYLES: DashStyleValue[] = [
+    'Dash',
+    'Dot',
+    'DashDot',
+    'LongDash',
+    'LongDashDotDot',
+    'ShortDash',
+    'ShortDashDotDot',
+  ];
+
+  /**
    * The first four line colors are fixed; if more than four lines are rendered,
    * the default Highcharts colors will be used.
    */
-  private static LINE_COLORS = [
-    'hsl(var(--nextui-clusterOrange))',
-    'hsl(var(--nextui-clusterBlue))',
-    'hsl(var(--nextui-clusterGreen))',
-    'hsl(var(--nextui-clusterRed))',
-  ];
+  private static getLineColorList() {
+    return [
+      'hsl(var(--nextui-clusterOrange))',
+      'hsl(var(--nextui-clusterBlue))',
+      'hsl(var(--nextui-clusterGreen))',
+      'hsl(var(--nextui-clusterRed))',
+    ];
+  }
 
   /**
    * Formatter function for `LineChart.Options.tooltip.formatter` usage only.
@@ -190,16 +207,31 @@ export default class LineChartOperations {
 
     // parsing all given data series
     const series: SeriesOptionsType[] = [];
+    const defaultLineColors = LineChartOperations.getLineColorList();
     for (let i = 0; i < data.lines.length; i += 1) {
       const lineData = data.lines[i];
 
       // the first four line colors are fixed; however, they can also be overridden by the `color` property;
-      // if more than four lines are rendered the default Highcharts colors will be used
+      // if `prediction` is set, the standard predictions color is used
+      // if more than four lines are rendered the default Highcharts colors will be used (`categoryColor` stays undefined)
       let categoryColor;
-      if (lineData.color) {
+      if (lineData.prediction) {
+        categoryColor = 'hsl(var(--nextui-chartForecast))';
+      } else if (lineData.color) {
         categoryColor = lineData.color;
-      } else if (i < this.LINE_COLORS.length) {
-        categoryColor = this.LINE_COLORS[i];
+      } else {
+        categoryColor = defaultLineColors.pop();
+      }
+
+      // select dash style
+      let categoryDashStyle: DashStyleValue;
+      if (lineData.prediction) {
+        categoryDashStyle =
+          LineChartOperations.PREDICTIONS_DASH_STYLES[i % LineChartOperations.PREDICTIONS_DASH_STYLES.length];
+      } else if (lineData.dashStyle) {
+        categoryDashStyle = lineData.dashStyle;
+      } else {
+        categoryDashStyle = 'Solid';
       }
 
       // collect series data
@@ -218,7 +250,6 @@ export default class LineChartOperations {
       seriesData.sort((a, b) => a.x! - b.x!);
 
       // build series object for highchart
-      const dashStyle: DashStyleValue = lineData.dashStyle ? lineData.dashStyle : 'Solid';
       if (barChart) {
         // plot series as bars
         series.push({
@@ -227,7 +258,7 @@ export default class LineChartOperations {
           data: seriesData,
           color:
             // if the dashStyle is not solid we fill the bars with diagonal lines
-            dashStyle !== 'Solid'
+            categoryDashStyle !== 'Solid'
               ? {
                   pattern: {
                     path: {
@@ -251,7 +282,7 @@ export default class LineChartOperations {
           name: lineData.name,
           data: seriesData,
           color: categoryColor,
-          dashStyle,
+          categoryDashStyle,
         });
       }
 

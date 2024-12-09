@@ -17,18 +17,23 @@ export interface LineChartDataPoint {
  *
  * Important: if the `dashStyle` is not defined or 'Solid' the bars are filled entirely,
  * if any other `dashStyle` is chosen the bars are always filled with a "striped" pattern.
+ *
+ * todo explain prediction and predictionStart
+ * If a line is marked as `prediction` the color and dash-style todo
  */
 export interface LineChartData {
   type: LineChartDataType.LINE_CHART_DATA;
   xAxisType: AxisTypeValue;
   yAxisLabel?: string;
   roundLines?: boolean;
+  predictionsVerticalLineX?: number;
   lines: {
     name: string;
     dataPoints: LineChartDataPoint[];
     showRange?: boolean;
     color?: string;
     dashStyle?: DashStyleValue;
+    prediction?: boolean;
   }[];
   verticalLines?: {
     x: number;

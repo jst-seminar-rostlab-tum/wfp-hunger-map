@@ -31,7 +31,9 @@ export interface ChartVerticalBand {
  * Important: if the `dashStyle` is not defined or 'Solid' the bars are filled entirely,
  * if any other `dashStyle` is chosen the bars are always filled with a "striped" pattern.
  *
- * If a line is marked as `prediction` the color and dash-style todo
+ * If a line is marked as `prediction` the color and dash-style are automatically set by the LineChart component.
+ * If a `predictionVerticalLineX` is chosen a vertical band, titled with "Future" is added automatically,
+ * starting from `predictionVerticalLineX` and spanning to the end of the chart.
  */
 export interface LineChartData {
   type: LineChartDataType.LINE_CHART_DATA;

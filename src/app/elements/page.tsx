@@ -144,6 +144,50 @@ export default async function Elements() {
     ],
   };
 
+  const multiplePredictionsDummyChartData: LineChartData = {
+    type: LineChartDataType.LINE_CHART_DATA,
+    xAxisType: 'linear',
+    yAxisLabel: 'Mill',
+    predictionVerticalLineX: 3,
+    lines: [
+      {
+        name: 'Category A',
+        showRange: true,
+        dataPoints: [
+          { x: 0, y: 4, yRangeMin: 3.5, yRangeMax: 5 },
+          { x: 1, y: 3, yRangeMin: 2, yRangeMax: 4 },
+          { x: 2, y: 4, yRangeMin: 3.5, yRangeMax: 4.5 },
+          { x: 3, y: 8, yRangeMin: 7.5, yRangeMax: 8.5 },
+        ],
+      },
+      {
+        name: 'Prediction 1',
+        prediction: true,
+        dataPoints: [
+          { x: 0, y: 4 },
+          { x: 1, y: 7 },
+          { x: 2, y: 5 },
+          { x: 3, y: 7 },
+          { x: 4, y: 8 },
+          { x: 5, y: 5 },
+          { x: 6, y: 6 },
+        ],
+      },
+      {
+        name: 'Prediction 2',
+        prediction: true,
+        dataPoints: [
+          { x: 0, y: 6 },
+          { x: 1, y: 5 },
+          { x: 2, y: 6 },
+          { x: 3, y: 7 },
+          { x: 4, y: 7 },
+          { x: 5, y: 8 },
+        ],
+      },
+    ],
+  };
+
   return (
     <div className="w-full flex flex-col items-center justify-center">
       <div className="svg-icon">
@@ -185,6 +229,9 @@ export default async function Elements() {
         </div>
         <div className="w-400px h-fit">
           <LineChart title="" data={predictionDummyChartData} expandable xAxisSlider barChartSwitch />
+        </div>
+        <div className="w-400px h-fit">
+          <LineChart title="" data={multiplePredictionsDummyChartData} expandable xAxisSlider barChartSwitch />
         </div>
       </div>
       <MapSkeleton />

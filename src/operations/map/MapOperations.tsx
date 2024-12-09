@@ -1,5 +1,7 @@
 import { Feature as GeoJsonFeature, FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
+import { createRoot } from 'react-dom/client';
 
+import CountryHoverPopover from '@/components/CountryHoverPopover/CountryHoverPopover';
 import container from '@/container';
 import { Feature } from '@/domain/entities/common/Feature';
 import { CountryData } from '@/domain/entities/country/CountryData.ts';
@@ -90,4 +92,15 @@ export class MapOperations {
     type: 'FeatureCollection',
     features: countryFeatures as GeoJsonFeature<Geometry, GeoJsonProperties>[],
   });
+
+  /**
+   * Create a 'HTMLDivElement' rending the given 'countryName' within a 'CountryHoverPopover'.
+   * Needed cause leaflet tooltips do not accept React components.
+   */
+  static createCountryNameTooltipElement(countryName: string): HTMLDivElement {
+    const tooltipContainer = document.createElement('div');
+    const root = createRoot(tooltipContainer);
+    root.render(<CountryHoverPopover header={countryName} />);
+    return tooltipContainer;
+  }
 }

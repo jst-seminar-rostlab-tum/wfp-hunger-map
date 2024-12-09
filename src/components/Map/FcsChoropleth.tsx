@@ -7,7 +7,7 @@ import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext
 import { LayerWithFeature } from '@/domain/entities/map/LayerWithFeature.ts';
 import FcsChoroplethProps from '@/domain/props/FcsChoroplethProps';
 import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
-import { MapboxMapOperations } from '@/operations/map/MapboxMapOperations';
+import { MapOperations } from '@/operations/map/MapOperations';
 
 import CountryLoadingLayer from './CountryLoading';
 import FscCountryChoropleth from './FcsCountryChoropleth';
@@ -35,7 +35,7 @@ export default function FcsChoropleth({
       if (!layer) return;
       const feature = layer.feature as Feature;
       if (feature.properties?.adm0_id !== selectedCountryId) {
-        const tooltipContainer = MapboxMapOperations.createCountryNameTooltipElement(feature?.properties?.adm0_name);
+        const tooltipContainer = MapOperations.createCountryNameTooltipElement(feature?.properties?.adm0_name);
         layer.bindTooltip(tooltipContainer, { className: 'leaflet-tooltip', sticky: true });
       } else {
         layer.unbindTooltip();

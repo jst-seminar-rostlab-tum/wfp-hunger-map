@@ -8,7 +8,7 @@ import { CountryNutrition } from '@/domain/entities/country/CountryNutrition';
 import { LayerWithFeature } from '@/domain/entities/map/LayerWithFeature.ts';
 import { useNutritionQuery } from '@/domain/hooks/globalHooks';
 import NutritionChoroplethProps from '@/domain/props/NutritionChoroplethProps';
-import { MapboxMapOperations } from '@/operations/map/MapboxMapOperations';
+import { MapOperations } from '@/operations/map/MapOperations';
 import NutritionChoroplethOperations from '@/operations/map/NutritionChoroplethOperations';
 
 import CountryLoadingLayer from './CountryLoading';
@@ -47,7 +47,7 @@ export default function NutritionChoropleth({
           selectedCountryId
         )
       ) {
-        const tooltipContainer = MapboxMapOperations.createCountryNameTooltipElement(feature?.properties?.adm0_name);
+        const tooltipContainer = MapOperations.createCountryNameTooltipElement(feature?.properties?.adm0_name);
         layer.bindTooltip(tooltipContainer, { className: 'leaflet-tooltip', sticky: true });
       } else {
         layer.unbindTooltip();

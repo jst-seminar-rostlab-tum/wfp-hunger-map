@@ -24,7 +24,7 @@ import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data.ts';
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight';
 import { MapProps } from '@/domain/props/MapProps';
-import { MapOperations } from '@/operations/map/MapOperations.ts';
+import { MapOperations } from '@/operations/map/MapOperations';
 
 import { AlertContainer } from './Alerts/AlertContainer';
 import FcsChoropleth from './FcsChoropleth';

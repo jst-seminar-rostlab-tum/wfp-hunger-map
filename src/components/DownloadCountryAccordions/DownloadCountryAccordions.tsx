@@ -71,7 +71,7 @@ export default function DownloadCountryAccordion({ countries }: DownloadCountryA
             showSnackBar({
               message: DOWNLOAD_SUCCESS_MSG,
               status: SnackbarStatus.Success,
-              position: SnackbarPosition.TopMiddle,
+              position: SnackbarPosition.BottomRight,
               duration: SNACKBAR_SHORT_DURATION,
             });
           } else {
@@ -81,7 +81,7 @@ export default function DownloadCountryAccordion({ countries }: DownloadCountryA
             showSnackBar({
               message: DOWNLOAD_ERROR_MSG,
               status: SnackbarStatus.Error,
-              position: SnackbarPosition.TopMiddle,
+              position: SnackbarPosition.BottomRight,
               duration: SNACKBAR_SHORT_DURATION,
             });
           }

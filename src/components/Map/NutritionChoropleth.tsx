@@ -3,6 +3,7 @@ import L from 'leaflet';
 import React, { useEffect, useRef, useState } from 'react';
 import { GeoJSON } from 'react-leaflet';
 
+import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { CountryNutrition } from '@/domain/entities/country/CountryNutrition';
 import { LayerWithFeature } from '@/domain/entities/map/LayerWithFeature.ts';
 import { useNutritionQuery } from '@/domain/hooks/globalHooks';
@@ -16,13 +17,11 @@ import NutritionStateChoropleth from './NutritionStateChoropleth';
 export default function NutritionChoropleth({
   data,
   countryId,
-  selectedCountryId,
-  setSelectedCountryId,
   regionNutritionData,
   selectedCountryName,
 }: NutritionChoroplethProps) {
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
-
+  const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
   const [countryStyles, setCountryStyles] = useState<{ [key: number]: L.PathOptions }>({});
   const { data: nutritionData } = useNutritionQuery(true);
 

@@ -137,8 +137,6 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
                 key={country.properties.adm0_id}
                 countryId={country.properties.adm0_id}
                 data={{ type: 'FeatureCollection', features: [country as Feature<Geometry, GeoJsonProperties>] }}
-                selectedCountryId={selectedCountryId}
-                setSelectedCountryId={setSelectedCountryId}
                 loading={countryClickLoading}
                 countryData={countryData}
                 countryIso3Data={countryIso3Data}
@@ -163,8 +161,6 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
               key={country.properties.adm0_id}
               countryId={country.properties.adm0_id}
               data={{ type: 'FeatureCollection', features: [country as Feature<Geometry, GeoJsonProperties>] }}
-              selectedCountryId={selectedCountryId}
-              setSelectedCountryId={setSelectedCountryId}
               regionNutritionData={regionNutritionData}
               selectedCountryName={selectedCountryName}
             />
@@ -185,8 +181,6 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
       {selectedMapType === GlobalInsight.IPC && (
         <IpcChoropleth
           countries={countries}
-          selectedCountryId={selectedCountryId}
-          setSelectedCountryId={setSelectedCountryId}
           countryData={countryData}
           ipcRegionData={ipcRegionData}
           selectedCountryName={selectedCountryName}

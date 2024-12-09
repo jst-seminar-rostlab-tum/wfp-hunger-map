@@ -26,7 +26,7 @@ import NutritionChoropleth from './NutritionChoropleth';
 import VectorTileLayer from './VectorTileLayer';
 import ZoomControl from './ZoomControl';
 
-export default function Map({ countries, disputedAreas, ipcData, fcsData, nutritionData, alertData }: MapProps) {
+export default function Map({ countries, disputedAreas, fcsData, alertData }: MapProps) {
   const mapRef = useRef<LeafletMap | null>(null);
   const { selectedMapType } = useSelectedMap();
   const { setSelectedMapVisibility } = useSelectedMapVisibility();
@@ -111,28 +111,25 @@ export default function Map({ countries, disputedAreas, ipcData, fcsData, nutrit
       {countries && <VectorTileLayer countries={countries} disputedAreas={disputedAreas} />}
       {selectedMapType === GlobalInsight.FOOD &&
         countries.features &&
-        countries.features
-          .filter((country) => country.properties.interactive)
-          .filter((country) => fcsData[country.properties.adm0_id]?.fcs)
-          .map((country) => (
-            <FcsChoropleth
-              key={country.properties.adm0_id}
-              countryId={country.properties.adm0_id}
-              data={{ type: 'FeatureCollection', features: [country as Feature<Geometry, GeoJsonProperties>] }}
-              selectedCountryId={selectedCountryId}
-              setSelectedCountryId={setSelectedCountryId}
-              loading={countryClickLoading}
-              countryData={countryData}
-              countryIso3Data={countryIso3Data}
-              regionData={regionData}
-              selectedCountryName={selectedCountryName}
-            />
-          ))}
+        countries.features.map((country) => (
+          <FcsChoropleth
+            key={country.properties.adm0_id}
+            countryId={country.properties.adm0_id}
+            data={{ type: 'FeatureCollection', features: [country as Feature<Geometry, GeoJsonProperties>] }}
+            selectedCountryId={selectedCountryId}
+            setSelectedCountryId={setSelectedCountryId}
+            loading={countryClickLoading}
+            countryData={countryData}
+            countryIso3Data={countryIso3Data}
+            regionData={regionData}
+            selectedCountryName={selectedCountryName}
+            fcsData={fcsData}
+          />
+        ))}
 
       {selectedMapType === GlobalInsight.IPC && (
         <IpcChoropleth
           countries={countries}
-          ipcData={ipcData}
           selectedCountryId={selectedCountryId}
           setSelectedCountryId={setSelectedCountryId}
           countryData={countryData}
@@ -143,20 +140,17 @@ export default function Map({ countries, disputedAreas, ipcData, fcsData, nutrit
 
       {selectedMapType === GlobalInsight.NUTRITION &&
         countries.features &&
-        countries.features
-          .filter((country) => country.properties.interactive)
-          .map((country) => (
-            <NutritionChoropleth
-              key={country.properties.adm0_id}
-              countryId={country.properties.adm0_id}
-              data={{ type: 'FeatureCollection', features: [country as Feature<Geometry, GeoJsonProperties>] }}
-              selectedCountryId={selectedCountryId}
-              setSelectedCountryId={setSelectedCountryId}
-              nutritionData={nutritionData}
-              regionNutritionData={regionNutritionData}
-              selectedCountryName={selectedCountryName}
-            />
-          ))}
+        countries.features.map((country) => (
+          <NutritionChoropleth
+            key={country.properties.adm0_id}
+            countryId={country.properties.adm0_id}
+            data={{ type: 'FeatureCollection', features: [country as Feature<Geometry, GeoJsonProperties>] }}
+            selectedCountryId={selectedCountryId}
+            setSelectedCountryId={setSelectedCountryId}
+            regionNutritionData={regionNutritionData}
+            selectedCountryName={selectedCountryName}
+          />
+        ))}
       <ZoomControl threshold={5} callback={onZoomThresholdReached} />
       <BackToGlobalButton />
     </MapContainer>

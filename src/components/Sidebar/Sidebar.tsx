@@ -3,7 +3,7 @@
 import { Button } from '@nextui-org/button';
 import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
 import { Link } from '@nextui-org/link';
-import { Autocomplete, AutocompleteItem, ScrollShadow } from '@nextui-org/react';
+import { Autocomplete, AutocompleteItem, ScrollShadow, Spinner } from '@nextui-org/react';
 import clsx from 'clsx';
 import { SidebarLeft } from 'iconsax-react';
 import NextImage from 'next/image';
@@ -21,6 +21,7 @@ import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { AlertsMenuVariant } from '@/domain/enums/AlertsMenuVariant';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
+import { useIpcQuery, useNutritionQuery } from '@/domain/hooks/globalHooks.ts';
 import SidebarProps from '@/domain/props/SidebarProps.ts';
 import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
 import { useMediaQuery } from '@/utils/resolution';
@@ -28,13 +29,20 @@ import { useMediaQuery } from '@/utils/resolution';
 import PopupModal from '../PopupModal/PopupModal';
 import Subscribe from '../Subscribe/Subscribe';
 
-export function Sidebar({ countryMapData }: SidebarProps) {
+export function Sidebar({ countryMapData, fcsData }: SidebarProps) {
   const { isSidebarOpen, toggleSidebar, closeSidebar } = useSidebar();
   const { selectedMapType, setSelectedMapType } = useSelectedMap();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isMobile = useMediaQuery('(max-width: 640px)');
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
   const { clearAccordionModal } = useAccordionsModal();
+  const { isFetching: ipcDataIsFetching, data: ipcData } = useIpcQuery(false);
+  const { isFetching: nutritionDataIsFetching, data: nutritionData } = useNutritionQuery(false);
+
+  const mapDataFetching: Partial<Record<GlobalInsight, boolean>> = {
+    [GlobalInsight.IPC]: ipcDataIsFetching,
+    [GlobalInsight.NUTRITION]: nutritionDataIsFetching,
+  };
 
   const handleCountrySelect = (countryID: React.Key | null) => {
     if (countryID) {
@@ -43,7 +51,7 @@ export function Sidebar({ countryMapData }: SidebarProps) {
   };
 
   if (!isSidebarOpen) {
-    return <CollapsedSidebar />;
+    return <CollapsedSidebar mapDataFetching={mapDataFetching} />;
   }
 
   const onMapTypeSelect = (mapType: GlobalInsight) => {
@@ -90,6 +98,26 @@ export function Sidebar({ countryMapData }: SidebarProps) {
                   className="transition-all hover:text-background dark:text-foreground"
                   key={country.properties.adm0_id.toString()}
                   aria-label={country.properties.adm0_name}
+                  isDisabled={
+                    !SidebarOperations.checkAvailabilityOfData(
+                      country,
+                      selectedMapType,
+                      fcsData,
+                      nutritionData,
+                      ipcData
+                    )
+                  }
+                  endContent={
+                    !SidebarOperations.checkAvailabilityOfData(
+                      country,
+                      selectedMapType,
+                      fcsData,
+                      nutritionData,
+                      ipcData
+                    )
+                      ? 'No data'
+                      : undefined
+                  }
                 >
                   {country.properties.adm0_name}
                 </AutocompleteItem>
@@ -105,14 +133,17 @@ export function Sidebar({ countryMapData }: SidebarProps) {
                   <Button
                     startContent={
                       item.icon && (
-                        <NextImage
-                          unoptimized
-                          loading="eager"
-                          src={item.icon}
-                          alt={item.label}
-                          width={24}
-                          height={24}
-                        />
+                        <div className="flex items-center justify-center relative">
+                          <NextImage
+                            unoptimized
+                            loading="eager"
+                            src={item.icon}
+                            alt={item.label}
+                            width={24}
+                            height={24}
+                          />
+                          {mapDataFetching[item.key] && <Spinner className="absolute" color="white" />}
+                        </div>
                       )
                     }
                     key={item.key}

@@ -4,6 +4,8 @@ import { Accordion, AccordionItem } from '@nextui-org/accordion';
 import { Button } from '@nextui-org/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@nextui-org/popover';
 import { Spinner } from '@nextui-org/spinner';
+import { useEffect, useState } from 'react';
+import Highlighter from 'react-highlight-words';
 
 import { AccordionContainerProps } from '@/domain/props/AccordionContainerProps';
 import AccordionOperations from '@/operations/accordions/AccordionOperations';
@@ -20,10 +22,17 @@ export default function AccordionListItems({
   loading = false,
   multipleSelectionMode = false,
   noSelectionMode = false,
+  expandAll = false,
+  highlightedTitleWords = [],
 }: AccordionContainerProps) {
+  const [expandedItems, setExpandedItems] = useState<Set<string> | 'all'>(new Set());
   const selectionMode = AccordionOperations.getSelectionModeType(noSelectionMode, multipleSelectionMode);
-  const defaultExpandedKeys =
-    items.length === 1 ? [typeof items[0].title === 'string' ? items[0].title : `accordion-item-0`] : [];
+  const defaultExpandedKeys = items.length === 1 ? [items[0].title] : [];
+
+  useEffect(() => {
+    if (expandAll) setExpandedItems('all');
+    else setExpandedItems(new Set());
+  }, [expandAll]);
 
   return (
     <Accordion
@@ -31,17 +40,21 @@ export default function AccordionListItems({
       selectionMode={selectionMode}
       defaultExpandedKeys={defaultExpandedKeys}
       className="p-0 mb-4 gap-0"
+      selectedKeys={expandedItems}
+      onSelectionChange={(keys) => setExpandedItems(keys as Set<string>)}
     >
-      {items.map((item, index) => (
+      {items.map((item) => (
         <AccordionItem
-          key={typeof item.title === 'string' ? item.title : `accordion-item-${index}`}
-          aria-label={typeof item.title === 'string' ? item.title : `Accordion Item ${index}`}
+          key={item.title}
+          aria-label={item.title}
           className="bg-transparent overflow-hidden p-0 border-t-1 border-clickableSecondary rounded-none shadow-none"
           hideIndicator={noSelectionMode}
           title={
             <div className="flex justify-between items-center w-full">
               <div className="flex gap-4">
-                <span className="text-md font-light">{item.title}</span>
+                <span className="text-md font-light">
+                  <Highlighter searchWords={highlightedTitleWords} textToHighlight={item.title} autoEscape />
+                </span>
                 {loading && <Spinner size="sm" />}
               </div>
               {item.tooltipInfo && (

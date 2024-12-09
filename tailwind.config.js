@@ -37,6 +37,13 @@ const config = {
     'bg-fatalityAlert',
     'bg-climateWetAlert',
     'bg-climateDryAlert',
+    'bg-danger',
+    'bg-success',
+    'bg-warning',
+    'bg-default',
+    // for snackbar position
+    'bottom-4',
+    'left-4',
   ],
   content: [
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -136,6 +143,7 @@ const config = {
             clickableSecondary: '#E6E6E6',
             danger: '#D32F2F',
             warning: '#FFB600',
+            success: '#4CAF50',
             clusterGreen: '#85E77C',
             clusterOrange: '#FFB74D',
             clusterRed: '#FF5252',
@@ -201,6 +209,11 @@ const config = {
             nutritionPredicted: '#E3F2FD',
             nutritionNotAnalyzed: '#D2D1D1',
 
+            //animation 
+            nutritionAnimation: '#F7B750',
+            fcsAnimation: '#338ef7',
+            ipcAnimation: '#cd1919',
+
             countriesBase: '#fefeff',
             ocean: '#91cccb',
             fatalityAlert: '#742280',
@@ -228,6 +241,7 @@ const config = {
             clickableSecondary: '#424242',
             danger: '#EF5350',
             warning: '#FFEB3B',
+            success: '#4CAF50',
             clusterGreen: '#A3F39C',
             clusterOrange: '#FFB74D',
             clusterRed: '#FF5252',

@@ -23,6 +23,8 @@ export default function AccordionContainer({
   color = 'bg-content1',
   accordionModalActive,
   maxWidth,
+  expandAll = false,
+  highlightedTitleWords = [],
 }: AccordionContainerProps) {
   const isMobile = useMediaQuery('(max-width: 700px)');
   const { setModalContent, setModalTitle } = useAccordionsModal();
@@ -38,6 +40,8 @@ export default function AccordionContainer({
           loading={loading}
           multipleSelectionMode={multipleSelectionMode}
           noSelectionMode={noSelectionMode}
+          expandAll={expandAll}
+          highlightedTitleWords={highlightedTitleWords}
         />
       );
       setModalTitle(title || '');
@@ -54,6 +58,8 @@ export default function AccordionContainer({
       noSelectionMode={noSelectionMode}
       color={color}
       maxWidth={maxWidth}
+      expandAll={expandAll}
+      highlightedTitleWords={highlightedTitleWords}
     />
   ) : null;
 }

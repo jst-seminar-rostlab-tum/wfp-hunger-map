@@ -1,7 +1,7 @@
-import { ReactNode } from 'react';
+import { ReactElement } from 'react';
 
 export interface WikiEntry {
   key: string;
   title: string;
-  content: ReactNode;
+  content: string | ReactElement;
 }

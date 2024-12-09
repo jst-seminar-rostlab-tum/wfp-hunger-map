@@ -4,6 +4,7 @@ import CustomTable from '@/components/Table/CustomTable';
 import Abbreviation from '@/components/Tooltip/Abbreviation';
 import { AccordionItemProps } from '@/domain/entities/accordions/Accordions';
 import { CustomTableColumns, DataSourceTableData } from '@/domain/props/CustomTableProps';
+import { SearchOperations } from '@/operations/Search/SearchOperations';
 
 const dataSourceTableColumns = [
   { columnId: 'keyColumn', label: 'Data type', alignLeft: true },
@@ -242,28 +243,33 @@ const otherTable: DataSourceTableData = [
 const dataSourceAccordionItems: AccordionItemProps[] = [
   {
     title: 'Context and Need',
-    content: <CustomTable columns={dataSourceTableColumns} data={contextAndNeedTableData} format="dataSources" />,
+    data: contextAndNeedTableData,
   },
   {
     title: 'Food Security',
-    content: <CustomTable columns={dataSourceTableColumns} data={foodSecurityTableData} format="dataSources" />,
+    data: foodSecurityTableData,
   },
   {
     title: 'Nutrition',
-    content: <CustomTable columns={dataSourceTableColumns} data={nutritionTable} format="dataSources" />,
+    data: nutritionTable,
   },
   {
     title: 'Markets',
-    content: <CustomTable columns={dataSourceTableColumns} data={marketsTable} format="dataSources" />,
+    data: marketsTable,
   },
   {
     title: 'Seasonal Information',
-    content: <CustomTable columns={dataSourceTableColumns} data={seasonalTable} format="dataSources" />,
+    data: seasonalTable,
   },
   {
     title: 'Other',
-    content: <CustomTable columns={dataSourceTableColumns} data={otherTable} format="dataSources" />,
+    data: otherTable,
   },
-];
+].map(({ title, data }) => {
+  return {
+    title,
+    content: <CustomTable columns={dataSourceTableColumns} data={data} format="dataSources" ariaLabel={title} />,
+  };
+});
 
-export default dataSourceAccordionItems;
+export default SearchOperations.makeDataSourceAccordionSearchable(dataSourceAccordionItems);

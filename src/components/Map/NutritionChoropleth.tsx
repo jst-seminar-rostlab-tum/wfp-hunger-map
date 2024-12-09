@@ -11,6 +11,7 @@ import NutritionChoroplethProps from '@/domain/props/NutritionChoroplethProps';
 import { MapboxMapOperations } from '@/operations/map/MapboxMapOperations';
 import NutritionChoroplethOperations from '@/operations/map/NutritionChoroplethOperations';
 
+import CountryLoadingLayer from './CountryLoading';
 import NutritionStateChoropleth from './NutritionStateChoropleth';
 
 export default function NutritionChoropleth({
@@ -62,6 +63,14 @@ export default function NutritionChoropleth({
               nutritionData
             )
           }
+        />
+      )}
+      {/* Animated GeoJSON layer for the selected country */}
+      {!regionNutritionData && selectedCountryId && (
+        <CountryLoadingLayer
+          data={data}
+          selectedCountryId={selectedCountryId}
+          color="hsl(var(--nextui-nutritionAnimation))"
         />
       )}
       {

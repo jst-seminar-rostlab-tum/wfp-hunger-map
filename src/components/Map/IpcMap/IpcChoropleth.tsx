@@ -1,5 +1,7 @@
+import { FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
 import React from 'react';
 
+import CountryLoadingLayer from '@/components/Map/CountryLoading';
 import { useIpcQuery } from '@/domain/hooks/globalHooks';
 import { IpcChoroplethProps } from '@/domain/props/IpcChoroplethProps';
 
@@ -21,13 +23,25 @@ function IpcChoropleth({
   const { data: ipcData } = useIpcQuery(true);
 
   return (
-    <div>
+    <>
       {ipcData && (
         <IpcGlobalChoropleth
           ipcData={ipcData}
           countries={countries}
           setSelectedCountryId={setSelectedCountryId}
           selectedCountryId={selectedCountryId}
+        />
+      )}
+      {!ipcRegionData && selectedCountryId && (
+        <CountryLoadingLayer
+          data={
+            {
+              type: 'FeatureCollection',
+              features: countries.features.filter((feature) => feature?.properties?.adm0_id === selectedCountryId),
+            } as FeatureCollection<Geometry, GeoJsonProperties>
+          }
+          selectedCountryId={selectedCountryId}
+          color="hsl(var(--nextui-ipcAnimation))"
         />
       )}
 
@@ -39,7 +53,7 @@ function IpcChoropleth({
           handleBackButtonClick={handleBackClick}
         />
       )}
-    </div>
+    </>
   );
 }
 

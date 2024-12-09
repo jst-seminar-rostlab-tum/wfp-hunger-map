@@ -10,6 +10,7 @@ export type CustomTableRow = {
     keyColumn: ReactNode;
     [columnKey: string]: ReactNode;
   };
+  containedWords?: string;
 };
 
 export type CustomTableColumns = { columnId: string; label: ReactNode; alignLeft?: boolean }[] & {
@@ -21,6 +22,7 @@ export type CustomTableData = {
   groupKey: string | number;
   groupName: ReactNode;
   attributeRows: readonly { [columnId: string]: ReactNode }[];
+  containedWords?: string;
 }[];
 
 export default interface CustomTableProps<D> {
@@ -33,7 +35,7 @@ export default interface CustomTableProps<D> {
   showBorders?: boolean;
 }
 
-export type DataSourceTableData = {
+export type DataSourceTableRow = {
   label: string;
   description: ReactNode;
   readMoreLink?: string;
@@ -41,7 +43,9 @@ export type DataSourceTableData = {
   dataSourceLink?: string;
   updateInterval?: string;
   updateDetails?: readonly { label: ReactNode; interval: string }[];
-}[];
+};
+
+export type DataSourceTableData = DataSourceTableRow[];
 
 export type SimpleTableData = {
   keyColumn: ReactNode;

@@ -40,6 +40,7 @@ export default class NutritionChoroplethOperations {
         if (this.checkIfActive(feature, nutritionData)) {
           NutritionChoroplethOperations.handleCountryClick(feature, setSelectedCountryId);
         }
+        document.getElementsByClassName('leaflet-container').item(0)?.classList.remove('interactive');
       },
     });
     layer.on('mouseover', () => {
@@ -47,6 +48,7 @@ export default class NutritionChoroplethOperations {
         pathLayer.setStyle({
           fillOpacity: 0.8,
         });
+        document.getElementsByClassName('leaflet-container').item(0)?.classList.add('interactive');
       }
     });
     pathLayer.on('mouseout', () => {
@@ -54,6 +56,7 @@ export default class NutritionChoroplethOperations {
         pathLayer.setStyle({
           fillOpacity: 0.5,
         });
+        document.getElementsByClassName('leaflet-container').item(0)?.classList.remove('interactive');
       }
     });
   }

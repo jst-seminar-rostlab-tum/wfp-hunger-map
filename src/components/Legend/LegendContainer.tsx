@@ -19,7 +19,7 @@ export default function LegendContainer({ items, loading = false }: LegendContai
   const [showInfoPopup, setInfoPopup] = useState(false);
 
   return !isMobile ? (
-    <div className="w-[450px] absolute bottom-3 right-20 z-legend">
+    <div className="w-[450px] absolute bottom-0 right-20 z-legend">
       <AccordionContainer
         loading={loading}
         multipleSelectionMode

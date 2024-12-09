@@ -1,8 +1,5 @@
-import { LatLngExpression } from 'leaflet';
-
 import { Feature } from '@/domain/entities/common/Feature.ts';
 
-import { Geometry } from '../common/Geometry';
 import { RegionNutritionProperties } from '../region/RegionNutritionProperties';
 
 export interface CountryMimiData {
@@ -13,7 +10,6 @@ export interface CountryMimiData {
     };
   };
   features: (Feature<RegionNutritionProperties> & {
-    geometry: Geometry<LatLngExpression[][][]>;
     id: string;
   })[];
 }

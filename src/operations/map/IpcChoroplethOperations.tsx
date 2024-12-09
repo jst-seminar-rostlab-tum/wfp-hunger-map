@@ -96,13 +96,18 @@ export class IpcChoroplethOperations {
     layer.on({
       click: () => {
         setSelectedCountryId(feature?.properties?.adm0_id);
+        document.getElementsByClassName('leaflet-container').item(0)?.classList.remove('interactive');
       },
       mouseover: () => {
         pathLayer.setStyle({ ...originalStyle, fillOpacity: 0.7 });
+        document.getElementsByClassName('leaflet-container').item(0)?.classList.add('interactive');
+
         pathLayer.openTooltip();
       },
       mouseout: () => {
         pathLayer.setStyle(originalStyle);
+        document.getElementsByClassName('leaflet-container').item(0)?.classList.remove('interactive');
+
         pathLayer.closeTooltip();
       },
     });

@@ -126,6 +126,10 @@ path.leaflet-interactive:focus {
   scrollbar-color: theme('colors.content3') transparent;
 }
 
-.leaflet-interactive:hover {
-  cursor: default !important;
+.leaflet-container .leaflet-interactive {
+  cursor: default;
+}
+
+.leaflet-container.interactive .leaflet-interactive {
+  cursor: pointer;
 }

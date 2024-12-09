@@ -7,3 +7,9 @@ export const getColors = (isDark: boolean): MapColorsType => ({
   outline: isDark ? '#0e2a3a' : '#306f96',
   roads: isDark ? '#404040' : '#808080',
 });
+
+export const inactiveCountryOverlayStyling = (isDark: boolean) => ({
+  color: getColors(isDark).inactiveCountriesOverlay,
+  fillOpacity: isDark ? 0.2 : 0.5,
+  stroke: false,
+});

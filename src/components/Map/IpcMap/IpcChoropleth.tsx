@@ -3,7 +3,6 @@ import React from 'react';
 
 import CountryLoadingLayer from '@/components/Map/CountryLoading';
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
-import { CountryIpcData } from '@/domain/entities/country/CountryIpcData.ts';
 import { useIpcQuery } from '@/domain/hooks/globalHooks';
 import { IpcChoroplethProps } from '@/domain/props/IpcChoroplethProps';
 
@@ -21,7 +20,7 @@ function IpcChoropleth({ countries, countryData, ipcRegionData, selectedCountryN
     <>
       {ipcData && (
         <IpcGlobalChoropleth
-          ipcData={ipcData as CountryIpcData[]}
+          ipcData={ipcData}
           countries={countries}
           setSelectedCountryId={setSelectedCountryId}
           selectedCountryId={selectedCountryId}

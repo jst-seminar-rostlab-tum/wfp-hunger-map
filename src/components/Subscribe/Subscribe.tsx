@@ -1,7 +1,6 @@
 'use client';
 
 import { Divider, Input } from '@nextui-org/react';
-import { motion } from 'framer-motion';
 import { Facebook, Instagram, Twitch, Youtube } from 'iconsax-react';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -17,7 +16,10 @@ import {
   TOPIC_MANDATORY_MSG,
   UNSUCCESSFUL_SUBSCRIPTION,
 } from '@/domain/constant/subscribe/Subscribe';
+import { useSnackbar } from '@/domain/contexts/SnackbarContext';
+import { SNACKBAR_SHORT_DURATION } from '@/domain/entities/snackbar/Snackbar';
 import { ITopic } from '@/domain/entities/subscribe/Subscribe';
+import { SnackbarPosition, SnackbarStatus } from '@/domain/enums/Snackbar';
 import { SubmitStatus } from '@/domain/enums/SubscribeTopic';
 import SubscriptionRepository from '@/domain/repositories/SubscriptionRepository';
 
@@ -41,6 +43,8 @@ export default function SubscriptionForm() {
 
   const [subscribeStatus, setSubscribeStatus] = useState<SubmitStatus>(SubmitStatus.Idle);
   const [isWaitingSubResponse, setIsWaitingSubResponse] = useState(false);
+
+  const { showSnackBar } = useSnackbar();
 
   const validateEmail = useCallback((newEmail: string): boolean => {
     return !!newEmail.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i);
@@ -101,12 +105,24 @@ export default function SubscriptionForm() {
             topic_id: topic,
           })
           .then((res) => {
-            if (res) {
-              setSubscribeStatus(SubmitStatus.Success);
+            if (res.ok) {
+              setSubscribeStatus(SubmitStatus.Idle);
               setIsWaitingSubResponse(false);
+              showSnackBar({
+                message: res.message ? res.message : SUCCESSFUL_SUBSCRIPTION, // if the response message is empty, show the default message
+                status: SnackbarStatus.Success,
+                position: SnackbarPosition.TopMiddle,
+                duration: SNACKBAR_SHORT_DURATION,
+              });
             } else {
-              setSubscribeStatus(SubmitStatus.Error);
+              setSubscribeStatus(SubmitStatus.Idle);
               setIsWaitingSubResponse(false);
+              showSnackBar({
+                message: res.message ? res.message : UNSUCCESSFUL_SUBSCRIPTION, // if the response message is empty, show the default message
+                status: SnackbarStatus.Error,
+                position: SnackbarPosition.TopMiddle,
+                duration: SNACKBAR_SHORT_DURATION,
+              });
             }
           });
       } catch (err) {
@@ -170,24 +186,6 @@ export default function SubscriptionForm() {
           submitStatus={subscribeStatus}
           className="w-full bg-subscribeText dark:bg-subscribeText text-white dark:text-black shadow-lg self-center"
         />
-        {subscribeStatus === SubmitStatus.Success && (
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-green-500 mt-4 text-center"
-          >
-            {SUCCESSFUL_SUBSCRIPTION}
-          </motion.p>
-        )}
-        {subscribeStatus === SubmitStatus.Error && (
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-red-500 mt-4 text-center"
-          >
-            {UNSUCCESSFUL_SUBSCRIPTION}
-          </motion.p>
-        )}
       </form>
 
       <div className="flex gap-1">

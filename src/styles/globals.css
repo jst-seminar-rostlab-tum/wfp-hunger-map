@@ -83,7 +83,7 @@ path.leaflet-interactive:focus {
   font-size: 0.875rem !important;
   line-height: 1.25rem !important;
 }
- /* shrink mapbox-popup tip triangle */
+/* shrink mapbox-popup tip triangle */
 .mapbox-popup-transparent .mapboxgl-popup-tip {
   width: 6px !important;
   height: 12px !important;
@@ -127,5 +127,5 @@ path.leaflet-interactive:focus {
 }
 
 .leaflet-interactive:hover {
-  cursor: default !important; 
+  cursor: default !important;
 }

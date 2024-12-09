@@ -129,21 +129,19 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
       </Pane>
       {selectedMapType === GlobalInsight.FOOD && countries.features && (
         <>
-          {countries.features
-            .filter((country) => country.properties.interactive)
-            .filter((country) => fcsData[country.properties.adm0_id]?.fcs)
-            .map((country) => (
-              <FcsChoropleth
-                key={country.properties.adm0_id}
-                countryId={country.properties.adm0_id}
-                data={{ type: 'FeatureCollection', features: [country as Feature<Geometry, GeoJsonProperties>] }}
-                loading={countryClickLoading}
-                countryData={countryData}
-                countryIso3Data={countryIso3Data}
-                regionData={regionData}
-                selectedCountryName={selectedCountryName}
-              />
-            ))}
+          {countries.features.map((country) => (
+            <FcsChoropleth
+              key={country.properties.adm0_id}
+              countryId={country.properties.adm0_id}
+              data={{ type: 'FeatureCollection', features: [country as Feature<Geometry, GeoJsonProperties>] }}
+              loading={countryClickLoading}
+              countryData={countryData}
+              countryIso3Data={countryIso3Data}
+              regionData={regionData}
+              selectedCountryName={selectedCountryName}
+              fcsData={fcsData}
+            />
+          ))}
           {!selectedCountryId && (
             <Pane name="fcs_raster" style={{ zIndex: 2 }}>
               <TileLayer url="https://static.hungermapdata.org/proteus_tiles/{z}/{x}/{y}.png" tms />
@@ -153,18 +151,15 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
       )}
 
       {selectedMapType === GlobalInsight.NUTRITION &&
-        countries.features &&
-        countries.features
-          .filter((country) => country.properties.interactive)
-          .map((country) => (
-            <NutritionChoropleth
-              key={country.properties.adm0_id}
-              countryId={country.properties.adm0_id}
-              data={{ type: 'FeatureCollection', features: [country as Feature<Geometry, GeoJsonProperties>] }}
-              regionNutritionData={regionNutritionData}
-              selectedCountryName={selectedCountryName}
-            />
-          ))}
+        countries.features.map((country) => (
+          <NutritionChoropleth
+            key={country.properties.adm0_id}
+            countryId={country.properties.adm0_id}
+            data={{ type: 'FeatureCollection', features: [country as Feature<Geometry, GeoJsonProperties>] }}
+            regionNutritionData={regionNutritionData}
+            selectedCountryName={selectedCountryName}
+          />
+        ))}
 
       {selectedMapType === GlobalInsight.VEGETATION && (
         <Pane name="vegetation_raster" style={{ zIndex: 2 }}>
@@ -199,6 +194,9 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
           style={disputedAreaStyle}
         />
       </Pane>
+
+      <ZoomControl threshold={5} callback={onZoomThresholdReached} />
+      <BackToGlobalButton />
     </MapContainer>
   );
 }

@@ -6,7 +6,6 @@ import { useEffect, useRef, useState } from 'react';
 import { MapContainer } from 'react-leaflet';
 
 import BackToGlobalButton from '@/components/Map/BackToGlobalButton';
-import WorldInactiveCountriesOverlay from '@/components/Map/WorldInactiveCountriesOverlay';
 import { MAP_MAX_ZOOM, MAP_MIN_ZOOM } from '@/domain/constant/map/Map';
 import { useSelectedAlert } from '@/domain/contexts/SelectedAlertContext';
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
@@ -138,8 +137,6 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
           selectedCountryName={selectedCountryName}
         />
       )}
-
-      {selectedMapType === GlobalInsight.RAINFALL && <WorldInactiveCountriesOverlay data={countries} />}
 
       {selectedMapType === GlobalInsight.NUTRITION &&
         countries.features &&

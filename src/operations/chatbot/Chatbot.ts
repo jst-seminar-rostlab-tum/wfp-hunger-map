@@ -30,6 +30,9 @@ export default class ChatbotOperations {
           (chat: IChat & { timestamp?: number }) => !chat.timestamp || chat.timestamp > oneDayAgo
         );
 
+        // Clean up localStorage by saving only the chats that are not older than 24 hours
+        localStorage.setItem('chatbotChatsWithTimestamp', JSON.stringify(recentChats));
+
         // If no recent chats, return default chat
         if (recentChats.length === 0) {
           return [

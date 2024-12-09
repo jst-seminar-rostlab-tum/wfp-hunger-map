@@ -201,9 +201,9 @@ const config = {
             nutritionPredicted: '#E3F2FD',
             nutritionNotAnalyzed: '#D2D1D1',
 
-            //animation 
+            //animation
             nutritionAnimation: '#F7B750',
-            fcsAnimation: '#338ef7',
+            fcsAnimation: '#157dbc',
             ipcAnimation: '#cd1919',
 
             countriesBase: '#fefeff',
@@ -263,6 +263,7 @@ const config = {
             chartsLegendBackground: '#2a2a2a',
             chartsXAxisLine: '#757575',
             nutritionNotAnalyzed: '#A69F9F',
+            fcsAnimation: '#014a5e',
           },
         },
       },

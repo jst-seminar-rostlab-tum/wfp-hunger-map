@@ -61,7 +61,7 @@ export class MapOperations {
         if (newRegionNutritionData && newRegionNutritionData.features) {
           setRegionNutritionData({
             type: 'FeatureCollection',
-            features: newRegionNutritionData.features as Feature<Geometry, GeoJsonProperties>[],
+            features: newRegionNutritionData.features as GeoJsonFeature<Geometry, GeoJsonProperties>[],
           });
         }
       }

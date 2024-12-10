@@ -82,9 +82,20 @@ export function NestedPopover({ items, onSelectionChange }: NestedPopoverProps) 
    * take care of nested menu open state
    * @param itemId is the id of the nested menu item
    */
-  const handleNestedMenuToggle = (itemId: string): void => {
-    setOpenNestedMenu(openNestedMenu === itemId ? null : itemId);
-    setIsNestedOpen(true);
+  const hoverNestedMenuItem = (itemId: string): void => {
+    const hoveredItem = items.find((it) => it.topic_id === itemId);
+    if (hoveredItem?.options && hoveredItem.options.length > 0) {
+      setOpenNestedMenu(itemId);
+      setIsNestedOpen(true);
+    }
+  };
+
+  const hoverMainMenuItem = (itemId: string): void => {
+    const hoveredMainItem = items.find((it) => it.topic_id === itemId);
+    if (hoveredMainItem?.options === undefined || hoveredMainItem?.options.length === 0) {
+      setOpenNestedMenu(null);
+      setIsNestedOpen(false);
+    }
   };
 
   const ifOptionsSelected = (option: IOption): boolean => {
@@ -132,6 +143,7 @@ export function NestedPopover({ items, onSelectionChange }: NestedPopoverProps) 
                   key={item.topic_id}
                   className="m-1 h-10 text-left text-gray-700 hover:bg-blue-100 hover:text-black dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white p-2"
                   onClick={() => selectMainMenuItem(item)}
+                  onMouseEnter={() => hoverMainMenuItem(item.topic_id)}
                 >
                   {item.topic_description}
                 </div>
@@ -145,18 +157,17 @@ export function NestedPopover({ items, onSelectionChange }: NestedPopoverProps) 
                 <li key={item.topic_id} className="relative">
                   <div
                     className="m-1 h-10 flex flex-row justify-between items-center text-gray-700 hover:bg-blue-100 hover:text-black dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white p-2"
-                    onClick={() => handleNestedMenuToggle(item.topic_id)}
-                    onMouseEnter={() => handleNestedMenuToggle(item.topic_id)}
+                    onMouseEnter={() => hoverNestedMenuItem(item.topic_id)}
                   >
                     <p>{item.topic_description}</p>
                     <ArrowRight2 size={24} />
                   </div>
 
                   {/* nested menu items */}
-                  {isNestedOpen && openNestedMenu?.includes(item.topic_id) && (
+                  {isNestedOpen && openNestedMenu === item.topic_id && (
                     <div
                       ref={nestedMenuRef}
-                      className="absolute top-0 left-full bg-white dark:bg-background shadow-lg rounded-md w-56 z-10 border-[0.5px] border-solid border-gray-500 p-1"
+                      className="absolute bottom-0 left-full bg-white dark:bg-background shadow-lg rounded-md w-56 z-10 border-[0.5px] border-solid border-gray-500 p-1"
                     >
                       <ul>
                         {item.options?.map((option) => (

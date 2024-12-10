@@ -3,7 +3,7 @@ import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchange
 import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
 import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
 
-export default interface LineChartProps {
+export default interface CategoricalChartProps {
   data: LineChartData | BalanceOfTradeGraph | CurrencyExchangeGraph | InflationGraphs;
 
   title?: string;
@@ -14,7 +14,6 @@ export default interface LineChartProps {
   transparentBackground?: boolean;
 
   disableExpandable?: boolean;
-  disableBarChartSwitch?: boolean;
-  disableXAxisSlider?: boolean;
+  disablePieChartSwitch?: boolean;
   disableDownload?: boolean;
 }

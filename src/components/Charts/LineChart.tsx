@@ -22,41 +22,35 @@ import LineChartOperations from '@/operations/charts/LineChartOperations';
  * 1. Define an interface and add it to `LineChartProps.data`.
  * 2. Add another switch case in `LineChartOperations.convertToLineChartData` to convert the new interface to `LineChartData`.
  *
- * @param title chart title (optional)
+ * @param title chart title (optional) // todo all
  * @param description chart description text (optional)
  * @param expandable when selected, the user is given the option to open the chart in a larger modal (optional)
  * @param barChartSwitch when selected, the user is given the option to switch to a bar chart (optional)
  * @param xAxisSlider when selected, the user is given the option to change the x-axis range via a slider (optional)
  * @param small when selected, all components in the line chart box become slightly smaller (optional)
  * @param small when selected, the download button dropdown is not shown (optional)
- * @param roundLines when selected, all plotted lines will be rounded (optional)
  * @param noPadding when selected, the main box has no padding on all sides (optional)
  * @param transparentBackground when selected, the background of the entire component is transparent (optional)
  * @param data the actual data to be used in the chart
  */
 export function LineChart({
+  data,
   title,
   description,
-  expandable,
-  barChartSwitch,
-  xAxisSlider,
   small,
-  disableDownload,
-  roundLines,
   noPadding,
   transparentBackground,
-  data,
+  disableExpandable,
+  disableBarChartSwitch,
+  disableXAxisSlider,
+  disableDownload,
 }: LineChartProps) {
   // the 'chartOptions' are dependent on the theme
   const { theme } = useTheme();
 
   // convert data to `LineChartData` and build chart options for 'Highcharts' (line and bar chart)
   const lineChartData: LineChartData = LineChartOperations.convertToLineChartData(data);
-  const lineChartOptions: Highcharts.Options = LineChartOperations.getHighChartOptions(
-    lineChartData,
-    theme === 'dark',
-    roundLines
-  );
+  const lineChartOptions: Highcharts.Options = LineChartOperations.getHighChartOptions(lineChartData, theme === 'dark');
 
   // the `selectedXAxisRange` saves the to be rendered x-axis range of the chart
   // can be changed using the `LinkeChartXAxisSlider` if the param `xAxisSlider==true`
@@ -76,7 +70,6 @@ export function LineChart({
         LineChartOperations.getHighChartOptions(
           lineChartData,
           theme === 'dark',
-          roundLines,
           selectedXAxisRange[0],
           selectedXAxisRange[1],
           true
@@ -87,7 +80,6 @@ export function LineChart({
         LineChartOperations.getHighChartOptions(
           lineChartData,
           theme === 'dark',
-          roundLines,
           selectedXAxisRange[0],
           selectedXAxisRange[1]
         )
@@ -103,10 +95,13 @@ export function LineChart({
       description={description}
       small={small}
       noPadding={noPadding}
-      expandable={expandable}
+      disableExpandable={disableExpandable}
+      disableDownload={disableDownload}
       transparentBackground={transparentBackground}
-      showAlternativeChart={barChartSwitch ? showBarChart : undefined}
-      setShowAlternativeChart={barChartSwitch ? setShowBarChart : undefined}
+      disableAlternativeChart={disableBarChartSwitch}
+      showAlternativeChart={showBarChart}
+      setShowAlternativeChart={setShowBarChart}
+      disableSlider={disableXAxisSlider}
       sliderTitle="Adjusting x-axis range:"
       sliderMin={0}
       sliderMax={xAxisLength - 1}

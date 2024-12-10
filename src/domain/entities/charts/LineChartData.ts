@@ -39,7 +39,6 @@ export interface LineChartData {
   type: LineChartDataType.LINE_CHART_DATA;
   xAxisType: AxisTypeValue;
   yAxisLabel?: string;
-  roundLines?: boolean;
   predictionVerticalLineX?: number;
   lines: {
     name: string;

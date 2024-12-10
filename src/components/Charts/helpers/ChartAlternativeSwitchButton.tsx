@@ -2,7 +2,7 @@ import { Button } from '@nextui-org/button';
 import { Chart, Diagram } from 'iconsax-react';
 
 import { Tooltip } from '@/components/Tooltip/Tooltip';
-import { ChartTypeSwitchButtonProps } from '@/domain/props/LineChartProps';
+import { ChartTypeSwitchButtonProps } from '@/domain/props/ChartContainerProps';
 
 /**
  * This component is tied to the `ChartContainer` and `ChartModal` component and should not be used independently.

@@ -11,10 +11,8 @@ import ExportData from 'highcharts/modules/export-data';
 import Exporting from 'highcharts/modules/exporting';
 import OfflineExporting from 'highcharts/modules/offline-exporting';
 import patternFill from 'highcharts/modules/pattern-fill';
-import HighchartsReact from 'highcharts-react-official';
 
 import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph.ts';
-import { CategoricalChartData } from '@/domain/entities/charts/CategoricalChartData.ts';
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph.ts';
 import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
 import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
@@ -187,7 +185,6 @@ export default class LineChartOperations {
    *
    * @param data `LineChartData` object, containing all data to be plotted in the chart
    * @param isDark - `true` if dark mode is selected
-   * @param roundLines if true, all plotted lines will be rounded
    * @param barChart if true, bars are plotted instead of lines
    * @param xAxisSelectedMinIdx index of selected x-axis range min value
    * @param xAxisSelectedMaxIdx index of selected x-axis range max value
@@ -195,7 +192,6 @@ export default class LineChartOperations {
   public static getHighChartOptions(
     data: LineChartData,
     isDark: boolean,
-    roundLines?: boolean,
     xAxisSelectedMinIdx?: number,
     xAxisSelectedMaxIdx?: number,
     barChart?: boolean
@@ -278,7 +274,7 @@ export default class LineChartOperations {
       } else {
         // plot series as line
         series.push({
-          type: roundLines ? 'spline' : 'line',
+          type: 'line',
           name: lineData.name,
           data: seriesData,
           color: categoryColor,

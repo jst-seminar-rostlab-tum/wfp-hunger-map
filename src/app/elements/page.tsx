@@ -207,16 +207,6 @@ export default async function Elements() {
         <div className="w-250px h-fit">
           <LineChart data={simpleAndSmallLineChartData} small disableDownload />
         </div>
-        <div className="w-250px h-fit">
-          <LineChart
-            title="Small Rounded Line Chart"
-            description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy."
-            data={simpleLineChartData}
-            expandable
-            small
-            roundLines
-          />
-        </div>
         <div className="w-400px h-fit">
           <LineChart
             title="Maxed Out Line Chart"

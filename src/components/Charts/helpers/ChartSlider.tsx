@@ -2,7 +2,7 @@
 
 import { Slider } from '@nextui-org/slider';
 
-import { ChartSliderProps } from '@/domain/props/LineChartProps';
+import { ChartSliderProps } from '@/domain/props/ChartContainerProps';
 
 /**
  * This component is tied to the `ChartContainer` and `ChartModal` component and should not be used independently.

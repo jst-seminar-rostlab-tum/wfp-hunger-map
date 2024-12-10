@@ -5,9 +5,10 @@ import { useDisclosure } from '@nextui-org/modal';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { Maximize4 } from 'iconsax-react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import ChartAlternativeSwitchButton from '@/components/Charts/helpers/ChartAlternativeSwitchButton';
+import ChartDownloadButton from '@/components/Charts/helpers/ChartDownloadButton';
 import ChartSlider from '@/components/Charts/helpers/ChartSlider';
 import ChartSliderButton from '@/components/Charts/helpers/ChartSliderButton';
 import { Tooltip } from '@/components/Tooltip/Tooltip';
@@ -23,10 +24,13 @@ export function ChartContainer({
   description,
   small,
   noPadding,
-  expandable,
+  disableExpandable,
+  disableDownload,
   transparentBackground,
+  disableAlternativeChart,
   showAlternativeChart,
   setShowAlternativeChart,
+  disableSlider,
   sliderTitle,
   sliderMin,
   sliderMax,
@@ -40,14 +44,7 @@ export function ChartContainer({
   const HEADER_PADDING = title ? 3 : 0;
   const MAIN_BOX_PADDING_FACTOR = noPadding ? 0 : 1;
 
-  // slider only available and therefore activated if all required params are provided
-  const sliderAvailable =
-    typeof sliderMin !== 'undefined' &&
-    typeof sliderMax !== 'undefined' &&
-    selectedSliderRange &&
-    setSelectedSliderRange;
-  // chart type switch only available if all required params are provided
-  const chartTypeSwitchAvailable = typeof showAlternativeChart !== 'undefined' && setShowAlternativeChart;
+  const chartRef = useRef<HighchartsReact.RefObject | null>(null);
 
   // full screen modal state handling
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
@@ -69,23 +66,27 @@ export function ChartContainer({
           >
             {
               // button to hide/show the slider to e.g. manipulate the plotted x-axis range of the chart
-              sliderAvailable && (
+              !disableSlider && (
                 <ChartSliderButton showSlider={showSlider} setShowSlider={setShowSlider} size={ICON_BUTTON_SIZE} />
               )
             }
             {
               // button to switch between different chart types
-              chartTypeSwitchAvailable && (
+              !disableAlternativeChart && (
                 <ChartAlternativeSwitchButton
-                  showAlternativeChart={showAlternativeChart}
-                  setShowAlternativeChart={setShowAlternativeChart}
+                  showAlternativeChart={showAlternativeChart!} // todo rework props
+                  setShowAlternativeChart={setShowAlternativeChart!}
                   size={ICON_BUTTON_SIZE}
                 />
               )
             }
             {
-              // button to trigger the full screen modal; rendered if `expandable` is selected
-              expandable && (
+              // button to download chart as png, svg, etc.
+              !disableDownload && <ChartDownloadButton chartRef={chartRef} chartData={chartData} />
+            }
+            {
+              // button to trigger the full screen modal; rendered if `disableExpandable` is not selected
+              !disableExpandable && (
                 <Tooltip text="Enlarge Chart">
                   <Button isIconOnly variant="light" size="sm" onClick={onOpen}>
                     <Maximize4 className={`h-${ICON_BUTTON_SIZE} w-${ICON_BUTTON_SIZE}`} />
@@ -107,6 +108,7 @@ export function ChartContainer({
         <HighchartsReact
           highcharts={Highcharts}
           options={chartOptions}
+          ref={chartRef}
           containerProps={{
             style: {
               width: '100%',
@@ -117,11 +119,11 @@ export function ChartContainer({
         />
         {
           // slider to e.g. manipulate the plotted x-axis range of the chart
-          sliderAvailable && (
+          !disableSlider && (
             <ChartSlider
               title={sliderTitle}
-              sliderMin={sliderMin}
-              sliderMax={sliderMax}
+              sliderMin={sliderMin!}
+              sliderMax={sliderMax!} // todo rework props
               selectedSliderRange={selectedSliderRange}
               setSelectedSliderRange={setSelectedSliderRange}
             />

@@ -3,8 +3,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '@nextui-org/popover';
 import { DocumentDownload, GalleryImport } from 'iconsax-react';
 
 import { Tooltip } from '@/components/Tooltip/Tooltip';
-import { ChartDownloadButtonProps } from '@/domain/props/LineChartProps';
-import ChartDownloadButtonOperations from '@/operations/charts/ChartDownloadButtonOperations.ts';
+import { ChartDownloadButtonProps } from '@/domain/props/ChartContainerProps';
+import ChartDownloadButtonOperations from '@/operations/charts/ChartDownloadButtonOperations';
 
 /**
  * This component is tied to the `ChartContainer` and `ChartModal` component and should not be used independently.

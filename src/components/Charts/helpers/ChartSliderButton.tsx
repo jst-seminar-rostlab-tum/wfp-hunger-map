@@ -2,7 +2,7 @@ import { Button } from '@nextui-org/button';
 import { Settings } from 'iconsax-react';
 
 import { Tooltip } from '@/components/Tooltip/Tooltip';
-import { LineChartSliderButtonProps } from '@/domain/props/LineChartProps';
+import { LineChartSliderButtonProps } from '@/domain/props/ChartContainerProps';
 
 /**
  * This component is tied to the `ChartContainer` and `ChartModal` component and should not be used independently.

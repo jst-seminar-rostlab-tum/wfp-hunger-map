@@ -35,23 +35,6 @@ export default async function Elements() {
     ],
   };
 
-  const simpleLineChartData: LineChartData = {
-    type: LineChartDataType.LINE_CHART_DATA,
-    xAxisType: 'linear',
-    yAxisLabel: 'yield',
-    lines: [
-      {
-        name: 'Category A',
-        dataPoints: [
-          { x: 0, y: 1 },
-          { x: 1, y: 2 },
-          { x: 2, y: 4 },
-          { x: 3, y: 8 },
-        ],
-      },
-    ],
-  };
-
   const maxedOutLineChartData: LineChartData = {
     type: LineChartDataType.LINE_CHART_DATA,
     xAxisType: 'linear',
@@ -173,18 +156,6 @@ export default async function Elements() {
           { x: 6, y: 6 },
         ],
       },
-      {
-        name: 'Prediction 2',
-        prediction: true,
-        dataPoints: [
-          { x: 0, y: 6 },
-          { x: 1, y: 5 },
-          { x: 2, y: 6 },
-          { x: 3, y: 7 },
-          { x: 4, y: 7 },
-          { x: 5, y: 8 },
-        ],
-      },
     ],
   };
 
@@ -205,23 +176,27 @@ export default async function Elements() {
       <AccordionContainer items={AccordionsOperations.getAccordionData()} />
       <div className="w-full h-fit flex flex-row flex-wrap gap-10 justify-around px-8 pt-40 pb-16 border-b border-gray-800">
         <div className="w-250px h-fit">
-          <LineChart data={simpleAndSmallLineChartData} small disableDownload />
+          <LineChart
+            data={simpleAndSmallLineChartData}
+            small
+            disableDownload
+            disableBarChartSwitch
+            disableExpandable
+            disableXAxisSlider
+          />
         </div>
         <div className="w-400px h-fit">
           <LineChart
             title="Maxed Out Line Chart"
             description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor onsetetur sadipscing elitr."
             data={maxedOutLineChartData}
-            expandable
-            xAxisSlider
-            barChartSwitch
           />
         </div>
         <div className="w-400px h-fit">
-          <LineChart title="" data={predictionDummyChartData} expandable xAxisSlider barChartSwitch />
+          <LineChart title="" data={predictionDummyChartData} />
         </div>
         <div className="w-400px h-fit">
-          <LineChart title="" data={multiplePredictionsDummyChartData} expandable xAxisSlider barChartSwitch />
+          <LineChart title="" data={multiplePredictionsDummyChartData} />
         </div>
       </div>
       <MapSkeleton />

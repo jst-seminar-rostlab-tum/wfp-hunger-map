@@ -4,7 +4,7 @@ import Highcharts from 'highcharts';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 
-import { ChartContainer } from '@/components/Charts/ChartContainer';
+import { ChartContainer } from '@/components/Charts/helpers/ChartContainer.tsx';
 import { LineChartData } from '@/domain/entities/charts/LineChartData';
 import LineChartProps from '@/domain/props/LineChartProps';
 import LineChartOperations from '@/operations/charts/LineChartOperations';

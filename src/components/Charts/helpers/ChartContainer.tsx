@@ -7,10 +7,11 @@ import HighchartsReact from 'highcharts-react-official';
 import { Maximize4 } from 'iconsax-react';
 import { useRef, useState } from 'react';
 
-import ChartAlternativeSwitchButton from '@/components/Charts/helpers/ChartAlternativeSwitchButton';
-import ChartDownloadButton from '@/components/Charts/helpers/ChartDownloadButton';
+import ChartAlternativeSwitchButton from '@/components/Charts/helpers/buttons/ChartAlternativeSwitchButton';
+import ChartDownloadButton from '@/components/Charts/helpers/buttons/ChartDownloadButton';
+import ChartSliderButton from '@/components/Charts/helpers/buttons/ChartSliderButton';
+import { ChartModal } from '@/components/Charts/helpers/ChartModal';
 import ChartSlider from '@/components/Charts/helpers/ChartSlider';
-import ChartSliderButton from '@/components/Charts/helpers/ChartSliderButton';
 import { Tooltip } from '@/components/Tooltip/Tooltip';
 import ChartContainerProps from '@/domain/props/ChartContainerProps';
 
@@ -119,7 +120,7 @@ export function ChartContainer({
         />
         {
           // slider to e.g. manipulate the plotted x-axis range of the chart
-          !disableSlider && (
+          showSlider && (
             <ChartSlider
               title={sliderTitle}
               sliderMin={sliderMin!}
@@ -131,25 +132,27 @@ export function ChartContainer({
         }
       </div>
 
-      {/**
-       * <LineChartModal // todo linus rename
-       *         title={title}
-       *         description={description}
-       *         barChartSwitch={barChartSwitch}
-       *         xAxisSlider={xAxisSlider}
-       *         lineChartData={chartData}
-       *         chartOptions={chartOptions}
-       *         isOpen={isOpen}
-       *         onClose={onClose}
-       *         onOpenChange={onOpenChange}
-       *         showXAxisSlider={showXAxisSlider}
-       *         setShowXAxisSlider={setShowXAxisSlider}
-       *         showBarChart={showBarChart}
-       *         setShowBarChart={setShowBarChart}
-       *         selectedXAxisRange={selectedXAxisRange}
-       *         setSelectedXAxisRange={setSelectedXAxisRange}
-       *       />
-       */}
+      <ChartModal
+        chartOptions={chartOptions}
+        chartData={chartData}
+        title={title}
+        description={description}
+        disableDownload={disableDownload}
+        isOpen={isOpen}
+        onClose={onClose}
+        onOpenChange={onOpenChange}
+        showSlider={showSlider}
+        setShowSlider={setShowSlider}
+        disableAlternativeChart={disableAlternativeChart}
+        showAlternativeChart={showAlternativeChart}
+        setShowAlternativeChart={setShowAlternativeChart}
+        disableSlider={disableSlider}
+        sliderTitle={sliderTitle}
+        sliderMin={sliderMin}
+        sliderMax={sliderMax}
+        selectedSliderRange={selectedSliderRange}
+        setSelectedSliderRange={setSelectedSliderRange}
+      />
     </>
   );
 }

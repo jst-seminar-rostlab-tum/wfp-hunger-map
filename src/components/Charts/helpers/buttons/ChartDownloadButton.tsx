@@ -4,7 +4,7 @@ import { DocumentDownload, GalleryImport } from 'iconsax-react';
 
 import { Tooltip } from '@/components/Tooltip/Tooltip';
 import { ChartDownloadButtonProps } from '@/domain/props/ChartContainerProps';
-import ChartDownloadButtonOperations from '@/operations/charts/ChartDownloadButtonOperations';
+import ChartDownloadButtonOperations from '@/operations/charts/ChartDownloadButtonOperations.ts';
 
 /**
  * This component is tied to the `ChartContainer` and `ChartModal` component and should not be used independently.

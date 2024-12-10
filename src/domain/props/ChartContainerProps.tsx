@@ -12,6 +12,7 @@ export default interface ChartContainerProps {
   description?: string;
   small?: boolean;
   noPadding?: boolean;
+
   disableExpandable?: boolean;
   disableDownload?: boolean;
   transparentBackground?: boolean;

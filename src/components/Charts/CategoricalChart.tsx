@@ -3,7 +3,8 @@
 import Highcharts from 'highcharts';
 import Exporting from 'highcharts/modules/exporting';
 import OfflineExporting from 'highcharts/modules/offline-exporting';
-import CategoricalChartProps from '@/domain/props/CategoricalChartProps.tsx';
+
+import CategoricalChartProps from '@/domain/props/CategoricalChartProps';
 
 // initialize the exporting module
 if (typeof Highcharts === 'object') {

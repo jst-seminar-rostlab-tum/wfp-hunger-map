@@ -14,7 +14,6 @@ export default function ChartAlternativeSwitchButton({
 }: ChartTypeSwitchButtonProps) {
   return (
     <Tooltip text={`Switch to ${showAlternativeChart ? 'Line' : 'Bar'} Chart`}>
-      // todo
       <Button isIconOnly variant="light" size="sm" onClick={() => setShowAlternativeChart(!showAlternativeChart)}>
         {showAlternativeChart ? (
           <Diagram className={`h-${size} w-${size}`} />

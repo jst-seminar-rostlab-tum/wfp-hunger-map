@@ -2,6 +2,7 @@ import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGrap
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph.ts';
 import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
 import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
+import { CategoricalChartData } from '@/domain/entities/charts/CategoricalChartData.ts';
 
 export default interface LineChartProps {
   title?: string;
@@ -21,19 +22,19 @@ export default interface LineChartProps {
  */
 
 export interface LineChartSliderButtonProps {
-  showXAxisSlider: boolean;
-  setShowXAxisSlider: (b: boolean) => void;
+  showSlider: boolean;
+  setShowSlider: (b: boolean) => void;
   size: number;
 }
 
-export interface LineChartBarLineSwitchButtonProps {
-  showBarChart: boolean;
-  setShowBarChart: (b: boolean) => void;
+export interface ChartTypeSwitchButtonProps {
+  showAlternativeChart: boolean;
+  setShowAlternativeChart: (b: boolean) => void;
   size: number;
 }
 
-export interface LineChartXAxisSlider {
-  selectedXAxisRange: number[]; // [xAxisRangeMinIndex, xAxisRangeMaxIndex]
-  setSelectedXAxisRange: (ns: number[]) => void;
-  data: LineChartData;
+export interface ChartSlider {
+  selectedSliderRange: number[]; // [rangeMin, rangeMax]
+  setSelectedSliderRange: (ns: number[]) => void;
+  chartData: LineChartData | CategoricalChartData;
 }

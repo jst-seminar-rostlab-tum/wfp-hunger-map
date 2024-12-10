@@ -13,6 +13,7 @@ import LineChartXAxisSlider from '@/components/Charts/helpers/LineChartXAxisSlid
 import { LineChartModal } from '@/components/Charts/LineChartModal';
 import { Tooltip } from '@/components/Tooltip/Tooltip';
 import ChartContainerProps from '@/domain/props/ChartContainerProps';
+import ChartSliderButton from '@/components/Charts/helpers/ChartSliderButton.tsx';
 
 /**
  * todo
@@ -51,7 +52,7 @@ export function ChartContainer({
   const [selectedSliderRange, setSelectedSliderRange] = useState([sliderMin, sliderMax]);
 
   // controlling if a line or bar chart is rendered; line chart is the default
-  const [showChartTypeAlternative, setShowChartTypeAlternative] = useState(false);
+  const [showAlternativeChart, setShowAlternativeChart] = useState(false);
   // handling the x-axis range slider visibility
   const [showSlider, setShowSlider] = useState(false);
 
@@ -70,9 +71,9 @@ export function ChartContainer({
             {
               // button to hide/show the slider to e.g. manipulate the plotted x-axis range of the chart
               sliderAvailable && (
-                <LineChartSliderButton // todo linus rename
-                  showXAxisSlider={showSlider}
-                  setShowXAxisSlider={setShowSlider}
+                <ChartSliderButton
+                  showSlider={showSlider}
+                  setShowSlider={setShowSlider}
                   size={ICON_BUTTON_SIZE}
                 />
               )

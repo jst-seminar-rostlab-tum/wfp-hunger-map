@@ -32,6 +32,6 @@ export default class HungerAlertOperations {
   }
 
   static getPulseClasses(): string {
-    return 'pulse w-48 h-48 rounded-full flex flex-col items-center justify-center text-center text-sm bg-content1 relative p-5';
+    return 'pulse w-48 h-48 rounded-full flex flex-col items-center justify-center text-center text-sm bg-content1 relative p-5 m-1';
   }
 }

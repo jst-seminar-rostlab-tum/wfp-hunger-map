@@ -197,7 +197,7 @@ export default async function Elements() {
       <AccordionContainer items={AccordionsOperations.getAccordionData()} />
       <div className="w-full h-fit flex flex-row flex-wrap gap-10 justify-around px-8 pt-40 pb-16 border-b border-gray-800">
         <div className="w-250px h-fit">
-          <LineChart data={simpleAndSmallLineChartData} small />
+          <LineChart data={simpleAndSmallLineChartData} small disableDownload />
         </div>
         <div className="w-250px h-fit">
           <LineChart

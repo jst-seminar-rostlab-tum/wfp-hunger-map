@@ -1,9 +1,6 @@
 import { Button } from '@nextui-org/button';
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@nextui-org/modal';
 import Highcharts from 'highcharts';
-import ExportDataModule from 'highcharts/modules/export-data';
-import Exporting from 'highcharts/modules/exporting';
-import OfflineExporting from 'highcharts/modules/offline-exporting';
 import HighchartsReact from 'highcharts-react-official';
 import { Minus } from 'iconsax-react';
 import { useRef } from 'react';
@@ -15,13 +12,6 @@ import LineChartXAxisSlider from '@/components/Charts/helpers/LineChartXAxisSlid
 import { Tooltip } from '@/components/Tooltip/Tooltip';
 import LineChartModalProps from '@/domain/props/LineChartModalProps';
 
-// initialize the exporting module
-if (typeof Highcharts === 'object') {
-  Exporting(Highcharts);
-  ExportDataModule(Highcharts);
-  OfflineExporting(Highcharts);
-}
-
 /**
  * This component is tied to the `LineChart` component and should not be used independently.
  * It renders the modal, which can be opened by the user from the `LineChart` to display the chart
@@ -31,6 +21,7 @@ if (typeof Highcharts === 'object') {
 export function LineChartModal({
   title,
   description,
+  disableDownload,
   barChartSwitch,
   xAxisSlider,
   lineChartData,
@@ -76,7 +67,7 @@ export function LineChartModal({
                 <LineChartBarLineSwitchButton showBarChart={showBarChart} setShowBarChart={setShowBarChart} size={4} />
               )}
 
-              <LineChartDownloadButton chartRef={chartRef} lineChartData={lineChartData} />
+              {!disableDownload && <LineChartDownloadButton chartRef={chartRef} lineChartData={lineChartData} />}
 
               {/* close model button */}
               <Tooltip text="Close">

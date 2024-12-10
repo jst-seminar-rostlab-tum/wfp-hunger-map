@@ -2,6 +2,9 @@
 
 import Highcharts, { AxisTypeValue, SeriesOptionsType, TooltipFormatterContextObject } from 'highcharts';
 import highchartsMore from 'highcharts/highcharts-more';
+import ExportData from 'highcharts/modules/export-data';
+import Exporting from 'highcharts/modules/exporting';
+import OfflineExporting from 'highcharts/modules/offline-exporting';
 import HighchartsReact from 'highcharts-react-official';
 
 import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph.ts';
@@ -11,10 +14,13 @@ import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
 import { LineChartDataType } from '@/domain/enums/LineChartDataType.ts';
 import { formatToMillion } from '@/utils/formatting.ts';
 
+// initialize the exporting module
 if (typeof Highcharts === 'object') {
   highchartsMore(Highcharts);
+  Exporting(Highcharts);
+  ExportData(Highcharts);
+  OfflineExporting(Highcharts);
 }
-
 /**
  * Using LineChartOperations, the LineChart component can convert its received data into LineChartData
  * and then generate the chart `Highcharts.Options` object required by the Highcharts component.
@@ -27,12 +33,7 @@ export default class LineChartOperations {
    * The first four line colors are fixed; if more than four lines are rendered,
    * the default Highcharts colors will be used.
    */
-  private static LINE_COLORS = [
-    'hsl(var(--nextui-clusterOrange))',
-    'hsl(var(--nextui-clusterBlue))',
-    'hsl(var(--nextui-clusterGreen))',
-    'hsl(var(--nextui-clusterRed))',
-  ];
+  private static LINE_COLORS = ['#FFB74D', '#157DBC', '#85E77C', '#FF5252'];
 
   /**
    * Formatter function for `LineChart.Options.tooltip.formatter` usage only.
@@ -40,7 +41,8 @@ export default class LineChartOperations {
   private static chartTooltipFormatter(
     xAxisType: AxisTypeValue,
     x: string | number | undefined,
-    points: TooltipFormatterContextObject[] | undefined
+    points: TooltipFormatterContextObject[] | undefined,
+    isDark: boolean
   ) {
     let tooltip = '';
     if (xAxisType === 'datetime' && typeof x === 'number') {
@@ -52,7 +54,8 @@ export default class LineChartOperations {
       if (p.point.options.y) {
         tooltip += `<br><span style="color:${p.series.color}">\u25CF</span> <div>${p.point.options.y}</div>`;
       } else if (p.point.options.high !== undefined && p.point.options.low !== undefined) {
-        tooltip += `<div style="color: ${'hsl(var(--nextui-secondary))'}"> (<div>${p.point.options.low} - ${p.point.options.high}</div>)</div>`;
+        const colorSecondary = isDark ? '#B0B0B0' : '#666666';
+        tooltip += `<div style="color: ${colorSecondary}"> (<div>${p.point.options.low} - ${p.point.options.high}</div>)</div>`;
       }
     });
     return tooltip;
@@ -164,6 +167,7 @@ export default class LineChartOperations {
    * can be manipulated; important: if a min is defined a max must be defined as well and vice versa.
    *
    * @param data `LineChartData` object, containing all data to be plotted in the chart
+   * @param isDark - `true` if dark mode is selected
    * @param roundLines if true, all plotted lines will be rounded
    * @param barChart if true, bars are plotted instead of lines
    * @param xAxisSelectedMinIdx index of selected x-axis range min value
@@ -171,6 +175,7 @@ export default class LineChartOperations {
    */
   public static getHighChartOptions(
     data: LineChartData,
+    isDark: boolean,
     roundLines?: boolean,
     xAxisSelectedMinIdx?: number,
     xAxisSelectedMaxIdx?: number,
@@ -272,6 +277,7 @@ export default class LineChartOperations {
     }
 
     // constructing the final HighCharts.Options
+    const colorSecondary = isDark ? '#B0B0B0' : '#666666';
     return {
       title: {
         text: '',
@@ -282,37 +288,37 @@ export default class LineChartOperations {
       legend: {
         itemStyle: {
           fontSize: '0.7rem',
-          color: 'hsl(var(--nextui-secondary))',
+          color: colorSecondary,
         },
         itemHoverStyle: {
-          color: 'hsl(var(--nextui-hover))',
+          color: isDark ? '#0F6396' : '#005489',
         },
       },
       xAxis: {
         type: data.xAxisType,
         labels: {
           style: {
-            color: 'hsl(var(--nextui-secondary))',
+            color: colorSecondary,
             fontSize: '0.7rem',
           },
           formatter() {
             return LineChartOperations.chartXAxisFormatter(data.xAxisType, this.value);
           },
         },
-        lineColor: 'hsl(var(--nextui-chartsXAxisLine))',
-        tickColor: 'hsl(var(--nextui-chartsXAxisLine))',
+        lineColor: isDark ? '#a6a6a6' : '#757575',
+        tickColor: isDark ? '#a6a6a6' : '#757575',
         tickLength: 4,
       },
       yAxis: {
         title: {
           text: data.yAxisLabel,
           style: {
-            color: 'hsl(var(--nextui-secondary))',
+            color: colorSecondary,
           },
         },
         labels: {
           style: {
-            color: 'hsl(var(--nextui-secondary))',
+            color: colorSecondary,
             fontSize: '0.7rem',
           },
           formatter() {
@@ -320,16 +326,16 @@ export default class LineChartOperations {
           },
         },
         lineColor: 'transparent',
-        gridLineColor: 'hsl(var(--nextui-clickableSecondary))',
+        gridLineColor: isDark ? '#424242' : '#E6E6E6',
       },
       tooltip: {
         shared: true,
         formatter() {
-          return LineChartOperations.chartTooltipFormatter(data.xAxisType, this.x, this.points);
+          return LineChartOperations.chartTooltipFormatter(data.xAxisType, this.x, this.points, isDark);
         },
-        backgroundColor: 'hsl(var(--nextui-chartsLegendBackground))',
+        backgroundColor: isDark ? '#2a2a2a' : '#F5F5F5',
         style: {
-          color: 'hsl(var(--nextui-foreground))',
+          color: isDark ? '#E0E0E0' : '#333333',
           fontSize: '0.7rem',
         },
       },
@@ -390,7 +396,6 @@ export default class LineChartOperations {
     chart.chart.exportChartLocal({
       type: 'image/png',
       filename: 'chart-download',
-      enabled: true,
     });
   }
 

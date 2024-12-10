@@ -1,5 +1,5 @@
-import HighchartsReact, { HighchartsReactRefObject } from 'highcharts-react-official';
-import { MutableRefObject, RefObject } from 'react';
+import HighchartsReact from 'highcharts-react-official';
+import { MutableRefObject } from 'react';
 
 import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph.ts';
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph.ts';
@@ -13,6 +13,7 @@ export default interface LineChartProps {
   barChartSwitch?: boolean;
   xAxisSlider?: boolean;
   small?: boolean;
+  disableDownload?: boolean;
   roundLines?: boolean;
   noPadding?: boolean;
   transparentBackground?: boolean;

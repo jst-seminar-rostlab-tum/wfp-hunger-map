@@ -3,8 +3,6 @@
 import { Button } from '@nextui-org/button';
 import { useDisclosure } from '@nextui-org/modal';
 import Highcharts from 'highcharts';
-import Exporting from 'highcharts/modules/exporting';
-import OfflineExporting from 'highcharts/modules/offline-exporting';
 import HighchartsReact from 'highcharts-react-official';
 import { Maximize4 } from 'iconsax-react';
 import { useTheme } from 'next-themes';
@@ -19,12 +17,6 @@ import { Tooltip } from '@/components/Tooltip/Tooltip';
 import { LineChartData } from '@/domain/entities/charts/LineChartData';
 import LineChartProps from '@/domain/props/LineChartProps';
 import LineChartOperations from '@/operations/charts/LineChartOperations';
-
-// initialize the exporting module
-if (typeof Highcharts === 'object') {
-  Exporting(Highcharts);
-  OfflineExporting(Highcharts);
-}
 
 /**
  * The LineChart component is a box that primarily renders a title, description text, and a line chart.
@@ -45,6 +37,7 @@ if (typeof Highcharts === 'object') {
  * @param barChartSwitch when selected, the user is given the option to switch to a bar chart (optional)
  * @param xAxisSlider when selected, the user is given the option to change the x-axis range via a slider (optional)
  * @param small when selected, all components in the line chart box become slightly smaller (optional)
+ * @param small when selected, the download button dropdown is not shown (optional)
  * @param roundLines when selected, all plotted lines will be rounded (optional)
  * @param noPadding when selected, the main box has no padding on all sides (optional)
  * @param transparentBackground when selected, the background of the entire component is transparent (optional)
@@ -57,6 +50,7 @@ export function LineChart({
   barChartSwitch,
   xAxisSlider,
   small,
+  disableDownload,
   roundLines,
   noPadding,
   transparentBackground,
@@ -76,7 +70,11 @@ export function LineChart({
 
   // convert data to `LineChartData` and build chart options for 'Highcharts' (line and bar chart)
   const lineChartData: LineChartData = LineChartOperations.convertToLineChartData(data);
-  const lineChartOptions: Highcharts.Options = LineChartOperations.getHighChartOptions(lineChartData, roundLines);
+  const lineChartOptions: Highcharts.Options = LineChartOperations.getHighChartOptions(
+    lineChartData,
+    theme === 'dark',
+    roundLines
+  );
 
   // the `selectedXAxisRange` saves the to be rendered x-axis range of the chart
   // can be changed using the `LinkeChartXAxisSlider` if the param `xAxisSlider==true`
@@ -99,6 +97,7 @@ export function LineChart({
       setChartOptions(
         LineChartOperations.getHighChartOptions(
           lineChartData,
+          theme === 'dark',
           roundLines,
           selectedXAxisRange[0],
           selectedXAxisRange[1],
@@ -107,7 +106,13 @@ export function LineChart({
       );
     } else {
       setChartOptions(
-        LineChartOperations.getHighChartOptions(lineChartData, roundLines, selectedXAxisRange[0], selectedXAxisRange[1])
+        LineChartOperations.getHighChartOptions(
+          lineChartData,
+          theme === 'dark',
+          roundLines,
+          selectedXAxisRange[0],
+          selectedXAxisRange[1]
+        )
       );
     }
   }, [showBarChart, theme, selectedXAxisRange]);
@@ -140,7 +145,7 @@ export function LineChart({
               />
             )}
 
-            <LineChartDownloadButton chartRef={chartRef} lineChartData={lineChartData} />
+            {!disableDownload && <LineChartDownloadButton chartRef={chartRef} lineChartData={lineChartData} />}
 
             {
               // button to trigger the full screen modal; rendered if `expandable`

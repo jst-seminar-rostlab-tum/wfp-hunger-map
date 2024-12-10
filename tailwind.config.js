@@ -224,8 +224,6 @@ const config = {
             ipcPhase3: '#e88519',
             ipcPhase4: '#cd1919',
             ipcPhase5: '#731919',
-            chartsLegendBackground: '#F5F5F5',
-            chartsXAxisLine: '#a6a6a6',
           },
         },
         dark: {
@@ -267,8 +265,6 @@ const config = {
             fatalityAlert: '#742280',
             climateWetAlert: '#4295D3',
             climateDryAlert: '#B95926',
-            chartsLegendBackground: '#2a2a2a',
-            chartsXAxisLine: '#757575',
             nutritionNotAnalyzed: '#A69F9F',
           },
         },

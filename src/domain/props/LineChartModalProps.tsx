@@ -5,6 +5,7 @@ import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
 export default interface LineChartModalProps {
   title?: string;
   description?: string;
+  disableDownload?: boolean;
   barChartSwitch?: boolean;
   xAxisSlider?: boolean;
 

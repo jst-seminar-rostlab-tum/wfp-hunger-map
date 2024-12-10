@@ -7,6 +7,9 @@ import Highcharts, {
   TooltipFormatterContextObject,
 } from 'highcharts';
 import highchartsMore from 'highcharts/highcharts-more';
+import ExportData from 'highcharts/modules/export-data';
+import Exporting from 'highcharts/modules/exporting';
+import OfflineExporting from 'highcharts/modules/offline-exporting';
 import patternFill from 'highcharts/modules/pattern-fill';
 import HighchartsReact from 'highcharts-react-official';
 
@@ -17,11 +20,14 @@ import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
 import { LineChartDataType } from '@/domain/enums/LineChartDataType.ts';
 import { formatToMillion } from '@/utils/formatting.ts';
 
+// initialize the exporting module
 if (typeof Highcharts === 'object') {
   highchartsMore(Highcharts);
   patternFill(Highcharts);
+  Exporting(Highcharts);
+  ExportData(Highcharts);
+  OfflineExporting(Highcharts);
 }
-
 /**
  * Using LineChartOperations, the LineChart component can convert its received data into LineChartData
  * and then generate the chart `Highcharts.Options` object required by the Highcharts component.
@@ -44,12 +50,7 @@ export default class LineChartOperations {
    * the default Highcharts colors will be used.
    */
   private static getLineColorList() {
-    return [
-      'hsl(var(--nextui-clusterRed))',
-      'hsl(var(--nextui-clusterGreen))',
-      'hsl(var(--nextui-clusterBlue))',
-      'hsl(var(--nextui-clusterOrange))',
-    ];
+    return ['#FF5252', '#85E77C', '#157DBC', '#FFB74D'];
   }
 
   /**
@@ -58,7 +59,8 @@ export default class LineChartOperations {
   private static chartTooltipFormatter(
     xAxisType: AxisTypeValue,
     x: string | number | undefined,
-    points: TooltipFormatterContextObject[] | undefined
+    points: TooltipFormatterContextObject[] | undefined,
+    isDark: boolean
   ) {
     let tooltip = '';
     if (xAxisType === 'datetime' && typeof x === 'number') {
@@ -70,7 +72,8 @@ export default class LineChartOperations {
       if (p.point.options.y) {
         tooltip += `<br><span style="color:${p.series.color}">\u25CF</span> <div>${p.point.options.y}</div>`;
       } else if (p.point.options.high !== undefined && p.point.options.low !== undefined) {
-        tooltip += `<div style="color: ${'hsl(var(--nextui-secondary))'}"> (<div>${p.point.options.low} - ${p.point.options.high}</div>)</div>`;
+        const colorSecondary = isDark ? '#B0B0B0' : '#666666';
+        tooltip += `<div style="color: ${colorSecondary}"> (<div>${p.point.options.low} - ${p.point.options.high}</div>)</div>`;
       }
     });
     return tooltip;
@@ -182,6 +185,7 @@ export default class LineChartOperations {
    * can be manipulated; important: if a min is defined a max must be defined as well and vice versa.
    *
    * @param data `LineChartData` object, containing all data to be plotted in the chart
+   * @param isDark - `true` if dark mode is selected
    * @param roundLines if true, all plotted lines will be rounded
    * @param barChart if true, bars are plotted instead of lines
    * @param xAxisSelectedMinIdx index of selected x-axis range min value
@@ -189,11 +193,14 @@ export default class LineChartOperations {
    */
   public static getHighChartOptions(
     data: LineChartData,
+    isDark: boolean,
     roundLines?: boolean,
     xAxisSelectedMinIdx?: number,
     xAxisSelectedMaxIdx?: number,
     barChart?: boolean
   ): Highcharts.Options {
+    const colorSecondary = isDark ? '#B0B0B0' : '#666666';
+
     // get selected x-axis range min and max values
     const xAxisDistinctValues = LineChartOperations.getDistinctXAxisValues(data);
     const xAxisSelectedMin = xAxisSelectedMinIdx !== undefined ? xAxisDistinctValues[xAxisSelectedMinIdx] : undefined;
@@ -213,7 +220,7 @@ export default class LineChartOperations {
       if (lineData.color) {
         categoryColor = lineData.color;
       } else if (lineData.prediction) {
-        categoryColor = 'hsl(var(--nextui-chartForecast))';
+        categoryColor = isDark ? '#0e6983' : '#3896a2';
       } else {
         categoryColor = defaultLineColors.pop();
       }
@@ -346,14 +353,14 @@ export default class LineChartOperations {
       label: {
         text: b.label || '',
         style: {
-          color: 'hsl(var(--nextui-secondary))',
+          color: colorSecondary,
           fontSize: '0.7rem',
         },
       },
     }));
     const plotLines = verticalLines.map((l) => ({
       value: l.x,
-      color: l.color || 'hsl(var(--nextui-chartsGridLine))',
+      color: l.color || isDark ? '#424242' : '#E6E6E6',
       dashStyle: l.dashStyle,
       zIndex: 2,
     }));
@@ -369,25 +376,25 @@ export default class LineChartOperations {
       legend: {
         itemStyle: {
           fontSize: '0.7rem',
-          color: 'hsl(var(--nextui-secondary))',
+          color: colorSecondary,
         },
         itemHoverStyle: {
-          color: 'hsl(var(--nextui-hover))',
+          color: isDark ? '#0F6396' : '#005489',
         },
       },
       xAxis: {
         type: data.xAxisType,
         labels: {
           style: {
-            color: 'hsl(var(--nextui-secondary))',
+            color: colorSecondary,
             fontSize: '0.7rem',
           },
           formatter() {
             return LineChartOperations.chartXAxisFormatter(data.xAxisType, this.value);
           },
         },
-        lineColor: 'hsl(var(--nextui-chartsXAxisLine))',
-        tickColor: 'hsl(var(--nextui-chartsXAxisLine))',
+        lineColor: isDark ? '#a6a6a6' : '#757575',
+        tickColor: isDark ? '#a6a6a6' : '#757575',
         tickLength: 4,
         plotBands,
         plotLines,
@@ -396,12 +403,12 @@ export default class LineChartOperations {
         title: {
           text: data.yAxisLabel,
           style: {
-            color: 'hsl(var(--nextui-secondary))',
+            color: colorSecondary,
           },
         },
         labels: {
           style: {
-            color: 'hsl(var(--nextui-secondary))',
+            color: colorSecondary,
             fontSize: '0.7rem',
           },
           formatter() {
@@ -409,16 +416,16 @@ export default class LineChartOperations {
           },
         },
         lineColor: 'transparent',
-        gridLineColor: 'hsl(var(--nextui-chartsGridLine))',
+        gridLineColor: isDark ? '#424242' : '#E6E6E6',
       },
       tooltip: {
         shared: true,
         formatter() {
-          return LineChartOperations.chartTooltipFormatter(data.xAxisType, this.x, this.points);
+          return LineChartOperations.chartTooltipFormatter(data.xAxisType, this.x, this.points, isDark);
         },
-        backgroundColor: 'hsl(var(--nextui-chartsLegendBackground))',
+        backgroundColor: isDark ? '#2a2a2a' : '#F5F5F5',
         style: {
-          color: 'hsl(var(--nextui-foreground))',
+          color: isDark ? '#E0E0E0' : '#333333',
           fontSize: '0.7rem',
         },
       },

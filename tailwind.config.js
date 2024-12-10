@@ -169,7 +169,6 @@ const config = {
             hazarAdvisory: '#57D66F',
             hazardInformation: '#0098EB',
             hazardTermination: '#B4B5B7',
-            chartForecast: '#3896a2',
 
             //fcs gradient
             fcsGradient1: '#29563a',
@@ -225,9 +224,6 @@ const config = {
             ipcPhase3: '#e88519',
             ipcPhase4: '#cd1919',
             ipcPhase5: '#731919',
-            chartsLegendBackground: '#F5F5F5',
-            chartsXAxisLine: '#a6a6a6',
-            chartsGridLine: '#E6E6E6',
           },
         },
         dark: {
@@ -269,10 +265,6 @@ const config = {
             fatalityAlert: '#742280',
             climateWetAlert: '#4295D3',
             climateDryAlert: '#B95926',
-            chartsLegendBackground: '#2a2a2a',
-            chartsXAxisLine: '#757575',
-            chartsGridLine: '#424242',
-            chartForecast: '#0e6983',
             nutritionNotAnalyzed: '#A69F9F',
           },
         },

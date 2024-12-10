@@ -9,6 +9,6 @@ const LazyMapLegendLoader = dynamic(() => import('@/components/Legend/MapLegend'
   loading: () => <MapLegendSkeleton />,
 });
 
-export default function HungerAlertLoader() {
+export default function MapLegendLoader() {
   return <LazyMapLegendLoader />;
 }

@@ -12,9 +12,6 @@ import IpcGlobalChoropleth from './IpcGlobalChoropleth';
 function IpcChoropleth({ countries, countryData, ipcRegionData, selectedCountryName }: IpcChoroplethProps) {
   const { data: ipcData } = useIpcQuery(true);
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
-  const handleBackClick = () => {
-    setSelectedCountryId(null);
-  };
 
   return (
     <>
@@ -44,7 +41,6 @@ function IpcChoropleth({ countries, countryData, ipcRegionData, selectedCountryN
           regionIpcData={ipcRegionData}
           countryData={countryData}
           countryName={selectedCountryName}
-          handleBackButtonClick={handleBackClick}
         />
       )}
     </>

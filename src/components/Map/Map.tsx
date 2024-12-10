@@ -17,7 +17,6 @@ import {
 import { useSelectedAlert } from '@/domain/contexts/SelectedAlertContext';
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
-import { useSelectedMapVisibility } from '@/domain/contexts/SelectedMapVisibilityContext';
 import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { CountryData } from '@/domain/entities/country/CountryData.ts';
 import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data.ts';
@@ -35,7 +34,6 @@ import ZoomControl from './ZoomControl';
 export default function Map({ countries, disputedAreas, fcsData, alertData }: MapProps) {
   const mapRef = useRef<LeafletMap | null>(null);
   const { selectedMapType } = useSelectedMap();
-  const { setSelectedMapVisibility } = useSelectedMapVisibility();
   const { resetAlert } = useSelectedAlert();
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
   const { closeSidebar } = useSidebar();
@@ -49,8 +47,6 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
   const [selectedCountryName, setSelectedCountryName] = useState<string | undefined>(undefined);
 
   const onZoomThresholdReached = () => {
-    setSelectedCountryId(null);
-    setSelectedMapVisibility(true);
     MapOperations.resetSelectedCountryData(
       setRegionData,
       setCountryData,
@@ -58,13 +54,11 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
       setRegionNutritionData,
       setIpcRegionData
     );
+    setSelectedCountryId(null);
   };
 
   useEffect(() => {
     if (selectedCountryId) {
-      setSelectedMapVisibility(
-        selectedMapType === GlobalInsight.VEGETATION || selectedMapType === GlobalInsight.RAINFALL
-      );
       closeSidebar();
       resetAlert();
 

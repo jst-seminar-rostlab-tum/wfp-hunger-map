@@ -14,7 +14,7 @@ export class IpcChoroplethOperations {
     ipcData: CountryIpcData[],
     isDark: boolean
   ) => {
-    const country = ipcData.find((c) => parseInt(c.adm0_code, 10) === adm0code);
+    const country = ipcData.find((c) => parseInt(c.adm0_code, 10) === adm0code); // TODO refactor this, this is crazy inefficient, there should never be such an expensive calculation in a render method
     return feature.properties?.ipcData
       ? {
           color: '#000',
@@ -37,9 +37,8 @@ export class IpcChoroplethOperations {
   };
 
   static ipcCountryStyle = (feature: Feature<Geometry, GeoJsonProperties> | undefined) => ({
-    color: '#fff',
-    opacity: 0.8,
-    weight: 0.5,
+    color: 'hsl(var(--nextui-countryBorders))',
+    weight: 1,
     fillOpacity: 1,
     fillColor: IpcChoroplethOperations.fillCountryIpc(feature?.properties?.ipcPhase),
   });

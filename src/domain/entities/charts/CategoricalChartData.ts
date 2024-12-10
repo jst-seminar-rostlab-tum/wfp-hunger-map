@@ -9,7 +9,6 @@ export interface CategoricalChartData {
   categories: {
     name: string;
     dataPoint: CategoricalDataPoint;
-    showRange?: boolean;
     color?: string;
   }[];
 }

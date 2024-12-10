@@ -1,10 +1,7 @@
-import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph.ts';
-import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph.ts';
-import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
-import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
+import { CategoricalChartData } from '@/domain/entities/charts/CategoricalChartData.ts';
 
 export default interface CategoricalChartProps {
-  data: LineChartData | BalanceOfTradeGraph | CurrencyExchangeGraph | InflationGraphs;
+  data: CategoricalChartData;
 
   title?: string;
   description?: string;

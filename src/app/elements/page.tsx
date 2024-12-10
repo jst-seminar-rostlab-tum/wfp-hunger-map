@@ -4,9 +4,11 @@ import { useState } from 'react';
 
 import AccordionContainer from '@/components/Accordions/AccordionContainer';
 import { CustomButton } from '@/components/Buttons/CustomButton';
+import { CategoricalChart } from '@/components/Charts/CategoricalChart';
 import { LineChart } from '@/components/Charts/LineChart';
 import MapSkeleton from '@/components/Map/MapSkeleton';
 import SearchBar from '@/components/Search/SearchBar';
+import { CategoricalChartData } from '@/domain/entities/charts/CategoricalChartData.ts';
 import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
 import { LineChartDataType } from '@/domain/enums/LineChartDataType.ts';
 import AccordionsOperations from '@/operations/accordions/AccordionOperations';
@@ -127,6 +129,19 @@ export default async function Elements() {
     ],
   };
 
+  const categoricalDummyChartData1: CategoricalChartData = {
+    yAxisLabel: 'Mill',
+    categories: [
+      {
+        name: 'Category A',
+        dataPoint: { y: 5 },
+      },
+      {
+        name: 'Category A',
+        dataPoint: { y: 5 },
+      },
+    ],
+  };
   return (
     <div className="w-full flex flex-col items-center justify-center">
       <div className="svg-icon">
@@ -162,6 +177,9 @@ export default async function Elements() {
         </div>
         <div className="w-400px h-fit">
           <LineChart title="" data={predictionDummyChartData} />
+        </div>
+        <div className="w-400px h-fit">
+          <CategoricalChart title="" data={categoricalDummyChartData1} />
         </div>
       </div>
       <MapSkeleton />

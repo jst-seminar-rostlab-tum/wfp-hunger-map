@@ -24,15 +24,15 @@ export function Topbar() {
   return (
     <Navbar onMenuOpenChange={setIsMenuOpen} maxWidth="full">
       <NavbarContent className="flex-1 min-w-[200px]">
-        <NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} className="md:hidden" />
+        <NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} className="lg:hidden" />
         <NavbarBrand>
           <LogoWithText />
         </NavbarBrand>
       </NavbarContent>
-      <NavbarContent className="hidden md:flex gap-4" justify="center">
+      <NavbarContent className="hidden lg:flex gap-4" justify="center">
         {pageLinks.map((item) => (
           <NavbarItem key={item.label} isActive={pathname === item.href}>
-            <Link href={item.href} className="text-lg" color={pathname === item.href ? 'primary' : 'foreground'}>
+            <Link href={item.href} className="text-medium" color={pathname === item.href ? 'primary' : 'foreground'}>
               {item.label}
             </Link>
           </NavbarItem>

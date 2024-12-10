@@ -58,12 +58,14 @@ export function ChartModal({
           <div className="flex flex-row justify-between w-full h-full">
             <h2 className="flex flex-col justify-center font-normal text-sm sm:text-md md:text-lg"> {title} </h2>
             <div className="flex flex-row w-fit h-full gap-0.5 sm:gap-4 md:gap-6">
-              {!disableSlider && <ChartSliderButton showSlider={showSlider} setShowSlider={setShowSlider} size={4} />}
+              {!disableSlider && showSlider && setShowSlider && (
+                <ChartSliderButton showSlider={showSlider} setShowSlider={setShowSlider} size={4} />
+              )}
 
-              {!disableAlternativeChart && (
+              {!disableAlternativeChart && typeof showAlternativeChart !== 'undefined' && setShowAlternativeChart && (
                 <ChartAlternativeSwitchButton
-                  showAlternativeChart={showAlternativeChart!} // todo rework props
-                  setShowAlternativeChart={setShowAlternativeChart!}
+                  showAlternativeChart={showAlternativeChart}
+                  setShowAlternativeChart={setShowAlternativeChart}
                   size={4}
                 />
               )}
@@ -94,13 +96,13 @@ export function ChartModal({
         </ModalBody>
         {
           // slider to e.g. manipulate the plotted x-axis range of the chart
-          showSlider && (
+          showSlider && sliderMin && sliderMax && selectedSliderRange && setSelectedSliderRange && (
             <ModalFooter>
               <div className="w-full">
                 <ChartSlider
                   title={sliderTitle}
-                  sliderMin={sliderMin!}
-                  sliderMax={sliderMax!} // todo rework props
+                  sliderMin={sliderMin}
+                  sliderMax={sliderMax}
                   selectedSliderRange={selectedSliderRange}
                   setSelectedSliderRange={setSelectedSliderRange}
                 />

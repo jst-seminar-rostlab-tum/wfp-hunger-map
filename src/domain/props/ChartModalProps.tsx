@@ -16,8 +16,8 @@ export default interface ChartModalProps {
   onClose: () => void;
   onOpenChange: () => void;
 
-  showSlider: boolean;
-  setShowSlider: (b: boolean) => void;
+  showSlider?: boolean;
+  setShowSlider?: (b: boolean) => void;
 
   // alternative chart switch
   disableAlternativeChart?: boolean;
@@ -29,6 +29,6 @@ export default interface ChartModalProps {
   sliderTitle?: string;
   sliderMin?: number;
   sliderMax?: number;
-  selectedSliderRange: number[]; // [rangeMin, rangeMax]
-  setSelectedSliderRange: (ns: number[]) => void;
+  selectedSliderRange?: number[]; // [rangeMin, rangeMax]
+  setSelectedSliderRange?: (ns: number[]) => void;
 }

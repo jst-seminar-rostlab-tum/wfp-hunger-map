@@ -73,10 +73,10 @@ export function ChartContainer({
             }
             {
               // button to switch between different chart types
-              !disableAlternativeChart && (
+              !disableAlternativeChart && showAlternativeChart && setShowAlternativeChart && (
                 <ChartAlternativeSwitchButton
-                  showAlternativeChart={showAlternativeChart!} // todo rework props
-                  setShowAlternativeChart={setShowAlternativeChart!}
+                  showAlternativeChart={showAlternativeChart}
+                  setShowAlternativeChart={setShowAlternativeChart}
                   size={ICON_BUTTON_SIZE}
                 />
               )
@@ -120,11 +120,11 @@ export function ChartContainer({
         />
         {
           // slider to e.g. manipulate the plotted x-axis range of the chart
-          showSlider && (
+          showSlider && sliderMin && sliderMax && selectedSliderRange && setSelectedSliderRange && (
             <ChartSlider
               title={sliderTitle}
-              sliderMin={sliderMin!}
-              sliderMax={sliderMax!} // todo rework props
+              sliderMin={sliderMin}
+              sliderMax={sliderMax}
               selectedSliderRange={selectedSliderRange}
               setSelectedSliderRange={setSelectedSliderRange}
             />

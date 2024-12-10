@@ -1,3 +1,4 @@
+import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { MutableRefObject } from 'react';
 
@@ -27,8 +28,8 @@ export default interface ChartContainerProps {
   sliderTitle?: string;
   sliderMin?: number;
   sliderMax?: number;
-  selectedSliderRange: number[]; // [rangeMin, rangeMax]
-  setSelectedSliderRange: (ns: number[]) => void;
+  selectedSliderRange?: number[]; // [rangeMin, rangeMax]
+  setSelectedSliderRange?: (ns: number[]) => void;
 }
 
 /**
@@ -41,7 +42,7 @@ export interface LineChartSliderButtonProps {
   size: number;
 }
 
-export interface ChartTypeSwitchButtonProps {
+export interface ChartAlternativeSwitchButtonProps {
   showAlternativeChart: boolean;
   setShowAlternativeChart: (b: boolean) => void;
   size: number;

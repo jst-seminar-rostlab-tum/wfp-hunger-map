@@ -1,10 +1,16 @@
 'use client';
 
-import Highcharts, { AxisTypeValue, SeriesOptionsType, TooltipFormatterContextObject } from 'highcharts';
+import Highcharts, {
+  AxisTypeValue,
+  DashStyleValue,
+  SeriesOptionsType,
+  TooltipFormatterContextObject,
+} from 'highcharts';
 import highchartsMore from 'highcharts/highcharts-more';
 import ExportData from 'highcharts/modules/export-data';
 import Exporting from 'highcharts/modules/exporting';
 import OfflineExporting from 'highcharts/modules/offline-exporting';
+import patternFill from 'highcharts/modules/pattern-fill';
 import HighchartsReact from 'highcharts-react-official';
 
 import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph.ts';
@@ -17,6 +23,7 @@ import { formatToMillion } from '@/utils/formatting.ts';
 // initialize the exporting module
 if (typeof Highcharts === 'object') {
   highchartsMore(Highcharts);
+  patternFill(Highcharts);
   Exporting(Highcharts);
   ExportData(Highcharts);
   OfflineExporting(Highcharts);
@@ -30,10 +37,21 @@ if (typeof Highcharts === 'object') {
  */
 export default class LineChartOperations {
   /**
+   * List of different dash styles for visualizing prediction data.
+   * All lines that are marked as `prediction` are colored with the same predictions color,
+   * to distinguish multiple predictions data series we use different dash styling.
+   */
+  private static getPredictionsDashStyles(): DashStyleValue[] {
+    return ['ShortDashDotDot', 'ShortDash', 'LongDashDotDot', 'LongDash', 'DashDot', 'Dot', 'Dash'];
+  }
+
+  /**
    * The first four line colors are fixed; if more than four lines are rendered,
    * the default Highcharts colors will be used.
    */
-  private static LINE_COLORS = ['#FFB74D', '#157DBC', '#85E77C', '#FF5252'];
+  private static getLineColorList() {
+    return ['#FF5252', '#85E77C', '#157DBC', '#FFB74D'];
+  }
 
   /**
    * Formatter function for `LineChart.Options.tooltip.formatter` usage only.
@@ -181,6 +199,8 @@ export default class LineChartOperations {
     xAxisSelectedMaxIdx?: number,
     barChart?: boolean
   ): Highcharts.Options {
+    const colorSecondary = isDark ? '#B0B0B0' : '#666666';
+
     // get selected x-axis range min and max values
     const xAxisDistinctValues = LineChartOperations.getDistinctXAxisValues(data);
     const xAxisSelectedMin = xAxisSelectedMinIdx !== undefined ? xAxisDistinctValues[xAxisSelectedMinIdx] : undefined;
@@ -188,16 +208,29 @@ export default class LineChartOperations {
 
     // parsing all given data series
     const series: SeriesOptionsType[] = [];
+    const defaultLineColors = LineChartOperations.getLineColorList();
+    const defaultPredictionsDashStyles = LineChartOperations.getPredictionsDashStyles();
     for (let i = 0; i < data.lines.length; i += 1) {
       const lineData = data.lines[i];
 
       // the first four line colors are fixed; however, they can also be overridden by the `color` property;
-      // if more than four lines are rendered the default Highcharts colors will be used
+      // if `prediction` is set, the standard predictions color is used
+      // if more than four lines are rendered the default Highcharts colors will be used (`categoryColor` stays undefined)
       let categoryColor;
       if (lineData.color) {
         categoryColor = lineData.color;
-      } else if (i < this.LINE_COLORS.length) {
-        categoryColor = this.LINE_COLORS[i];
+      } else if (lineData.prediction) {
+        categoryColor = isDark ? '#0e6983' : '#3896a2';
+      } else {
+        categoryColor = defaultLineColors.pop();
+      }
+
+      // select dash style
+      let categoryDashStyle: DashStyleValue = 'Solid';
+      if (lineData.dashStyle) {
+        categoryDashStyle = lineData.dashStyle;
+      } else if (lineData.prediction) {
+        categoryDashStyle = defaultPredictionsDashStyles.pop() || 'Solid';
       }
 
       // collect series data
@@ -222,8 +255,24 @@ export default class LineChartOperations {
           name: lineData.name,
           type: 'column',
           data: seriesData,
-          color: categoryColor,
-          opacity: lineData.showRange ? 0.7 : 1,
+          color:
+            // if the dashStyle is not solid we fill the bars with diagonal lines
+            categoryDashStyle !== 'Solid'
+              ? {
+                  pattern: {
+                    path: {
+                      d: 'M 0 0 L 8 8 M -8 8 L 8 -8',
+                      stroke: categoryColor,
+                      strokeWidth: 1,
+                    },
+                    width: 8,
+                    height: 8,
+                  },
+                }
+              : categoryColor,
+          opacity: lineData.showRange ? 0.75 : 1,
+          borderColor: categoryColor,
+          dashStyle: 'Solid',
         });
       } else {
         // plot series as line
@@ -232,6 +281,7 @@ export default class LineChartOperations {
           name: lineData.name,
           data: seriesData,
           color: categoryColor,
+          dashStyle: categoryDashStyle,
         });
       }
 
@@ -262,6 +312,7 @@ export default class LineChartOperations {
             data: areaSeriesData,
             linkedTo: ':previous',
             color: categoryColor,
+            dashStyle: 'Solid',
           });
         } else {
           // add area around line
@@ -271,13 +322,50 @@ export default class LineChartOperations {
             data: areaSeriesData,
             color: categoryColor,
             linkedTo: ':previous',
+            dashStyle: lineData.dashStyle,
           });
         }
       }
     }
 
+    // build all vertical lines and plot bands
+    const verticalBands = data.verticalBands ? [...data.verticalBands] : [];
+    const verticalLines = data.verticalLines ? [...data.verticalLines] : [];
+    if (data.predictionVerticalLineX) {
+      // get max x value
+      const xMax = Math.max(...data.lines.flatMap((l) => l.dataPoints.map((p) => p.x)));
+      verticalBands.push({
+        xStart: data.predictionVerticalLineX,
+        xEnd: xMax,
+        label: 'Future',
+      });
+    }
+    if (data.predictionVerticalLineX) {
+      verticalLines.push({
+        x: data.predictionVerticalLineX,
+      });
+    }
+    const plotBands = verticalBands.map((b) => ({
+      from: b.xStart,
+      to: b.xEnd,
+      color: b.color || 'rgba(140,140,140,0.07)',
+      zIndex: 1,
+      label: {
+        text: b.label || '',
+        style: {
+          color: colorSecondary,
+          fontSize: '0.7rem',
+        },
+      },
+    }));
+    const plotLines = verticalLines.map((l) => ({
+      value: l.x,
+      color: l.color || isDark ? '#424242' : '#E6E6E6',
+      dashStyle: l.dashStyle,
+      zIndex: 2,
+    }));
+
     // constructing the final HighCharts.Options
-    const colorSecondary = isDark ? '#B0B0B0' : '#666666';
     return {
       title: {
         text: '',
@@ -308,6 +396,8 @@ export default class LineChartOperations {
         lineColor: isDark ? '#a6a6a6' : '#757575',
         tickColor: isDark ? '#a6a6a6' : '#757575',
         tickLength: 4,
+        plotBands,
+        plotLines,
       },
       yAxis: {
         title: {
@@ -377,7 +467,7 @@ export default class LineChartOperations {
           animation: true,
           grouping: true,
           shadow: false,
-          borderWidth: 0,
+          borderWidth: 1,
         },
         errorbar: {
           animation: true,

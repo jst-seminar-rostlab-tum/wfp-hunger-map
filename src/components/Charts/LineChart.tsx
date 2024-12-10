@@ -70,11 +70,7 @@ export function LineChart({
 
   // convert data to `LineChartData` and build chart options for 'Highcharts' (line and bar chart)
   const lineChartData: LineChartData = LineChartOperations.convertToLineChartData(data);
-  const lineChartOptions: Highcharts.Options = LineChartOperations.getHighChartOptions(
-    lineChartData,
-    theme === 'dark',
-    roundLines
-  );
+  const lineChartOptions: Highcharts.Options = LineChartOperations.getHighChartOptions(lineChartData, roundLines);
 
   // the `selectedXAxisRange` saves the to be rendered x-axis range of the chart
   // can be changed using the `LinkeChartXAxisSlider` if the param `xAxisSlider==true`
@@ -97,7 +93,6 @@ export function LineChart({
       setChartOptions(
         LineChartOperations.getHighChartOptions(
           lineChartData,
-          theme === 'dark',
           roundLines,
           selectedXAxisRange[0],
           selectedXAxisRange[1],
@@ -106,13 +101,7 @@ export function LineChart({
       );
     } else {
       setChartOptions(
-        LineChartOperations.getHighChartOptions(
-          lineChartData,
-          theme === 'dark',
-          roundLines,
-          selectedXAxisRange[0],
-          selectedXAxisRange[1]
-        )
+        LineChartOperations.getHighChartOptions(lineChartData, roundLines, selectedXAxisRange[0], selectedXAxisRange[1])
       );
     }
   }, [showBarChart, theme, selectedXAxisRange]);

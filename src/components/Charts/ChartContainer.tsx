@@ -7,13 +7,11 @@ import HighchartsReact from 'highcharts-react-official';
 import { Maximize4 } from 'iconsax-react';
 import { useState } from 'react';
 
-import LineChartBarLineSwitchButton from '@/components/Charts/helpers/LineChartBarLineSwitchButton';
-import LineChartSliderButton from '@/components/Charts/helpers/LineChartSliderButton';
-import LineChartXAxisSlider from '@/components/Charts/helpers/LineChartXAxisSlider';
-import { LineChartModal } from '@/components/Charts/LineChartModal';
+import ChartAlternativeSwitchButton from '@/components/Charts/helpers/ChartAlternativeSwitchButton';
+import ChartSlider from '@/components/Charts/helpers/ChartSlider';
+import ChartSliderButton from '@/components/Charts/helpers/ChartSliderButton';
 import { Tooltip } from '@/components/Tooltip/Tooltip';
 import ChartContainerProps from '@/domain/props/ChartContainerProps';
-import ChartSliderButton from '@/components/Charts/helpers/ChartSliderButton.tsx';
 
 /**
  * todo
@@ -27,10 +25,13 @@ export function ChartContainer({
   noPadding,
   expandable,
   transparentBackground,
-  chartTypeSwitchHandle,
-  sliderHandle,
+  showAlternativeChart,
+  setShowAlternativeChart,
+  sliderTitle,
   sliderMin,
   sliderMax,
+  selectedSliderRange,
+  setSelectedSliderRange,
 }: ChartContainerProps) {
   const TITLE_TEXT_SIZE = small ? 'text-sm' : 'text-md';
   const DESCRIPTION_TEXT_SIZE = small ? 'text-tiny' : 'text-sm';
@@ -40,19 +41,17 @@ export function ChartContainer({
   const MAIN_BOX_PADDING_FACTOR = noPadding ? 0 : 1;
 
   // slider only available and therefore activated if all required params are provided
-  const sliderAvailable = sliderHandle && sliderMin && sliderMax;
+  const sliderAvailable =
+    typeof sliderMin !== 'undefined' &&
+    typeof sliderMax !== 'undefined' &&
+    selectedSliderRange &&
+    setSelectedSliderRange;
   // chart type switch only available if all required params are provided
-  const chartTypeSwitchAvailable = chartTypeSwitchHandle;
+  const chartTypeSwitchAvailable = typeof showAlternativeChart !== 'undefined' && setShowAlternativeChart;
 
   // full screen modal state handling
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
 
-  // the `selectedXAxisRange` saves the to be rendered x-axis range of the chart
-  // can be changed using the `LinkeChartXAxisSlider` if the param `xAxisSlider==true`
-  const [selectedSliderRange, setSelectedSliderRange] = useState([sliderMin, sliderMax]);
-
-  // controlling if a line or bar chart is rendered; line chart is the default
-  const [showAlternativeChart, setShowAlternativeChart] = useState(false);
   // handling the x-axis range slider visibility
   const [showSlider, setShowSlider] = useState(false);
 
@@ -71,19 +70,15 @@ export function ChartContainer({
             {
               // button to hide/show the slider to e.g. manipulate the plotted x-axis range of the chart
               sliderAvailable && (
-                <ChartSliderButton
-                  showSlider={showSlider}
-                  setShowSlider={setShowSlider}
-                  size={ICON_BUTTON_SIZE}
-                />
+                <ChartSliderButton showSlider={showSlider} setShowSlider={setShowSlider} size={ICON_BUTTON_SIZE} />
               )
             }
             {
               // button to switch between different chart types
               chartTypeSwitchAvailable && (
-                <LineChartBarLineSwitchButton // todo linus rename
-                  showBarChart={showChartTypeAlternative}
-                  setShowBarChart={setShowChartTypeAlternative}
+                <ChartAlternativeSwitchButton
+                  showAlternativeChart={showAlternativeChart}
+                  setShowAlternativeChart={setShowAlternativeChart}
                   size={ICON_BUTTON_SIZE}
                 />
               )
@@ -123,32 +118,36 @@ export function ChartContainer({
         {
           // slider to e.g. manipulate the plotted x-axis range of the chart
           sliderAvailable && (
-            <LineChartXAxisSlider // todo linus rename
-              selectedXAxisRange={selectedSliderRange}
-              setSelectedXAxisRange={setSelectedSliderRange}
-              data={chartData}
+            <ChartSlider
+              title={sliderTitle}
+              sliderMin={sliderMin}
+              sliderMax={sliderMax}
+              selectedSliderRange={selectedSliderRange}
+              setSelectedSliderRange={setSelectedSliderRange}
             />
           )
         }
       </div>
 
-      <LineChartModal // todo linus rename
-        title={title}
-        description={description}
-        barChartSwitch={barChartSwitch}
-        xAxisSlider={xAxisSlider}
-        lineChartData={lineChartData}
-        chartOptions={chartOptions}
-        isOpen={isOpen}
-        onClose={onClose}
-        onOpenChange={onOpenChange}
-        showXAxisSlider={showXAxisSlider}
-        setShowXAxisSlider={setShowXAxisSlider}
-        showBarChart={showBarChart}
-        setShowBarChart={setShowBarChart}
-        selectedXAxisRange={selectedXAxisRange}
-        setSelectedXAxisRange={setSelectedXAxisRange}
-      />
+      {/**
+       * <LineChartModal // todo linus rename
+       *         title={title}
+       *         description={description}
+       *         barChartSwitch={barChartSwitch}
+       *         xAxisSlider={xAxisSlider}
+       *         lineChartData={chartData}
+       *         chartOptions={chartOptions}
+       *         isOpen={isOpen}
+       *         onClose={onClose}
+       *         onOpenChange={onOpenChange}
+       *         showXAxisSlider={showXAxisSlider}
+       *         setShowXAxisSlider={setShowXAxisSlider}
+       *         showBarChart={showBarChart}
+       *         setShowBarChart={setShowBarChart}
+       *         selectedXAxisRange={selectedXAxisRange}
+       *         setSelectedXAxisRange={setSelectedXAxisRange}
+       *       />
+       */}
     </>
   );
 }

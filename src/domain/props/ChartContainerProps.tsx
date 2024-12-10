@@ -11,7 +11,15 @@ export default interface ChartContainerProps {
   expandable?: boolean;
   transparentBackground?: boolean;
   chartTypeSwitchHandle?: () => void;
-  sliderHandle?: (xStart: number, xEnd: number) => void;
+
+  // alternative chart switch
+  showAlternativeChart?: boolean;
+  setShowAlternativeChart?: (b: boolean) => void;
+
+  // slider props
+  sliderTitle?: string;
   sliderMin?: number;
   sliderMax?: number;
+  selectedSliderRange: number[]; // [rangeMin, rangeMax]
+  setSelectedSliderRange: (ns: number[]) => void;
 }

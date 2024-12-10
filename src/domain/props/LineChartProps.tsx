@@ -2,6 +2,7 @@ import HighchartsReact from 'highcharts-react-official';
 import { MutableRefObject } from 'react';
 
 import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph.ts';
+import { CategoricalChartData } from '@/domain/entities/charts/CategoricalChartData.ts';
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph.ts';
 import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
 import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
@@ -36,13 +37,15 @@ export interface ChartTypeSwitchButtonProps {
   size: number;
 }
 
-export interface ChartSlider {
+export interface ChartSliderProps {
+  title?: string;
+  sliderMin: number;
+  sliderMax: number;
   selectedSliderRange: number[]; // [rangeMin, rangeMax]
   setSelectedSliderRange: (ns: number[]) => void;
-  chartData: LineChartData | CategoricalChartData;
 }
 
-export interface LineChartDownloadButtonProps {
+export interface ChartDownloadButtonProps {
   chartRef: MutableRefObject<HighchartsReact.RefObject | null>;
-  lineChartData: LineChartData;
+  chartData: LineChartData | CategoricalChartData;
 }

@@ -5,12 +5,9 @@ import Exporting from 'highcharts/modules/exporting';
 import OfflineExporting from 'highcharts/modules/offline-exporting';
 
 import CategoricalChartProps from '@/domain/props/CategoricalChartProps';
-
-// initialize the exporting module
-if (typeof Highcharts === 'object') {
-  Exporting(Highcharts);
-  OfflineExporting(Highcharts);
-}
+import { useTheme } from 'next-themes';
+import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
+import LineChartOperations from '@/operations/charts/LineChartOperations.ts';
 
 /**
  * todo
@@ -26,5 +23,12 @@ export function CategoricalChart({
   disablePieChartSwitch,
   disableDownload,
 }: CategoricalChartProps) {
+  // the 'chartOptions' are dependent on the theme
+  const { theme } = useTheme();
+
+  // build chart options for 'Highcharts'
+  const lineChartOptions: Highcharts.Options = LineChartOperations.getHighChartOptions(lineChartData, theme === 'dark');
+
+
   return <>cat chart</>;
 }

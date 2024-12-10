@@ -90,7 +90,7 @@ export function NestedPopover({ items, onSelectionChange }: NestedPopoverProps) 
     }
   };
 
-  const hoverMainMenuITem = (itemId: string): void => {
+  const hoverMainMenuItem = (itemId: string): void => {
     const hoveredMainItem = items.find((it) => it.topic_id === itemId);
     if (hoveredMainItem?.options === undefined || hoveredMainItem?.options.length === 0) {
       setOpenNestedMenu(null);
@@ -143,7 +143,7 @@ export function NestedPopover({ items, onSelectionChange }: NestedPopoverProps) 
                   key={item.topic_id}
                   className="m-1 h-10 text-left text-gray-700 hover:bg-blue-100 hover:text-black dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white p-2"
                   onClick={() => selectMainMenuItem(item)}
-                  onMouseEnter={() => hoverMainMenuITem(item.topic_id)}
+                  onMouseEnter={() => hoverMainMenuItem(item.topic_id)}
                 >
                   {item.topic_description}
                 </div>

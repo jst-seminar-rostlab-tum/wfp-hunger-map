@@ -7,9 +7,11 @@ import { MapContainer } from 'react-leaflet';
 
 import BackToGlobalButton from '@/components/Map/BackToGlobalButton';
 import { MAP_MAX_ZOOM, MAP_MIN_ZOOM } from '@/domain/constant/map/Map';
+import { useSelectedAlert } from '@/domain/contexts/SelectedAlertContext';
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSelectedMapVisibility } from '@/domain/contexts/SelectedMapVisibilityContext';
+import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { CountryData } from '@/domain/entities/country/CountryData.ts';
 import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data.ts';
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
@@ -29,6 +31,8 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
   const { selectedMapType } = useSelectedMap();
   const { setSelectedMapVisibility } = useSelectedMapVisibility();
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
+  const { resetAlert } = useSelectedAlert();
+  const { closeSidebar } = useSidebar();
 
   const [countryData, setCountryData] = useState<CountryData | undefined>();
   const [countryIso3Data, setCountryIso3Data] = useState<CountryIso3Data | undefined>();
@@ -57,6 +61,8 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
       const selectedCountryData: CountryMapData | undefined = countries.features.find(
         (country) => country.properties.adm0_id === selectedCountryId
       );
+      closeSidebar();
+      resetAlert();
 
       if (selectedCountryData) {
         // Fetch country data for the new map type

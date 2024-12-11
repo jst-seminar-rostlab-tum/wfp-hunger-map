@@ -7,11 +7,9 @@ import { MapContainer } from 'react-leaflet';
 
 import BackToGlobalButton from '@/components/Map/BackToGlobalButton';
 import { MAP_MAX_ZOOM, MAP_MIN_ZOOM } from '@/domain/constant/map/Map';
-import { useSelectedAlert } from '@/domain/contexts/SelectedAlertContext';
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSelectedMapVisibility } from '@/domain/contexts/SelectedMapVisibilityContext';
-import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { CountryData } from '@/domain/entities/country/CountryData.ts';
 import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data.ts';
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
@@ -30,9 +28,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
   const mapRef = useRef<LeafletMap | null>(null);
   const { selectedMapType } = useSelectedMap();
   const { setSelectedMapVisibility } = useSelectedMapVisibility();
-  const { resetAlert } = useSelectedAlert();
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
-  const { closeSidebar } = useSidebar();
 
   const [countryData, setCountryData] = useState<CountryData | undefined>();
   const [countryIso3Data, setCountryIso3Data] = useState<CountryIso3Data | undefined>();
@@ -41,6 +37,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
   const [regionNutritionData, setRegionNutritionData] = useState<FeatureCollection | undefined>();
   const [ipcRegionData, setIpcRegionData] = useState<FeatureCollection<Geometry, GeoJsonProperties> | undefined>();
   const [selectedCountryName, setSelectedCountryName] = useState<string | undefined>(undefined);
+  const [data, setData] = useState<boolean>(false);
 
   const onZoomThresholdReached = () => {
     setSelectedCountryId(null);
@@ -50,30 +47,19 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
       setCountryData,
       setCountryIso3Data,
       setRegionNutritionData,
-      setIpcRegionData
+      setIpcRegionData,
+      setData
     );
   };
 
   useEffect(() => {
     if (selectedCountryId) {
-      setSelectedMapVisibility(
-        selectedMapType === GlobalInsight.VEGETATION || selectedMapType === GlobalInsight.RAINFALL
-      );
-      closeSidebar();
-      resetAlert();
-
-      MapOperations.resetSelectedCountryData(
-        setRegionData,
-        setCountryData,
-        setCountryIso3Data,
-        setRegionNutritionData,
-        setIpcRegionData
-      );
-
       const selectedCountryData: CountryMapData | undefined = countries.features.find(
         (country) => country.properties.adm0_id === selectedCountryId
       );
+
       if (selectedCountryData) {
+        // Fetch country data for the new map type
         MapOperations.fetchCountryData(
           selectedMapType,
           selectedCountryData,
@@ -82,13 +68,35 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
           setCountryData,
           setCountryIso3Data,
           setRegionNutritionData,
-          setIpcRegionData
+          setIpcRegionData,
+          setData
         );
-        setSelectedCountryName(selectedCountryData.properties.adm0_name);
-        mapRef.current?.fitBounds(L.geoJSON(selectedCountryData as GeoJSON).getBounds(), { animate: true });
+
+        if (data) {
+          setSelectedCountryName(selectedCountryData.properties.adm0_name);
+          mapRef.current?.fitBounds(L.geoJSON(selectedCountryData as GeoJSON).getBounds(), { animate: true });
+        } else {
+          mapRef.current?.fitBounds(
+            [
+              [-90, -180], // South-West corner
+              [90, 180], // North-East corner
+            ],
+            { animate: true }
+          );
+          setSelectedCountryId(null);
+        }
       }
+    } else {
+      mapRef.current?.fitBounds(
+        [
+          [-90, -180], // South-West corner
+          [90, 180], // North-East corner
+        ],
+        { animate: true }
+      );
+      setSelectedCountryId(null);
     }
-  }, [selectedCountryId, selectedMapType]);
+  }, [selectedCountryId, selectedMapType, data]);
 
   return (
     <MapContainer

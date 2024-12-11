@@ -7,9 +7,6 @@ import Highcharts, {
   TooltipFormatterContextObject,
 } from 'highcharts';
 import highchartsMore from 'highcharts/highcharts-more';
-import ExportData from 'highcharts/modules/export-data';
-import Exporting from 'highcharts/modules/exporting';
-import OfflineExporting from 'highcharts/modules/offline-exporting';
 import patternFill from 'highcharts/modules/pattern-fill';
 
 import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph.ts';
@@ -24,16 +21,11 @@ import { getTailwindColor } from '@/utils/tailwind-util.ts';
 if (typeof Highcharts === 'object') {
   highchartsMore(Highcharts);
   patternFill(Highcharts);
-  Exporting(Highcharts);
-  ExportData(Highcharts);
-  OfflineExporting(Highcharts);
 }
 /**
  * Using LineChartOperations, the LineChart component can convert its received data into LineChartData
  * and then generate the chart `Highcharts.Options` object required by the Highcharts component.
  * Two types of options can be created: rendering the LineChart data as a line chart or as a bar chart.
- *
- * In addition, several download functionalities are implemented.
  */
 export default class LineChartOperations {
   /**
@@ -59,7 +51,7 @@ export default class LineChartOperations {
   }
 
   /**
-   * Formatter function for `LineChart.Options.tooltip.formatter` usage only.
+   * Formatter function for `Options.tooltip.formatter` usage only.
    */
   private static chartTooltipFormatter(
     xAxisType: AxisTypeValue,
@@ -83,7 +75,7 @@ export default class LineChartOperations {
   }
 
   /**
-   * Formatter function for `LineChart.Options.xAxis.labels.formatter` usage only.
+   * Tooltip formatter function for `LineChart.Options.xAxis.labels.formatter` usage only.
    */
   private static chartXAxisFormatter(xAxisType: AxisTypeValue, x: string | number): string {
     if (xAxisType === 'datetime' && typeof x === 'number') {

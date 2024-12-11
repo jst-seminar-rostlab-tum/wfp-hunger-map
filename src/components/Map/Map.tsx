@@ -41,6 +41,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
   const [regionNutritionData, setRegionNutritionData] = useState<FeatureCollection | undefined>();
   const [ipcRegionData, setIpcRegionData] = useState<FeatureCollection<Geometry, GeoJsonProperties> | undefined>();
   const [selectedCountryName, setSelectedCountryName] = useState<string | undefined>(undefined);
+  const [data, setData] = useState<boolean>(true);
 
   const onZoomThresholdReached = () => {
     setSelectedCountryId(null);
@@ -82,13 +83,34 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
           setCountryData,
           setCountryIso3Data,
           setRegionNutritionData,
-          setIpcRegionData
+          setIpcRegionData,
+          setData
         );
-        setSelectedCountryName(selectedCountryData.properties.adm0_name);
-        mapRef.current?.fitBounds(L.geoJSON(selectedCountryData as GeoJSON).getBounds(), { animate: true });
+        if (data) {
+          setSelectedCountryName(selectedCountryData.properties.adm0_name);
+          mapRef.current?.fitBounds(L.geoJSON(selectedCountryData as GeoJSON).getBounds(), { animate: true });
+        } else {
+          mapRef.current?.fitBounds(
+            [
+              [-90, -180],
+              [90, 180],
+            ],
+            { animate: true }
+          );
+          setSelectedCountryId(null);
+        }
+      } else {
+        mapRef.current?.fitBounds(
+          [
+            [-90, -180], // South-West corner
+            [90, 180], // North-East corner
+          ],
+          { animate: true }
+        );
+        setSelectedCountryId(null);
       }
     }
-  }, [selectedCountryId, selectedMapType]);
+  }, [selectedCountryId, selectedMapType, data]);
 
   return (
     <MapContainer

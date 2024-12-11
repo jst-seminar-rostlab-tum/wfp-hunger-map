@@ -32,11 +32,7 @@ export function ChartContainer({
   showAlternativeChart,
   setShowAlternativeChart,
   disableSlider,
-  sliderTitle,
-  sliderMin,
-  sliderMax,
-  selectedSliderRange,
-  setSelectedSliderRange,
+  sliderProps,
 }: ChartContainerProps) {
   const TITLE_TEXT_SIZE = small ? 'text-sm' : 'text-md';
   const DESCRIPTION_TEXT_SIZE = small ? 'text-tiny' : 'text-sm';
@@ -73,7 +69,7 @@ export function ChartContainer({
             }
             {
               // button to switch between different chart types
-              !disableAlternativeChart && showAlternativeChart && setShowAlternativeChart && (
+              !disableAlternativeChart && typeof showAlternativeChart !== 'undefined' && setShowAlternativeChart && (
                 <ChartAlternativeSwitchButton
                   showAlternativeChart={showAlternativeChart}
                   setShowAlternativeChart={setShowAlternativeChart}
@@ -83,7 +79,9 @@ export function ChartContainer({
             }
             {
               // button to download chart as png, svg, etc.
-              !disableDownload && <ChartDownloadButton chartRef={chartRef} chartData={chartData} />
+              !disableDownload && (
+                <ChartDownloadButton chartRef={chartRef} chartData={chartData} size={ICON_BUTTON_SIZE} />
+              )
             }
             {
               // button to trigger the full screen modal; rendered if `disableExpandable` is not selected
@@ -120,13 +118,13 @@ export function ChartContainer({
         />
         {
           // slider to e.g. manipulate the plotted x-axis range of the chart
-          showSlider && sliderMin && sliderMax && selectedSliderRange && setSelectedSliderRange && (
+          showSlider && sliderProps && (
             <ChartSlider
-              title={sliderTitle}
-              sliderMin={sliderMin}
-              sliderMax={sliderMax}
-              selectedSliderRange={selectedSliderRange}
-              setSelectedSliderRange={setSelectedSliderRange}
+              title={sliderProps?.title} // todo unpack props smarter
+              sliderMin={sliderProps?.sliderMin}
+              sliderMax={sliderProps?.sliderMax}
+              selectedSliderRange={sliderProps?.selectedSliderRange}
+              setSelectedSliderRange={sliderProps?.setSelectedSliderRange}
             />
           )
         }
@@ -147,11 +145,7 @@ export function ChartContainer({
         showAlternativeChart={showAlternativeChart}
         setShowAlternativeChart={setShowAlternativeChart}
         disableSlider={disableSlider}
-        sliderTitle={sliderTitle}
-        sliderMin={sliderMin}
-        sliderMax={sliderMax}
-        selectedSliderRange={selectedSliderRange}
-        setSelectedSliderRange={setSelectedSliderRange}
+        sliderProps={sliderProps}
       />
     </>
   );

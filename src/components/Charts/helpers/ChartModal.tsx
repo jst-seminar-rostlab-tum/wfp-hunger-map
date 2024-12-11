@@ -13,10 +13,9 @@ import { Tooltip } from '@/components/Tooltip/Tooltip';
 import ChartModalProps from '@/domain/props/ChartModalProps';
 
 /**
- * This component is tied to the `LineChart` component and should not be used independently. // todo rework
- * It renders the modal, which can be opened by the user from the `LineChart` to display the chart
- * in a larger view and access additional functionalities, such as downloading the chart as a PNG.
- * For more details, please refer to the `LineChart` component.
+ * This component is tied to the `ChartContainer` component and should not be used independently.
+ * It renders the modal, which can be opened by the user from the `ChartContainer`
+ * to display the chart in a larger view.
  */
 export function ChartModal({
   chartOptions,
@@ -33,16 +32,10 @@ export function ChartModal({
   showAlternativeChart,
   setShowAlternativeChart,
   disableSlider,
-  sliderTitle,
-  sliderMin,
-  sliderMax,
-  selectedSliderRange,
-  setSelectedSliderRange,
+  sliderProps,
 }: ChartModalProps) {
   const chartRef = useRef<HighchartsReact.RefObject | null>(null);
 
-  // full screen modal by the 'LineChart' component that can be opened if `expandable==true`;
-  // offers a larger chart and an additional features (see buttons)
   return (
     <Modal
       size="5xl"
@@ -70,7 +63,7 @@ export function ChartModal({
                 />
               )}
 
-              {!disableDownload && <ChartDownloadButton chartRef={chartRef} chartData={chartData} />}
+              {!disableDownload && <ChartDownloadButton chartRef={chartRef} chartData={chartData} size={4} />}
 
               {/* close model button */}
               <Tooltip text="Close">
@@ -96,15 +89,15 @@ export function ChartModal({
         </ModalBody>
         {
           // slider to e.g. manipulate the plotted x-axis range of the chart
-          showSlider && sliderMin && sliderMax && selectedSliderRange && setSelectedSliderRange && (
+          showSlider && sliderProps && (
             <ModalFooter>
               <div className="w-full">
                 <ChartSlider
-                  title={sliderTitle}
-                  sliderMin={sliderMin}
-                  sliderMax={sliderMax}
-                  selectedSliderRange={selectedSliderRange}
-                  setSelectedSliderRange={setSelectedSliderRange}
+                  title={sliderProps?.title} // todo unpack props smarter
+                  sliderMin={sliderProps?.sliderMin}
+                  sliderMax={sliderProps?.sliderMax}
+                  selectedSliderRange={sliderProps?.selectedSliderRange}
+                  setSelectedSliderRange={sliderProps?.setSelectedSliderRange}
                 />
               </div>
             </ModalFooter>

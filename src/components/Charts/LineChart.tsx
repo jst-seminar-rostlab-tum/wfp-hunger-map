@@ -8,6 +8,7 @@ import { ChartContainer } from '@/components/Charts/helpers/ChartContainer';
 import { LineChartData } from '@/domain/entities/charts/LineChartData';
 import LineChartProps from '@/domain/props/LineChartProps';
 import LineChartOperations from '@/operations/charts/LineChartOperations';
+import { ChartSliderProps } from '@/domain/props/ChartContainerProps.tsx';
 
 /**
  * The LineChart component is a box that primarily renders a title, description text, and a line chart.
@@ -76,6 +77,15 @@ export function LineChart({
     }
   }, [showBarChart, theme, selectedXAxisRange]);
 
+  // chart slider props - to manipulate the shown x-axis range
+  const sliderProps: ChartSliderProps = {
+    title: 'Adjusting x-axis range:',
+    sliderMin: 0,
+    sliderMax: xAxisLength - 1,
+    selectedSliderRange: selectedXAxisRange,
+    setSelectedSliderRange: setSelectedXAxisRange,
+  };
+
   return (
     <ChartContainer
       chartOptions={chartOptions}
@@ -91,11 +101,7 @@ export function LineChart({
       showAlternativeChart={showBarChart}
       setShowAlternativeChart={setShowBarChart}
       disableSlider={disableXAxisSlider}
-      sliderTitle="Adjusting x-axis range:"
-      sliderMin={0}
-      sliderMax={xAxisLength - 1}
-      selectedSliderRange={selectedXAxisRange}
-      setSelectedSliderRange={setSelectedXAxisRange}
+      sliderProps={sliderProps}
     />
   );
 }

@@ -7,6 +7,7 @@ export class AccessibilityOperations {
    *
    * relevant docu see below:
    * https://dequeuniversity.com/rules/axe/4.9/aria-command-name
+   * https://dequeuniversity.com/rules/axe/4.9/target-size
    */
   static addAriaLabelsAndStyles(): void {
     const markers = document.querySelectorAll('.leaflet-marker-icon.leaflet-zoom-hide');
@@ -18,6 +19,13 @@ export class AccessibilityOperations {
       marker.setAttribute('tabindex', '0');
 
       marker.classList.add('map-marker-with-margin');
+    });
+
+    const containers = document.querySelectorAll('.leaflet-container');
+    containers.forEach((container) => {
+      if (!container.getAttribute('aria-label')) {
+        container.setAttribute('aria-label', 'leaflet container');
+      }
     });
   }
 }

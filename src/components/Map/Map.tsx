@@ -3,10 +3,16 @@ import 'leaflet/dist/leaflet.css';
 import { Feature, FeatureCollection, GeoJSON, GeoJsonProperties, Geometry } from 'geojson';
 import L, { Map as LeafletMap } from 'leaflet';
 import { useEffect, useRef, useState } from 'react';
-import { GeoJSON as LeafletGeoJSON, MapContainer, Pane, TileLayer } from 'react-leaflet';
+import { GeoJSON as LeafletGeoJSON, MapContainer, Pane, SVGOverlay, TileLayer } from 'react-leaflet';
 
 import BackToGlobalButton from '@/components/Map/BackToGlobalButton';
-import { countryBorderStyle, disputedAreaStyle, MAP_MAX_ZOOM, MAP_MIN_ZOOM } from '@/domain/constant/map/Map';
+import {
+  countryBorderStyle,
+  disputedAreaStyle,
+  MAP_MAX_ZOOM,
+  MAP_MIN_ZOOM,
+  oceanBounds,
+} from '@/domain/constant/map/Map';
 import { useSelectedAlert } from '@/domain/contexts/SelectedAlertContext';
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
@@ -107,12 +113,12 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
           url={`https://api.mapbox.com/styles/v1/feketesamu/cm4h3vg16012n01r1cz47horn/tiles/256/{z}/{x}/{y}?access_token=${process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}`}
         />
       </Pane>
-      {/* <Pane name="ocean" style={{ zIndex: 0 }}>
+      <Pane name="ocean" style={{ zIndex: 0 }}>
         <SVGOverlay bounds={oceanBounds}>
           <rect width="100%" height="100%" fill="hsl(var(--nextui-ocean))" />
         </SVGOverlay>
       </Pane>
-      <Pane name="countries_base" style={{ zIndex: 1 }}>
+      {/* <Pane name="countries_base" style={{ zIndex: 1 }}>
         <LeafletGeoJSON
           interactive={false}
           data={MapOperations.convertCountriesToFeatureCollection(countries.features)}

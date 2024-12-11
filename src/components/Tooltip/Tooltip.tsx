@@ -1,4 +1,5 @@
 import { Tooltip as NextUITooltip } from '@nextui-org/tooltip';
+import clsx from 'clsx';
 
 import TooltipProps from '@/domain/props/TooltipProps';
 
@@ -25,8 +26,8 @@ export function Tooltip({ children, title, text, delay, warning, titleStyle, tex
 
   const tooltipContent = title ? (
     <div>
-      <h3 className={`text-small font-bold mb-1 ${titleStyle}`}> {title} </h3>
-      <p className={`text-small font-normal ${textStyle}`}> {text} </p>
+      <h3 className={clsx('text-small font-bold mb-1', titleStyle)}> {title} </h3>
+      <p className={clsx('text-small font-normal', textStyle)}> {text} </p>
     </div>
   ) : (
     <p className={`text-small font-normal ${textStyle}`}> {text} </p>

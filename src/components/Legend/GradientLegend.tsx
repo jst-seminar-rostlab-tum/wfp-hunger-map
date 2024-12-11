@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 import { ColorsData } from '@/domain/props/ColorsData';
 import GradientLegendProps from '@/domain/props/GradientLegendProps';
 
@@ -37,7 +39,10 @@ export default function GradientLegend({ colorsData, startLabel, endLabel, hasNo
           >
             <Tooltip title={colorData.title} text={colorData.value} titleStyle="text-center" textStyle="text-center">
               <div
-                className={`hover:bg-opacity-25 hover:bg-black group flex-1 h-full cursor-pointer ${index === 0 ? 'rounded-l-full' : ''} ${index === colorsData.length - 1 ? 'rounded-r-full' : ''}`}
+                className={clsx('hover:bg-opacity-25 hover:bg-black group flex-1 h-full cursor-pointer', {
+                  'rounded-l-full': index === 0,
+                  'rounded-r-full': index === colorsData.length - 1,
+                })}
                 style={{
                   flexBasis: `${segmentWidth}%`,
                 }}

@@ -1,6 +1,6 @@
 import { Slider } from '@nextui-org/slider';
 
-import { LineChartXAxisSlider } from '@/domain/props/LineChartProps';
+import { LineChartXAxisSliderProps } from '@/domain/props/LineChartProps';
 import LineChartOperations from '@/operations/charts/LineChartOperations.ts';
 
 /**
@@ -13,7 +13,7 @@ export default function LineChartXAxisSlider({
   selectedXAxisRange,
   setSelectedXAxisRange,
   data,
-}: LineChartXAxisSlider) {
+}: LineChartXAxisSliderProps) {
   const xAxisValues: number[] = LineChartOperations.getDistinctXAxisValues(data);
 
   return (

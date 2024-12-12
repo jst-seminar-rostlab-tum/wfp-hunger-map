@@ -220,10 +220,12 @@ const config = {
 
             //animation
             nutritionAnimation: '#F7B750',
-            fcsAnimation: '#338ef7',
+            fcsAnimation: '#157dbc',
             ipcAnimation: '#cd1919',
 
             countriesBase: '#fefeff',
+            countryBorders: '#6f7475',
+            countryHover: '#8a8a8a',
             ocean: '#91cccb',
             fatalityAlert: '#742280',
             climateWetAlert: '#4295D3',
@@ -269,12 +271,13 @@ const config = {
             conflictCivil: '#96badc',
             conflictExplosion: '#eaaf75',
             conflictStrategic: '#bec0c1',
-            countriesBase: '#0e6397',
-            ocean: '#111111',
+            countriesBase: '#002129',
+            ocean: '#002a38',
             fatalityAlert: '#742280',
             climateWetAlert: '#4295D3',
             climateDryAlert: '#B95926',
             nutritionNotAnalyzed: '#A69F9F',
+            fcsAnimation: '#014a5e',
 
             // charts
             chartsLegendBackground: '#2a2a2a',

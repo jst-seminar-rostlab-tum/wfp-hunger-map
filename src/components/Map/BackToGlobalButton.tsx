@@ -8,14 +8,13 @@ import { useAccordionsModal } from '@/domain/contexts/AccodionsModalContext';
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 
 export default function BackToGlobalButton() {
-  const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
+  const { selectedCountryId } = useSelectedCountryId();
   const { clearAccordionModal } = useAccordionsModal();
   const map = useMap();
 
   const handleBackButtonClick = (): void => {
     map.zoomOut(4);
     clearAccordionModal();
-    setSelectedCountryId(null);
   };
 
   return selectedCountryId ? (

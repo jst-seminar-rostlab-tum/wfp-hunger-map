@@ -1,18 +1,16 @@
 'use client';
 
 import { Spacer } from '@nextui-org/react';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 import CustomInfoCircle from '@/components/CustomInfoCircle/CustomInfoCircle';
-import { CountryDataRecord } from '@/domain/entities/country/CountryData';
-import { CountryIso3DataRecord } from '@/domain/entities/country/CountryIso3Data.ts';
+import { useSnackbar } from '@/domain/contexts/SnackbarContext';
 import { CountryMapData } from '@/domain/entities/country/CountryMapData';
 import { useCountryDataListQuery, useCountryIso3DataListQuery } from '@/domain/hooks/countryHooks';
 import { CountryComparisonOperations } from '@/operations/comparison-portal/CountryComparisonOperations';
 import { FcsAccordionOperations } from '@/operations/map/FcsAccordionOperations';
 
 import AccordionContainer from '../Accordions/AccordionContainer';
-import CustomAlert from '../Alert/Alert';
 import { LineChart } from '../Charts/LineChart';
 
 interface CountryComparisonAccordionProps {
@@ -20,81 +18,48 @@ interface CountryComparisonAccordionProps {
 }
 
 export default function CountryComparisonAccordion({ selectedCountries }: CountryComparisonAccordionProps) {
-  const [errorMessages, setErrorMessages] = useState<string[]>([]);
+  const { showSnackBar } = useSnackbar();
 
-  // TODO: merge useMemo calls below
-  // TODO: merge error messages and show actual country
-  // TODO @Bohdan: rename this to sth like countryDataQuery to distinct from below
-  const queryResultList = useCountryDataListQuery(
+  const countryDataQuery = useCountryDataListQuery(
     selectedCountries.map((country) => country.properties.adm0_id),
     (countryId) => {
-      setErrorMessages((prev) => [...prev, `Error fetching data for country ${countryId}`]);
+      const countryName = CountryComparisonOperations.getCountryNameById(countryId, selectedCountries);
+      CountryComparisonOperations.showDataNotFoundSnackBar(showSnackBar, countryName);
     }
   );
-  const isLoading = useMemo(() => {
-    return queryResultList.some((result) => result.isLoading);
-  }, [queryResultList]);
-  const countryDataList: CountryDataRecord[] = useMemo(() => {
-    return queryResultList
-      .map((result) => result.data)
-      .filter((data): data is CountryDataRecord => data !== null && data !== undefined);
-  }, [queryResultList]);
 
   const countryIso3DataQuery = useCountryIso3DataListQuery(
     selectedCountries.map((country) => country.properties.iso3),
     (countryCode) => {
-      setErrorMessages((prev) => [...prev, `Error fetching data for country ${countryCode}`]);
+      const countryName = CountryComparisonOperations.getCountryNameByIso3(countryCode, selectedCountries);
+      CountryComparisonOperations.showDataNotFoundSnackBar(showSnackBar, countryName);
     }
   );
-  const countryIso3DataList: CountryIso3DataRecord[] = useMemo(() => {
-    return countryIso3DataQuery
-      .map((result) => result.data)
-      .filter((data): data is CountryIso3DataRecord => data !== null && data !== undefined);
-  }, [countryIso3DataQuery]);
 
-  // TODO: merge useMemo calls into one
-  const fcsChartData = useMemo(() => {
-    return countryDataList.length > 1
-      ? CountryComparisonOperations.getFcsChartData(countryDataList, selectedCountries)
-      : undefined;
-  }, [countryDataList]);
-  const rcsiChartData = useMemo(() => {
-    return countryDataList.length > 1
-      ? CountryComparisonOperations.getRcsiChartData(countryDataList, selectedCountries)
-      : undefined;
-  }, [countryDataList]);
-  const foodSecurityBarChartData = useMemo(() => {
-    return countryDataList.length > 1
-      ? CountryComparisonOperations.getFoodSecurityBarChartData(countryDataList, selectedCountries)
-      : undefined;
-  }, [countryDataList]);
-  const importDependencyBarChartData = useMemo(() => {
-    return countryDataList.length > 1
-      ? CountryComparisonOperations.getImportDependencyBarChartData(countryDataList, selectedCountries)
-      : undefined;
-  }, [countryDataList]);
-  const balanceOfTradeData = useMemo(() => {
-    return countryIso3DataList.length > 1
-      ? CountryComparisonOperations.getBalanceOfTradeData(countryIso3DataList, selectedCountries)
-      : undefined;
-  }, [countryDataList]);
-  const headlineInflationData = useMemo(() => {
-    return countryIso3DataList.length > 1
-      ? CountryComparisonOperations.getInflationData(countryIso3DataList, selectedCountries, 'headline')
-      : undefined;
-  }, [countryDataList]);
-  const foodInflationData = useMemo(() => {
-    return countryIso3DataList.length > 1
-      ? CountryComparisonOperations.getInflationData(countryIso3DataList, selectedCountries, 'food')
-      : undefined;
-  }, [countryDataList]);
+  const isLoading = useMemo(() => {
+    return (
+      countryDataQuery.some((result) => result.isLoading) || countryIso3DataQuery.some((result) => result.isLoading)
+    );
+  }, [countryDataQuery, countryIso3DataQuery]);
+
+  const { countryDataList, countryIso3DataList } = useMemo(() => {
+    return CountryComparisonOperations.getFilteredCountryData(countryDataQuery, countryIso3DataQuery);
+  }, [countryDataQuery, countryIso3DataQuery]);
+
+  const {
+    fcsChartData,
+    rcsiChartData,
+    foodSecurityBarChartData,
+    importDependencyBarChartData,
+    balanceOfTradeData,
+    headlineInflationData,
+    foodInflationData,
+  } = useMemo(() => {
+    return CountryComparisonOperations.getChartData(countryDataList, countryIso3DataList, selectedCountries);
+  }, [countryDataList, countryIso3DataList, selectedCountries]);
 
   return (
     <div>
-      {errorMessages.map((message) => (
-        // TODO: integrate snackbar instead of alert - depends on f-129
-        <CustomAlert className="py-2" description={message} title="Error" />
-      ))}
       {countryDataList.length > 1 && (
         <AccordionContainer
           loading={isLoading}

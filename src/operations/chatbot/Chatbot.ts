@@ -23,14 +23,14 @@ export default class ChatbotOperations {
       if (storedData) {
         const parsedData = JSON.parse(storedData);
         const currentTime = Date.now();
-        const oneDayAgo = currentTime - 24 * 60 * 60 * 1000; // Filter set for 24 hours
+        const oneWeekAgo = currentTime - 7 * 24 * 60 * 60 * 1000; // Filter set for 1 week
 
-        // Filter out chats older than 24 hours
+        // Filter out chats older than 1 Week
         const recentChats = parsedData.filter(
-          (chat: IChat & { timestamp?: number }) => !chat.timestamp || chat.timestamp > oneDayAgo
+          (chat: IChat & { timestamp?: number }) => !chat.timestamp || chat.timestamp > oneWeekAgo
         );
 
-        // Clean up localStorage by saving only the chats that are not older than 24 hours
+        // Clean up localStorage by saving only the chats that are not older than 1 Week
         localStorage.setItem('chatbotChatsWithTimestamp', JSON.stringify(recentChats));
 
         // If no recent chats, return default chat

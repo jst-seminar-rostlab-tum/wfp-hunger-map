@@ -4,10 +4,12 @@ import { useTheme } from 'next-themes';
 import React, { useEffect, useRef } from 'react';
 import { GeoJSON } from 'react-leaflet';
 
+import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
+import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 import { LayerWithFeature } from '@/domain/entities/map/LayerWithFeature.ts';
 import FcsChoroplethProps from '@/domain/props/FcsChoroplethProps';
 import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
-import { MapboxMapOperations } from '@/operations/map/MapboxMapOperations';
+import { MapOperations } from '@/operations/map/MapOperations';
 
 import CountryLoadingLayer from './CountryLoading';
 import FscCountryChoropleth from './FcsCountryChoropleth';
@@ -15,15 +17,15 @@ import FscCountryChoropleth from './FcsCountryChoropleth';
 export default function FcsChoropleth({
   data,
   countryId,
-  selectedCountryId,
-  setSelectedCountryId,
   loading,
   regionData,
   countryData,
   countryIso3Data,
   selectedCountryName,
+  fcsData,
 }: FcsChoroplethProps) {
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
+  const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
   const { theme } = useTheme();
 
   const handleBackClick = () => {
@@ -36,8 +38,8 @@ export default function FcsChoropleth({
     geoJsonRef.current.eachLayer((layer: LayerWithFeature) => {
       if (!layer) return;
       const feature = layer.feature as Feature;
-      if (feature.properties?.adm0_id !== selectedCountryId) {
-        const tooltipContainer = MapboxMapOperations.createCountryNameTooltipElement(feature?.properties?.adm0_name);
+      if (FcsChoroplethOperations.checkIfActive(feature as CountryMapData, fcsData)) {
+        const tooltipContainer = MapOperations.createCountryNameTooltipElement(feature?.properties?.adm0_name);
         layer.bindTooltip(tooltipContainer, { className: 'leaflet-tooltip', sticky: true });
       } else {
         layer.unbindTooltip();
@@ -47,16 +49,18 @@ export default function FcsChoropleth({
 
   return (
     <div>
-      <GeoJSON
-        ref={(instance) => {
-          geoJsonRef.current = instance;
-        }}
-        data={data}
-        style={FcsChoroplethOperations.countryStyle}
-        onEachFeature={(feature, layer) =>
-          FcsChoroplethOperations.onEachFeature(feature, layer, setSelectedCountryId, theme === 'dark')
-        }
-      />
+      {countryId !== selectedCountryId && (
+        <GeoJSON
+          ref={(instance) => {
+            geoJsonRef.current = instance;
+          }}
+          data={data}
+          style={FcsChoroplethOperations.countryStyle(data.features[0], theme === 'dark', fcsData)}
+          onEachFeature={(feature, layer) =>
+            FcsChoroplethOperations.onEachFeature(feature, layer, setSelectedCountryId, fcsData)
+          }
+        />
+      )}
       {/* Animated GeoJSON layer for the selected country */}
       {!regionData && selectedCountryId && (
         <CountryLoadingLayer

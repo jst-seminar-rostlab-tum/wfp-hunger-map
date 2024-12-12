@@ -6,12 +6,17 @@ import React, { useState } from 'react';
 
 import container from '@/container';
 import { DOWNLOAD_DATA } from '@/domain/constant/subscribe/Subscribe';
+import { useSnackbar } from '@/domain/contexts/SnackbarContext';
 import {
   COUNTRY_ERROR_MSG,
   DATE_RANGE_ERROR_MSG,
   DATE_RANGE_TOO_LONG_ERROR_MSG,
   DESCRIPTION,
+  DOWNLOAD_ERROR_MSG,
+  DOWNLOAD_SUCCESS_MSG,
 } from '@/domain/entities/download/Country';
+import { SNACKBAR_SHORT_DURATION } from '@/domain/entities/snackbar/Snackbar';
+import { SnackbarPosition, SnackbarStatus } from '@/domain/enums/Snackbar';
 import { SubmitStatus } from '@/domain/enums/SubscribeTopic';
 import DownloadCountryAccordionProps from '@/domain/props/DownloadCountryAccordionProps';
 import DownloadRepository from '@/domain/repositories/DownloadRepository';
@@ -32,6 +37,8 @@ export default function DownloadCountryAccordion({ countries }: DownloadCountryA
 
   const [downloadStatus, setDownloadStatus] = useState<SubmitStatus>(SubmitStatus.Idle);
   const [isWaitingDownloadResponse, setIsWaitingDownloadResponse] = useState(false);
+
+  const { showSnackBar } = useSnackbar();
 
   const handleCountrySelection = (key: unknown): void => {
     const selectedCountry = countries?.find((item) => item.id === parseInt(key as string, 10));
@@ -57,12 +64,26 @@ export default function DownloadCountryAccordion({ countries }: DownloadCountryA
         await download.getDownLoadCountryData(country, start, end).then((res) => {
           // only download if there is data
           if (res && res.length > 0) {
-            setDownloadStatus(SubmitStatus.Success);
+            setDownloadStatus(SubmitStatus.Idle);
             setIsWaitingDownloadResponse(false);
             DownloadPortalOperations.downloadJsonFile(res, country);
+
+            showSnackBar({
+              message: DOWNLOAD_SUCCESS_MSG,
+              status: SnackbarStatus.Success,
+              position: SnackbarPosition.BottomRight,
+              duration: SNACKBAR_SHORT_DURATION,
+            });
           } else {
-            setDownloadStatus(SubmitStatus.Error);
+            setDownloadStatus(SubmitStatus.Idle);
             setIsWaitingDownloadResponse(false);
+
+            showSnackBar({
+              message: DOWNLOAD_ERROR_MSG,
+              status: SnackbarStatus.Error,
+              position: SnackbarPosition.BottomRight,
+              duration: SNACKBAR_SHORT_DURATION,
+            });
           }
         });
       } catch (err) {

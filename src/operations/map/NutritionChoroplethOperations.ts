@@ -1,10 +1,11 @@
-import { Feature, GeoJsonProperties, Geometry } from 'geojson';
 import L from 'leaflet';
 
+import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 import { CountryNutrition } from '@/domain/entities/country/CountryNutrition.ts';
+import { inactiveCountryOverlayStyling } from '@/styles/MapColors.ts';
 
 export default class NutritionChoroplethOperations {
-  private static getFillColor(dataType: string): string {
+  private static getFillColor(dataType: string | undefined): string {
     switch (dataType) {
       case 'actual':
         return '#FFB74D';
@@ -15,91 +16,61 @@ export default class NutritionChoroplethOperations {
     }
   }
 
-  public static getCountryStyles(nutritionData: CountryNutrition) {
-    if (nutritionData && Array.isArray(nutritionData.body)) {
-      return nutritionData.body.reduce(
-        (acc, item) => {
-          acc[item.adm0_code] = {
-            color: '#fff',
-            weight: 1,
-            fillOpacity: 0.5,
-            fillColor: NutritionChoroplethOperations.getFillColor(item.data_type),
-          };
-          return acc;
-        },
-        {} as { [key: number]: L.PathOptions }
-      );
-    }
-    return {};
-  }
-
   // check if the country is not selected and if there is data available for the country
-  public static allowCountryHover(
-    nutritionData: CountryNutrition,
-    countryId: number,
-    selectedCountryId: number | null | undefined
-  ): boolean {
-    if (selectedCountryId === countryId) return false;
-    return nutritionData.body?.find((c) => c.adm0_code === countryId) !== undefined;
+  public static checkIfActive(feature: CountryMapData, nutritionData: CountryNutrition): boolean {
+    return nutritionData.body?.find((c) => c.adm0_code === feature.properties.adm0_id) !== undefined;
   }
 
   private static async handleCountryClick(
-    feature: Feature<Geometry, GeoJsonProperties>,
+    feature: CountryMapData,
     setSelectedCountryId: (countryId: number | null) => void
   ) {
     setSelectedCountryId(feature.properties?.adm0_id);
   }
 
   public static onEachFeature(
-    feature: Feature<Geometry, GeoJsonProperties>,
+    feature: CountryMapData,
     layer: L.Layer,
     setSelectedCountryId: (countryId: number | null) => void,
-    countryStyles: { [key: number]: L.PathOptions }
+    nutritionData: CountryNutrition
   ) {
     const pathLayer = layer as L.Path;
-    const featureStyle = countryStyles[feature.properties?.adm0_id];
-    if (featureStyle) {
-      pathLayer.setStyle(featureStyle);
-    }
     pathLayer.on({
       click: async () => {
-        NutritionChoroplethOperations.handleCountryClick(feature, setSelectedCountryId);
+        if (this.checkIfActive(feature, nutritionData)) {
+          NutritionChoroplethOperations.handleCountryClick(feature, setSelectedCountryId);
+        }
+        document.getElementsByClassName('leaflet-container').item(0)?.classList.remove('interactive');
       },
     });
     layer.on('mouseover', () => {
-      if (
-        pathLayer.options.fillColor === '#FFB74D' ||
-        pathLayer.options.fillColor === '#E3F2FD' ||
-        pathLayer.options.fillColor === '#52525b'
-      ) {
+      if (this.checkIfActive(feature, nutritionData)) {
         pathLayer.setStyle({
           fillOpacity: 0.8,
         });
-      } else {
-        pathLayer.setStyle({
-          fillOpacity: 0.1,
-        });
+        document.getElementsByClassName('leaflet-container').item(0)?.classList.add('interactive');
       }
     });
     pathLayer.on('mouseout', () => {
-      if (
-        pathLayer.options.fillColor === '#FFB74D' ||
-        pathLayer.options.fillColor === '#E3F2FD' ||
-        pathLayer.options.fillColor === '#52525b'
-      ) {
+      if (this.checkIfActive(feature, nutritionData)) {
         pathLayer.setStyle({
           fillOpacity: 0.5,
         });
-      } else {
-        pathLayer.setStyle({
-          fillOpacity: 0,
-        });
+        document.getElementsByClassName('leaflet-container').item(0)?.classList.remove('interactive');
       }
     });
   }
 
-  static countryStyle: L.PathOptions = {
-    color: undefined,
-    fillOpacity: 0,
-  };
+  static countryStyle(feature: CountryMapData, nutritionData: CountryNutrition, isDark: boolean): L.PathOptions {
+    return this.checkIfActive(feature, nutritionData)
+      ? {
+          color: '#fff',
+          weight: 1,
+          fillOpacity: 0.5,
+          fillColor: NutritionChoroplethOperations.getFillColor(
+            nutritionData.body?.find((c) => c.adm0_code === feature.properties.adm0_id)?.data_type
+          ),
+        }
+      : inactiveCountryOverlayStyling(isDark);
+  }
 }

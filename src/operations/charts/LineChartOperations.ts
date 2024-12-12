@@ -1,7 +1,16 @@
 'use client';
 
-import Highcharts, { AxisTypeValue, SeriesOptionsType, TooltipFormatterContextObject } from 'highcharts';
+import Highcharts, {
+  AxisTypeValue,
+  DashStyleValue,
+  SeriesOptionsType,
+  TooltipFormatterContextObject,
+} from 'highcharts';
 import highchartsMore from 'highcharts/highcharts-more';
+import ExportData from 'highcharts/modules/export-data';
+import Exporting from 'highcharts/modules/exporting';
+import OfflineExporting from 'highcharts/modules/offline-exporting';
+import patternFill from 'highcharts/modules/pattern-fill';
 import HighchartsReact from 'highcharts-react-official';
 
 import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph.ts';
@@ -10,11 +19,16 @@ import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
 import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
 import { LineChartDataType } from '@/domain/enums/LineChartDataType.ts';
 import { formatToMillion } from '@/utils/formatting.ts';
+import { getTailwindColor } from '@/utils/tailwind-util.ts';
 
+// initialize the exporting module
 if (typeof Highcharts === 'object') {
   highchartsMore(Highcharts);
+  patternFill(Highcharts);
+  Exporting(Highcharts);
+  ExportData(Highcharts);
+  OfflineExporting(Highcharts);
 }
-
 /**
  * Using LineChartOperations, the LineChart component can convert its received data into LineChartData
  * and then generate the chart `Highcharts.Options` object required by the Highcharts component.
@@ -24,15 +38,26 @@ if (typeof Highcharts === 'object') {
  */
 export default class LineChartOperations {
   /**
+   * List of different dash styles for visualizing prediction data.
+   * All lines that are marked as `prediction` are colored with the same predictions color,
+   * to distinguish multiple predictions data series we use different dash styling.
+   */
+  private static getPredictionsDashStyles(): DashStyleValue[] {
+    return ['ShortDashDotDot', 'ShortDash', 'LongDashDotDot', 'LongDash', 'DashDot', 'Dot', 'Dash'];
+  }
+
+  /**
    * The first four line colors are fixed; if more than four lines are rendered,
    * the default Highcharts colors will be used.
    */
-  private static LINE_COLORS = [
-    'hsl(var(--nextui-clusterOrange))',
-    'hsl(var(--nextui-clusterBlue))',
-    'hsl(var(--nextui-clusterGreen))',
-    'hsl(var(--nextui-clusterRed))',
-  ];
+  private static getLineColorList() {
+    return [
+      getTailwindColor('--nextui-clusterRed'),
+      getTailwindColor('--nextui-clusterGreen'),
+      getTailwindColor('--nextui-clusterBlue'),
+      getTailwindColor('--nextui-clusterOrange'),
+    ];
+  }
 
   /**
    * Formatter function for `LineChart.Options.tooltip.formatter` usage only.
@@ -52,7 +77,7 @@ export default class LineChartOperations {
       if (p.point.options.y) {
         tooltip += `<br><span style="color:${p.series.color}">\u25CF</span> <div>${p.point.options.y}</div>`;
       } else if (p.point.options.high !== undefined && p.point.options.low !== undefined) {
-        tooltip += `<div style="color: ${'hsl(var(--nextui-secondary))'}"> (<div>${p.point.options.low} - ${p.point.options.high}</div>)</div>`;
+        tooltip += `<div style="color: ${getTailwindColor('--nextui-secondary')}"> (<div>${p.point.options.low} - ${p.point.options.high}</div>)</div>`;
       }
     });
     return tooltip;
@@ -164,6 +189,7 @@ export default class LineChartOperations {
    * can be manipulated; important: if a min is defined a max must be defined as well and vice versa.
    *
    * @param data `LineChartData` object, containing all data to be plotted in the chart
+   * @param isDark - `true` if dark mode is selected
    * @param roundLines if true, all plotted lines will be rounded
    * @param barChart if true, bars are plotted instead of lines
    * @param xAxisSelectedMinIdx index of selected x-axis range min value
@@ -183,16 +209,29 @@ export default class LineChartOperations {
 
     // parsing all given data series
     const series: SeriesOptionsType[] = [];
+    const defaultLineColors = LineChartOperations.getLineColorList();
+    const defaultPredictionsDashStyles = LineChartOperations.getPredictionsDashStyles();
     for (let i = 0; i < data.lines.length; i += 1) {
       const lineData = data.lines[i];
 
       // the first four line colors are fixed; however, they can also be overridden by the `color` property;
-      // if more than four lines are rendered the default Highcharts colors will be used
+      // if `prediction` is set, the standard predictions color is used
+      // if more than four lines are rendered the default Highcharts colors will be used (`categoryColor` stays undefined)
       let categoryColor;
       if (lineData.color) {
         categoryColor = lineData.color;
-      } else if (i < this.LINE_COLORS.length) {
-        categoryColor = this.LINE_COLORS[i];
+      } else if (lineData.prediction) {
+        categoryColor = getTailwindColor('--nextui-chartForecast');
+      } else {
+        categoryColor = defaultLineColors.pop();
+      }
+
+      // select dash style
+      let categoryDashStyle: DashStyleValue = 'Solid';
+      if (lineData.dashStyle) {
+        categoryDashStyle = lineData.dashStyle;
+      } else if (lineData.prediction) {
+        categoryDashStyle = defaultPredictionsDashStyles.pop() || 'Solid';
       }
 
       // collect series data
@@ -217,8 +256,24 @@ export default class LineChartOperations {
           name: lineData.name,
           type: 'column',
           data: seriesData,
-          color: categoryColor,
-          opacity: lineData.showRange ? 0.7 : 1,
+          color:
+            // if the dashStyle is not solid we fill the bars with diagonal lines
+            categoryDashStyle !== 'Solid'
+              ? {
+                  pattern: {
+                    path: {
+                      d: 'M 0 0 L 8 8 M -8 8 L 8 -8',
+                      stroke: categoryColor,
+                      strokeWidth: 1,
+                    },
+                    width: 8,
+                    height: 8,
+                  },
+                }
+              : categoryColor,
+          opacity: lineData.showRange ? 0.75 : 1,
+          borderColor: categoryColor,
+          dashStyle: 'Solid',
         });
       } else {
         // plot series as line
@@ -227,6 +282,7 @@ export default class LineChartOperations {
           name: lineData.name,
           data: seriesData,
           color: categoryColor,
+          dashStyle: categoryDashStyle,
         });
       }
 
@@ -257,6 +313,7 @@ export default class LineChartOperations {
             data: areaSeriesData,
             linkedTo: ':previous',
             color: categoryColor,
+            dashStyle: 'Solid',
           });
         } else {
           // add area around line
@@ -266,10 +323,48 @@ export default class LineChartOperations {
             data: areaSeriesData,
             color: categoryColor,
             linkedTo: ':previous',
+            dashStyle: lineData.dashStyle,
           });
         }
       }
     }
+
+    // build all vertical lines and plot bands
+    const verticalBands = data.verticalBands ? [...data.verticalBands] : [];
+    const verticalLines = data.verticalLines ? [...data.verticalLines] : [];
+    if (data.predictionVerticalLineX) {
+      // get max x value
+      const xMax = Math.max(...data.lines.flatMap((l) => l.dataPoints.map((p) => p.x)));
+      verticalBands.push({
+        xStart: data.predictionVerticalLineX,
+        xEnd: xMax,
+        label: 'Future',
+      });
+    }
+    if (data.predictionVerticalLineX) {
+      verticalLines.push({
+        x: data.predictionVerticalLineX,
+      });
+    }
+    const plotBands = verticalBands.map((b) => ({
+      from: b.xStart,
+      to: b.xEnd,
+      color: b.color || 'rgba(140,140,140,0.07)',
+      zIndex: 1,
+      label: {
+        text: b.label || '',
+        style: {
+          color: getTailwindColor('--nextui-secondary'),
+          fontSize: '0.7rem',
+        },
+      },
+    }));
+    const plotLines = verticalLines.map((l) => ({
+      value: l.x,
+      color: l.color || getTailwindColor('--nextui-chartsGridLine'),
+      dashStyle: l.dashStyle,
+      zIndex: 2,
+    }));
 
     // constructing the final HighCharts.Options
     return {
@@ -282,37 +377,39 @@ export default class LineChartOperations {
       legend: {
         itemStyle: {
           fontSize: '0.7rem',
-          color: 'hsl(var(--nextui-secondary))',
+          color: getTailwindColor('--nextui-secondary'),
         },
         itemHoverStyle: {
-          color: 'hsl(var(--nextui-hover))',
+          color: getTailwindColor('--nextui-hover'),
         },
       },
       xAxis: {
         type: data.xAxisType,
         labels: {
           style: {
-            color: 'hsl(var(--nextui-secondary))',
+            color: getTailwindColor('--nextui-secondary'),
             fontSize: '0.7rem',
           },
           formatter() {
             return LineChartOperations.chartXAxisFormatter(data.xAxisType, this.value);
           },
         },
-        lineColor: 'hsl(var(--nextui-chartsXAxisLine))',
-        tickColor: 'hsl(var(--nextui-chartsXAxisLine))',
+        lineColor: getTailwindColor('--nextui-chartsXAxisLine'),
+        tickColor: getTailwindColor('--nextui-chartsXAxisLine'),
         tickLength: 4,
+        plotBands,
+        plotLines,
       },
       yAxis: {
         title: {
           text: data.yAxisLabel,
           style: {
-            color: 'hsl(var(--nextui-secondary))',
+            color: getTailwindColor('--nextui-secondary'),
           },
         },
         labels: {
           style: {
-            color: 'hsl(var(--nextui-secondary))',
+            color: getTailwindColor('--nextui-secondary'),
             fontSize: '0.7rem',
           },
           formatter() {
@@ -320,16 +417,16 @@ export default class LineChartOperations {
           },
         },
         lineColor: 'transparent',
-        gridLineColor: 'hsl(var(--nextui-clickableSecondary))',
+        gridLineColor: getTailwindColor('--nextui-chartsGridLine'),
       },
       tooltip: {
         shared: true,
         formatter() {
           return LineChartOperations.chartTooltipFormatter(data.xAxisType, this.x, this.points);
         },
-        backgroundColor: 'hsl(var(--nextui-chartsLegendBackground))',
+        backgroundColor: getTailwindColor('--nextui-chartsLegendBackground'),
         style: {
-          color: 'hsl(var(--nextui-foreground))',
+          color: getTailwindColor('--nextui-foreground'),
           fontSize: '0.7rem',
         },
       },
@@ -371,7 +468,7 @@ export default class LineChartOperations {
           animation: true,
           grouping: true,
           shadow: false,
-          borderWidth: 0,
+          borderWidth: 1,
         },
         errorbar: {
           animation: true,

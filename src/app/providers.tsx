@@ -14,8 +14,8 @@ import { ChatbotProvider } from '@/domain/contexts/ChatbotContext';
 import { SelectedAlertProvider } from '@/domain/contexts/SelectedAlertContext';
 import { SelectedCountryIdProvider } from '@/domain/contexts/SelectedCountryIdContext';
 import { SelectedMapProvider } from '@/domain/contexts/SelectedMapContext';
-import { SelectedMapVisibilityProvider } from '@/domain/contexts/SelectedMapVisibilityContext';
 import { SidebarProvider } from '@/domain/contexts/SidebarContext';
+import { SnackbarProvider } from '@/domain/contexts/SnackbarContext';
 
 export interface ProvidersProps {
   children: React.ReactNode;
@@ -31,15 +31,15 @@ export function Providers({ children, themeProps }: ProvidersProps) {
         <QueryClientProvider client={cachedQueryClient}>
           <ChatbotProvider>
             <SidebarProvider>
-              <SelectedMapVisibilityProvider>
-                <SelectedMapProvider>
-                  <SelectedAlertProvider>
-                    <SelectedCountryIdProvider>
-                      <AccordionsModalProvider>{children}</AccordionsModalProvider>
-                    </SelectedCountryIdProvider>
-                  </SelectedAlertProvider>
-                </SelectedMapProvider>
-              </SelectedMapVisibilityProvider>
+              <SelectedMapProvider>
+                <SelectedAlertProvider>
+                  <SelectedCountryIdProvider>
+                    <AccordionsModalProvider>
+                      <SnackbarProvider>{children}</SnackbarProvider>
+                    </AccordionsModalProvider>
+                  </SelectedCountryIdProvider>
+                </SelectedAlertProvider>
+              </SelectedMapProvider>
             </SidebarProvider>
           </ChatbotProvider>
           <ReactQueryDevtools initialIsOpen={false} />

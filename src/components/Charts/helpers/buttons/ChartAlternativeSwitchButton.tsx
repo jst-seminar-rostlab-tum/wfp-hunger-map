@@ -1,10 +1,9 @@
 import { Button } from '@nextui-org/button';
-import { Chart, Diagram } from 'iconsax-react';
 import React from 'react';
 
 import { Tooltip } from '@/components/Tooltip/Tooltip';
-import { ChartType } from '@/domain/enums/ChartType.ts';
 import { ChartAlternativeSwitchButtonProps } from '@/domain/props/ChartContainerProps';
+import ChartDownloadButtonOperations from '@/operations/charts/ChartAlternativeSwitchButtonOperations';
 
 /**
  * This component is tied to the `ChartContainer` and `ChartModal` component and should not be used independently.
@@ -14,24 +13,20 @@ export default function ChartAlternativeSwitchButton({
   alternativeChartType,
   showAlternativeChart,
   setShowAlternativeChart,
-  size,
+  size = 4,
 }: ChartAlternativeSwitchButtonProps) {
-  const chartTypeIcons = new Map<ChartType, React.JSX.Element>();
-  chartTypeIcons.set(ChartType.LINE, <Diagram className={`h-${size} w-${size}`} />);
-  chartTypeIcons.set(ChartType.COLUMN, <Chart className={`h-${size} w-${size}`} />);
-  chartTypeIcons.set(ChartType.PIE, <Chart className={`h-${size} w-${size}`} />);
+  const chartSwitchTitle = showAlternativeChart
+    ? ChartDownloadButtonOperations.getChartTypeTitle(defaultChartType)
+    : ChartDownloadButtonOperations.getChartTypeTitle(alternativeChartType);
 
-  const chartTypeTitles = new Map<ChartType, string>();
-  chartTypeTitles.set(ChartType.LINE, 'Line');
-  chartTypeTitles.set(ChartType.COLUMN, 'Column');
-  chartTypeTitles.set(ChartType.PIE, 'Pie');
+  const chartSwitchIcon = showAlternativeChart
+    ? ChartDownloadButtonOperations.getChartTypeIcon(defaultChartType, size)
+    : ChartDownloadButtonOperations.getChartTypeIcon(alternativeChartType, size);
 
   return (
-    <Tooltip
-      text={`Switch to ${showAlternativeChart ? chartTypeTitles.get(defaultChartType) : chartTypeTitles.get(alternativeChartType)} Chart`}
-    >
+    <Tooltip text={`Switch to ${chartSwitchTitle} Chart`}>
       <Button isIconOnly variant="light" size="sm" onClick={() => setShowAlternativeChart(!showAlternativeChart)}>
-        {showAlternativeChart ? chartTypeIcons.get(defaultChartType) : chartTypeIcons.get(alternativeChartType)}
+        {chartSwitchIcon}
       </Button>
     </Tooltip>
   );

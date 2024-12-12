@@ -91,8 +91,8 @@ export function LineChart({
   const alternativeSwitchButtonProps = disableBarChartSwitch
     ? undefined
     : {
-        defaultChartType: ChartType.COLUMN,
-        alternativeChartType: ChartType.PIE,
+        defaultChartType: ChartType.LINE,
+        alternativeChartType: ChartType.COLUMN,
         showAlternativeChart: showBarChart,
         setShowAlternativeChart: setShowBarChart,
       };

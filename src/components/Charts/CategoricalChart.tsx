@@ -2,11 +2,12 @@
 
 import Highcharts from 'highcharts';
 import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 import { ChartContainer } from '@/components/Charts/helpers/ChartContainer';
 import CategoricalChartProps from '@/domain/props/CategoricalChartProps';
 import CategoricalChartOperations from '@/operations/charts/CategoricalChartOperations.ts';
+import { ChartType } from '@/domain/enums/ChartType.ts';
 
 /**
  * The `CategoricalChart` component is a box that primarily renders a title, description text, and a bar chart.
@@ -50,6 +51,13 @@ export function CategoricalChart({
     setChartOptions(CategoricalChartOperations.getHighChartOptions(data, showPieChart));
   }, [showPieChart, theme]);
 
+  const alternativeSwitchButtonProps = {
+    defaultChartType: ChartType.COLUMN,
+    alternativeChartType: ChartType.PIE,
+    showAlternativeChart: showPieChart,
+    setShowAlternativeChart: setShowPieChart,
+  };
+
   return (
     <ChartContainer
       chartOptions={chartOptions}
@@ -58,13 +66,10 @@ export function CategoricalChart({
       description={description}
       small={small}
       noPadding={noPadding}
+      transparentBackground={transparentBackground}
       disableExpandable={disableExpandable}
       disableDownload={disableDownload}
-      transparentBackground={transparentBackground}
-      disableAlternativeChart={disablePieChartSwitch}
-      showAlternativeChart={showPieChart}
-      setShowAlternativeChart={setShowPieChart}
-      disableSlider
+      alternativeSwitchButtonProps={alternativeSwitchButtonProps}
     />
   );
 }

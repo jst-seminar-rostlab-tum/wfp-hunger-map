@@ -4,6 +4,7 @@ import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 
 import { CategoricalChartData } from '@/domain/entities/charts/CategoricalChartData.ts';
 import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
+import { ChartType } from '@/domain/enums/ChartType.ts';
 
 /**
  * helpers props
@@ -16,9 +17,11 @@ export interface LineChartSliderButtonProps {
 }
 
 export interface ChartAlternativeSwitchButtonProps {
+  defaultChartType: ChartType;
+  alternativeChartType: ChartType;
   showAlternativeChart: boolean;
   setShowAlternativeChart: Dispatch<SetStateAction<boolean>>;
-  size: number;
+  size?: number;
 }
 
 export interface ChartSliderProps {
@@ -47,17 +50,12 @@ export default interface ChartContainerProps {
   description?: string;
   small?: boolean;
   noPadding?: boolean;
+  transparentBackground?: boolean;
 
   disableExpandable?: boolean;
   disableDownload?: boolean;
-  transparentBackground?: boolean;
 
-  // alternative chart switch
-  disableAlternativeChart?: boolean;
-  showAlternativeChart?: boolean;
-  setShowAlternativeChart?: Dispatch<SetStateAction<boolean>>;
+  alternativeSwitchButtonProps?: ChartAlternativeSwitchButtonProps;
 
-  // slider props
-  disableSlider?: boolean; // todo removable ?
   sliderProps?: ChartSliderProps;
 }

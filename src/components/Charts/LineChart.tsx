@@ -6,9 +6,9 @@ import { useEffect, useState } from 'react';
 
 import { ChartContainer } from '@/components/Charts/helpers/ChartContainer';
 import { LineChartData } from '@/domain/entities/charts/LineChartData';
+import { ChartType } from '@/domain/enums/ChartType.ts';
 import LineChartProps from '@/domain/props/LineChartProps';
 import LineChartOperations from '@/operations/charts/LineChartOperations';
-import { ChartSliderProps } from '@/domain/props/ChartContainerProps.tsx';
 
 /**
  * The LineChart component is a box that primarily renders a title, description text, and a line chart.
@@ -78,13 +78,24 @@ export function LineChart({
   }, [showBarChart, theme, selectedXAxisRange]);
 
   // chart slider props - to manipulate the shown x-axis range
-  const sliderProps: ChartSliderProps = {
-    title: 'Adjusting x-axis range:',
-    sliderMin: 0,
-    sliderMax: xAxisLength - 1,
-    selectedSliderRange: selectedXAxisRange,
-    setSelectedSliderRange: setSelectedXAxisRange,
-  };
+  const sliderProps = disableXAxisSlider
+    ? undefined
+    : {
+        title: 'Adjusting x-axis range:',
+        sliderMin: 0,
+        sliderMax: xAxisLength - 1,
+        selectedSliderRange: selectedXAxisRange,
+        setSelectedSliderRange: setSelectedXAxisRange,
+      };
+
+  const alternativeSwitchButtonProps = disableBarChartSwitch
+    ? undefined
+    : {
+        defaultChartType: ChartType.COLUMN,
+        alternativeChartType: ChartType.PIE,
+        showAlternativeChart: showBarChart,
+        setShowAlternativeChart: setShowBarChart,
+      };
 
   return (
     <ChartContainer
@@ -94,13 +105,10 @@ export function LineChart({
       description={description}
       small={small}
       noPadding={noPadding}
+      transparentBackground={transparentBackground}
       disableExpandable={disableExpandable}
       disableDownload={disableDownload}
-      transparentBackground={transparentBackground}
-      disableAlternativeChart={disableBarChartSwitch}
-      showAlternativeChart={showBarChart}
-      setShowAlternativeChart={setShowBarChart}
-      disableSlider={disableXAxisSlider}
+      alternativeSwitchButtonProps={alternativeSwitchButtonProps}
       sliderProps={sliderProps}
     />
   );

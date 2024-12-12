@@ -25,13 +25,10 @@ export function ChartContainer({
   description,
   small,
   noPadding,
+  transparentBackground,
   disableExpandable,
   disableDownload,
-  transparentBackground,
-  disableAlternativeChart,
-  showAlternativeChart,
-  setShowAlternativeChart,
-  disableSlider,
+  alternativeSwitchButtonProps,
   sliderProps,
 }: ChartContainerProps) {
   const TITLE_TEXT_SIZE = small ? 'text-sm' : 'text-md';
@@ -48,7 +45,6 @@ export function ChartContainer({
 
   // handling the x-axis range slider visibility
   const [showSlider, setShowSlider] = useState(false);
-
   return (
     <>
       <div className={`w-full h-fit flex-col rounded-md ${transparentBackground ? 'bg-transparent' : 'bg-background'}`}>
@@ -63,18 +59,14 @@ export function ChartContainer({
           >
             {
               // button to hide/show the slider to e.g. manipulate the plotted x-axis range of the chart
-              !disableSlider && (
+              sliderProps && (
                 <ChartSliderButton showSlider={showSlider} setShowSlider={setShowSlider} size={ICON_BUTTON_SIZE} />
               )
             }
             {
               // button to switch between different chart types
-              !disableAlternativeChart && typeof showAlternativeChart !== 'undefined' && setShowAlternativeChart && (
-                <ChartAlternativeSwitchButton
-                  showAlternativeChart={showAlternativeChart}
-                  setShowAlternativeChart={setShowAlternativeChart}
-                  size={ICON_BUTTON_SIZE}
-                />
+              alternativeSwitchButtonProps && (
+                <ChartAlternativeSwitchButton {...alternativeSwitchButtonProps} size={4} />
               )
             }
             {
@@ -118,15 +110,7 @@ export function ChartContainer({
         />
         {
           // slider to e.g. manipulate the plotted x-axis range of the chart
-          showSlider && sliderProps && (
-            <ChartSlider
-              title={sliderProps?.title} // todo unpack props smarter
-              sliderMin={sliderProps?.sliderMin}
-              sliderMax={sliderProps?.sliderMax}
-              selectedSliderRange={sliderProps?.selectedSliderRange}
-              setSelectedSliderRange={sliderProps?.setSelectedSliderRange}
-            />
-          )
+          showSlider && sliderProps && <ChartSlider {...sliderProps} />
         }
       </div>
 
@@ -139,13 +123,10 @@ export function ChartContainer({
         isOpen={isOpen}
         onClose={onClose}
         onOpenChange={onOpenChange}
+        alternativeSwitchButtonProps={alternativeSwitchButtonProps}
+        sliderProps={sliderProps}
         showSlider={showSlider}
         setShowSlider={setShowSlider}
-        disableAlternativeChart={disableAlternativeChart}
-        showAlternativeChart={showAlternativeChart}
-        setShowAlternativeChart={setShowAlternativeChart}
-        disableSlider={disableSlider}
-        sliderProps={sliderProps}
       />
     </>
   );

@@ -26,13 +26,10 @@ export function ChartModal({
   isOpen,
   onClose,
   onOpenChange,
+  alternativeSwitchButtonProps,
+  sliderProps,
   showSlider,
   setShowSlider,
-  disableAlternativeChart,
-  showAlternativeChart,
-  setShowAlternativeChart,
-  disableSlider,
-  sliderProps,
 }: ChartModalProps) {
   const chartRef = useRef<HighchartsReact.RefObject | null>(null);
 
@@ -51,16 +48,12 @@ export function ChartModal({
           <div className="flex flex-row justify-between w-full h-full">
             <h2 className="flex flex-col justify-center font-normal text-sm sm:text-md md:text-lg"> {title} </h2>
             <div className="flex flex-row w-fit h-full gap-0.5 sm:gap-4 md:gap-6">
-              {!disableSlider && showSlider && setShowSlider && (
+              {sliderProps && showSlider && setShowSlider && (
                 <ChartSliderButton showSlider={showSlider} setShowSlider={setShowSlider} size={4} />
               )}
 
-              {!disableAlternativeChart && typeof showAlternativeChart !== 'undefined' && setShowAlternativeChart && (
-                <ChartAlternativeSwitchButton
-                  showAlternativeChart={showAlternativeChart}
-                  setShowAlternativeChart={setShowAlternativeChart}
-                  size={4}
-                />
+              {alternativeSwitchButtonProps && (
+                <ChartAlternativeSwitchButton {...alternativeSwitchButtonProps} size={4} />
               )}
 
               {!disableDownload && <ChartDownloadButton chartRef={chartRef} chartData={chartData} size={4} />}
@@ -89,16 +82,10 @@ export function ChartModal({
         </ModalBody>
         {
           // slider to e.g. manipulate the plotted x-axis range of the chart
-          showSlider && sliderProps && (
+          sliderProps && (
             <ModalFooter>
               <div className="w-full">
-                <ChartSlider
-                  title={sliderProps?.title} // todo unpack props smarter
-                  sliderMin={sliderProps?.sliderMin}
-                  sliderMax={sliderProps?.sliderMax}
-                  selectedSliderRange={sliderProps?.selectedSliderRange}
-                  setSelectedSliderRange={sliderProps?.setSelectedSliderRange}
-                />
+                <ChartSlider {...sliderProps} />
               </div>
             </ModalFooter>
           )

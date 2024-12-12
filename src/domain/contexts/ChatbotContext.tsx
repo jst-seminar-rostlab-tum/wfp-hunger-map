@@ -3,7 +3,6 @@ import React, { createContext, ReactNode, useContext, useEffect, useMemo, useSta
 import { IChat } from '@/domain/entities/chatbot/Chatbot';
 import { SenderRole } from '@/domain/enums/SenderRole';
 import ChatbotOperations from '@/operations/chatbot/Chatbot';
-import { DownloadPortalOperations } from '@/operations/download-portal/DownloadPortalOperations';
 import { useMediaQuery } from '@/utils/resolution';
 
 interface ChatbotContextType {
@@ -79,12 +78,15 @@ export function ChatbotProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    const reportText = await DownloadPortalOperations.extractTextFromPdf(await report);
+    // Use dynamic import for client-side PDF text extraction
+    const { extractClientSidePdfText } = await import('@/operations/pdf/DownloadPortalOperations');
+    const reportText = await extractClientSidePdfText(report);
+    //  const reportText = await DownloadPortalOperations.extractTextFromPdf(await report);
 
     const assistantMessage = {
       id: crypto.randomUUID(),
       content: reportText
-        ? `Hey, how can I help you with this report about ${countryName}?`
+        ? `Hey, how can I help you with this report about ${reportText}?`
         : `Hey, unfortunately I'm currently unable to answer questions about this report. You can try it later or chat with me about other things!`,
       role: SenderRole.ASSISTANT,
     };

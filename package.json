@@ -19,6 +19,7 @@
     "@nextui-org/card": "^2.0.34",
     "@nextui-org/chip": "^2.0.33",
     "@nextui-org/code": "2.0.33",
+    "pdfjs-dist": "3.11.174",
     "@nextui-org/dropdown": "^2.1.31",
     "@nextui-org/image": "^2.0.32",
     "@nextui-org/input": "2.2.5",
@@ -72,7 +73,6 @@
     "react-leaflet-cluster": "^2.1.0",
     "react-markdown": "^9.0.1",
     "react-pdf": "^9.1.1",
-    "react-pdftotext": "^1.3.4",
     "rehype-sanitize": "^6.0.0",
     "remark-gfm": "^4.0.0",
     "sharp": "^0.33.5",
@@ -124,8 +124,5 @@
         "never"
       ]
     }
-  },
-  "resolutions": {
-    "pdfjs-dist": "3.11.174"
   }
 }

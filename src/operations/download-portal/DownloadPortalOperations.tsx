@@ -1,13 +1,12 @@
 import { CalendarDate } from '@internationalized/date';
 import { DocumentDownload, SearchNormal1 } from 'iconsax-react';
 import { Bot } from 'lucide-react';
-import { pdfjs } from 'react-pdf';
 
 import { CountryCodesData } from '@/domain/entities/country/CountryCodesData';
 import { ICountryData } from '@/domain/entities/download/Country';
 import { CustomTableColumns } from '@/domain/props/CustomTableProps';
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.mjs`;
+//  pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.mjs`;
 
 export class DownloadPortalOperations {
   static getColumns(): CustomTableColumns {
@@ -130,6 +129,7 @@ export class DownloadPortalOperations {
     toggleModal();
   }
 
+  /*
   static async extractTextFromPdf(url: string): Promise<string> {
     try {
       const pdf = await pdfjs.getDocument(url).promise;
@@ -158,7 +158,8 @@ export class DownloadPortalOperations {
       return fullText.trim();
     } catch (error) {
       console.error('Error extracting text from PDF:', error);
-      return '';
+      return 'error during extraction';
     }
   }
+    */
 }

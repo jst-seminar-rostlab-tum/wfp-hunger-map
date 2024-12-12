@@ -173,6 +173,12 @@ const config = {
             hazardInformation: '#0098EB',
             hazardTermination: '#B4B5B7',
 
+            // charts
+            chartsLegendBackground: '#F5F5F5',
+            chartsXAxisLine: '#a6a6a6',
+            chartsGridLine: '#E6E6E6',
+            chartForecast: '#3896a2',
+
             //fcs gradient
             fcsGradient1: '#29563a',
             fcsGradient2: '#73b358',
@@ -272,6 +278,12 @@ const config = {
             climateDryAlert: '#B95926',
             nutritionNotAnalyzed: '#A69F9F',
             fcsAnimation: '#014a5e',
+
+            // charts
+            chartsLegendBackground: '#2a2a2a',
+            chartsXAxisLine: '#757575',
+            chartsGridLine: '#424242',
+            chartForecast: '#0e6983',
           },
         },
       },

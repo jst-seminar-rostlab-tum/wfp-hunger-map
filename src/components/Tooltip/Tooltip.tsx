@@ -1,4 +1,5 @@
 import { Tooltip as NextUITooltip } from '@nextui-org/tooltip';
+import clsx from 'clsx';
 
 import TooltipProps from '@/domain/props/TooltipProps';
 
@@ -11,9 +12,11 @@ import TooltipProps from '@/domain/props/TooltipProps';
  * @param text textual content of the tooltip
  * @param delay delay with which tooltip appears on hover in milliseconds; default is 0
  * @param warning selected if the tooltip should be highlighted (optional)
+ * @param titleStyle tailwind classes to style the title (optional)
+ * @param textStyle tailwind classes to style the text (optional)
  * @constructor
  */
-export function Tooltip({ children, title, text, delay, warning }: TooltipProps) {
+export function Tooltip({ children, title, text, delay, warning, titleStyle, textStyle }: TooltipProps) {
   const OFFSET: number = 10;
   const RADIUS = 'sm';
   const SHADOW = 'md';
@@ -23,11 +26,11 @@ export function Tooltip({ children, title, text, delay, warning }: TooltipProps)
 
   const tooltipContent = title ? (
     <div>
-      <h3 className="text-small font-bold mb-1"> {title} </h3>
-      <p className="text-small font-normal"> {text} </p>
+      <h3 className={clsx('text-small font-bold mb-1', titleStyle)}> {title} </h3>
+      <p className={clsx('text-small font-normal', textStyle)}> {text} </p>
     </div>
   ) : (
-    <p className="text-small font-normal"> {text} </p>
+    <p className={`text-small font-normal ${textStyle}`}> {text} </p>
   );
 
   return (

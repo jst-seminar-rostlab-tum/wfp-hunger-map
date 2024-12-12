@@ -1,7 +1,9 @@
 import { ReactNode } from 'react';
 
+import { ColorsData } from './ColorsData';
+
 export interface GradientLegendContainerItem {
-  colors: string[];
+  colorsData: ColorsData[];
   title: string;
   startLabel: string;
   endLabel: string;

@@ -2,7 +2,7 @@ import AccordionModal from '@/components/Accordions/AccordionModal';
 import { AlertsMenuWrapper } from '@/components/AlertsMenu/AlertsMenuWrapper';
 import Chatbot from '@/components/Chatbot/Chatbot';
 import HungerAlertLoader from '@/components/HungerAlert/HungerAlertLoader';
-import MapLegend from '@/components/Legend/MapLegend';
+import MapLegendLoader from '@/components/Legend/MapLegendLoader';
 import MapLoader from '@/components/Map/MapLoader';
 import { Sidebar } from '@/components/Sidebar/Sidebar';
 import container from '@/container';
@@ -28,7 +28,7 @@ export default async function Home() {
       <Chatbot />
       <MapLoader countries={countryMapData} fcsData={fcsData} disputedAreas={disputedAreas} alertData={alertData} />
       <HungerAlertLoader countryMapData={countryMapData} countryFcsData={fcsData} />
-      <MapLegend />
+      <MapLegendLoader />
       <AccordionModal />
     </>
   );

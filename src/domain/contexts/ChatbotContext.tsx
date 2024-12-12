@@ -29,7 +29,9 @@ export function ChatbotProvider({ children }: { children: ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [chats, setChats] = useState<IChat[]>(ChatbotOperations.loadChatsFromStorage());
 
-  // Save chats to localStorage whenever they change
+  /**
+   * Saves chats to localStorage whenever they change
+   */
   useEffect(() => {
     ChatbotOperations.saveChatsToStorage(chats);
   }, [chats]);
@@ -39,6 +41,11 @@ export function ChatbotProvider({ children }: { children: ReactNode }) {
     setIsOpen(true);
   };
 
+  /**
+   * Starts a new chat, either with a provided chat object or a default one.
+   * @param newChat - Optional chat object to start with.
+   * @param openNewChat - Optional flag to determine if the new chat should be opened immediately.
+   */
   const startNewChat = (newChat?: IChat, openNewChat?: boolean) => {
     let chatToAdd: IChat;
 
@@ -70,23 +77,33 @@ export function ChatbotProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const chatWithReport = async (countryName: string, report: string) => {
+  /**
+   * Initiates a chat with a report based on the provided country name and report content.
+   * If a chat for that specific already exists, it opens that chat; otherwise, it creates a new one.
+   * @param countryName - The name of the country related to the report.
+   * @param reportURL - The URL of the report to be processed.
+   */
+  const chatWithReport = async (countryName: string, reportURL: string) => {
     const reportChatIndex = chats.findIndex((chat) => chat.title === `Report ${countryName}`);
     const reportChatExists = reportChatIndex !== -1;
+
     if (reportChatExists) {
       openChat(reportChatIndex);
       return;
     }
 
-    // Use dynamic import for client-side PDF text extraction
-    const { extractClientSidePdfText } = await import('@/operations/pdf/DownloadPortalOperations');
-    const reportText = await extractClientSidePdfText(report);
-    //  const reportText = await DownloadPortalOperations.extractTextFromPdf(await report);
+    const { extractPdfText } = await import('@/operations/chatbot/ExtractPdfText');
+    let reportText;
+    try {
+      reportText = await extractPdfText(reportURL);
+    } catch {
+      reportText = '';
+    }
 
     const assistantMessage = {
       id: crypto.randomUUID(),
       content: reportText
-        ? `Hey, how can I help you with this report about ${reportText}?`
+        ? `Hey, how can I help you with this report about ${countryName}?`
         : `Hey, unfortunately I'm currently unable to answer questions about this report. You can try it later or chat with me about other things!`,
       role: SenderRole.ASSISTANT,
     };

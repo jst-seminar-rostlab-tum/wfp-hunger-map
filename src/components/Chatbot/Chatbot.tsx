@@ -194,7 +194,7 @@ export default function HungerMapChatbot() {
   return (
     <div
       className={clsx('absolute', {
-        'inset-0 z-chatbotFullScreen ': isFullScreen,
+        'inset-0 z-chatbotFullScreen': isFullScreen,
         'top-4 right-4': !isFullScreen,
         'z-chatbotExpanded': isOpen,
         'z-chatbotCollapsed': !isOpen,
@@ -274,7 +274,7 @@ export default function HungerMapChatbot() {
               <ScrollShadow hideScrollBar className="w-full h-full">
                 {chats[currentChatIndex].messages.length === 0 ? (
                   <div className="flex flex-col items-center pt-4 space-y-4">
-                    <p className="-center text-xl max-w-[80%] mb-2">{WELCOME_MESSAGE}</p>
+                    <p className="text-center text-xl max-w-[80%] mb-2">{WELCOME_MESSAGE}</p>
                     <p className="text-center text-md max-w-[80%] mb-2text">{SUB_WELCOME_MESSAGE}</p>
                     <div className="flex flex-col items-center space-y-2 w-full max-w-md">
                       {DEFAULT_PROMPT.map((prompt) => (

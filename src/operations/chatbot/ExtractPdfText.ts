@@ -4,7 +4,15 @@ import { pdfjs } from 'react-pdf';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.mjs`;
 
-export const extractClientSidePdfText = async (url: string): Promise<string> => {
+/**
+ * Extracts text from a PDF document located at the specified URL.
+ * This function retrieves the text content from each page of the PDF
+ * and concatenates it into a single string, which is then returned.
+ *
+ * @param url - The URL of the PDF document to extract text from.
+ * @returns A promise that resolves to the extracted text or undefined if an error occurs.
+ */
+export const extractPdfText = async (url: string): Promise<string> => {
   try {
     const pdf = await pdfjs.getDocument(url).promise;
     let fullText = '';
@@ -31,7 +39,6 @@ export const extractClientSidePdfText = async (url: string): Promise<string> => 
 
     return fullText.trim();
   } catch (error) {
-    console.error('Error extracting text from PDF:', error);
-    return 'error during extraction';
+    throw new Error(`Error extracting text from PDF: ${error}`);
   }
 };

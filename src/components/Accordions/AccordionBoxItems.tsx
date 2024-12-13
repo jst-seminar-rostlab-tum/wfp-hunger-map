@@ -75,6 +75,15 @@ export default function AccordionBoxItems({
                         <Button isIconOnly className="w-[37px] h-[37px] p-[5.5px]" variant="light">
                           {item.infoIcon}
                         </Button>
+                        //   <div
+                        //   role="button"
+                        //   tabIndex={0}
+                        //   onClick={() => 1}
+                        //   onKeyDown={() => 1}
+                        //   className="w-[37px] h-[37px] p-[5.5px] hover:bg-default hover:opacity-40 rounded-xl"
+                        // >
+                        //   <span className="hover:opacity-100 hover:text-white">{item.infoIcon}</span>
+                        // </div>
                       )}
                     </PopoverTrigger>
                     <PopoverContent>

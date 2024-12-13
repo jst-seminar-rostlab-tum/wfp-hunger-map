@@ -26,6 +26,7 @@ export function CookieConsentPopup() {
         const gtagScript = document.createElement('script');
         gtagScript.async = true;
         gtagScript.src = `https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`;
+        gtagScript.nonce = document.getElementById('google-analytics')?.nonce;
 
         const firstScript = document.getElementsByTagName('script')[0];
         firstScript.parentNode?.insertBefore(gtagScript, firstScript);

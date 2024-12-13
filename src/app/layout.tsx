@@ -2,6 +2,7 @@ import '@/styles/globals.css';
 
 import clsx from 'clsx';
 import { Metadata, Viewport } from 'next';
+import { headers } from 'next/headers';
 import Script from 'next/script';
 
 import { CookieConsentPopup } from '@/components/Analytics/CookieConsentPopup';
@@ -39,10 +40,11 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const nonce = headers().get('x-nonce');
   return (
     <html suppressHydrationWarning lang="en">
       <head>
-        <Script id="google-analytics">
+        <Script id="google-analytics" nonce={nonce ?? ''}>
           {`
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}

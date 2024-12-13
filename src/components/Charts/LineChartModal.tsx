@@ -1,6 +1,7 @@
 import { Button } from '@nextui-org/button';
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@nextui-org/modal';
 import Highcharts from 'highcharts';
+import highchartsAccessibility from 'highcharts/modules/accessibility';
 import HighchartsReact from 'highcharts-react-official';
 import { Minus } from 'iconsax-react';
 import { useRef } from 'react';
@@ -11,6 +12,10 @@ import LineChartSliderButton from '@/components/Charts/helpers/LineChartSliderBu
 import LineChartXAxisSlider from '@/components/Charts/helpers/LineChartXAxisSlider';
 import { Tooltip } from '@/components/Tooltip/Tooltip';
 import LineChartModalProps from '@/domain/props/LineChartModalProps';
+
+if (typeof Highcharts === 'object') {
+  highchartsAccessibility(Highcharts);
+}
 
 /**
  * This component is tied to the `LineChart` component and should not be used independently.

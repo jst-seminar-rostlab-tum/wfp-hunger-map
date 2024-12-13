@@ -193,7 +193,7 @@ export default function HungerMapChatbot() {
 
   return (
     <div
-      className={clsx('absolute', {
+      className={clsx('fixed', {
         'inset-0 z-chatbotFullScreen': isFullScreen,
         'top-4 right-4': !isFullScreen,
         'z-chatbotExpanded': isOpen,

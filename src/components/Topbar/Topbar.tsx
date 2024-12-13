@@ -13,7 +13,6 @@ import {
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
-import HungerMapChatbot from '@/components/Chatbot/Chatbot';
 import { LogoWithText } from '@/components/LogoWithText/LogoWithText';
 import { ThemeSwitch } from '@/components/Sidebar/ThemeSwitch';
 import { pageLinks } from '@/domain/constant/PageLinks';
@@ -23,7 +22,7 @@ export function Topbar() {
   const pathname = usePathname();
 
   return (
-    <Navbar onMenuOpenChange={setIsMenuOpen} maxWidth="full">
+    <Navbar onMenuOpenChange={setIsMenuOpen} maxWidth="full" className="fixed pr-10">
       <NavbarContent className="flex-1 min-w-[200px] mt-4">
         <NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} className="md:hidden" />
         <NavbarBrand>
@@ -42,9 +41,6 @@ export function Topbar() {
       <NavbarContent justify="end" className="space-x-7">
         <NavbarItem className="mt-4">
           <ThemeSwitch isIconOnly />
-        </NavbarItem>
-        <NavbarItem className="flex items-center">
-          <HungerMapChatbot />
         </NavbarItem>
       </NavbarContent>
       <NavbarMenu>

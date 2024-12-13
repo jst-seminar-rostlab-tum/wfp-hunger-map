@@ -1,7 +1,8 @@
 'use client';
 
 import { Select, SelectItem } from '@nextui-org/react';
-import { useMemo } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useMemo } from 'react';
 
 import { CountrySelectionProps } from '@/domain/props/CountrySelectionProps';
 import { CountrySelectionOperations } from '@/operations/comparison-portal/CountrySelectionOperations';
@@ -13,6 +14,18 @@ export default function CountrySelection({
   selectedCountries,
   setSelectedCountries,
 }: CountrySelectionProps) {
+  const searchParamCountryCodes = useSearchParams().get('countries')?.split(',') ?? [];
+  const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    setSelectedCountries(
+      countryMapData.features.filter((availableCountry) =>
+        searchParamCountryCodes.includes(availableCountry.properties.adm0_id.toString())
+      )
+    );
+  }, []);
+
   const disabledKeys = useMemo(() => {
     return countryMapData.features
       .filter(
@@ -35,8 +48,9 @@ export default function CountrySelection({
         aria-label="Select countries for comparison"
         selectionMode="multiple"
         onSelectionChange={(keys) =>
-          CountrySelectionOperations.onSelectionChange(keys, setSelectedCountries, countryMapData)
+          CountrySelectionOperations.onSelectionChange(keys, setSelectedCountries, countryMapData, pathname, router)
         }
+        defaultSelectedKeys={searchParamCountryCodes}
         disabledKeys={disabledKeys}
         className="w-full"
         variant="faded"

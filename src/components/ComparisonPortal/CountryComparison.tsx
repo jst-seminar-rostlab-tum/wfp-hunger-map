@@ -24,7 +24,7 @@ export default function CountryComparison({ countryMapData, globalFcsData }: Cou
         selectedCountries={selectedCountries}
         setSelectedCountries={setSelectedCountries}
       />
-      {selectedCountries.length > 1 && <CountryComparisonAccordion selectedCountries={selectedCountries} />}
+      <CountryComparisonAccordion selectedCountries={selectedCountries} />
     </div>
   );
 }

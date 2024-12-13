@@ -3,6 +3,7 @@
 import { Button } from '@nextui-org/button';
 import { useDisclosure } from '@nextui-org/modal';
 import Highcharts from 'highcharts';
+import highchartsAccessibility from 'highcharts/modules/accessibility';
 import HighchartsReact from 'highcharts-react-official';
 import { Maximize4 } from 'iconsax-react';
 import { useTheme } from 'next-themes';
@@ -17,6 +18,8 @@ import { Tooltip } from '@/components/Tooltip/Tooltip';
 import { LineChartData } from '@/domain/entities/charts/LineChartData';
 import LineChartProps from '@/domain/props/LineChartProps';
 import LineChartOperations from '@/operations/charts/LineChartOperations';
+
+highchartsAccessibility(Highcharts);
 
 /**
  * The LineChart component is a box that primarily renders a title, description text, and a line chart.

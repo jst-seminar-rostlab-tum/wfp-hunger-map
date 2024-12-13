@@ -19,7 +19,7 @@ export function HazardMarker({ hazard }: { hazard: Hazard }) {
     [hazard]
   );
   return (
-    <Marker position={[hazard.latitude, hazard.longitude]} icon={icon}>
+    <Marker position={[hazard.latitude, hazard.longitude]} icon={icon} title="Hazard alert">
       <Popup className="hazardMarkerPopup">
         <div className="flex gap-4 items-center">
           <img

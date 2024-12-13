@@ -1,6 +1,7 @@
 import { UseQueryResult } from '@tanstack/react-query';
 
 import { LineChartData } from '@/domain/entities/charts/LineChartData';
+import { ChartData } from '@/domain/entities/common/ChartData.ts';
 import { CountryComparisonChartData } from '@/domain/entities/comparison/CountryComparisonChartdata';
 import { CountryComparisonData } from '@/domain/entities/comparison/CountryComparisonData';
 import { CountryDataRecord } from '@/domain/entities/country/CountryData';
@@ -122,12 +123,14 @@ export class CountryComparisonOperations {
       type: LineChartDataType.LINE_CHART_DATA,
       xAxisType: 'datetime',
       yAxisLabel: 'Rate in %',
-      lines: countryIso3DataList.map((countryIso3Data) => ({
-        name: this.getCountryNameByIso3(countryIso3Data.id, selectedCountries),
-        dataPoints: countryIso3Data.inflationGraphs[type].data.map((p) => {
-          return { x: new Date(p.x).getTime(), y: p.y };
-        }),
-      })),
+      lines: countryIso3DataList
+        .filter((countryIso3Data) => countryIso3Data.inflationGraphs[type].data !== undefined)
+        .map((countryIso3Data) => ({
+          name: this.getCountryNameByIso3(countryIso3Data.id, selectedCountries),
+          dataPoints: (countryIso3Data.inflationGraphs[type].data as ChartData[]).map((p) => {
+            return { x: new Date(p.x).getTime(), y: p.y };
+          }),
+        })),
     };
   }
 

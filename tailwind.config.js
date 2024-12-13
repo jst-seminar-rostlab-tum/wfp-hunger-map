@@ -216,7 +216,8 @@ const config = {
             //nutrition points
             nutritionActual: '#FFB74D',
             nutritionPredicted: '#E3F2FD',
-            nutritionNotAnalyzed: '#D2D1D1',
+
+            notAnalyzed: '#8C8C8C',
 
             //animation
             nutritionAnimation: '#F7B750',
@@ -276,7 +277,6 @@ const config = {
             fatalityAlert: '#742280',
             climateWetAlert: '#4295D3',
             climateDryAlert: '#B95926',
-            nutritionNotAnalyzed: '#A69F9F',
             fcsAnimation: '#014a5e',
 
             // charts

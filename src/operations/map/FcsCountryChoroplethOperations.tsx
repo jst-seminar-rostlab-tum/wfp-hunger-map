@@ -7,7 +7,7 @@ import FcsRegionTooltip from '@/components/Map/FcsRegionTooltip';
 
 export class FcsCountryChoroplethOperations {
   static fcsFill(fcs?: number): string {
-    if (fcs === undefined) return 'hsl(var(--nextui-countriesBase))';
+    if (fcs === undefined) return 'hsl(var(--nextui-notAnalyzed), 0.6)';
     if (fcs <= 0.05) return '#29563A';
     if (fcs <= 0.1) return '#73B358';
     if (fcs <= 0.2) return '#CBCC58';
@@ -21,7 +21,7 @@ export class FcsCountryChoroplethOperations {
       fillColor: FcsCountryChoroplethOperations.fcsFill(feature?.properties?.fcs?.score),
       color: 'hsl(var(--nextui-countryBorders))',
       weight: 1,
-      fillOpacity: 0.6,
+      fillOpacity: 1,
     };
   }
 
@@ -40,7 +40,7 @@ export class FcsCountryChoroplethOperations {
       if (hoveredRegionFeature) {
         const pathLayer = layer as L.Path;
         pathLayer.setStyle({
-          fillOpacity: 0.8,
+          fillOpacity: 0.6,
         });
 
         const tooltipContainer = document.createElement('div');
@@ -58,7 +58,7 @@ export class FcsCountryChoroplethOperations {
       const pathLayer = layer as L.Path;
 
       pathLayer.setStyle({
-        fillOpacity: 0.6,
+        fillOpacity: 1,
       });
       pathLayer.closeTooltip();
     });

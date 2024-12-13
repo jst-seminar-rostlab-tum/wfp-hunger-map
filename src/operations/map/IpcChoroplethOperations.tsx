@@ -44,14 +44,14 @@ export class IpcChoroplethOperations {
   });
 
   static fillCountryIpc = (phase: number) => {
-    if (phase === null) return 'RGBA(58, 66, 68, 0.7)';
+    if (phase === null) return 'hsl(var(--nextui-notAnalyzed), 0.6)';
     if (phase === 1) return '#D1FAD1';
     if (phase === 2) return '#FAE834';
     if (phase === 3) return '#E88519';
     if (phase === 4) return '#CD1919';
     if (phase === 5) return '#731919';
     if (phase === 6) return '#353F42';
-    return 'RGBA(58, 66, 68, 0.7)';
+    return 'hsl(var(--nextui-notAnalyzed), 0.6)';
   };
 
   static generateColorMap = (ipcData: CountryIpcData[], mapData: CountryMapDataWrapper) => {

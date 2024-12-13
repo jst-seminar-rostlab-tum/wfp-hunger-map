@@ -19,7 +19,7 @@ export default class NutritionStateChoroplethOperations {
   };
 
   public static nutritionFillColor(value: number | null): string {
-    if (!value) return 'none';
+    if (!value) return 'hsl(var(--nextui-notAnalyzed), 0.6)';
     if (value <= 19) return '#fff3f3';
     if (value <= 39) return '#fcd0ce';
     if (value <= 59) return '#f88884';
@@ -34,9 +34,9 @@ export default class NutritionStateChoroplethOperations {
 
     return {
       fillColor: this.nutritionFillColor(value),
-      color: '#000',
+      color: 'hsl(var(--nextui-countryBorders))',
       weight: 1,
-      fillOpacity: 0.6,
+      fillOpacity: 1,
     };
   }
 
@@ -44,10 +44,10 @@ export default class NutritionStateChoroplethOperations {
     const pathLayer = layer as L.Path;
     pathLayer.on({
       mouseover: () => {
-        pathLayer.setStyle({ fillOpacity: 1 });
+        pathLayer.setStyle({ fillOpacity: 0.6 });
       },
       mouseout: () => {
-        pathLayer.setStyle({ fillOpacity: 0.6 });
+        pathLayer.setStyle({ fillOpacity: 1 });
       },
     });
   }

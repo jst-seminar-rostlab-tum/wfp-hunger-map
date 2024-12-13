@@ -15,4 +15,5 @@ export default interface FcsChoroplethProps {
   countryIso3Data?: CountryIso3Data;
   selectedCountryName?: string;
   fcsData: Record<string, CountryFcsData>;
+  regionLabelData?: FeatureCollection<Geometry, GeoJsonProperties>;
 }

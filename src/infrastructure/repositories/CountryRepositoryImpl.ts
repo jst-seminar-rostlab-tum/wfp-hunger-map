@@ -1,3 +1,5 @@
+import { FeatureCollection } from 'geojson';
+
 import { AdditionalCountryData } from '@/domain/entities/country/AdditionalCountryData';
 import { CountryData } from '@/domain/entities/country/CountryData';
 import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data';
@@ -34,6 +36,11 @@ export default class CountryRepositoryImpl implements CountryRepository {
 
   async getRegionIpcData(countryId: number): Promise<RegionIpc> {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/adm0/${countryId}/ipc.geojson`);
+    return response.json();
+  }
+
+  async getRegionLabelData(): Promise<FeatureCollection> {
+    const response = await fetch('https://cdn.hungermapdata.org/hungermap/adm1_labels.geojson');
     return response.json();
   }
 }

@@ -4,6 +4,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 
 import FcsRegionTooltip from '@/components/Map/FcsRegionTooltip';
+import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 
 export class FcsCountryChoroplethOperations {
   static fcsFill(fcs?: number): string {
@@ -28,8 +29,28 @@ export class FcsCountryChoroplethOperations {
   static onEachFeature(
     feature: Feature<Geometry, GeoJsonProperties>,
     layer: L.Layer,
-    regionData: FeatureCollection<Geometry, GeoJsonProperties>
+    regionData: FeatureCollection<Geometry, GeoJsonProperties>,
+    regionLabelData: FeatureCollection<Geometry, GeoJsonProperties>,
+    countryMapData: CountryMapData,
+    map: L.Map
   ) {
+    const featureLabelData = regionLabelData.features.find((labelItem) => {
+      return (
+        labelItem.properties?.iso3 === countryMapData.properties.iso3 &&
+        labelItem.properties?.name === feature.properties?.Name
+      );
+    });
+
+    if (featureLabelData && featureLabelData.geometry.type === 'Point') {
+      const tooltip = L.tooltip({
+        permanent: true,
+        direction: 'center',
+        className: 'text-background dark:text-foreground',
+        content: feature.properties?.Name,
+      }).setLatLng([featureLabelData.geometry.coordinates[1], featureLabelData.geometry.coordinates[0]]);
+      tooltip.addTo(map);
+    }
+
     // Hover behavior
     layer.on('mouseover', () => {
       const hoveredRegionFeature = regionData.features.find(
@@ -60,7 +81,7 @@ export class FcsCountryChoroplethOperations {
       pathLayer.setStyle({
         fillOpacity: 0.6,
       });
-      pathLayer.closeTooltip();
+      pathLayer.unbindTooltip();
     });
   }
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { GeoJSON } from 'react-leaflet';
+import { GeoJSON, useMap } from 'react-leaflet';
 
 import FscCountryChoroplethProps from '@/domain/props/FcsCountryChoroplethProps';
 import { FcsCountryChoroplethOperations } from '@/operations/map/FcsCountryChoroplethOperations';
@@ -12,7 +12,11 @@ export default function FscCountryChoropleth({
   countryIso3Data,
   countryName,
   loading,
+  regionLabelData,
+  countryMapData,
 }: FscCountryChoroplethProps) {
+  const map = useMap();
+
   return (
     <div>
       <FcsAccordion
@@ -24,7 +28,9 @@ export default function FscCountryChoropleth({
       <GeoJSON
         data={regionData}
         style={FcsCountryChoroplethOperations.styleFunction}
-        onEachFeature={(feature, layer) => FcsCountryChoroplethOperations.onEachFeature(feature, layer, regionData)}
+        onEachFeature={(feature, layer) =>
+          FcsCountryChoroplethOperations.onEachFeature(feature, layer, regionData, regionLabelData, countryMapData, map)
+        }
       />
     </div>
   );

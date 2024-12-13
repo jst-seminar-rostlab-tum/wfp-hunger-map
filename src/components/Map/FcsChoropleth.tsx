@@ -24,6 +24,7 @@ export default function FcsChoropleth({
   countryIso3Data,
   selectedCountryName,
   fcsData,
+  regionLabelData,
 }: FcsChoroplethProps) {
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
   const { theme } = useTheme();
@@ -69,7 +70,7 @@ export default function FcsChoropleth({
           color="hsl(var(--nextui-fcsAnimation))"
         />
       )}
-      {regionData && countryId === selectedCountryId && (
+      {regionData && countryId === selectedCountryId && regionLabelData && (
         <FscCountryChoropleth
           regionData={regionData}
           countryData={countryData}
@@ -77,6 +78,8 @@ export default function FcsChoropleth({
           countryName={selectedCountryName}
           loading={loading}
           handleBackButtonClick={handleBackClick}
+          regionLabelData={regionLabelData}
+          countryMapData={data.features[0] as CountryMapData}
         />
       )}
     </div>

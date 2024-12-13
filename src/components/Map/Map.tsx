@@ -41,6 +41,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
   const [regionNutritionData, setRegionNutritionData] = useState<FeatureCollection | undefined>();
   const [ipcRegionData, setIpcRegionData] = useState<FeatureCollection<Geometry, GeoJsonProperties> | undefined>();
   const [selectedCountryName, setSelectedCountryName] = useState<string | undefined>(undefined);
+  const [regionLabelData, setRegionLabelData] = useState<FeatureCollection | undefined>(undefined);
 
   const onZoomThresholdReached = () => {
     setSelectedCountryId(null);
@@ -82,7 +83,9 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
           setCountryData,
           setCountryIso3Data,
           setRegionNutritionData,
-          setIpcRegionData
+          setIpcRegionData,
+          regionLabelData,
+          setRegionLabelData
         );
         setSelectedCountryName(selectedCountryData.properties.adm0_name);
         mapRef.current?.fitBounds(L.geoJSON(selectedCountryData as GeoJSON).getBounds(), { animate: true });
@@ -124,6 +127,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
             regionData={regionData}
             selectedCountryName={selectedCountryName}
             fcsData={fcsData}
+            regionLabelData={regionLabelData}
           />
         ))}
 

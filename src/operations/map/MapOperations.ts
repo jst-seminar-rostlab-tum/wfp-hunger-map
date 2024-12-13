@@ -16,7 +16,9 @@ export class MapOperations {
     setCountryData: (countryData: CountryData | undefined) => void,
     setCountryIso3Data: (iso3Data: CountryIso3Data | undefined) => void,
     setRegionNutritionData: (regionNutritionData: FeatureCollection | undefined) => void,
-    setIpcRegionData: (ipcRegionData: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void
+    setIpcRegionData: (ipcRegionData: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
+    regionLabelData: FeatureCollection<Geometry, GeoJsonProperties> | undefined,
+    setRegionLabelData: (newRegionLabelData: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void
   ) {
     setCountryClickLoading(true);
 
@@ -63,6 +65,16 @@ export class MapOperations {
             features: newRegionNutritionData.features as Feature<Geometry, GeoJsonProperties>[],
           });
         }
+      }
+
+      if (
+        (selectedMapType === GlobalInsight.FOOD ||
+          selectedMapType === GlobalInsight.NUTRITION ||
+          selectedMapType === GlobalInsight.IPC) &&
+        !regionLabelData
+      ) {
+        const newRegionLabelData = await countryRepository.getRegionLabelData();
+        setRegionLabelData(newRegionLabelData);
       }
 
       setCountryClickLoading(false);

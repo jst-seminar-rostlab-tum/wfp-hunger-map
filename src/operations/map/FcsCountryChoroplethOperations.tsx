@@ -8,7 +8,7 @@ import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 
 export class FcsCountryChoroplethOperations {
   static fcsFill(fcs?: number): string {
-    if (fcs === undefined) return '#2D6092';
+    if (fcs === undefined) return 'hsl(var(--nextui-countriesBase))';
     if (fcs <= 0.05) return '#29563A';
     if (fcs <= 0.1) return '#73B358';
     if (fcs <= 0.2) return '#CBCC58';
@@ -20,7 +20,7 @@ export class FcsCountryChoroplethOperations {
   static styleFunction(feature?: Feature<Geometry, GeoJsonProperties>): L.PathOptions {
     return {
       fillColor: FcsCountryChoroplethOperations.fcsFill(feature?.properties?.fcs?.score),
-      color: '#000',
+      color: 'hsl(var(--nextui-countryBorders))',
       weight: 1,
       fillOpacity: 0.6,
     };

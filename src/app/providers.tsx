@@ -13,7 +13,6 @@ import { AccordionsModalProvider } from '@/domain/contexts/AccodionsModalContext
 import { SelectedAlertProvider } from '@/domain/contexts/SelectedAlertContext';
 import { SelectedCountryIdProvider } from '@/domain/contexts/SelectedCountryIdContext';
 import { SelectedMapProvider } from '@/domain/contexts/SelectedMapContext';
-import { SelectedMapVisibilityProvider } from '@/domain/contexts/SelectedMapVisibilityContext';
 import { SidebarProvider } from '@/domain/contexts/SidebarContext';
 import { SnackbarProvider } from '@/domain/contexts/SnackbarContext';
 
@@ -30,17 +29,15 @@ export function Providers({ children, themeProps }: ProvidersProps) {
       <NextThemesProvider defaultTheme="system" {...themeProps}>
         <QueryClientProvider client={cachedQueryClient}>
           <SidebarProvider>
-            <SelectedMapVisibilityProvider>
-              <SelectedMapProvider>
-                <SelectedAlertProvider>
-                  <SelectedCountryIdProvider>
-                    <AccordionsModalProvider>
-                      <SnackbarProvider>{children}</SnackbarProvider>
-                    </AccordionsModalProvider>
-                  </SelectedCountryIdProvider>
-                </SelectedAlertProvider>
-              </SelectedMapProvider>
-            </SelectedMapVisibilityProvider>
+            <SelectedMapProvider>
+              <SelectedAlertProvider>
+                <SelectedCountryIdProvider>
+                  <AccordionsModalProvider>
+                    <SnackbarProvider>{children}</SnackbarProvider>
+                  </AccordionsModalProvider>
+                </SelectedCountryIdProvider>
+              </SelectedAlertProvider>
+            </SelectedMapProvider>
           </SidebarProvider>
           <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>

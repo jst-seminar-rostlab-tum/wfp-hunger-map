@@ -77,7 +77,6 @@ export default function CountryComparisonAccordion({ selectedCountries }: Countr
               <div>
                 {foodSecurityBarChartData && (
                   <LineChart
-                    title="Food Security"
                     data={foodSecurityBarChartData}
                     expandable
                     small

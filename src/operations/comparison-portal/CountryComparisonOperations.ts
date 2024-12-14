@@ -103,7 +103,6 @@ export class CountryComparisonOperations {
     return {
       type: LineChartDataType.LINE_CHART_DATA,
       xAxisType: 'datetime',
-      // TODO: What's the unit here? Million Dollars?
       yAxisLabel: 'Mill',
       lines: countryIso3DataList.map((countryIso3Data) => ({
         name: this.getCountryNameByIso3(countryIso3Data.id, selectedCountries),

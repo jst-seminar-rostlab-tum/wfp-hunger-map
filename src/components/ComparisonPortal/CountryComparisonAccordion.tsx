@@ -70,7 +70,6 @@ export default function CountryComparisonAccordion({ selectedCountries }: Countr
         multipleSelectionMode
         loading={isLoading}
         expandAll={expandAll}
-        // TODO: extract these items into the const folder
         items={[
           {
             title: 'Food Security',
@@ -83,7 +82,7 @@ export default function CountryComparisonAccordion({ selectedCountries }: Countr
                     small
                     noPadding
                     transparentBackground
-                    // TODO: f-165 barChartOnly
+                    // TODO: f-165 bar chart
                   />
                 )}
               </div>

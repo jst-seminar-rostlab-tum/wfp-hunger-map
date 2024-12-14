@@ -15,6 +15,7 @@
   "dependencies": {
     "@internationalized/date": "^3.6.0",
     "@nextui-org/accordion": "^2.0.40",
+    "@nextui-org/alert": "^2.2.7",
     "@nextui-org/button": "^2.0.38",
     "@nextui-org/card": "^2.0.34",
     "@nextui-org/chip": "^2.0.33",
@@ -36,7 +37,7 @@
     "@nextui-org/switch": "^2.0.34",
     "@nextui-org/system": "2.2.6",
     "@nextui-org/table": "^2.0.40",
-    "@nextui-org/theme": "2.2.11",
+    "@nextui-org/theme": "2.4.3",
     "@nextui-org/tooltip": "^2.0.41",
     "@react-aria/ssr": "3.9.4",
     "@react-aria/visually-hidden": "3.8.12",

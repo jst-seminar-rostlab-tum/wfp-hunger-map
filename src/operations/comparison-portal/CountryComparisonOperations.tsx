@@ -1,5 +1,9 @@
+import { Spacer } from '@nextui-org/react';
 import { UseQueryResult } from '@tanstack/react-query';
 
+import { LineChart } from '@/components/Charts/LineChart';
+import NoDataHint from '@/components/ComparisonPortal/NoDataHint';
+import CustomInfoCircle from '@/components/CustomInfoCircle/CustomInfoCircle';
 import { LineChartData } from '@/domain/entities/charts/LineChartData';
 import { ChartData } from '@/domain/entities/common/ChartData.ts';
 import { CountryComparisonChartData } from '@/domain/entities/comparison/CountryComparisonChartdata';
@@ -11,6 +15,7 @@ import { SNACKBAR_SHORT_DURATION } from '@/domain/entities/snackbar/Snackbar';
 import { LineChartDataType } from '@/domain/enums/LineChartDataType';
 import { SnackbarPosition, SnackbarStatus } from '@/domain/enums/Snackbar';
 import { SnackbarProps } from '@/domain/props/SnackbarProps';
+import { FcsAccordionOperations } from '@/operations/map/FcsAccordionOperations';
 import { formatToMillion } from '@/utils/formatting.ts';
 
 export class CountryComparisonOperations {
@@ -199,5 +204,144 @@ export class CountryComparisonOperations {
       position: SnackbarPosition.BottomMiddle,
       duration: SNACKBAR_SHORT_DURATION,
     });
+  }
+
+  static getComparisonAccordionItems(
+    {
+      fcsChartData,
+      rcsiChartData,
+      foodSecurityBarChartData,
+      importDependencyBarChartData,
+      balanceOfTradeData,
+      headlineInflationData,
+      foodInflationData,
+    }: CountryComparisonChartData,
+    selectedCountryNames: string[]
+  ) {
+    return [
+      {
+        title: 'Food Security',
+        content: (
+          <div>
+            {foodSecurityBarChartData && (
+              <>
+                <LineChart
+                  data={foodSecurityBarChartData}
+                  expandable
+                  small
+                  noPadding
+                  transparentBackground
+                  // TODO: f-165 bar chart
+                />
+                <NoDataHint lineChartData={foodSecurityBarChartData} selectedCountryNames={selectedCountryNames} />
+              </>
+            )}
+          </div>
+        ),
+      },
+      {
+        title: 'Food Security Trends',
+        content: (
+          <div>
+            {fcsChartData && (
+              <>
+                <LineChart
+                  title="Trend of the number of people with insufficient food consumption"
+                  data={fcsChartData}
+                  expandable
+                  xAxisSlider
+                  small
+                  noPadding
+                  transparentBackground
+                />
+                <NoDataHint lineChartData={fcsChartData} selectedCountryNames={selectedCountryNames} />
+              </>
+            )}
+            <Spacer y={6} />
+            {rcsiChartData && (
+              <>
+                <LineChart
+                  title="Trend of the number of people using crisis or above crisis food-based coping"
+                  data={rcsiChartData}
+                  expandable
+                  xAxisSlider
+                  small
+                  noPadding
+                  transparentBackground
+                />
+                <NoDataHint lineChartData={rcsiChartData} selectedCountryNames={selectedCountryNames} />
+              </>
+            )}
+          </div>
+        ),
+      },
+      {
+        title: 'Import Dependency',
+        infoIcon: <CustomInfoCircle />,
+        popoverInfo: FcsAccordionOperations.getMacroEconomicPopoverInfo(),
+        content: (
+          <div>
+            {importDependencyBarChartData && (
+              <>
+                <LineChart data={importDependencyBarChartData} expandable small noPadding transparentBackground />
+                <NoDataHint lineChartData={importDependencyBarChartData} selectedCountryNames={selectedCountryNames} />
+              </>
+            )}
+          </div>
+        ),
+      },
+      {
+        title: 'Balance of Trade',
+        infoIcon: <CustomInfoCircle />,
+        popoverInfo: FcsAccordionOperations.getBalanceOfTradePopoverInfo(),
+        content: (
+          <div>
+            {balanceOfTradeData && (
+              <>
+                <LineChart data={balanceOfTradeData} expandable xAxisSlider small noPadding transparentBackground />
+                <NoDataHint lineChartData={balanceOfTradeData} selectedCountryNames={selectedCountryNames} />
+              </>
+            )}
+          </div>
+        ),
+      },
+      {
+        title: 'Food and Headline Inflation',
+        infoIcon: <CustomInfoCircle />,
+        popoverInfo: FcsAccordionOperations.getHeadlineAndFoodInflationPopoverInfo(),
+        content: (
+          <div>
+            {headlineInflationData && (
+              <>
+                <LineChart
+                  title="Headline Inflation"
+                  data={headlineInflationData}
+                  expandable
+                  xAxisSlider
+                  small
+                  noPadding
+                  transparentBackground
+                />
+                <NoDataHint lineChartData={headlineInflationData} selectedCountryNames={selectedCountryNames} />
+              </>
+            )}
+            {foodInflationData && (
+              <>
+                <LineChart
+                  title="Food Inflation"
+                  data={foodInflationData}
+                  expandable
+                  xAxisSlider
+                  small
+                  noPadding
+                  transparentBackground
+                />
+                <NoDataHint lineChartData={foodInflationData} selectedCountryNames={selectedCountryNames} />
+              </>
+            )}
+          </div>
+        ),
+      },
+    ];
   }
 }

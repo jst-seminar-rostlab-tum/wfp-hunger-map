@@ -87,6 +87,7 @@ export function Sidebar({ countryMapData, fcsData }: SidebarProps) {
             classNames={{ popoverContent: 'bg-clickableSecondary' }}
             variant="faded"
             color="primary"
+            aria-label="Search a country"
             selectedKey={selectedCountryId !== null ? selectedCountryId.toString() : ''}
           >
             {countryMapData.features

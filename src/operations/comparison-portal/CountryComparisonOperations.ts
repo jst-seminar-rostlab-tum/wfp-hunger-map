@@ -187,7 +187,7 @@ export class CountryComparisonOperations {
   static showDataNotFoundSnackBar(showSnackBar: (props: SnackbarProps) => void, countryName: string): void {
     showSnackBar({
       message: `Error fetching country data for ${countryName}`,
-      status: SnackbarStatus.Warning,
+      status: SnackbarStatus.Error,
       position: SnackbarPosition.BottomMiddle,
       duration: SNACKBAR_SHORT_DURATION,
     });

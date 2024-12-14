@@ -67,6 +67,7 @@ export default function CountryComparisonAccordion({ selectedCountries }: Countr
   return countryDataList.length > 1 ? (
     <div>
       <AccordionContainer
+        multipleSelectionMode
         loading={isLoading}
         expandAll={expandAll}
         // TODO: extract these items into the const folder

@@ -14,17 +14,19 @@ export default function CountrySelection({
   selectedCountries,
   setSelectedCountries,
 }: CountrySelectionProps) {
-  const searchParamCountryCodes = useSearchParams().get('countries')?.split(',') ?? [];
+  const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
 
+  const searchParamCountryCodes = useMemo(() => searchParams.get('countries')?.split(',') ?? [], [searchParams]);
+
+  // Sync selected countries when search params change
   useEffect(() => {
-    setSelectedCountries(
-      countryMapData.features.filter((availableCountry) =>
-        searchParamCountryCodes.includes(availableCountry.properties.adm0_id.toString())
-      )
+    const newSelectedCountries = countryMapData.features.filter((availableCountry) =>
+      searchParamCountryCodes.includes(availableCountry.properties.adm0_id.toString())
     );
-  }, []);
+    setSelectedCountries(newSelectedCountries);
+  }, [searchParamCountryCodes, countryMapData, setSelectedCountries]);
 
   const disabledKeys = useMemo(() => {
     return countryMapData.features

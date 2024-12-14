@@ -63,7 +63,7 @@ export function Sidebar({ countryMapData, fcsData }: SidebarProps) {
   };
 
   return (
-    <div className="w-screen h-dvh absolute top-0 left-0 z-sidebarFullScreen sm:w-auto sm:h-[calc(100dvh-3.5rem)] sm:z-sidebarExpanded sm:pt-4 sm:pl-4 sm:pb-10">
+    <div className="w-screen h-dvh absolute top-0 left-0 z-sidebarFullScreen sm:w-auto sm:h-[calc(100dvh-2rem)] sm:z-sidebarExpanded sm:top-4 sm:left-4">
       <Card
         classNames={{
           base: 'h-full rounded-none sm:rounded-large',

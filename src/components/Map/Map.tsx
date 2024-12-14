@@ -13,6 +13,7 @@ import {
   MAP_MAX_ZOOM,
   MAP_MIN_ZOOM,
   oceanBounds,
+  SELECTED_COUNTRY_ZOOM_THRESHOLD,
 } from '@/domain/constant/map/Map';
 import { useSelectedAlert } from '@/domain/contexts/SelectedAlertContext';
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
@@ -194,7 +195,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
         />
       </Pane>
 
-      <ZoomControl threshold={5} callback={onZoomThresholdReached} />
+      <ZoomControl threshold={SELECTED_COUNTRY_ZOOM_THRESHOLD} callback={onZoomThresholdReached} />
       <BackToGlobalButton />
     </MapContainer>
   );

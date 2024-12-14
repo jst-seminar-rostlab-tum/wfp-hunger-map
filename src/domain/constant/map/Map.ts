@@ -1,7 +1,12 @@
 import { LatLngBoundsExpression } from 'leaflet';
 
-export const MAP_MAX_ZOOM = 6;
+export const MAP_MAX_ZOOM = 8;
 export const MAP_MIN_ZOOM = 3;
+export const SELECTED_COUNTRY_ZOOM_THRESHOLD = 5;
+
+// Higher sensitiveness makes labels turn faster into "..."
+export const REGION_LABEL_SENSITIVENESS = 0.8;
+
 export const oceanBounds: LatLngBoundsExpression = [
   [-90, -180],
   [90, 180],

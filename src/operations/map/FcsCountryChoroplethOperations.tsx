@@ -4,6 +4,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 
 import FcsRegionTooltip from '@/components/Map/FcsRegionTooltip';
+import { MAP_MAX_ZOOM, REGION_LABEL_SENSITIVENESS, SELECTED_COUNTRY_ZOOM_THRESHOLD } from '@/domain/constant/map/Map';
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 
 export class FcsCountryChoroplethOperations {
@@ -26,6 +27,21 @@ export class FcsCountryChoroplethOperations {
     };
   }
 
+  static updateTooltip(feature: Feature<Geometry, GeoJsonProperties>, map: L.Map, tooltip: L.Tooltip) {
+    const bounds = L.geoJSON(feature).getBounds();
+    const zoom = map.getZoom();
+    const width = (bounds.getEast() - bounds.getWest()) * zoom;
+    const isMaxZoom = zoom === MAP_MAX_ZOOM;
+    const isZoomThreshold = zoom === SELECTED_COUNTRY_ZOOM_THRESHOLD;
+
+    const text = feature.properties?.Name || '';
+    const textWidth = text.length * REGION_LABEL_SENSITIVENESS;
+
+    const truncatedText = isZoomThreshold || (textWidth > width && !isMaxZoom) ? '...' : text;
+
+    tooltip.setContent(truncatedText);
+  }
+
   static onEachFeature(
     feature: Feature<Geometry, GeoJsonProperties>,
     layer: L.Layer,
@@ -46,9 +62,12 @@ export class FcsCountryChoroplethOperations {
         permanent: true,
         direction: 'center',
         className: 'text-background dark:text-foreground',
-        content: feature.properties?.Name,
+        content: '',
       }).setLatLng([featureLabelData.geometry.coordinates[1], featureLabelData.geometry.coordinates[0]]);
       tooltip.addTo(map);
+
+      this.updateTooltip(feature, map, tooltip);
+      map.on('zoom', () => this.updateTooltip(feature, map, tooltip));
     }
 
     // Hover behavior

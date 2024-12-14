@@ -73,9 +73,12 @@ export function LineChart({
   const lineChartOptions: Highcharts.Options = LineChartOperations.getHighChartOptions(lineChartData, roundLines);
 
   // the `selectedXAxisRange` saves the to be rendered x-axis range of the chart
-  // can be changed using the `LinkeChartXAxisSlider` if the param `xAxisSlider==true`
-  const xAxisLength: number = LineChartOperations.getDistinctXAxisValues(lineChartData).length;
-  const [selectedXAxisRange, setSelectedXAxisRange] = useState([0, xAxisLength - 1]);
+  // can be changed using the `LineChartXAxisSlider` if the param `xAxisSlider==true`
+  const [selectedXAxisRange, setSelectedXAxisRange] = useState([0, 0]);
+  useEffect(() => {
+    const xAxisLength = LineChartOperations.getDistinctXAxisValues(lineChartData).length;
+    setSelectedXAxisRange([0, xAxisLength - 1]);
+  }, [lineChartData]);
 
   // controlling if a line or bar chart is rendered; line chart is the default
   const [showBarChart, setShowBarChart] = useState(false);

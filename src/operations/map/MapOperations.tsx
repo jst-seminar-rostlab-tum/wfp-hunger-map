@@ -19,30 +19,26 @@ export class MapOperations {
     setCountryData: (countryData: CountryData | undefined) => void,
     setCountryIso3Data: (iso3Data: CountryIso3Data | undefined) => void,
     setRegionNutritionData: (regionNutritionData: FeatureCollection | undefined) => void,
-    setIpcRegionData: (ipcRegionData: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void
+    setIpcRegionData: (ipcRegionData: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
+    setIsDataAvailable: (isDataAvailable: boolean) => void
   ) {
     setCountryClickLoading(true);
 
     const countryRepository = container.resolve<CountryRepository>('CountryRepository');
     try {
-      if (selectedMapType === GlobalInsight.FOOD) {
-        const newRegionData = await countryRepository.getRegionData(selectedCountryData.properties.adm0_id);
-        if (newRegionData && newRegionData.features) {
-          setRegionData({
-            type: 'FeatureCollection',
-            features: newRegionData.features as GeoJsonFeature<Geometry, GeoJsonProperties>[],
-          });
-        }
-      }
-
       if (selectedMapType === GlobalInsight.IPC) {
-        setIpcRegionData(undefined);
-        const newIpcRegionData = await countryRepository.getRegionIpcData(selectedCountryData.properties.adm0_id);
-        if (newIpcRegionData && newIpcRegionData.features) {
-          setIpcRegionData({
-            type: 'FeatureCollection',
-            features: newIpcRegionData?.features as GeoJsonFeature<Geometry, GeoJsonProperties>[],
-          });
+        try {
+          const newIpcRegionData = await countryRepository.getRegionIpcData(selectedCountryData.properties.adm0_id);
+          const hasIpc = newIpcRegionData.features.some((feature) => feature.properties?.ipcPhase !== undefined);
+          setIsDataAvailable(hasIpc);
+          if (newIpcRegionData && newIpcRegionData.features) {
+            setIpcRegionData({
+              type: 'FeatureCollection',
+              features: newIpcRegionData?.features as GeoJsonFeature<Geometry, GeoJsonProperties>[],
+            });
+          }
+        } catch {
+          setIsDataAvailable(false);
         }
       }
 
@@ -53,17 +49,40 @@ export class MapOperations {
 
       if (selectedMapType === GlobalInsight.FOOD) {
         const newCountryIso3Data = await countryRepository.getCountryIso3Data(selectedCountryData.properties.iso3);
-        setCountryIso3Data(newCountryIso3Data);
+        if (Array.isArray(newCountryIso3Data) && newCountryIso3Data[1] === 404) {
+          setIsDataAvailable(false);
+        } else {
+          setCountryIso3Data(newCountryIso3Data);
+          setIsDataAvailable(true);
+        }
       }
 
       if (selectedMapType === GlobalInsight.NUTRITION) {
         const newRegionNutritionData = await countryRepository.getRegionNutritionData(
           selectedCountryData.properties.adm0_id
         );
+        const hasNutrition = newRegionNutritionData.features.some(
+          (feature) =>
+            feature.properties?.nutrition &&
+            typeof feature.properties.nutrition === 'object' &&
+            Object.keys(feature.properties.nutrition).length > 0
+        );
+        setIsDataAvailable(hasNutrition);
         if (newRegionNutritionData && newRegionNutritionData.features) {
           setRegionNutritionData({
             type: 'FeatureCollection',
             features: newRegionNutritionData.features as GeoJsonFeature<Geometry, GeoJsonProperties>[],
+          });
+        }
+      }
+      if (selectedMapType === GlobalInsight.FOOD) {
+        const newRegionData = await countryRepository.getRegionData(selectedCountryData.properties.adm0_id);
+        const hasFcs = newRegionData.features.some((feature) => feature.properties?.fcs !== undefined);
+        setIsDataAvailable(hasFcs);
+        if (newRegionData && newRegionData.features) {
+          setRegionData({
+            type: 'FeatureCollection',
+            features: newRegionData.features as GeoJsonFeature<Geometry, GeoJsonProperties>[],
           });
         }
       }

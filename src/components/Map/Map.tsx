@@ -108,13 +108,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
         mapRef.current?.fitBounds(L.geoJSON(selectedCountryData as GeoJSON).getBounds(), { animate: true });
       }
     } else if (!isLoading && !isDataAvailable) {
-      mapRef.current?.fitBounds(
-        [
-          [-90, -180],
-          [90, 180],
-        ],
-        { animate: true }
-      );
+      mapRef.current?.zoomOut(4, { animate: true });
     }
   }, [isLoading, isDataAvailable]);
 

@@ -4,11 +4,12 @@ import { useTheme } from 'next-themes';
 import React, { useEffect, useRef } from 'react';
 import { GeoJSON } from 'react-leaflet';
 
+import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 import { LayerWithFeature } from '@/domain/entities/map/LayerWithFeature.ts';
 import { useNutritionQuery } from '@/domain/hooks/globalHooks';
 import NutritionChoroplethProps from '@/domain/props/NutritionChoroplethProps';
-import { MapboxMapOperations } from '@/operations/map/MapboxMapOperations';
+import { MapOperations } from '@/operations/map/MapOperations';
 import NutritionChoroplethOperations from '@/operations/map/NutritionChoroplethOperations';
 
 import CountryLoadingLayer from './CountryLoading';
@@ -17,12 +18,11 @@ import NutritionStateChoropleth from './NutritionStateChoropleth';
 export default function NutritionChoropleth({
   data,
   countryId,
-  selectedCountryId,
-  setSelectedCountryId,
   regionNutritionData,
   selectedCountryName,
 }: NutritionChoroplethProps) {
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
+  const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
   const { theme } = useTheme();
   const { data: nutritionData } = useNutritionQuery(true);
 
@@ -34,7 +34,7 @@ export default function NutritionChoropleth({
       if (!layer) return;
       const feature = layer.feature as Feature;
       if (NutritionChoroplethOperations.checkIfActive(data.features[0] as CountryMapData, nutritionData)) {
-        const tooltipContainer = MapboxMapOperations.createCountryNameTooltipElement(feature?.properties?.adm0_name);
+        const tooltipContainer = MapOperations.createCountryNameTooltipElement(feature?.properties?.adm0_name);
         layer.bindTooltip(tooltipContainer, { className: 'leaflet-tooltip', sticky: true });
       } else {
         layer.unbindTooltip();

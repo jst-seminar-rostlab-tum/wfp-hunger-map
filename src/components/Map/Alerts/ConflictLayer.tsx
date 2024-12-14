@@ -19,7 +19,6 @@ export function ConflictLayer() {
         data &&
         (Object.keys(conflictsByType) as ConflictType[]).map((conflictType) => (
           <MarkerClusterGroup
-            animate={false}
             key={conflictType}
             iconCreateFunction={(cluster) => ConflictOperations.createClusterCustomIcon(cluster, conflictType)}
             showCoverageOnHover={false}

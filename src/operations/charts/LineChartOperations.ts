@@ -89,7 +89,6 @@ export default class LineChartOperations {
    * is converted to the `LineChartData` type.
    * To support another interface in `LineChartProps.data`, one has to add another switch case here
    * that converts the new interface into `LineChartData`.
-   * @param data
    */
   public static convertToLineChartData(
     data: LineChartData | BalanceOfTradeGraph | CurrencyExchangeGraph | InflationGraphs

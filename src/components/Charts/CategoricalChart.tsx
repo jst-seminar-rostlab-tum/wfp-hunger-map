@@ -2,16 +2,16 @@
 
 import Highcharts from 'highcharts';
 import { useTheme } from 'next-themes';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { ChartContainer } from '@/components/Charts/helpers/ChartContainer';
+import { ChartType } from '@/domain/enums/ChartType.ts';
 import CategoricalChartProps from '@/domain/props/CategoricalChartProps';
 import CategoricalChartOperations from '@/operations/charts/CategoricalChartOperations.ts';
-import { ChartType } from '@/domain/enums/ChartType.ts';
 
 /**
  * The `CategoricalChart` component is a box that primarily renders a title, description text, and a bar chart.
- * It should be used to plot categorical data. For continues data please use the `ContinuesChart` component.
+ * It should be used to plot categorical data. For continues data please use the `LineChart` component.
  * This component has a width of 100%, so it adjusts to the width of its parent element in which it is used.
  * The height of the entire box depends on the provided text, while the chart itself has a fixed height.
  * It also provides the option to open the chart in a full-screen modal, where one can download the data as well.
@@ -51,12 +51,14 @@ export function CategoricalChart({
     setChartOptions(CategoricalChartOperations.getHighChartOptions(data, showPieChart));
   }, [showPieChart, theme]);
 
-  const alternativeSwitchButtonProps = {
-    defaultChartType: ChartType.COLUMN,
-    alternativeChartType: ChartType.PIE,
-    showAlternativeChart: showPieChart,
-    setShowAlternativeChart: setShowPieChart,
-  };
+  const alternativeSwitchButtonProps = disablePieChartSwitch
+    ? undefined
+    : {
+        defaultChartType: ChartType.COLUMN,
+        alternativeChartType: ChartType.PIE,
+        showAlternativeChart: showPieChart,
+        setShowAlternativeChart: setShowPieChart,
+      };
 
   return (
     <ChartContainer

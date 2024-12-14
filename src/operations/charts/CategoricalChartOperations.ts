@@ -12,6 +12,7 @@ if (typeof Highcharts === 'object') {
   highchartsMore(Highcharts);
   patternFill(Highcharts);
 }
+
 /**
  * Using CategoricalChartOperations, the CategoricalChart component can generate
  * the chart `Highcharts.Options` object required by the Highcharts component.
@@ -53,7 +54,6 @@ export default class CategoricalChartOperations {
   /**
    * With this static function, the CategoricalChart component can build the `HighCharts.Options` object
    * for a bar chart or pie chart, out of a given `CategoricalChartData` instance.
-   *
    * @param data `CategoricalChartData` object, containing all data to be plotted in the chart
    * @param pieChart if true, a pie chart instead of a bar chart is created
    */

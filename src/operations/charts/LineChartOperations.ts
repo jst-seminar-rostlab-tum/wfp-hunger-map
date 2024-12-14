@@ -16,7 +16,7 @@ import HighchartsReact from 'highcharts-react-official';
 import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph.ts';
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph.ts';
 import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
-import { LineChartData, LineChartDataPoint } from '@/domain/entities/charts/LineChartData.ts';
+import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
 import { LineChartDataType } from '@/domain/enums/LineChartDataType.ts';
 import { formatToMillion } from '@/utils/formatting.ts';
 import { getTailwindColor } from '@/utils/tailwind-util.ts';
@@ -336,11 +336,7 @@ export default class LineChartOperations {
     const verticalLines = data.verticalLines ? [...data.verticalLines] : [];
     if (data.predictionVerticalLineX) {
       // get max x value
-      const xMax = Math.max(
-        ...data.lines
-          .filter((l) => l.dataPoints !== undefined)
-          .flatMap((l) => (l.dataPoints as LineChartDataPoint[]).map((p) => p.x))
-      );
+      const xMax = Math.max(...data.lines.flatMap((l) => l.dataPoints.map((p) => p.x)));
       verticalBands.push({
         xStart: data.predictionVerticalLineX,
         xEnd: xMax,

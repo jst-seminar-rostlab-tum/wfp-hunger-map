@@ -15,7 +15,7 @@ import { formatToMillion } from '@/utils/formatting.ts';
 
 export class CountryComparisonOperations {
   static getFcsChartData(countryDataList: CountryDataRecord[], countryMapData: CountryMapData[]): LineChartData {
-    return {
+    return this.chartWithoutEmptyLines({
       type: LineChartDataType.LINE_CHART_DATA,
       xAxisType: 'datetime',
       yAxisLabel: 'Mill',
@@ -29,25 +29,27 @@ export class CountryComparisonOperations {
           yRangeMax: formatToMillion(fcsChartData.fcsHigh),
         })),
       })),
-    };
+    });
   }
 
   static getRcsiChartData(countryDataList: CountryDataRecord[], countryMapData: CountryMapData[]): LineChartData {
-    return {
+    return this.chartWithoutEmptyLines({
       type: LineChartDataType.LINE_CHART_DATA,
       xAxisType: 'datetime',
       yAxisLabel: 'Mill',
       lines: countryDataList.map((countryData) => ({
         name: this.getCountryNameById(countryData.id, countryMapData),
         showRange: true,
-        dataPoints: countryData.rcsiGraph.map((rcsiChartData) => ({
-          x: new Date(rcsiChartData.x).getTime(),
-          y: formatToMillion(rcsiChartData.rcsi),
-          yRangeMin: formatToMillion(rcsiChartData.rcsiLow),
-          yRangeMax: formatToMillion(rcsiChartData.rcsiHigh),
-        })),
+        dataPoints: countryData.rcsiGraph
+          .filter((rcsiChartData) => rcsiChartData.rcsi !== null)
+          .map((rcsiChartData) => ({
+            x: new Date(rcsiChartData.x).getTime(),
+            y: formatToMillion(rcsiChartData.rcsi),
+            yRangeMin: formatToMillion(rcsiChartData.rcsiLow),
+            yRangeMax: formatToMillion(rcsiChartData.rcsiHigh),
+          })),
       })),
-    };
+    });
   }
 
   static getFoodSecurityBarChartData(
@@ -100,7 +102,7 @@ export class CountryComparisonOperations {
     countryIso3DataList: CountryIso3DataRecord[],
     selectedCountries: CountryMapData[]
   ): LineChartData {
-    return {
+    return this.chartWithoutEmptyLines({
       type: LineChartDataType.LINE_CHART_DATA,
       xAxisType: 'datetime',
       yAxisLabel: 'Mill',
@@ -110,7 +112,7 @@ export class CountryComparisonOperations {
           return { x: new Date(p.x).getTime(), y: formatToMillion(p.y) };
         }),
       })),
-    };
+    });
   }
 
   static getInflationData(
@@ -118,7 +120,7 @@ export class CountryComparisonOperations {
     selectedCountries: CountryMapData[],
     type: 'headline' | 'food'
   ): LineChartData {
-    return {
+    return this.chartWithoutEmptyLines({
       type: LineChartDataType.LINE_CHART_DATA,
       xAxisType: 'datetime',
       yAxisLabel: 'Rate in %',
@@ -130,7 +132,7 @@ export class CountryComparisonOperations {
             return { x: new Date(p.x).getTime(), y: p.y };
           }),
         })),
-    };
+    });
   }
 
   static getCountryNameById(id: number, countryMapData: CountryMapData[]): string {
@@ -139,6 +141,13 @@ export class CountryComparisonOperations {
 
   static getCountryNameByIso3(iso3: string, countryMapData: CountryMapData[]): string {
     return countryMapData.find((country) => country.properties.iso3 === iso3)?.properties.adm0_name || '';
+  }
+
+  static chartWithoutEmptyLines(chart: LineChartData): LineChartData {
+    return {
+      ...chart,
+      lines: chart.lines.filter((line) => line.dataPoints.length > 0),
+    };
   }
 
   static getChartData(

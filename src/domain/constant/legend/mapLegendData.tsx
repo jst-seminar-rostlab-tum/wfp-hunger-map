@@ -106,7 +106,15 @@ export function mapLegendData(
     case GlobalInsight.FOOD:
       legendData.push({
         title: 'Prevalence of insufficient food consumption',
-        colors: ['fcsGradient1', 'fcsGradient2', 'fcsGradient3', 'fcsGradient4', 'fcsGradient5', 'fcsGradient6'],
+        colorsData: [
+          { color: 'fcsGradient1', title: 'Very Low', value: '0-5%' },
+          { color: 'fcsGradient2', title: 'Low', value: '5-10%' },
+          { color: 'fcsGradient3', title: 'Moderately Low', value: '10-20%' },
+          { color: 'fcsGradient4', title: 'Moderately High', value: '20-30%' },
+          { color: 'fcsGradient5', title: 'High', value: '30-40%' },
+          { color: 'fcsGradient6', title: 'Very High', value: 'Above 40%' },
+        ],
+
         startLabel: '0%',
         endLabel: 'above 40%',
         popoverInfo: (
@@ -158,17 +166,18 @@ export function mapLegendData(
     case GlobalInsight.RAINFALL:
       legendData.push({
         title: 'Rainfall',
-        colors: [
-          'vegetationGradient1',
-          'vegetationGradient2',
-          'vegetationGradient3',
-          'vegetationGradient4',
-          'vegetationGradient5',
-          'rainfallGradient6',
-          'rainfallGradient7',
-          'rainfallGradient8',
-          'rainfallGradient9',
+        colorsData: [
+          { color: 'vegetationGradient1', value: '<40%' },
+          { color: 'vegetationGradient2', value: '40-60%' },
+          { color: 'vegetationGradient3', value: '60-80%' },
+          { color: 'vegetationGradient4', value: '80-90%' },
+          { color: 'vegetationGradient5', value: '90-110%' },
+          { color: 'rainfallGradient6', value: '110-120%' },
+          { color: 'rainfallGradient7', value: '120-140%' },
+          { color: 'rainfallGradient8', value: '140-180%' },
+          { color: 'rainfallGradient9', value: '>180%' },
         ],
+
         startLabel: '<40%',
         endLabel: '>180%',
         popoverInfo: (
@@ -196,17 +205,18 @@ export function mapLegendData(
     case GlobalInsight.VEGETATION:
       legendData.push({
         title: 'Vegetation',
-        colors: [
-          'vegetationGradient1',
-          'vegetationGradient2',
-          'vegetationGradient3',
-          'vegetationGradient4',
-          'vegetationGradient5',
-          'vegetationGradient6',
-          'vegetationGradient7',
-          'vegetationGradient8',
-          'vegetationGradient9',
+        colorsData: [
+          { color: 'vegetationGradient1', value: '<50%' },
+          { color: 'vegetationGradient2', value: '50-70%' },
+          { color: 'vegetationGradient3', value: '70-80%' },
+          { color: 'vegetationGradient4', value: '80-90%' },
+          { color: 'vegetationGradient5', value: '90-110%' },
+          { color: 'vegetationGradient6', value: '110-120%' },
+          { color: 'vegetationGradient7', value: '120-130%' },
+          { color: 'vegetationGradient8', value: '130-150%' },
+          { color: 'vegetationGradient9', value: '>150%' },
         ],
+
         startLabel: '<50%',
         endLabel: '>150%',
         popoverInfo: (
@@ -236,14 +246,14 @@ export function mapLegendData(
         legendData.push({
           title: 'Number of people in IPC/CH Phase 3 or above (millions)',
           hasNotAnalyzedPoint: true,
-          colors: [
-            'ipcGradient1',
-            'ipcGradient2',
-            'ipcGradient3',
-            'ipcGradient4',
-            'ipcGradient5',
-            'ipcGradient6',
-            'ipcGradient7',
+          colorsData: [
+            { color: 'ipcGradient1', value: '0-0.099' },
+            { color: 'ipcGradient2', value: '0.1-0.49' },
+            { color: 'ipcGradient3', value: '0.5-0.99' },
+            { color: 'ipcGradient4', value: '1.0-2.99' },
+            { color: 'ipcGradient5', value: '3.0-4.99' },
+            { color: 'ipcGradient6', value: '5.0-9.99' },
+            { color: 'ipcGradient7', value: '>10' },
           ],
           startLabel: '0',
           endLabel: '>10',
@@ -356,7 +366,13 @@ export function mapLegendData(
       } else {
         legendData.push({
           title: 'Risk of Inadequate Micronutrient Intake',
-          colors: ['ipcGradient1', 'ipcGradient2', 'ipcGradient3', 'ipcGradient4', 'ipcGradient5'],
+          colorsData: [
+            { color: 'ipcGradient1', title: 'Lowest', value: '0-19%' },
+            { color: 'ipcGradient2', title: 'Low', value: '20-39%' },
+            { color: 'ipcGradient3', title: 'Moderate', value: '40-59%' },
+            { color: 'ipcGradient4', title: 'High', value: '60-79%' },
+            { color: 'ipcGradient5', title: 'Highest', value: '80-100%' },
+          ],
           startLabel: '0%',
           endLabel: '100%',
           popoverInfo: (

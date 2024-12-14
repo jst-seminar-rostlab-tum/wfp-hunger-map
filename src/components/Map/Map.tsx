@@ -84,6 +84,9 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
           setRegionNutritionData,
           setIpcRegionData
         );
+        window.gtag('event', `${selectedCountryData.properties.iso3}_country_selected`, {
+          selectedMap: selectedMapType,
+        });
         setSelectedCountryName(selectedCountryData.properties.adm0_name);
         mapRef.current?.fitBounds(L.geoJSON(selectedCountryData as GeoJSON).getBounds(), { animate: true });
       }

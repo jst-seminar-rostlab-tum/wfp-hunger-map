@@ -22,21 +22,32 @@ export default class CategoricalChartOperations {
    * the default Highcharts colors will be used.
    */
   private static getCategoriesColorList() {
-    return ['#FF5252', '#85E77C', '#157DBC', '#FFB74D'];
+    return [
+      getTailwindColor('--nextui-clusterRed'),
+      getTailwindColor('--nextui-clusterGreen'),
+      getTailwindColor('--nextui-clusterBlue'),
+      getTailwindColor('--nextui-clusterOrange'),
+    ];
   }
 
   /**
    * Tooltip formatter function for `Options.tooltip.formatter` usage only.
    */
-  private static chartTooltipFormatter(
-    x: string | number | undefined,
-    points: TooltipFormatterContextObject[] | undefined
-  ) {
+  private static chartTooltipFormatter(points: TooltipFormatterContextObject[] | undefined) {
     let tooltip = '';
     points?.forEach((p) => {
-      if (p.point.options.y) tooltip += `<br><div>${p.point.options.y}</div>`;
+      if (p.point.options.y) {
+        tooltip += `<br><span style="color:${p.color}">\u25CF</span> <div>${p.point.options.y}</div>`;
+      }
     });
     return tooltip;
+  }
+
+  /**
+   * Tooltip formatter function for `Options.plotOptions.pie.dataLabels.formatter` usage only.
+   */
+  private static pieDataLabelsFormatter(point: Highcharts.Point, data: CategoricalChartData) {
+    return `<p>${point.name}: </p><p style="color:${point.color}">${point.y} ${data.yAxisLabel}</p>`;
   }
 
   /**
@@ -48,6 +59,7 @@ export default class CategoricalChartOperations {
    */
   public static getHighChartOptions(data: CategoricalChartData, pieChart?: boolean): Highcharts.Options {
     const seriesData = [];
+    const categories = [];
     const defaultCategoriesColors = CategoricalChartOperations.getCategoriesColorList();
     for (let i = 0; i < data.categories.length; i += 1) {
       const categoryData = data.categories[i];
@@ -60,6 +72,9 @@ export default class CategoricalChartOperations {
       } else {
         categoryColor = defaultCategoriesColors.pop();
       }
+
+      // collect category names
+      categories.push(categoryData.name);
 
       // build series object for highchart
       seriesData.push({
@@ -75,13 +90,15 @@ export default class CategoricalChartOperations {
         text: '',
       },
       chart: {
-        type: pieChart ? 'pie' : 'column',
+        type: pieChart ? 'Line' : 'column',
         backgroundColor: 'transparent',
       },
       legend: {
         enabled: false,
       },
       xAxis: {
+        categories,
+        visible: !pieChart,
         labels: {
           style: {
             color: getTailwindColor('--nextui-secondary'),
@@ -93,6 +110,7 @@ export default class CategoricalChartOperations {
         tickLength: 4,
       },
       yAxis: {
+        visible: !pieChart,
         title: {
           text: data.yAxisLabel,
           style: {
@@ -112,9 +130,10 @@ export default class CategoricalChartOperations {
         gridLineColor: getTailwindColor('--nextui-chartsGridLine'),
       },
       tooltip: {
+        enabled: !pieChart,
         shared: true,
         formatter() {
-          return CategoricalChartOperations.chartTooltipFormatter(this.x, this.points);
+          return CategoricalChartOperations.chartTooltipFormatter(this.points);
         },
         backgroundColor: getTailwindColor('--nextui-chartsLegendBackground'),
         style: {
@@ -137,11 +156,26 @@ export default class CategoricalChartOperations {
           animation: true,
           grouping: true,
           shadow: false,
-          borderWidth: 1,
+          borderWidth: 0,
         },
         pie: {
+          animation: true,
           allowPointSelect: true,
           cursor: 'pointer',
+          innerSize: '60%',
+          borderWidth: 0,
+          dataLabels: {
+            enabled: true,
+            formatter() {
+              return CategoricalChartOperations.pieDataLabelsFormatter(this.point, data);
+            },
+            style: {
+              color: getTailwindColor('--nextui-secondary'),
+              fontSize: '12px',
+              borderWidth: 0,
+              fontWeight: 'light',
+            },
+          },
         },
       },
     };

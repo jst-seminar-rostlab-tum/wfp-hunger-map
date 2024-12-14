@@ -137,8 +137,8 @@ export default async function Elements() {
         dataPoint: { y: 5 },
       },
       {
-        name: 'Category A',
-        dataPoint: { y: 5 },
+        name: 'Category B',
+        dataPoint: { y: 8 },
       },
     ],
   };

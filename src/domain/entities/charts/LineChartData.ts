@@ -16,8 +16,8 @@ export interface ChartVerticalLine {
 }
 
 export interface ChartVerticalBand {
-  xStart?: number; // if null -> band extends to the end of the axis dynamically
-  xEnd?: number; // if null -> band extends to the end of the axis dynamically
+  xStart?: number;
+  xEnd?: number;
   color?: string;
   label?: string;
 }

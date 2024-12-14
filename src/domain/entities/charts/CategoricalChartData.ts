@@ -1,7 +1,5 @@
 export interface CategoricalDataPoint {
   y: number;
-  yRangeMin?: number;
-  yRangeMax?: number; // todo include into options
 }
 
 export interface CategoricalChartData {

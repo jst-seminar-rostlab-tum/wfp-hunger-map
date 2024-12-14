@@ -188,9 +188,6 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
           style={disputedAreaStyle}
         />
       </Pane>
-
-      <ZoomControl threshold={5} callback={onZoomThresholdReached} />
-      <BackToGlobalButton />
     </MapContainer>
   );
 }

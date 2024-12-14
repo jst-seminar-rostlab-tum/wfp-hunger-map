@@ -36,6 +36,7 @@ export default function ZoomControl({ threshold, callback }: ZoomControlProps) {
     <div className="absolute right-4 bottom-7 z-9999 flex flex-col shadow-lg">
       <Button
         isDisabled={zoomLevel === MAP_MAX_ZOOM}
+        aria-label="Zoom in"
         size="sm"
         onClick={() => map.zoomIn()}
         color="default"
@@ -45,6 +46,7 @@ export default function ZoomControl({ threshold, callback }: ZoomControlProps) {
       </Button>
       <Button
         isDisabled={zoomLevel === MAP_MIN_ZOOM}
+        aria-label="Zoom out"
         size="sm"
         onClick={() => map.zoomOut()}
         className="rounded-b-md px-2 min-w-0 rounded-t-none z-9999 bg-content1 hover:bg-content2"

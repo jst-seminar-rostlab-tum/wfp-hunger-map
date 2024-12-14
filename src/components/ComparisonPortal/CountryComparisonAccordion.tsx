@@ -137,7 +137,7 @@ export default function CountryComparisonAccordion({ selectedCountries }: Countr
             content: (
               <div>
                 {balanceOfTradeData && (
-                  <LineChart data={balanceOfTradeData} expandable small noPadding transparentBackground />
+                  <LineChart data={balanceOfTradeData} expandable xAxisSlider small noPadding transparentBackground />
                 )}
               </div>
             ),
@@ -153,6 +153,7 @@ export default function CountryComparisonAccordion({ selectedCountries }: Countr
                     title="Headline Inflation"
                     data={headlineInflationData}
                     expandable
+                    xAxisSlider
                     small
                     noPadding
                     transparentBackground
@@ -163,6 +164,7 @@ export default function CountryComparisonAccordion({ selectedCountries }: Countr
                     title="Food Inflation"
                     data={foodInflationData}
                     expandable
+                    xAxisSlider
                     small
                     noPadding
                     transparentBackground

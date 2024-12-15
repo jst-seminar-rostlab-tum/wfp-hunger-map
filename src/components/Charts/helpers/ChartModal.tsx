@@ -5,41 +5,34 @@ import HighchartsReact from 'highcharts-react-official';
 import { Minus } from 'iconsax-react';
 import { useRef } from 'react';
 
-import LineChartBarLineSwitchButton from '@/components/Charts/helpers/LineChartBarLineSwitchButton';
-import LineChartDownloadButton from '@/components/Charts/helpers/LineChartDownloadButton';
-import LineChartSliderButton from '@/components/Charts/helpers/LineChartSliderButton';
-import LineChartXAxisSlider from '@/components/Charts/helpers/LineChartXAxisSlider';
+import ChartAlternativeSwitchButton from '@/components/Charts/helpers/buttons/ChartAlternativeSwitchButton';
+import ChartDownloadButton from '@/components/Charts/helpers/buttons/ChartDownloadButton';
+import ChartSliderButton from '@/components/Charts/helpers/buttons/ChartSliderButton';
+import ChartSlider from '@/components/Charts/helpers/ChartSlider';
 import { Tooltip } from '@/components/Tooltip/Tooltip';
-import LineChartModalProps from '@/domain/props/LineChartModalProps';
+import ChartModalProps from '@/domain/props/ChartModalProps';
 
 /**
- * This component is tied to the `LineChart` component and should not be used independently.
- * It renders the modal, which can be opened by the user from the `LineChart` to display the chart
- * in a larger view and access additional functionalities, such as downloading the chart as a PNG.
- * For more details, please refer to the `LineChart` component.
+ * This component is tied to the `ChartContainer` component and should not be used independently.
+ * It renders the modal, which can be opened by the user from the `ChartContainer`
+ * to display the chart in a larger view.
  */
-export function LineChartModal({
+export function ChartModal({
+  chartOptions,
+  chartData,
   title,
   description,
   disableDownload,
-  barChartSwitch,
-  xAxisSlider,
-  lineChartData,
-  chartOptions,
   isOpen,
   onClose,
   onOpenChange,
-  showXAxisSlider,
-  setShowXAxisSlider,
-  showBarChart,
-  setShowBarChart,
-  selectedXAxisRange,
-  setSelectedXAxisRange,
-}: LineChartModalProps) {
+  alternativeSwitchButtonProps,
+  sliderProps,
+  showSlider,
+  setShowSlider,
+}: ChartModalProps) {
   const chartRef = useRef<HighchartsReact.RefObject | null>(null);
 
-  // full screen modal by the 'LineChart' component that can be opened if `expandable==true`;
-  // offers a larger chart and an additional features (see buttons)
   return (
     <Modal
       size="5xl"
@@ -55,19 +48,15 @@ export function LineChartModal({
           <div className="flex flex-row justify-between w-full h-full">
             <h2 className="flex flex-col justify-center font-normal text-sm sm:text-md md:text-lg"> {title} </h2>
             <div className="flex flex-row w-fit h-full gap-0.5 sm:gap-4 md:gap-6">
-              {xAxisSlider && (
-                <LineChartSliderButton
-                  showXAxisSlider={showXAxisSlider}
-                  setShowXAxisSlider={setShowXAxisSlider}
-                  size={4}
-                />
+              {sliderProps && showSlider && setShowSlider && (
+                <ChartSliderButton showSlider={showSlider} setShowSlider={setShowSlider} size={4} />
               )}
 
-              {barChartSwitch && (
-                <LineChartBarLineSwitchButton showBarChart={showBarChart} setShowBarChart={setShowBarChart} size={4} />
+              {alternativeSwitchButtonProps && (
+                <ChartAlternativeSwitchButton {...alternativeSwitchButtonProps} size={4} />
               )}
 
-              {!disableDownload && <LineChartDownloadButton chartRef={chartRef} lineChartData={lineChartData} />}
+              {!disableDownload && <ChartDownloadButton chartRef={chartRef} chartData={chartData} size={4} />}
 
               {/* close model button */}
               <Tooltip text="Close">
@@ -92,15 +81,11 @@ export function LineChartModal({
           </div>
         </ModalBody>
         {
-          // slider to manipulate the plotted x-axis range of the chart; can be disabled via `xAxisSlider`
-          showXAxisSlider && (
+          // slider to e.g. manipulate the plotted x-axis range of the chart
+          sliderProps && (
             <ModalFooter>
               <div className="w-full">
-                <LineChartXAxisSlider
-                  selectedXAxisRange={selectedXAxisRange}
-                  setSelectedXAxisRange={setSelectedXAxisRange}
-                  data={lineChartData}
-                />
+                <ChartSlider {...sliderProps} />
               </div>
             </ModalFooter>
           )

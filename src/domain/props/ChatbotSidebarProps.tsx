@@ -8,5 +8,5 @@ export interface ChatbotSidebarProps {
   chats: IChat[];
   currentChatIndex: number;
   onSelectChat: (index: number) => void;
-  onStartNewChat: () => void;
+  onStartNewChat: (newChat?: IChat) => void;
 }

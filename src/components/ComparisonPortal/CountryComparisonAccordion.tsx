@@ -4,17 +4,16 @@ import { useEffect, useMemo, useState } from 'react';
 
 import ComparisonAccordionSkeleton from '@/components/ComparisonPortal/ComparisonAccordionSkeleton';
 import { useSnackbar } from '@/domain/contexts/SnackbarContext';
-import { CountryMapData } from '@/domain/entities/country/CountryMapData';
 import { useCountryDataListQuery, useCountryIso3DataListQuery } from '@/domain/hooks/countryHooks';
+import CountryComparisonAccordionProps from '@/domain/props/CountryComparisonAccordionProps';
 import { CountryComparisonOperations } from '@/operations/comparison-portal/CountryComparisonOperations';
 
 import AccordionContainer from '../Accordions/AccordionContainer';
 
-interface CountryComparisonAccordionProps {
-  selectedCountries: CountryMapData[] | undefined;
-}
-
-export default function CountryComparisonAccordion({ selectedCountries }: CountryComparisonAccordionProps) {
+export default function CountryComparisonAccordion({
+  selectedCountries,
+  setSelectedCountries,
+}: CountryComparisonAccordionProps) {
   const [expandAll, setExpandAll] = useState(false);
   const { showSnackBar } = useSnackbar();
 
@@ -26,6 +25,7 @@ export default function CountryComparisonAccordion({ selectedCountries }: Countr
       if (!selectedCountries) return;
       const countryName = CountryComparisonOperations.getCountryNameById(countryId, selectedCountries);
       CountryComparisonOperations.showDataNotFoundSnackBar(showSnackBar, countryName);
+      setSelectedCountries(selectedCountries.filter((country) => country.properties.adm0_id !== countryId));
     }
   );
 
@@ -37,6 +37,7 @@ export default function CountryComparisonAccordion({ selectedCountries }: Countr
       if (!selectedCountries) return;
       const countryName = CountryComparisonOperations.getCountryNameByIso3(countryCode, selectedCountries);
       CountryComparisonOperations.showDataNotFoundSnackBar(showSnackBar, countryName);
+      setSelectedCountries(selectedCountries.filter((country) => country.properties.iso3 !== countryCode));
     }
   );
 

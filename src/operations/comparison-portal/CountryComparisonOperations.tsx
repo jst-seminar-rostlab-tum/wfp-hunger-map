@@ -4,6 +4,7 @@ import { UseQueryResult } from '@tanstack/react-query';
 import { LineChart } from '@/components/Charts/LineChart';
 import NoDataHint from '@/components/ComparisonPortal/NoDataHint';
 import CustomInfoCircle from '@/components/CustomInfoCircle/CustomInfoCircle';
+import { AccordionItemProps } from '@/domain/entities/accordions/Accordions';
 import { LineChartData } from '@/domain/entities/charts/LineChartData';
 import { ChartData } from '@/domain/entities/common/ChartData.ts';
 import { CountryComparisonChartData } from '@/domain/entities/comparison/CountryComparisonChartdata';
@@ -221,7 +222,7 @@ export class CountryComparisonOperations {
     }: CountryComparisonChartData,
     selectedCountryNames: string[],
     isLoading: boolean
-  ) {
+  ): AccordionItemProps[] {
     return [
       {
         title: 'Food Security',

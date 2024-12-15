@@ -10,7 +10,6 @@ import { CountryIso3Data, CountryIso3DataRecord } from '../entities/country/Coun
 import { RegionIpc } from '../entities/region/RegionIpc';
 import CountryRepository from '../repositories/CountryRepository';
 
-// TODO: reformat this file (merge similar & remove unused functions)
 const countryRepo = container.resolve<CountryRepository>('CountryRepository');
 
 export const useCountryDataQuery = (countryId: number) =>
@@ -22,6 +21,13 @@ export const useCountryDataQuery = (countryId: number) =>
     cachedQueryClient
   );
 
+/**
+ * Fetches country data for a list of country IDs.
+ * If the data is not found for a country, the `onCountryDataNotFound` callback is called with the country ID.
+ * @param countryIds List of country IDs to fetch data for.
+ * @param onCountryDataNotFound Callback called when the data is not found for a country.
+ * @returns An array of query results for each country ID. The query result is `null` if the data is not found.
+ */
 export const useCountryDataListQuery = (
   countryIds: number[] | undefined,
   onCountryDataNotFound: (countryId: number) => void
@@ -61,6 +67,13 @@ export const useCountryIso3DataQuery = (countryCode: string) =>
     cachedQueryClient
   );
 
+/**
+ * Fetches country ISO3 data for a list of country codes.
+ * If the data is not found for a country, the `onCountryDataNotFound` callback is called with the country code.
+ * @param countryCodes List of country codes to fetch data for.
+ * @param onCountryDataNotFound Callback called when the data is not found for a country.
+ * @returns An array of query results for each country code. The query result is `null` if the data is not found.
+ */
 export const useCountryIso3DataListQuery = (
   countryCodes: string[] | undefined,
   onCountryDataNotFound: (countryCode: string) => void

@@ -1947,6 +1947,11 @@
   resolved "https://registry.yarnpkg.com/@nextui-org/shared-utils/-/shared-utils-2.0.8.tgz#6e6e71a067c273581839c2226fd9fb4e1e3a3410"
   integrity sha512-ZEtoMPXS+IjT8GvpJTS9IWDnT1JNCKV+NDqqgysAf1niJmOFLyJgl6dh/9n4ufcGf1GbSEQN+VhJasEw7ajYGQ==
 
+"@nextui-org/shared-utils@2.0.9":
+  version "2.0.9"
+  resolved "https://registry.yarnpkg.com/@nextui-org/shared-utils/-/shared-utils-2.0.9.tgz#08e06464b9e8f9b1e7456ea97895f360e952262d"
+  integrity sha512-tb+bkkRb8Yb2kaQYKQF6VvxOCuIjwP9UWHUL7zgq3mjOVtHlzz9iqrNlcc3xCrOtNWIBQuI15MAUYeo3PXXeqg==
+
 "@nextui-org/shared-utils@2.1.1":
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/@nextui-org/shared-utils/-/shared-utils-2.1.1.tgz#e5a7edbdfe88c4b9595e413cfec958d95096f6f1"
@@ -2120,12 +2125,12 @@
     tailwind-merge "^1.14.0"
     tailwind-variants "^0.1.20"
 
-"@nextui-org/theme@2.4.3":
-  version "2.4.3"
-  resolved "https://registry.yarnpkg.com/@nextui-org/theme/-/theme-2.4.3.tgz#fabd04a95e2dfc07f82dd39795b1493835a99c9c"
-  integrity sha512-QH9ps5NpenWU966INdGbdvZOWWUEGqxrLM2vyqkSRq+A65YON4Jhg/x1xWcSX0SJECNhoNZLh5mt6jp3jH5k8Q==
+"@nextui-org/theme@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@nextui-org/theme/-/theme-2.3.0.tgz#f33faa02684c32dfe2950563f98b43a2b0a5790e"
+  integrity sha512-MTWpjXeG+i9svlib8xMz17aK4GWijGoLZ4BRQv8JxvhZMUMuqPxkVeuMAXqg3dK9eF13KmtjCDf4K7d9/WkzYg==
   dependencies:
-    "@nextui-org/shared-utils" "2.1.1"
+    "@nextui-org/shared-utils" "2.0.9"
     clsx "^1.2.1"
     color "^4.2.3"
     color2k "^2.0.2"

@@ -9,8 +9,8 @@ export default function NotFound() {
       <Topbar />
       <main className="flex h-full flex-col items-center justify-center gap-2 text-content">
         <section className="text-center">
-          <h2 className="text-xl font-semibold">404 Not Found</h2>
-          <p>Could not find the requested resource.</p>
+          <h2 className="text-xl font-semibold">Ooops</h2>
+          <p>The requested page could not be found.</p>
         </section>
         <div className="flex flex-row gap-2 mt-4">
           <a href="/">

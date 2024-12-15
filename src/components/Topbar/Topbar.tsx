@@ -3,7 +3,6 @@
 import {
   Link,
   Navbar,
-  NavbarBrand,
   NavbarContent,
   NavbarItem,
   NavbarMenu,
@@ -26,9 +25,7 @@ export function Topbar() {
     <Navbar onMenuOpenChange={setIsMenuOpen} maxWidth="full">
       <NavbarContent className="flex-1 min-w-[200px]">
         <NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} className="md:hidden" />
-        <NavbarBrand>
-          <LogoWithText />
-        </NavbarBrand>
+        <LogoWithText />
       </NavbarContent>
       <NavbarContent className="hidden md:flex gap-4" justify="center">
         {pageLinks.map((item) => (

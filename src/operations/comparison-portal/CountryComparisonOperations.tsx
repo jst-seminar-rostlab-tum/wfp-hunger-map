@@ -86,21 +86,24 @@ export class CountryComparisonOperations {
     countryDataList: CountryDataRecord[],
     selectedCountries: CountryMapData[]
   ): LineChartData {
-    return {
+    return this.chartWithoutEmptyLines({
       type: LineChartDataType.LINE_CHART_DATA,
       xAxisType: 'category',
       yAxisLabel: '% of Cereals',
       lines: countryDataList.map((countryData) => ({
         name: this.getCountryNameById(countryData.id, selectedCountries),
         showRange: false,
-        dataPoints: [
-          {
-            x: 0, // TODO: f-165: should be the individual value of the country variable
-            y: countryData.importDependency,
-          },
-        ],
+        dataPoints:
+          countryData.importDependency !== null
+            ? [
+                {
+                  x: 0, // TODO: f-165: should be the individual value of the country variable
+                  y: countryData.importDependency,
+                },
+              ]
+            : [],
       })),
-    };
+    });
   }
 
   static getBalanceOfTradeData(

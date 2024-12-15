@@ -3,6 +3,7 @@
 import { Suspense, useState } from 'react';
 
 import ComparisonAccordionSkeleton from '@/components/ComparisonPortal/ComparisonAccordionSkeleton';
+import CountrySelectionSkeleton from '@/components/ComparisonPortal/CountrySelectSkeleton';
 import { GlobalFcsData } from '@/domain/entities/country/CountryFcsData';
 import { CountryMapData, CountryMapDataWrapper } from '@/domain/entities/country/CountryMapData';
 
@@ -19,14 +20,17 @@ export default function CountryComparison({ countryMapData, globalFcsData }: Cou
 
   return (
     <div>
-      <CountrySelection
-        countryMapData={countryMapData}
-        globalFcsData={globalFcsData}
-        selectedCountries={selectedCountries}
-        setSelectedCountries={setSelectedCountries}
-      />
-      <Suspense fallback={<ComparisonAccordionSkeleton />} />
-      <CountryComparisonAccordion selectedCountries={selectedCountries} />
+      <Suspense fallback={<CountrySelectionSkeleton />}>
+        <CountrySelection
+          countryMapData={countryMapData}
+          globalFcsData={globalFcsData}
+          selectedCountries={selectedCountries}
+          setSelectedCountries={setSelectedCountries}
+        />
+      </Suspense>
+      <Suspense fallback={<ComparisonAccordionSkeleton />}>
+        <CountryComparisonAccordion selectedCountries={selectedCountries} />
+      </Suspense>
     </div>
   );
 }

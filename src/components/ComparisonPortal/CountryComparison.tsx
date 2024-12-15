@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 
+import ComparisonAccordionSkeleton from '@/components/ComparisonPortal/ComparisonAccordionSkeleton';
 import { GlobalFcsData } from '@/domain/entities/country/CountryFcsData';
 import { CountryMapData, CountryMapDataWrapper } from '@/domain/entities/country/CountryMapData';
 
@@ -24,6 +25,7 @@ export default function CountryComparison({ countryMapData, globalFcsData }: Cou
         selectedCountries={selectedCountries}
         setSelectedCountries={setSelectedCountries}
       />
+      <Suspense fallback={<ComparisonAccordionSkeleton />} />
       <CountryComparisonAccordion selectedCountries={selectedCountries} />
     </div>
   );

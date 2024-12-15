@@ -58,8 +58,7 @@ export default function CountryComparisonAccordion({ selectedCountries }: Countr
     return CountryComparisonOperations.getComparisonAccordionItems(chartData, selectedCountryNames, isLoading);
   }, [countryDataList, countryIso3DataList, selectedCountries]);
 
-  if (!accordionItems || (countryDataList.length < 2 && isLoading))
-    return <ComparisonAccordionSkeleton numberOfItems={5} />;
+  if (!accordionItems || (countryDataList.length < 2 && isLoading)) return <ComparisonAccordionSkeleton />;
 
   if (countryDataList.length < 2) {
     return (

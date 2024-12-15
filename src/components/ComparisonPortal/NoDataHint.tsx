@@ -1,15 +1,18 @@
 import { Alert } from '@nextui-org/alert';
 import { useEffect, useState } from 'react';
 
+import { isLineChartData } from '@/domain/entities/charts/LineChartData';
 import { NoDataHintProps } from '@/domain/props/NoDataHintProps.ts';
 
-export default function NoDataHint({ lineChartData, selectedCountryNames, isLoading }: NoDataHintProps) {
+export default function NoDataHint({ chartData, selectedCountryNames, isLoading }: NoDataHintProps) {
   const [formattedMissingCountryNames, setFormattedMissingCountryNames] = useState<string | null>(null);
 
   useEffect(() => {
     if (isLoading) return;
 
-    const countryNamesInChart = lineChartData.lines.map((i) => i.name);
+    const countryNamesInChart = isLineChartData(chartData)
+      ? chartData.lines.map((line) => line.name)
+      : chartData.categories.map((category) => category.name);
     const missingCountryNames = selectedCountryNames.filter(
       (countryName) => !countryNamesInChart.includes(countryName)
     );
@@ -25,7 +28,7 @@ export default function NoDataHint({ lineChartData, selectedCountryNames, isLoad
           `${missingCountryNames.slice(0, -1).join(', ')} and ${missingCountryNames.slice(-1)}`
         );
     }
-  }, [isLoading, lineChartData, selectedCountryNames]);
+  }, [isLoading, chartData, selectedCountryNames]);
 
   return formattedMissingCountryNames ? (
     <Alert

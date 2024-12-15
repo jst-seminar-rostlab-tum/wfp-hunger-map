@@ -49,7 +49,7 @@ export function CategoricalChart({
   // handling the bar and pie chart switch and the theme switch;
   useEffect(() => {
     setChartOptions(CategoricalChartOperations.getHighChartOptions(data, showPieChart));
-  }, [showPieChart, theme]);
+  }, [showPieChart, theme, data]);
 
   const alternativeSwitchButtonProps = disablePieChartSwitch
     ? undefined

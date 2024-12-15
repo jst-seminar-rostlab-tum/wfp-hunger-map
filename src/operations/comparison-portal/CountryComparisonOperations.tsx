@@ -1,10 +1,12 @@
 import { Spacer } from '@nextui-org/react';
 import { UseQueryResult } from '@tanstack/react-query';
 
+import { CategoricalChart } from '@/components/Charts/CategoricalChart';
 import { LineChart } from '@/components/Charts/LineChart';
 import NoDataHint from '@/components/ComparisonPortal/NoDataHint';
 import CustomInfoCircle from '@/components/CustomInfoCircle/CustomInfoCircle';
 import { AccordionItemProps } from '@/domain/entities/accordions/Accordions';
+import { CategoricalChartData } from '@/domain/entities/charts/CategoricalChartData';
 import { LineChartData } from '@/domain/entities/charts/LineChartData';
 import { ChartData } from '@/domain/entities/common/ChartData.ts';
 import { CountryComparisonChartData } from '@/domain/entities/comparison/CountryComparisonChartdata';
@@ -58,27 +60,32 @@ export class CountryComparisonOperations {
     });
   }
 
+  static getPopulationBarChartData(
+    countryDataList: CountryDataRecord[],
+    countryMapData: CountryMapData[]
+  ): CategoricalChartData {
+    return {
+      yAxisLabel: 'Mill',
+      categories: countryDataList.map((countryData) => ({
+        name: this.getCountryNameById(countryData.id, countryMapData),
+        dataPoint: {
+          y: countryData.population,
+        },
+      })),
+    };
+  }
+
   static getFoodSecurityBarChartData(
     countryDataList: CountryDataRecord[],
     countryMapData: CountryMapData[]
-  ): LineChartData {
+  ): CategoricalChartData {
     return {
-      type: LineChartDataType.LINE_CHART_DATA,
-      xAxisType: 'category',
       yAxisLabel: 'Mill',
-      lines: countryDataList.map((countryData) => ({
+      categories: countryDataList.map((countryData) => ({
         name: this.getCountryNameById(countryData.id, countryMapData),
-        showRange: false,
-        dataPoints: [
-          {
-            x: 0, // TODO: f-165 this should be 'population'
-            y: countryData.population,
-          },
-          {
-            x: 1, // TODO: f-165 this should be 'people with insufficient food consumption'
-            y: countryData.fcs,
-          },
-        ],
+        dataPoint: {
+          y: countryData.fcs,
+        },
       })),
     };
   }
@@ -86,25 +93,18 @@ export class CountryComparisonOperations {
   static getImportDependencyBarChartData(
     countryDataList: CountryDataRecord[],
     selectedCountries: CountryMapData[]
-  ): LineChartData {
-    return this.chartWithoutEmptyLines({
-      type: LineChartDataType.LINE_CHART_DATA,
-      xAxisType: 'category',
+  ): CategoricalChartData {
+    return {
       yAxisLabel: '% of Cereals',
-      lines: countryDataList.map((countryData) => ({
-        name: this.getCountryNameById(countryData.id, selectedCountries),
-        showRange: false,
-        dataPoints:
-          countryData.importDependency !== null
-            ? [
-                {
-                  x: 0, // TODO: f-165: should be the individual value of the country variable
-                  y: countryData.importDependency,
-                },
-              ]
-            : [],
-      })),
-    });
+      categories: countryDataList
+        .filter((countryData) => countryData.importDependency !== null)
+        .map((countryData) => ({
+          name: this.getCountryNameById(countryData.id, selectedCountries),
+          dataPoint: {
+            y: countryData.importDependency!,
+          },
+        })),
+    };
   }
 
   static getBalanceOfTradeData(
@@ -169,6 +169,8 @@ export class CountryComparisonOperations {
       rcsiChartData: countryDataList.length > 1 ? this.getRcsiChartData(countryDataList, selectedCountries) : undefined,
       foodSecurityBarChartData:
         countryDataList.length > 1 ? this.getFoodSecurityBarChartData(countryDataList, selectedCountries) : undefined,
+      populationBarChartData:
+        countryDataList.length > 1 ? this.getPopulationBarChartData(countryDataList, selectedCountries) : undefined,
       importDependencyBarChartData:
         countryDataList.length > 1
           ? this.getImportDependencyBarChartData(countryDataList, selectedCountries)
@@ -215,6 +217,7 @@ export class CountryComparisonOperations {
       fcsChartData,
       rcsiChartData,
       foodSecurityBarChartData,
+      populationBarChartData,
       importDependencyBarChartData,
       balanceOfTradeData,
       headlineInflationData,
@@ -227,23 +230,15 @@ export class CountryComparisonOperations {
       {
         title: 'Food Security',
         content: (
-          <div>
+          <div className="flex">
             {foodSecurityBarChartData && (
-              <>
-                <LineChart
-                  data={foodSecurityBarChartData}
-                  small
-                  noPadding
-                  transparentBackground
-                  // TODO: f-165 bar chart
-                />
-                <NoDataHint
-                  lineChartData={foodSecurityBarChartData}
-                  selectedCountryNames={selectedCountryNames}
-                  isLoading={isLoading}
-                />
-              </>
+              <CategoricalChart
+                title="Number of people with insufficient food consumption"
+                data={foodSecurityBarChartData}
+              />
             )}
+            <Spacer x={6} />
+            {populationBarChartData && <CategoricalChart title="Population" data={populationBarChartData} />}
           </div>
         ),
       },
@@ -261,7 +256,7 @@ export class CountryComparisonOperations {
                   transparentBackground
                 />
                 <NoDataHint
-                  lineChartData={fcsChartData}
+                  chartData={fcsChartData}
                   selectedCountryNames={selectedCountryNames}
                   isLoading={isLoading}
                 />
@@ -278,7 +273,7 @@ export class CountryComparisonOperations {
                   transparentBackground
                 />
                 <NoDataHint
-                  lineChartData={rcsiChartData}
+                  chartData={rcsiChartData}
                   selectedCountryNames={selectedCountryNames}
                   isLoading={isLoading}
                 />
@@ -288,16 +283,16 @@ export class CountryComparisonOperations {
         ),
       },
       {
-        title: 'Import Dependency',
+        title: 'Macro-economic',
         infoIcon: <CustomInfoCircle />,
         popoverInfo: FcsAccordionOperations.getMacroEconomicPopoverInfo(),
         content: (
           <div>
             {importDependencyBarChartData && (
               <>
-                <LineChart data={importDependencyBarChartData} small noPadding transparentBackground />
+                <CategoricalChart title="Import Dependency" data={importDependencyBarChartData} />
                 <NoDataHint
-                  lineChartData={importDependencyBarChartData}
+                  chartData={importDependencyBarChartData}
                   selectedCountryNames={selectedCountryNames}
                   isLoading={isLoading}
                 />
@@ -316,7 +311,7 @@ export class CountryComparisonOperations {
               <>
                 <LineChart data={balanceOfTradeData} small noPadding transparentBackground />
                 <NoDataHint
-                  lineChartData={balanceOfTradeData}
+                  chartData={balanceOfTradeData}
                   selectedCountryNames={selectedCountryNames}
                   isLoading={isLoading}
                 />
@@ -341,7 +336,7 @@ export class CountryComparisonOperations {
                   transparentBackground
                 />
                 <NoDataHint
-                  lineChartData={headlineInflationData}
+                  chartData={headlineInflationData}
                   selectedCountryNames={selectedCountryNames}
                   isLoading={isLoading}
                 />
@@ -351,7 +346,7 @@ export class CountryComparisonOperations {
               <>
                 <LineChart title="Food Inflation" data={foodInflationData} small noPadding transparentBackground />
                 <NoDataHint
-                  lineChartData={foodInflationData}
+                  chartData={foodInflationData}
                   selectedCountryNames={selectedCountryNames}
                   isLoading={isLoading}
                 />

@@ -9,9 +9,7 @@ export default async function ComparisonPortal() {
   return (
     <div>
       <h1>Comparison Portal</h1>
-      <div>
-        <CountryComparison countryMapData={countryMapData} globalFcsData={globalFcsData} />
-      </div>
+      <CountryComparison countryMapData={countryMapData} globalFcsData={globalFcsData} />
     </div>
   );
 }

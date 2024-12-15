@@ -1,7 +1,7 @@
 import { Skeleton } from '@nextui-org/skeleton';
 import React from 'react';
 
-function CountrySelectionSkeleton() {
+export default function CountrySelectionSkeleton() {
   return (
     <div className="pb-4 space-y-6">
       <div className="group flex flex-col w-full">
@@ -14,5 +14,3 @@ function CountrySelectionSkeleton() {
     </div>
   );
 }
-
-export default CountrySelectionSkeleton;

@@ -232,7 +232,6 @@ export class CountryComparisonOperations {
               <>
                 <LineChart
                   data={foodSecurityBarChartData}
-                  expandable
                   small
                   noPadding
                   transparentBackground
@@ -257,8 +256,6 @@ export class CountryComparisonOperations {
                 <LineChart
                   title="Trend of the number of people with insufficient food consumption"
                   data={fcsChartData}
-                  expandable
-                  xAxisSlider
                   small
                   noPadding
                   transparentBackground
@@ -276,8 +273,6 @@ export class CountryComparisonOperations {
                 <LineChart
                   title="Trend of the number of people using crisis or above crisis food-based coping"
                   data={rcsiChartData}
-                  expandable
-                  xAxisSlider
                   small
                   noPadding
                   transparentBackground
@@ -300,7 +295,7 @@ export class CountryComparisonOperations {
           <div>
             {importDependencyBarChartData && (
               <>
-                <LineChart data={importDependencyBarChartData} expandable small noPadding transparentBackground />
+                <LineChart data={importDependencyBarChartData} small noPadding transparentBackground />
                 <NoDataHint
                   lineChartData={importDependencyBarChartData}
                   selectedCountryNames={selectedCountryNames}
@@ -319,7 +314,7 @@ export class CountryComparisonOperations {
           <div>
             {balanceOfTradeData && (
               <>
-                <LineChart data={balanceOfTradeData} expandable xAxisSlider small noPadding transparentBackground />
+                <LineChart data={balanceOfTradeData} small noPadding transparentBackground />
                 <NoDataHint
                   lineChartData={balanceOfTradeData}
                   selectedCountryNames={selectedCountryNames}
@@ -341,8 +336,6 @@ export class CountryComparisonOperations {
                 <LineChart
                   title="Headline Inflation"
                   data={headlineInflationData}
-                  expandable
-                  xAxisSlider
                   small
                   noPadding
                   transparentBackground
@@ -356,15 +349,7 @@ export class CountryComparisonOperations {
             )}
             {foodInflationData && (
               <>
-                <LineChart
-                  title="Food Inflation"
-                  data={foodInflationData}
-                  expandable
-                  xAxisSlider
-                  small
-                  noPadding
-                  transparentBackground
-                />
+                <LineChart title="Food Inflation" data={foodInflationData} small noPadding transparentBackground />
                 <NoDataHint
                   lineChartData={foodInflationData}
                   selectedCountryNames={selectedCountryNames}

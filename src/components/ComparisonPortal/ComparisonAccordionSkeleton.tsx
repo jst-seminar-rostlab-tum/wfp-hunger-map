@@ -1,7 +1,7 @@
 import { Skeleton } from '@nextui-org/skeleton';
 import React from 'react';
 
-function ComparisonAccordionSkeleton() {
+export default function ComparisonAccordionSkeleton() {
   const N_ITEMS = 5;
   return (
     <div className="overflow-x-auto rounded-lg shadow-none">
@@ -17,5 +17,3 @@ function ComparisonAccordionSkeleton() {
     </div>
   );
 }
-
-export default ComparisonAccordionSkeleton;

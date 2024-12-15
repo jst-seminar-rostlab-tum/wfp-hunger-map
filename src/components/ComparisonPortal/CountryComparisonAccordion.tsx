@@ -47,9 +47,10 @@ export default function CountryComparisonAccordion({ selectedCountries }: Countr
     if (!expandAll && !isLoading) setExpandAll(true);
   }, [isLoading]);
 
-  const { countryDataList, countryIso3DataList } = useMemo(() => {
-    return CountryComparisonOperations.getFilteredCountryData(countryDataQuery, countryIso3DataQuery);
-  }, [countryDataQuery, countryIso3DataQuery]);
+  const { countryDataList, countryIso3DataList } = useMemo(
+    () => CountryComparisonOperations.getFilteredCountryData(countryDataQuery, countryIso3DataQuery),
+    [countryDataQuery, countryIso3DataQuery]
+  );
 
   const accordionItems = useMemo(() => {
     if (!selectedCountries) return undefined;

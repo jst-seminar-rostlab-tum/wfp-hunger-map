@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 import { NoDataHintProps } from '@/domain/props/NoDataHintProps.ts';
 
-function NoDataHint({ lineChartData, selectedCountryNames, isLoading }: NoDataHintProps) {
+export default function NoDataHint({ lineChartData, selectedCountryNames, isLoading }: NoDataHintProps) {
   const [formattedMissingCountryNames, setFormattedMissingCountryNames] = useState<string | null>(null);
 
   useEffect(() => {
@@ -34,5 +34,3 @@ function NoDataHint({ lineChartData, selectedCountryNames, isLoading }: NoDataHi
     />
   ) : null;
 }
-
-export default NoDataHint;

@@ -68,3 +68,30 @@ The point of DI is that the dependencies of services should not be hardcoded, in
 
 - Example of how to use the container to resolve a dependency can be found in `src/app/elements/page.tsx`.
 - A list of all dependencies and their implementations can be found in `src/container.tsx`.
+
+## Accessibility score
+### Form elements must have labels
+
+Programmatically associate labels with all form controls. The recommended method for most circumstances is to use the label element and an explicit association using the for and id attributes. The examples here are ordered from the most common acceptable solution to the least common acceptable solution. For more information, please check: https://dequeuniversity.com/rules/axe/4.9/label
+
+
+### list HTML structure
+
+Ensure all ordered and unordered lists (defined by ul or ol elements) contain only li content elements.
+
+For more information, please check: https://dequeuniversity.com/rules/axe/4.9/list
+
+### Color contrast
+
+Ensure all text elements have sufficient color contrast between the text in the foreground and background color behind it.
+
+Success Criterion: Ensure color contrast of at least 4.5:1 for small text or 3:1 for large text, even if text is part of an image. Large text has been defined in the requirements as 18pt (24 CSS pixels) or 14pt bold (19 CSS pixels). Note: Elements found to have a 1:1 ratio are considered "incomplete" and require a manual review.
+
+For more information, please check: https://dequeuniversity.com/rules/axe/4.9/color-contrast
+
+
+### Aira-label
+For more information, please check: https://dequeuniversity.com/rules/axe/4.9/aria-command-name
+
+### Target size
+For more information, please check:https://dequeuniversity.com/rules/axe/4.9/target-size

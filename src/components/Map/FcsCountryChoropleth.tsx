@@ -14,6 +14,8 @@ export default function FscCountryChoropleth({
   loading,
   regionLabelData,
   countryMapData,
+  regionLabelTooltips,
+  setRegionLabelTooltips,
 }: FscCountryChoroplethProps) {
   const map = useMap();
 
@@ -29,7 +31,16 @@ export default function FscCountryChoropleth({
         data={regionData}
         style={FcsCountryChoroplethOperations.styleFunction}
         onEachFeature={(feature, layer) =>
-          FcsCountryChoroplethOperations.onEachFeature(feature, layer, regionData, regionLabelData, countryMapData, map)
+          FcsCountryChoroplethOperations.onEachFeature(
+            feature,
+            layer,
+            regionData,
+            regionLabelData,
+            countryMapData,
+            map,
+            regionLabelTooltips,
+            setRegionLabelTooltips
+          )
         }
       />
     </div>

@@ -48,7 +48,9 @@ export class FcsCountryChoroplethOperations {
     regionData: FeatureCollection<Geometry, GeoJsonProperties>,
     regionLabelData: FeatureCollection<Geometry, GeoJsonProperties>,
     countryMapData: CountryMapData,
-    map: L.Map
+    map: L.Map,
+    regionLabelTooltips: L.Tooltip[],
+    setRegionLabelTooltips: (tooltips: (prevRegionLabelData: L.Tooltip[]) => L.Tooltip[]) => void
   ) {
     const featureLabelData = regionLabelData.features.find((labelItem) => {
       return (
@@ -65,6 +67,7 @@ export class FcsCountryChoroplethOperations {
         content: '',
       }).setLatLng([featureLabelData.geometry.coordinates[1], featureLabelData.geometry.coordinates[0]]);
       tooltip.addTo(map);
+      setRegionLabelTooltips((prevRegionLabelData) => [...prevRegionLabelData, tooltip]);
 
       this.updateTooltip(feature, map, tooltip);
       map.on('zoom', () => this.updateTooltip(feature, map, tooltip));

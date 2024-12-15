@@ -1,8 +1,8 @@
 import { Feature } from 'geojson';
 import L from 'leaflet';
 import { useTheme } from 'next-themes';
-import React, { useEffect, useRef } from 'react';
-import { GeoJSON } from 'react-leaflet';
+import React, { useEffect, useRef, useState } from 'react';
+import { GeoJSON, useMap } from 'react-leaflet';
 
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
@@ -26,8 +26,10 @@ export default function FcsChoropleth({
   regionLabelData,
 }: FcsChoroplethProps) {
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
+  const [regionLabelTooltips, setRegionLabelTooltips] = useState<L.Tooltip[]>([]);
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
   const { theme } = useTheme();
+  const map = useMap();
 
   const handleBackClick = () => {
     setSelectedCountryId(null);
@@ -47,6 +49,12 @@ export default function FcsChoropleth({
       }
     });
   }, [selectedCountryId]);
+
+  useEffect(() => {
+    if (selectedCountryId !== data.features[0].properties?.adm0_id) {
+      regionLabelTooltips.forEach((tooltip) => tooltip.removeFrom(map));
+    }
+  }, [selectedCountryId, regionLabelTooltips]);
 
   return (
     <div>
@@ -80,6 +88,8 @@ export default function FcsChoropleth({
           handleBackButtonClick={handleBackClick}
           regionLabelData={regionLabelData}
           countryMapData={data.features[0] as CountryMapData}
+          regionLabelTooltips={regionLabelTooltips}
+          setRegionLabelTooltips={setRegionLabelTooltips}
         />
       )}
     </div>

@@ -10,7 +10,8 @@
     "lint:fix": "eslint . --ext .ts,.tsx -c .eslintrc.json --fix",
     "format": "prettier --write .",
     "format:fix": "prettier .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "postbuild": "next-sitemap"
   },
   "dependencies": {
     "@internationalized/date": "^3.6.0",
@@ -60,6 +61,7 @@
     "leaflet-geosearch": "^4.0.0",
     "lucide-react": "^0.454.0",
     "next": "14.2.10",
+    "next-sitemap": "^4.2.3",
     "next-themes": "^0.2.1",
     "nextui-cli": "^0.3.4",
     "react": "18.3.1",

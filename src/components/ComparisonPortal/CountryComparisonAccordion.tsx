@@ -19,7 +19,9 @@ export default function CountryComparisonAccordion({ selectedCountries }: Countr
   const { showSnackBar } = useSnackbar();
 
   const countryDataQuery = useCountryDataListQuery(
+    // selected country ids
     selectedCountries?.map((country) => country.properties.adm0_id),
+    // callback to show snackbar if data not found
     (countryId) => {
       if (!selectedCountries) return;
       const countryName = CountryComparisonOperations.getCountryNameById(countryId, selectedCountries);
@@ -28,7 +30,9 @@ export default function CountryComparisonAccordion({ selectedCountries }: Countr
   );
 
   const countryIso3DataQuery = useCountryIso3DataListQuery(
+    // selected country iso3 codes
     selectedCountries?.map((country) => country.properties.iso3),
+    // callback to show snackbar if data not found
     (countryCode) => {
       if (!selectedCountries) return;
       const countryName = CountryComparisonOperations.getCountryNameByIso3(countryCode, selectedCountries);

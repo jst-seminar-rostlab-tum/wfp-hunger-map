@@ -6,4 +6,6 @@ export default interface TooltipProps {
   text: string;
   delay?: number;
   warning?: boolean;
+  titleStyle?: string;
+  textStyle?: string;
 }

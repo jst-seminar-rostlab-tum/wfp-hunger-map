@@ -1,5 +1,6 @@
 import React, { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
 
+import { useSnackbar } from '@/domain/contexts/SnackbarContext';
 import { IChat } from '@/domain/entities/chatbot/Chatbot';
 import { SenderRole } from '@/domain/enums/SenderRole';
 import ChatbotOperations from '@/operations/chatbot/Chatbot';
@@ -12,7 +13,7 @@ interface ChatbotContextType {
   setCurrentChatIndex: React.Dispatch<React.SetStateAction<number>>;
   openChat: (chatIndex: number) => void;
   startNewChat: (newChat?: IChat) => void;
-  chatWithReport: (countryName: string, report: string) => Promise<void>;
+  initiateChatAboutReport: (countryName: string, report: string) => Promise<void>;
   isOpen: boolean;
   isMobile: boolean;
   isSidebarOpen: boolean;
@@ -28,13 +29,14 @@ export function ChatbotProvider({ children }: { children: ReactNode }) {
   const isMobile = useMediaQuery('(max-width: 640px)');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [chats, setChats] = useState<IChat[]>(ChatbotOperations.loadChatsFromStorage());
+  const { showSnackBar } = useSnackbar();
 
   /**
    * Saves chats to localStorage whenever they change
    */
   useEffect(() => {
-    ChatbotOperations.saveChatsToStorage(chats);
-  }, [chats]);
+    ChatbotOperations.saveChatsToStorage(chats, showSnackBar);
+  }, [chats, showSnackBar]);
 
   const openChat = (chatIndex: number) => {
     setCurrentChatIndex(chatIndex);
@@ -83,7 +85,7 @@ export function ChatbotProvider({ children }: { children: ReactNode }) {
    * @param countryName - The name of the country related to the report.
    * @param reportURL - The URL of the report to be processed.
    */
-  const chatWithReport = async (countryName: string, reportURL: string) => {
+  const initiateChatAboutReport = async (countryName: string, reportURL: string) => {
     const reportChatIndex = chats.findIndex((chat) => chat.title === `Report ${countryName}`);
     const reportChatExists = reportChatIndex !== -1;
 
@@ -95,7 +97,7 @@ export function ChatbotProvider({ children }: { children: ReactNode }) {
     const { extractPdfText } = await import('@/operations/chatbot/ExtractPdfText');
     let reportText;
     try {
-      reportText = await extractPdfText(reportURL);
+      reportText = await extractPdfText(reportURL, showSnackBar);
     } catch {
       reportText = '';
     }
@@ -129,7 +131,7 @@ export function ChatbotProvider({ children }: { children: ReactNode }) {
       setCurrentChatIndex,
       startNewChat,
       openChat,
-      chatWithReport,
+      initiateChatAboutReport,
       isOpen,
       isMobile,
       isSidebarOpen,

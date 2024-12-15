@@ -19,7 +19,7 @@ export class DownloadPortalOperations {
   static formatTableData(
     data: CountryCodesData[],
     setSelectedCountry: (countryData: CountryCodesData) => void,
-    chatWithReport: (country: string, report: string) => Promise<void>,
+    initiateChatAboutReport: (country: string, report: string) => Promise<void>,
     setPdfFile: (file: Blob | null) => void,
     setError: (error: string | null) => void,
     toggleModal: () => void
@@ -50,7 +50,7 @@ export class DownloadPortalOperations {
         <div className="flex justify-center items-center">
           <Bot
             size={20}
-            onClick={() => chatWithReport(item.country.name, item.url.summary)}
+            onClick={() => initiateChatAboutReport(item.country.name, item.url.summary)}
             className="cursor-pointer"
           />
         </div>

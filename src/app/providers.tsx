@@ -29,19 +29,19 @@ export function Providers({ children, themeProps }: ProvidersProps) {
     <NextUIProvider navigate={router.push}>
       <NextThemesProvider defaultTheme="system" {...themeProps}>
         <QueryClientProvider client={cachedQueryClient}>
-          <ChatbotProvider>
-            <SidebarProvider>
-              <SelectedMapProvider>
-                <SelectedAlertProvider>
-                  <SelectedCountryIdProvider>
-                    <AccordionsModalProvider>
-                      <SnackbarProvider>{children}</SnackbarProvider>
-                    </AccordionsModalProvider>
-                  </SelectedCountryIdProvider>
-                </SelectedAlertProvider>
-              </SelectedMapProvider>
-            </SidebarProvider>
-          </ChatbotProvider>
+          <SidebarProvider>
+            <SelectedMapProvider>
+              <SelectedAlertProvider>
+                <SelectedCountryIdProvider>
+                  <AccordionsModalProvider>
+                    <SnackbarProvider>
+                      <ChatbotProvider>{children}</ChatbotProvider>
+                    </SnackbarProvider>
+                  </AccordionsModalProvider>
+                </SelectedCountryIdProvider>
+              </SelectedAlertProvider>
+            </SelectedMapProvider>
+          </SidebarProvider>
           <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
       </NextThemesProvider>

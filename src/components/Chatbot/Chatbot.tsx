@@ -302,16 +302,11 @@ export default function HungerMapChatbot() {
                       )}
                       <div
                         className={clsx(
-                          'mb-5 rounded-lg max-w-[80%]',
+                          'mb-5 rounded-lg max-w-[80%] break-words whitespace-normal',
                           message.role === SenderRole.USER
                             ? 'rounded-xl p-2 bg-chatbotUserMsg dark:bg-chatbotUserMsg ml-12'
                             : 'bg-transparent pl-2 pr-2'
                         )}
-                        style={{
-                          wordWrap: 'break-word',
-                          overflowWrap: 'break-word',
-                          whiteSpace: 'normal',
-                        }}
                       >
                         {message.role === SenderRole.USER ? (
                           <p className="break-words text-justify">{message.content}</p>

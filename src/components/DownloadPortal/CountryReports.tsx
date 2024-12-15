@@ -18,6 +18,9 @@ export default function CountryReports({ countryCodesData }: CountryReportsProps
   const [error, setError] = useState<string | null>(null);
   const [selectedCountry, setSelectedCountry] = useState<CountryCodesData | null>(null);
 
+  const chatBot = useChatbot();
+  const { initiateChatAboutReport } = chatBot;
+
   const toggleModal = () => setModalOpen((prev) => !prev);
 
   const filteredData = useMemo(() => {
@@ -34,7 +37,7 @@ export default function CountryReports({ countryCodesData }: CountryReportsProps
         data={DownloadPortalOperations.formatTableData(
           filteredData,
           setSelectedCountry,
-          useChatbot().chatWithReport,
+          initiateChatAboutReport,
           setPdfFile,
           setError,
           toggleModal

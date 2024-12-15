@@ -1,5 +1,8 @@
 import { IChat } from '@/domain/entities/chatbot/Chatbot';
+import { SNACKBAR_SHORT_DURATION } from '@/domain/entities/snackbar/Snackbar';
 import { SenderRole } from '@/domain/enums/SenderRole';
+import { SnackbarPosition, SnackbarStatus } from '@/domain/enums/Snackbar';
+import { SnackbarProps } from '@/domain/props/SnackbarProps';
 
 export default class ChatbotOperations {
   static processInput(submitEvent: React.FormEvent, chats: IChat[], currentChatIndex: number, text: string): IChat[] {
@@ -33,34 +36,13 @@ export default class ChatbotOperations {
         // Clean up localStorage by saving only the chats that are not older than 1 Week
         localStorage.setItem('chatbotChatsWithTimestamp', JSON.stringify(recentChats));
 
-        // If no recent chats, return default chat
-        if (recentChats.length === 0) {
-          return [
-            {
-              id: 1,
-              title: 'Chat 1',
-              messages: [],
-              isTyping: false,
-              timestamp: currentTime,
-            },
-          ];
+        if (recentChats.length !== 0) {
+          return recentChats;
         }
-
-        return recentChats;
       }
-
-      // If no stored data, return default chat
-      return [
-        {
-          id: 1,
-          title: 'Chat 1',
-          messages: [],
-          isTyping: false,
-          timestamp: Date.now(),
-        },
-      ];
     }
 
+    // Return default chat if no recent chats are found
     return [
       {
         id: 1,
@@ -72,7 +54,7 @@ export default class ChatbotOperations {
     ];
   }
 
-  static saveChatsToStorage(chats: IChat[]): void {
+  static saveChatsToStorage(chats: IChat[], showSnackBar: (snackbarProps: SnackbarProps) => void): void {
     if (typeof window !== 'undefined') {
       const chatsWithTimestamp = chats.map((chat) => ({
         ...chat,
@@ -80,6 +62,13 @@ export default class ChatbotOperations {
       }));
 
       localStorage.setItem('chatbotChatsWithTimestamp', JSON.stringify(chatsWithTimestamp));
+    } else {
+      showSnackBar({
+        message: 'Unable to save chats.',
+        status: SnackbarStatus.Error,
+        position: SnackbarPosition.BottomRight,
+        duration: SNACKBAR_SHORT_DURATION,
+      });
     }
   }
 }

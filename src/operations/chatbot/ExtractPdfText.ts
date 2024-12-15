@@ -2,6 +2,10 @@
 
 import { pdfjs } from 'react-pdf';
 
+import { SNACKBAR_SHORT_DURATION } from '@/domain/entities/snackbar/Snackbar';
+import { SnackbarPosition, SnackbarStatus } from '@/domain/enums/Snackbar';
+import { SnackbarProps } from '@/domain/props/SnackbarProps';
+
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.mjs`;
 
 /**
@@ -12,7 +16,10 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
  * @param url - The URL of the PDF document to extract text from.
  * @returns A promise that resolves to the extracted text or undefined if an error occurs.
  */
-export const extractPdfText = async (url: string): Promise<string> => {
+export const extractPdfText = async (
+  url: string,
+  showSnackBar?: (snackbarProps: SnackbarProps) => void
+): Promise<string> => {
   try {
     const pdf = await pdfjs.getDocument(url).promise;
     let fullText = '';
@@ -39,6 +46,14 @@ export const extractPdfText = async (url: string): Promise<string> => {
 
     return fullText.trim();
   } catch (error) {
+    if (showSnackBar) {
+      showSnackBar({
+        message: 'Error extracting information from PDF',
+        status: SnackbarStatus.Error,
+        position: SnackbarPosition.BottomRight,
+        duration: SNACKBAR_SHORT_DURATION,
+      });
+    }
     throw new Error(`Error extracting text from PDF: ${error}`);
   }
 };

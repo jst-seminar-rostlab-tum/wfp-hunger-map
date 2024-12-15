@@ -22,10 +22,13 @@ export const useCountryDataQuery = (countryId: number) =>
     cachedQueryClient
   );
 
-export const useCountryDataListQuery = (countryIds: number[], onCountryDataNotFound: (countryId: number) => void) =>
+export const useCountryDataListQuery = (
+  countryIds: number[] | undefined,
+  onCountryDataNotFound: (countryId: number) => void
+) =>
   useQueries<number[], UseQueryResult<CountryDataRecord | null>[]>(
     {
-      queries: countryIds.map((countryId) => ({
+      queries: (countryIds ?? []).map((countryId) => ({
         queryKey: ['fetchCountryData', countryId],
         queryFn: async () => {
           const countryData = await countryRepo.getCountryData(countryId);
@@ -59,12 +62,12 @@ export const useCountryIso3DataQuery = (countryCode: string) =>
   );
 
 export const useCountryIso3DataListQuery = (
-  countryCodes: string[],
+  countryCodes: string[] | undefined,
   onCountryDataNotFound: (countryCode: string) => void
 ) =>
   useQueries<string[], UseQueryResult<CountryIso3DataRecord | null>[]>(
     {
-      queries: countryCodes.map((countryCode) => ({
+      queries: (countryCodes ?? []).map((countryCode) => ({
         queryKey: ['fetchCountryIso3Data', countryCode],
         queryFn: async () => {
           const countryIso3Data = await countryRepo.getCountryIso3Data(countryCode);

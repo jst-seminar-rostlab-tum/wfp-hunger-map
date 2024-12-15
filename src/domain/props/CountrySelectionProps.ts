@@ -4,6 +4,6 @@ import { CountryMapData, CountryMapDataWrapper } from '../entities/country/Count
 export interface CountrySelectionProps {
   countryMapData: CountryMapDataWrapper;
   globalFcsData: GlobalFcsData;
-  selectedCountries: CountryMapData[];
+  selectedCountries?: CountryMapData[];
   setSelectedCountries: (countries: CountryMapData[]) => void;
 }

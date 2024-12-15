@@ -29,6 +29,7 @@ export default function CountrySelection({
   }, [searchParamCountryCodes, countryMapData, setSelectedCountries]);
 
   const disabledKeys = useMemo(() => {
+    if (!selectedCountries) return [];
     return countryMapData.features
       .filter(
         (country) =>

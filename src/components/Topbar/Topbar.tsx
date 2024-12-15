@@ -10,6 +10,7 @@ import {
   NavbarMenuItem,
   NavbarMenuToggle,
 } from '@nextui-org/react';
+import clsx from 'clsx';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
@@ -32,7 +33,12 @@ export function Topbar() {
       <NavbarContent className="hidden md:flex gap-4" justify="center">
         {pageLinks.map((item) => (
           <NavbarItem key={item.label} isActive={pathname === item.href}>
-            <Link href={item.href} className="text-lg" color={pathname === item.href ? 'primary' : 'foreground'}>
+            <Link
+              href={item.href}
+              className={clsx('text-lg text-black dark:text-white', {
+                'text-link dark:text-link': pathname === item.href,
+              })}
+            >
               {item.label}
             </Link>
           </NavbarItem>

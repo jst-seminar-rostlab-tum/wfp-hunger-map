@@ -228,6 +228,7 @@ const config = {
             chartsLegendBackground: '#F5F5F5',
             chartsXAxisLine: '#a6a6a6',
             chartsGridLine: '#E6E6E6',
+            link: '#005999',
           },
         },
         dark: {
@@ -274,6 +275,7 @@ const config = {
             chartsGridLine: '#424242',
             chartForecast: '#0e6983',
             nutritionNotAnalyzed: '#A69F9F',
+            link: '#0A9BFF',
           },
         },
       },

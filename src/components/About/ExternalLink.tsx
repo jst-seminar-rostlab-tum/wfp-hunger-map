@@ -4,7 +4,13 @@ import React, { ReactNode } from 'react';
 
 function ExternalLink({ href, children, className }: { href: string; children: ReactNode; className?: string }) {
   return (
-    <Link isExternal size="lg" underline="hover" href={href} className={clsx('inline', className)}>
+    <Link
+      isExternal
+      size="lg"
+      underline="hover"
+      href={href}
+      className={clsx('inline text-link dark:text-link', className)}
+    >
       {children}
     </Link>
   );

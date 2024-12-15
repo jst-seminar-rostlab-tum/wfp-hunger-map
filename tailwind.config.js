@@ -62,6 +62,9 @@ const config = {
         brand: '#157DBC',
         brandHover: '#0F6396',
       },
+      screens: {
+        sm700: '700px',
+      },
       width: {
         '215px': '215px',
         '179px': '179px',
@@ -169,6 +172,11 @@ const config = {
             hazarAdvisory: '#57D66F',
             hazardInformation: '#0098EB',
             hazardTermination: '#B4B5B7',
+
+            // charts
+            chartsLegendBackground: '#F5F5F5',
+            chartsXAxisLine: '#a6a6a6',
+            chartsGridLine: '#E6E6E6',
             chartForecast: '#3896a2',
 
             //fcs gradient
@@ -210,12 +218,14 @@ const config = {
             nutritionPredicted: '#E3F2FD',
             nutritionNotAnalyzed: '#D2D1D1',
 
-            //animation 
+            //animation
             nutritionAnimation: '#F7B750',
-            fcsAnimation: '#338ef7',
+            fcsAnimation: '#157dbc',
             ipcAnimation: '#cd1919',
 
             countriesBase: '#fefeff',
+            countryBorders: '#6f7475',
+            countryHover: '#8a8a8a',
             ocean: '#91cccb',
             fatalityAlert: '#742280',
             climateWetAlert: '#4295D3',
@@ -225,9 +235,6 @@ const config = {
             ipcPhase3: '#e88519',
             ipcPhase4: '#cd1919',
             ipcPhase5: '#731919',
-            chartsLegendBackground: '#F5F5F5',
-            chartsXAxisLine: '#a6a6a6',
-            chartsGridLine: '#E6E6E6',
             link: '#005999',
           },
         },
@@ -265,16 +272,19 @@ const config = {
             conflictCivil: '#96badc',
             conflictExplosion: '#eaaf75',
             conflictStrategic: '#bec0c1',
-            countriesBase: '#0e6397',
-            ocean: '#111111',
+            countriesBase: '#002129',
+            ocean: '#002a38',
             fatalityAlert: '#742280',
             climateWetAlert: '#4295D3',
             climateDryAlert: '#B95926',
+            nutritionNotAnalyzed: '#A69F9F',
+            fcsAnimation: '#014a5e',
+
+            // charts
             chartsLegendBackground: '#2a2a2a',
             chartsXAxisLine: '#757575',
             chartsGridLine: '#424242',
             chartForecast: '#0e6983',
-            nutritionNotAnalyzed: '#A69F9F',
             link: '#0A9BFF',
           },
         },

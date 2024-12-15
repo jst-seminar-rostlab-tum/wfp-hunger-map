@@ -6,8 +6,8 @@ export class LegendOperations {
       return false;
     }
     return (
-      Array.isArray((value as GradientLegendContainerItem).colors) &&
-      (value as GradientLegendContainerItem).colors.every((color) => typeof color === 'string')
+      Array.isArray((value as GradientLegendContainerItem).colorsData) &&
+      (value as GradientLegendContainerItem).colorsData.every((colorsData) => typeof colorsData.color === 'string')
     );
   }
 }

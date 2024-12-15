@@ -4,36 +4,17 @@ import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
 import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
 
 export default interface LineChartProps {
+  data: LineChartData | BalanceOfTradeGraph | CurrencyExchangeGraph | InflationGraphs;
+
   title?: string;
   description?: string;
-  expandable?: boolean;
-  barChartSwitch?: boolean;
-  xAxisSlider?: boolean;
+
   small?: boolean;
-  roundLines?: boolean;
   noPadding?: boolean;
   transparentBackground?: boolean;
-  data: LineChartData | BalanceOfTradeGraph | CurrencyExchangeGraph | InflationGraphs;
-}
 
-/**
- * following: helpers props
- */
-
-export interface LineChartSliderButtonProps {
-  showXAxisSlider: boolean;
-  setShowXAxisSlider: (b: boolean) => void;
-  size: number;
-}
-
-export interface LineChartBarLineSwitchButtonProps {
-  showBarChart: boolean;
-  setShowBarChart: (b: boolean) => void;
-  size: number;
-}
-
-export interface LineChartXAxisSlider {
-  selectedXAxisRange: number[]; // [xAxisRangeMinIndex, xAxisRangeMaxIndex]
-  setSelectedXAxisRange: (ns: number[]) => void;
-  data: LineChartData;
+  disableExpandable?: boolean;
+  disableBarChartSwitch?: boolean;
+  disableXAxisSlider?: boolean;
+  disableDownload?: boolean;
 }

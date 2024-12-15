@@ -4,9 +4,11 @@ import { useState } from 'react';
 
 import AccordionContainer from '@/components/Accordions/AccordionContainer';
 import { CustomButton } from '@/components/Buttons/CustomButton';
+import { CategoricalChart } from '@/components/Charts/CategoricalChart';
 import { LineChart } from '@/components/Charts/LineChart';
 import MapSkeleton from '@/components/Map/MapSkeleton';
 import SearchBar from '@/components/Search/SearchBar';
+import { CategoricalChartData } from '@/domain/entities/charts/CategoricalChartData.ts';
 import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
 import { LineChartDataType } from '@/domain/enums/LineChartDataType.ts';
 import AccordionsOperations from '@/operations/accordions/AccordionOperations';
@@ -30,23 +32,6 @@ export default async function Elements() {
           { x: 1, y: 2 },
           { x: 2, y: 4 },
           { x: 3, y: 4 },
-        ],
-      },
-    ],
-  };
-
-  const simpleLineChartData: LineChartData = {
-    type: LineChartDataType.LINE_CHART_DATA,
-    xAxisType: 'linear',
-    yAxisLabel: 'yield',
-    lines: [
-      {
-        name: 'Category A',
-        dataPoints: [
-          { x: 0, y: 1 },
-          { x: 1, y: 2 },
-          { x: 2, y: 4 },
-          { x: 3, y: 8 },
         ],
       },
     ],
@@ -144,50 +129,19 @@ export default async function Elements() {
     ],
   };
 
-  const multiplePredictionsDummyChartData: LineChartData = {
-    type: LineChartDataType.LINE_CHART_DATA,
-    xAxisType: 'linear',
+  const categoricalDummyChartData1: CategoricalChartData = {
     yAxisLabel: 'Mill',
-    predictionVerticalLineX: 3,
-    lines: [
+    categories: [
       {
         name: 'Category A',
-        showRange: true,
-        dataPoints: [
-          { x: 0, y: 4, yRangeMin: 3.5, yRangeMax: 5 },
-          { x: 1, y: 3, yRangeMin: 2, yRangeMax: 4 },
-          { x: 2, y: 4, yRangeMin: 3.5, yRangeMax: 4.5 },
-          { x: 3, y: 8, yRangeMin: 7.5, yRangeMax: 8.5 },
-        ],
+        dataPoint: { y: 5 },
       },
       {
-        name: 'Prediction 1',
-        prediction: true,
-        dataPoints: [
-          { x: 0, y: 4 },
-          { x: 1, y: 7 },
-          { x: 2, y: 5 },
-          { x: 3, y: 7 },
-          { x: 4, y: 8 },
-          { x: 5, y: 5 },
-          { x: 6, y: 6 },
-        ],
-      },
-      {
-        name: 'Prediction 2',
-        prediction: true,
-        dataPoints: [
-          { x: 0, y: 6 },
-          { x: 1, y: 5 },
-          { x: 2, y: 6 },
-          { x: 3, y: 7 },
-          { x: 4, y: 7 },
-          { x: 5, y: 8 },
-        ],
+        name: 'Category B',
+        dataPoint: { y: 8 },
       },
     ],
   };
-
   return (
     <div className="w-full flex flex-col items-center justify-center">
       <div className="svg-icon">
@@ -205,16 +159,13 @@ export default async function Elements() {
       <AccordionContainer items={AccordionsOperations.getAccordionData()} />
       <div className="w-full h-fit flex flex-row flex-wrap gap-10 justify-around px-8 pt-40 pb-16 border-b border-gray-800">
         <div className="w-250px h-fit">
-          <LineChart data={simpleAndSmallLineChartData} small />
-        </div>
-        <div className="w-250px h-fit">
           <LineChart
-            title="Small Rounded Line Chart"
-            description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy."
-            data={simpleLineChartData}
-            expandable
+            data={simpleAndSmallLineChartData}
             small
-            roundLines
+            disableDownload
+            disableBarChartSwitch
+            disableExpandable
+            disableXAxisSlider
           />
         </div>
         <div className="w-400px h-fit">
@@ -222,16 +173,13 @@ export default async function Elements() {
             title="Maxed Out Line Chart"
             description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor onsetetur sadipscing elitr."
             data={maxedOutLineChartData}
-            expandable
-            xAxisSlider
-            barChartSwitch
           />
         </div>
         <div className="w-400px h-fit">
-          <LineChart title="" data={predictionDummyChartData} expandable xAxisSlider barChartSwitch />
+          <LineChart title="" data={predictionDummyChartData} />
         </div>
         <div className="w-400px h-fit">
-          <LineChart title="" data={multiplePredictionsDummyChartData} expandable xAxisSlider barChartSwitch />
+          <CategoricalChart title="" data={categoricalDummyChartData1} />
         </div>
       </div>
       <MapSkeleton />

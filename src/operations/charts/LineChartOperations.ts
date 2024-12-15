@@ -8,7 +8,6 @@ import Highcharts, {
 } from 'highcharts';
 import highchartsMore from 'highcharts/highcharts-more';
 import patternFill from 'highcharts/modules/pattern-fill';
-import HighchartsReact from 'highcharts-react-official';
 
 import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph.ts';
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph.ts';
@@ -16,18 +15,17 @@ import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
 import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
 import { LineChartDataType } from '@/domain/enums/LineChartDataType.ts';
 import { formatToMillion } from '@/utils/formatting.ts';
+import { getTailwindColor } from '@/utils/tailwind-util.ts';
 
+// initialize the exporting module
 if (typeof Highcharts === 'object') {
   highchartsMore(Highcharts);
   patternFill(Highcharts);
 }
-
 /**
  * Using LineChartOperations, the LineChart component can convert its received data into LineChartData
  * and then generate the chart `Highcharts.Options` object required by the Highcharts component.
  * Two types of options can be created: rendering the LineChart data as a line chart or as a bar chart.
- *
- * In addition, several download functionalities are implemented.
  */
 export default class LineChartOperations {
   /**
@@ -45,15 +43,15 @@ export default class LineChartOperations {
    */
   private static getLineColorList() {
     return [
-      'hsl(var(--nextui-clusterRed))',
-      'hsl(var(--nextui-clusterGreen))',
-      'hsl(var(--nextui-clusterBlue))',
-      'hsl(var(--nextui-clusterOrange))',
+      getTailwindColor('--nextui-clusterRed'),
+      getTailwindColor('--nextui-clusterGreen'),
+      getTailwindColor('--nextui-clusterBlue'),
+      getTailwindColor('--nextui-clusterOrange'),
     ];
   }
 
   /**
-   * Formatter function for `LineChart.Options.tooltip.formatter` usage only.
+   * Formatter function for `Options.tooltip.formatter` usage only.
    */
   private static chartTooltipFormatter(
     xAxisType: AxisTypeValue,
@@ -70,14 +68,14 @@ export default class LineChartOperations {
       if (p.point.options.y) {
         tooltip += `<br><span style="color:${p.series.color}">\u25CF</span> <div>${p.point.options.y}</div>`;
       } else if (p.point.options.high !== undefined && p.point.options.low !== undefined) {
-        tooltip += `<div style="color: ${'hsl(var(--nextui-secondary))'}"> (<div>${p.point.options.low} - ${p.point.options.high}</div>)</div>`;
+        tooltip += `<div style="color: ${getTailwindColor('--nextui-secondary')}"> (<div>${p.point.options.low} - ${p.point.options.high}</div>)</div>`;
       }
     });
     return tooltip;
   }
 
   /**
-   * Formatter function for `LineChart.Options.xAxis.labels.formatter` usage only.
+   * Tooltip formatter function for `LineChart.Options.xAxis.labels.formatter` usage only.
    */
   private static chartXAxisFormatter(xAxisType: AxisTypeValue, x: string | number): string {
     if (xAxisType === 'datetime' && typeof x === 'number') {
@@ -91,7 +89,6 @@ export default class LineChartOperations {
    * is converted to the `LineChartData` type.
    * To support another interface in `LineChartProps.data`, one has to add another switch case here
    * that converts the new interface into `LineChartData`.
-   * @param data
    */
   public static convertToLineChartData(
     data: LineChartData | BalanceOfTradeGraph | CurrencyExchangeGraph | InflationGraphs
@@ -182,14 +179,12 @@ export default class LineChartOperations {
    * can be manipulated; important: if a min is defined a max must be defined as well and vice versa.
    *
    * @param data `LineChartData` object, containing all data to be plotted in the chart
-   * @param roundLines if true, all plotted lines will be rounded
    * @param barChart if true, bars are plotted instead of lines
    * @param xAxisSelectedMinIdx index of selected x-axis range min value
    * @param xAxisSelectedMaxIdx index of selected x-axis range max value
    */
   public static getHighChartOptions(
     data: LineChartData,
-    roundLines?: boolean,
     xAxisSelectedMinIdx?: number,
     xAxisSelectedMaxIdx?: number,
     barChart?: boolean
@@ -213,7 +208,7 @@ export default class LineChartOperations {
       if (lineData.color) {
         categoryColor = lineData.color;
       } else if (lineData.prediction) {
-        categoryColor = 'hsl(var(--nextui-chartForecast))';
+        categoryColor = getTailwindColor('--nextui-chartForecast');
       } else {
         categoryColor = defaultLineColors.pop();
       }
@@ -270,7 +265,7 @@ export default class LineChartOperations {
       } else {
         // plot series as line
         series.push({
-          type: roundLines ? 'spline' : 'line',
+          type: 'line',
           name: lineData.name,
           data: seriesData,
           color: categoryColor,
@@ -346,14 +341,14 @@ export default class LineChartOperations {
       label: {
         text: b.label || '',
         style: {
-          color: 'hsl(var(--nextui-secondary))',
+          color: getTailwindColor('--nextui-secondary'),
           fontSize: '0.7rem',
         },
       },
     }));
     const plotLines = verticalLines.map((l) => ({
       value: l.x,
-      color: l.color || 'hsl(var(--nextui-chartsGridLine))',
+      color: l.color || getTailwindColor('--nextui-chartsGridLine'),
       dashStyle: l.dashStyle,
       zIndex: 2,
     }));
@@ -369,25 +364,25 @@ export default class LineChartOperations {
       legend: {
         itemStyle: {
           fontSize: '0.7rem',
-          color: 'hsl(var(--nextui-secondary))',
+          color: getTailwindColor('--nextui-secondary'),
         },
         itemHoverStyle: {
-          color: 'hsl(var(--nextui-hover))',
+          color: getTailwindColor('--nextui-hover'),
         },
       },
       xAxis: {
         type: data.xAxisType,
         labels: {
           style: {
-            color: 'hsl(var(--nextui-secondary))',
+            color: getTailwindColor('--nextui-secondary'),
             fontSize: '0.7rem',
           },
           formatter() {
             return LineChartOperations.chartXAxisFormatter(data.xAxisType, this.value);
           },
         },
-        lineColor: 'hsl(var(--nextui-chartsXAxisLine))',
-        tickColor: 'hsl(var(--nextui-chartsXAxisLine))',
+        lineColor: getTailwindColor('--nextui-chartsXAxisLine'),
+        tickColor: getTailwindColor('--nextui-chartsXAxisLine'),
         tickLength: 4,
         plotBands,
         plotLines,
@@ -396,12 +391,12 @@ export default class LineChartOperations {
         title: {
           text: data.yAxisLabel,
           style: {
-            color: 'hsl(var(--nextui-secondary))',
+            color: getTailwindColor('--nextui-secondary'),
           },
         },
         labels: {
           style: {
-            color: 'hsl(var(--nextui-secondary))',
+            color: getTailwindColor('--nextui-secondary'),
             fontSize: '0.7rem',
           },
           formatter() {
@@ -409,16 +404,16 @@ export default class LineChartOperations {
           },
         },
         lineColor: 'transparent',
-        gridLineColor: 'hsl(var(--nextui-chartsGridLine))',
+        gridLineColor: getTailwindColor('--nextui-chartsGridLine'),
       },
       tooltip: {
         shared: true,
         formatter() {
           return LineChartOperations.chartTooltipFormatter(data.xAxisType, this.x, this.points);
         },
-        backgroundColor: 'hsl(var(--nextui-chartsLegendBackground))',
+        backgroundColor: getTailwindColor('--nextui-chartsLegendBackground'),
         style: {
-          color: 'hsl(var(--nextui-foreground))',
+          color: getTailwindColor('--nextui-foreground'),
           fontSize: '0.7rem',
         },
       },
@@ -470,51 +465,5 @@ export default class LineChartOperations {
         },
       },
     };
-  }
-
-  /**
-   * Trigger download of the given line chart as a png file.
-   */
-  public static downloadChartPNG(chart: HighchartsReact.RefObject): void {
-    chart.chart.exportChartLocal({
-      type: 'image/png',
-      filename: 'chart-download',
-    });
-  }
-
-  /**
-   * Trigger download of the given line chart as a svg file.
-   */
-  public static downloadChartDataSVG(chart: HighchartsReact.RefObject): void {
-    const svg = chart.chart.getSVG();
-    const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    // create a temporary link element and trigger the download
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'chart.svg'; // Name of the SVG file
-    a.click();
-    // clean up the URL object
-    URL.revokeObjectURL(url);
-  }
-
-  /**
-   * Trigger download of the given line chart data as a csv file.
-   */
-  public static downloadChartDataCSV(chart: HighchartsReact.RefObject): void {
-    chart.chart.downloadCSV();
-  }
-
-  /**
-   * Trigger download of the given line chart `data` as a json file.
-   */
-  public static downloadDataJSON(data: LineChartData): void {
-    // convert data json object to string and encode as URI
-    const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(data, null, 2))}`;
-    // create a temporary link element and trigger the download
-    const link = document.createElement('a');
-    link.href = jsonString;
-    link.download = 'hunger_map_chart_data.json';
-    link.click();
   }
 }

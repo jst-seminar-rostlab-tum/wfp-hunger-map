@@ -24,15 +24,15 @@ export function Topbar() {
   return (
     <Navbar onMenuOpenChange={setIsMenuOpen} maxWidth="full">
       <NavbarContent className="flex-1 min-w-[200px]">
-        <NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} className="md:hidden" />
+        <NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} className="lg:hidden" />
         <LogoWithText />
       </NavbarContent>
-      <NavbarContent className="hidden md:flex gap-4" justify="center">
+      <NavbarContent className="hidden lg:flex gap-4" justify="center">
         {pageLinks.map((item) => (
           <NavbarItem key={item.label} isActive={pathname === item.href}>
             <Link
               href={item.href}
-              className={clsx('text-lg text-black dark:text-white', {
+              className={clsx('text-medium text-black dark:text-white', {
                 'text-link dark:text-link': pathname === item.href,
               })}
             >

@@ -216,7 +216,8 @@ export class CountryComparisonOperations {
       headlineInflationData,
       foodInflationData,
     }: CountryComparisonChartData,
-    selectedCountryNames: string[]
+    selectedCountryNames: string[],
+    isLoading: boolean
   ) {
     return [
       {
@@ -233,7 +234,11 @@ export class CountryComparisonOperations {
                   transparentBackground
                   // TODO: f-165 bar chart
                 />
-                <NoDataHint lineChartData={foodSecurityBarChartData} selectedCountryNames={selectedCountryNames} />
+                <NoDataHint
+                  lineChartData={foodSecurityBarChartData}
+                  selectedCountryNames={selectedCountryNames}
+                  isLoading={isLoading}
+                />
               </>
             )}
           </div>
@@ -254,7 +259,11 @@ export class CountryComparisonOperations {
                   noPadding
                   transparentBackground
                 />
-                <NoDataHint lineChartData={fcsChartData} selectedCountryNames={selectedCountryNames} />
+                <NoDataHint
+                  lineChartData={fcsChartData}
+                  selectedCountryNames={selectedCountryNames}
+                  isLoading={isLoading}
+                />
               </>
             )}
             <Spacer y={6} />
@@ -269,7 +278,11 @@ export class CountryComparisonOperations {
                   noPadding
                   transparentBackground
                 />
-                <NoDataHint lineChartData={rcsiChartData} selectedCountryNames={selectedCountryNames} />
+                <NoDataHint
+                  lineChartData={rcsiChartData}
+                  selectedCountryNames={selectedCountryNames}
+                  isLoading={isLoading}
+                />
               </>
             )}
           </div>
@@ -284,7 +297,11 @@ export class CountryComparisonOperations {
             {importDependencyBarChartData && (
               <>
                 <LineChart data={importDependencyBarChartData} expandable small noPadding transparentBackground />
-                <NoDataHint lineChartData={importDependencyBarChartData} selectedCountryNames={selectedCountryNames} />
+                <NoDataHint
+                  lineChartData={importDependencyBarChartData}
+                  selectedCountryNames={selectedCountryNames}
+                  isLoading={isLoading}
+                />
               </>
             )}
           </div>
@@ -299,7 +316,11 @@ export class CountryComparisonOperations {
             {balanceOfTradeData && (
               <>
                 <LineChart data={balanceOfTradeData} expandable xAxisSlider small noPadding transparentBackground />
-                <NoDataHint lineChartData={balanceOfTradeData} selectedCountryNames={selectedCountryNames} />
+                <NoDataHint
+                  lineChartData={balanceOfTradeData}
+                  selectedCountryNames={selectedCountryNames}
+                  isLoading={isLoading}
+                />
               </>
             )}
           </div>
@@ -322,7 +343,11 @@ export class CountryComparisonOperations {
                   noPadding
                   transparentBackground
                 />
-                <NoDataHint lineChartData={headlineInflationData} selectedCountryNames={selectedCountryNames} />
+                <NoDataHint
+                  lineChartData={headlineInflationData}
+                  selectedCountryNames={selectedCountryNames}
+                  isLoading={isLoading}
+                />
               </>
             )}
             {foodInflationData && (
@@ -336,7 +361,11 @@ export class CountryComparisonOperations {
                   noPadding
                   transparentBackground
                 />
-                <NoDataHint lineChartData={foodInflationData} selectedCountryNames={selectedCountryNames} />
+                <NoDataHint
+                  lineChartData={foodInflationData}
+                  selectedCountryNames={selectedCountryNames}
+                  isLoading={isLoading}
+                />
               </>
             )}
           </div>

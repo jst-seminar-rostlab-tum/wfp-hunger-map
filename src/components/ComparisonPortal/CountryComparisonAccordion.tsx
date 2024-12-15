@@ -51,7 +51,7 @@ export default function CountryComparisonAccordion({ selectedCountries }: Countr
   const accordionItems = useMemo(() => {
     const chartData = CountryComparisonOperations.getChartData(countryDataList, countryIso3DataList, selectedCountries);
     const selectedCountryNames = selectedCountries.map((country) => country.properties.adm0_name);
-    return CountryComparisonOperations.getComparisonAccordionItems(chartData, selectedCountryNames);
+    return CountryComparisonOperations.getComparisonAccordionItems(chartData, selectedCountryNames, isLoading);
   }, [countryDataList, countryIso3DataList, selectedCountries]);
 
   return countryDataList.length > 1 ? (

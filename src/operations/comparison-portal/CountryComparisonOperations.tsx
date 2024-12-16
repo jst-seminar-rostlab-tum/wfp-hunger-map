@@ -235,9 +235,12 @@ export class CountryComparisonOperations {
               <CategoricalChart
                 title="Number of people with insufficient food consumption"
                 data={foodSecurityBarChartData}
+                transparentBackground
               />
             )}
-            {populationBarChartData && <CategoricalChart title="Population" data={populationBarChartData} />}
+            {populationBarChartData && (
+              <CategoricalChart title="Population" data={populationBarChartData} transparentBackground />
+            )}
           </div>
         ),
       },
@@ -289,7 +292,7 @@ export class CountryComparisonOperations {
           <div>
             {importDependencyBarChartData && (
               <>
-                <CategoricalChart title="Import Dependency" data={importDependencyBarChartData} />
+                <CategoricalChart title="Import Dependency" data={importDependencyBarChartData} transparentBackground />
                 <NoDataHint
                   chartData={importDependencyBarChartData}
                   selectedCountryNames={selectedCountryNames}

@@ -55,14 +55,12 @@ export function ChartModal({
             <h2 className="flex flex-col justify-center font-normal text-sm sm:text-md md:text-lg"> {title} </h2>
             <div className="flex flex-row w-fit h-full gap-0.5 sm:gap-4 md:gap-6">
               {sliderProps && showSlider && setShowSlider && (
-                <ChartSliderButton showSlider={showSlider} setShowSlider={setShowSlider} size={4} />
+                <ChartSliderButton showSlider={showSlider} setShowSlider={setShowSlider} />
               )}
 
-              {alternativeSwitchButtonProps && (
-                <ChartAlternativeSwitchButton {...alternativeSwitchButtonProps} size={4} />
-              )}
+              {alternativeSwitchButtonProps && <ChartAlternativeSwitchButton {...alternativeSwitchButtonProps} />}
 
-              {!disableDownload && <ChartDownloadButton chartRef={chartRef} chartData={chartData} size={4} />}
+              {!disableDownload && <ChartDownloadButton chartRef={chartRef} chartData={chartData} />}
             </div>
           </div>
         </ModalHeader>

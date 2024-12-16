@@ -70,7 +70,7 @@ export function ChartContainer({
             {
               // button to switch between different chart types
               alternativeSwitchButtonProps && (
-                <ChartAlternativeSwitchButton {...alternativeSwitchButtonProps} size={4} />
+                <ChartAlternativeSwitchButton {...alternativeSwitchButtonProps} size={ICON_BUTTON_SIZE} />
               )
             }
             {

@@ -249,14 +249,13 @@ export class CountryComparisonOperations {
       {
         title: 'Food Security',
         content: (
-          <div className="flex">
+          <div className="grid md:grid-cols-2 gap-6">
             {foodSecurityBarChartData && (
               <CategoricalChart
                 title="Number of people with insufficient food consumption"
                 data={foodSecurityBarChartData}
               />
             )}
-            <Spacer x={6} />
             {populationBarChartData && <CategoricalChart title="Population" data={populationBarChartData} />}
           </div>
         ),

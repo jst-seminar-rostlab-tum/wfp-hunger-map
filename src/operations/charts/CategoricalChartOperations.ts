@@ -160,8 +160,8 @@ export default class CategoricalChartOperations {
         },
         pie: {
           animation: true,
-          allowPointSelect: true,
-          cursor: 'pointer',
+          allowPointSelect: false,
+          cursor: 'default',
           innerSize: '60%',
           borderWidth: 0,
           dataLabels: {
@@ -174,6 +174,13 @@ export default class CategoricalChartOperations {
               fontSize: '12px',
               borderWidth: 0,
               fontWeight: 'light',
+            },
+          },
+          states: {
+            hover: {
+              halo: {
+                size: 4, // shrinking the halo/glow size on hover
+              },
             },
           },
         },

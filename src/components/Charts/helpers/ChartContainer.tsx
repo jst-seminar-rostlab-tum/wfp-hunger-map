@@ -55,7 +55,6 @@ export function ChartContainer({
 
   // if chartOptions is undefined -> display "no data available"
   if (!chartOptions) {
-    // todo check
     return (
       <div
         className={`w-full h-40 flex-col rounded-md ${BOX_BACKGROUND} text-secondary text-xs flex flex-row justify-center items-center`}

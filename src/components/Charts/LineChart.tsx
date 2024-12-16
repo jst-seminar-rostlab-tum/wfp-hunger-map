@@ -51,7 +51,7 @@ export function LineChart({
 
   // convert data to `LineChartData` and build chart options for 'Highcharts' (line and bar chart)
   const lineChartData: LineChartData = LineChartOperations.convertToLineChartData(data);
-  const lineChartOptions: Highcharts.Options = LineChartOperations.getHighChartOptions(lineChartData);
+  const lineChartOptions: Highcharts.Options | undefined = LineChartOperations.getHighChartOptions(lineChartData);
 
   // the `selectedXAxisRange` saves the to be rendered x-axis range of the chart
   // can be changed using the `LinkeChartXAxisSlider` if the param `xAxisSlider==true`

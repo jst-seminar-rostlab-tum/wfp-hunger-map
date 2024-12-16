@@ -74,7 +74,6 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
       const selectedCountryData: CountryMapData | undefined = countries.features.find(
         (country) => country.properties.adm0_id === selectedCountryId
       );
-
       if (selectedCountryData) {
         MapOperations.fetchCountryData(
           selectedMapType,
@@ -87,6 +86,10 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
           setIpcRegionData,
           setIsDataAvailable
         );
+        window.gtag('event', `${selectedCountryData.properties.iso3}_country_selected`, {
+          selectedMap: selectedMapType,
+        });
+        setSelectedCountryName(selectedCountryData.properties.adm0_name);
         mapRef.current?.fitBounds(L.geoJSON(selectedCountryData as GeoJSON).getBounds(), { animate: true });
       }
     }
@@ -97,12 +100,8 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
       const selectedCountryData = countries.features.find(
         (country) => country.properties.adm0_id === selectedCountryId
       );
-
-      if (selectedCountryData) {
-        setSelectedCountryName(selectedCountryData.properties.adm0_name);
-        mapRef.current?.fitBounds(L.geoJSON(selectedCountryData as GeoJSON).getBounds(), { animate: true });
-      }
-    } else if (!isDataAvailable) {
+      mapRef.current?.fitBounds(L.geoJSON(selectedCountryData as GeoJSON).getBounds(), { animate: true });
+    } else {
       mapRef.current?.zoomOut(4, { animate: true });
     }
   }, [isDataAvailable]);

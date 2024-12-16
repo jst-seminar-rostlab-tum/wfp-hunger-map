@@ -6,14 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import { GeoJSON as LeafletGeoJSON, MapContainer, Pane, SVGOverlay, TileLayer } from 'react-leaflet';
 
 import BackToGlobalButton from '@/components/Map/BackToGlobalButton';
-import {
-  countryBaseStyle,
-  countryBorderStyle,
-  disputedAreaStyle,
-  MAP_MAX_ZOOM,
-  MAP_MIN_ZOOM,
-  oceanBounds,
-} from '@/domain/constant/map/Map';
+import { disputedAreaStyle, MAP_MAX_ZOOM, MAP_MIN_ZOOM, oceanBounds } from '@/domain/constant/map/Map';
 import { useSelectedAlert } from '@/domain/contexts/SelectedAlertContext';
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
@@ -125,18 +118,23 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
       <ZoomControl threshold={5} callback={onZoomThresholdReached} />
       <BackToGlobalButton />
 
+      <Pane name="roads" style={{ zIndex: 1 }}>
+        <TileLayer
+          url={`https://api.mapbox.com/styles/v1/feketesamu/cm4h3vg16012n01r1cz47horn/tiles/256/{z}/{x}/{y}?access_token=${process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}`}
+        />
+      </Pane>
       <Pane name="ocean" style={{ zIndex: 0 }}>
         <SVGOverlay bounds={oceanBounds}>
           <rect width="100%" height="100%" fill="hsl(var(--nextui-ocean))" />
         </SVGOverlay>
       </Pane>
-      <Pane name="countries_base" style={{ zIndex: 1 }}>
+      {/* <Pane name="countries_base" style={{ zIndex: 1 }}>
         <LeafletGeoJSON
           interactive={false}
           data={MapOperations.convertCountriesToFeatureCollection(countries.features)}
           style={countryBaseStyle}
         />
-      </Pane>
+      </Pane> */}
       {selectedMapType === GlobalInsight.FOOD && countries.features && (
         <>
           {countries.features.map((country) => (
@@ -192,21 +190,18 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
         />
       )}
 
-      <Pane name="countries_border" style={{ zIndex: 3 }}>
+      {/* <Pane name="countries_border" style={{ zIndex: 3 }}>
         <LeafletGeoJSON
           data={MapOperations.convertCountriesToFeatureCollection(countries.features)}
           style={countryBorderStyle}
         />
-      </Pane>
+      </Pane> */}
       <Pane name="disputed_areas" style={{ zIndex: 4 }}>
         <LeafletGeoJSON
           data={MapOperations.convertCountriesToFeatureCollection(disputedAreas.features)}
           style={disputedAreaStyle}
         />
       </Pane>
-
-      <ZoomControl threshold={5} callback={onZoomThresholdReached} />
-      <BackToGlobalButton />
     </MapContainer>
   );
 }

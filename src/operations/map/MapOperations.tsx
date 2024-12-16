@@ -165,8 +165,13 @@ export class MapOperations {
       tooltip.addTo(map);
       setRegionLabelTooltips((prevRegionLabelData) => [...prevRegionLabelData, tooltip]);
 
+      const zoomListener = () => this.updateRegionLabelTooltip(feature, map, tooltip);
+
       this.updateRegionLabelTooltip(feature, map, tooltip);
-      map.on('zoom', () => this.updateRegionLabelTooltip(feature, map, tooltip));
+      map.on('zoom', zoomListener);
+      tooltip.on('remove', () => {
+        map.off('zoom', zoomListener);
+      });
     }
   }
 }

@@ -95,7 +95,9 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
     }
 
     if (mapRef.current) {
-      regionLabelTooltips.forEach((tooltip) => tooltip.removeFrom(mapRef.current as L.Map));
+      regionLabelTooltips.forEach((tooltip) => {
+        tooltip.removeFrom(mapRef.current as L.Map);
+      });
       setRegionLabelTooltips([]);
     }
   }, [selectedCountryId, selectedMapType]);

@@ -173,6 +173,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
           countryData={countryData}
           ipcRegionData={ipcRegionData}
           selectedCountryName={selectedCountryName}
+          countryIso3Data={countryIso3Data}
         />
       )}
 

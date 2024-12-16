@@ -9,7 +9,13 @@ import { IpcChoroplethProps } from '@/domain/props/IpcChoroplethProps';
 import IpcCountryChoropleth from './IpcCountryChoropleth';
 import IpcGlobalChoropleth from './IpcGlobalChoropleth';
 
-function IpcChoropleth({ countries, countryData, ipcRegionData, selectedCountryName }: IpcChoroplethProps) {
+function IpcChoropleth({
+  countries,
+  countryData,
+  ipcRegionData,
+  selectedCountryName,
+  countryIso3Data,
+}: IpcChoroplethProps) {
   const { data: ipcData } = useIpcQuery(true);
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
 
@@ -41,6 +47,7 @@ function IpcChoropleth({ countries, countryData, ipcRegionData, selectedCountryN
           regionIpcData={ipcRegionData}
           countryData={countryData}
           countryName={selectedCountryName}
+          countryIso3Data={countryIso3Data}
         />
       )}
     </>

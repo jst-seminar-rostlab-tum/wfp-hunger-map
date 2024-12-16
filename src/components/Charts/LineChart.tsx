@@ -49,23 +49,24 @@ export function LineChart({
 }: LineChartProps) {
   const { theme } = useTheme();
 
-  // convert data to `LineChartData` and build chart options for 'Highcharts' (line and bar chart)
+  // make sure data is converted to `LineChartData`
   const lineChartData: LineChartData = LineChartOperations.convertToLineChartData(data);
-  const lineChartOptions: Highcharts.Options = LineChartOperations.getHighChartOptions(lineChartData);
 
   // the `selectedXAxisRange` saves the to be rendered x-axis range of the chart
   // can be changed using the `LinkeChartXAxisSlider` if the param `xAxisSlider==true`
   const xAxisLength: number = LineChartOperations.getDistinctXAxisValues(lineChartData).length;
-  const [selectedXAxisRange, setSelectedXAxisRange] = useState([0, xAxisLength - 1]);
+  const [selectedXAxisRange, setSelectedXAxisRange] = useState<number[]>([0, xAxisLength - 1]);
 
   // controlling if a line or bar chart is rendered; line chart is the default
-  const [showBarChart, setShowBarChart] = useState(false);
-  const [chartOptions, setChartOptions] = useState(lineChartOptions);
+  const [showBarChart, setShowBarChart] = useState<boolean>(false);
+  const [chartOptions, setChartOptions] = useState<Highcharts.Options | undefined>(
+    LineChartOperations.getHighChartOptions(lineChartData)
+  );
 
-  // handling the line and bar chart switch and the theme switch;
-  // also handling changing the x-axis range using the `LineChartXAxisSlider`;
-  // special: if the selected x-axis range has length 1 -> bar chart is displayed
-  useEffect(() => {
+  // general function to update the chart options -> only used by the following `useEffect` hooks
+  const updateChartOptions = () => {
+    // also handling changing the x-axis range using the `LineChartXAxisSlider`;
+    // special: if the selected x-axis range has length 1 -> bar chart is displayed
     if (showBarChart || selectedXAxisRange[1] - selectedXAxisRange[0] === 0) {
       setChartOptions(
         LineChartOperations.getHighChartOptions(lineChartData, selectedXAxisRange[0], selectedXAxisRange[1], true)
@@ -75,7 +76,22 @@ export function LineChart({
         LineChartOperations.getHighChartOptions(lineChartData, selectedXAxisRange[0], selectedXAxisRange[1])
       );
     }
-  }, [showBarChart, theme, selectedXAxisRange]);
+  };
+
+  // handling the line and bar chart switch, selected x-axis range changes and data changes
+  useEffect(() => {
+    updateChartOptions();
+  }, [showBarChart, selectedXAxisRange, data]);
+
+  // handling the theme switch
+  useEffect(() => {
+    // `theme` change does not guarantee that the NextUI CSS colors have already been changed;
+    // therefore we synchronize the update with the next repaint cycle, ensuring the CSS variables are updated
+    const rafId = requestAnimationFrame(() => {
+      updateChartOptions();
+    });
+    return () => cancelAnimationFrame(rafId);
+  }, [theme]);
 
   // chart slider props - to manipulate the shown x-axis range
   const sliderProps = disableXAxisSlider

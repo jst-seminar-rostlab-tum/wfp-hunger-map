@@ -6,7 +6,7 @@ import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
 import { ChartAlternativeSwitchButtonProps, ChartSliderProps } from '@/domain/props/ChartContainerProps';
 
 export default interface ChartModalProps {
-  chartOptions: Highcharts.Options;
+  chartOptions?: Highcharts.Options;
   chartData: LineChartData | CategoricalChartData;
 
   title?: string;

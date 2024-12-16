@@ -1,6 +1,5 @@
 'use client';
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
 
 import ComparisonAccordionSkeleton from '@/components/ComparisonPortal/ComparisonAccordionSkeleton';
@@ -11,21 +10,24 @@ import { CountryComparisonOperations } from '@/operations/comparison-portal/Coun
 
 import AccordionContainer from '../Accordions/AccordionContainer';
 
-export default function CountryComparisonAccordion({ selectedCountries }: CountryComparisonAccordionProps) {
+export default function CountryComparisonAccordion({
+  selectedCountries,
+  setSelectedCountries,
+}: CountryComparisonAccordionProps) {
   const { showSnackBar } = useSnackbar();
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const pathname = usePathname();
 
   const countryDataQuery = useCountryDataListQuery(
     // selected country ids
     selectedCountries?.map((country) => country.properties.adm0_id),
     // callback to show snackbar if data not found
-    (countryId) => {
+    (invalidCountryId) => {
       if (!selectedCountries) return;
-      const countryName = CountryComparisonOperations.getCountryNameById(countryId, selectedCountries);
-      CountryComparisonOperations.showDataNotFoundSnackBar(showSnackBar, countryName);
-      CountryComparisonOperations.updateIdQueryParams(searchParams, countryId, router, pathname);
+      const invalidCountryName = CountryComparisonOperations.getCountryNameById(invalidCountryId, selectedCountries);
+      CountryComparisonOperations.showDataNotFoundSnackBar(showSnackBar, invalidCountryName);
+      setSelectedCountries((prevCountries) =>
+        prevCountries?.filter((country) => country.properties.adm0_id !== invalidCountryId)
+      );
+      // CountryComparisonOperations.updateIdQueryParams(searchParams, countryId, router, pathname);
     }
   );
 

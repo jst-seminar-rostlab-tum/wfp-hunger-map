@@ -158,6 +158,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
             data={{ type: 'FeatureCollection', features: [country as Feature<Geometry, GeoJsonProperties>] }}
             regionNutritionData={regionNutritionData}
             selectedCountryName={selectedCountryName}
+            regionLabelData={regionLabelData}
           />
         ))}
 

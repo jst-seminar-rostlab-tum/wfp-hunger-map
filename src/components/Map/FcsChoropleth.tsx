@@ -48,13 +48,12 @@ export default function FcsChoropleth({
         layer.unbindTooltip();
       }
     });
-  }, [selectedCountryId]);
 
-  useEffect(() => {
     if (selectedCountryId !== data.features[0].properties?.adm0_id) {
       regionLabelTooltips.forEach((tooltip) => tooltip.removeFrom(map));
+      setRegionLabelTooltips([]);
     }
-  }, [selectedCountryId, regionLabelTooltips]);
+  }, [selectedCountryId]);
 
   return (
     <div>
@@ -71,7 +70,7 @@ export default function FcsChoropleth({
         />
       )}
       {/* Animated GeoJSON layer for the selected country */}
-      {!regionData && selectedCountryId && (
+      {selectedCountryId && (!regionData || !regionLabelData) && (
         <CountryLoadingLayer
           data={data}
           selectedCountryId={selectedCountryId}
@@ -88,7 +87,6 @@ export default function FcsChoropleth({
           handleBackButtonClick={handleBackClick}
           regionLabelData={regionLabelData}
           countryMapData={data.features[0] as CountryMapData}
-          regionLabelTooltips={regionLabelTooltips}
           setRegionLabelTooltips={setRegionLabelTooltips}
         />
       )}

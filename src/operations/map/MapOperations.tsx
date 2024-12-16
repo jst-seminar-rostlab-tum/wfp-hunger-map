@@ -1,8 +1,14 @@
 import { Feature as GeoJsonFeature, FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
+import L from 'leaflet';
 import { createRoot } from 'react-dom/client';
 
 import CountryHoverPopover from '@/components/CountryHoverPopover/CountryHoverPopover';
 import container from '@/container';
+import {
+  MAP_MAX_ZOOM,
+  REGION_LABEL_SENSITIVENESS,
+  SELECTED_COUNTRY_ZOOM_THRESHOLD,
+} from '@/domain/constant/map/Map.ts';
 import { Feature } from '@/domain/entities/common/Feature';
 import { CountryData } from '@/domain/entities/country/CountryData.ts';
 import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data.ts';
@@ -114,5 +120,53 @@ export class MapOperations {
     const root = createRoot(tooltipContainer);
     root.render(<CountryHoverPopover header={countryName} />);
     return tooltipContainer;
+  }
+
+  static updateRegionLabelTooltip(
+    feature: GeoJsonFeature<Geometry, GeoJsonProperties>,
+    map: L.Map,
+    tooltip: L.Tooltip
+  ) {
+    const bounds = L.geoJSON(feature).getBounds();
+    const zoom = map.getZoom();
+    const width = (bounds.getEast() - bounds.getWest()) * zoom;
+    const isMaxZoom = zoom === MAP_MAX_ZOOM;
+    const isZoomThreshold = zoom === SELECTED_COUNTRY_ZOOM_THRESHOLD;
+
+    const text = feature.properties?.Name || '';
+    const textWidth = text.length * REGION_LABEL_SENSITIVENESS;
+
+    const truncatedText = isZoomThreshold || (textWidth > width && !isMaxZoom) ? '...' : text;
+
+    tooltip.setContent(truncatedText);
+  }
+
+  static setupRegionLabelTooltip(
+    feature: GeoJsonFeature<Geometry, GeoJsonProperties>,
+    regionLabelData: FeatureCollection<Geometry, GeoJsonProperties>,
+    countryMapData: CountryMapData,
+    map: L.Map,
+    setRegionLabelTooltips: (tooltips: (prevRegionLabelData: L.Tooltip[]) => L.Tooltip[]) => void
+  ) {
+    const featureLabelData = regionLabelData.features.find((labelItem) => {
+      return (
+        labelItem.properties?.iso3 === countryMapData.properties.iso3 &&
+        labelItem.properties?.name === feature.properties?.Name
+      );
+    });
+
+    if (featureLabelData && featureLabelData.geometry.type === 'Point') {
+      const tooltip = L.tooltip({
+        permanent: true,
+        direction: 'center',
+        className: 'text-background dark:text-foreground',
+        content: '',
+      }).setLatLng([featureLabelData.geometry.coordinates[1], featureLabelData.geometry.coordinates[0]]);
+      tooltip.addTo(map);
+      setRegionLabelTooltips((prevRegionLabelData) => [...prevRegionLabelData, tooltip]);
+
+      this.updateRegionLabelTooltip(feature, map, tooltip);
+      map.on('zoom', () => this.updateRegionLabelTooltip(feature, map, tooltip));
+    }
   }
 }

@@ -1,8 +1,8 @@
 import { Feature } from 'geojson';
 import L from 'leaflet';
 import { useTheme } from 'next-themes';
-import React, { useEffect, useRef } from 'react';
-import { GeoJSON } from 'react-leaflet';
+import React, { useEffect, useRef, useState } from 'react';
+import { GeoJSON, useMap } from 'react-leaflet';
 
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
@@ -20,11 +20,14 @@ export default function NutritionChoropleth({
   countryId,
   regionNutritionData,
   selectedCountryName,
+  regionLabelData,
 }: NutritionChoroplethProps) {
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
   const { theme } = useTheme();
   const { data: nutritionData } = useNutritionQuery(true);
+  const [regionLabelTooltips, setRegionLabelTooltips] = useState<L.Tooltip[]>([]);
+  const map = useMap();
 
   // adding the country name as a tooltip to each layer (on hover)
   // the tooltip is not shown if the country is selected or there is no data available for the country
@@ -40,6 +43,11 @@ export default function NutritionChoropleth({
         layer.unbindTooltip();
       }
     });
+
+    if (selectedCountryId !== data.features[0].properties?.adm0_id) {
+      regionLabelTooltips.forEach((tooltip) => tooltip.removeFrom(map));
+      setRegionLabelTooltips([]);
+    }
   }, [selectedCountryId]);
 
   return (
@@ -66,7 +74,7 @@ export default function NutritionChoropleth({
         />
       )}
       {/* Animated GeoJSON layer for the selected country */}
-      {!regionNutritionData && selectedCountryId && (
+      {selectedCountryId && (!regionNutritionData || !regionLabelData) && (
         <CountryLoadingLayer
           data={data}
           selectedCountryId={selectedCountryId}
@@ -75,8 +83,14 @@ export default function NutritionChoropleth({
       )}
       {
         // if this country ('countryId') is selected and data is loaded ('regionNutritionData') show Choropleth for all states
-        regionNutritionData && countryId === selectedCountryId && (
-          <NutritionStateChoropleth regionNutrition={regionNutritionData} countryName={selectedCountryName} />
+        regionNutritionData && countryId === selectedCountryId && regionLabelData && (
+          <NutritionStateChoropleth
+            regionNutrition={regionNutritionData}
+            countryName={selectedCountryName}
+            regionLabelData={regionLabelData}
+            setRegionLabelTooltips={setRegionLabelTooltips}
+            countryMapData={data.features[0] as CountryMapData}
+          />
         )
       }
     </div>

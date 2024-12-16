@@ -4,8 +4,8 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 
 import FcsRegionTooltip from '@/components/Map/FcsRegionTooltip';
-import { MAP_MAX_ZOOM, REGION_LABEL_SENSITIVENESS, SELECTED_COUNTRY_ZOOM_THRESHOLD } from '@/domain/constant/map/Map';
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
+import { MapOperations } from '@/operations/map/MapOperations';
 
 export class FcsCountryChoroplethOperations {
   static fcsFill(fcs?: number): string {
@@ -27,21 +27,6 @@ export class FcsCountryChoroplethOperations {
     };
   }
 
-  static updateTooltip(feature: Feature<Geometry, GeoJsonProperties>, map: L.Map, tooltip: L.Tooltip) {
-    const bounds = L.geoJSON(feature).getBounds();
-    const zoom = map.getZoom();
-    const width = (bounds.getEast() - bounds.getWest()) * zoom;
-    const isMaxZoom = zoom === MAP_MAX_ZOOM;
-    const isZoomThreshold = zoom === SELECTED_COUNTRY_ZOOM_THRESHOLD;
-
-    const text = feature.properties?.Name || '';
-    const textWidth = text.length * REGION_LABEL_SENSITIVENESS;
-
-    const truncatedText = isZoomThreshold || (textWidth > width && !isMaxZoom) ? '...' : text;
-
-    tooltip.setContent(truncatedText);
-  }
-
   static onEachFeature(
     feature: Feature<Geometry, GeoJsonProperties>,
     layer: L.Layer,
@@ -49,29 +34,9 @@ export class FcsCountryChoroplethOperations {
     regionLabelData: FeatureCollection<Geometry, GeoJsonProperties>,
     countryMapData: CountryMapData,
     map: L.Map,
-    regionLabelTooltips: L.Tooltip[],
     setRegionLabelTooltips: (tooltips: (prevRegionLabelData: L.Tooltip[]) => L.Tooltip[]) => void
   ) {
-    const featureLabelData = regionLabelData.features.find((labelItem) => {
-      return (
-        labelItem.properties?.iso3 === countryMapData.properties.iso3 &&
-        labelItem.properties?.name === feature.properties?.Name
-      );
-    });
-
-    if (featureLabelData && featureLabelData.geometry.type === 'Point') {
-      const tooltip = L.tooltip({
-        permanent: true,
-        direction: 'center',
-        className: 'text-background dark:text-foreground',
-        content: '',
-      }).setLatLng([featureLabelData.geometry.coordinates[1], featureLabelData.geometry.coordinates[0]]);
-      tooltip.addTo(map);
-      setRegionLabelTooltips((prevRegionLabelData) => [...prevRegionLabelData, tooltip]);
-
-      this.updateTooltip(feature, map, tooltip);
-      map.on('zoom', () => this.updateTooltip(feature, map, tooltip));
-    }
+    MapOperations.setupRegionLabelTooltip(feature, regionLabelData, countryMapData, map, setRegionLabelTooltips);
 
     // Hover behavior
     layer.on('mouseover', () => {

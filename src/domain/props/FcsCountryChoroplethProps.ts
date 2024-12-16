@@ -15,6 +15,5 @@ export default interface FscCountryChoroplethProps {
   handleBackButtonClick?: () => void;
   regionLabelData: FeatureCollection<Geometry, GeoJsonProperties>;
   countryMapData: CountryMapData;
-  regionLabelTooltips: L.Tooltip[];
   setRegionLabelTooltips: (tooltips: (prevRegionLabelData: L.Tooltip[]) => L.Tooltip[]) => void;
 }

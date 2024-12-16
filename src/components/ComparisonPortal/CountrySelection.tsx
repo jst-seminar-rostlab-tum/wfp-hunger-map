@@ -7,6 +7,8 @@ import { CountrySelectionProps } from '@/domain/props/CountrySelectionProps';
 import { CountrySelectionOperations } from '@/operations/comparison-portal/CountrySelectionOperations';
 import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
 
+import { CustomButton } from '../Buttons/CustomButton';
+
 export default function CountrySelection({
   countryMapData,
   globalFcsData,
@@ -39,7 +41,7 @@ export default function CountrySelection({
   }, [selectedCountries, availableCountries, disabledCountryIds]);
 
   return (
-    <div className="pb-4 space-y-6">
+    <div className="pb-4 flex items-center gap-4">
       <Select
         placeholder="Select up to 5 countries"
         aria-label="Select countries for comparison"
@@ -66,6 +68,13 @@ export default function CountrySelection({
             </SelectItem>
           ))}
       </Select>
+      <CustomButton
+        variant="bordered"
+        onClick={() => setSelectedCountries([])}
+        isDisabled={selectedCountries === undefined || selectedCountries.length === 0}
+      >
+        Clear
+      </CustomButton>
     </div>
   );
 }

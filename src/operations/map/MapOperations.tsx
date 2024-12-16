@@ -4,11 +4,7 @@ import { createRoot } from 'react-dom/client';
 
 import CountryHoverPopover from '@/components/CountryHoverPopover/CountryHoverPopover';
 import container from '@/container';
-import {
-  MAP_MAX_ZOOM,
-  REGION_LABEL_SENSITIVENESS,
-  SELECTED_COUNTRY_ZOOM_THRESHOLD,
-} from '@/domain/constant/map/Map.ts';
+import { MAP_MAX_ZOOM, REGION_LABEL_SENSITIVITY, SELECTED_COUNTRY_ZOOM_THRESHOLD } from '@/domain/constant/map/Map.ts';
 import { Feature } from '@/domain/entities/common/Feature';
 import { CountryData } from '@/domain/entities/country/CountryData.ts';
 import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data.ts';
@@ -146,7 +142,7 @@ export class MapOperations {
     const isZoomThreshold = zoom === SELECTED_COUNTRY_ZOOM_THRESHOLD;
 
     const text = feature.properties?.Name || '';
-    const textWidth = text.length * REGION_LABEL_SENSITIVENESS;
+    const textWidth = text.length * REGION_LABEL_SENSITIVITY;
 
     const truncatedText = isZoomThreshold || (textWidth > width && !isMaxZoom) ? '...' : text;
 

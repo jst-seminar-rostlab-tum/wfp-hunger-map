@@ -3,10 +3,11 @@ import clsx from 'clsx';
 
 import StyledLink from '@/components/About/StyledLink';
 import RecursiveHighlighter from '@/components/Search/RecursiveHighlighter';
-import { CustomTableData, DataSourceTableData } from '@/domain/props/CustomTableProps';
+import { DataSourceDescriptionItems } from '@/domain/entities/dataSources/DataSourceDescription';
+import { CustomTableData } from '@/domain/props/CustomTableProps';
 import { SearchOperations } from '@/operations/Search/SearchOperations';
 
-function formatDataSourceTable(dataSources: DataSourceTableData) {
+function formatDataSourceTable(dataSources: DataSourceDescriptionItems) {
   return Object.entries(dataSources).map(([key, tableRow]) => {
     // remove leading http[s]:// and trailing slash
     const linkDisplayText = tableRow.dataSourceLink?.split('//')?.pop()?.replace(/\/$/, '');

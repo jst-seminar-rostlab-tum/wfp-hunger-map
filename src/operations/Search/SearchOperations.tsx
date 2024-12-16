@@ -3,7 +3,7 @@ import reactElementToJsxString from 'react-element-to-jsx-string';
 
 import RecursiveHighlighter from '@/components/Search/RecursiveHighlighter';
 import { AccordionItemProps, SearchableAccordionItemProps } from '@/domain/entities/accordions/Accordions';
-import { DataSourceTableData, DataSourceTableRow } from '@/domain/props/CustomTableProps';
+import DataSourceDescription, { DataSourceDescriptionItems } from '@/domain/entities/dataSources/DataSourceDescription';
 
 export class SearchOperations {
   // textElements should not be changed during runtime
@@ -23,7 +23,7 @@ export class SearchOperations {
 
   static makeDataSourceAccordionSearchable(items: AccordionItemProps[]): SearchableAccordionItemProps[] {
     return items.map((item) => {
-      const tableData: DataSourceTableData | undefined = (item.content as ReactElement)?.props?.data;
+      const tableData: DataSourceDescriptionItems | undefined = (item.content as ReactElement)?.props?.data;
       if (!tableData) return { ...item, containedWords: '' };
 
       const sanitizedTable = Object.values(tableData).map(SearchOperations.sanitizeTableRow).join(' ');
@@ -51,7 +51,7 @@ export class SearchOperations {
     );
   }
 
-  static sanitizeTableRow(item: DataSourceTableRow): string {
+  static sanitizeTableRow(item: DataSourceDescription): string {
     return SearchOperations.sanitizeText(`${item.label}
       ${SearchOperations.sanitizeReactNode(item.description)}
       ${SearchOperations.sanitizeReactNode(item.dataSource)}

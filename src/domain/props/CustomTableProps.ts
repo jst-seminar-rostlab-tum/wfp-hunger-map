@@ -35,18 +35,6 @@ export default interface CustomTableProps<D> {
   showBorders?: boolean;
 }
 
-export type DataSourceTableRow = {
-  label: string;
-  description: ReactNode;
-  readMoreLink?: string;
-  dataSource: ReactNode;
-  dataSourceLink?: string;
-  updateInterval?: string;
-  updateDetails?: readonly { label: ReactNode; interval: string }[];
-};
-
-export type DataSourceTableData = { [key: string]: DataSourceTableRow };
-
 export type SimpleTableData = {
   keyColumn: ReactNode;
   [columnId: string]: ReactNode;

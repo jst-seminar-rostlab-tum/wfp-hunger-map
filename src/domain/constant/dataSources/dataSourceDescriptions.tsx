@@ -1,8 +1,9 @@
 import React from 'react';
 
 import Abbreviation from '@/components/Tooltip/Abbreviation';
+import { DataSourceDescriptionItems } from '@/domain/entities/dataSources/DataSourceDescription';
 
-export const contextAndNeedDescriptions = {
+export const contextAndNeedDescriptions: DataSourceDescriptionItems = {
   conflict: {
     label: 'Conflict',
     description:
@@ -30,7 +31,7 @@ export const contextAndNeedDescriptions = {
   },
 };
 
-export const foodSecurityDescriptions = {
+export const foodSecurityDescriptions: DataSourceDescriptionItems = {
   fcs: {
     label: 'People with insufficient food consumption',
     description:
@@ -103,7 +104,7 @@ export const foodSecurityDescriptions = {
   },
 };
 
-export const nutritionDescriptions = {
+export const nutritionDescriptions: DataSourceDescriptionItems = {
   malnutritionAcute: {
     label: 'Acute malnutrition',
     description: 'Characterized by a rapid deterioration in nutritional status over a short period of time.',
@@ -121,7 +122,7 @@ export const nutritionDescriptions = {
   },
 };
 
-export const marketDescriptions = {
+export const marketDescriptions: DataSourceDescriptionItems = {
   importDependency: {
     label: 'Import dependency',
     description: (
@@ -169,7 +170,7 @@ export const marketDescriptions = {
   },
 };
 
-export const seasonalDescriptions = {
+export const seasonalDescriptions: DataSourceDescriptionItems = {
   rainfall: {
     label: 'Rainfall',
     description:
@@ -211,7 +212,7 @@ export const seasonalDescriptions = {
   },
 };
 
-export const otherDescriptions = {
+export const otherDescriptions: DataSourceDescriptionItems = {
   news: {
     label: 'News feed',
     description:

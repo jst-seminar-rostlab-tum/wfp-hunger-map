@@ -1,6 +1,7 @@
 import { IMessage } from './Chatbot';
 
 export interface QueryRequest {
+  context?: string;
   query: string;
   version?: number;
   chatbot_type?: string;
@@ -14,7 +15,6 @@ export interface QueryResponse {
   total_tokens: number;
 }
 
-// TO-DO: not sure if it belongs here. consider moving to another place
 export class APIError extends Error {
   constructor(
     public status: number,

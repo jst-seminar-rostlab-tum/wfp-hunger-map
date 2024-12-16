@@ -53,6 +53,10 @@ export default function FcsRegionTooltip({ feature }: FcsRegionTooltipProps) {
             title="Number of people with insufficient food consumption"
             data={FcsRegionTooltipOperations.getFcsChartData(feature.properties.fcsGraph)}
             small
+            disableDownload
+            disableBarChartSwitch
+            disableXAxisSlider
+            disableExpandable
           />
         )}
       </div>

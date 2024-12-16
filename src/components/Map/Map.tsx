@@ -48,6 +48,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
   const [selectedCountryName, setSelectedCountryName] = useState<string | undefined>(undefined);
   const [regionLabelData, setRegionLabelData] = useState<FeatureCollection | undefined>(undefined);
   const [regionLabelTooltips, setRegionLabelTooltips] = useState<L.Tooltip[]>([]);
+  const [isDataAvailable, setIsDataAvailable] = useState<boolean>(true);
 
   const onZoomThresholdReached = () => {
     MapOperations.resetSelectedCountryData(
@@ -87,8 +88,12 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
           setRegionNutritionData,
           setIpcRegionData,
           regionLabelData,
-          setRegionLabelData
+          setRegionLabelData,
+          setIsDataAvailable
         );
+        window.gtag('event', `${selectedCountryData.properties.iso3}_country_selected`, {
+          selectedMap: selectedMapType,
+        });
         setSelectedCountryName(selectedCountryData.properties.adm0_name);
         mapRef.current?.fitBounds(L.geoJSON(selectedCountryData as GeoJSON).getBounds(), { animate: true });
       }
@@ -101,6 +106,17 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
       setRegionLabelTooltips([]);
     }
   }, [selectedCountryId, selectedMapType]);
+
+  useEffect(() => {
+    if (isDataAvailable) {
+      const selectedCountryData = countries.features.find(
+        (country) => country.properties.adm0_id === selectedCountryId
+      );
+      mapRef.current?.fitBounds(L.geoJSON(selectedCountryData as GeoJSON).getBounds(), { animate: true });
+    } else {
+      mapRef.current?.zoomOut(4, { animate: true });
+    }
+  }, [isDataAvailable]);
 
   return (
     <MapContainer
@@ -150,7 +166,6 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
               setRegionLabelTooltips={setRegionLabelTooltips}
             />
           ))}
-
           {!selectedCountryId && (
             <Pane name="fcs_raster" style={{ zIndex: 2 }}>
               <TileLayer url="https://static.hungermapdata.org/proteus_tiles/{z}/{x}/{y}.png" tms />

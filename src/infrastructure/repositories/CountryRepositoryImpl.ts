@@ -35,7 +35,14 @@ export default class CountryRepositoryImpl implements CountryRepository {
   }
 
   async getRegionIpcData(countryId: number): Promise<RegionIpc> {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/adm0/${countryId}/ipc.geojson`);
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/adm0/${countryId}/ipc.geojson`;
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch IPC data: HTTP ${response.status} - ${response.statusText}`);
+    }
+
     return response.json();
   }
 

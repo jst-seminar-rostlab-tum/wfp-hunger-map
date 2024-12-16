@@ -9,7 +9,6 @@ import ChartAlternativeSwitchButton from '@/components/Charts/helpers/buttons/Ch
 import ChartDownloadButton from '@/components/Charts/helpers/buttons/ChartDownloadButton';
 import ChartSliderButton from '@/components/Charts/helpers/buttons/ChartSliderButton';
 import ChartSlider from '@/components/Charts/helpers/ChartSlider';
-import { Tooltip } from '@/components/Tooltip/Tooltip';
 import ChartModalProps from '@/domain/props/ChartModalProps';
 
 /**
@@ -40,11 +39,18 @@ export function ChartModal({
       backdrop="blur"
       scrollBehavior="inside"
       onOpenChange={onOpenChange}
-      hideCloseButton
       className="bg-background"
+      classNames={{
+        closeButton: 'mt-3 rounded-lg mr-3',
+      }}
+      closeButton={
+        <Button isIconOnly variant="light" size="sm" onPress={onClose}>
+          <Minus className="h-4 w-4" />
+        </Button>
+      }
     >
       <ModalContent>
-        <ModalHeader className="flex flex-col gap-1">
+        <ModalHeader className="flex flex-col gap-1 mr-12">
           <div className="flex flex-row justify-between w-full h-full">
             <h2 className="flex flex-col justify-center font-normal text-sm sm:text-md md:text-lg"> {title} </h2>
             <div className="flex flex-row w-fit h-full gap-0.5 sm:gap-4 md:gap-6">
@@ -57,13 +63,6 @@ export function ChartModal({
               )}
 
               {!disableDownload && <ChartDownloadButton chartRef={chartRef} chartData={chartData} size={4} />}
-
-              {/* close model button */}
-              <Tooltip text="Close">
-                <Button isIconOnly variant="light" size="sm" onPress={onClose}>
-                  <Minus className="h-4 w-4" />
-                </Button>
-              </Tooltip>
             </div>
           </div>
         </ModalHeader>

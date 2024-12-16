@@ -3,7 +3,8 @@ import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@nextu
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { Minus } from 'iconsax-react';
-import { useRef } from 'react';
+import { useTheme } from 'next-themes';
+import { useEffect, useRef, useState } from 'react';
 
 import ChartAlternativeSwitchButton from '@/components/Charts/helpers/buttons/ChartAlternativeSwitchButton';
 import ChartDownloadButton from '@/components/Charts/helpers/buttons/ChartDownloadButton';
@@ -31,7 +32,15 @@ export function ChartModal({
   showSlider,
   setShowSlider,
 }: ChartModalProps) {
+  const { theme } = useTheme();
+
   const chartRef = useRef<HighchartsReact.RefObject | null>(null);
+  const [chartKey, setChartKey] = useState(0);
+
+  // if chart changes -> force chart to remount -> chart animation will be re-triggered
+  useEffect(() => {
+    setChartKey((prev) => prev + 1);
+  }, [theme, alternativeSwitchButtonProps?.showAlternativeChart, sliderProps?.selectedSliderRange, chartData]);
 
   return (
     <Modal
@@ -76,6 +85,7 @@ export function ChartModal({
               highcharts={Highcharts}
               options={chartOptions}
               ref={chartRef}
+              key={chartKey}
               containerProps={{ style: { width: '100%', height: '45dvh', borderRadius: '0 0 0.5rem 0.5rem' } }}
             />
           </div>

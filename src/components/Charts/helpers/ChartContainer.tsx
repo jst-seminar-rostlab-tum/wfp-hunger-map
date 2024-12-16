@@ -47,6 +47,7 @@ export function ChartContainer({
   const { theme } = useTheme();
 
   const chartRef = useRef<HighchartsReact.RefObject | null>(null);
+  const [chartKey, setChartKey] = useState(0);
 
   // full screen modal state handling
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
@@ -57,6 +58,7 @@ export function ChartContainer({
     // therefore we synchronize the update with the next repaint cycle, ensuring the CSS variables are updated
     const rafId = requestAnimationFrame(() => {
       recalculateChartOptions();
+      setChartKey((prev) => prev + 1); // forces chart to remount -> chart animation will be re-triggered
     });
     return () => cancelAnimationFrame(rafId);
   }, [theme]);
@@ -64,6 +66,7 @@ export function ChartContainer({
   // handling chart type switch, data changes and slider changes
   useEffect(() => {
     recalculateChartOptions();
+    setChartKey((prev) => prev + 1); // forces chart to remount -> chart animation will be re-triggered
   }, [alternativeSwitchButtonProps?.showAlternativeChart, sliderProps?.selectedSliderRange, chartData]);
 
   // handling the x-axis range slider visibility
@@ -123,6 +126,7 @@ export function ChartContainer({
           highcharts={Highcharts}
           options={chartOptions}
           ref={chartRef}
+          key={chartKey}
           containerProps={{
             style: {
               width: '100%',

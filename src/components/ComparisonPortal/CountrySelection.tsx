@@ -1,8 +1,7 @@
 'use client';
 
 import { Select, SelectItem } from '@nextui-org/react';
-import { useSearchParams } from 'next/navigation';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { CountrySelectionProps } from '@/domain/props/CountrySelectionProps';
 import { CountrySelectionOperations } from '@/operations/comparison-portal/CountrySelectionOperations';
@@ -14,17 +13,10 @@ export default function CountrySelection({
   selectedCountries,
   setSelectedCountries,
 }: CountrySelectionProps) {
-  const searchParams = useSearchParams();
-
-  const searchParamCountryCodes = useMemo(() => searchParams.get('countries')?.split(',') ?? [], [searchParams]);
-
-  // Sync selected countries when search params change
-  useEffect(() => {
-    const newSelectedCountries = countryMapData.features.filter((availableCountry) =>
-      searchParamCountryCodes.includes(availableCountry.properties.adm0_id.toString())
-    );
-    setSelectedCountries(newSelectedCountries);
-  }, [searchParamCountryCodes, countryMapData, setSelectedCountries]);
+  const selectedKeys = useMemo(
+    () => selectedCountries?.map((country) => country.properties.adm0_id.toString()),
+    [selectedCountries]
+  );
 
   const disabledKeys = useMemo(() => {
     if (!selectedCountries) return [];
@@ -51,8 +43,8 @@ export default function CountrySelection({
         onSelectionChange={(keys) =>
           CountrySelectionOperations.onSelectionChange(keys, setSelectedCountries, countryMapData)
         }
-        defaultSelectedKeys={searchParamCountryCodes}
-        selectedKeys={selectedCountries?.map((country) => country.properties.adm0_id.toString())}
+        defaultSelectedKeys={selectedKeys}
+        selectedKeys={selectedKeys}
         disabledKeys={disabledKeys}
         className="w-full"
         variant="faded"

@@ -24,9 +24,7 @@ export default function CountryComparisonAccordion({
       if (!selectedCountries) return;
       const invalidCountryName = CountryComparisonOperations.getCountryNameById(invalidCountryId, selectedCountries);
       CountryComparisonOperations.showDataNotFoundSnackBar(showSnackBar, invalidCountryName);
-      setSelectedCountries((prevCountries) =>
-        prevCountries?.filter((country) => country.properties.adm0_id !== invalidCountryId)
-      );
+      setSelectedCountries(selectedCountries.filter((country) => country.properties.adm0_id !== invalidCountryId));
     }
   );
 

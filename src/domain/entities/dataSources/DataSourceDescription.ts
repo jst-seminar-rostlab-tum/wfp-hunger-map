@@ -1,8 +1,10 @@
-import { ReactNode } from 'react';
+import { ReactElement, ReactNode } from 'react';
 
 export default interface DataSourceDescription {
-  label: string;
-  description: ReactNode;
+  title: string;
+  legendLabel?: string;
+  summary: ReactNode;
+  description?: string | ReactElement;
   readMoreLink?: string;
   dataSource: ReactNode;
   dataSourceLink?: string;

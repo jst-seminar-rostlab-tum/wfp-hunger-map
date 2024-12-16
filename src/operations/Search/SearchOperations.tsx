@@ -52,14 +52,17 @@ export class SearchOperations {
   }
 
   static sanitizeTableRow(item: DataSourceDescription): string {
-    return SearchOperations.sanitizeText(`${item.label}
-      ${SearchOperations.sanitizeReactNode(item.description)}
+    return SearchOperations.sanitizeText(
+      `${item.title}
+      ${SearchOperations.sanitizeReactNode(item.summary)}
       ${SearchOperations.sanitizeReactNode(item.dataSource)}
       ${item.updateInterval?.toLowerCase() ?? ''}
-      ${item.updateDetails?.map((d) => `${d.interval} ${SearchOperations.sanitizeReactNode(d.label)}`)?.join(' ') ?? ''}`);
+      ${item.updateDetails?.map((d) => `${d.interval} ${SearchOperations.sanitizeReactNode(d.label)}`)?.join(' ') ?? ''}`
+    );
   }
 
   private static sanitizeReactNode(item: ReactNode): string {
+    if (item === undefined) return '';
     return reactElementToJsxString(item)
       .replace(/<Abbreviation abbreviation="([^"]*)" \/>/g, '$1')
       .replace(/<[^>]*>/g, '')

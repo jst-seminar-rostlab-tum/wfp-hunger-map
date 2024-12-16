@@ -18,7 +18,9 @@ function formatDataSourceTable(dataSources: DataSourceDescriptionItems) {
         <RecursiveHighlighter>
           <>
             <div className="text-base pb-3 block">
-              <b className={clsx('block pt-0.5 pr-2', { 'float-left': tableRow.updateInterval })}>{tableRow.label}</b>{' '}
+              <b className={clsx('block pt-0.5 pr-2', { 'float-left': tableRow.updateInterval })}>
+                {tableRow.legendLabel ?? tableRow.title}
+              </b>{' '}
               {tableRow.updateInterval && (
                 <Chip size="sm" color="primary">
                   {tableRow.updateInterval}
@@ -26,7 +28,7 @@ function formatDataSourceTable(dataSources: DataSourceDescriptionItems) {
               )}
             </div>
             <span>
-              {tableRow.description}
+              {tableRow.summary}
               {tableRow.readMoreLink && (
                 <>
                   {' '}

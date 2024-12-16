@@ -1,7 +1,5 @@
-import { ReactElement } from 'react';
+import DataSourceDescription from '@/domain/entities/dataSources/DataSourceDescription';
 
-export interface WikiEntry {
+export interface WikiEntry extends DataSourceDescription {
   key: string;
-  title: string;
-  content: string | ReactElement;
 }

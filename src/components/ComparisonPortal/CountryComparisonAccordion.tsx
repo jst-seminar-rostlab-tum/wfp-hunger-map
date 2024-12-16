@@ -13,6 +13,7 @@ import AccordionContainer from '../Accordions/AccordionContainer';
 export default function CountryComparisonAccordion({
   selectedCountries,
   setSelectedCountries,
+  setDisabledCountryIds,
 }: CountryComparisonAccordionProps) {
   const { showSnackBar } = useSnackbar();
 
@@ -25,6 +26,7 @@ export default function CountryComparisonAccordion({
       const invalidCountryName = CountryComparisonOperations.getCountryNameById(invalidCountryId, selectedCountries);
       CountryComparisonOperations.showDataNotFoundSnackBar(showSnackBar, invalidCountryName);
       setSelectedCountries(selectedCountries.filter((country) => country.properties.adm0_id !== invalidCountryId));
+      setDisabledCountryIds((prevDisabledCountryIds) => [...prevDisabledCountryIds, invalidCountryId.toString()]);
     }
   );
 

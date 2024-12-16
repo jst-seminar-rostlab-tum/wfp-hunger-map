@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+
 import { useSelectedCountries } from '@/domain/hooks/queryParamsHooks.ts';
 import CountryComparisonProps from '@/domain/props/CountryComparisonProps';
 
@@ -8,6 +10,7 @@ import CountrySelection from './CountrySelection';
 
 export default function CountryComparison({ countryMapData, globalFcsData }: CountryComparisonProps) {
   const [selectedCountries, setSelectedCountries] = useSelectedCountries(countryMapData);
+  const [disabledCountryIds, setDisabledCountryIds] = useState<string[]>([]);
 
   return (
     <div>
@@ -16,8 +19,13 @@ export default function CountryComparison({ countryMapData, globalFcsData }: Cou
         globalFcsData={globalFcsData}
         selectedCountries={selectedCountries}
         setSelectedCountries={setSelectedCountries}
+        disabledCountryIds={disabledCountryIds}
       />
-      <CountryComparisonAccordion selectedCountries={selectedCountries} setSelectedCountries={setSelectedCountries} />
+      <CountryComparisonAccordion
+        selectedCountries={selectedCountries}
+        setSelectedCountries={setSelectedCountries}
+        setDisabledCountryIds={setDisabledCountryIds}
+      />
     </div>
   );
 }

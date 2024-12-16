@@ -6,4 +6,5 @@ export interface CountrySelectionProps {
   globalFcsData: GlobalFcsData;
   selectedCountries?: CountryMapData[];
   setSelectedCountries: (countries: CountryMapData[]) => void;
+  disabledCountryIds: string[];
 }

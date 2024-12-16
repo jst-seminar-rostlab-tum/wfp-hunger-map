@@ -12,27 +12,31 @@ export default function CountrySelection({
   globalFcsData,
   selectedCountries,
   setSelectedCountries,
+  disabledCountryIds,
 }: CountrySelectionProps) {
   const selectedKeys = useMemo(
     () => selectedCountries?.map((country) => country.properties.adm0_id.toString()),
     [selectedCountries]
   );
 
+  const availableCountries = useMemo(() => {
+    return countryMapData.features.filter((country) => FcsChoroplethOperations.checkIfActive(country, globalFcsData));
+  }, [countryMapData, globalFcsData]);
+
   const disabledKeys = useMemo(() => {
     if (!selectedCountries) return [];
-    return countryMapData.features
+    return availableCountries
       .filter(
         (country) =>
-          // filter out countries that don't have fcs data
-          !FcsChoroplethOperations.checkIfActive(country, globalFcsData) ||
           // if there are already 5 selected countries, disable the rest
-          (selectedCountries.length >= 5 &&
-            !selectedCountries.find(
-              (selectedCountry) => selectedCountry.properties.adm0_id === country.properties.adm0_id
-            ))
+          selectedCountries.length >= 5 &&
+          !selectedCountries.find(
+            (selectedCountry) => selectedCountry.properties.adm0_id === country.properties.adm0_id
+          )
       )
-      .map((country) => country.properties.adm0_id.toString());
-  }, [countryMapData, globalFcsData, selectedCountries]);
+      .map((country) => country.properties.adm0_id.toString())
+      .concat(disabledCountryIds);
+  }, [selectedCountries, availableCountries, disabledCountryIds]);
 
   return (
     <div className="pb-4 space-y-6">
@@ -50,7 +54,7 @@ export default function CountrySelection({
         variant="faded"
         color="primary"
       >
-        {countryMapData.features
+        {availableCountries
           .sort((a, b) => a.properties.adm0_name.localeCompare(b.properties.adm0_name))
           .map((country) => (
             <SelectItem

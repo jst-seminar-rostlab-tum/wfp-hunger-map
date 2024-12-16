@@ -1,8 +1,7 @@
 'use client';
 
 import Highcharts from 'highcharts';
-import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { ChartContainer } from '@/components/Charts/helpers/ChartContainer';
 import { LineChartData } from '@/domain/entities/charts/LineChartData';
@@ -47,8 +46,6 @@ export function LineChart({
   disableXAxisSlider,
   disableDownload,
 }: LineChartProps) {
-  const { theme } = useTheme();
-
   // make sure data is converted to `LineChartData`
   const lineChartData: LineChartData = LineChartOperations.convertToLineChartData(data);
 
@@ -63,8 +60,8 @@ export function LineChart({
     LineChartOperations.getHighChartOptions(lineChartData)
   );
 
-  // general function to update the chart options -> only used by the following `useEffect` hooks
-  const updateChartOptions = () => {
+  // function to update/recalculate the chart options
+  const recalculateChartOptions = () => {
     // also handling changing the x-axis range using the `LineChartXAxisSlider`;
     // special: if the selected x-axis range has length 1 -> bar chart is displayed
     if (showBarChart || selectedXAxisRange[1] - selectedXAxisRange[0] === 0) {
@@ -77,21 +74,6 @@ export function LineChart({
       );
     }
   };
-
-  // handling the line and bar chart switch, selected x-axis range changes and data changes
-  useEffect(() => {
-    updateChartOptions();
-  }, [showBarChart, selectedXAxisRange, data]);
-
-  // handling the theme switch
-  useEffect(() => {
-    // `theme` change does not guarantee that the NextUI CSS colors have already been changed;
-    // therefore we synchronize the update with the next repaint cycle, ensuring the CSS variables are updated
-    const rafId = requestAnimationFrame(() => {
-      updateChartOptions();
-    });
-    return () => cancelAnimationFrame(rafId);
-  }, [theme]);
 
   // chart slider props - to manipulate the shown x-axis range
   const sliderProps = disableXAxisSlider
@@ -115,8 +97,9 @@ export function LineChart({
 
   return (
     <ChartContainer
-      chartOptions={chartOptions}
       chartData={lineChartData}
+      chartOptions={chartOptions}
+      recalculateChartOptions={recalculateChartOptions}
       title={title}
       description={description}
       small={small}

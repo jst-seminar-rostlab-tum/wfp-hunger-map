@@ -1,8 +1,7 @@
 'use client';
 
 import Highcharts from 'highcharts';
-import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { ChartContainer } from '@/components/Charts/helpers/ChartContainer';
 import { ChartType } from '@/domain/enums/ChartType.ts';
@@ -37,28 +36,16 @@ export function CategoricalChart({
   disablePieChartSwitch,
   disableDownload,
 }: CategoricalChartProps) {
-  const { theme } = useTheme();
-
   // controlling if a bar or pie chart is rendered; bar chart is the default
   const [showPieChart, setShowPieChart] = useState<boolean>(false);
   const [chartOptions, setChartOptions] = useState<Highcharts.Options | undefined>(
     CategoricalChartOperations.getHighChartOptions(data, showPieChart)
   );
 
-  // handling the theme switch
-  useEffect(() => {
-    // `theme` change does not guarantee that the NextUI CSS colors have already been changed;
-    // therefore we synchronize the update with the next repaint cycle, ensuring the CSS variables are updated
-    const rafId = requestAnimationFrame(() => {
-      setChartOptions(CategoricalChartOperations.getHighChartOptions(data, showPieChart));
-    });
-    return () => cancelAnimationFrame(rafId);
-  }, [theme]);
-
-  // handling the bar and pie chart switch and data changes
-  useEffect(() => {
+  // function to update/recalculate the chart options
+  const recalculateChartOptions = () => {
     setChartOptions(CategoricalChartOperations.getHighChartOptions(data, showPieChart));
-  }, [showPieChart, data]);
+  };
 
   const alternativeSwitchButtonProps = disablePieChartSwitch
     ? undefined
@@ -71,8 +58,9 @@ export function CategoricalChart({
 
   return (
     <ChartContainer
-      chartOptions={chartOptions}
       chartData={data}
+      chartOptions={chartOptions}
+      recalculateChartOptions={recalculateChartOptions}
       title={title}
       description={description}
       small={small}

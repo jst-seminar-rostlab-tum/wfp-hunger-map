@@ -1,11 +1,10 @@
-'use client';
-
 import { Button } from '@nextui-org/button';
 import { useDisclosure } from '@nextui-org/modal';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { Maximize4 } from 'iconsax-react';
-import { useRef, useState } from 'react';
+import { useTheme } from 'next-themes';
+import { useEffect, useRef, useState } from 'react';
 
 import ChartAlternativeSwitchButton from '@/components/Charts/helpers/buttons/ChartAlternativeSwitchButton';
 import ChartDownloadButton from '@/components/Charts/helpers/buttons/ChartDownloadButton';
@@ -25,8 +24,9 @@ import ChartContainerProps from '@/domain/props/ChartContainerProps';
  * The main goal of this component is to prevents code redundancy between `LineChart` and `CategoricalChart`.
  */
 export function ChartContainer({
-  chartOptions,
   chartData,
+  chartOptions,
+  recalculateChartOptions,
   title,
   description,
   small,
@@ -44,10 +44,27 @@ export function ChartContainer({
   const HEADER_PADDING = title ? 3 : 0;
   const MAIN_BOX_PADDING_FACTOR = noPadding ? 0 : 1;
 
+  const { theme } = useTheme();
+
   const chartRef = useRef<HighchartsReact.RefObject | null>(null);
 
   // full screen modal state handling
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
+
+  // handling the theme switch
+  useEffect(() => {
+    // `theme` change does not guarantee that the NextUI CSS colors have already been changed;
+    // therefore we synchronize the update with the next repaint cycle, ensuring the CSS variables are updated
+    const rafId = requestAnimationFrame(() => {
+      recalculateChartOptions();
+    });
+    return () => cancelAnimationFrame(rafId);
+  }, [theme]);
+
+  // handling chart type switch, data changes and slider changes
+  useEffect(() => {
+    recalculateChartOptions();
+  }, [alternativeSwitchButtonProps?.showAlternativeChart, sliderProps?.selectedSliderRange, chartData]);
 
   // handling the x-axis range slider visibility
   const [showSlider, setShowSlider] = useState(false);

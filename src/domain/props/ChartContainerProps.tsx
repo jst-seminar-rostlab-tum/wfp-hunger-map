@@ -43,8 +43,9 @@ export interface ChartDownloadButtonProps {
  */
 
 export default interface ChartContainerProps {
-  chartOptions?: Highcharts.Options;
   chartData: LineChartData | CategoricalChartData;
+  chartOptions?: Highcharts.Options;
+  recalculateChartOptions: () => void;
 
   title?: string;
   description?: string;

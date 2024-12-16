@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 import ComparisonAccordionSkeleton from '@/components/ComparisonPortal/ComparisonAccordionSkeleton';
 import { useSnackbar } from '@/domain/contexts/SnackbarContext';
@@ -12,7 +12,6 @@ import { CountryComparisonOperations } from '@/operations/comparison-portal/Coun
 import AccordionContainer from '../Accordions/AccordionContainer';
 
 export default function CountryComparisonAccordion({ selectedCountries }: CountryComparisonAccordionProps) {
-  const [expandAll, setExpandAll] = useState(false);
   const { showSnackBar } = useSnackbar();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -47,11 +46,6 @@ export default function CountryComparisonAccordion({ selectedCountries }: Countr
     );
   }, [countryDataQuery, countryIso3DataQuery]);
 
-  useEffect(() => {
-    // expand all items only after the first load
-    if (!expandAll && !isLoading) setExpandAll(true);
-  }, [isLoading]);
-
   const { countryDataList, countryIso3DataList } = useMemo(
     () => CountryComparisonOperations.getFilteredCountryData(countryDataQuery, countryIso3DataQuery),
     [countryDataQuery, countryIso3DataQuery]
@@ -75,5 +69,5 @@ export default function CountryComparisonAccordion({ selectedCountries }: Countr
     );
   }
 
-  return <AccordionContainer multipleSelectionMode loading={isLoading} expandAll={expandAll} items={accordionItems} />;
+  return <AccordionContainer multipleSelectionMode loading={isLoading} items={accordionItems} />;
 }

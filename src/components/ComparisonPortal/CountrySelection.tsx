@@ -1,7 +1,7 @@
 'use client';
 
 import { Select, SelectItem } from '@nextui-org/react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useMemo } from 'react';
 
 import { CountrySelectionProps } from '@/domain/props/CountrySelectionProps';
@@ -15,8 +15,6 @@ export default function CountrySelection({
   setSelectedCountries,
 }: CountrySelectionProps) {
   const searchParams = useSearchParams();
-  const router = useRouter();
-  const pathname = usePathname();
 
   const searchParamCountryCodes = useMemo(() => searchParams.get('countries')?.split(',') ?? [], [searchParams]);
 
@@ -51,7 +49,7 @@ export default function CountrySelection({
         aria-label="Select countries for comparison"
         selectionMode="multiple"
         onSelectionChange={(keys) =>
-          CountrySelectionOperations.onSelectionChange(keys, setSelectedCountries, countryMapData, pathname, router)
+          CountrySelectionOperations.onSelectionChange(keys, setSelectedCountries, countryMapData)
         }
         defaultSelectedKeys={searchParamCountryCodes}
         selectedKeys={selectedCountries?.map((country) => country.properties.adm0_id.toString())}

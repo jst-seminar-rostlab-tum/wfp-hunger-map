@@ -12,12 +12,13 @@ import CountrySelection from './CountrySelection';
 import CountrySelectionSkeleton from './CountrySelectSkeleton';
 
 export default function CountryComparison({ countryMapData, globalFcsData }: CountryComparisonProps) {
-  const [selectedCountries, setSelectedCountries] = useState<CountryMapData[]>([]);
+  const [selectedCountries, setSelectedCountries] = useState<CountryMapData[] | undefined>(undefined);
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   useEffect(() => {
+    if (!selectedCountries) return;
     const countryIds = selectedCountries.map((country) => country.properties.adm0_id);
     const newSearchParam = countryIds.join(',');
     if (newSearchParam !== searchParams.get('countries')) {

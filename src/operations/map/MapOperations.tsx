@@ -26,6 +26,20 @@ export class MapOperations {
 
     const countryRepository = container.resolve<CountryRepository>('CountryRepository');
     try {
+      if (selectedMapType === GlobalInsight.FOOD) {
+        const newRegionData = await countryRepository.getRegionData(selectedCountryData.properties.adm0_id);
+        if (Array.isArray(newRegionData) && newRegionData[1] === 404) {
+          setIsDataAvailable(false);
+        } else if (newRegionData && newRegionData.features) {
+          const hasFcs = newRegionData.features.some((feature) => feature.properties?.fcs !== undefined);
+          setIsDataAvailable(hasFcs);
+          setRegionData({
+            type: 'FeatureCollection',
+            features: newRegionData.features as GeoJsonFeature<Geometry, GeoJsonProperties>[],
+          });
+        }
+      }
+
       if (selectedMapType === GlobalInsight.IPC) {
         try {
           const newIpcRegionData = await countryRepository.getRegionIpcData(selectedCountryData.properties.adm0_id);
@@ -49,12 +63,7 @@ export class MapOperations {
 
       if (selectedMapType === GlobalInsight.FOOD) {
         const newCountryIso3Data = await countryRepository.getCountryIso3Data(selectedCountryData.properties.iso3);
-        if (Array.isArray(newCountryIso3Data) && newCountryIso3Data[1] === 404) {
-          setIsDataAvailable(false);
-        } else {
-          setCountryIso3Data(newCountryIso3Data);
-          setIsDataAvailable(true);
-        }
+        setCountryIso3Data(newCountryIso3Data);
       }
 
       if (selectedMapType === GlobalInsight.NUTRITION) {
@@ -72,17 +81,6 @@ export class MapOperations {
           setRegionNutritionData({
             type: 'FeatureCollection',
             features: newRegionNutritionData.features as GeoJsonFeature<Geometry, GeoJsonProperties>[],
-          });
-        }
-      }
-      if (selectedMapType === GlobalInsight.FOOD) {
-        const newRegionData = await countryRepository.getRegionData(selectedCountryData.properties.adm0_id);
-        const hasFcs = newRegionData.features.some((feature) => feature.properties?.fcs !== undefined);
-        setIsDataAvailable(hasFcs);
-        if (newRegionData && newRegionData.features) {
-          setRegionData({
-            type: 'FeatureCollection',
-            features: newRegionData.features as GeoJsonFeature<Geometry, GeoJsonProperties>[],
           });
         }
       }

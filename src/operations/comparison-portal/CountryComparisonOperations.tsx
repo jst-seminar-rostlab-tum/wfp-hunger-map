@@ -1,6 +1,5 @@
 import { Spacer } from '@nextui-org/react';
 import { UseQueryResult } from '@tanstack/react-query';
-import { ReadonlyURLSearchParams } from 'next/navigation';
 
 import { CategoricalChart } from '@/components/Charts/CategoricalChart';
 import { LineChart } from '@/components/Charts/LineChart';
@@ -23,13 +22,6 @@ import { FcsAccordionOperations } from '@/operations/map/FcsAccordionOperations'
 import { formatToMillion } from '@/utils/formatting.ts';
 
 export class CountryComparisonOperations {
-  static removeCountryFromUrl(searchParams: ReadonlyURLSearchParams, countryId: number) {
-    const countryIdToRemove = countryId.toString();
-    const countryIds = searchParams.get('countries')?.split(',') ?? [];
-    const newCountryIds = countryIds.filter((id) => id !== countryIdToRemove);
-    return newCountryIds.join(',');
-  }
-
   static getFcsChartData(countryDataList: CountryDataRecord[], countryMapData: CountryMapData[]): LineChartData {
     return this.chartWithoutEmptyLines({
       type: LineChartDataType.LINE_CHART_DATA,

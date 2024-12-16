@@ -7,37 +7,37 @@ import { CustomTableData, DataSourceTableData } from '@/domain/props/CustomTable
 import { SearchOperations } from '@/operations/Search/SearchOperations';
 
 function formatDataSourceTable(dataSources: DataSourceTableData) {
-  return dataSources.map((item) => {
+  return Object.entries(dataSources).map(([key, tableRow]) => {
     // remove leading http[s]:// and trailing slash
-    const linkDisplayText = item.dataSourceLink?.split('//')?.pop()?.replace(/\/$/, '');
+    const linkDisplayText = tableRow.dataSourceLink?.split('//')?.pop()?.replace(/\/$/, '');
     return {
-      groupKey: item.label,
-      updateDetails: item.updateDetails,
+      groupKey: key,
+      updateDetails: tableRow.updateDetails,
       groupName: (
         <RecursiveHighlighter>
           <>
             <div className="text-base pb-3 block">
-              <b className={clsx('block pt-0.5 pr-2', { 'float-left': item.updateInterval })}>{item.label}</b>{' '}
-              {item.updateInterval && (
+              <b className={clsx('block pt-0.5 pr-2', { 'float-left': tableRow.updateInterval })}>{tableRow.label}</b>{' '}
+              {tableRow.updateInterval && (
                 <Chip size="sm" color="primary">
-                  {item.updateInterval}
+                  {tableRow.updateInterval}
                 </Chip>
               )}
             </div>
             <span>
-              {item.description}
-              {item.readMoreLink && (
+              {tableRow.description}
+              {tableRow.readMoreLink && (
                 <>
                   {' '}
-                  <StyledLink href={item.readMoreLink} className="text-sm">
+                  <StyledLink href={tableRow.readMoreLink} className="text-sm">
                     Read more...
                   </StyledLink>
                 </>
               )}
             </span>
-            {item.updateDetails && (
+            {tableRow.updateDetails && (
               <ul className="mt-2 !pb-0">
-                {item.updateDetails.map(({ label: detailLabel, interval }) => (
+                {tableRow.updateDetails.map(({ label: detailLabel, interval }) => (
                   <li className="text-sm" key={JSON.stringify(detailLabel)}>
                     {detailLabel}{' '}
                     <Chip className="my-1" color="primary" size="sm">
@@ -55,11 +55,11 @@ function formatDataSourceTable(dataSources: DataSourceTableData) {
           source: (
             <RecursiveHighlighter>
               <>
-                {item.dataSource}
-                {item.dataSourceLink && (
+                {tableRow.dataSource}
+                {tableRow.dataSourceLink && (
                   <>
                     <br />
-                    <StyledLink href={item.dataSourceLink} className="text-sm">
+                    <StyledLink href={tableRow.dataSourceLink} className="text-sm">
                       {linkDisplayText}
                     </StyledLink>
                   </>
@@ -69,7 +69,7 @@ function formatDataSourceTable(dataSources: DataSourceTableData) {
           ),
         },
       ],
-      containedWords: SearchOperations.sanitizeTableRow(item),
+      containedWords: SearchOperations.sanitizeTableRow(tableRow),
     };
   }) as CustomTableData;
 }

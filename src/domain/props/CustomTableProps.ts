@@ -45,7 +45,7 @@ export type DataSourceTableRow = {
   updateDetails?: readonly { label: ReactNode; interval: string }[];
 };
 
-export type DataSourceTableData = DataSourceTableRow[];
+export type DataSourceTableData = { [key: string]: DataSourceTableRow };
 
 export type SimpleTableData = {
   keyColumn: ReactNode;

@@ -26,7 +26,7 @@ export class SearchOperations {
       const tableData: DataSourceTableData | undefined = (item.content as ReactElement)?.props?.data;
       if (!tableData) return { ...item, containedWords: '' };
 
-      const sanitizedTable = tableData.map(SearchOperations.sanitizeTableRow).join(' ');
+      const sanitizedTable = Object.values(tableData).map(SearchOperations.sanitizeTableRow).join(' ');
       return { ...item, containedWords: `${item.title.toLowerCase()} ${sanitizedTable}` };
     });
   }

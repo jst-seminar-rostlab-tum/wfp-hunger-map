@@ -27,7 +27,6 @@ export default function CountryComparisonAccordion({
       setSelectedCountries((prevCountries) =>
         prevCountries?.filter((country) => country.properties.adm0_id !== invalidCountryId)
       );
-      // CountryComparisonOperations.updateIdQueryParams(searchParams, countryId, router, pathname);
     }
   );
 

@@ -1,6 +1,5 @@
 import { Spacer } from '@nextui-org/react';
 import { UseQueryResult } from '@tanstack/react-query';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { ReadonlyURLSearchParams } from 'next/navigation';
 
 import { CategoricalChart } from '@/components/Charts/CategoricalChart';
@@ -29,16 +28,6 @@ export class CountryComparisonOperations {
     const countryIds = searchParams.get('countries')?.split(',') ?? [];
     const newCountryIds = countryIds.filter((id) => id !== countryIdToRemove);
     return newCountryIds.join(',');
-  }
-
-  static updateIdQueryParams(
-    searchParams: ReadonlyURLSearchParams,
-    countryId: number,
-    router: AppRouterInstance,
-    pathname: string
-  ): void {
-    const newCountryIdQueryParams = this.removeCountryFromUrl(searchParams, countryId);
-    router.push(`${pathname}?countries=${newCountryIdQueryParams}`);
   }
 
   static getFcsChartData(countryDataList: CountryDataRecord[], countryMapData: CountryMapData[]): LineChartData {

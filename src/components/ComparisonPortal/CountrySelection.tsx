@@ -54,6 +54,7 @@ export default function CountrySelection({
           CountrySelectionOperations.onSelectionChange(keys, setSelectedCountries, countryMapData, pathname, router)
         }
         defaultSelectedKeys={searchParamCountryCodes}
+        selectedKeys={selectedCountries?.map((country) => country.properties.adm0_id.toString())}
         disabledKeys={disabledKeys}
         className="w-full"
         variant="faded"

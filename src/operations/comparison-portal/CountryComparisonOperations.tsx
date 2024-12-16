@@ -1,5 +1,7 @@
 import { Spacer } from '@nextui-org/react';
 import { UseQueryResult } from '@tanstack/react-query';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { ReadonlyURLSearchParams } from 'next/navigation';
 
 import { CategoricalChart } from '@/components/Charts/CategoricalChart';
 import { LineChart } from '@/components/Charts/LineChart';
@@ -22,6 +24,23 @@ import { FcsAccordionOperations } from '@/operations/map/FcsAccordionOperations'
 import { formatToMillion } from '@/utils/formatting.ts';
 
 export class CountryComparisonOperations {
+  static removeCountryFromUrl(searchParams: ReadonlyURLSearchParams, countryId: number) {
+    const countryIdToRemove = countryId.toString();
+    const countryIds = searchParams.get('countries')?.split(',') ?? [];
+    const newCountryIds = countryIds.filter((id) => id !== countryIdToRemove);
+    return newCountryIds.join(',');
+  }
+
+  static updateIdQueryParams(
+    searchParams: ReadonlyURLSearchParams,
+    countryId: number,
+    router: AppRouterInstance,
+    pathname: string
+  ): void {
+    const newCountryIdQueryParams = this.removeCountryFromUrl(searchParams, countryId);
+    router.push(`${pathname}?countries=${newCountryIdQueryParams}`);
+  }
+
   static getFcsChartData(countryDataList: CountryDataRecord[], countryMapData: CountryMapData[]): LineChartData {
     return this.chartWithoutEmptyLines({
       type: LineChartDataType.LINE_CHART_DATA,

@@ -24,7 +24,7 @@ export default function CountryComparison({ countryMapData, globalFcsData }: Cou
         />
       </Suspense>
       <Suspense fallback={<ComparisonAccordionSkeleton />}>
-        <CountryComparisonAccordion selectedCountries={selectedCountries} setSelectedCountries={setSelectedCountries} />
+        <CountryComparisonAccordion selectedCountries={selectedCountries} />
       </Suspense>
     </div>
   );

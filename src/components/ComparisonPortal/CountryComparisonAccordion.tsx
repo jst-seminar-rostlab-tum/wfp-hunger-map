@@ -1,5 +1,6 @@
 'use client';
 
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
 import ComparisonAccordionSkeleton from '@/components/ComparisonPortal/ComparisonAccordionSkeleton';
@@ -10,12 +11,12 @@ import { CountryComparisonOperations } from '@/operations/comparison-portal/Coun
 
 import AccordionContainer from '../Accordions/AccordionContainer';
 
-export default function CountryComparisonAccordion({
-  selectedCountries,
-  setSelectedCountries,
-}: CountryComparisonAccordionProps) {
+export default function CountryComparisonAccordion({ selectedCountries }: CountryComparisonAccordionProps) {
   const [expandAll, setExpandAll] = useState(false);
   const { showSnackBar } = useSnackbar();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
 
   const countryDataQuery = useCountryDataListQuery(
     // selected country ids
@@ -25,7 +26,7 @@ export default function CountryComparisonAccordion({
       if (!selectedCountries) return;
       const countryName = CountryComparisonOperations.getCountryNameById(countryId, selectedCountries);
       CountryComparisonOperations.showDataNotFoundSnackBar(showSnackBar, countryName);
-      setSelectedCountries(selectedCountries.filter((country) => country.properties.adm0_id !== countryId));
+      CountryComparisonOperations.updateIdQueryParams(searchParams, countryId, router, pathname);
     }
   );
 
@@ -37,7 +38,6 @@ export default function CountryComparisonAccordion({
       if (!selectedCountries) return;
       const countryName = CountryComparisonOperations.getCountryNameByIso3(countryCode, selectedCountries);
       CountryComparisonOperations.showDataNotFoundSnackBar(showSnackBar, countryName);
-      setSelectedCountries(selectedCountries.filter((country) => country.properties.iso3 !== countryCode));
     }
   );
 

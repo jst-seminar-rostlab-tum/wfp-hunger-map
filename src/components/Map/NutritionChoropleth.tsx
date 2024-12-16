@@ -1,8 +1,8 @@
 import { Feature } from 'geojson';
 import L from 'leaflet';
 import { useTheme } from 'next-themes';
-import React, { useEffect, useRef, useState } from 'react';
-import { GeoJSON, useMap } from 'react-leaflet';
+import React, { useEffect, useRef } from 'react';
+import { GeoJSON } from 'react-leaflet';
 
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
@@ -21,13 +21,12 @@ export default function NutritionChoropleth({
   regionNutritionData,
   selectedCountryName,
   regionLabelData,
+  setRegionLabelTooltips,
 }: NutritionChoroplethProps) {
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
   const { theme } = useTheme();
   const { data: nutritionData } = useNutritionQuery(true);
-  const [regionLabelTooltips, setRegionLabelTooltips] = useState<L.Tooltip[]>([]);
-  const map = useMap();
 
   // adding the country name as a tooltip to each layer (on hover)
   // the tooltip is not shown if the country is selected or there is no data available for the country
@@ -43,11 +42,6 @@ export default function NutritionChoropleth({
         layer.unbindTooltip();
       }
     });
-
-    if (selectedCountryId !== data.features[0].properties?.adm0_id) {
-      regionLabelTooltips.forEach((tooltip) => tooltip.removeFrom(map));
-      setRegionLabelTooltips([]);
-    }
   }, [selectedCountryId]);
 
   return (

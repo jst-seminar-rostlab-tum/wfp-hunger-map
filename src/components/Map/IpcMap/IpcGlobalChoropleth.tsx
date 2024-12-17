@@ -19,13 +19,8 @@ function IpcGlobalChoropleth({
     GeoJsonProperties
   >;
 
-  const filteredIpcColorData = {
-    ...ipcColorData,
-    features: ipcColorData.features.filter((feature) => feature?.properties?.adm0_id !== selectedCountryId),
-  };
-
   const handleCountryFeature = (feature: Feature<Geometry, GeoJsonProperties>, layer: L.Layer) => {
-    IpcChoroplethOperations.initializeCountryLayer(feature, layer, ipcData, setSelectedCountryId);
+    IpcChoroplethOperations.initializeCountryLayer(feature, layer, ipcData, setSelectedCountryId, selectedCountryId!);
   };
 
   return (
@@ -35,9 +30,18 @@ function IpcGlobalChoropleth({
         if (!feature) {
           return {};
         }
+
+        if (feature.properties.adm0_id === selectedCountryId) {
+          return {
+            color: 'hsl(var(--nextui-countryBorders))',
+            weight: 1,
+            fillOpacity: 1,
+            fillColor: IpcChoroplethOperations.fillCountryIpc(feature?.properties?.ipcPhase),
+          };
+        }
         return IpcChoroplethOperations.ipcGlobalStyle(feature, feature?.properties.adm0_id, ipcData, theme === 'dark');
       }}
-      data={filteredIpcColorData}
+      data={ipcColorData}
       onEachFeature={handleCountryFeature}
     />
   );

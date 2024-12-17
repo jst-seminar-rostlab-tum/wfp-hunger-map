@@ -19,7 +19,7 @@ export default class NutritionStateChoroplethOperations {
   };
 
   public static nutritionFillColor(value: number | null): string {
-    if (!value) return 'hsl(var(--nextui-notAnalyzed), 0.6)';
+    if (!value) return 'hsl(var(--nextui-notAnalyzed))';
     if (value <= 19) return '#fff3f3';
     if (value <= 39) return '#fcd0ce';
     if (value <= 59) return '#f88884';

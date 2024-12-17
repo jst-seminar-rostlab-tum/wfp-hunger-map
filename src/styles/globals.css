@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --nextui-notAnalyzed: 0, 0%, 55%;
-}
-
 @layer base {
   .text-content {
     @apply max-w-screen-lg mx-auto;

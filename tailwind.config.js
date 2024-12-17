@@ -217,8 +217,6 @@ const config = {
             nutritionActual: '#FFB74D',
             nutritionPredicted: '#E3F2FD',
 
-            notAnalyzed: '#8C8C8C',
-
             //animation
             nutritionAnimation: '#F7B750',
             fcsAnimation: '#157dbc',
@@ -236,6 +234,8 @@ const config = {
             ipcPhase3: '#e88519',
             ipcPhase4: '#cd1919',
             ipcPhase5: '#731919',
+            notAnalyzed: '#CFCFCF',
+            ipcHoverRegion: '#A5B1B3',
           },
         },
         dark: {
@@ -284,6 +284,8 @@ const config = {
             chartsXAxisLine: '#757575',
             chartsGridLine: '#424242',
             chartForecast: '#0e6983',
+            notAnalyzed: '#A6A6A6',
+            ipcHoverRegion: '#757E80',
           },
         },
       },

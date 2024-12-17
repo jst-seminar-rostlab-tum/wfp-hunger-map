@@ -4,5 +4,4 @@ module.exports = {
   generateRobotsTxt: true,
   changefreq: 'daily',
   priority: 0.7,
-  exclude: ['/admin', '/api'], 
 };

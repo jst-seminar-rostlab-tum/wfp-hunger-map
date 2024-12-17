@@ -45,6 +45,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
   const [regionNutritionData, setRegionNutritionData] = useState<FeatureCollection | undefined>();
   const [ipcRegionData, setIpcRegionData] = useState<FeatureCollection<Geometry, GeoJsonProperties> | undefined>();
   const [selectedCountryName, setSelectedCountryName] = useState<string | undefined>(undefined);
+  const [isDataAvailable, setIsDataAvailable] = useState<boolean>(true);
 
   const onZoomThresholdReached = () => {
     MapOperations.resetSelectedCountryData(
@@ -82,13 +83,28 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
           setCountryData,
           setCountryIso3Data,
           setRegionNutritionData,
-          setIpcRegionData
+          setIpcRegionData,
+          setIsDataAvailable
         );
+        window.gtag('event', `${selectedCountryData.properties.iso3}_country_selected`, {
+          selectedMap: selectedMapType,
+        });
         setSelectedCountryName(selectedCountryData.properties.adm0_name);
         mapRef.current?.fitBounds(L.geoJSON(selectedCountryData as GeoJSON).getBounds(), { animate: true });
       }
     }
   }, [selectedCountryId, selectedMapType]);
+
+  useEffect(() => {
+    if (isDataAvailable) {
+      const selectedCountryData = countries.features.find(
+        (country) => country.properties.adm0_id === selectedCountryId
+      );
+      mapRef.current?.fitBounds(L.geoJSON(selectedCountryData as GeoJSON).getBounds(), { animate: true });
+    } else {
+      mapRef.current?.zoomOut(4, { animate: true });
+    }
+  }, [isDataAvailable]);
 
   return (
     <MapContainer

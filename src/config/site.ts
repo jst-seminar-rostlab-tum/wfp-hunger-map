@@ -1,5 +1,5 @@
 export const siteConfig = {
-  name: 'Global Hunger Map - WFP Initiative',
+  name: 'HungerMap LIVE',
   description:
     'Explore the Global Hunger Map by WFP for real-time insights on global hunger trends, food insecurity data, and regional analysis to support humanitarian initiatives.',
   navItems: [
@@ -10,7 +10,16 @@ export const siteConfig = {
   ],
   navMenuItems: [],
   links: {},
-  domain: 'https://www.wfp-hungermap.com', // todo: update domain
+  keywords: [
+    'global hunger map',
+    'WFP hunger data',
+    'food insecurity trends',
+    'humanitarian aid insights',
+    'hunger statistics',
+    'real-time hunger data',
+    'WFP hunger map',
+  ],
+  domain: 'https://www.wfp-hungermap.com', // TODO: update domain after real prod
 };
 
 export type SiteConfig = typeof siteConfig;

@@ -29,15 +29,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     title: 'HungerMap',
   },
-  keywords: [
-    'global hunger map',
-    'WFP hunger data',
-    'food insecurity trends',
-    'humanitarian aid insights',
-    'hunger statistics',
-    'real-time hunger data',
-    'WFP hunger map',
-  ], // may not be used by search engines but its good to have
+  keywords: siteConfig.keywords, // may not be used by search engines but its good to have
   openGraph: {
     title: siteConfig.name,
     description: siteConfig.description,

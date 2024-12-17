@@ -6,9 +6,11 @@ import CountryHoverPopover from '@/components/CountryHoverPopover/CountryHoverPo
 import container from '@/container';
 import { MAP_MAX_ZOOM, REGION_LABEL_SENSITIVITY, SELECTED_COUNTRY_ZOOM_THRESHOLD } from '@/domain/constant/map/Map.ts';
 import { Feature } from '@/domain/entities/common/Feature';
+import { AdditionalCountryData } from '@/domain/entities/country/AdditionalCountryData.ts';
 import { CountryData } from '@/domain/entities/country/CountryData.ts';
 import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data.ts';
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
+import { CountryMimiData } from '@/domain/entities/country/CountryMimiData.ts';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
 import CountryRepository from '@/domain/repositories/CountryRepository.ts';
 
@@ -31,17 +33,28 @@ export class MapOperations {
     const countryRepository = container.resolve<CountryRepository>('CountryRepository');
     try {
       if (selectedMapType === GlobalInsight.FOOD) {
-        const newRegionData = await countryRepository.getRegionData(selectedCountryData.properties.adm0_id);
-        if (Array.isArray(newRegionData) && newRegionData[1] === 404) {
+        const dataPromises: [
+          Promise<AdditionalCountryData>,
+          Promise<FeatureCollection<Geometry, GeoJsonProperties>> | Promise<undefined>,
+        ] = [
+          countryRepository.getRegionData(selectedCountryData.properties.adm0_id),
+          !regionLabelData ? countryRepository.getRegionLabelData() : Promise.resolve(undefined),
+        ];
+        const data: [AdditionalCountryData, FeatureCollection<Geometry, GeoJsonProperties> | undefined] =
+          await Promise.all(dataPromises);
+
+        if (Array.isArray(data[0]) && data[0][1] === 404) {
           setIsDataAvailable(false);
-        } else if (newRegionData && newRegionData.features) {
-          const hasFcs = newRegionData.features.some((feature) => feature.properties?.fcs !== undefined);
+        } else if (data[0] && data[0].features) {
+          const hasFcs = data[0].features.some((feature) => feature.properties?.fcs !== undefined);
           setIsDataAvailable(hasFcs);
           setRegionData({
             type: 'FeatureCollection',
-            features: newRegionData.features as GeoJsonFeature<Geometry, GeoJsonProperties>[],
+            features: data[0].features as GeoJsonFeature<Geometry, GeoJsonProperties>[],
           });
         }
+
+        if (!regionLabelData) setRegionLabelData(data[1]);
       }
 
       if (selectedMapType === GlobalInsight.IPC) {
@@ -71,27 +84,32 @@ export class MapOperations {
       }
 
       if (selectedMapType === GlobalInsight.NUTRITION) {
-        const newRegionNutritionData = await countryRepository.getRegionNutritionData(
-          selectedCountryData.properties.adm0_id
-        );
-        const hasNutrition = newRegionNutritionData.features.some(
+        const dataPromises: [
+          Promise<CountryMimiData>,
+          Promise<FeatureCollection<Geometry, GeoJsonProperties>> | Promise<undefined>,
+        ] = [
+          countryRepository.getRegionNutritionData(selectedCountryData.properties.adm0_id),
+          !regionLabelData ? countryRepository.getRegionLabelData() : Promise.resolve(undefined),
+        ];
+
+        const data: [CountryMimiData, FeatureCollection<Geometry, GeoJsonProperties> | undefined] =
+          await Promise.all(dataPromises);
+
+        const hasNutrition = data[0].features.some(
           (feature) =>
             feature.properties?.nutrition &&
             typeof feature.properties.nutrition === 'object' &&
             Object.keys(feature.properties.nutrition).length > 0
         );
         setIsDataAvailable(hasNutrition);
-        if (newRegionNutritionData && newRegionNutritionData.features) {
+        if (data[0] && data[0].features) {
           setRegionNutritionData({
             type: 'FeatureCollection',
-            features: newRegionNutritionData.features as GeoJsonFeature<Geometry, GeoJsonProperties>[],
+            features: data[0].features as GeoJsonFeature<Geometry, GeoJsonProperties>[],
           });
         }
-      }
 
-      if ((selectedMapType === GlobalInsight.FOOD || selectedMapType === GlobalInsight.NUTRITION) && !regionLabelData) {
-        const newRegionLabelData = await countryRepository.getRegionLabelData();
-        setRegionLabelData(newRegionLabelData);
+        if (!regionLabelData) setRegionLabelData(data[1]);
       }
 
       setCountryClickLoading(false);

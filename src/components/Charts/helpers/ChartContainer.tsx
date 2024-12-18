@@ -43,6 +43,7 @@ export function ChartContainer({
   const ICON_BUTTON_SIZE = small ? 3 : 4;
   const HEADER_PADDING = title ? 3 : 0;
   const MAIN_BOX_PADDING_FACTOR = noPadding ? 0 : 1;
+  const BOX_BACKGROUND = transparentBackground ? 'bg-transparent' : 'bg-background';
 
   const chartRef = useRef<HighchartsReact.RefObject | null>(null);
 
@@ -51,9 +52,24 @@ export function ChartContainer({
 
   // handling the x-axis range slider visibility
   const [showSlider, setShowSlider] = useState(false);
+
+  // if chartOptions is undefined -> display "no data available"
+  if (!chartOptions) {
+    return (
+      <div
+        className={`w-full h-40 flex-col rounded-md ${BOX_BACKGROUND} text-secondary text-xs flex flex-row justify-center items-center`}
+      >
+        <p>no data available</p>
+        <p className="max-w-52 pt-1 text-[0.65rem] font-light text-center">
+          &#39;{title}&#39; chart cannot be displayed
+        </p>
+      </div>
+    );
+  }
+
   return (
     <>
-      <div className={`w-full h-fit flex-col rounded-md ${transparentBackground ? 'bg-transparent' : 'bg-background'}`}>
+      <div className={`w-full h-fit flex-col rounded-md ${BOX_BACKGROUND}`}>
         <div
           className={`w-full h-fit flex flex-row justify-between items-start gap-1 pl-${3 * MAIN_BOX_PADDING_FACTOR} pb-${HEADER_PADDING}`}
         >
@@ -93,6 +109,7 @@ export function ChartContainer({
             }
           </div>
         </div>
+
         {
           // description text element should only be rendered if description is available
           description && (
@@ -101,6 +118,7 @@ export function ChartContainer({
             </p>
           )
         }
+
         {/* the actual chart */}
         <HighchartsReact
           highcharts={Highcharts}
@@ -114,6 +132,7 @@ export function ChartContainer({
             },
           }}
         />
+
         {
           // slider to e.g. manipulate the plotted x-axis range of the chart
           showSlider && sliderProps && <ChartSlider {...sliderProps} />

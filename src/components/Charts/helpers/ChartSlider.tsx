@@ -1,5 +1,3 @@
-'use client';
-
 import { Slider } from '@nextui-org/slider';
 
 import { ChartSliderProps } from '@/domain/props/ChartContainerProps';

@@ -13,7 +13,7 @@ import { ChartType } from '@/domain/enums/ChartType.ts';
 export interface LineChartSliderButtonProps {
   showSlider: boolean;
   setShowSlider: Dispatch<SetStateAction<boolean>>;
-  size: number;
+  size?: number;
 }
 
 export interface ChartAlternativeSwitchButtonProps {
@@ -35,7 +35,7 @@ export interface ChartSliderProps {
 export interface ChartDownloadButtonProps {
   chartRef: MutableRefObject<HighchartsReact.RefObject | null>;
   chartData: LineChartData | CategoricalChartData;
-  size: number;
+  size?: number;
 }
 
 /**

@@ -2,7 +2,7 @@
 
 import Highcharts from 'highcharts';
 import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { ChartContainer } from '@/components/Charts/helpers/ChartContainer';
 import { LineChartData } from '@/domain/entities/charts/LineChartData';
@@ -54,9 +54,15 @@ export function LineChart({
   const lineChartOptions: Highcharts.Options | undefined = LineChartOperations.getHighChartOptions(lineChartData);
 
   // the `selectedXAxisRange` saves the to be rendered x-axis range of the chart
-  // can be changed using the `LinkeChartXAxisSlider` if the param `xAxisSlider==true`
-  const xAxisLength: number = LineChartOperations.getDistinctXAxisValues(lineChartData).length;
-  const [selectedXAxisRange, setSelectedXAxisRange] = useState([0, xAxisLength - 1]);
+  // can be changed using the `LineChartXAxisSlider` if the param `xAxisSlider==true`
+  const [selectedXAxisRange, setSelectedXAxisRange] = useState([0, 0]);
+  const xAxisLength = useMemo(() => {
+    return LineChartOperations.getDistinctXAxisValues(lineChartData).length;
+  }, [lineChartData]);
+
+  useEffect(() => {
+    setSelectedXAxisRange([0, xAxisLength - 1]);
+  }, [xAxisLength]);
 
   // controlling if a line or bar chart is rendered; line chart is the default
   const [showBarChart, setShowBarChart] = useState(false);
@@ -75,7 +81,7 @@ export function LineChart({
         LineChartOperations.getHighChartOptions(lineChartData, selectedXAxisRange[0], selectedXAxisRange[1])
       );
     }
-  }, [showBarChart, theme, selectedXAxisRange]);
+  }, [showBarChart, theme, selectedXAxisRange, lineChartData]);
 
   // chart slider props - to manipulate the shown x-axis range
   const sliderProps = disableXAxisSlider

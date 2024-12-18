@@ -135,15 +135,17 @@ export default class LineChartOperations {
           lines: [
             {
               name: 'Headline Inflation',
-              dataPoints: data.headline.data.map((p) => {
-                return { x: new Date(p.x).getTime(), y: p.y };
-              }),
+              dataPoints:
+                data.headline.data?.map((p) => {
+                  return { x: new Date(p.x).getTime(), y: p.y };
+                }) ?? [],
             },
             {
               name: 'Food Inflation',
-              dataPoints: data.food.data.map((p) => {
-                return { x: new Date(p.x).getTime(), y: p.y };
-              }),
+              dataPoints:
+                data.food.data?.map((p) => {
+                  return { x: new Date(p.x).getTime(), y: p.y };
+                }) ?? [],
             },
           ],
         };
@@ -164,7 +166,7 @@ export default class LineChartOperations {
   public static getDistinctXAxisValues(data: LineChartData): number[] {
     const uniqueXValues = new Set<number>();
     data.lines.forEach((line) => {
-      line.dataPoints.forEach((point) => {
+      line.dataPoints?.forEach((point) => {
         uniqueXValues.add(point.x); // Add x-value to the Set
       });
     });
@@ -226,7 +228,7 @@ export default class LineChartOperations {
 
       // collect series data
       const seriesData: Highcharts.PointOptionsObject[] = [];
-      lineData.dataPoints.forEach((p) => {
+      lineData.dataPoints?.forEach((p) => {
         // check if datapoint x is in selected x-axis range
         if (xAxisSelectedMin !== undefined && xAxisSelectedMax !== undefined) {
           if (p.x < xAxisSelectedMin || xAxisSelectedMax < p.x) return;
@@ -282,7 +284,7 @@ export default class LineChartOperations {
       if (lineData.showRange) {
         // collect series area range data
         const areaSeriesData: Highcharts.PointOptionsObject[] = [];
-        lineData.dataPoints.forEach((p) => {
+        lineData.dataPoints?.forEach((p) => {
           // check if datapoint x is in selected x-axis range
           if (xAxisSelectedMin !== undefined && xAxisSelectedMax !== undefined) {
             if (p.x < xAxisSelectedMin || xAxisSelectedMax < p.x) return;

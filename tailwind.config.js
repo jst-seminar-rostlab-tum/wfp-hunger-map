@@ -49,7 +49,7 @@ const config = {
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
     './src/domain/constant/dataSourceTables/dataSourceAccordionItems.tsx',
-    './src/operations/tables/*.tsx',
+    './src/operations/**/*.tsx',
     './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {

@@ -21,6 +21,13 @@ export class AccessibilityOperations {
       marker.classList.add('map-marker-with-margin');
     });
 
+    const animatedMarkers = document.querySelectorAll('.leaflet-marker-icon.leaflet-zoom-animated');
+    animatedMarkers.forEach((marker) => {
+      if (!marker.getAttribute('aria-label')) {
+        marker.setAttribute('aria-label', 'Map Animated Marker');
+      }
+    });
+
     const containers = document.querySelectorAll('.leaflet-container');
     containers.forEach((container) => {
       if (!container.getAttribute('aria-label')) {

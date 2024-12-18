@@ -20,6 +20,8 @@ export default function NutritionChoropleth({
   countryId,
   regionNutritionData,
   selectedCountryName,
+  regionLabelData,
+  setRegionLabelTooltips,
 }: NutritionChoroplethProps) {
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
@@ -66,7 +68,7 @@ export default function NutritionChoropleth({
         />
       )}
       {/* Animated GeoJSON layer for the selected country */}
-      {!regionNutritionData && selectedCountryId && (
+      {selectedCountryId && (!regionNutritionData || !regionLabelData) && (
         <CountryLoadingLayer
           data={data}
           selectedCountryId={selectedCountryId}
@@ -75,8 +77,14 @@ export default function NutritionChoropleth({
       )}
       {
         // if this country ('countryId') is selected and data is loaded ('regionNutritionData') show Choropleth for all states
-        regionNutritionData && countryId === selectedCountryId && (
-          <NutritionStateChoropleth regionNutrition={regionNutritionData} countryName={selectedCountryName} />
+        regionNutritionData && countryId === selectedCountryId && regionLabelData && (
+          <NutritionStateChoropleth
+            regionNutrition={regionNutritionData}
+            countryName={selectedCountryName}
+            regionLabelData={regionLabelData}
+            setRegionLabelTooltips={setRegionLabelTooltips}
+            countryMapData={data.features[0] as CountryMapData}
+          />
         )
       }
     </div>

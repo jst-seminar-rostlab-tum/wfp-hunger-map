@@ -22,12 +22,12 @@ export function Topbar() {
   const pathname = usePathname();
 
   return (
-    <Navbar onMenuOpenChange={setIsMenuOpen} maxWidth="full">
-      <NavbarContent className="flex-1 min-w-[200px]">
+    <Navbar onMenuOpenChange={setIsMenuOpen} maxWidth="full" className="fixed pr-10">
+      <NavbarContent className="flex-1 min-w-[200px] mt-4">
         <NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} className="lg:hidden" />
         <LogoWithText />
       </NavbarContent>
-      <NavbarContent className="hidden lg:flex gap-4" justify="center">
+      <NavbarContent className="hidden lg:flex gap-4 mt-4" justify="center">
         {pageLinks.map((item) => (
           <NavbarItem key={item.label} isActive={pathname === item.href}>
             <Link
@@ -41,8 +41,8 @@ export function Topbar() {
           </NavbarItem>
         ))}
       </NavbarContent>
-      <NavbarContent justify="end">
-        <NavbarItem>
+      <NavbarContent justify="end" className="hidden lg:flex space-x-7">
+        <NavbarItem className="mt-4">
           <ThemeSwitch isIconOnly />
         </NavbarItem>
       </NavbarContent>
@@ -59,6 +59,9 @@ export function Topbar() {
             </Link>
           </NavbarMenuItem>
         ))}
+        <NavbarMenuItem className="mt-4">
+          <ThemeSwitch isIconOnly />
+        </NavbarMenuItem>
       </NavbarMenu>
     </Navbar>
   );

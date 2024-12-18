@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 
+import { NutritionData } from '@/domain/enums/NutritionData';
 import { ColorsData } from '@/domain/props/ColorsData';
 import GradientLegendProps from '@/domain/props/GradientLegendProps';
 
@@ -19,11 +20,8 @@ export default function GradientLegend({ colorsData, startLabel, endLabel, hasNo
     <div className="relative flex flex-col items-end w-full md:w-96 px-4 py-3">
       {hasNotAnalyzedPoint && (
         <div className="flex items-center gap-x-2 mb-4">
-          <span
-            className="w-3 h-3 rounded-full"
-            style={{ backgroundColor: `hsl(var(--nextui-nutritionNotAnalyzed))` }}
-          />
-          <span className="text-xs font-medium">Not Analyzed</span>
+          <span className="w-3 h-3 rounded-full" style={{ backgroundColor: `hsl(var(--nextui-notAnalyzed))` }} />
+          <span className="text-xs font-medium">{NutritionData.NOT_ANALYZED_DATA}</span>
         </div>
       )}
 

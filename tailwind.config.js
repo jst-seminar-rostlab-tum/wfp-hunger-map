@@ -49,7 +49,7 @@ const config = {
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
     './src/domain/constant/dataSourceTables/dataSourceAccordionItems.tsx',
-    './src/operations/tables/*.tsx',
+    './src/operations/**/*.tsx',
     './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
@@ -216,7 +216,6 @@ const config = {
             //nutrition points
             nutritionActual: '#FFB74D',
             nutritionPredicted: '#E3F2FD',
-            nutritionNotAnalyzed: '#D2D1D1',
 
             //animation
             nutritionAnimation: '#F7B750',
@@ -236,6 +235,8 @@ const config = {
             ipcPhase4: '#cd1919',
             ipcPhase5: '#731919',
             link: '#005999',
+            notAnalyzed: '#CFCFCF',
+            ipcHoverRegion: '#A5B1B3',
           },
         },
         dark: {
@@ -277,7 +278,6 @@ const config = {
             fatalityAlert: '#742280',
             climateWetAlert: '#4295D3',
             climateDryAlert: '#B95926',
-            nutritionNotAnalyzed: '#A69F9F',
             fcsAnimation: '#014a5e',
 
             // charts
@@ -286,6 +286,8 @@ const config = {
             chartsGridLine: '#424242',
             chartForecast: '#0e6983',
             link: '#0A9BFF',
+            notAnalyzed: '#A6A6A6',
+            ipcHoverRegion: '#757E80',
           },
         },
       },

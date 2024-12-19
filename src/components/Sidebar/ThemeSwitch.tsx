@@ -24,7 +24,7 @@ export function ThemeSwitch({ isIconOnly = false }: ThemeSwitchProps) {
     return (
       <div className="flex items-center justify-between gap-4 w-full ml-1">
         {!isIconOnly && <small>Theme</small>}
-        <Skeleton className="rounded-full  w-14 h-7" />
+        <Skeleton aria-hidden="true" className="rounded-full  w-14 h-7" />
       </div>
     );
 

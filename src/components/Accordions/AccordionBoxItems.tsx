@@ -72,7 +72,7 @@ export default function AccordionBoxItems({
                   <Popover>
                     <PopoverTrigger>
                       {item.infoIcon && (
-                        <Button isIconOnly className="w-[37px] h-[37px] p-[5.5px]" variant="light">
+                        <Button as="span" isIconOnly className="w-[37px] h-[37px] p-[5.5px]" variant="light">
                           {item.infoIcon}
                         </Button>
                       )}

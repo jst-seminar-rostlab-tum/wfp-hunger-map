@@ -40,6 +40,7 @@ export default function ZoomControl({ threshold, callback }: ZoomControlProps) {
         onClick={() => map.zoomIn()}
         color="default"
         className="px-2 min-w-0 rounded-t-md rounded-b-none z-9999 bg-content1 hover:bg-content2"
+        aria-label="Zoom in"
       >
         <Add size={24} />
       </Button>
@@ -48,6 +49,7 @@ export default function ZoomControl({ threshold, callback }: ZoomControlProps) {
         size="sm"
         onClick={() => map.zoomOut()}
         className="rounded-b-md px-2 min-w-0 rounded-t-none z-9999 bg-content1 hover:bg-content2"
+        aria-label="Zoom out"
       >
         <Minus size={24} />
       </Button>

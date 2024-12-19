@@ -233,10 +233,10 @@ export const nutritionDescriptions = {
     title: 'Micronutrients',
     legendTitle: 'Risk of Inadequate Micronutrient Intake',
     summary: (
-      <p>
+      <span>
         The <Abbreviation abbreviation="MIMI" /> project is modelling and mapping the risk of inadequate micronutrient
         intake to inform decision making in the short-medium term.
-      </p>
+      </span>
     ),
     description: (
       <>

@@ -23,6 +23,8 @@ export default function FcsChoropleth({
   countryIso3Data,
   selectedCountryName,
   fcsData,
+  regionLabelData,
+  setRegionLabelTooltips,
 }: FcsChoroplethProps) {
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
@@ -62,14 +64,14 @@ export default function FcsChoropleth({
         />
       )}
       {/* Animated GeoJSON layer for the selected country */}
-      {!regionData && selectedCountryId && (
+      {selectedCountryId && (!regionData || !regionLabelData) && (
         <CountryLoadingLayer
           data={data}
           selectedCountryId={selectedCountryId}
           color="hsl(var(--nextui-fcsAnimation))"
         />
       )}
-      {regionData && countryId === selectedCountryId && (
+      {regionData && countryId === selectedCountryId && regionLabelData && (
         <FscCountryChoropleth
           regionData={regionData}
           countryData={countryData}
@@ -77,6 +79,9 @@ export default function FcsChoropleth({
           countryName={selectedCountryName}
           loading={loading}
           handleBackButtonClick={handleBackClick}
+          regionLabelData={regionLabelData}
+          countryMapData={data.features[0] as CountryMapData}
+          setRegionLabelTooltips={setRegionLabelTooltips}
         />
       )}
     </div>

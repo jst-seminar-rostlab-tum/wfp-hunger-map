@@ -5,9 +5,9 @@ import { ChartData } from '../common/ChartData';
 export interface InflationGraphs {
   type: LineChartDataType.INFLATION_CHARTS;
   headline: {
-    data: ChartData[];
+    data: ChartData[] | undefined;
   };
   food: {
-    data: ChartData[];
+    data: ChartData[] | undefined;
   };
 }

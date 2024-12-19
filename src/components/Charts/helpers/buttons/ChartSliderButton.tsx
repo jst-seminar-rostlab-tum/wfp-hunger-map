@@ -2,17 +2,12 @@ import { Button } from '@nextui-org/button';
 import { Settings } from 'iconsax-react';
 
 import { Tooltip } from '@/components/Tooltip/Tooltip';
-import { LineChartSliderButtonProps } from '@/domain/props/LineChartProps';
+import { LineChartSliderButtonProps } from '@/domain/props/ChartContainerProps';
 
 /**
- * This component is tied to the `LineChart` and `LineChartModal` component
- * and should not be used independently.
+ * This component is tied to the `ChartContainer` and `ChartModal` component and should not be used independently.
  */
-export default function LineChartSliderButton({
-  showXAxisSlider,
-  setShowXAxisSlider,
-  size,
-}: LineChartSliderButtonProps) {
+export default function ChartSliderButton({ showSlider, setShowSlider, size = 4 }: LineChartSliderButtonProps) {
   return (
     <Tooltip text="x-Axis Slider">
       <Button
@@ -20,7 +15,7 @@ export default function LineChartSliderButton({
         variant="light"
         size="sm"
         onPress={() => {
-          setShowXAxisSlider(!showXAxisSlider);
+          setShowSlider(!showSlider);
         }}
       >
         <Settings className={`h-${size} w-${size}`} />

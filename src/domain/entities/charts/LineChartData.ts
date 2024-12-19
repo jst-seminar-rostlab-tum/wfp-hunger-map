@@ -16,8 +16,8 @@ export interface ChartVerticalLine {
 }
 
 export interface ChartVerticalBand {
-  xStart?: number; // if null -> band extends to the end of the axis dynamically
-  xEnd?: number; // if null -> band extends to the end of the axis dynamically
+  xStart?: number;
+  xEnd?: number;
   color?: string;
   label?: string;
 }
@@ -39,7 +39,6 @@ export interface LineChartData {
   type: LineChartDataType.LINE_CHART_DATA;
   xAxisType: AxisTypeValue;
   yAxisLabel?: string;
-  roundLines?: boolean;
   predictionVerticalLineX?: number;
   lines: {
     name: string;
@@ -51,4 +50,8 @@ export interface LineChartData {
   }[];
   verticalLines?: ChartVerticalLine[];
   verticalBands?: ChartVerticalBand[];
+}
+
+export function isLineChartData(data: unknown): data is LineChartData {
+  return (data as LineChartData).type === LineChartDataType.LINE_CHART_DATA;
 }

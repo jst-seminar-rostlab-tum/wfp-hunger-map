@@ -121,8 +121,6 @@ export function getFcsFoodSecurityAccordionItems(
             <LineChart
               title="Trend of the number of people with insufficient food consumption"
               data={fcsChartData}
-              expandable
-              xAxisSlider
               small
               noPadding
               transparentBackground
@@ -135,8 +133,6 @@ export function getFcsFoodSecurityAccordionItems(
             <LineChart
               title="Trend of the number of people using crisis or above crisis food-based coping"
               data={rcsiChartData}
-              expandable
-              xAxisSlider
               small
               noPadding
               transparentBackground

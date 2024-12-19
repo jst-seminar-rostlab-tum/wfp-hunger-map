@@ -5,11 +5,12 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useRouter } from 'next/navigation';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
-import type { ThemeProviderProps } from 'next-themes/dist/types.d.ts';
+import type { ThemeProviderProps } from 'next-themes/dist/types';
 import * as React from 'react';
 
 import { cachedQueryClient } from '@/config/queryClient';
 import { AccordionsModalProvider } from '@/domain/contexts/AccodionsModalContext';
+import { ChatbotProvider } from '@/domain/contexts/ChatbotContext';
 import { SelectedAlertProvider } from '@/domain/contexts/SelectedAlertContext';
 import { SelectedCountryIdProvider } from '@/domain/contexts/SelectedCountryIdContext';
 import { SelectedMapProvider } from '@/domain/contexts/SelectedMapContext';
@@ -33,7 +34,9 @@ export function Providers({ children, themeProps }: ProvidersProps) {
               <SelectedAlertProvider>
                 <SelectedCountryIdProvider>
                   <AccordionsModalProvider>
-                    <SnackbarProvider>{children}</SnackbarProvider>
+                    <SnackbarProvider>
+                      <ChatbotProvider>{children}</ChatbotProvider>
+                    </SnackbarProvider>
                   </AccordionsModalProvider>
                 </SelectedCountryIdProvider>
               </SelectedAlertProvider>

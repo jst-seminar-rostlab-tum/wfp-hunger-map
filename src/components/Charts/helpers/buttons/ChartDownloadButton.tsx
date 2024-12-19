@@ -3,21 +3,20 @@ import { Popover, PopoverContent, PopoverTrigger } from '@nextui-org/popover';
 import { DocumentDownload, GalleryImport } from 'iconsax-react';
 
 import { Tooltip } from '@/components/Tooltip/Tooltip';
-import { LineChartDownloadButtonProps } from '@/domain/props/LineChartProps';
-import LineChartOperations from '@/operations/charts/LineChartOperations.ts';
+import { ChartDownloadButtonProps } from '@/domain/props/ChartContainerProps';
+import ChartDownloadButtonOperations from '@/operations/charts/ChartDownloadButtonOperations.ts';
 
 /**
- * This component is tied to the `LineChart` and `LineChartModal` component
- * and should not be used independently.
+ * This component is tied to the `ChartContainer` and `ChartModal` component and should not be used independently.
  * It renders a button to open a dropdown menu to download the chart as csv, png, etc.
  */
-export default function LineChartDownloadButton({ chartRef, lineChartData }: LineChartDownloadButtonProps) {
+export default function ChartDownloadButton({ chartRef, chartData, size = 4 }: ChartDownloadButtonProps) {
   return (
     <Popover placement="bottom" offset={10} backdrop="opaque">
       <PopoverTrigger>
         <Button isIconOnly variant="light" size="sm">
-          <Tooltip text="Export Chart / Data">
-            <DocumentDownload className="h-4 w-4" />
+          <Tooltip text="Export Chart / Data" offset={20}>
+            <DocumentDownload className={`h-${size} w-${size}`} />
           </Tooltip>
         </Button>
       </PopoverTrigger>
@@ -27,7 +26,7 @@ export default function LineChartDownloadButton({ chartRef, lineChartData }: Lin
           size="sm"
           className="w-full justify-start"
           onPress={() => {
-            if (chartRef.current) LineChartOperations.downloadChartPNG(chartRef.current);
+            if (chartRef.current) ChartDownloadButtonOperations.downloadChartPNG(chartRef.current);
           }}
           startContent={<GalleryImport className="h-4 w-4" />}
         >
@@ -38,7 +37,7 @@ export default function LineChartDownloadButton({ chartRef, lineChartData }: Lin
           size="sm"
           className="w-full justify-start"
           onPress={() => {
-            if (chartRef.current) LineChartOperations.downloadChartDataSVG(chartRef.current);
+            if (chartRef.current) ChartDownloadButtonOperations.downloadChartDataSVG(chartRef.current);
           }}
           startContent={<GalleryImport className="h-4 w-4" />}
         >
@@ -49,7 +48,7 @@ export default function LineChartDownloadButton({ chartRef, lineChartData }: Lin
           size="sm"
           className="w-full justify-start"
           onPress={() => {
-            if (chartRef.current) LineChartOperations.downloadChartDataCSV(chartRef.current);
+            if (chartRef.current) ChartDownloadButtonOperations.downloadChartDataCSV(chartRef.current);
           }}
           startContent={<DocumentDownload className="h-4 w-4" />}
         >
@@ -60,7 +59,7 @@ export default function LineChartDownloadButton({ chartRef, lineChartData }: Lin
           size="sm"
           className="w-full justify-start"
           onPress={() => {
-            LineChartOperations.downloadDataJSON(lineChartData);
+            ChartDownloadButtonOperations.downloadDataJSON(chartData);
           }}
           startContent={<DocumentDownload className="h-4 w-4" />}
         >

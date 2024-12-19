@@ -23,6 +23,7 @@ export const IpcFoodSecurityAccordionOperations = {
     return {
       title: 'Food Security',
       infoIcon: <CustomInfoCircle />,
+      popoverInfo: FcsAccordionOperations.getFoodSecutriyPopoverInfo(),
       content: !hasNoData ? (
         <div className={cardsWrapperClass}>
           {/* Population Card */}
@@ -41,7 +42,7 @@ export const IpcFoodSecurityAccordionOperations = {
           <CustomCard
             content={[
               {
-                svgIcon: <FoodConsumption className="w-[70px] h-[70px] object-contain" />,
+                svgIcon: <FoodConsumption className="w-[50px] h-[50px] object-contain" />,
                 text: 'Population with insufficient food consumption',
                 value: countryData?.fcs ? `${countryData?.fcs.toFixed(2)} M` : 'N/A',
                 textClass: 'text-xs',
@@ -69,51 +70,50 @@ export const IpcFoodSecurityAccordionOperations = {
     };
   },
   getNutritionAccordion: (countryIso3Data: CountryIso3Data | undefined) => {
+    const nutritionData = FcsAccordionOperations.getNutritionData(countryIso3Data);
+
     return {
       title: 'Nutrition',
       infoIcon: <CustomInfoCircle />,
-      content: (
-        <div className={cardsWrapperClass}>
-          {/* Acute Nutrition Card */}
-          <CustomCard
-            title="Acute Nutrition"
-            content={[
-              {
-                svgIcon: <Nutrition />,
-                text: FcsAccordionOperations.getNutritionData(countryIso3Data)?.Acute ? (
-                  <>
-                    <span className="text-xl">{`${FcsAccordionOperations.getNutritionData(countryIso3Data)?.Acute} %`}</span>
-                    <span className="text-sm text-gray-400 ml-1">of children (under 5)</span>
-                  </>
-                ) : (
-                  'N/A'
-                ),
-                altText: 'Acute Nutrition Icon',
-                textClass: 'text-base',
-              },
-            ]}
-          />
-          {/* Chronic Nutrition Card */}
-          <CustomCard
-            title="Chronic Nutrition"
-            content={[
-              {
-                svgIcon: <Nutrition className="w-[70px] h-[60px] object-contain" />,
-                text: FcsAccordionOperations.getNutritionData(countryIso3Data)?.Chronic ? (
-                  <>
-                    <span className="text-xl">{`${FcsAccordionOperations.getNutritionData(countryIso3Data)?.Chronic} %`}</span>
-                    <span className="text-sm text-gray-400 ml-1">of children (under 5)</span>
-                  </>
-                ) : (
-                  'N/A'
-                ),
-                altText: 'Chronic Nutrition Icon',
-                textClass: 'text-base',
-              },
-            ]}
-          />
-        </div>
-      ),
+      content:
+        nutritionData && (nutritionData.Acute != null || nutritionData.Chronic != null) ? (
+          <div className={cardsWrapperClass}>
+            {nutritionData.Acute != null && (
+              <CustomCard
+                title="Acute Nutrition"
+                content={[
+                  {
+                    svgIcon: <Nutrition className="w-[50px] h-[50px] object-contain" />,
+                    text: (
+                      <>
+                        <span className="text-base">{`${nutritionData.Acute} %`}</span>
+                        <span className="text-xs text-gray-400 ml-1">of children (under 5)</span>
+                      </>
+                    ),
+                  },
+                ]}
+              />
+            )}
+            {nutritionData.Chronic != null && (
+              <CustomCard
+                title="Chronic Nutrition"
+                content={[
+                  {
+                    svgIcon: <Nutrition className="w-[50px] h-[50px] object-contain" />,
+                    text: (
+                      <>
+                        <span className="text-base">{`${nutritionData.Chronic} %`}</span>
+                        <span className="text-xs text-gray-400 ml-1">of children (under 5)</span>
+                      </>
+                    ),
+                  },
+                ]}
+              />
+            )}
+          </div>
+        ) : (
+          <p>No data about Nutrition is available</p>
+        ),
     };
   },
 };

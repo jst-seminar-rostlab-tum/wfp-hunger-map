@@ -43,7 +43,7 @@ export function getFcsFoodSecurityAccordionItems(
           <CustomCard
             content={[
               {
-                svgIcon: <FoodConsumption className="w-[70px] h-[70px] object-contain" />,
+                svgIcon: <FoodConsumption className="w-[50px] h-[50px] object-contain" />,
                 text: 'Population with insufficient food consumption',
                 value: countryData?.fcs ? `${countryData.fcs.toFixed(2)} M` : 'N/A',
                 textClass: 'text-xs',
@@ -70,46 +70,46 @@ export function getFcsFoodSecurityAccordionItems(
     {
       title: 'Nutrition',
       infoIcon: <CustomInfoCircle />,
-      content: (
-        <div className={cardsWrapperClass}>
-          <CustomCard
-            title="Acute Nutrition"
-            content={[
-              {
-                svgIcon: <Nutrition />,
-                text: nutritionData?.Acute ? (
-                  <>
-                    <span className="text-xl">{`${nutritionData.Acute} %`}</span>
-                    <span className="text-sm text-gray-400 ml-1">of children (under 5)</span>
-                  </>
-                ) : (
-                  'N/A'
-                ),
-                altText: 'Population Icon',
-                textClass: 'text-base',
-              },
-            ]}
-          />
-          <CustomCard
-            title="Chronic Nutrition"
-            content={[
-              {
-                svgIcon: <Nutrition className="w-[70px] h-[60px] object-contain" />,
-                text: nutritionData?.Chronic ? (
-                  <>
-                    <span className="text-xl">{`${nutritionData.Chronic} %`}</span>
-                    <span className="text-sm text-gray-400 ml-1">of children (under 5)</span>
-                  </>
-                ) : (
-                  'N/A'
-                ),
-                altText: 'Population Icon',
-                textClass: 'text-base',
-              },
-            ]}
-          />
-        </div>
-      ),
+      popoverInfo: FcsAccordionOperations.getFoodSecutriyPopoverInfo(),
+      content:
+        nutritionData && (nutritionData.Acute != null || nutritionData.Chronic != null) ? (
+          <div className={cardsWrapperClass}>
+            {nutritionData.Acute != null && (
+              <CustomCard
+                title="Acute Nutrition"
+                content={[
+                  {
+                    svgIcon: <Nutrition className="w-[50px] h-[50px] object-contain" />,
+                    text: (
+                      <>
+                        <span className="text-base">{`${nutritionData.Acute} %`}</span>
+                        <span className="text-xs text-gray-400 ml-1">of children (under 5)</span>
+                      </>
+                    ),
+                  },
+                ]}
+              />
+            )}
+            {nutritionData.Chronic != null && (
+              <CustomCard
+                title="Chronic Nutrition"
+                content={[
+                  {
+                    svgIcon: <Nutrition className="w-[50px] h-[50px] object-contain" />,
+                    text: (
+                      <>
+                        <span className="text-base">{`${nutritionData.Chronic} %`}</span>
+                        <span className="text-xs text-gray-400 ml-1">of children (under 5)</span>
+                      </>
+                    ),
+                  },
+                ]}
+              />
+            )}
+          </div>
+        ) : (
+          <p>No data about Nutrition is available</p>
+        ),
     },
     {
       title: 'Food Security Trends',

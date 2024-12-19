@@ -13,10 +13,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
   return (
     <>
       {!isMobile ? (
-        <div
-          className="absolute w-[370px] left-[108px] top-4 z-9999 overflow-y-auto max-h-[400px]"
-          style={{ maxHeight: '900px' }} // Adjust height as needed
-        >
+        <div className="absolute w-[300px] left-[108px] top-4 z-9999 overflow-visible overflow-y-auto h-screen">
           <AccordionContainer
             loading={loading}
             title={countryName ?? undefined}
@@ -38,7 +35,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
         </div>
       )}
       {!isMobile && (
-        <div className="absolute w-[370px] right-[1rem] inset-y-20 z-9999">
+        <div className="absolute w-[300px] right-[1rem] inset-y-24 z-9999">
           <AccordionContainer loading={loading} accordionModalActive maxWidth={600} items={macroEconomicAccordion} />
         </div>
       )}

@@ -3,7 +3,7 @@ import L from 'leaflet';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 
-import FcsRegionTooltip from '@/components/Map/FcsRegionTooltip';
+import FcsRegionTooltip from '@/components/Map/FcsMap/FcsRegionTooltip';
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 import { MapOperations } from '@/operations/map/MapOperations';
 

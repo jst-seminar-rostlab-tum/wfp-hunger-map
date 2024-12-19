@@ -2,7 +2,7 @@ import { Feature } from 'geojson';
 import { PathOptions } from 'leaflet';
 import { createRoot } from 'react-dom/client';
 
-import NutritionRegionTooltip from '@/components/Map/NutritionRegionTooltip';
+import NutritionRegionTooltip from '@/components/Map/NutritionMap/NutritionRegionTooltip';
 import { NUTRIENT_LABELS } from '@/domain/constant/map/NutritionChoropleth.ts';
 import { LayerWithFeature } from '@/domain/entities/map/LayerWithFeature.ts';
 import { Nutrition } from '@/domain/entities/region/RegionNutritionProperties.ts';

@@ -78,7 +78,7 @@ export class MapOperations {
         setCountryData(newCountryData);
       }
 
-      if (selectedMapType === GlobalInsight.FOOD) {
+      if (selectedMapType === GlobalInsight.FOOD || selectedMapType === GlobalInsight.IPC) {
         const newCountryIso3Data = await countryRepository.getCountryIso3Data(selectedCountryData.properties.iso3);
         setCountryIso3Data(newCountryIso3Data);
       }

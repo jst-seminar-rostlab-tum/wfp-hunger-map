@@ -49,13 +49,7 @@ function IpcChoropleth({
       {selectedCountryId && (
         <IpcAccordion countryData={countryData} countryName={selectedCountryName} loading={isLoadingCountry} />
       )}
-      {ipcRegionData && (
-        <IpcCountryChoropleth
-          regionIpcData={ipcRegionData}
-          countryData={countryData}
-          countryName={selectedCountryName}
-        />
-      )}
+      {ipcRegionData && <IpcCountryChoropleth regionIpcData={ipcRegionData} />}
     </>
   );
 }

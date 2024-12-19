@@ -7,7 +7,7 @@ import { LineChartSliderButtonProps } from '@/domain/props/ChartContainerProps';
 /**
  * This component is tied to the `ChartContainer` and `ChartModal` component and should not be used independently.
  */
-export default function ChartSliderButton({ showSlider, setShowSlider, size }: LineChartSliderButtonProps) {
+export default function ChartSliderButton({ showSlider, setShowSlider, size = 4 }: LineChartSliderButtonProps) {
   return (
     <Tooltip text="x-Axis Slider">
       <Button

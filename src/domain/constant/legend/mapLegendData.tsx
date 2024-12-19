@@ -71,6 +71,7 @@ export function mapLegendData(
     case GlobalInsight.FOOD:
       legendData.push({
         title: descriptions.fcs.title,
+        hasNotAnalyzedPoint: true,
         colorsData: [
           { color: 'fcsGradient1', title: 'Very Low', value: '0-5%' },
           { color: 'fcsGradient2', title: 'Low', value: '5-10%' },
@@ -150,6 +151,7 @@ export function mapLegendData(
             { label: IpcPhases.PHASE_3, color: 'ipcPhase3' },
             { label: IpcPhases.PHASE_4, color: 'ipcPhase4' },
             { label: IpcPhases.PHASE_5, color: 'ipcPhase5' },
+            { label: NutritionData.NOT_ANALYZED_DATA, color: 'notAnalyzed' },
           ],
         });
       }
@@ -162,12 +164,13 @@ export function mapLegendData(
           records: [
             { label: NutritionData.ACTUAL_DATA, color: 'nutritionActual' },
             { label: NutritionData.PREDICTED_DATA, color: 'nutritionPredicted' },
-            { label: NutritionData.NOT_ANALYZED_DATA, color: 'nutritionNotAnalyzed' },
+            { label: NutritionData.NOT_ANALYZED_DATA, color: 'notAnalyzed' },
           ],
         });
       } else {
         legendData.push({
           title: 'Risk of Inadequate Micronutrient Intake',
+          hasNotAnalyzedPoint: true,
           colorsData: [
             { color: 'ipcGradient1', title: 'Lowest', value: '0-19%' },
             { color: 'ipcGradient2', title: 'Low', value: '20-39%' },

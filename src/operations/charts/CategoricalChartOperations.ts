@@ -56,8 +56,10 @@ export default class CategoricalChartOperations {
    * for a bar chart or pie chart, out of a given `CategoricalChartData` instance.
    * @param data `CategoricalChartData` object, containing all data to be plotted in the chart
    * @param pieChart if true, a pie chart instead of a bar chart is created
+   * @return 'Highcharts.Options' ready to be passed to the Highcharts component,
+   * or 'undefined' if there is no data available to be plotted in the chart (to be interpreted as "no data available")
    */
-  public static getHighChartOptions(data: CategoricalChartData, pieChart?: boolean): Highcharts.Options {
+  public static getHighChartOptions(data: CategoricalChartData, pieChart?: boolean): Highcharts.Options | undefined {
     const seriesData = [];
     const categories = [];
     const defaultCategoriesColors = CategoricalChartOperations.getCategoriesColorList();
@@ -83,6 +85,9 @@ export default class CategoricalChartOperations {
         color: categoryColor,
       });
     }
+
+    // if there is not a single series -> we return 'undefined' -> 'undefined' is to be interpreted as "no data available"
+    if (seriesData.length === 0) return undefined;
 
     // constructing the final HighCharts.Options
     return {

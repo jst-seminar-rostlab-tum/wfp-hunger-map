@@ -40,7 +40,7 @@ export function CategoricalChart({
   const { theme } = useTheme();
 
   // build chart options for 'Highcharts'
-  const defaultChartOptions: Highcharts.Options = CategoricalChartOperations.getHighChartOptions(data);
+  const defaultChartOptions: Highcharts.Options | undefined = CategoricalChartOperations.getHighChartOptions(data);
 
   // controlling if a bar or pie chart is rendered; bar chart is the default
   const [showPieChart, setShowPieChart] = useState(false);
@@ -49,7 +49,7 @@ export function CategoricalChart({
   // handling the bar and pie chart switch and the theme switch;
   useEffect(() => {
     setChartOptions(CategoricalChartOperations.getHighChartOptions(data, showPieChart));
-  }, [showPieChart, theme]);
+  }, [showPieChart, theme, data]);
 
   const alternativeSwitchButtonProps = disablePieChartSwitch
     ? undefined

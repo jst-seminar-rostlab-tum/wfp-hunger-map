@@ -51,3 +51,7 @@ export interface LineChartData {
   verticalLines?: ChartVerticalLine[];
   verticalBands?: ChartVerticalBand[];
 }
+
+export function isLineChartData(data: unknown): data is LineChartData {
+  return (data as LineChartData).type === LineChartDataType.LINE_CHART_DATA;
+}

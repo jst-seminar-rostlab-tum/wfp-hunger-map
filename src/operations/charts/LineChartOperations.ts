@@ -135,15 +135,17 @@ export default class LineChartOperations {
           lines: [
             {
               name: 'Headline Inflation',
-              dataPoints: data.headline.data.map((p) => {
-                return { x: new Date(p.x).getTime(), y: p.y };
-              }),
+              dataPoints:
+                data.headline.data?.map((p) => {
+                  return { x: new Date(p.x).getTime(), y: p.y };
+                }) ?? [],
             },
             {
               name: 'Food Inflation',
-              dataPoints: data.food.data.map((p) => {
-                return { x: new Date(p.x).getTime(), y: p.y };
-              }),
+              dataPoints:
+                data.food.data?.map((p) => {
+                  return { x: new Date(p.x).getTime(), y: p.y };
+                }) ?? [],
             },
           ],
         };
@@ -164,7 +166,7 @@ export default class LineChartOperations {
   public static getDistinctXAxisValues(data: LineChartData): number[] {
     const uniqueXValues = new Set<number>();
     data.lines.forEach((line) => {
-      line.dataPoints.forEach((point) => {
+      line.dataPoints?.forEach((point) => {
         uniqueXValues.add(point.x); // Add x-value to the Set
       });
     });
@@ -182,13 +184,15 @@ export default class LineChartOperations {
    * @param barChart if true, bars are plotted instead of lines
    * @param xAxisSelectedMinIdx index of selected x-axis range min value
    * @param xAxisSelectedMaxIdx index of selected x-axis range max value
+   * @return 'Highcharts.Options' ready to be passed to the Highcharts component,
+   * or 'undefined' if there is no data available to be plotted in the chart (to be interpreted as "no data available")
    */
   public static getHighChartOptions(
     data: LineChartData,
     xAxisSelectedMinIdx?: number,
     xAxisSelectedMaxIdx?: number,
     barChart?: boolean
-  ): Highcharts.Options {
+  ): Highcharts.Options | undefined {
     // get selected x-axis range min and max values
     const xAxisDistinctValues = LineChartOperations.getDistinctXAxisValues(data);
     const xAxisSelectedMin = xAxisSelectedMinIdx !== undefined ? xAxisDistinctValues[xAxisSelectedMinIdx] : undefined;
@@ -198,6 +202,7 @@ export default class LineChartOperations {
     const series: SeriesOptionsType[] = [];
     const defaultLineColors = LineChartOperations.getLineColorList();
     const defaultPredictionsDashStyles = LineChartOperations.getPredictionsDashStyles();
+    let atLeastOneSeriesAvailable = false;
     for (let i = 0; i < data.lines.length; i += 1) {
       const lineData = data.lines[i];
 
@@ -223,7 +228,7 @@ export default class LineChartOperations {
 
       // collect series data
       const seriesData: Highcharts.PointOptionsObject[] = [];
-      lineData.dataPoints.forEach((p) => {
+      lineData.dataPoints?.forEach((p) => {
         // check if datapoint x is in selected x-axis range
         if (xAxisSelectedMin !== undefined && xAxisSelectedMax !== undefined) {
           if (p.x < xAxisSelectedMin || xAxisSelectedMax < p.x) return;
@@ -235,6 +240,8 @@ export default class LineChartOperations {
       });
       // make sure data is sorted (required by highchart)
       seriesData.sort((a, b) => a.x! - b.x!);
+
+      if (seriesData.length > 0) atLeastOneSeriesAvailable = true;
 
       // build series object for highchart
       if (barChart) {
@@ -277,7 +284,7 @@ export default class LineChartOperations {
       if (lineData.showRange) {
         // collect series area range data
         const areaSeriesData: Highcharts.PointOptionsObject[] = [];
-        lineData.dataPoints.forEach((p) => {
+        lineData.dataPoints?.forEach((p) => {
           // check if datapoint x is in selected x-axis range
           if (xAxisSelectedMin !== undefined && xAxisSelectedMax !== undefined) {
             if (p.x < xAxisSelectedMin || xAxisSelectedMax < p.x) return;
@@ -315,6 +322,9 @@ export default class LineChartOperations {
         }
       }
     }
+
+    // not a single non-empty series -> we return 'undefined' ('undefined' is to be interpreted as "no data available")
+    if (!atLeastOneSeriesAvailable) return undefined;
 
     // build all vertical lines and plot bands
     const verticalBands = data.verticalBands ? [...data.verticalBands] : [];

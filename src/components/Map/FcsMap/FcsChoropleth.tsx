@@ -11,8 +11,8 @@ import FcsChoroplethProps from '@/domain/props/FcsChoroplethProps';
 import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
 import { MapOperations } from '@/operations/map/MapOperations';
 
-import AccordionModalSkeleton from '../Accordions/AccordionModalSkeleton';
-import CountryLoadingLayer from './CountryLoading';
+import AccordionModalSkeleton from '../../Accordions/AccordionModalSkeleton';
+import CountryLoadingLayer from '../CountryLoading';
 import FscCountryChoropleth from './FcsCountryChoropleth';
 
 export default function FcsChoropleth({

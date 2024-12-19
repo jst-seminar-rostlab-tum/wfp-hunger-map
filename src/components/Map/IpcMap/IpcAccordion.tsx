@@ -22,6 +22,7 @@ export default function IpcAccordion({ countryData, countryName, countryIso3Data
         accordionModalActive
         maxWidth={600}
         items={[ipcFoodSecurityAccordion, ipcNutrititonAccordion]}
+        multipleSelectionMode={!isMobile}
         expandAll={!isMobile}
       />
     </div>

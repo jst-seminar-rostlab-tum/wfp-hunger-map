@@ -111,8 +111,8 @@ export class FcsAccordionOperations {
 
     const { wasting, stunting } = countryIso3Data.nutrition;
     return {
-      Acute: wasting || null,
-      Chronic: stunting || null,
+      Acute: wasting,
+      Chronic: stunting,
     };
   }
 

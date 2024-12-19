@@ -22,13 +22,13 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
         <div className="absolute w-[350px] left-[108px] top-4 z-9999">
           <AccordionContainer
             loading={loading}
-            title={countryName ?? undefined}
+            title={countryName}
             accordionModalActive
             maxWidth={600}
             items={[...foodSecurityAccordion, ...macroEconomicAccordion]}
           />
         </div>
-      )}{' '}
+      )}
       : (
       <div className="absolute w-[300px] left-[108px] top-4 z-9999 overflow-visible overflow-y-auto h-screen">
         <AccordionContainer

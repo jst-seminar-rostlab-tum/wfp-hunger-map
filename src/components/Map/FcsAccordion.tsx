@@ -9,7 +9,7 @@ import { ReactComponent as Import } from '../../../public/Images/Import.svg';
 import { ReactComponent as Population } from '../../../public/Images/Population.svg';
 import AccordionContainer from '../Accordions/AccordionContainer';
 import CustomCard from '../Cards/Card';
-import { LineChart } from '../Charts/LineChart';
+import { ContinuousChart } from '../Charts/ContinuousChart';
 import CustomInfoCircle from '../CustomInfoCircle/CustomInfoCircle';
 
 export default function FcsAccordion({ countryData, loading, countryIso3Data, countryName }: FcsAccordionProps) {
@@ -78,7 +78,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
             content: (
               <div>
                 {fcsChartData ? (
-                  <LineChart
+                  <ContinuousChart
                     title="Trend of the number of people with insufficient food consumption"
                     data={fcsChartData}
                     small
@@ -90,7 +90,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
                 )}
                 <Spacer y={6} />
                 {rcsiChartData ? (
-                  <LineChart
+                  <ContinuousChart
                     title="Trend of the number of people using crisis or above crisis food-based coping"
                     data={rcsiChartData}
                     small
@@ -131,7 +131,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
             content: (
               <div>
                 {currencyExchangeChartData ? (
-                  <LineChart data={currencyExchangeChartData} small noPadding transparentBackground />
+                  <ContinuousChart data={currencyExchangeChartData} small noPadding transparentBackground />
                 ) : (
                   <p>No data about currency exchange</p>
                 )}
@@ -145,7 +145,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
             content: (
               <div>
                 {balanceOfTradeChartData ? (
-                  <LineChart data={balanceOfTradeChartData} small noPadding transparentBackground />
+                  <ContinuousChart data={balanceOfTradeChartData} small noPadding transparentBackground />
                 ) : (
                   <p>No data about balance of trade</p>
                 )}
@@ -159,7 +159,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
             content: (
               <div>
                 {headlineAndFoodInflationChartData ? (
-                  <LineChart data={headlineAndFoodInflationChartData} small noPadding transparentBackground />
+                  <ContinuousChart data={headlineAndFoodInflationChartData} small noPadding transparentBackground />
                 ) : (
                   <p>No data about headline and food inflation</p>
                 )}

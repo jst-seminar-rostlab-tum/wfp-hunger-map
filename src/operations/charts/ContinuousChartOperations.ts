@@ -10,10 +10,10 @@ import highchartsMore from 'highcharts/highcharts-more';
 import patternFill from 'highcharts/modules/pattern-fill';
 
 import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph.ts';
+import { ContinuousChartData } from '@/domain/entities/charts/ContinuousChartData.ts';
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph.ts';
 import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
-import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
-import { LineChartDataType } from '@/domain/enums/LineChartDataType.ts';
+import { ContinuousChartDataType } from '@/domain/enums/ContinuousChartDataType.ts';
 import { formatToMillion } from '@/utils/formatting.ts';
 import { getTailwindColor } from '@/utils/tailwind-util.ts';
 
@@ -23,11 +23,11 @@ if (typeof Highcharts === 'object') {
   patternFill(Highcharts);
 }
 /**
- * Using LineChartOperations, the LineChart component can convert its received data into LineChartData
+ * Using ContinuousChartOperations, the ContinuousChart component can convert its received data into ContinuousChartData
  * and then generate the chart `Highcharts.Options` object required by the Highcharts component.
- * Two types of options can be created: rendering the LineChart data as a line chart or as a bar chart.
+ * Two types of options can be created: rendering the ContinuousChart data as a line chart or as a bar chart.
  */
-export default class LineChartOperations {
+export default class ContinuousChartOperations {
   /**
    * List of different dash styles for visualizing prediction data.
    * All lines that are marked as `prediction` are colored with the same predictions color,
@@ -75,7 +75,7 @@ export default class LineChartOperations {
   }
 
   /**
-   * Tooltip formatter function for `LineChart.Options.xAxis.labels.formatter` usage only.
+   * Tooltip formatter function for `ContinuousChart.Options.xAxis.labels.formatter` usage only.
    */
   private static chartXAxisFormatter(xAxisType: AxisTypeValue, x: string | number): string {
     if (xAxisType === 'datetime' && typeof x === 'number') {
@@ -85,21 +85,21 @@ export default class LineChartOperations {
   }
 
   /**
-   * With this static function, the LineChart component can ensure that the received data for the chart
-   * is converted to the `LineChartData` type.
-   * To support another interface in `LineChartProps.data`, one has to add another switch case here
-   * that converts the new interface into `LineChartData`.
+   * With this static function, the ContinuousChart component can ensure that the received data for the chart
+   * is converted to the `ContinuousChartData` type.
+   * To support another interface in `ContinuousChartProps.data`, one has to add another switch case here
+   * that converts the new interface into `ContinuousChartData`.
    */
-  public static convertToLineChartData(
-    data: LineChartData | BalanceOfTradeGraph | CurrencyExchangeGraph | InflationGraphs
-  ): LineChartData {
+  public static convertToContinuousChartData(
+    data: ContinuousChartData | BalanceOfTradeGraph | CurrencyExchangeGraph | InflationGraphs
+  ): ContinuousChartData {
     switch (data.type) {
-      case LineChartDataType.LINE_CHART_DATA:
+      case ContinuousChartDataType.LINE_CHART_DATA:
         return data;
 
-      case LineChartDataType.BALANCE_OF_TRADE_CHART:
+      case ContinuousChartDataType.BALANCE_OF_TRADE_CHART:
         return {
-          type: LineChartDataType.LINE_CHART_DATA,
+          type: ContinuousChartDataType.LINE_CHART_DATA,
           xAxisType: 'datetime',
           yAxisLabel: 'Mill',
           lines: [
@@ -112,9 +112,9 @@ export default class LineChartOperations {
           ],
         };
 
-      case LineChartDataType.CURRENCY_EXCHANGE_CHART:
+      case ContinuousChartDataType.CURRENCY_EXCHANGE_CHART:
         return {
-          type: LineChartDataType.LINE_CHART_DATA,
+          type: ContinuousChartDataType.LINE_CHART_DATA,
           xAxisType: 'datetime',
           yAxisLabel: 'Exchange rate',
           lines: [
@@ -127,9 +127,9 @@ export default class LineChartOperations {
           ],
         };
 
-      case LineChartDataType.INFLATION_CHARTS:
+      case ContinuousChartDataType.INFLATION_CHARTS:
         return {
-          type: LineChartDataType.LINE_CHART_DATA,
+          type: ContinuousChartDataType.LINE_CHART_DATA,
           xAxisType: 'datetime',
           yAxisLabel: 'Rate in %',
           lines: [
@@ -151,9 +151,9 @@ export default class LineChartOperations {
         };
 
       default:
-        // if the given type is not supported yet, an empty `LineChartData` instance is returned
+        // if the given type is not supported yet, an empty `ContinuousChartData` instance is returned
         return {
-          type: LineChartDataType.LINE_CHART_DATA,
+          type: ContinuousChartDataType.LINE_CHART_DATA,
           xAxisType: 'linear',
           lines: [],
         };
@@ -161,9 +161,9 @@ export default class LineChartOperations {
   }
 
   /**
-   * Given `LineChartData` get list of all distinct x values of all lines' data points.
+   * Given `ContinuousChartData` get list of all distinct x values of all lines' data points.
    */
-  public static getDistinctXAxisValues(data: LineChartData): number[] {
+  public static getDistinctXAxisValues(data: ContinuousChartData): number[] {
     const uniqueXValues = new Set<number>();
     data.lines.forEach((line) => {
       line.dataPoints?.forEach((point) => {
@@ -174,13 +174,13 @@ export default class LineChartOperations {
   }
 
   /**
-   * With this static function, the LineChart component can build the `HighCharts.Options` object
-   * for a line chart or bar chart, out of a given `LineChartData` instance.
+   * With this static function, the ContinuousChar component can build the `HighCharts.Options` object
+   * for a line chart or bar chart, out of a given `ContinuousChartData` instance.
    *
    * Setting the 'xAxisSelectedMinIdx' and 'xAxisSelectedMinIdx' the rendered x-axis range
    * can be manipulated; important: if a min is defined a max must be defined as well and vice versa.
    *
-   * @param data `LineChartData` object, containing all data to be plotted in the chart
+   * @param data `ContinuousChartData` object, containing all data to be plotted in the chart
    * @param barChart if true, bars are plotted instead of lines
    * @param xAxisSelectedMinIdx index of selected x-axis range min value
    * @param xAxisSelectedMaxIdx index of selected x-axis range max value
@@ -188,20 +188,20 @@ export default class LineChartOperations {
    * or 'undefined' if there is no data available to be plotted in the chart (to be interpreted as "no data available")
    */
   public static getHighChartOptions(
-    data: LineChartData,
+    data: ContinuousChartData,
     xAxisSelectedMinIdx?: number,
     xAxisSelectedMaxIdx?: number,
     barChart?: boolean
   ): Highcharts.Options | undefined {
     // get selected x-axis range min and max values
-    const xAxisDistinctValues = LineChartOperations.getDistinctXAxisValues(data);
+    const xAxisDistinctValues = ContinuousChartOperations.getDistinctXAxisValues(data);
     const xAxisSelectedMin = xAxisSelectedMinIdx !== undefined ? xAxisDistinctValues[xAxisSelectedMinIdx] : undefined;
     const xAxisSelectedMax = xAxisSelectedMaxIdx !== undefined ? xAxisDistinctValues[xAxisSelectedMaxIdx] : undefined;
 
     // parsing all given data series
     const series: SeriesOptionsType[] = [];
-    const defaultLineColors = LineChartOperations.getLineColorList();
-    const defaultPredictionsDashStyles = LineChartOperations.getPredictionsDashStyles();
+    const defaultLineColors = ContinuousChartOperations.getLineColorList();
+    const defaultPredictionsDashStyles = ContinuousChartOperations.getPredictionsDashStyles();
     let atLeastOneSeriesAvailable = false;
     for (let i = 0; i < data.lines.length; i += 1) {
       const lineData = data.lines[i];
@@ -388,7 +388,7 @@ export default class LineChartOperations {
             fontSize: '0.7rem',
           },
           formatter() {
-            return LineChartOperations.chartXAxisFormatter(data.xAxisType, this.value);
+            return ContinuousChartOperations.chartXAxisFormatter(data.xAxisType, this.value);
           },
         },
         lineColor: getTailwindColor('--nextui-chartsXAxisLine'),
@@ -419,7 +419,7 @@ export default class LineChartOperations {
       tooltip: {
         shared: true,
         formatter() {
-          return LineChartOperations.chartTooltipFormatter(data.xAxisType, this.x, this.points);
+          return ContinuousChartOperations.chartTooltipFormatter(data.xAxisType, this.x, this.points);
         },
         backgroundColor: getTailwindColor('--nextui-chartsLegendBackground'),
         style: {

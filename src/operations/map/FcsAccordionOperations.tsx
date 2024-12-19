@@ -1,21 +1,21 @@
 import { ReactNode } from 'react';
 
 import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph';
+import { ContinuousChartData } from '@/domain/entities/charts/ContinuousChartData.ts';
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph';
 import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs';
-import { LineChartData } from '@/domain/entities/charts/LineChartData';
 import { CountryData } from '@/domain/entities/country/CountryData';
 import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data';
-import { LineChartDataType } from '@/domain/enums/LineChartDataType';
+import { ContinuousChartDataType } from '@/domain/enums/ContinuousChartDataType.ts';
 import { formatToMillion } from '@/utils/formatting';
 
 export class FcsAccordionOperations {
-  static getFcsChartData(countryData?: CountryData): LineChartData | null {
+  static getFcsChartData(countryData?: CountryData): ContinuousChartData | null {
     if (!countryData?.fcsGraph) {
       return null;
     }
     return {
-      type: LineChartDataType.LINE_CHART_DATA,
+      type: ContinuousChartDataType.LINE_CHART_DATA,
       xAxisType: 'datetime',
       yAxisLabel: 'Mill',
       lines: [
@@ -33,12 +33,12 @@ export class FcsAccordionOperations {
     };
   }
 
-  static getRcsiChartData(countryData?: CountryData): LineChartData | null {
+  static getRcsiChartData(countryData?: CountryData): ContinuousChartData | null {
     if (!countryData?.rcsiGraph) {
       return null;
     }
     return {
-      type: LineChartDataType.LINE_CHART_DATA,
+      type: ContinuousChartDataType.LINE_CHART_DATA,
       xAxisType: 'datetime',
       yAxisLabel: 'Mill',
       lines: [
@@ -61,7 +61,7 @@ export class FcsAccordionOperations {
       return null;
     }
     return {
-      type: LineChartDataType.BALANCE_OF_TRADE_CHART,
+      type: ContinuousChartDataType.BALANCE_OF_TRADE_CHART,
       data: countryIso3Data.balanceOfTradeGraph.data,
     };
   }
@@ -77,7 +77,7 @@ export class FcsAccordionOperations {
     }
 
     return {
-      type: LineChartDataType.INFLATION_CHARTS,
+      type: ContinuousChartDataType.INFLATION_CHARTS,
       headline: {
         data: headlineData,
       },
@@ -96,7 +96,7 @@ export class FcsAccordionOperations {
       return null;
     }
     return {
-      type: LineChartDataType.CURRENCY_EXCHANGE_CHART,
+      type: ContinuousChartDataType.CURRENCY_EXCHANGE_CHART,
       name,
       source,
       updated,

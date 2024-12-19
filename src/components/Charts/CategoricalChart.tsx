@@ -10,7 +10,7 @@ import CategoricalChartOperations from '@/operations/charts/CategoricalChartOper
 
 /**
  * The `CategoricalChart` component is a box that primarily renders a title, description text, and a bar chart.
- * It should be used to plot categorical data. For continues data please use the `LineChart` component.
+ * It should be used to plot categorical data. For continues data please use the `ContinuousChart` component.
  * This component has a width of 100%, so it adjusts to the width of its parent element in which it is used.
  * The height of the entire box depends on the provided text, while the chart itself has a fixed height.
  * It also provides the option to open the chart in a full-screen modal, where one can download the data as well.

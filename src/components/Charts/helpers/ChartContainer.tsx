@@ -20,8 +20,8 @@ import ChartContainerProps from '@/domain/props/ChartContainerProps';
  * The height of the entire box depends on the provided text, while the chart itself has a fixed height.
  * It also provides the option to open the chart in a full-screen modal, where one can download the data as well.
  *
- * It is used by the `CategoricalChart` and `LineChart` components, which define the type of chart through the passed `chartOptions`.
- * The main goal of this component is to prevents code redundancy between `LineChart` and `CategoricalChart`.
+ * It is used by the `CategoricalChart` and `ContinuousChart` components, which define the type of chart through the passed `chartOptions`.
+ * The main goal of this component is to prevents code redundancy between `ContinuousChart` and `CategoricalChart`.
  */
 export function ChartContainer({
   chartData,

@@ -53,7 +53,7 @@ export const contextAndNeedDescriptions = {
 export const foodSecurityDescriptions = {
   fcs: {
     title: 'Food Consumption Score (FCS)',
-    legendTitle: 'People with insufficient food consumption',
+    legendTitle: 'People with Insufficient Food Consumption',
     summary: 'Number of people with poor or borderline food consumption according to the Food Consumption Score (FCS).',
     description: (
       <>
@@ -115,8 +115,8 @@ export const foodSecurityDescriptions = {
   },
   rCsi: {
     title: 'reduced Coping Strategies Index (rCSI)',
-    legendTitle: 'People using crisis or above crisis food-based coping',
-    summary: 'Frequency and Severity of behaviors when faced with shortages of food.',
+    legendTitle: 'People Using Crisis or Above Crisis Food-Based Coping',
+    summary: 'Frequency and severity of behaviors when faced with shortages of food.',
     description: (
       <>
         <p>
@@ -184,8 +184,8 @@ export const foodSecurityDescriptions = {
 
 export const nutritionDescriptions = {
   malnutritionAcute: {
-    title: 'Malnutrition, acute',
-    legendTitle: 'Acute malnutrition',
+    title: 'Malnutrition, Acute',
+    legendTitle: 'Acute Malnutrition',
     summary: 'Characterized by a rapid deterioration in nutritional status over a short period of time.',
     description: (
       <>
@@ -214,8 +214,8 @@ export const nutritionDescriptions = {
     updateInterval: 'yearly or less',
   },
   malnutritionChronic: {
-    title: 'Malnutrition, chronic',
-    legendTitle: 'Chronic malnutrition',
+    title: 'Malnutrition, Chronic',
+    legendTitle: 'Chronic Malnutrition',
     summary:
       'A form of growth failure which develops as a result of inadequate nutrition and/or repeated infections over long periods of time.',
     description: (
@@ -296,7 +296,7 @@ export const nutritionDescriptions = {
 
 export const marketDescriptions = {
   importDependency: {
-    title: 'Import dependency',
+    title: 'Import Dependency',
     summary: (
       <span>
         Percentage of a country’s imported food for domestic supply versus its own food production for domestic supply.
@@ -313,13 +313,13 @@ export const marketDescriptions = {
     updateInterval: 'daily',
   },
   currencyExchange: {
-    title: 'Currency exchange',
+    title: 'Currency Exchange',
     summary: 'Price of a unit of domestic currency in terms of USD.',
     dataSource: 'Trading Economics',
     updateInterval: 'yearly',
   },
   balanceOfTrade: {
-    title: 'Balance of trade',
+    title: 'Balance of Trade',
     summary:
       'The balance of trade is the value of exports of goods and services less imports of goods and services. ' +
       'It is usually the largest component of the current account.',
@@ -327,14 +327,14 @@ export const marketDescriptions = {
     updateInterval: 'monthly or less',
   },
   foodInflation: {
-    title: 'Food inflation',
+    title: 'Food Inflation',
     summary:
       'Year-on-year percentage change in the price of a standard basket of food as calculated from the national Consumer Price Index.',
     dataSource: 'Trading Economics',
     updateInterval: 'monthly',
   },
   headlineInflation: {
-    title: 'Headline inflation',
+    title: 'Headline Inflation',
     summary:
       'Year on year percentage change in the price of a standard basket of goods and services as calculated from the national Consumer Price Index.',
     dataSource: 'Trading Economics',
@@ -383,7 +383,7 @@ export const seasonalDescriptions = {
     updateInterval: 'every 8 days',
   },
   riverBaisins: {
-    title: 'River baisins',
+    title: 'River Baisins',
     summary:
       'The river basins visualization provides rainfall data for the last 35+ years for five of the world’s major ' +
       'rivers (Limpopo, Nile, Orange, Shabelli-Juba, and Zambesi), allowing users to track whether the current ' +
@@ -401,7 +401,7 @@ export const seasonalDescriptions = {
 
 export const otherDescriptions = {
   news: {
-    title: 'News feed',
+    title: 'News Feed',
     summary:
       'News articles retrieved from news sources all over the web. Topics include recent events or developments ' +
       'relating to hazards and conflict. The news feed is country-specific and serves to provide further context to ' +

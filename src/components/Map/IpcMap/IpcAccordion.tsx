@@ -12,7 +12,7 @@ export default function IpcAccordion({ countryData, countryName, countryIso3Data
     deltaOneMonth,
     deltaThreeMonth
   );
-  const ipcNutrititonAccordion = IpcFoodSecurityAccordionOperations.getNutritionAccordion(countryIso3Data);
+  const ipcNutrititonAccordion = IpcFoodSecurityAccordionOperations.getNutritionAccordionItems(countryIso3Data);
   const isMobile = useMediaQuery('(max-width: 700px)');
 
   return (

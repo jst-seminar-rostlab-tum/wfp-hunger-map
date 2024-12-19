@@ -9,7 +9,7 @@ import { ReactComponent as Import } from '../../../public/Images/Import.svg';
 import { FcsAccordionOperations } from './FcsAccordionOperations';
 
 export class FcsMacroEconomicOperations {
-  static getMacroEconomicAccordionOperations(
+  static getMacroEconomicAccordionItems(
     countryData: CountryData | undefined,
     countryIso3Data: CountryIso3Data | undefined
   ) {

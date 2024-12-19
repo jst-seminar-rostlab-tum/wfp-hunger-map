@@ -11,7 +11,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
     countryData,
     countryIso3Data
   );
-  const macroEconomicAccordion = FcsMacroEconomicOperations.getMacroEconomicAccordionOperations(
+  const macroEconomicAccordion = FcsMacroEconomicOperations.getMacroEconomicAccordionItems(
     countryData,
     countryIso3Data
   );

@@ -76,7 +76,7 @@ export class IpcFoodSecurityAccordionOperations {
     };
   }
 
-  static getNutritionAccordion(countryIso3Data: CountryIso3Data | undefined) {
+  static getNutritionAccordionItems(countryIso3Data: CountryIso3Data | undefined) {
     const nutritionData = FcsAccordionOperations.getNutritionData(countryIso3Data);
 
     if (!nutritionData || (nutritionData.Acute == null && nutritionData.Chronic == null)) {

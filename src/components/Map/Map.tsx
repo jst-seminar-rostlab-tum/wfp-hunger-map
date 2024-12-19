@@ -94,6 +94,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
         window.gtag('event', `${selectedCountryData.properties.iso3}_country_selected`, {
           selectedMap: selectedMapType,
         });
+        window.gtag('event', `${selectedCountryData.properties.iso3} _${selectedMapType}_countrymap_selected`);
         setSelectedCountryName(selectedCountryData.properties.adm0_name);
         mapRef.current?.fitBounds(L.geoJSON(selectedCountryData as GeoJSON).getBounds(), { animate: true });
       }

@@ -1,6 +1,7 @@
 import { FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
 import React from 'react';
 
+import AccordionModalSkeleton from '@/components/Accordions/AccordionModalSkeleton';
 import CountryLoadingLayer from '@/components/Map/CountryLoading';
 import IpcAccordion from '@/components/Map/IpcMap/IpcAccordion';
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
@@ -31,16 +32,19 @@ function IpcChoropleth({
         />
       )}
       {!ipcRegionData && selectedCountryId && (
-        <CountryLoadingLayer
-          data={
-            {
-              type: 'FeatureCollection',
-              features: countries.features.filter((feature) => feature?.properties?.adm0_id === selectedCountryId),
-            } as FeatureCollection<Geometry, GeoJsonProperties>
-          }
-          selectedCountryId={selectedCountryId}
-          color="hsl(var(--nextui-ipcAnimation))"
-        />
+        <>
+          <CountryLoadingLayer
+            data={
+              {
+                type: 'FeatureCollection',
+                features: countries.features.filter((feature) => feature?.properties?.adm0_id === selectedCountryId),
+              } as FeatureCollection<Geometry, GeoJsonProperties>
+            }
+            selectedCountryId={selectedCountryId}
+            color="hsl(var(--nextui-ipcAnimation))"
+          />
+          <AccordionModalSkeleton />
+        </>
       )}
       {selectedCountryId && (
         <IpcAccordion countryData={countryData} countryName={selectedCountryName} loading={isLoadingCountry} />

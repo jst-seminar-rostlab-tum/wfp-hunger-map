@@ -12,6 +12,7 @@ import FcsChoroplethProps from '@/domain/props/FcsChoroplethProps';
 import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
 import { MapOperations } from '@/operations/map/MapOperations';
 
+import AccordionModalSkeleton from '../Accordions/AccordionModalSkeleton';
 import CountryLoadingLayer from './CountryLoading';
 import FscCountryChoropleth from './FcsCountryChoropleth';
 
@@ -66,11 +67,14 @@ export default function FcsChoropleth({
       )}
       {/* Animated GeoJSON layer for the selected country */}
       {selectedCountryId && (!regionData || !regionLabelData) && (
-        <CountryLoadingLayer
-          data={data}
-          selectedCountryId={selectedCountryId}
-          color="hsl(var(--nextui-fcsAnimation))"
-        />
+        <>
+          <CountryLoadingLayer
+            data={data}
+            selectedCountryId={selectedCountryId}
+            color="hsl(var(--nextui-fcsAnimation))"
+          />
+          <AccordionModalSkeleton />
+        </>
       )}
       {countryId === selectedCountryId && (
         <FcsAccordion

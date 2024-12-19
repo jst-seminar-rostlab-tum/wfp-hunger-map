@@ -18,7 +18,7 @@ export class MapOperations {
   static async fetchCountryData(
     selectedMapType: GlobalInsight,
     selectedCountryData: CountryMapData,
-    setCountryClickLoading: (isLoading: boolean) => void,
+    setIsCountryDataLoading: (isLoading: boolean) => void,
     setRegionData: (regionData: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
     setCountryData: (countryData: CountryData | undefined) => void,
     setCountryIso3Data: (iso3Data: CountryIso3Data | undefined) => void,
@@ -28,7 +28,7 @@ export class MapOperations {
     setRegionLabelData: (newRegionLabelData: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
     setIsDataAvailable: (isDataAvailable: boolean) => void
   ) {
-    setCountryClickLoading(true);
+    setIsCountryDataLoading(true);
 
     const countryRepository = container.resolve<CountryRepository>('CountryRepository');
     try {
@@ -111,10 +111,10 @@ export class MapOperations {
 
         if (!regionLabelData) setRegionLabelData(data[1]);
       }
-
-      setCountryClickLoading(false);
     } catch {
       // Do nothing
+    } finally {
+      setIsCountryDataLoading(false);
     }
   }
 

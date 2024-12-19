@@ -10,6 +10,7 @@ import { ReactComponent as FoodConsumption } from '../../../public/Images/FoodCo
 import { ReactComponent as Nutrition } from '../../../public/Images/Nutrition.svg';
 import { ReactComponent as Population } from '../../../public/Images/Population.svg';
 import { FcsAccordionOperations } from './FcsAccordionOperations';
+import NutritionAccordionText from './NutritionAccordionText';
 
 export const IpcFoodSecurityAccordionOperations = {
   getFoodSecurityAccordionItems: (
@@ -85,10 +86,10 @@ export const IpcFoodSecurityAccordionOperations = {
                   {
                     svgIcon: <Nutrition className="w-[50px] h-[50px] object-contain" />,
                     text: (
-                      <>
-                        <span className="text-base">{`${nutritionData.Acute} %`}</span>
-                        <span className="text-xs text-gray-400 ml-1">of children (under 5)</span>
-                      </>
+                      <NutritionAccordionText
+                        nutritionValue={`${nutritionData.Acute} %`}
+                        text="of children (under 5)"
+                      />
                     ),
                   },
                 ]}
@@ -101,10 +102,10 @@ export const IpcFoodSecurityAccordionOperations = {
                   {
                     svgIcon: <Nutrition className="w-[50px] h-[50px] object-contain" />,
                     text: (
-                      <>
-                        <span className="text-base">{`${nutritionData.Chronic} %`}</span>
-                        <span className="text-xs text-gray-400 ml-1">of children (under 5)</span>
-                      </>
+                      <NutritionAccordionText
+                        nutritionValue={`${nutritionData.Chronic} %`}
+                        text="of children (under 5)"
+                      />
                     ),
                   },
                 ]}

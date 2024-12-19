@@ -9,4 +9,5 @@ export interface IpcChoroplethProps {
   countryData?: CountryData;
   ipcRegionData?: FeatureCollection<Geometry, GeoJsonProperties>;
   selectedCountryName?: string;
+  isLoadingCountry: boolean;
 }

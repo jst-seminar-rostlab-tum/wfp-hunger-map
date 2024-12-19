@@ -18,7 +18,7 @@ import FscCountryChoropleth from './FcsCountryChoropleth';
 export default function FcsChoropleth({
   data,
   countryId,
-  loading,
+  isLoadingCountry,
   regionData,
   countryData,
   countryIso3Data,
@@ -76,7 +76,7 @@ export default function FcsChoropleth({
         <FcsAccordion
           countryData={countryData}
           countryIso3Data={countryIso3Data}
-          loading={loading}
+          loading={isLoadingCountry}
           countryName={selectedCountryName}
         />
       )}

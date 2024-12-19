@@ -24,7 +24,7 @@ export default function NutritionChoropleth({
   selectedCountryName,
   regionLabelData,
   setRegionLabelTooltips,
-  isCountryDataLoading,
+  isLoadingCountry,
 }: NutritionChoroplethProps) {
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
@@ -84,7 +84,7 @@ export default function NutritionChoropleth({
           setSelectedNutrient={setSelectedNutrient}
           selectedNutrient={selectedNutrient}
           countryName={selectedCountryName}
-          loading={isCountryDataLoading}
+          loading={isLoadingCountry}
         />
       )}
       {

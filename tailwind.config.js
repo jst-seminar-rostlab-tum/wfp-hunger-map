@@ -64,6 +64,7 @@ const config = {
       },
       screens: {
         sm700: '700px',
+        sm450: '450px',
       },
       width: {
         '215px': '215px',

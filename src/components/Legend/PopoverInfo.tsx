@@ -1,11 +1,34 @@
 import { Chip } from '@nextui-org/chip';
 
 import StyledLink from '@/components/About/StyledLink';
+import descriptions from '@/domain/constant/dataSources/dataSourceDescriptions';
 import DataSourceDescription from '@/domain/entities/dataSources/DataSourceDescription';
 import { prettifyURL } from '@/utils/formatting';
 
-export function PopoverInfo({ dataSourceDescription }: { dataSourceDescription: DataSourceDescription }) {
-  const { summary, description, updateInterval, dataSource, dataSourceLink, updateDetails } = dataSourceDescription;
+// pass an array to show 1+ datasources with their title
+export function PopoverInfo({
+  dataSourceKeys,
+}: {
+  dataSourceKeys: keyof typeof descriptions | (keyof typeof descriptions)[];
+}) {
+  if (Array.isArray(dataSourceKeys)) {
+    return (
+      <>
+        {dataSourceKeys.map((dataSourceKey, index) => (
+          <>
+            {index ? <hr /> : null}
+            <h1>{descriptions[dataSourceKey]?.title}</h1>
+            <PopoverInfo dataSourceKeys={dataSourceKey} />
+          </>
+        ))}
+      </>
+    );
+  }
+
+  const { summary, description, updateInterval, dataSource, dataSourceLink, updateDetails } = descriptions[
+    dataSourceKeys
+  ] as DataSourceDescription;
+
   return (
     <>
       {summary && (

@@ -1,5 +1,7 @@
 import { Spacer } from '@nextui-org/react';
 
+import { PopoverInfo } from '@/components/Legend/PopoverInfo';
+import descriptions from '@/domain/constant/dataSources/dataSourceDescriptions';
 import FcsAccordionProps from '@/domain/props/FcsAccordionProps';
 import { FcsAccordionOperations } from '@/operations/map/FcsAccordionOperations';
 import { cardsWrapperClass } from '@/utils/primitives';
@@ -32,7 +34,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
           {
             title: 'Food Security',
             infoIcon: <CustomInfoCircle />,
-            popoverInfo: FcsAccordionOperations.getFoodSecutriyPopoverInfo(),
+            popoverInfo: <PopoverInfo dataSourceKeys={['fcs']} />,
             content: (
               <div className={cardsWrapperClass}>
                 <CustomCard
@@ -74,12 +76,12 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
           {
             title: 'Food Security Trends',
             infoIcon: <CustomInfoCircle />,
-            popoverInfo: FcsAccordionOperations.getFoodSecutriyTrendsPopoverInfo(),
+            popoverInfo: <PopoverInfo dataSourceKeys={['fcs', 'rCsi']} />,
             content: (
               <div>
                 {fcsChartData ? (
                   <LineChart
-                    title="Trend of the number of people with insufficient food consumption"
+                    title="Number of people with insufficient food consumption"
                     data={fcsChartData}
                     small
                     noPadding
@@ -91,7 +93,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
                 <Spacer y={6} />
                 {rcsiChartData ? (
                   <LineChart
-                    title="Trend of the number of people using crisis or above crisis food-based coping"
+                    title="Number of people using crisis or above crisis food-based coping"
                     data={rcsiChartData}
                     small
                     noPadding
@@ -104,9 +106,9 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
             ),
           },
           {
-            title: 'Macro-economic',
+            title: descriptions.importDependency.title,
             infoIcon: <CustomInfoCircle />,
-            popoverInfo: FcsAccordionOperations.getMacroEconomicPopoverInfo(),
+            popoverInfo: <PopoverInfo dataSourceKeys="importDependency" />,
             content: (
               <div className={cardsWrapperClass}>
                 <CustomCard
@@ -125,9 +127,9 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
             ),
           },
           {
-            title: 'Currency Exchange',
+            title: descriptions.currencyExchange.title,
             infoIcon: <CustomInfoCircle />,
-            popoverInfo: FcsAccordionOperations.getCurrencyExchangePopoverInfo(),
+            popoverInfo: <PopoverInfo dataSourceKeys="currencyExchange" />,
             content: (
               <div>
                 {currencyExchangeChartData ? (
@@ -139,9 +141,9 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
             ),
           },
           {
-            title: 'Balance of Trade',
+            title: descriptions.balanceOfTrade.title,
             infoIcon: <CustomInfoCircle />,
-            popoverInfo: FcsAccordionOperations.getBalanceOfTradePopoverInfo(),
+            popoverInfo: <PopoverInfo dataSourceKeys="balanceOfTrade" />,
             content: (
               <div>
                 {balanceOfTradeChartData ? (
@@ -155,7 +157,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
           {
             title: 'Headline and food inflation',
             infoIcon: <CustomInfoCircle />,
-            popoverInfo: FcsAccordionOperations.getHeadlineAndFoodInflationPopoverInfo(),
+            popoverInfo: <PopoverInfo dataSourceKeys={['headlineInflation', 'foodInflation']} />,
             content: (
               <div>
                 {headlineAndFoodInflationChartData ? (

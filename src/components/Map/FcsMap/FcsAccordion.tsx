@@ -16,20 +16,18 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
     countryIso3Data
   );
 
-  return (
+  return isMobile ? (
+    <div className="absolute w-[350px] left-[108px] top-4 z-9999">
+      <AccordionContainer
+        loading={loading}
+        title={countryName}
+        accordionModalActive
+        maxWidth={600}
+        items={[...foodSecurityAccordion, ...macroEconomicAccordion]}
+      />
+    </div>
+  ) : (
     <>
-      {isMobile && (
-        <div className="absolute w-[350px] left-[108px] top-4 z-9999">
-          <AccordionContainer
-            loading={loading}
-            title={countryName}
-            accordionModalActive
-            maxWidth={600}
-            items={[...foodSecurityAccordion, ...macroEconomicAccordion]}
-          />
-        </div>
-      )}
-      : (
       <div className="absolute w-[310px] left-[108px] top-4 z-9999 overflow-y-scroll max-h-screen">
         <AccordionContainer
           loading={loading}
@@ -41,12 +39,9 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
           expandAll
         />
       </div>
-      )
-      {!isMobile && (
-        <div className="absolute w-[300px] right-[1rem] inset-y-24 z-9999">
-          <AccordionContainer loading={loading} accordionModalActive maxWidth={600} items={macroEconomicAccordion} />
-        </div>
-      )}
+      <div className="absolute w-[300px] right-[1rem] inset-y-24 z-9999">
+        <AccordionContainer loading={loading} accordionModalActive maxWidth={600} items={macroEconomicAccordion} />
+      </div>
     </>
   );
 }

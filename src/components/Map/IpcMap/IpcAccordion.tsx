@@ -18,7 +18,7 @@ export default function IpcAccordion({ countryData, countryName, countryIso3Data
   return (
     <div className="absolute w-[300px] left-[108px] top-4 z-9999">
       <AccordionContainer
-        title={countryName ?? undefined}
+        title={countryName}
         accordionModalActive
         maxWidth={600}
         items={[ipcFoodSecurityAccordion, ipcNutrititonAccordion]}

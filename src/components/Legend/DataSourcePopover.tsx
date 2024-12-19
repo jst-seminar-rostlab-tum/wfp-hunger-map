@@ -6,7 +6,7 @@ import DataSourceDescription from '@/domain/entities/dataSources/DataSourceDescr
 import { prettifyURL } from '@/utils/formatting';
 
 // pass an array to show 1+ datasources with their title
-export function PopoverInfo({
+export function DataSourcePopover({
   dataSourceKeys,
 }: {
   dataSourceKeys: keyof typeof descriptions | (keyof typeof descriptions)[];
@@ -18,7 +18,7 @@ export function PopoverInfo({
           <>
             {index ? <hr /> : null}
             <h1>{descriptions[dataSourceKey]?.title}</h1>
-            <PopoverInfo dataSourceKeys={dataSourceKey} />
+            <DataSourcePopover dataSourceKeys={dataSourceKey} />
           </>
         ))}
       </>

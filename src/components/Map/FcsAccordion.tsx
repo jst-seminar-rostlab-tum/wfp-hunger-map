@@ -1,6 +1,6 @@
 import { Spacer } from '@nextui-org/react';
 
-import { PopoverInfo } from '@/components/Legend/PopoverInfo';
+import { DataSourcePopover } from '@/components/Legend/DataSourcePopover';
 import descriptions from '@/domain/constant/dataSources/dataSourceDescriptions';
 import FcsAccordionProps from '@/domain/props/FcsAccordionProps';
 import { FcsAccordionOperations } from '@/operations/map/FcsAccordionOperations';
@@ -34,7 +34,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
           {
             title: 'Food Security',
             infoIcon: <CustomInfoCircle />,
-            popoverInfo: <PopoverInfo dataSourceKeys={['fcs']} />,
+            popoverInfo: <DataSourcePopover dataSourceKeys={['population', 'fcs']} />,
             content: (
               <div className={cardsWrapperClass}>
                 <CustomCard
@@ -76,7 +76,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
           {
             title: 'Food Security Trends',
             infoIcon: <CustomInfoCircle />,
-            popoverInfo: <PopoverInfo dataSourceKeys={['fcs', 'rCsi']} />,
+            popoverInfo: <DataSourcePopover dataSourceKeys={['fcs', 'rCsi']} />,
             content: (
               <div>
                 {fcsChartData ? (
@@ -108,7 +108,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
           {
             title: descriptions.importDependency.title,
             infoIcon: <CustomInfoCircle />,
-            popoverInfo: <PopoverInfo dataSourceKeys="importDependency" />,
+            popoverInfo: <DataSourcePopover dataSourceKeys="importDependency" />,
             content: (
               <div className={cardsWrapperClass}>
                 <CustomCard
@@ -129,7 +129,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
           {
             title: descriptions.currencyExchange.title,
             infoIcon: <CustomInfoCircle />,
-            popoverInfo: <PopoverInfo dataSourceKeys="currencyExchange" />,
+            popoverInfo: <DataSourcePopover dataSourceKeys="currencyExchange" />,
             content: (
               <div>
                 {currencyExchangeChartData ? (
@@ -143,7 +143,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
           {
             title: descriptions.balanceOfTrade.title,
             infoIcon: <CustomInfoCircle />,
-            popoverInfo: <PopoverInfo dataSourceKeys="balanceOfTrade" />,
+            popoverInfo: <DataSourcePopover dataSourceKeys="balanceOfTrade" />,
             content: (
               <div>
                 {balanceOfTradeChartData ? (
@@ -157,7 +157,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
           {
             title: 'Headline and food inflation',
             infoIcon: <CustomInfoCircle />,
-            popoverInfo: <PopoverInfo dataSourceKeys={['headlineInflation', 'foodInflation']} />,
+            popoverInfo: <DataSourcePopover dataSourceKeys={['headlineInflation', 'foodInflation']} />,
             content: (
               <div>
                 {headlineAndFoodInflationChartData ? (

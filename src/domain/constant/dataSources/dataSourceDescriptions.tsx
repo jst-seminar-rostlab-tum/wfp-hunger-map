@@ -99,6 +99,7 @@ export const foodSecurityDescriptions = {
   },
   rCsi: {
     title: 'reduced Coping Strategies Index (rCSI)',
+    legendTitle: 'People using crisis or above crisis food-based coping',
     summary: 'Frequency and Severity of behaviors when faced with shortages of food.',
     description: (
       <>

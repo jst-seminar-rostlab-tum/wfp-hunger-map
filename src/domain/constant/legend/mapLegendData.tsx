@@ -1,4 +1,4 @@
-import { PopoverInfo } from '@/components/Legend/PopoverInfo';
+import { DataSourcePopover } from '@/components/Legend/DataSourcePopover';
 import { CountryAlertLegendItem } from '@/components/Map/Alerts/CountryAlerts/CountryAlertLegendItem';
 import { HazardLegendItem } from '@/components/Map/Alerts/HazardLegendItem';
 import { AlertType } from '@/domain/enums/AlertType.ts';
@@ -24,7 +24,7 @@ export function mapLegendData(
     case AlertType.CONFLICTS:
       legendData.push({
         title: 'Type of conflict',
-        popoverInfo: <PopoverInfo dataSourceKeys="conflicts" />,
+        popoverInfo: <DataSourcePopover dataSourceKeys="conflicts" />,
         records: [
           { label: ConflictType.BATTLES, color: 'conflictBattle' },
           { label: ConflictType.CIVIL_VIOLENCE, color: 'conflictCivil' },
@@ -38,7 +38,7 @@ export function mapLegendData(
     case AlertType.HAZARDS:
       legendData.push({
         title: 'Severity of hazards',
-        popoverInfo: <PopoverInfo dataSourceKeys="hazards" />,
+        popoverInfo: <DataSourcePopover dataSourceKeys="hazards" />,
         records: [
           { label: HazardSeverity.WARNING, color: 'hazardWarning' },
           { label: HazardSeverity.WATCH, color: 'hazardWatch' },
@@ -81,7 +81,7 @@ export function mapLegendData(
         ],
         startLabel: '0%',
         endLabel: 'above 40%',
-        popoverInfo: <PopoverInfo dataSourceKeys="fcs" />,
+        popoverInfo: <DataSourcePopover dataSourceKeys="fcs" />,
       });
       break;
     case GlobalInsight.RAINFALL:
@@ -100,7 +100,7 @@ export function mapLegendData(
         ],
         startLabel: '<40%',
         endLabel: '>180%',
-        popoverInfo: <PopoverInfo dataSourceKeys="rainfall" />,
+        popoverInfo: <DataSourcePopover dataSourceKeys="rainfall" />,
       });
       break;
     case GlobalInsight.VEGETATION:
@@ -119,7 +119,7 @@ export function mapLegendData(
         ],
         startLabel: '<50%',
         endLabel: '>150%',
-        popoverInfo: <PopoverInfo dataSourceKeys="vegetation" />,
+        popoverInfo: <DataSourcePopover dataSourceKeys="vegetation" />,
       });
       break;
     case GlobalInsight.IPC:
@@ -138,12 +138,12 @@ export function mapLegendData(
           ],
           startLabel: '0',
           endLabel: '>10',
-          popoverInfo: <PopoverInfo dataSourceKeys="ipcCh" />,
+          popoverInfo: <DataSourcePopover dataSourceKeys="ipcCh" />,
         });
       } else {
         legendData.push({
           title: 'Acute food insecurity phase classification',
-          popoverInfo: <PopoverInfo dataSourceKeys="ipcCh" />,
+          popoverInfo: <DataSourcePopover dataSourceKeys="ipcCh" />,
           records: [
             { label: IpcPhases.PHASE_1, color: 'ipcPhase1' },
             { label: IpcPhases.PHASE_2, color: 'ipcPhase2' },
@@ -158,7 +158,7 @@ export function mapLegendData(
       if (!selectedCountryId) {
         legendData.push({
           title: 'MIMI Analysis Distribution',
-          popoverInfo: <PopoverInfo dataSourceKeys="micronutrients" />,
+          popoverInfo: <DataSourcePopover dataSourceKeys="micronutrients" />,
           records: [
             { label: NutritionData.ACTUAL_DATA, color: 'nutritionActual' },
             { label: NutritionData.PREDICTED_DATA, color: 'nutritionPredicted' },
@@ -177,7 +177,7 @@ export function mapLegendData(
           ],
           startLabel: '0%',
           endLabel: '100%',
-          popoverInfo: <PopoverInfo dataSourceKeys="micronutrients" />,
+          popoverInfo: <DataSourcePopover dataSourceKeys="micronutrients" />,
         });
       }
       break;

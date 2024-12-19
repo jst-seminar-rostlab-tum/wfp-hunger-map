@@ -1,20 +1,18 @@
 import AccordionContainer from '@/components/Accordions/AccordionContainer';
 import IpcAccordionProps from '@/domain/props/IpcAccordionProps';
+import { IpcFoodSecurityAccordionOperations } from '@/operations/map/IpcFoodSecurityOperations';
 import { useMediaQuery } from '@/utils/resolution.ts';
-
-import IpcFoodSecurityAccordion from './IpcFoodSecurityAccordion';
-import IpcNutritionAccordion from './IpcNutritionAccordion';
 
 export default function IpcAccordion({ countryData, countryName, countryIso3Data }: IpcAccordionProps) {
   const deltaOneMonth = countryData?.fcsMinus1 ? countryData.fcs - countryData.fcsMinus1 : null;
   const deltaThreeMonth = countryData?.fcsMinus3 ? countryData.fcs - countryData.fcsMinus3 : null;
 
-  const ipcFoodSecurityAccordion = IpcFoodSecurityAccordion({
+  const ipcFoodSecurityAccordion = IpcFoodSecurityAccordionOperations.getFoodSecurityAccordionItems(
     countryData,
     deltaOneMonth,
-    deltaThreeMonth,
-  });
-  const ipcNutrititonAccordion = IpcNutritionAccordion({ countryIso3Data });
+    deltaThreeMonth
+  );
+  const ipcNutrititonAccordion = IpcFoodSecurityAccordionOperations.getNutritionAccordion(countryIso3Data);
   const isMobile = useMediaQuery('(max-width: 700px)');
 
   return (

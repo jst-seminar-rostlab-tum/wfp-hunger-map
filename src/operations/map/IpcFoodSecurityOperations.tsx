@@ -100,7 +100,7 @@ export const IpcFoodSecurityAccordionOperations = {
                 title="Chronic Nutrition"
                 content={[
                   {
-                    svgIcon: <Nutrition className="w-[50px] h-[50px] object-contain" />,
+                    svgIcon: <Nutrition className="w-[40px] h-[40px] object-contain" />,
                     text: (
                       <NutritionAccordionText
                         nutritionValue={`${nutritionData.Chronic} %`}

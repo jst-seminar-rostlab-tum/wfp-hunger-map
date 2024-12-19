@@ -1,14 +1,14 @@
 import FcsAccordionProps from '@/domain/props/FcsAccordionProps';
+import { getFcsFoodSecurityAccordionItems } from '@/operations/map/FcsFoodSecurityOperations';
+import { getMacroEconomicAccordionOperations } from '@/operations/map/FcsMacroEconomicOperations';
 import { useMediaQuery } from '@/utils/resolution.ts';
 
 import AccordionContainer from '../../Accordions/AccordionContainer';
-import FcsFoodSecurityAccordion from './FcsFoodSecurityAccordion';
-import FcsMacroEconomicAccordion from './FcsMacroEconomicAccordion';
 
 export default function FcsAccordion({ countryData, loading, countryIso3Data, countryName }: FcsAccordionProps) {
   const isMobile = useMediaQuery('(max-width: 700px)');
-  const foodSecurityAccordion = FcsFoodSecurityAccordion({ countryData, countryIso3Data });
-  const macroEconomicAccordion = FcsMacroEconomicAccordion({ countryData, countryIso3Data });
+  const foodSecurityAccordion = getFcsFoodSecurityAccordionItems(countryData, countryIso3Data);
+  const macroEconomicAccordion = getMacroEconomicAccordionOperations(countryData, countryIso3Data);
 
   return (
     <>

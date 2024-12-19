@@ -46,7 +46,7 @@ export function getMacroEconomicAccordionOperations(
       content: (
         <div>
           {currencyExchangeChartData ? (
-            <LineChart data={currencyExchangeChartData} expandable xAxisSlider small noPadding transparentBackground />
+            <LineChart data={currencyExchangeChartData} small noPadding transparentBackground />
           ) : (
             <p>No data about currency exchange</p>
           )}
@@ -60,7 +60,7 @@ export function getMacroEconomicAccordionOperations(
       content: (
         <div>
           {balanceOfTradeChartData ? (
-            <LineChart data={balanceOfTradeChartData} expandable xAxisSlider small noPadding transparentBackground />
+            <LineChart data={balanceOfTradeChartData} small noPadding transparentBackground />
           ) : (
             <p>No data about balance of trade</p>
           )}
@@ -74,15 +74,7 @@ export function getMacroEconomicAccordionOperations(
       content: (
         <div>
           {headlineAndFoodInflationChartData ? (
-            <LineChart
-              data={headlineAndFoodInflationChartData}
-              expandable
-              xAxisSlider
-              barChartSwitch
-              small
-              noPadding
-              transparentBackground
-            />
+            <LineChart data={headlineAndFoodInflationChartData} small noPadding transparentBackground />
           ) : (
             <p>No data about headline and food inflation</p>
           )}

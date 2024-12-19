@@ -1,23 +1,20 @@
-import {
-  foodSecurityDescriptions,
-  nutritionDescriptions,
-  seasonalDescriptions,
-} from '@/domain/constant/dataSources/dataSourceDescriptions';
+import descriptions from '@/domain/constant/dataSources/dataSourceDescriptions';
 import { WikiEntry } from '@/domain/entities/wiki/WikiEntry';
 import { SearchOperations } from '@/operations/Search/SearchOperations';
 
-const wikiEntries = (
+const wikiItems = (
   [
-    foodSecurityDescriptions.fcs,
-    nutritionDescriptions.malnutritionAcute,
-    nutritionDescriptions.malnutritionChronic,
-    seasonalDescriptions.rainfall,
-    foodSecurityDescriptions.rCsi,
-    foodSecurityDescriptions.undernourishment,
-    seasonalDescriptions.vegetation,
+    descriptions.fcs,
+    descriptions.hazards,
+    descriptions.malnutritionAcute,
+    descriptions.malnutritionChronic,
+    descriptions.rainfall,
+    descriptions.rCsi,
+    descriptions.undernourishment,
+    descriptions.vegetation,
   ] as WikiEntry[]
 )
   .map((wikiEntry) => ({ ...wikiEntry, description: undefined, content: wikiEntry.description }))
   .sort((a, b) => a.title?.localeCompare(b.title));
 
-export default SearchOperations.makeAccordionItemsSearchable(wikiEntries);
+export default SearchOperations.makeAccordionItemsSearchable(wikiItems);

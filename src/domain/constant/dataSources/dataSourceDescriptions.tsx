@@ -18,13 +18,29 @@ export const contextAndNeedDescriptions = {
   hazards: {
     title: 'Hazards',
     summary: 'Hazards such as storms, earthquakes, wildfires or landslides.',
-    description:
-      'Current hazards information: Active Volcanoes; Active/Forecast Wind Radii (39, 58, 74); Previous, Current and ' +
-      'Forecast Storm Positions; 3- and 5-day Potential Track Area of Storms; Recent Earthquakes; MODIS Hotspots; ' +
-      'Tsunami Travel Time; GLIDE Events; H1N1 Affected Countries; Country Boundaries and Labels; Global Shaded ' +
-      'Relief; Global Population Density; and PDC integrated hazards.',
+    description: (
+      <>
+        <p>Current hazards information:</p>
+        <ul>
+          <li>Active Volcanoes</li>
+          <li>Active/Forecast Wind Radii (39, 58, 74)</li>
+          <li>Previous, Current and Forecast Storm Positions</li>
+          <li>3- and 5-day Potential Track Area of Storms</li>
+          <li>Recent Earthquakes</li>
+          <li>MODIS Hotspots</li>
+          <li>Tsunami Travel Time</li>
+          <li>GLIDE Events</li>
+          <li>H1N1 Affected Countries</li>
+          <li>Country Boundaries and Labels</li>
+          <li>Global Shaded Relief</li>
+          <li>Global Population Density</li>
+          <li>PDC integrated hazards</li>
+        </ul>
+      </>
+    ),
     dataSource: 'Pacific Disaster Centre (PDC) - Active Hazards Map Service',
     updateInterval: 'hourly',
+    readMoreLink: '/wiki',
   },
   population: {
     title: 'Population',
@@ -162,6 +178,7 @@ export const foodSecurityDescriptions = {
     dataSourceLink:
       'https://www.wfp.org/publications/2019-state-food-security-and-nutrition-world-sofi-safeguarding-against-economic',
     updateInterval: 'yearly',
+    readMoreLink: '/wiki',
   },
 } satisfies DataSourceDescriptionItems;
 

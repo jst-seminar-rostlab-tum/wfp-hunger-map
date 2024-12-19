@@ -3,6 +3,7 @@ import React from 'react';
 
 import AccordionModalSkeleton from '@/components/Accordions/AccordionModalSkeleton';
 import CountryLoadingLayer from '@/components/Map/CountryLoading';
+import IpcAccordion from '@/components/Map/IpcMap/IpcAccordion';
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { useIpcQuery } from '@/domain/hooks/globalHooks';
 import { IpcChoroplethProps } from '@/domain/props/IpcChoroplethProps';
@@ -10,7 +11,13 @@ import { IpcChoroplethProps } from '@/domain/props/IpcChoroplethProps';
 import IpcCountryChoropleth from './IpcCountryChoropleth';
 import IpcGlobalChoropleth from './IpcGlobalChoropleth';
 
-function IpcChoropleth({ countries, countryData, ipcRegionData, selectedCountryName }: IpcChoroplethProps) {
+function IpcChoropleth({
+  countries,
+  countryData,
+  ipcRegionData,
+  selectedCountryName,
+  isLoadingCountry,
+}: IpcChoroplethProps) {
   const { data: ipcData } = useIpcQuery(true);
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
 
@@ -39,14 +46,10 @@ function IpcChoropleth({ countries, countryData, ipcRegionData, selectedCountryN
           <AccordionModalSkeleton />
         </>
       )}
-
-      {ipcRegionData && (
-        <IpcCountryChoropleth
-          regionIpcData={ipcRegionData}
-          countryData={countryData}
-          countryName={selectedCountryName}
-        />
+      {selectedCountryId && (
+        <IpcAccordion countryData={countryData} countryName={selectedCountryName} loading={isLoadingCountry} />
       )}
+      {ipcRegionData && <IpcCountryChoropleth regionIpcData={ipcRegionData} />}
     </>
   );
 }

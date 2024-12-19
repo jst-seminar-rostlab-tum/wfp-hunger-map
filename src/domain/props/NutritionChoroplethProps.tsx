@@ -8,4 +8,5 @@ export default interface NutritionChoroplethProps {
   selectedCountryName?: string;
   regionLabelData?: FeatureCollection<Geometry, GeoJsonProperties>;
   setRegionLabelTooltips: (tooltips: (prevRegionLabelData: L.Tooltip[]) => L.Tooltip[]) => void;
+  isLoadingCountry: boolean;
 }

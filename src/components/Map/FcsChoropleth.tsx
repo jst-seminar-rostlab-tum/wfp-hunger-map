@@ -4,6 +4,7 @@ import { useTheme } from 'next-themes';
 import React, { useEffect, useRef } from 'react';
 import { GeoJSON } from 'react-leaflet';
 
+import FcsAccordion from '@/components/Map/FcsAccordion';
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 import { LayerWithFeature } from '@/domain/entities/map/LayerWithFeature.ts';
@@ -18,7 +19,7 @@ import FscCountryChoropleth from './FcsCountryChoropleth';
 export default function FcsChoropleth({
   data,
   countryId,
-  loading,
+  isLoadingCountry,
   regionData,
   countryData,
   countryIso3Data,
@@ -75,13 +76,17 @@ export default function FcsChoropleth({
           <AccordionModalSkeleton />
         </>
       )}
+      {countryId === selectedCountryId && (
+        <FcsAccordion
+          countryData={countryData}
+          countryIso3Data={countryIso3Data}
+          loading={isLoadingCountry}
+          countryName={selectedCountryName}
+        />
+      )}
       {regionData && countryId === selectedCountryId && regionLabelData && (
         <FscCountryChoropleth
           regionData={regionData}
-          countryData={countryData}
-          countryIso3Data={countryIso3Data}
-          countryName={selectedCountryName}
-          loading={loading}
           handleBackButtonClick={handleBackClick}
           regionLabelData={regionLabelData}
           countryMapData={data.features[0] as CountryMapData}

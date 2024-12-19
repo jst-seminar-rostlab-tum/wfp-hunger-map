@@ -8,7 +8,7 @@ import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data.ts';
 export default interface FcsChoroplethProps {
   data: FeatureCollection<Geometry, GeoJsonProperties>;
   countryId: number;
-  loading: boolean;
+  isLoadingCountry: boolean;
   regionData?: FeatureCollection<Geometry, GeoJsonProperties>;
   countryData?: CountryData;
   countryIso3Data?: CountryIso3Data;

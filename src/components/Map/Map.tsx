@@ -42,7 +42,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
   const [countryData, setCountryData] = useState<CountryData | undefined>();
   const [countryIso3Data, setCountryIso3Data] = useState<CountryIso3Data | undefined>();
   const [regionData, setRegionData] = useState<FeatureCollection<Geometry, GeoJsonProperties> | undefined>();
-  const [countryClickLoading, setCountryClickLoading] = useState<boolean>(false);
+  const [isLoadingCountry, setIsLoadingCountry] = useState<boolean>(false);
   const [regionNutritionData, setRegionNutritionData] = useState<FeatureCollection | undefined>();
   const [ipcRegionData, setIpcRegionData] = useState<FeatureCollection<Geometry, GeoJsonProperties> | undefined>();
   const [selectedCountryName, setSelectedCountryName] = useState<string | undefined>(undefined);
@@ -81,7 +81,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
         MapOperations.fetchCountryData(
           selectedMapType,
           selectedCountryData,
-          setCountryClickLoading,
+          setIsLoadingCountry,
           setRegionData,
           setCountryData,
           setCountryIso3Data,
@@ -157,7 +157,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
               key={country.properties.adm0_id}
               countryId={country.properties.adm0_id}
               data={{ type: 'FeatureCollection', features: [country as Feature<Geometry, GeoJsonProperties>] }}
-              loading={countryClickLoading}
+              isLoadingCountry={isLoadingCountry}
               countryData={countryData}
               countryIso3Data={countryIso3Data}
               regionData={regionData}
@@ -185,6 +185,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
             selectedCountryName={selectedCountryName}
             regionLabelData={regionLabelData}
             setRegionLabelTooltips={setRegionLabelTooltips}
+            isLoadingCountry={isLoadingCountry}
           />
         ))}
 
@@ -206,6 +207,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
           countryData={countryData}
           ipcRegionData={ipcRegionData}
           selectedCountryName={selectedCountryName}
+          isLoadingCountry={isLoadingCountry}
         />
       )}
 

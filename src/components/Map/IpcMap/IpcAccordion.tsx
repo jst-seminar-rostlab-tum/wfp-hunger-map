@@ -8,7 +8,7 @@ import { cardsWrapperClass } from '@/utils/primitives';
 import { ReactComponent as FoodConsumption } from '../../../../public/Images/FoodConsumption.svg';
 import { ReactComponent as Population } from '../../../../public/Images/Population.svg';
 
-export default function IpcAccordion({ countryData, countryName }: IpcAccordionProps) {
+export default function IpcAccordion({ countryData, countryName, loading }: IpcAccordionProps) {
   const deltaOneMonth = countryData?.fcsMinus1 ? countryData.fcs - countryData.fcsMinus1 : null;
   const deltaThreeMonth = countryData?.fcsMinus3 ? countryData.fcs - countryData.fcsMinus3 : null;
   const hasNoData: boolean =
@@ -20,6 +20,7 @@ export default function IpcAccordion({ countryData, countryName }: IpcAccordionP
         title={countryName ?? undefined}
         accordionModalActive
         maxWidth={600}
+        loading={loading}
         items={[
           {
             title: 'Food Security',

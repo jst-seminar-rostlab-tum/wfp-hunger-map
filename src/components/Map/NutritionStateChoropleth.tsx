@@ -31,17 +31,15 @@ export default function NutritionStateChoropleth({
   }, [selectedNutrient, regionNutrition]);
 
   return (
-    regionNutrition && (
-      <GeoJSON
-        data={regionNutrition}
-        style={(feature) => NutritionStateChoroplethOperations.dynamicStyle(feature, selectedNutrient)}
-        onEachFeature={(feature, layer) => {
-          layersRef.current.push(layer);
-          NutritionStateChoroplethOperations.addNutritionTooltip(layer, feature, selectedNutrient);
-          NutritionStateChoroplethOperations.addHoverEffect(layer);
-          MapOperations.setupRegionLabelTooltip(feature, regionLabelData, countryMapData, map, setRegionLabelTooltips);
-        }}
-      />
-    )
+    <GeoJSON
+      data={regionNutrition}
+      style={(feature) => NutritionStateChoroplethOperations.dynamicStyle(feature, selectedNutrient)}
+      onEachFeature={(feature, layer) => {
+        layersRef.current.push(layer);
+        NutritionStateChoroplethOperations.addNutritionTooltip(layer, feature, selectedNutrient);
+        NutritionStateChoroplethOperations.addHoverEffect(layer);
+        MapOperations.setupRegionLabelTooltip(feature, regionLabelData, countryMapData, map, setRegionLabelTooltips);
+      }}
+    />
   );
 }

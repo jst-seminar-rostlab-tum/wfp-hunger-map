@@ -133,3 +133,7 @@ path.leaflet-interactive:focus {
 .leaflet-container.interactive .leaflet-interactive {
   cursor: pointer;
 }
+
+.map-marker-with-margin {
+  margin: 1px !important;
+}

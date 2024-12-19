@@ -30,7 +30,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
         </div>
       )}
       : (
-      <div className="absolute w-[300px] left-[108px] top-4 z-9999 overflow-y-scroll max-h-screen">
+      <div className="absolute w-[310px] left-[108px] top-4 z-9999 overflow-y-scroll max-h-screen">
         <AccordionContainer
           loading={loading}
           title={countryName}

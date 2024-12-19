@@ -95,7 +95,7 @@ export function getFcsFoodSecurityAccordionItems(
                 title="Chronic Nutrition"
                 content={[
                   {
-                    svgIcon: <Nutrition className="w-[50px] h-[50px] object-contain" />,
+                    svgIcon: <Nutrition className="w-[30px] h-[30px] object-contain" />,
                     text: (
                       <>
                         <span className="text-base">{`${nutritionData.Chronic} %`}</span>

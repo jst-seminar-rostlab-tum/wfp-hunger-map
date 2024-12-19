@@ -8,4 +8,5 @@ export default interface TooltipProps {
   warning?: boolean;
   titleStyle?: string;
   textStyle?: string;
+  offset?: number;
 }

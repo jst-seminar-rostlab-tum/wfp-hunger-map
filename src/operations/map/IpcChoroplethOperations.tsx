@@ -44,14 +44,14 @@ export class IpcChoroplethOperations {
   });
 
   static fillCountryIpc = (phase: number) => {
-    if (phase === null) return 'RGBA(58, 66, 68, 0.7)';
+    if (phase === null) return 'hsl(var(--nextui-notAnalyzed))';
     if (phase === 1) return '#D1FAD1';
     if (phase === 2) return '#FAE834';
     if (phase === 3) return '#E88519';
     if (phase === 4) return '#CD1919';
     if (phase === 5) return '#731919';
     if (phase === 6) return '#353F42';
-    return 'RGBA(58, 66, 68, 0.7)';
+    return 'hsl(var(--nextui-notAnalyzed))';
   };
 
   static generateColorMap = (ipcData: CountryIpcData[], mapData: CountryMapDataWrapper) => {
@@ -76,18 +76,22 @@ export class IpcChoroplethOperations {
     feature: Feature<Geometry, GeoJsonProperties>,
     layer: L.Layer,
     ipcData: CountryIpcData[],
-    setSelectedCountryId: (id: number | null) => void
+    setSelectedCountryId: (id: number | null) => void,
+    selectedCountryId: number
   ) {
     if (this.checkIfActive(feature as CountryMapData, ipcData)) {
-      this.createTooltip(feature, layer, ipcData);
-      this.attachEvents(feature, layer, setSelectedCountryId);
+      if (feature.properties?.adm0_id !== selectedCountryId) {
+        this.createTooltip(feature, layer, ipcData);
+      }
+      this.attachEvents(feature, layer, setSelectedCountryId, selectedCountryId);
     }
   }
 
   static attachEvents(
     feature: Feature<Geometry, GeoJsonProperties>,
     layer: L.Layer,
-    setSelectedCountryId: (id: number | null) => void
+    setSelectedCountryId: (id: number | null) => void,
+    selectedCountryId: number
   ) {
     const pathLayer = layer as L.Path;
     const originalStyle = { ...pathLayer.options };
@@ -98,11 +102,19 @@ export class IpcChoroplethOperations {
         document.getElementsByClassName('leaflet-container').item(0)?.classList.remove('interactive');
       },
       mouseover: () => {
-        pathLayer.setStyle({ ...originalStyle, fillOpacity: 0.7 });
-        document.getElementsByClassName('leaflet-container').item(0)?.classList.add('interactive');
+        if (feature.properties?.adm0_id !== selectedCountryId) {
+          pathLayer.setStyle({ ...originalStyle, fillOpacity: 0.6 });
+        } else {
+          pathLayer.setStyle({
+            ...originalStyle,
+            fillColor: 'hsl(var(--nextui-ipcHoverRegion))',
+          });
+        }
 
+        document.getElementsByClassName('leaflet-container').item(0)?.classList.add('interactive');
         pathLayer.openTooltip();
       },
+
       mouseout: () => {
         pathLayer.setStyle(originalStyle);
         document.getElementsByClassName('leaflet-container').item(0)?.classList.remove('interactive');
@@ -159,7 +171,14 @@ export class IpcChoroplethOperations {
     const originalStyle = { ...pathLayer.options };
     layer.on({
       mouseover: () => {
-        pathLayer.setStyle({ ...originalStyle, fillOpacity: 0.7 });
+        if (feature?.properties?.ipcPhase) {
+          pathLayer.setStyle({ ...originalStyle, fillOpacity: 0.6 });
+        } else {
+          pathLayer.setStyle({
+            ...originalStyle,
+            fillColor: 'hsl(var(--nextui-ipcHoverRegion))',
+          });
+        }
       },
       mouseout: () => {
         pathLayer.setStyle(originalStyle);

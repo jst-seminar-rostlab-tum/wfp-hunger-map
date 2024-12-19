@@ -13,6 +13,7 @@ import {
   MAP_MAX_ZOOM,
   MAP_MIN_ZOOM,
   oceanBounds,
+  SELECTED_COUNTRY_ZOOM_THRESHOLD,
 } from '@/domain/constant/map/Map';
 import { useSelectedAlert } from '@/domain/contexts/SelectedAlertContext';
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
@@ -45,6 +46,8 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
   const [regionNutritionData, setRegionNutritionData] = useState<FeatureCollection | undefined>();
   const [ipcRegionData, setIpcRegionData] = useState<FeatureCollection<Geometry, GeoJsonProperties> | undefined>();
   const [selectedCountryName, setSelectedCountryName] = useState<string | undefined>(undefined);
+  const [regionLabelData, setRegionLabelData] = useState<FeatureCollection | undefined>(undefined);
+  const [regionLabelTooltips, setRegionLabelTooltips] = useState<L.Tooltip[]>([]);
   const [isDataAvailable, setIsDataAvailable] = useState<boolean>(true);
 
   const onZoomThresholdReached = () => {
@@ -84,6 +87,8 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
           setCountryIso3Data,
           setRegionNutritionData,
           setIpcRegionData,
+          regionLabelData,
+          setRegionLabelData,
           setIsDataAvailable
         );
         window.gtag('event', `${selectedCountryData.properties.iso3}_country_selected`, {
@@ -92,6 +97,13 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
         setSelectedCountryName(selectedCountryData.properties.adm0_name);
         mapRef.current?.fitBounds(L.geoJSON(selectedCountryData as GeoJSON).getBounds(), { animate: true });
       }
+    }
+
+    if (mapRef.current) {
+      regionLabelTooltips.forEach((tooltip) => {
+        tooltip.removeFrom(mapRef.current as L.Map);
+      });
+      setRegionLabelTooltips([]);
     }
   }, [selectedCountryId, selectedMapType]);
 
@@ -150,6 +162,8 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
               regionData={regionData}
               selectedCountryName={selectedCountryName}
               fcsData={fcsData}
+              regionLabelData={regionLabelData}
+              setRegionLabelTooltips={setRegionLabelTooltips}
             />
           ))}
           {!selectedCountryId && (
@@ -168,6 +182,8 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
             data={{ type: 'FeatureCollection', features: [country as Feature<Geometry, GeoJsonProperties>] }}
             regionNutritionData={regionNutritionData}
             selectedCountryName={selectedCountryName}
+            regionLabelData={regionLabelData}
+            setRegionLabelTooltips={setRegionLabelTooltips}
           />
         ))}
 
@@ -205,7 +221,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
         />
       </Pane>
 
-      <ZoomControl threshold={5} callback={onZoomThresholdReached} />
+      <ZoomControl threshold={SELECTED_COUNTRY_ZOOM_THRESHOLD} callback={onZoomThresholdReached} />
       <BackToGlobalButton />
     </MapContainer>
   );

@@ -17,3 +17,5 @@ export interface CountryIso3Data {
   balanceOfTradeGraph: BalanceOfTradeGraph;
   inflationGraphs: InflationGraphs;
 }
+
+export type CountryIso3DataRecord = CountryIso3Data & { id: string };

@@ -142,6 +142,21 @@ export default async function Elements() {
       },
     ],
   };
+
+  const emptyDummyChartData: LineChartData = {
+    type: LineChartDataType.LINE_CHART_DATA,
+    xAxisType: 'linear',
+    yAxisLabel: 'Mill',
+    predictionVerticalLineX: 3,
+    lines: [
+      {
+        name: 'Category A',
+        showRange: true,
+        dataPoints: [],
+      },
+    ],
+  };
+
   return (
     <div className="w-full flex flex-col items-center justify-center">
       <div className="svg-icon">
@@ -180,6 +195,9 @@ export default async function Elements() {
         </div>
         <div className="w-400px h-fit">
           <CategoricalChart title="" data={categoricalDummyChartData1} />
+        </div>
+        <div className="w-400px h-fit">
+          <LineChart title="Forecast XYZ" data={emptyDummyChartData} />
         </div>
       </div>
       <MapSkeleton />

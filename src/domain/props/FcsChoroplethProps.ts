@@ -1,4 +1,5 @@
 import { FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
+import L from 'leaflet';
 
 import { CountryData } from '@/domain/entities/country/CountryData.ts';
 import { CountryFcsData } from '@/domain/entities/country/CountryFcsData.ts';
@@ -13,4 +14,6 @@ export default interface FcsChoroplethProps {
   countryIso3Data?: CountryIso3Data;
   selectedCountryName?: string;
   fcsData: Record<string, CountryFcsData>;
+  regionLabelData?: FeatureCollection<Geometry, GeoJsonProperties>;
+  setRegionLabelTooltips: (tooltips: (prevRegionLabelData: L.Tooltip[]) => L.Tooltip[]) => void;
 }

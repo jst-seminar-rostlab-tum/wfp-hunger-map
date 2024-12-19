@@ -10,11 +10,13 @@
     "lint:fix": "eslint . --ext .ts,.tsx -c .eslintrc.json --fix",
     "format": "prettier --write .",
     "format:fix": "prettier .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "postbuild": "next-sitemap"
   },
   "dependencies": {
     "@internationalized/date": "^3.6.0",
     "@nextui-org/accordion": "^2.0.40",
+    "@nextui-org/alert": "^2.2.7",
     "@nextui-org/button": "^2.0.38",
     "@nextui-org/card": "^2.0.34",
     "@nextui-org/chip": "^2.0.33",
@@ -37,7 +39,7 @@
     "@nextui-org/switch": "^2.0.34",
     "@nextui-org/system": "2.2.6",
     "@nextui-org/table": "^2.0.40",
-    "@nextui-org/theme": "2.2.11",
+    "@nextui-org/theme": "^2.3.0",
     "@nextui-org/tooltip": "^2.0.41",
     "@react-aria/ssr": "3.9.4",
     "@react-aria/visually-hidden": "3.8.12",
@@ -61,6 +63,7 @@
     "leaflet-geosearch": "^4.0.0",
     "lucide-react": "^0.454.0",
     "next": "14.2.10",
+    "next-sitemap": "^4.2.3",
     "next-themes": "^0.2.1",
     "nextui-cli": "^0.3.4",
     "react": "18.3.1",

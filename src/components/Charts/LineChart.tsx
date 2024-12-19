@@ -1,7 +1,7 @@
 'use client';
 
 import Highcharts from 'highcharts';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { ChartContainer } from '@/components/Charts/helpers/ChartContainer';
 import { LineChartData } from '@/domain/entities/charts/LineChartData';
@@ -51,8 +51,15 @@ export function LineChart({
 
   // the `selectedXAxisRange` saves the to be rendered x-axis range of the chart
   // can be changed using the `LinkeChartXAxisSlider` if the param `xAxisSlider==true`
-  const xAxisLength: number = LineChartOperations.getDistinctXAxisValues(lineChartData).length;
+  const xAxisLength = useMemo(() => {
+    return LineChartOperations.getDistinctXAxisValues(lineChartData).length;
+  }, [lineChartData]);
   const [selectedXAxisRange, setSelectedXAxisRange] = useState<number[]>([0, xAxisLength - 1]);
+
+  // we have to make sure that if the data changes we update the XAxis slider configuration as well
+  useEffect(() => {
+    setSelectedXAxisRange([0, xAxisLength - 1]);
+  }, [xAxisLength]);
 
   // controlling if a line or bar chart is rendered; line chart is the default
   const [showBarChart, setShowBarChart] = useState<boolean>(false);

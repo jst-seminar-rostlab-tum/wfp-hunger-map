@@ -6,11 +6,10 @@ import RecursiveHighlighter from '@/components/Search/RecursiveHighlighter';
 import { DataSourceDescriptionItems } from '@/domain/entities/dataSources/DataSourceDescription';
 import { CustomTableData } from '@/domain/props/CustomTableProps';
 import { SearchOperations } from '@/operations/Search/SearchOperations';
+import { prettifyURL } from '@/utils/formatting';
 
 function formatDataSourceTable(dataSources: DataSourceDescriptionItems) {
   return Object.entries(dataSources).map(([key, tableRow]) => {
-    // remove leading http[s]:// and trailing slash
-    const linkDisplayText = tableRow.dataSourceLink?.split('//')?.pop()?.replace(/\/$/, '');
     return {
       groupKey: key,
       updateDetails: tableRow.updateDetails,
@@ -19,7 +18,7 @@ function formatDataSourceTable(dataSources: DataSourceDescriptionItems) {
           <>
             <div className="text-base pb-3 block">
               <b className={clsx('block pt-0.5 pr-2', { 'float-left': tableRow.updateInterval })}>
-                {tableRow.legendLabel ?? tableRow.title}
+                {tableRow.legendTitle ?? tableRow.title}
               </b>{' '}
               {tableRow.updateInterval && (
                 <Chip size="sm" color="primary">
@@ -63,7 +62,7 @@ function formatDataSourceTable(dataSources: DataSourceDescriptionItems) {
                   <>
                     <br />
                     <StyledLink href={tableRow.dataSourceLink} className="text-sm">
-                      {linkDisplayText}
+                      {prettifyURL(tableRow.dataSourceLink)}
                     </StyledLink>
                   </>
                 )}

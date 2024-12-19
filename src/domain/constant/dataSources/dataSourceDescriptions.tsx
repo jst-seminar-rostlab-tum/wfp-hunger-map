@@ -6,8 +6,8 @@ import Abbreviation from '@/components/Tooltip/Abbreviation';
 import { DataSourceDescriptionItems } from '@/domain/entities/dataSources/DataSourceDescription';
 
 export const contextAndNeedDescriptions = {
-  conflict: {
-    title: 'Conflict',
+  conflicts: {
+    title: 'Conflicts',
     summary:
       'All reported violence and conflicts in the last 30 days across Africa, the Middle East, South and South East ' +
       'Asia, Eastern and Southeastern Europe and the Balkans.',
@@ -17,7 +17,8 @@ export const contextAndNeedDescriptions = {
   },
   hazards: {
     title: 'Hazards',
-    summary:
+    summary: 'Hazards such as storms, earthquakes, wildfires or landslides.',
+    description:
       'Current hazards information: Active Volcanoes; Active/Forecast Wind Radii (39, 58, 74); Previous, Current and ' +
       'Forecast Storm Positions; 3- and 5-day Potential Track Area of Storms; Recent Earthquakes; MODIS Hotspots; ' +
       'Tsunami Travel Time; GLIDE Events; H1N1 Affected Countries; Country Boundaries and Labels; Global Shaded ' +
@@ -36,7 +37,7 @@ export const contextAndNeedDescriptions = {
 export const foodSecurityDescriptions = {
   fcs: {
     title: 'Food Consumption Score (FCS)',
-    legendLabel: 'People with insufficient food consumption',
+    legendTitle: 'People with insufficient food consumption',
     summary: 'Number of people with poor or borderline food consumption according to the Food Consumption Score (FCS).',
     description: (
       <>
@@ -166,7 +167,7 @@ export const foodSecurityDescriptions = {
 export const nutritionDescriptions = {
   malnutritionAcute: {
     title: 'Malnutrition, acute',
-    legendLabel: 'Acute malnutrition',
+    legendTitle: 'Acute malnutrition',
     summary: 'Characterized by a rapid deterioration in nutritional status over a short period of time.',
     description: (
       <>
@@ -196,7 +197,7 @@ export const nutritionDescriptions = {
   },
   malnutritionChronic: {
     title: 'Malnutrition, chronic',
-    legendLabel: 'Chronic malnutrition',
+    legendTitle: 'Chronic malnutrition',
     summary:
       'A form of growth failure which develops as a result of inadequate nutrition and/or repeated infections over long periods of time.',
     description: (
@@ -226,6 +227,52 @@ export const nutritionDescriptions = {
     readMoreLink: '/wiki',
     dataSource: 'Joint Malnutrition Estimates – UNICEF, WHO, World Bank',
     updateInterval: 'yearly or less',
+  },
+  micronutrients: {
+    title: 'Micronutrients',
+    legendTitle: 'Risk of Inadequate Micronutrient Intake',
+    summary: (
+      <p>
+        The <Abbreviation abbreviation="MIMI" /> project is modelling and mapping the risk of inadequate micronutrient
+        intake to inform decision making in the short-medium term.
+      </p>
+    ),
+    description: (
+      <>
+        <p>
+          MIMI is helping to close gaps in the nutrition data landscape by applying novel approaches to model and map
+          the risk of inadequate micronutrient intake and potential contribution from fortification scenarios, to inform
+          decision making and advocacy for fortification and other micronutrient programmes in the short-medium term.
+        </p>
+        <p>
+          <b>Key components of the current MIMI project:</b>
+        </p>
+        <ul>
+          <li>
+            Qualitative research to understand key policy questions and evidence needs for food fortification policy and
+            programmes
+          </li>
+          <li>
+            Preparation and analysis of secondary household survey data to estimate risk of inadequate intake in
+            Ethiopia, India and Nigeria
+          </li>
+          <li>
+            Training machine-learning (ML) models to predict risk of inadequate micronutrient intake and potential
+            contribution to improving intake
+          </li>
+          <li>
+            Interactive, subnational map visualisations to make data outputs relevant and accessible to decision-makers
+            and advisors
+          </li>
+          <li>
+            Workshops and Capacity Strengthening to ensure outputs are policy-relevant and can inform advocacy and
+            decision-making
+          </li>
+        </ul>
+      </>
+    ),
+    readMoreLink: '/wiki',
+    // the original WFP website does not give info on the source (it does not even list micronutrients)
   },
 } satisfies DataSourceDescriptionItems;
 
@@ -346,3 +393,13 @@ export const otherDescriptions = {
     updateInterval: 'live',
   },
 } satisfies DataSourceDescriptionItems;
+
+const descriptions = {
+  ...contextAndNeedDescriptions,
+  ...foodSecurityDescriptions,
+  ...nutritionDescriptions,
+  ...marketDescriptions,
+  ...seasonalDescriptions,
+  ...otherDescriptions,
+};
+export default descriptions;

@@ -29,7 +29,7 @@ export function Topbar() {
           <LogoWithText />
         </NavbarBrand>
       </NavbarContent>
-      <NavbarContent as="div" className="hidden lg:flex gap-4 mt-4" justify="center">
+      <NavbarContent className="hidden lg:flex gap-4 mt-4" justify="center">
         {pageLinks.map((item) => (
           <NavbarItem key={item.label} isActive={pathname === item.href}>
             <Link href={item.href} className="text-medium" color={pathname === item.href ? 'primary' : 'foreground'}>
@@ -43,7 +43,7 @@ export function Topbar() {
           <ThemeSwitch isIconOnly />
         </NavbarItem>
       </NavbarContent>
-      <NavbarMenu as="div">
+      <NavbarMenu>
         {pageLinks.map((item) => (
           <NavbarMenuItem key={item.label} isActive={pathname === item.href}>
             <Link

@@ -4,10 +4,15 @@ import reactElementToJsxString from 'react-element-to-jsx-string';
 import RecursiveHighlighter from '@/components/Search/RecursiveHighlighter';
 import { AccordionItemProps, SearchableAccordionItemProps } from '@/domain/entities/accordions/Accordions';
 import { DataSourceTableData, DataSourceTableRow } from '@/domain/props/CustomTableProps';
+import { SearchableElement } from '@/domain/props/SearchableSectionProps';
 
 export class SearchOperations {
-  // textElements should not be changed during runtime
-  static makeTextElementsSearchable(textElements: ReactElement[]) {
+  /**
+   * For each element, wrap the text contents of its components with a `Highlighter` component. In addition, store all contained words into `containedWords`.
+   *
+   * @param textElements Elements to deal with. This value should never change since the array indices are used as keys.
+   */
+  static makeTextElementsSearchable(textElements: ReactElement[]): SearchableElement[] {
     return textElements.map((item, index) => {
       return {
         element: (
@@ -21,6 +26,10 @@ export class SearchOperations {
     });
   }
 
+  /**
+   * Find all contained words for an accordion of tables and store them into the respective `containedWords` fields.
+   * @param items Accordion items where every `content` field is assumed to contain a `CustomTable`.
+   */
   static makeDataSourceAccordionSearchable(items: AccordionItemProps[]): SearchableAccordionItemProps[] {
     return items.map((item) => {
       const tableData: DataSourceTableData | undefined = (item.content as ReactElement)?.props?.data;
@@ -31,6 +40,9 @@ export class SearchOperations {
     });
   }
 
+  /**
+   * For each item, wrap the text contents of its components with a `Highlighter` component. In addition, store all contained words into `containedWords`.
+   */
   static makeAccordionItemsSearchable(items: AccordionItemProps[]): SearchableAccordionItemProps[] {
     return items.map((item) => {
       return {
@@ -45,12 +57,9 @@ export class SearchOperations {
     });
   }
 
-  private static sanitizeAccordionItem(item: AccordionItemProps): string {
-    return SearchOperations.sanitizeText(
-      `${item.title} ${item.description ?? ''} ${SearchOperations.sanitizeReactNode(item.content)}`
-    );
-  }
-
+  /**
+   * Put all contained words from a table row into a lowercase string.
+   */
   static sanitizeTableRow(item: DataSourceTableRow): string {
     return SearchOperations.sanitizeText(`${item.label}
       ${SearchOperations.sanitizeReactNode(item.description)}
@@ -59,6 +68,18 @@ export class SearchOperations {
       ${item.updateDetails?.map((d) => `${d.interval} ${SearchOperations.sanitizeReactNode(d.label)}`)?.join(' ') ?? ''}`);
   }
 
+  /**
+   * Put all contained words from an accordion item into a lowercase string.
+   */
+  private static sanitizeAccordionItem(item: AccordionItemProps): string {
+    return SearchOperations.sanitizeText(
+      `${item.title} ${item.description ?? ''} ${SearchOperations.sanitizeReactNode(item.content)}`
+    );
+  }
+
+  /**
+   * Put all contained words from a React Node into a lowercase string, omitting component names and props.
+   */
   private static sanitizeReactNode(item: ReactNode): string {
     return reactElementToJsxString(item)
       .replace(/<Abbreviation abbreviation="([^"]*)" \/>/g, '$1')
@@ -67,6 +88,9 @@ export class SearchOperations {
       .replace(/{[^}]*}/g, '');
   }
 
+  /**
+   * Turn an arbitrary text into a string of the contained words that is lowercase, without redundant whitespace and has no duplicate words.
+   */
   private static sanitizeText(text: string) {
     return Array.from(
       new Set(

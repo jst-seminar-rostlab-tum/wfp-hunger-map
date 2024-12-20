@@ -5,6 +5,15 @@ import { AccordionItemProps, SearchableAccordionItemProps } from '@/domain/entit
 import { SearchableElement, SearchableSectionProps } from '@/domain/props/SearchableSectionProps';
 import { filterSearchableItems } from '@/utils/searchUtils';
 
+/**
+ * Wrap the provided elements into a section. If there is an ongoing search (i.e. `searchWords.length > 0`) with no results in this section, hide it.
+ *
+ * @param heading Heading of the section. Will be hidden if the other elements contain no results during search.
+ * @param textElements Array of text elements to display. Only elements with results will be shown during search.
+ * @param accordionItems Array of accordion items to display. Only items with results will be shown during search.
+ * @param searchWords
+ * @param onVisibilityChange is being called with the current visibility of the section (true = visible).
+ */
 function SearchableSection({
   heading,
   textElements,

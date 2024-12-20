@@ -5,7 +5,22 @@ import Highlighter from 'react-highlight-words';
 import { RecursiveHighlighterProps } from '@/domain/props/RecursiveHighlighterProps';
 import { getSearchWords } from '@/utils/searchUtils';
 
-// only use if children does never change!
+/**
+ * Throughout the passed children, wrap everything that looks like a text into a `Highlighter` component.
+ *
+ * In Detail:
+ * * Render a React Element with given type and props, but modified children.
+ *   * if `type` is `React.Fragment`, this is equivalent to just rendering the modified children
+ * * if `children` is a string: wrap it with a `Highlighter` component
+ * * if `children` is a React Element (e.g. p or div): modify its children recursively
+ * * if `children` is an array (i.e. there are multiple children): modify each item recursively
+ * * if `children` is anything else (undefined): do not modify it
+ *
+ * @param children Content that should be wrapped with `Highlighter` components
+ * @param type Type of the created wrapper element (used for the recursive call)
+ * @param props Props of the created wrapper element (used for the recursive call)
+ * @constructor
+ */
 function RecursiveHighlighter({ type = React.Fragment, children, ...props }: RecursiveHighlighterProps) {
   const searchWords = getSearchWords(useSearchParams().get('search') ?? '');
 

@@ -1,3 +1,6 @@
+/**
+ * Convert a search string into an array of lowercase words.
+ */
 export const getSearchWords = (searchString: string): string[] => {
   return (
     searchString

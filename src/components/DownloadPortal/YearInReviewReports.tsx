@@ -43,7 +43,7 @@ export default function YearInReviewReports({ yearInReviewReports }: YearInRevie
         error={error}
         onDownloadPdf={() => {
           if (selectedReport) {
-            DownloadPortalOperations.downloadYearInReview(selectedReport, showSnackBar);
+            DownloadPortalOperations.downloadYearInReviewReport(selectedReport, showSnackBar);
           }
         }}
       />

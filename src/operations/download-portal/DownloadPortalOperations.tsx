@@ -91,7 +91,7 @@ export class DownloadPortalOperations {
         <div className="flex justify-center items-center">
           <DocumentDownload
             size={20}
-            onClick={() => DownloadPortalOperations.downloadYearInReview(item, showSnackBar)}
+            onClick={() => DownloadPortalOperations.downloadYearInReviewReport(item, showSnackBar)}
             className="cursor-pointer"
           />
         </div>
@@ -133,17 +133,17 @@ export class DownloadPortalOperations {
     country: CountryCodesData,
     showSnackBar: (snackbarProps: SnackbarProps) => void
   ): Promise<void> {
-    await this.downloadFile(country.url.summary, `${country.country.name}.pdf`, showSnackBar);
+    await this.downloadPdfFile(country.url.summary, `${country.country.name}.pdf`, showSnackBar);
   }
 
-  static async downloadYearInReview(
+  static async downloadYearInReviewReport(
     yearInReview: YearInReview,
     showSnackBar: (snackbarProps: SnackbarProps) => void
   ): Promise<void> {
-    await this.downloadFile(yearInReview.url, `${yearInReview.label}.pdf`, showSnackBar);
+    await this.downloadPdfFile(yearInReview.url, `${yearInReview.label}.pdf`, showSnackBar);
   }
 
-  private static async downloadFile(
+  private static async downloadPdfFile(
     fileUrl: string,
     fileName: string,
     showSnackBar?: (snackbarProps: SnackbarProps) => void
@@ -161,8 +161,6 @@ export class DownloadPortalOperations {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-
-      // Cleanup URL object
       window.URL.revokeObjectURL(url);
     } catch {
       if (showSnackBar) {

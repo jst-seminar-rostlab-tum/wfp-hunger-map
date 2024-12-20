@@ -39,7 +39,7 @@ export function Topbar() {
         ))}
       </NavbarContent>
       <NavbarContent as="div" justify="end" className="hidden lg:flex space-x-7">
-        <NavbarItem className="mt-4">
+        <NavbarItem as="div" className="mt-4">
           <ThemeSwitch isIconOnly />
         </NavbarItem>
       </NavbarContent>

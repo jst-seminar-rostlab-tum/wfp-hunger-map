@@ -8,7 +8,7 @@ export interface IMessage {
 }
 
 export interface IChat {
-  id: number;
+  id: string;
   title: string;
   context?: string;
   isReportStarter?: boolean;

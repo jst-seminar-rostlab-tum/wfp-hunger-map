@@ -1,3 +1,5 @@
+import { v4 as uuid } from 'uuid';
+
 import { IChat } from '@/domain/entities/chatbot/Chatbot';
 import { SNACKBAR_SHORT_DURATION } from '@/domain/entities/snackbar/Snackbar';
 import { SenderRole } from '@/domain/enums/SenderRole';
@@ -45,7 +47,7 @@ export default class ChatbotOperations {
     // Return default chat if no recent chats are found
     return [
       {
-        id: 1,
+        id: uuid(),
         title: 'Chat 1',
         messages: [],
         isTyping: false,

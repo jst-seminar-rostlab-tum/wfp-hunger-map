@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode, Suspense } from 'react';
+import { ReactElement, Suspense } from 'react';
 import reactElementToJsxString from 'react-element-to-jsx-string';
 
 import RecursiveHighlighter from '@/components/Search/RecursiveHighlighter';
@@ -64,7 +64,8 @@ export class SearchOperations {
     return SearchOperations.sanitizeText(`${item.label}
       ${SearchOperations.sanitizeReactNode(item.description)}
       ${SearchOperations.sanitizeReactNode(item.dataSource)}
-      ${item.updateInterval?.toLowerCase() ?? ''}
+      ${item.dataSourceLink ?? ''}
+      ${item.updateInterval ?? ''}
       ${item.updateDetails?.map((d) => `${d.interval} ${SearchOperations.sanitizeReactNode(d.label)}`)?.join(' ') ?? ''}`);
   }
 
@@ -73,14 +74,15 @@ export class SearchOperations {
    */
   private static sanitizeAccordionItem(item: AccordionItemProps): string {
     return SearchOperations.sanitizeText(
-      `${item.title} ${item.description ?? ''} ${SearchOperations.sanitizeReactNode(item.content)}`
+      `${item.title} ${item.description ?? ''} ${SearchOperations.sanitizeReactNode(item.content ?? '')}`
     );
   }
 
   /**
-   * Put all contained words from a React Node into a lowercase string, omitting component names and props.
+   * Convert a React Node into a string, omitting component names and props.
    */
-  private static sanitizeReactNode(item: ReactNode): string {
+  private static sanitizeReactNode(item: ReactElement | string): string {
+    if (typeof item === 'string') return item;
     return reactElementToJsxString(item)
       .replace(/<Abbreviation abbreviation="([^"]*)" \/>/g, '$1')
       .replace(/<[^>]*>/g, '')

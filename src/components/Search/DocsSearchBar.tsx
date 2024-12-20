@@ -1,26 +1,16 @@
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import SearchBar from '@/components/Search/SearchBar';
-import { useDebounce } from '@/domain/hooks/searchHooks.ts';
+import { useSearchQuery } from '@/domain/hooks/queryParamsHooks';
 import { DocsSearchBarProps } from '@/domain/props/DocsSearchBarProps';
 import { getSearchWords } from '@/utils/searchUtils';
 
 function DocsSearchBar({ setSearchWords }: DocsSearchBarProps) {
-  const params = useSearchParams();
-  const router = useRouter();
-  const pathname = usePathname();
-
-  const [search, setSearch] = useState(params.get('search') ?? '');
-  const debouncedSearch = useDebounce(search, 350);
+  const [search, setSearch] = useSearchQuery();
 
   useEffect(() => {
-    if (search) setSearchWords(getSearchWords(search));
-  }, []);
-
-  useEffect(() => {
-    router.push(`${pathname}?search=${debouncedSearch}`);
-  }, [debouncedSearch]);
+    setSearchWords(getSearchWords(search));
+  }, [search]);
 
   return (
     <div className="h-10">

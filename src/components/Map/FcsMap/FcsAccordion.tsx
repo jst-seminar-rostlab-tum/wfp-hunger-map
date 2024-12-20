@@ -7,11 +7,11 @@ import AccordionContainer from '../../Accordions/AccordionContainer';
 
 export default function FcsAccordion({ countryData, loading, countryIso3Data, countryName }: FcsAccordionProps) {
   const isMobile = useMediaQuery('(max-width: 700px)');
-  const foodSecurityAccordion = FcsFoodSecurityOperations.getFcsFoodSecurityAccordionItems(
+  const foodSecurityAccordionItems = FcsFoodSecurityOperations.getFcsFoodSecurityAccordionItems(
     countryData,
     countryIso3Data
   );
-  const macroEconomicAccordion = FcsMacroEconomicOperations.getMacroEconomicAccordionItems(
+  const macroEconomicAccordionItems = FcsMacroEconomicOperations.getMacroEconomicAccordionItems(
     countryData,
     countryIso3Data
   );
@@ -23,7 +23,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
         title={countryName}
         accordionModalActive
         maxWidth={600}
-        items={[...foodSecurityAccordion, ...macroEconomicAccordion]}
+        items={[...foodSecurityAccordionItems, ...macroEconomicAccordionItems]}
       />
     </div>
   ) : (
@@ -35,12 +35,12 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
           multipleSelectionMode
           accordionModalActive
           maxWidth={600}
-          items={foodSecurityAccordion}
+          items={foodSecurityAccordionItems}
           expandAll
         />
       </div>
       <div className="absolute w-[300px] right-[1rem] inset-y-24 z-9999">
-        <AccordionContainer loading={loading} accordionModalActive maxWidth={600} items={macroEconomicAccordion} />
+        <AccordionContainer loading={loading} accordionModalActive maxWidth={600} items={macroEconomicAccordionItems} />
       </div>
     </>
   );

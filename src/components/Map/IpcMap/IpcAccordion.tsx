@@ -7,12 +7,12 @@ export default function IpcAccordion({ countryData, countryName, countryIso3Data
   const deltaOneMonth = countryData?.fcsMinus1 ? countryData.fcs - countryData.fcsMinus1 : null;
   const deltaThreeMonth = countryData?.fcsMinus3 ? countryData.fcs - countryData.fcsMinus3 : null;
 
-  const ipcFoodSecurityAccordion = IpcFoodSecurityAccordionOperations.getFoodSecurityAccordionItems(
+  const foodSecurityAccordionItems = IpcFoodSecurityAccordionOperations.getFoodSecurityAccordionItems(
     countryData,
     deltaOneMonth,
     deltaThreeMonth
   );
-  const ipcNutrititonAccordion = IpcFoodSecurityAccordionOperations.getNutritionAccordionItems(countryIso3Data);
+  const nutrititonAccordionItems = IpcFoodSecurityAccordionOperations.getNutritionAccordionItems(countryIso3Data);
   const isMobile = useMediaQuery('(max-width: 700px)');
 
   return (
@@ -21,7 +21,7 @@ export default function IpcAccordion({ countryData, countryName, countryIso3Data
         title={countryName}
         accordionModalActive
         maxWidth={600}
-        items={[ipcFoodSecurityAccordion, ipcNutrititonAccordion]}
+        items={[foodSecurityAccordionItems, nutrititonAccordionItems]}
         multipleSelectionMode={!isMobile}
         expandAll={!isMobile}
       />

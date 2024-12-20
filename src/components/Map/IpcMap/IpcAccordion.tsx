@@ -16,7 +16,7 @@ export default function IpcAccordion({ countryData, countryName, countryIso3Data
   const isMobile = useMediaQuery('(max-width: 700px)');
 
   return (
-    <div className="absolute w-[300px] left-[108px] top-4 z-9999">
+    <div className="absolute w-[350px] left-[108px] top-4 z-9999">
       <AccordionContainer
         title={countryName}
         accordionModalActive

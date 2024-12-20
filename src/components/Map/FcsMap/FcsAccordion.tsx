@@ -28,7 +28,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
     </div>
   ) : (
     <>
-      <div className="absolute w-[310px] left-[108px] top-4 z-9999 overflow-y-scroll max-h-screen">
+      <div className="absolute w-[360px] left-[108px] top-4 z-9999 overflow-y-scroll max-h-screen">
         <AccordionContainer
           loading={loading}
           title={countryName}
@@ -39,7 +39,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
           expandAll
         />
       </div>
-      <div className="absolute w-[300px] right-[1rem] inset-y-24 z-9999">
+      <div className="absolute w-[350px] right-[1rem] inset-y-24 z-9999">
         <AccordionContainer loading={loading} accordionModalActive maxWidth={600} items={macroEconomicAccordionItems} />
       </div>
     </>

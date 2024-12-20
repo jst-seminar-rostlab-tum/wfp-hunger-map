@@ -301,7 +301,7 @@ export const marketDescriptions = {
       <span>
         Percentage of a country’s imported food for domestic supply versus its own food production for domestic supply.
         <br />
-        IDR = Imports ÷ (local production + imports – exports) × 100%
+        Calculation: Imports ÷ (local production + imports – exports) × 100%
       </span>
     ),
     dataSource: (
@@ -321,7 +321,7 @@ export const marketDescriptions = {
   balanceOfTrade: {
     title: 'Balance of Trade',
     summary:
-      'The balance of trade is the value of exports of goods and services less imports of goods and services. ' +
+      'The balance of trade is the difference between exports and imports of goods and services. ' +
       'It is usually the largest component of the current account.',
     dataSource: 'Trading Economics',
     updateInterval: 'monthly or less',

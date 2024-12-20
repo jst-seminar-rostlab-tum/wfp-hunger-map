@@ -3,8 +3,12 @@ import DownloadCountryAccordion from '@/components/DownloadCountryAccordions/Dow
 import CountryReports from '@/components/DownloadPortal/CountryReports';
 import YearInReviewReports from '@/components/DownloadPortal/YearInReviewReports';
 import container from '@/container';
-import { TITLE } from '@/domain/entities/download/Country';
 import { GlobalDataRepository } from '@/domain/repositories/GlobalDataRepository';
+import {
+  COUNTRY_REPORTS_TITLE,
+  EXPORT_COUNTRY_DATA_TITLE,
+  YEAR_IN_REVIEW_REPORTS_TITLE,
+} from '@/operations/download-portal/DownloadPortalConstants';
 
 export default async function DownloadPortal() {
   const globalRepo = container.resolve<GlobalDataRepository>('GlobalDataRepository');
@@ -33,15 +37,15 @@ export default async function DownloadPortal() {
           multipleSelectionMode
           items={[
             {
-              title: 'WFP Real Time Monitoring: Year in Review Reports',
+              title: YEAR_IN_REVIEW_REPORTS_TITLE,
               content: <YearInReviewReports yearInReviewReports={yearInReviews} />,
             },
             {
-              title: 'Country Reports',
+              title: COUNTRY_REPORTS_TITLE,
               content: <CountryReports countryCodesData={countryCodesData} />,
             },
             {
-              title: TITLE,
+              title: EXPORT_COUNTRY_DATA_TITLE,
               content: <DownloadCountryAccordion countries={countries} />,
             },
           ]}

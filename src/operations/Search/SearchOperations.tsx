@@ -6,6 +6,52 @@ import { AccordionItemProps, SearchableAccordionItemProps } from '@/domain/entit
 import { DataSourceTableData, DataSourceTableRow } from '@/domain/props/CustomTableProps';
 import { SearchableElement } from '@/domain/props/SearchableSectionProps';
 
+/**
+ * <h1>Adding the Search Feature to a New Page</h1>
+ * <h2>Demo Code</h2>
+ * ```tsx
+ * // demoItems.ts
+ * const demoItems = [
+ *   { title: 'Demo 1', content: 'a' },
+ *   { title: 'Demo 2', content: 'b' },
+ * ];
+ * export const SearchOperations.makeAccordionItemsSearchable(demoItems);
+ * ```
+ * ```tsx
+ * // page.tsx
+ * function Page() {
+ *   const [searchWords, setSearchWords] = useState<string[]>([]);
+ *   const [sectionIsVisible, setSectionIsVisible] = useState(true);
+ *   return (
+ *     <>
+ *       <Suspense fallback={<DocsSearchBarSkeleton />}>
+ *         <DocsSearchBar setSearchWords={setSearchWords} />
+ *       </Suspense>
+ *       {!searchWords.length && <h1 className="!mb-0">Demo Page</h1>}
+ *       <SearchableSection
+ *         searchWords={searchWords}
+ *         accordionItems={demoItems}
+ *         onVisibilityChange={setSectionIsVisible}
+ *       />
+ *       {!sectionIsVisible && !!searchWords.length && <p className="text-center">No results</p>}
+ *     </>
+ *   );
+ * }
+ * ```
+ * <h2>Recommended Approach</h2>
+ * * store all logical units of the content (e.g. accordion items, paragraphs, table lines) into an array
+ * * apply the fitting `makeXxxSearchable` function from this class
+ * * put the result into the `SearchableSection` component
+ * * add `DocsSearchBar` to the current page
+ *
+ * <h2>Extended / Customized Approach </h2>
+ * * store all logical units of the content (e.g. accordion items, paragraphs, table lines) into an array
+ * * convert them into objects with a `containedWords` field
+ *   * `containedWords` should be a string of all contained lowercase words, ideally without unnecessary whitespace or repetitions
+ * * filter that array using `filterSearchableItems(...)` in `searchUtils.ts`
+ * * store the current search query in a query param `?search=...`, e.g. using the hook `useSearchQuery`
+ * * wrap components containing text content with a `RecursiveHighlighter` component
+ */
 export class SearchOperations {
   /**
    * For each element, wrap the text contents of its components with a `Highlighter` component. In addition, store all contained words into `containedWords`.

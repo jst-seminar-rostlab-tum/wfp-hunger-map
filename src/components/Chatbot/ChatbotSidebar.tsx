@@ -24,7 +24,7 @@ export default function ChatbotSidebar({
     >
       <CardBody className="p-4">
         <Button
-          onClick={onStartNewChat}
+          onClick={() => onStartNewChat()}
           className="bg-transparent w-full h-10 mb-4 flex justify-center items-center gap-2 border-1.5 border-solid border-black dark:border-white text-black dark:text-white hover:bg-chatbotSidebarBtnHover dark:hover:bg-chatbotSidebarBtnHover"
         >
           <AddCircle size={24} />

@@ -29,6 +29,41 @@ export const metadata: Metadata = {
   appleWebApp: {
     title: 'HungerMap',
   },
+  keywords: siteConfig.keywords, // may not be used by search engines but its good to have
+  openGraph: {
+    title: siteConfig.name,
+    description: siteConfig.description,
+    url: siteConfig.domain,
+    siteName: 'WFP Hunger Map',
+    images: [
+      {
+        url: '/Images/Web-preview.png',
+        width: 1200,
+        height: 630,
+        alt: 'Global Hunger Map Preview',
+      },
+    ],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: siteConfig.name,
+    description: siteConfig.description,
+    images: [
+      {
+        url: '/Images/Web-preview.png',
+        width: 1200,
+        height: 630,
+        alt: 'Global Hunger Map Preview',
+      },
+    ],
+    site: '@WFP',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+  },
 };
 
 export const viewport: Viewport = {
@@ -42,6 +77,28 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html suppressHydrationWarning lang="en">
       <head>
+        {/* JSON-LD Structured Data */}
+        <Script type="application/ld+json" id="structured-data">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "WebPage",
+              "name": "Global Hunger Map",
+              "description": "Explore the Global Hunger Map by WFP for real-time insights on global hunger trends and food insecurity data.",
+              "url": "https://www.wfp-hungermap.com",
+              "publisher": {
+                "@type": "Organization",
+                "name": "World Food Programme",
+                "logo": {
+                  "@type": "ImageObject",
+                  "url": "/favicon/favicon.svg"
+                }
+              }
+            }
+          `}
+        </Script>
+
+        {/* Google Analytics Script */}
         <Script id="google-analytics">
           {`
               window.dataLayer = window.dataLayer || [];

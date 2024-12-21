@@ -24,29 +24,37 @@ import {
   TYPING_PLACEHOLDER,
   WELCOME_MESSAGE,
 } from '@/domain/constant/chatbot/Chatbot';
+import { useChatbot } from '@/domain/contexts/ChatbotContext';
 import { APIError } from '@/domain/entities/chatbot/BackendCommunication';
-import { IChat } from '@/domain/entities/chatbot/Chatbot';
 import { SenderRole } from '@/domain/enums/SenderRole';
 import ChatbotRepository from '@/domain/repositories/ChatbotRepository';
 import ChatbotOperations from '@/operations/chatbot/Chatbot';
-import { useMediaQuery } from '@/utils/resolution';
 
 import TypingDots from '../TypingText/TypingDot';
 import ChatbotSidebar from './ChatbotSidebar';
 
 export default function HungerMapChatbot() {
   const chatbot = container.resolve<ChatbotRepository>('ChatbotRepository');
-  const [isOpen, setIsOpen] = useState(false);
+  const {
+    chats,
+    setChats,
+    currentChatIndex,
+    setCurrentChatIndex,
+    startNewChat,
+    isOpen,
+    isMobile,
+    isSidebarOpen,
+    setIsOpen,
+    setIsSidebarOpen,
+  } = useChatbot();
+
   const [isFullScreen, setIsFullScreen] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isUserMessageSent, setIsUserMessageSent] = useState(false);
-  const [chats, setChats] = useState<IChat[]>([{ id: 1, title: 'Chat 1', messages: [], isTyping: false }]);
-  const [currentChatIndex, setCurrentChatIndex] = useState(0);
   const [input, setInput] = useState('');
   const [isResponseAnimated, setIsResponseAnimated] = useState(true);
+
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
-  const isMobile = useMediaQuery('(max-width: 640px)');
 
   const toggleChat = (): void => {
     if (isMobile) {
@@ -61,15 +69,6 @@ export default function HungerMapChatbot() {
   const toggleFullScreen = (): void => {
     if (!isMobile) {
       setIsFullScreen(!isFullScreen);
-    }
-  };
-
-  const startNewChat = (): void => {
-    const newChat: IChat = { id: chats.length + 1, title: `Chat ${chats.length + 1}`, messages: [], isTyping: false };
-    setChats([...chats, newChat]);
-    setCurrentChatIndex(chats.length);
-    if (isMobile) {
-      setIsSidebarOpen(false);
     }
   };
 
@@ -97,8 +96,17 @@ export default function HungerMapChatbot() {
     const previousMessages = chats[currentChatIndex].messages;
     let aiResponse = '';
     try {
-      const response = await chatbot.sendMessage(text, { previous_messages: previousMessages });
-      aiResponse = response.response;
+      if (chats[currentChatIndex].isReportStarter && chats[currentChatIndex].context) {
+        aiResponse = (
+          await chatbot.sendMessage(text, {
+            previous_messages: previousMessages,
+            context: chats[currentChatIndex].context,
+          })
+        ).response;
+        chats[currentChatIndex].isReportStarter = false;
+      } else {
+        aiResponse = (await chatbot.sendMessage(text, { previous_messages: previousMessages })).response;
+      }
     } catch (err) {
       if (err instanceof APIError) {
         aiResponse = `Ups! Unfortunately, it seems like there was a problem connecting to the server...\n ${err.status}: ${err.message}`;
@@ -165,7 +173,7 @@ export default function HungerMapChatbot() {
 
   // use to scroll to the end of the chat when new messages are added
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }, [chats, currentChatIndex]);
 
   // listen to isOpen and isMobile to set isFullScreen
@@ -185,7 +193,7 @@ export default function HungerMapChatbot() {
 
   return (
     <div
-      className={clsx('absolute', {
+      className={clsx('fixed', {
         'inset-0 z-chatbotFullScreen': isFullScreen,
         'top-4 right-4': !isFullScreen,
         'z-chatbotExpanded': isOpen,
@@ -196,8 +204,7 @@ export default function HungerMapChatbot() {
         <Tooltip text={TRIGGER_CHAT}>
           <Button
             onClick={toggleChat}
-            className="
-            relative flex items-center justify-center min-w-12 h-12 px-1 rounded-full bg-content1 hover:bg-content2 shadow-md"
+            className="relative flex items-center justify-center min-w-12 h-12 px-1 rounded-full bg-content1 hover:bg-content2 shadow-md"
           >
             <Bot size={24} />
           </Button>
@@ -268,15 +275,13 @@ export default function HungerMapChatbot() {
                 {chats[currentChatIndex].messages.length === 0 ? (
                   <div className="flex flex-col items-center pt-4 space-y-4">
                     <p className="text-center text-xl max-w-[80%] mb-2">{WELCOME_MESSAGE}</p>
-                    <p className="text-center text-md max-w-[80%] mb-2">{SUB_WELCOME_MESSAGE}</p>
+                    <p className="text-center text-md max-w-[80%] mb-2text">{SUB_WELCOME_MESSAGE}</p>
                     <div className="flex flex-col items-center space-y-2 w-full max-w-md">
                       {DEFAULT_PROMPT.map((prompt) => (
                         <Button
                           key={prompt.id}
                           onClick={(event) => handleSubmit(event, prompt.value)}
-                          className="
-                              truncate w-full mb-2 max-w-[250px] sm:max-w-[400px] border border-solid border-black dark:border-white bg-transparent hover:bg-chatbotDefaultPromptHover dark:hover:bg-chatbotDefaultPromptHover
-                              "
+                          className="truncate w-full mb-2 max-w-[250px] sm:max-w-[400px] border border-solid border-black dark:border-white bg-transparent hover:bg-chatbotDefaultPromptHover dark:hover:bg-chatbotDefaultPromptHover"
                           title={prompt.value}
                         >
                           <span className="truncate">{prompt.value}</span>
@@ -297,7 +302,7 @@ export default function HungerMapChatbot() {
                       )}
                       <div
                         className={clsx(
-                          'mb-5 rounded-lg max-w-[80%]',
+                          'mb-5 rounded-lg max-w-[80%] break-words whitespace-normal',
                           message.role === SenderRole.USER
                             ? 'rounded-xl p-2 bg-chatbotUserMsg dark:bg-chatbotUserMsg ml-12'
                             : 'bg-transparent pl-2 pr-2'

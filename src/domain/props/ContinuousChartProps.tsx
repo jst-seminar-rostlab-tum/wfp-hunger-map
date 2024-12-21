@@ -12,6 +12,7 @@ export default interface ContinuousChartProps {
   small?: boolean;
   noPadding?: boolean;
   transparentBackground?: boolean;
+  chartHeight?: number;
 
   disableExpandable?: boolean;
   disableBarChartSwitch?: boolean;

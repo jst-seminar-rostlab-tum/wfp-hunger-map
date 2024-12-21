@@ -256,6 +256,7 @@ export class CountryComparisonOperations {
                   small
                   noPadding
                   transparentBackground
+                  chartHeight={300}
                 />
                 <NoDataHint
                   chartData={fcsChartData}
@@ -273,6 +274,7 @@ export class CountryComparisonOperations {
                   small
                   noPadding
                   transparentBackground
+                  chartHeight={300}
                 />
                 <NoDataHint
                   chartData={rcsiChartData}
@@ -311,7 +313,7 @@ export class CountryComparisonOperations {
           <div>
             {balanceOfTradeData && (
               <>
-                <ContinuousChart data={balanceOfTradeData} small noPadding transparentBackground />
+                <ContinuousChart data={balanceOfTradeData} small noPadding transparentBackground chartHeight={300} />
                 <NoDataHint
                   chartData={balanceOfTradeData}
                   selectedCountryNames={selectedCountryNames}
@@ -336,6 +338,7 @@ export class CountryComparisonOperations {
                   small
                   noPadding
                   transparentBackground
+                  chartHeight={300}
                 />
                 <NoDataHint
                   chartData={headlineInflationData}
@@ -352,6 +355,7 @@ export class CountryComparisonOperations {
                   small
                   noPadding
                   transparentBackground
+                  chartHeight={300}
                 />
                 <NoDataHint
                   chartData={foodInflationData}

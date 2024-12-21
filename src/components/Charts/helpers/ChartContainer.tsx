@@ -32,6 +32,7 @@ export function ChartContainer({
   small,
   noPadding,
   transparentBackground,
+  chartHeight,
   disableExpandable,
   disableDownload,
   alternativeSwitchButtonProps,
@@ -39,7 +40,7 @@ export function ChartContainer({
 }: ChartContainerProps) {
   const TITLE_TEXT_SIZE = small ? 'text-sm' : 'text-md';
   const DESCRIPTION_TEXT_SIZE = small ? 'text-tiny' : 'text-sm';
-  const CHART_HEIGHT = small ? 12 : 16;
+  const CHART_HEIGHT = chartHeight ? `${chartHeight}px` : small ? '12rem' : '16rem';
   const ICON_BUTTON_SIZE = small ? 3 : 4;
   const HEADER_PADDING = title ? 3 : 0;
   const MAIN_BOX_PADDING_FACTOR = noPadding ? 0 : 1;
@@ -148,7 +149,7 @@ export function ChartContainer({
           containerProps={{
             style: {
               width: '100%',
-              height: `${CHART_HEIGHT}rem`,
+              height: CHART_HEIGHT,
               borderRadius: '0 0 0.375rem 0.375rem',
             },
           }}

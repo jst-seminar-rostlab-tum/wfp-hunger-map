@@ -29,6 +29,8 @@ import ContinuousChartOperations from '@/operations/charts/ContinuousChartOperat
  * @param small when selected, all components in the main box become slightly smaller (optional)
  * @param noPadding when selected, the main box has no padding on all sides (optional)
  * @param transparentBackground when selected, the background of the entire component is transparent (optional)
+ * @param chartHeight with this parameter, the height of the actual chart can be set to a fixed value in pixels. If
+ *        chartHeight is not specified, the chart is given a fixed default height depending on `small`.
  * @param disableExpandable when selected, the functionality to open the chart in a larger modal is disabled (optional)
  * @param disableBarChartSwitch when selected, the functionality to switch to a bar chart is disabled (optional)
  * @param disableXAxisSlider when selected, the functionality to change the x-axis range via a slider is disabled (optional)
@@ -41,6 +43,7 @@ export function ContinuousChart({
   small,
   noPadding,
   transparentBackground,
+  chartHeight,
   disableExpandable,
   disableBarChartSwitch,
   disableXAxisSlider,
@@ -117,6 +120,7 @@ export function ContinuousChart({
       small={small}
       noPadding={noPadding}
       transparentBackground={transparentBackground}
+      chartHeight={chartHeight}
       disableExpandable={disableExpandable}
       disableDownload={disableDownload}
       alternativeSwitchButtonProps={alternativeSwitchButtonProps}

@@ -63,7 +63,7 @@ export function Sidebar({ countryMapData, fcsData }: SidebarProps) {
   };
 
   return (
-    <div className="w-screen h-dvh absolute top-0 left-0 z-sidebarFullScreen sm:w-auto sm:h-[calc(100dvh-2rem)] sm:z-sidebarExpanded sm:top-4 sm:left-4">
+    <div className="w-screen h-dvh absolute top-0 left-0 z-sidebarFullScreen sm:w-[280px] sm:h-[calc(100dvh-2rem)] sm:z-sidebarExpanded sm:top-4 sm:left-4">
       <Card
         classNames={{
           base: 'h-full rounded-none sm:rounded-large',
@@ -168,7 +168,7 @@ export function Sidebar({ countryMapData, fcsData }: SidebarProps) {
           </ScrollShadow>
         </CardBody>
         <CardFooter>
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-2">
             <Button radius="full" onClick={() => setIsModalOpen(!isModalOpen)} size="sm" className="w-fit text-white">
               SUBSCRIBE
             </Button>
@@ -181,17 +181,15 @@ export function Sidebar({ countryMapData, fcsData }: SidebarProps) {
             >
               <Subscribe />
             </PopupModal>
-            <ul className="pl-3">
+            <div className="grid grid-cols-2 gap-2 pl-3">
               {pageLinks
                 .filter((page) => page.label !== 'Home')
                 .map((page) => (
-                  <li key={page.label}>
-                    <Link href={page.href} color="foreground" className="text-tiny text-opacity-80">
-                      {page.label}
-                    </Link>
-                  </li>
+                  <Link key={page.label} href={page.href} color="foreground" className="text-tiny text-opacity-80">
+                    {page.label}
+                  </Link>
                 ))}
-            </ul>
+            </div>
           </div>
         </CardFooter>
       </Card>

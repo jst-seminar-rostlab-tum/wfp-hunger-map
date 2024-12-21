@@ -38,7 +38,7 @@ export default function LegendContainer({ items, loading = false }: LegendContai
     </div>
   ) : (
     <>
-      <div className="absolute z-legend bottom-0 pb-10 right-16">
+      <div className="absolute z-legend bottom-10 right-16">
         <Tooltip text={items.length > 1 ? 'Legends Information' : 'Legend Information'}>
           <Button
             onClick={() => setInfoPopup(true)}

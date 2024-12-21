@@ -165,8 +165,8 @@ export default class ContinuousChartOperations {
    */
   public static getDistinctXAxisValues(data: ContinuousChartData): number[] {
     const uniqueXValues = new Set<number>();
-    data.lines.forEach((line) => {
-      line.dataPoints?.forEach((point) => {
+    data.lines.forEach((l) => {
+      l.dataPoints?.forEach((point) => {
         uniqueXValues.add(point.x); // Add x-value to the Set
       });
     });
@@ -227,54 +227,40 @@ export default class ContinuousChartOperations {
       }
 
       // collect series data
-      const seriesData: Highcharts.PointOptionsObject[] = [];
+      const categoryData: Highcharts.PointOptionsObject[] = [];
       lineData.dataPoints?.forEach((p) => {
         // check if datapoint x is in selected x-axis range
         if (xAxisSelectedMin !== undefined && xAxisSelectedMax !== undefined) {
           if (p.x < xAxisSelectedMin || xAxisSelectedMax < p.x) return;
         }
-        seriesData.push({
+        categoryData.push({
           x: p.x,
           y: p.y,
         });
       });
       // make sure data is sorted (required by highchart)
-      seriesData.sort((a, b) => a.x! - b.x!);
+      categoryData.sort((a, b) => a.x! - b.x!);
 
-      if (seriesData.length > 0) atLeastOneSeriesAvailable = true;
+      if (categoryData.length > 0) atLeastOneSeriesAvailable = true;
 
       // build series object for highchart
       if (barChart) {
         // plot series as bars
-        series.push({
-          name: lineData.name,
-          type: 'column',
-          data: seriesData,
-          color:
-            // if the dashStyle is not solid we fill the bars with diagonal lines
-            categoryDashStyle !== 'Solid'
-              ? {
-                  pattern: {
-                    path: {
-                      d: 'M 0 0 L 8 8 M -8 8 L 8 -8',
-                      stroke: categoryColor,
-                      strokeWidth: 1,
-                    },
-                    width: 8,
-                    height: 8,
-                  },
-                }
-              : categoryColor,
-          opacity: lineData.showRange ? 0.75 : 1,
-          borderColor: categoryColor,
-          dashStyle: 'Solid',
-        });
+        series.push(
+          ContinuousChartOperations.createBarSeries(
+            lineData.name,
+            categoryData,
+            categoryDashStyle,
+            categoryColor,
+            lineData.showRange
+          )
+        );
       } else {
         // plot series as line
         series.push({
           type: 'line',
           name: lineData.name,
-          data: seriesData,
+          data: categoryData,
           color: categoryColor,
           dashStyle: categoryDashStyle,
         });
@@ -327,41 +313,8 @@ export default class ContinuousChartOperations {
     if (!atLeastOneSeriesAvailable) return undefined;
 
     // build all vertical lines and plot bands
-    const verticalBands = data.verticalBands ? [...data.verticalBands] : [];
-    const verticalLines = data.verticalLines ? [...data.verticalLines] : [];
-    if (data.predictionVerticalLineX) {
-      // get max x value
-      const xMax = Math.max(...data.lines.flatMap((l) => l.dataPoints.map((p) => p.x)));
-      verticalBands.push({
-        xStart: data.predictionVerticalLineX,
-        xEnd: xMax,
-        label: 'Future',
-      });
-    }
-    if (data.predictionVerticalLineX) {
-      verticalLines.push({
-        x: data.predictionVerticalLineX,
-      });
-    }
-    const plotBands = verticalBands.map((b) => ({
-      from: b.xStart,
-      to: b.xEnd,
-      color: b.color || 'rgba(140,140,140,0.07)',
-      zIndex: 1,
-      label: {
-        text: b.label || '',
-        style: {
-          color: getTailwindColor('--nextui-secondary'),
-          fontSize: '0.7rem',
-        },
-      },
-    }));
-    const plotLines = verticalLines.map((l) => ({
-      value: l.x,
-      color: l.color || getTailwindColor('--nextui-chartsGridLine'),
-      dashStyle: l.dashStyle,
-      zIndex: 2,
-    }));
+    const plotBands = ContinuousChartOperations.buildPlotBands(data);
+    const plotLines = ContinuousChartOperations.buildVerticalPlotLines(data);
 
     // constructing the final HighCharts.Options
     return {
@@ -475,5 +428,90 @@ export default class ContinuousChartOperations {
         },
       },
     };
+  }
+
+  /**
+   * Helper function exclusively for ContinuousChartOperations.getHighChartOptions.
+   */
+  private static createBarSeries(
+    name: string,
+    data: Highcharts.PointOptionsObject[],
+    categoryDashStyle: DashStyleValue,
+    categoryColor: string | undefined,
+    showRange: boolean | undefined
+  ): Highcharts.SeriesOptionsType {
+    return {
+      name,
+      type: 'column',
+      data,
+      color:
+        // if the dashStyle is not solid we fill the bars with diagonal lines
+        categoryDashStyle !== 'Solid'
+          ? {
+              pattern: {
+                path: {
+                  d: 'M 0 0 L 8 8 M -8 8 L 8 -8',
+                  stroke: categoryColor,
+                  strokeWidth: 1,
+                },
+                width: 8,
+                height: 8,
+              },
+            }
+          : categoryColor,
+      opacity: showRange ? 0.75 : 1,
+      borderColor: categoryColor,
+      dashStyle: 'Solid',
+    };
+  }
+
+  /**
+   * Helper function exclusively for ContinuousChartOperations.getHighChartOptions.
+   * Building all chart 'bands'.
+   */
+  private static buildPlotBands(chartData: ContinuousChartData) {
+    const verticalBands = chartData.verticalBands ? [...chartData.verticalBands] : [];
+    if (chartData.predictionVerticalLineX) {
+      // if a predictionVerticalLineX is given we create a grey band from predictionVerticalLineX to the end of the chart
+      const xMax = Math.max(...chartData.lines.flatMap((l) => l.dataPoints.map((p) => p.x)));
+      verticalBands.push({
+        xStart: chartData.predictionVerticalLineX,
+        xEnd: xMax,
+        label: 'Future',
+      });
+    }
+    return verticalBands.map((b) => ({
+      from: b.xStart,
+      to: b.xEnd,
+      color: b.color || 'rgba(140,140,140,0.07)',
+      zIndex: 1,
+      label: {
+        text: b.label || '',
+        style: {
+          color: getTailwindColor('--nextui-secondary'),
+          fontSize: '0.7rem',
+        },
+      },
+    }));
+  }
+
+  /**
+   * Helper function exclusively for ContinuousChartOperations.getHighChartOptions.
+   * Building all chart 'vertical lines'.
+   */
+  private static buildVerticalPlotLines(chartData: ContinuousChartData) {
+    const verticalLines = chartData.verticalLines ? [...chartData.verticalLines] : [];
+    if (chartData.predictionVerticalLineX) {
+      // if a predictionVerticalLineX is given we create a grey vertical "dividing" line at predictionVerticalLineX
+      verticalLines.push({
+        x: chartData.predictionVerticalLineX,
+      });
+    }
+    return verticalLines.map((l) => ({
+      value: l.x,
+      color: l.color || getTailwindColor('--nextui-chartsGridLine'),
+      dashStyle: l.dashStyle,
+      zIndex: 2,
+    }));
   }
 }

@@ -9,6 +9,7 @@ import { useMediaQuery } from '@/utils/resolution';
 
 import AccordionContainer from '../Accordions/AccordionContainer';
 import CustomInfoCircle from '../CustomInfoCircle/CustomInfoCircle';
+import { InfoPopover } from '../InfoPopover/InfoPopover';
 import PopupModal from '../PopupModal/PopupModal';
 import { Tooltip } from '../Tooltip/Tooltip';
 import GradientLegend from './GradientLegend';
@@ -61,15 +62,18 @@ export default function LegendContainer({ items, loading = false }: LegendContai
           {items.map((item) =>
             LegendOperations.isGradientLegendContainerItem(item) ? (
               <>
-                <div key={item.title} className="font-bold">
-                  {item.title}
+                <div key={item.title} className="flex justify-between w-full">
+                  <div className="font-bold">{item.title}</div>
+                  <InfoPopover popoverInfo={item.popoverInfo} />
                 </div>
+
                 <GradientLegend key={item.title} {...item} />
               </>
             ) : (
               <>
-                <div key={item.title} className="font-bold">
-                  {item.title}
+                <div key={item.title} className="flex justify-between w-full">
+                  <div className="font-bold">{item.title}</div>
+                  <InfoPopover popoverInfo={item.popoverInfo} />
                 </div>
                 <PointLegend key={item.title} {...item}>
                   {item.renderItem ? (props) => item.renderItem?.(props) : undefined}

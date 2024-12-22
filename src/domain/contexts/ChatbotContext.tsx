@@ -83,9 +83,8 @@ export function ChatbotProvider({ children }: { children: ReactNode }) {
    * Initiates a chat with a report based on the provided country name and report content.
    * If a chat for that specific already exists, it opens that chat; otherwise, it creates a new one.
    * @param countryName - The name of the country related to the report.
-   * @param reportURL - The URL of the report to be processed.
    */
-  const initiateChatAboutReport = async (countryName: string, reportURL: string) => {
+  const initiateChatAboutReport = async (countryName: string) => {
     const reportChatIndex = chats.findIndex((chat) => chat.title === `Report ${countryName}`);
     const reportChatExists = reportChatIndex !== -1;
 
@@ -94,26 +93,16 @@ export function ChatbotProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    const { extractPdfText } = await import('@/operations/chatbot/ExtractPdfText');
-    let reportText;
-    try {
-      reportText = await extractPdfText(reportURL, showSnackBar);
-    } catch {
-      reportText = '';
-    }
-
     const assistantMessage = {
       id: crypto.randomUUID(),
-      content: reportText
-        ? `Hey, how can I help you with this report about ${countryName}?`
-        : `Hey, unfortunately I'm currently unable to answer questions about this report. You can try it later or chat with me about other things!`,
+      content: `Hey, how can I help you with this report about ${countryName}?`,
       role: SenderRole.ASSISTANT,
     };
 
     const newChat: IChat = {
       id: chats.length + 1,
       title: `Report ${countryName}`,
-      context: reportText,
+      reports_country_name: countryName,
       isReportStarter: true,
       messages: [assistantMessage],
       isTyping: false,

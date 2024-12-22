@@ -10,7 +10,7 @@ export interface IMessage {
 export interface IChat {
   id: number;
   title: string;
-  context?: string;
+  reports_country_name?: string;
   isReportStarter?: boolean;
   messages: IMessage[];
   isTyping: boolean;

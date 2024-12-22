@@ -11,6 +11,7 @@ import FcsChoroplethProps from '@/domain/props/FcsChoroplethProps';
 import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
 import { MapOperations } from '@/operations/map/MapOperations';
 
+import AccordionModalSkeleton from '../Accordions/AccordionModalSkeleton';
 import CountryLoadingLayer from './CountryLoading';
 import FscCountryChoropleth from './FcsCountryChoropleth';
 
@@ -23,6 +24,8 @@ export default function FcsChoropleth({
   countryIso3Data,
   selectedCountryName,
   fcsData,
+  regionLabelData,
+  setRegionLabelTooltips,
 }: FcsChoroplethProps) {
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
@@ -62,14 +65,17 @@ export default function FcsChoropleth({
         />
       )}
       {/* Animated GeoJSON layer for the selected country */}
-      {!regionData && selectedCountryId && (
-        <CountryLoadingLayer
-          data={data}
-          selectedCountryId={selectedCountryId}
-          color="hsl(var(--nextui-fcsAnimation))"
-        />
+      {selectedCountryId && (!regionData || !regionLabelData) && (
+        <>
+          <CountryLoadingLayer
+            data={data}
+            selectedCountryId={selectedCountryId}
+            color="hsl(var(--nextui-fcsAnimation))"
+          />
+          <AccordionModalSkeleton />
+        </>
       )}
-      {regionData && countryId === selectedCountryId && (
+      {regionData && countryId === selectedCountryId && regionLabelData && (
         <FscCountryChoropleth
           regionData={regionData}
           countryData={countryData}
@@ -77,6 +83,9 @@ export default function FcsChoropleth({
           countryName={selectedCountryName}
           loading={loading}
           handleBackButtonClick={handleBackClick}
+          regionLabelData={regionLabelData}
+          countryMapData={data.features[0] as CountryMapData}
+          setRegionLabelTooltips={setRegionLabelTooltips}
         />
       )}
     </div>

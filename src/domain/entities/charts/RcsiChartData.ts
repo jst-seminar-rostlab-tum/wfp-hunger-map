@@ -1,6 +1,6 @@
 export interface RcsiChartData {
   x: string;
-  rcsi: number;
-  rcsiHigh: number;
-  rcsiLow: number;
+  rcsi: number | null;
+  rcsiHigh: number | null;
+  rcsiLow: number | null;
 }

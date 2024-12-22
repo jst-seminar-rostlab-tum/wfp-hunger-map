@@ -19,6 +19,7 @@ export class DownloadPortalOperations {
   static formatTableData(
     data: CountryCodesData[],
     setSelectedCountry: (countryData: CountryCodesData) => void,
+    initiateChatAboutReport: (country: string, report: string) => Promise<void>,
     setPdfFile: (file: Blob | null) => void,
     setError: (error: string | null) => void,
     toggleModal: () => void
@@ -47,7 +48,11 @@ export class DownloadPortalOperations {
       ),
       chat: (
         <div className="flex justify-center items-center">
-          <Bot size={20} className="cursor-pointer" />
+          <Bot
+            size={20}
+            onClick={() => initiateChatAboutReport(item.country.name, item.url.summary)}
+            className="cursor-pointer"
+          />
         </div>
       ),
     }));

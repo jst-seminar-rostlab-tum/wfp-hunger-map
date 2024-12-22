@@ -1,12 +1,16 @@
 import { Feature as GeoJsonFeature, FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
+import L from 'leaflet';
 import { createRoot } from 'react-dom/client';
 
 import CountryHoverPopover from '@/components/CountryHoverPopover/CountryHoverPopover';
 import container from '@/container';
+import { MAP_MAX_ZOOM, REGION_LABEL_SENSITIVITY, SELECTED_COUNTRY_ZOOM_THRESHOLD } from '@/domain/constant/map/Map.ts';
 import { Feature } from '@/domain/entities/common/Feature';
+import { AdditionalCountryData } from '@/domain/entities/country/AdditionalCountryData.ts';
 import { CountryData } from '@/domain/entities/country/CountryData.ts';
 import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data.ts';
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
+import { CountryMimiData } from '@/domain/entities/country/CountryMimiData.ts';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
 import CountryRepository from '@/domain/repositories/CountryRepository.ts';
 
@@ -19,30 +23,53 @@ export class MapOperations {
     setCountryData: (countryData: CountryData | undefined) => void,
     setCountryIso3Data: (iso3Data: CountryIso3Data | undefined) => void,
     setRegionNutritionData: (regionNutritionData: FeatureCollection | undefined) => void,
-    setIpcRegionData: (ipcRegionData: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void
+    setIpcRegionData: (ipcRegionData: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
+    regionLabelData: FeatureCollection<Geometry, GeoJsonProperties> | undefined,
+    setRegionLabelData: (newRegionLabelData: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
+    setIsDataAvailable: (isDataAvailable: boolean) => void
   ) {
     setCountryClickLoading(true);
 
     const countryRepository = container.resolve<CountryRepository>('CountryRepository');
     try {
       if (selectedMapType === GlobalInsight.FOOD) {
-        const newRegionData = await countryRepository.getRegionData(selectedCountryData.properties.adm0_id);
-        if (newRegionData && newRegionData.features) {
+        const dataPromises: [
+          Promise<AdditionalCountryData>,
+          Promise<FeatureCollection<Geometry, GeoJsonProperties>> | Promise<undefined>,
+        ] = [
+          countryRepository.getRegionData(selectedCountryData.properties.adm0_id),
+          !regionLabelData ? countryRepository.getRegionLabelData() : Promise.resolve(undefined),
+        ];
+        const data: [AdditionalCountryData, FeatureCollection<Geometry, GeoJsonProperties> | undefined] =
+          await Promise.all(dataPromises);
+
+        if (Array.isArray(data[0]) && data[0][1] === 404) {
+          setIsDataAvailable(false);
+        } else if (data[0] && data[0].features) {
+          const hasFcs = data[0].features.some((feature) => feature.properties?.fcs !== undefined);
+          setIsDataAvailable(hasFcs);
           setRegionData({
             type: 'FeatureCollection',
-            features: newRegionData.features as GeoJsonFeature<Geometry, GeoJsonProperties>[],
+            features: data[0].features as GeoJsonFeature<Geometry, GeoJsonProperties>[],
           });
         }
+
+        if (!regionLabelData) setRegionLabelData(data[1]);
       }
 
       if (selectedMapType === GlobalInsight.IPC) {
-        setIpcRegionData(undefined);
-        const newIpcRegionData = await countryRepository.getRegionIpcData(selectedCountryData.properties.adm0_id);
-        if (newIpcRegionData && newIpcRegionData.features) {
-          setIpcRegionData({
-            type: 'FeatureCollection',
-            features: newIpcRegionData?.features as GeoJsonFeature<Geometry, GeoJsonProperties>[],
-          });
+        try {
+          const newIpcRegionData = await countryRepository.getRegionIpcData(selectedCountryData.properties.adm0_id);
+          const hasIpc = newIpcRegionData.features.some((feature) => feature.properties?.ipcPhase !== undefined);
+          setIsDataAvailable(hasIpc);
+          if (newIpcRegionData && newIpcRegionData.features) {
+            setIpcRegionData({
+              type: 'FeatureCollection',
+              features: newIpcRegionData?.features as GeoJsonFeature<Geometry, GeoJsonProperties>[],
+            });
+          }
+        } catch {
+          setIsDataAvailable(false);
         }
       }
 
@@ -57,15 +84,32 @@ export class MapOperations {
       }
 
       if (selectedMapType === GlobalInsight.NUTRITION) {
-        const newRegionNutritionData = await countryRepository.getRegionNutritionData(
-          selectedCountryData.properties.adm0_id
+        const dataPromises: [
+          Promise<CountryMimiData>,
+          Promise<FeatureCollection<Geometry, GeoJsonProperties>> | Promise<undefined>,
+        ] = [
+          countryRepository.getRegionNutritionData(selectedCountryData.properties.adm0_id),
+          !regionLabelData ? countryRepository.getRegionLabelData() : Promise.resolve(undefined),
+        ];
+
+        const data: [CountryMimiData, FeatureCollection<Geometry, GeoJsonProperties> | undefined] =
+          await Promise.all(dataPromises);
+
+        const hasNutrition = data[0].features.some(
+          (feature) =>
+            feature.properties?.nutrition &&
+            typeof feature.properties.nutrition === 'object' &&
+            Object.keys(feature.properties.nutrition).length > 0
         );
-        if (newRegionNutritionData && newRegionNutritionData.features) {
+        setIsDataAvailable(hasNutrition);
+        if (data[0] && data[0].features) {
           setRegionNutritionData({
             type: 'FeatureCollection',
-            features: newRegionNutritionData.features as GeoJsonFeature<Geometry, GeoJsonProperties>[],
+            features: data[0].features as GeoJsonFeature<Geometry, GeoJsonProperties>[],
           });
         }
+
+        if (!regionLabelData) setRegionLabelData(data[1]);
       }
 
       setCountryClickLoading(false);
@@ -102,5 +146,58 @@ export class MapOperations {
     const root = createRoot(tooltipContainer);
     root.render(<CountryHoverPopover header={countryName} />);
     return tooltipContainer;
+  }
+
+  static updateRegionLabelTooltip(
+    feature: GeoJsonFeature<Geometry, GeoJsonProperties>,
+    map: L.Map,
+    tooltip: L.Tooltip
+  ) {
+    const bounds = L.geoJSON(feature).getBounds();
+    const zoom = map.getZoom();
+    const width = (bounds.getEast() - bounds.getWest()) * zoom;
+    const isMaxZoom = zoom === MAP_MAX_ZOOM;
+    const isZoomThreshold = zoom === SELECTED_COUNTRY_ZOOM_THRESHOLD;
+
+    const text = feature.properties?.Name || '';
+    const textWidth = text.length * REGION_LABEL_SENSITIVITY;
+
+    const truncatedText = isZoomThreshold || (textWidth > width && !isMaxZoom) ? '...' : text;
+
+    tooltip.setContent(truncatedText);
+  }
+
+  static setupRegionLabelTooltip(
+    feature: GeoJsonFeature<Geometry, GeoJsonProperties>,
+    regionLabelData: FeatureCollection<Geometry, GeoJsonProperties>,
+    countryMapData: CountryMapData,
+    map: L.Map,
+    setRegionLabelTooltips: (tooltips: (prevRegionLabelData: L.Tooltip[]) => L.Tooltip[]) => void
+  ) {
+    const featureLabelData = regionLabelData.features.find((labelItem) => {
+      return (
+        labelItem.properties?.iso3 === countryMapData.properties.iso3 &&
+        labelItem.properties?.name === feature.properties?.Name
+      );
+    });
+
+    if (featureLabelData && featureLabelData.geometry.type === 'Point') {
+      const tooltip = L.tooltip({
+        permanent: true,
+        direction: 'center',
+        className: 'text-background dark:text-foreground',
+        content: '',
+      }).setLatLng([featureLabelData.geometry.coordinates[1], featureLabelData.geometry.coordinates[0]]);
+      tooltip.addTo(map);
+      setRegionLabelTooltips((prevRegionLabelData) => [...prevRegionLabelData, tooltip]);
+
+      const zoomListener = () => this.updateRegionLabelTooltip(feature, map, tooltip);
+
+      this.updateRegionLabelTooltip(feature, map, tooltip);
+      map.on('zoom', zoomListener);
+      tooltip.on('remove', () => {
+        map.off('zoom', zoomListener);
+      });
+    }
   }
 }

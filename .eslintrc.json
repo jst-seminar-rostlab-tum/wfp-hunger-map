@@ -38,7 +38,8 @@
         "ts": "warn",
         "tsx": "never"
       }
-    ]
+    ],
+    "import/no-unresolved": [2, { "ignore": ["^@theme", "^@docusaurus", "^@site"] }]
   },
   "settings": {
     "react": {

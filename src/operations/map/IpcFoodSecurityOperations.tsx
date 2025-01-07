@@ -2,6 +2,8 @@ import React from 'react';
 
 import CustomCard from '@/components/Cards/Card';
 import CustomInfoCircle from '@/components/CustomInfoCircle/CustomInfoCircle';
+import { DataSourcePopover } from '@/components/Legend/DataSourcePopover';
+import descriptions from '@/domain/constant/dataSources/dataSourceDescriptions';
 import { CountryData } from '@/domain/entities/country/CountryData';
 import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data';
 import { cardsWrapperClass } from '@/utils/primitives';
@@ -18,26 +20,17 @@ export class IpcFoodSecurityAccordionOperations {
     deltaOneMonth: number | null,
     deltaThreeMonth: number | null
   ) {
-    const hasNoData =
-      !countryData || !countryData.population || !countryData.fcs || deltaOneMonth === null || deltaThreeMonth === null;
-
-    if (hasNoData) {
-      return {
-        title: 'Food Security',
-        infoIcon: <CustomInfoCircle />,
-        popoverInfo: FcsAccordionOperations.getFoodSecutriyPopoverInfo(),
-        content: <p>No data about food security</p>,
-      };
-    }
+    const hasData =
+      countryData && countryData.population && countryData.fcs && deltaOneMonth !== null && deltaThreeMonth !== null;
 
     return {
       title: 'Food Security',
       infoIcon: <CustomInfoCircle />,
-      popoverInfo: FcsAccordionOperations.getFoodSecutriyPopoverInfo(),
-      content: (
+      popoverInfo: <DataSourcePopover dataSourceKeys={['population', 'fcs']} />,
+      content: hasData ? (
         <div className={cardsWrapperClass}>
           <CustomCard
-            title="Population"
+            title={descriptions.population.title}
             content={[
               {
                 svgIcon: <Population className="w-full h-full object-contain" />,
@@ -51,7 +44,7 @@ export class IpcFoodSecurityAccordionOperations {
             content={[
               {
                 svgIcon: <FoodConsumption className="w-[50px] h-[50px] object-contain" />,
-                text: 'Population with insufficient food consumption',
+                text: descriptions.fcs.legendTitle,
                 value: countryData.fcs ? `${countryData.fcs.toFixed(2)} M` : 'N/A',
                 textClass: 'text-xs',
                 changeValues: [
@@ -72,29 +65,25 @@ export class IpcFoodSecurityAccordionOperations {
             ]}
           />
         </div>
+      ) : (
+        <p>No data about food security available</p>
       ),
     };
   }
 
   static getNutritionAccordionItems(countryIso3Data: CountryIso3Data | undefined) {
     const nutritionData = FcsAccordionOperations.getNutritionData(countryIso3Data);
-
-    if (!nutritionData || (nutritionData.Acute == null && nutritionData.Chronic == null)) {
-      return {
-        title: 'Nutrition',
-        infoIcon: <CustomInfoCircle />,
-        content: <p>No data about Nutrition is available</p>,
-      };
-    }
+    const hasData = nutritionData && !(nutritionData.Acute == null && nutritionData.Chronic == null);
 
     return {
-      title: 'Nutrition',
+      title: 'Malnutrition',
       infoIcon: <CustomInfoCircle />,
-      content: (
+      popoverInfo: <DataSourcePopover dataSourceKeys={['malnutritionChronic', 'malnutritionAcute']} />,
+      content: hasData ? (
         <div className={cardsWrapperClass}>
           {nutritionData.Acute != null && (
             <CustomCard
-              title="Acute Nutrition"
+              title={descriptions.malnutritionAcute.legendTitle}
               content={[
                 {
                   svgIcon: <Nutrition className="w-[50px] h-[50px] object-contain" />,
@@ -107,7 +96,7 @@ export class IpcFoodSecurityAccordionOperations {
           )}
           {nutritionData.Chronic != null && (
             <CustomCard
-              title="Chronic Nutrition"
+              title={descriptions.malnutritionAcute.legendTitle}
               content={[
                 {
                   svgIcon: <Nutrition className="w-[40px] h-[40px] object-contain" />,
@@ -122,6 +111,8 @@ export class IpcFoodSecurityAccordionOperations {
             />
           )}
         </div>
+      ) : (
+        <p>No data about malnutrition available</p>
       ),
     };
   }

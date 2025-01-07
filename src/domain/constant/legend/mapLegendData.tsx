@@ -70,7 +70,7 @@ export function mapLegendData(
   switch (selectedMapType) {
     case GlobalInsight.FOOD:
       legendData.push({
-        title: descriptions.fcs.title,
+        title: descriptions.fcs.legendTitle,
         hasNotAnalyzedPoint: true,
         colorsData: [
           { color: 'fcsGradient1', title: 'Very Low', value: '0-5%' },

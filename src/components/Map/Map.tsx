@@ -38,6 +38,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
   const { resetAlert } = useSelectedAlert();
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
   const { closeSidebar } = useSidebar();
+  const [renderer] = useState(new L.SVG({ padding: 0.5 }));
 
   const [countryData, setCountryData] = useState<CountryData | undefined>();
   const [countryIso3Data, setCountryIso3Data] = useState<CountryIso3Data | undefined>();
@@ -124,6 +125,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
       ref={mapRef}
       center={[21.505, -0.09]}
       zoom={3}
+      renderer={renderer}
       maxBounds={[
         [-90, -180],
         [90, 180],

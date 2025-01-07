@@ -3,6 +3,8 @@ import { Spacer } from '@nextui-org/react';
 import CustomCard from '@/components/Cards/Card';
 import { LineChart } from '@/components/Charts/LineChart';
 import CustomInfoCircle from '@/components/CustomInfoCircle/CustomInfoCircle';
+import { DataSourcePopover } from '@/components/Legend/DataSourcePopover';
+import descriptions from '@/domain/constant/dataSources/dataSourceDescriptions';
 import { CountryData } from '@/domain/entities/country/CountryData';
 import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data';
 import { cardsWrapperClass } from '@/utils/primitives';
@@ -27,11 +29,11 @@ export class FcsFoodSecurityOperations {
       {
         title: 'Food Security',
         infoIcon: <CustomInfoCircle />,
-        popoverInfo: FcsAccordionOperations.getFoodSecutriyPopoverInfo(),
+        popoverInfo: <DataSourcePopover dataSourceKeys={['population', 'fcs']} />,
         content: (
           <div className={cardsWrapperClass}>
             <CustomCard
-              title="Population"
+              title={descriptions.population.title}
               content={[
                 {
                   svgIcon: <Population />,
@@ -45,7 +47,7 @@ export class FcsFoodSecurityOperations {
               content={[
                 {
                   svgIcon: <FoodConsumption className="w-[50px] h-[50px] object-contain" />,
-                  text: 'Population with insufficient food consumption',
+                  text: descriptions.fcs.legendTitle,
                   value: countryData?.fcs ? `${countryData.fcs.toFixed(2)} M` : 'N/A',
                   textClass: 'text-xs',
                   changeValues: [
@@ -70,15 +72,15 @@ export class FcsFoodSecurityOperations {
         ),
       },
       {
-        title: 'Nutrition',
+        title: 'Malnutrition',
         infoIcon: <CustomInfoCircle />,
-        popoverInfo: FcsAccordionOperations.getFoodSecutriyPopoverInfo(),
+        popoverInfo: <DataSourcePopover dataSourceKeys={['malnutritionAcute', 'malnutritionChronic']} />,
         content:
           nutritionData && (nutritionData.Acute != null || nutritionData.Chronic != null) ? (
             <div className={cardsWrapperClass}>
               {nutritionData.Acute != null && (
                 <CustomCard
-                  title="Acute Nutrition"
+                  title={descriptions.malnutritionAcute.legendTitle}
                   content={[
                     {
                       svgIcon: <Nutrition className="w-[50px] h-[50px] object-contain" />,
@@ -94,7 +96,7 @@ export class FcsFoodSecurityOperations {
               )}
               {nutritionData.Chronic != null && (
                 <CustomCard
-                  title="Chronic Nutrition"
+                  title={descriptions.malnutritionChronic.legendTitle}
                   content={[
                     {
                       svgIcon: <Nutrition className="w-[40px] h-[40px] object-contain" />,
@@ -110,37 +112,25 @@ export class FcsFoodSecurityOperations {
               )}
             </div>
           ) : (
-            <p>No data about Nutrition is available</p>
+            <p>No data about malnutrition available</p>
           ),
       },
       {
         title: 'Food Security Trends',
         infoIcon: <CustomInfoCircle />,
-        popoverInfo: FcsAccordionOperations.getFoodSecutriyTrendsPopoverInfo(),
+        popoverInfo: <DataSourcePopover dataSourceKeys={['fcs', 'rCsi']} />,
         content: (
           <div>
             {fcsChartData ? (
-              <LineChart
-                title="Trend of the number of people with insufficient food consumption"
-                data={fcsChartData}
-                small
-                noPadding
-                transparentBackground
-              />
+              <LineChart title={descriptions.fcs.title} data={fcsChartData} small noPadding transparentBackground />
             ) : (
-              <p>No data about insufficient food consumption</p>
+              <p>No data about food consumption available</p>
             )}
             <Spacer y={6} />
             {rcsiChartData ? (
-              <LineChart
-                title="Trend of the number of people using crisis or above crisis food-based coping"
-                data={rcsiChartData}
-                small
-                noPadding
-                transparentBackground
-              />
+              <LineChart title={descriptions.rCsi.title} data={rcsiChartData} small noPadding transparentBackground />
             ) : (
-              <p>No data about crisis or above crisis food-based coping</p>
+              <p>No data about food-based coping available</p>
             )}
           </div>
         ),

@@ -1,6 +1,8 @@
 import CustomCard from '@/components/Cards/Card';
 import { LineChart } from '@/components/Charts/LineChart';
 import CustomInfoCircle from '@/components/CustomInfoCircle/CustomInfoCircle';
+import { DataSourcePopover } from '@/components/Legend/DataSourcePopover';
+import descriptions from '@/domain/constant/dataSources/dataSourceDescriptions';
 import { CountryData } from '@/domain/entities/country/CountryData';
 import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data';
 import { cardsWrapperClass } from '@/utils/primitives';
@@ -20,9 +22,9 @@ export class FcsMacroEconomicOperations {
 
     return [
       {
-        title: 'Macroeconomic',
+        title: descriptions.importDependency.title,
         infoIcon: <CustomInfoCircle />,
-        popoverInfo: FcsAccordionOperations.getMacroEconomicPopoverInfo(),
+        popoverInfo: <DataSourcePopover dataSourceKeys="importDependency" />,
         content: (
           <div className={cardsWrapperClass}>
             <CustomCard
@@ -42,29 +44,29 @@ export class FcsMacroEconomicOperations {
         ),
       },
       {
-        title: 'Currency Exchange',
+        title: descriptions.currencyExchange.title,
         infoIcon: <CustomInfoCircle />,
-        popoverInfo: FcsAccordionOperations.getCurrencyExchangePopoverInfo(),
+        popoverInfo: <DataSourcePopover dataSourceKeys="currencyExchange" />,
         content: (
           <div>
             {currencyExchangeChartData ? (
               <LineChart data={currencyExchangeChartData} small noPadding transparentBackground />
             ) : (
-              <p>No data about currency exchange</p>
+              <p>No data about currency exchange available</p>
             )}
           </div>
         ),
       },
       {
-        title: 'Balance of Trade',
+        title: descriptions.balanceOfTrade.title,
         infoIcon: <CustomInfoCircle />,
-        popoverInfo: FcsAccordionOperations.getBalanceOfTradePopoverInfo(),
+        popoverInfo: <DataSourcePopover dataSourceKeys="balanceOfTrade" />,
         content: (
           <div>
             {balanceOfTradeChartData ? (
               <LineChart data={balanceOfTradeChartData} small noPadding transparentBackground />
             ) : (
-              <p>No data about balance of trade</p>
+              <p>No data about balance of trade available</p>
             )}
           </div>
         ),
@@ -72,13 +74,13 @@ export class FcsMacroEconomicOperations {
       {
         title: 'Headline and food inflation',
         infoIcon: <CustomInfoCircle />,
-        popoverInfo: FcsAccordionOperations.getHeadlineAndFoodInflationPopoverInfo(),
+        popoverInfo: <DataSourcePopover dataSourceKeys={['headlineInflation', 'foodInflation']} />,
         content: (
           <div>
             {headlineAndFoodInflationChartData ? (
               <LineChart data={headlineAndFoodInflationChartData} small noPadding transparentBackground />
             ) : (
-              <p>No data about headline and food inflation</p>
+              <p>No data about headline and food inflation available</p>
             )}
           </div>
         ),

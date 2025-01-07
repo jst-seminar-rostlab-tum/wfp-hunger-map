@@ -1,9 +1,9 @@
-import { ReactElement, Suspense } from 'react';
+import { ReactElement, ReactNode, Suspense } from 'react';
 import reactElementToJsxString from 'react-element-to-jsx-string';
 
 import RecursiveHighlighter from '@/components/Search/RecursiveHighlighter';
 import { AccordionItemProps, SearchableAccordionItemProps } from '@/domain/entities/accordions/Accordions';
-import { DataSourceTableData, DataSourceTableRow } from '@/domain/props/CustomTableProps';
+import DataSourceDescription, { DataSourceDescriptionItems } from '@/domain/entities/dataSources/DataSourceDescription';
 import { SearchableElement } from '@/domain/props/SearchableSectionProps';
 
 /**
@@ -78,10 +78,10 @@ export class SearchOperations {
    */
   static makeDataSourceAccordionSearchable(items: AccordionItemProps[]): SearchableAccordionItemProps[] {
     return items.map((item) => {
-      const tableData: DataSourceTableData | undefined = (item.content as ReactElement)?.props?.data;
+      const tableData: DataSourceDescriptionItems | undefined = (item.content as ReactElement)?.props?.data;
       if (!tableData) return { ...item, containedWords: '' };
 
-      const sanitizedTable = tableData.map(SearchOperations.sanitizeTableRow).join(' ');
+      const sanitizedTable = Object.values(tableData).map(SearchOperations.sanitizeTableRow).join(' ');
       return { ...item, containedWords: `${item.title.toLowerCase()} ${sanitizedTable}` };
     });
   }
@@ -106,13 +106,15 @@ export class SearchOperations {
   /**
    * Put all contained words from a table row into a lowercase string.
    */
-  static sanitizeTableRow(item: DataSourceTableRow): string {
-    return SearchOperations.sanitizeText(`${item.label}
-      ${SearchOperations.sanitizeReactNode(item.description)}
+  static sanitizeTableRow(item: DataSourceDescription): string {
+    return SearchOperations.sanitizeText(
+      `${item.title}
+      ${SearchOperations.sanitizeReactNode(item.summary)}
       ${SearchOperations.sanitizeReactNode(item.dataSource)}
       ${item.dataSourceLink ?? ''}
       ${item.updateInterval ?? ''}
-      ${item.updateDetails?.map((d) => `${d.interval} ${SearchOperations.sanitizeReactNode(d.label)}`)?.join(' ') ?? ''}`);
+      ${item.updateDetails?.map((d) => `${d.interval} ${SearchOperations.sanitizeReactNode(d.label)}`)?.join(' ') ?? ''}`
+    );
   }
 
   /**
@@ -127,8 +129,8 @@ export class SearchOperations {
   /**
    * Convert a React Node into a string, omitting component names and props.
    */
-  private static sanitizeReactNode(item: ReactElement | string): string {
-    if (typeof item === 'string') return item;
+  private static sanitizeReactNode(item: ReactNode): string {
+    if (item === undefined) return '';
     return reactElementToJsxString(item)
       .replace(/<Abbreviation abbreviation="([^"]*)" \/>/g, '$1')
       .replace(/<[^>]*>/g, '')

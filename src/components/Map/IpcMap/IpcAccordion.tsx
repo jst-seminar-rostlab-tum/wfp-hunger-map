@@ -6,7 +6,6 @@ import { useMediaQuery } from '@/utils/resolution.ts';
 export default function IpcAccordion({ countryData, countryName, countryIso3Data }: IpcAccordionProps) {
   const deltaOneMonth = countryData?.fcsMinus1 ? countryData.fcs - countryData.fcsMinus1 : null;
   const deltaThreeMonth = countryData?.fcsMinus3 ? countryData.fcs - countryData.fcsMinus3 : null;
-
   const foodSecurityAccordionItems = IpcFoodSecurityAccordionOperations.getFoodSecurityAccordionItems(
     countryData,
     deltaOneMonth,

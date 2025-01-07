@@ -19,14 +19,14 @@ function Abbreviation({ abbreviation, searchable = true }: { abbreviation: strin
 
   return (
     <Tooltip text={abbreviations[abbreviation]}>
-      <div className="inline cursor-help whitespace-nowrap">
+      <span className="inline cursor-help whitespace-nowrap">
         <Highlighter
           textToHighlight={abbreviation}
           searchWords={searchWords}
           className="underline decoration-dotted decoration-2"
         />
         <CustomInfoCircle className="w-4 h-6 inline pt-2" />
-      </div>
+      </span>
     </Tooltip>
   );
 }

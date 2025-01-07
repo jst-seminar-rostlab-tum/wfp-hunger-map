@@ -3,7 +3,7 @@ import { Feature, GeoJsonProperties, Geometry } from 'geojson';
 import { FcsRegionTooltipOperations } from '@/operations/map/FcsRegionTooltipOperations';
 import { formatToMillion } from '@/utils/formatting';
 
-import { LineChart } from '../Charts/LineChart';
+import { LineChart } from '../../Charts/LineChart';
 
 interface FcsRegionTooltipProps {
   feature: Feature<Geometry, GeoJsonProperties>;

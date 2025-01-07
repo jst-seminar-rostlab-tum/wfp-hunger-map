@@ -1,5 +1,3 @@
-import { v4 as uuid } from 'uuid';
-
 import { PointLegendProps } from '@/domain/props/PointLegendProps';
 
 export default function PointLegend({ records, children }: PointLegendProps) {
@@ -10,7 +8,7 @@ export default function PointLegend({ records, children }: PointLegendProps) {
           children ? (
             children({ record })
           ) : (
-            <div key={uuid()} className="flex items-center space-x-2">
+            <div key={record.label} className="flex items-center space-x-2">
               <span
                 className="w-3 h-3 rounded-full"
                 style={{ backgroundColor: `hsl(var(--nextui-${record.color}))` }}

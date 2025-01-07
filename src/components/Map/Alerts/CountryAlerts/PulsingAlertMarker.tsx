@@ -18,5 +18,5 @@ export function PulsingAlertMarker({ countryAlert }: { countryAlert: CountryAler
       }),
     [countryAlert]
   );
-  return <Marker interactive={false} position={countryAlert.position} icon={icon} />;
+  return <Marker title="Country alert" interactive={false} position={countryAlert.position} icon={icon} />;
 }

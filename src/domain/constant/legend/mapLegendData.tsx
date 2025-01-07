@@ -85,7 +85,7 @@ export function mapLegendData(
       break;
     case AlertType.COUNTRY_ALERTS:
       legendData.push({
-        title: 'Country alerts',
+        title: 'Country Alerts',
         popoverInfo: (
           <div>
             <p>Alerts on a country level.</p>

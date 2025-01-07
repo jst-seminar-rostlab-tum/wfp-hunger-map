@@ -1,6 +1,7 @@
 'use client';
 
 import Highcharts from 'highcharts';
+import highchartsAccessibility from 'highcharts/modules/accessibility';
 import { useTheme } from 'next-themes';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -9,6 +10,10 @@ import { LineChartData } from '@/domain/entities/charts/LineChartData';
 import { ChartType } from '@/domain/enums/ChartType.ts';
 import LineChartProps from '@/domain/props/LineChartProps';
 import LineChartOperations from '@/operations/charts/LineChartOperations';
+
+if (typeof Highcharts === 'object') {
+  highchartsAccessibility(Highcharts);
+}
 
 /**
  * The LineChart component is a box that primarily renders a title, description text, and a line chart.

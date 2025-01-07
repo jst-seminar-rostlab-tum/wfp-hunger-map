@@ -104,6 +104,18 @@ export class FcsAccordionOperations {
     };
   }
 
+  static getNutritionData(countryIso3Data?: CountryIso3Data) {
+    if (!countryIso3Data?.nutrition) {
+      return null;
+    }
+
+    const { wasting, stunting } = countryIso3Data.nutrition;
+    return {
+      Acute: wasting,
+      Chronic: stunting,
+    };
+  }
+
   static getFoodSecutriyPopoverInfo(): ReactNode {
     return (
       <div>

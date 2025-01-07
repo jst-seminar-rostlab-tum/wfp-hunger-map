@@ -21,6 +21,8 @@ export function SelectedAlertProvider({ children }: { children: ReactNode }) {
       setSelectedAlert(null);
     } else {
       setSelectedAlert(alertType);
+
+      // send event to Google Analytics
       window.gtag('event', `${alertType}_alert_selected`);
     }
   };

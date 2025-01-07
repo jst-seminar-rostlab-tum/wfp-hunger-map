@@ -92,6 +92,8 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
           setRegionLabelData,
           setIsDataAvailable
         );
+
+        // send events to Google Analytics
         window.gtag('event', `${selectedCountryData.properties.iso3}_country_selected`, {
           selectedMap: selectedMapType,
         });

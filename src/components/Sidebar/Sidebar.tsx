@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@nextui-org/button';
-import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
+import { Card, CardBody, CardHeader } from '@nextui-org/card';
 import { Link } from '@nextui-org/link';
 import { Autocomplete, AutocompleteItem, ScrollShadow, Spinner } from '@nextui-org/react';
 import clsx from 'clsx';
@@ -63,13 +63,12 @@ export function Sidebar({ countryMapData, fcsData }: SidebarProps) {
   };
 
   return (
-    <div className="w-screen h-dvh absolute top-0 left-0 z-sidebarFullScreen sm:w-auto sm:h-[calc(100dvh-3.5rem)] sm:z-sidebarExpanded sm:pt-4 sm:pl-4 sm:pb-10">
+    <div className="w-screen h-dvh absolute top-0 left-0 z-sidebarFullScreen sm:w-[280px] sm:h-[calc(100dvh-2rem)] sm:z-sidebarExpanded sm:top-4 sm:left-4">
       <Card
         classNames={{
           base: 'h-full rounded-none sm:rounded-large',
           header: 'flex flex-col gap-4 w-full items-start',
-          body: 'flex-grow overflow-auto min-h-[100px]',
-          footer: 'flex-shrink-0',
+          body: 'min-h-[100px]',
         }}
       >
         <CardHeader>
@@ -126,7 +125,7 @@ export function Sidebar({ countryMapData, fcsData }: SidebarProps) {
           </Autocomplete>
         </CardHeader>
         <CardBody>
-          <ScrollShadow className="w-full h-full">
+          <ScrollShadow className="w-full h-full flex flex-col">
             <div className="w-full">
               <span className="text-tiny text-foreground-500 pl-1">Global Insights</span>
               <div className="flex flex-col gap-1 pt-1">
@@ -160,41 +159,38 @@ export function Sidebar({ countryMapData, fcsData }: SidebarProps) {
                 ))}
               </div>
             </div>
-            <div className="w-full">
+            <div className="w-full flex-grow">
               <span className="text-tiny text-foreground-500 pl-1">Alerts</span>
               <div className="pt-1">
                 <AlertsMenu variant={AlertsMenuVariant.Inside} />
               </div>
             </div>
-          </ScrollShadow>
-        </CardBody>
-        <CardFooter>
-          <div className="flex flex-col gap-1">
-            <Button radius="full" onClick={() => setIsModalOpen(!isModalOpen)} size="sm" className="w-fit text-white">
-              SUBSCRIBE
-            </Button>
-            <PopupModal
-              isModalOpen={isModalOpen}
-              toggleModal={() => setIsModalOpen(!isModalOpen)}
-              modalTitle={SUBSCRIBE_MODAL_TITLE}
-              modalSize="lg"
-              modalHeight="auto"
-            >
-              <Subscribe />
-            </PopupModal>
-            <ul className="pl-3">
-              {pageLinks
-                .filter((page) => page.label !== 'Home')
-                .map((page) => (
-                  <li key={page.label}>
-                    <Link href={page.href} color="foreground" className="text-tiny text-opacity-80">
+
+            <div className="flex flex-col gap-2 pt-4">
+              <Button radius="full" onClick={() => setIsModalOpen(!isModalOpen)} size="sm" className="w-fit text-white">
+                SUBSCRIBE
+              </Button>
+              <PopupModal
+                isModalOpen={isModalOpen}
+                toggleModal={() => setIsModalOpen(!isModalOpen)}
+                modalTitle={SUBSCRIBE_MODAL_TITLE}
+                modalSize="lg"
+                modalHeight="auto"
+              >
+                <Subscribe />
+              </PopupModal>
+              <div className="grid grid-cols-2 gap-2 pl-3">
+                {pageLinks
+                  .filter((page) => page.label !== 'Home')
+                  .map((page) => (
+                    <Link key={page.label} href={page.href} color="foreground" className="text-tiny text-opacity-80">
                       {page.label}
                     </Link>
-                  </li>
-                ))}
-            </ul>
-          </div>
-        </CardFooter>
+                  ))}
+              </div>
+            </div>
+          </ScrollShadow>
+        </CardBody>
       </Card>
     </div>
   );

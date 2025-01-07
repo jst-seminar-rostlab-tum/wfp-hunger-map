@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactElement, ReactNode } from 'react';
 
 import tableFormatters from '@/operations/tables/tableFormatters';
 
@@ -34,6 +34,18 @@ export default interface CustomTableProps<D> {
   zebraRows?: boolean;
   showBorders?: boolean;
 }
+
+export type DataSourceTableRow = {
+  label: string;
+  description: ReactElement | string;
+  readMoreLink?: string;
+  dataSource: ReactElement | string;
+  dataSourceLink?: string;
+  updateInterval?: string;
+  updateDetails?: readonly { label: ReactElement | string; interval: string }[];
+};
+
+export type DataSourceTableData = DataSourceTableRow[];
 
 export type SimpleTableData = {
   keyColumn: ReactNode;

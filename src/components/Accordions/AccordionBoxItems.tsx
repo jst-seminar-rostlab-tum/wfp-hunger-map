@@ -58,11 +58,11 @@ export default function AccordionBoxItems({
             className={`last:border-b-0 ${color} white:bg-white overflow-hidden shadow-md`}
             hideIndicator={noSelectionMode}
             title={
-              <div className="flex justify-between items-center w-full">
-                <div className="flex gap-4">
+              <span className="flex justify-between items-center w-full">
+                <span className="flex gap-4">
                   <Highlighter searchWords={highlightedTitleWords} textToHighlight={item.title} autoEscape />
                   {loading && <Spinner size="sm" />}
-                </div>
+                </span>
                 {item.tooltipInfo && (
                   <Tooltip text={item.tooltipInfo}>
                     {item.infoIcon && <span className="w-[37px] h-[37px] p-[5.5px]">{item.infoIcon}</span>}
@@ -89,7 +89,7 @@ export default function AccordionBoxItems({
                 {!item.tooltipInfo && !item.popoverInfo && item.infoIcon && (
                   <span className="w-[37px] h-[37px] p-[5.5px]">{item.infoIcon}</span>
                 )}
-              </div>
+              </span>
             }
           >
             {item.description && <p className="text-sm text-balance pb-8 text-center">{item.description}</p>}

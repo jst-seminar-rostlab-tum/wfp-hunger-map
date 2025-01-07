@@ -6,12 +6,13 @@ export interface AccordionItemProps {
   infoIcon?: ReactNode;
   tooltipInfo?: string;
   popoverInfo?: ReactNode;
-  description?: ReactNode;
+  description?: string;
   content?: string | ReactElement;
   hideIndicator?: boolean;
   containedWords?: string;
 }
 
 export interface SearchableAccordionItemProps extends AccordionItemProps {
+  // string of lowercase words seperated by single spaces and without duplicates
   containedWords: string;
 }

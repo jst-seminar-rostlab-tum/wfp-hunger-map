@@ -16,27 +16,27 @@ export class SidebarOperations {
       {
         key: GlobalInsight.FOOD,
         label: 'Food consumption',
-        icon: '/menu_fcs.png',
+        icon: '/menu_fcs.webp',
       },
       {
         key: GlobalInsight.NUTRITION,
         label: 'Nutrition',
-        icon: '/menu_nutri.png',
+        icon: '/menu_nutri.webp',
       },
       {
         key: GlobalInsight.VEGETATION,
         label: 'Vegetation',
-        icon: '/menu_ndvi.png',
+        icon: '/menu_ndvi.webp',
       },
       {
         key: GlobalInsight.RAINFALL,
         label: 'Rainfall',
-        icon: '/menu_rainfall.png',
+        icon: '/menu_rainfall.webp',
       },
       {
         key: GlobalInsight.IPC,
         label: 'IPC/CH',
-        icon: '/menu_ipc.png',
+        icon: '/menu_ipc.webp',
       },
     ];
   }
@@ -50,12 +50,12 @@ export class SidebarOperations {
     {
       key: AlertType.HAZARDS,
       label: 'Hazards',
-      icon: '/menu_hazards.png',
+      icon: '/menu_hazards.webp',
     },
     {
       key: AlertType.CONFLICTS,
       label: 'Conflicts',
-      icon: '/menu_conflicts.png',
+      icon: '/menu_conflicts.webp',
     },
   ];
 

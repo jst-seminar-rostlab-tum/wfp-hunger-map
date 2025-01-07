@@ -27,9 +27,9 @@ import { MapProps } from '@/domain/props/MapProps';
 import { MapOperations } from '@/operations/map/MapOperations';
 
 import { AlertContainer } from './Alerts/AlertContainer';
-import FcsChoropleth from './FcsChoropleth';
+import FcsChoropleth from './FcsMap/FcsChoropleth';
 import IpcChoropleth from './IpcMap/IpcChoropleth';
-import NutritionChoropleth from './NutritionChoropleth';
+import NutritionChoropleth from './NutritionMap/NutritionChoropleth';
 import ZoomControl from './ZoomControl';
 
 export default function Map({ countries, disputedAreas, fcsData, alertData }: MapProps) {
@@ -206,6 +206,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
           countryData={countryData}
           ipcRegionData={ipcRegionData}
           selectedCountryName={selectedCountryName}
+          countryIso3Data={countryIso3Data}
         />
       )}
 

@@ -9,6 +9,7 @@ import Highcharts, {
 import highchartsMore from 'highcharts/highcharts-more';
 import patternFill from 'highcharts/modules/pattern-fill';
 
+import descriptions from '@/domain/constant/dataSources/dataSourceDescriptions';
 import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph.ts';
 import { ContinuousChartData } from '@/domain/entities/charts/ContinuousChartData.ts';
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph.ts';
@@ -101,10 +102,10 @@ export default class ContinuousChartOperations {
         return {
           type: ContinuousChartDataType.LINE_CHART_DATA,
           xAxisType: 'datetime',
-          yAxisLabel: 'Mill',
+          yAxisLabel: 'Mill USD',
           lines: [
             {
-              name: 'Balance of Trade',
+              name: descriptions.balanceOfTrade.title,
               dataPoints: data.data.map((p) => {
                 return { x: new Date(p.x).getTime(), y: formatToMillion(p.y) };
               }),
@@ -134,14 +135,14 @@ export default class ContinuousChartOperations {
           yAxisLabel: 'Rate in %',
           lines: [
             {
-              name: 'Headline Inflation',
+              name: descriptions.headlineInflation.title,
               dataPoints:
                 data.headline.data?.map((p) => {
                   return { x: new Date(p.x).getTime(), y: p.y };
                 }) ?? [],
             },
             {
-              name: 'Food Inflation',
+              name: descriptions.foodInflation.title,
               dataPoints:
                 data.food.data?.map((p) => {
                   return { x: new Date(p.x).getTime(), y: p.y };

@@ -80,13 +80,13 @@ export function ChatbotProvider({ children }: { children: ReactNode }) {
   };
 
   /**
-   * Initiates a chat with a report based on the provided country name and report content.
-   * If a chat for that specific already exists, it opens that chat; otherwise, it creates a new one.
-   * @param countryName - The name of the country related to the report.
+   * Initiates a chat with a report based on the provided report name and report content.
+   * If a chat for that specific report already exists, it opens that chat; otherwise, it creates a new one.
+   * @param reportName - The name of the report.
    * @param reportURL - The URL of the report to be processed.
    */
-  const initiateChatAboutReport = async (countryName: string, reportURL: string) => {
-    const reportChatIndex = chats.findIndex((chat) => chat.title === `Report ${countryName}`);
+  const initiateChatAboutReport = async (reportName: string, reportURL: string) => {
+    const reportChatIndex = chats.findIndex((chat) => chat.title === `Report ${reportName}`);
     const reportChatExists = reportChatIndex !== -1;
 
     if (reportChatExists) {
@@ -105,14 +105,14 @@ export function ChatbotProvider({ children }: { children: ReactNode }) {
     const assistantMessage = {
       id: crypto.randomUUID(),
       content: reportText
-        ? `Hey, how can I help you with this report about ${countryName}?`
+        ? `Hey, how can I help you with this report about ${reportName}?`
         : `Hey, unfortunately I'm currently unable to answer questions about this report. You can try it later or chat with me about other things!`,
       role: SenderRole.ASSISTANT,
     };
 
     const newChat: IChat = {
       id: chats.length + 1,
-      title: `Report ${countryName}`,
+      title: `Report ${reportName}`,
       context: reportText,
       isReportStarter: true,
       messages: [assistantMessage],

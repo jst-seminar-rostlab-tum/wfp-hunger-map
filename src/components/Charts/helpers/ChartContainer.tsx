@@ -40,6 +40,7 @@ export function ChartContainer({
 }: ChartContainerProps) {
   const TITLE_TEXT_SIZE = small ? 'text-sm' : 'text-md';
   const DESCRIPTION_TEXT_SIZE = small ? 'text-tiny' : 'text-sm';
+  // eslint-disable-next-line no-nested-ternary
   const CHART_HEIGHT = chartHeight ? `${chartHeight}px` : small ? '12rem' : '16rem';
   const ICON_BUTTON_SIZE = small ? 3 : 4;
   const HEADER_PADDING = title ? 3 : 0;

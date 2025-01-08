@@ -5,6 +5,8 @@ import { CategoricalChart } from '@/components/Charts/CategoricalChart';
 import { ContinuousChart } from '@/components/Charts/ContinuousChart';
 import NoDataHint from '@/components/ComparisonPortal/NoDataHint';
 import CustomInfoCircle from '@/components/CustomInfoCircle/CustomInfoCircle';
+import { DataSourcePopover } from '@/components/Legend/DataSourcePopover';
+import descriptions from '@/domain/constant/dataSources/dataSourceDescriptions';
 import { AccordionItemProps } from '@/domain/entities/accordions/Accordions';
 import { CategoricalChartData } from '@/domain/entities/charts/CategoricalChartData';
 import { ContinuousChartData } from '@/domain/entities/charts/ContinuousChartData.ts';
@@ -18,7 +20,6 @@ import { SNACKBAR_SHORT_DURATION } from '@/domain/entities/snackbar/Snackbar';
 import { ContinuousChartDataType } from '@/domain/enums/ContinuousChartDataType.ts';
 import { SnackbarPosition, SnackbarStatus } from '@/domain/enums/Snackbar';
 import { SnackbarProps } from '@/domain/props/SnackbarProps';
-import { FcsAccordionOperations } from '@/operations/map/FcsAccordionOperations';
 import { formatToMillion } from '@/utils/formatting.ts';
 
 export class CountryComparisonOperations {
@@ -114,7 +115,7 @@ export class CountryComparisonOperations {
     return this.chartWithoutEmptyLines({
       type: ContinuousChartDataType.LINE_CHART_DATA,
       xAxisType: 'datetime',
-      yAxisLabel: 'Mill',
+      yAxisLabel: 'Mill USD',
       lines: countryIso3DataList.map((countryIso3Data) => ({
         name: this.getCountryNameByIso3(countryIso3Data.id, selectedCountries),
         dataPoints: countryIso3Data.balanceOfTradeGraph.data.map((p) => {
@@ -229,23 +230,31 @@ export class CountryComparisonOperations {
     return [
       {
         title: 'Food Security',
+        infoIcon: <CustomInfoCircle />,
+        popoverInfo: <DataSourcePopover dataSourceKeys={['population', 'fcs']} />,
         content: (
           <div className="grid md:grid-cols-2 gap-6">
             {foodSecurityBarChartData && (
               <CategoricalChart
-                title="Number of people with insufficient food consumption"
+                title={descriptions.fcs.legendTitle}
                 data={foodSecurityBarChartData}
                 transparentBackground
               />
             )}
             {populationBarChartData && (
-              <CategoricalChart title="Population" data={populationBarChartData} transparentBackground />
+              <CategoricalChart
+                title={descriptions.population.title}
+                data={populationBarChartData}
+                transparentBackground
+              />
             )}
           </div>
         ),
       },
       {
         title: 'Food Security Trends',
+        infoIcon: <CustomInfoCircle />,
+        popoverInfo: <DataSourcePopover dataSourceKeys={['fcs', 'rCsi']} />,
         content: (
           <div>
             {fcsChartData && (
@@ -287,14 +296,14 @@ export class CountryComparisonOperations {
         ),
       },
       {
-        title: 'Macro-economic',
+        title: descriptions.importDependency.title,
         infoIcon: <CustomInfoCircle />,
-        popoverInfo: FcsAccordionOperations.getMacroEconomicPopoverInfo(),
+        popoverInfo: <DataSourcePopover dataSourceKeys="importDependency" />,
         content: (
           <div>
             {importDependencyBarChartData && (
               <>
-                <CategoricalChart title="Import Dependency" data={importDependencyBarChartData} transparentBackground />
+                <CategoricalChart data={importDependencyBarChartData} transparentBackground />
                 <NoDataHint
                   chartData={importDependencyBarChartData}
                   selectedCountryNames={selectedCountryNames}
@@ -306,9 +315,9 @@ export class CountryComparisonOperations {
         ),
       },
       {
-        title: 'Balance of Trade',
+        title: descriptions.balanceOfTrade.title,
         infoIcon: <CustomInfoCircle />,
-        popoverInfo: FcsAccordionOperations.getBalanceOfTradePopoverInfo(),
+        popoverInfo: <DataSourcePopover dataSourceKeys="balanceOfTrade" />,
         content: (
           <div>
             {balanceOfTradeData && (
@@ -327,13 +336,13 @@ export class CountryComparisonOperations {
       {
         title: 'Food and Headline Inflation',
         infoIcon: <CustomInfoCircle />,
-        popoverInfo: FcsAccordionOperations.getHeadlineAndFoodInflationPopoverInfo(),
+        popoverInfo: <DataSourcePopover dataSourceKeys={['headlineInflation', 'foodInflation']} />,
         content: (
           <div>
             {headlineInflationData && (
               <>
                 <ContinuousChart
-                  title="Headline Inflation"
+                  title={descriptions.headlineInflation.title}
                   data={headlineInflationData}
                   small
                   noPadding
@@ -350,7 +359,7 @@ export class CountryComparisonOperations {
             {foodInflationData && (
               <>
                 <ContinuousChart
-                  title="Food Inflation"
+                  title={descriptions.foodInflation.title}
                   data={foodInflationData}
                   small
                   noPadding

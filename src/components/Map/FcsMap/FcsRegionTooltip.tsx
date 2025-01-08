@@ -1,9 +1,8 @@
 import { Feature, GeoJsonProperties, Geometry } from 'geojson';
 
+import { ContinuousChart } from '@/components/Charts/ContinuousChart';
 import { FcsRegionTooltipOperations } from '@/operations/map/FcsRegionTooltipOperations';
 import { formatToMillion } from '@/utils/formatting';
-
-import { ContinuousChart } from '../Charts/ContinuousChart';
 
 interface FcsRegionTooltipProps {
   feature: Feature<Geometry, GeoJsonProperties>;

@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactElement, ReactNode } from 'react';
 
 import tableFormatters from '@/operations/tables/tableFormatters';
 
@@ -37,12 +37,12 @@ export default interface CustomTableProps<D> {
 
 export type DataSourceTableRow = {
   label: string;
-  description: ReactNode;
+  description: ReactElement | string;
   readMoreLink?: string;
-  dataSource: ReactNode;
+  dataSource: ReactElement | string;
   dataSourceLink?: string;
   updateInterval?: string;
-  updateDetails?: readonly { label: ReactNode; interval: string }[];
+  updateDetails?: readonly { label: ReactElement | string; interval: string }[];
 };
 
 export type DataSourceTableData = DataSourceTableRow[];

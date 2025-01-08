@@ -11,6 +11,7 @@ const nextConfig = {
     return config;
   },
   cacheHandler: require.resolve('next/dist/server/lib/incremental-cache/file-system-cache.js'),
+  productionBrowserSourceMaps: true,
 };
 
 module.exports = nextConfig;

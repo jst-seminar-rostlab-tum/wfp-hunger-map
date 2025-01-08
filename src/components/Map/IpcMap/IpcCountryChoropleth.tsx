@@ -7,13 +7,13 @@ import { IpcChoroplethOperations } from '@/operations/map/IpcChoroplethOperation
 
 import IpcAccordion from './IpcAccordion';
 
-function IpcCountryChoropleth({ regionIpcData, countryData, countryName }: IpcCountryChoroplethProps) {
+function IpcCountryChoropleth({ regionIpcData, countryData, countryName, countryIso3Data }: IpcCountryChoroplethProps) {
   const handleCountryFeature = (feature: Feature<Geometry, GeoJsonProperties>, layer: L.Layer) => {
     IpcChoroplethOperations.attachEventsRegion(feature, layer);
   };
   return (
     <>
-      <IpcAccordion countryData={countryData} countryName={countryName} />
+      <IpcAccordion countryData={countryData} countryName={countryName} countryIso3Data={countryIso3Data} />
       <GeoJSON
         style={IpcChoroplethOperations.ipcCountryStyle}
         data={regionIpcData}

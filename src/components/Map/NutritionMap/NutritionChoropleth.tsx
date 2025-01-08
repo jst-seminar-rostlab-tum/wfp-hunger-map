@@ -4,7 +4,6 @@ import { useTheme } from 'next-themes';
 import React, { useEffect, useRef, useState } from 'react';
 import { GeoJSON } from 'react-leaflet';
 
-import NutritionAccordion from '@/components/Map/NutritionAccordion';
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 import { LayerWithFeature } from '@/domain/entities/map/LayerWithFeature.ts';
@@ -14,8 +13,9 @@ import NutritionChoroplethProps from '@/domain/props/NutritionChoroplethProps';
 import { MapOperations } from '@/operations/map/MapOperations';
 import NutritionChoroplethOperations from '@/operations/map/NutritionChoroplethOperations';
 
-import AccordionModalSkeleton from '../Accordions/AccordionModalSkeleton';
-import CountryLoadingLayer from './CountryLoading';
+import AccordionModalSkeleton from '../../Accordions/AccordionModalSkeleton';
+import CountryLoadingLayer from '../CountryLoading';
+import NutritionAccordion from './NutritionAccordion';
 import NutritionStateChoropleth from './NutritionStateChoropleth';
 
 export default function NutritionChoropleth({

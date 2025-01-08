@@ -1,5 +1,9 @@
 import AccordionContainer from '@/components/Accordions/AccordionContainer';
-import { TITLE } from '@/domain/entities/download/Country';
+import {
+  COUNTRY_REPORTS_TITLE,
+  EXPORT_COUNTRY_DATA_TITLE,
+  YEAR_IN_REVIEW_REPORTS_TITLE,
+} from '@/operations/download-portal/DownloadPortalConstants';
 
 export default function Loading() {
   const loading = true;
@@ -10,10 +14,13 @@ export default function Loading() {
       <AccordionContainer
         items={[
           {
-            title: 'Country Reports',
+            title: YEAR_IN_REVIEW_REPORTS_TITLE,
           },
           {
-            title: TITLE,
+            title: COUNTRY_REPORTS_TITLE,
+          },
+          {
+            title: EXPORT_COUNTRY_DATA_TITLE,
           },
         ]}
         loading={loading}

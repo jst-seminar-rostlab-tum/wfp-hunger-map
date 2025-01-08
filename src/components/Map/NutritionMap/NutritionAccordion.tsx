@@ -4,9 +4,9 @@ import React from 'react';
 
 import AccordionContainer from '@/components/Accordions/AccordionContainer';
 import CustomInfoCircle from '@/components/CustomInfoCircle/CustomInfoCircle';
+import { DataSourcePopover } from '@/components/Legend/DataSourcePopover';
 import { NutrientType } from '@/domain/enums/NutrientType.ts';
 import NutritionAccordionProps from '@/domain/props/NutritionAccordionProps';
-import { FcsAccordionOperations } from '@/operations/map/FcsAccordionOperations';
 import NutritionStateChoroplethOperations from '@/operations/map/NutritionStateChoroplethOperations';
 
 export default function NutritionAccordion({
@@ -27,7 +27,7 @@ export default function NutritionAccordion({
             {
               title: 'Micronutrients',
               infoIcon: <CustomInfoCircle />,
-              popoverInfo: FcsAccordionOperations.getFoodSecutriyTrendsPopoverInfo(), // TODO this is the popover in the old map but a seperate could be created
+              popoverInfo: <DataSourcePopover dataSourceKeys="micronutrients" />,
               description: 'Population at Risk of Inadequate Micronutrient Intake',
               content: (
                 <div className="flex flex-row gap-4 justify-center flex-wrap pb-8">

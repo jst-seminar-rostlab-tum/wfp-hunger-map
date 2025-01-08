@@ -17,6 +17,7 @@ function IpcChoropleth({
   ipcRegionData,
   selectedCountryName,
   isLoadingCountry,
+  countryIso3Data,
 }: IpcChoroplethProps) {
   const { data: ipcData } = useIpcQuery(true);
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
@@ -47,7 +48,12 @@ function IpcChoropleth({
         </>
       )}
       {selectedCountryId && (
-        <IpcAccordion countryData={countryData} countryName={selectedCountryName} loading={isLoadingCountry} />
+        <IpcAccordion
+          countryData={countryData}
+          countryName={selectedCountryName}
+          loading={isLoadingCountry}
+          countryIso3Data={countryIso3Data}
+        />
       )}
       {ipcRegionData && <IpcCountryChoropleth regionIpcData={ipcRegionData} />}
     </>

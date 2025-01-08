@@ -44,7 +44,6 @@ export default function AccordionListItems({
       onSelectionChange={(keys) => setExpandedItems(keys as Set<string>)}
     >
       {items.map((item) => (
-        /* test commit */
         <AccordionItem
           key={item.title}
           aria-label={item.title}

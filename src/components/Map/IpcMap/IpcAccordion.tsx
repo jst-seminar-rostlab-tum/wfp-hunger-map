@@ -23,7 +23,7 @@ export default function IpcAccordion({ countryData, countryName, loading, countr
         loading={loading}
         items={[foodSecurityAccordionItems, nutrititonAccordionItems]}
         multipleSelectionMode={!isMobile}
-        expandAll={!isMobile}
+        expandAll={!isMobile && !loading}
       />
     </div>
   );

@@ -30,7 +30,7 @@ class FcsChoroplethOperations {
     const pathLayer = layer as L.Path;
 
     pathLayer.on({
-      click: async () => {
+      click: () => {
         if (this.checkIfActive(feature as CountryMapData, fcsData)) {
           FcsChoroplethOperations.handleCountryClick(feature, setSelectedCountryId);
           document.getElementsByClassName('leaflet-container').item(0)?.classList.remove('interactive');

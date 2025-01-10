@@ -27,9 +27,9 @@ import { MapProps } from '@/domain/props/MapProps';
 import { MapOperations } from '@/operations/map/MapOperations';
 
 import { AlertContainer } from './Alerts/AlertContainer';
-import FcsChoropleth from './FcsChoropleth';
+import FcsChoropleth from './FcsMap/FcsChoropleth';
 import IpcChoropleth from './IpcMap/IpcChoropleth';
-import NutritionChoropleth from './NutritionChoropleth';
+import NutritionChoropleth from './NutritionMap/NutritionChoropleth';
 import ZoomControl from './ZoomControl';
 
 export default function Map({ countries, disputedAreas, fcsData, alertData }: MapProps) {
@@ -38,6 +38,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
   const { resetAlert } = useSelectedAlert();
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
   const { closeSidebar } = useSidebar();
+  const [renderer] = useState(new L.SVG({ padding: 0.5 }));
 
   const [countryData, setCountryData] = useState<CountryData | undefined>();
   const [countryIso3Data, setCountryIso3Data] = useState<CountryIso3Data | undefined>();
@@ -94,6 +95,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
         window.gtag('event', `${selectedCountryData.properties.iso3}_country_selected`, {
           selectedMap: selectedMapType,
         });
+        window.gtag('event', `${selectedCountryData.properties.iso3} _${selectedMapType}_countrymap_selected`);
         setSelectedCountryName(selectedCountryData.properties.adm0_name);
         mapRef.current?.fitBounds(L.geoJSON(selectedCountryData as GeoJSON).getBounds(), { animate: true });
       }
@@ -123,6 +125,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
       ref={mapRef}
       center={[21.505, -0.09]}
       zoom={3}
+      renderer={renderer}
       maxBounds={[
         [-90, -180],
         [90, 180],
@@ -134,7 +137,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
       style={{ height: '100%', width: '100%', zIndex: 1 }}
     >
       <AlertContainer countries={countries} alertData={alertData} />
-      <ZoomControl threshold={5} callback={onZoomThresholdReached} />
+      <ZoomControl threshold={SELECTED_COUNTRY_ZOOM_THRESHOLD} callback={onZoomThresholdReached} />
       <BackToGlobalButton />
 
       <Pane name="ocean" style={{ zIndex: 0 }}>
@@ -205,6 +208,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
           countryData={countryData}
           ipcRegionData={ipcRegionData}
           selectedCountryName={selectedCountryName}
+          countryIso3Data={countryIso3Data}
         />
       )}
 
@@ -220,9 +224,6 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
           style={disputedAreaStyle}
         />
       </Pane>
-
-      <ZoomControl threshold={SELECTED_COUNTRY_ZOOM_THRESHOLD} callback={onZoomThresholdReached} />
-      <BackToGlobalButton />
     </MapContainer>
   );
 }

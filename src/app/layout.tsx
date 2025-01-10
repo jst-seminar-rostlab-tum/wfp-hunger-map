@@ -2,6 +2,7 @@ import '@/styles/globals.css';
 
 import clsx from 'clsx';
 import { Metadata, Viewport } from 'next';
+import { headers } from 'next/headers';
 import Script from 'next/script';
 
 import { CookieConsentPopup } from '@/components/Analytics/CookieConsentPopup';
@@ -26,9 +27,6 @@ export const metadata: Metadata = {
     apple: { url: '/favicon/apple-touch-icon.png', sizes: '180x180' },
   },
   manifest: '/favicon/site.webmanifest',
-  appleWebApp: {
-    title: 'HungerMap',
-  },
   keywords: siteConfig.keywords, // may not be used by search engines but its good to have
   openGraph: {
     title: siteConfig.name,
@@ -74,11 +72,12 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const nonce = headers().get('x-nonce');
   return (
     <html suppressHydrationWarning lang="en">
       <head>
         {/* JSON-LD Structured Data */}
-        <Script type="application/ld+json" id="structured-data">
+        <Script type="application/ld+json" id="structured-data" nonce={nonce ?? ''}>
           {`
             {
               "@context": "https://schema.org",
@@ -99,7 +98,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </Script>
 
         {/* Google Analytics Script */}
-        <Script id="google-analytics">
+        <Script id="google-analytics" nonce={nonce ?? ''}>
           {`
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}

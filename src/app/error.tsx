@@ -15,7 +15,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
   return (
     <div className="flex flex-col h-screen">
       <Topbar />
-      <main className="flex h-full flex-col items-center justify-center gap-2 text-content">
+      <div className="flex h-full flex-col items-center justify-center gap-2 text-content">
         <section className="text-center">
           <h2 className="text-xl font-semibold">An Error Occurred</h2>
           <p>Please try again or go back to the Home page.</p>
@@ -30,7 +30,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
             </CustomButton>
           </a>
         </div>
-      </main>
+      </div>
     </div>
   );
 }

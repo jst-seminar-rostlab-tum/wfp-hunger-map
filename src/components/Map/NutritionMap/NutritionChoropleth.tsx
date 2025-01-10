@@ -12,7 +12,8 @@ import NutritionChoroplethProps from '@/domain/props/NutritionChoroplethProps';
 import { MapOperations } from '@/operations/map/MapOperations';
 import NutritionChoroplethOperations from '@/operations/map/NutritionChoroplethOperations';
 
-import CountryLoadingLayer from './CountryLoading';
+import AccordionModalSkeleton from '../../Accordions/AccordionModalSkeleton';
+import CountryLoadingLayer from '../CountryLoading';
 import NutritionStateChoropleth from './NutritionStateChoropleth';
 
 export default function NutritionChoropleth({
@@ -69,11 +70,14 @@ export default function NutritionChoropleth({
       )}
       {/* Animated GeoJSON layer for the selected country */}
       {selectedCountryId && (!regionNutritionData || !regionLabelData) && (
-        <CountryLoadingLayer
-          data={data}
-          selectedCountryId={selectedCountryId}
-          color="hsl(var(--nextui-nutritionAnimation))"
-        />
+        <>
+          <CountryLoadingLayer
+            data={data}
+            selectedCountryId={selectedCountryId}
+            color="hsl(var(--nextui-nutritionAnimation))"
+          />
+          <AccordionModalSkeleton />
+        </>
       )}
       {
         // if this country ('countryId') is selected and data is loaded ('regionNutritionData') show Choropleth for all states

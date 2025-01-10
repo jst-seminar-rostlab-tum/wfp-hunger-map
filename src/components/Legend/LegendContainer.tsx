@@ -48,10 +48,11 @@ export default function LegendContainer({ items, loading = false }: LegendContai
     </div>
   ) : (
     <>
-      <div className="absolute z-legend bottom-0 pb-10 right-16">
+      <div className="absolute z-legend bottom-10 right-16">
         <Tooltip text={items.length > 1 ? 'Legends Information' : 'Legend Information'}>
           <Button
             onClick={() => setInfoPopup(true)}
+            aria-label="Map legend"
             className="
         relative flex items-center justify-center min-w-10 h-10 px-1 rounded-full bg-content1 shadow-md"
           >

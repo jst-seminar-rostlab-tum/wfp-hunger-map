@@ -36,10 +36,10 @@ export function ChartModal({
   const chartRef = useRef<HighchartsReact.RefObject | null>(null);
   const [chartKey, setChartKey] = useState(0);
 
-  // if chart changes -> force chart to remount -> chart animation will be re-triggered
+  // handling chart type switch -> force chart to remount -> correct chart animation will be re-triggered
   useEffect(() => {
     setChartKey((prev) => prev + 1);
-  }, [theme, alternativeSwitchButtonProps?.showAlternativeChart, sliderProps?.selectedSliderRange, chartData]);
+  }, [theme, alternativeSwitchButtonProps?.showAlternativeChart]);
 
   return (
     <Modal

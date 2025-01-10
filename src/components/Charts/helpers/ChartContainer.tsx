@@ -59,18 +59,20 @@ export function ChartContainer({
   useEffect(() => {
     // `theme` change does not guarantee that the NextUI CSS colors have already been changed;
     // therefore we synchronize the update with the next repaint cycle, ensuring the CSS variables are updated
-    const rafId = requestAnimationFrame(() => {
-      recalculateChartOptions();
-      setChartKey((prev) => prev + 1); // forces chart to remount -> chart animation will be re-triggered
-    });
+    const rafId = requestAnimationFrame(() => recalculateChartOptions());
     return () => cancelAnimationFrame(rafId);
   }, [theme]);
 
-  // handling chart type switch, data changes and slider changes
+  // handling chart type switch
   useEffect(() => {
     recalculateChartOptions();
-    setChartKey((prev) => prev + 1); // forces chart to remount -> chart animation will be re-triggered
-  }, [alternativeSwitchButtonProps?.showAlternativeChart, sliderProps?.selectedSliderRange, chartData]);
+    setChartKey((prev) => prev + 1); // forces chart to remount -> correct chart animation will be re-triggered
+  }, [alternativeSwitchButtonProps?.showAlternativeChart]);
+
+  // data changes and slider changes
+  useEffect(() => {
+    recalculateChartOptions();
+  }, [chartData, sliderProps?.selectedSliderRange]);
 
   // handling the x-axis range slider visibility
   const [showSlider, setShowSlider] = useState(false);

@@ -6,14 +6,26 @@ import GradientLegendProps from '@/domain/props/GradientLegendProps';
 
 import { Tooltip } from '../Tooltip/Tooltip';
 
+/**
+ * GradientLegend component
+ *
+ * This component renders a gradient legend with a tooltip
+ * that displays the title and value of the corresponding color
+ * in the gradient.
+ *
+ * @param {GradientLegendProps} props
+ * @returns {JSX.Element}
+ */
 export default function GradientLegend({ colorsData, startLabel, endLabel, hasNotAnalyzedPoint }: GradientLegendProps) {
   const gradients: string = colorsData
     .map((colorData: ColorsData, index: number) => {
+      // Calculate the percentage for each gradient segment
       const percentage = (index / (colorsData.length - 1)) * 100;
       return `hsl(var(--nextui-${colorData.color})) ${percentage}%`;
     })
     .join(', ');
 
+  // Calculate the width of each segment
   const segmentWidth: number = 100 / colorsData.length;
 
   return (
@@ -35,6 +47,7 @@ export default function GradientLegend({ colorsData, startLabel, endLabel, hasNo
               left: `${index * segmentWidth}%`,
             }}
           >
+            {/* Render a tooltip for each segment, activated on hover */}
             <Tooltip title={colorData.title} text={colorData.value} titleStyle="text-center" textStyle="text-center">
               <div
                 className={clsx('hover:bg-opacity-25 hover:bg-black group flex-1 h-full cursor-pointer', {

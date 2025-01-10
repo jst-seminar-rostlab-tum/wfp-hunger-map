@@ -14,6 +14,16 @@ import { Tooltip } from '../Tooltip/Tooltip';
 import GradientLegend from './GradientLegend';
 import PointLegend from './PointLegend';
 
+/**
+ * LegendContainer Component
+ *
+ * This component serves as a container for legend items.
+ * On large screens, it displays individual legend items, while on small or medium screens,
+ * it renders a modal containing a list of legend items.
+ *
+ * @param {LegendContainerProps} props
+ * @returns {JSX.Element}
+ */
 export default function LegendContainer({ items, loading = false }: LegendContainerProps) {
   const isMobile = useMediaQuery('(max-width: 700px)');
   const [showInfoPopup, setInfoPopup] = useState(false);

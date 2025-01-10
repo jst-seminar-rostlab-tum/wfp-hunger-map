@@ -12,6 +12,14 @@ import { NutritionData } from '@/domain/enums/NutritionData';
 import { GradientLegendContainerItem } from '@/domain/props/GradientLegendContainerItem.ts';
 import PointLegendContainerItem from '@/domain/props/PointLegendContainerItem.ts';
 
+/**
+ * Generates the legend data for the map based on the selected map type, alert, and countryId.
+ *
+ * @param selectedMapType The selected global insight type.
+ * @param selectedAlert The selected alert type, if any.
+ * @param selectedCountryId The selected countryId, if any.
+ * @returns An array of legend items for the map.
+ */
 export function mapLegendData(
   selectedMapType: GlobalInsight,
   selectedAlert: AlertType | null,
@@ -19,6 +27,7 @@ export function mapLegendData(
 ): (PointLegendContainerItem | GradientLegendContainerItem)[] {
   const legendData: (PointLegendContainerItem | GradientLegendContainerItem)[] = [];
 
+  // Add legend items based on the selected alert type
   switch (selectedAlert) {
     case AlertType.CONFLICTS:
       legendData.push({
@@ -102,6 +111,7 @@ export function mapLegendData(
     default:
   }
 
+  // Add legend items based on the selected map type
   switch (selectedMapType) {
     case GlobalInsight.FOOD:
       legendData.push({

@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export function middleware(request: NextRequest) {
+  // scripts with this nonce will be allowed to run. Used for the Google Analytics scripts
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
+
+  // if you want to fetch data from a new API, add it to connect-src
+  // if you want to show images from a different source, add it to img-src
   const cspHeader = `
     default-src 'self';
     script-src 'self' 'nonce-${nonce}' 'sha256-q1+DaXsZUnEJs3jpN9ZoWp6ypK1xBwXiRxG+C31xOUA=' 'strict-dynamic' 'unsafe-eval' 'unsafe-inline' ${process.env.NEXT_PUBLIC_API_URL?.slice(0, -3)};

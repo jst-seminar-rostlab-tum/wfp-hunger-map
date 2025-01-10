@@ -1,7 +1,6 @@
 import { FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
 
 export default interface CountryLoadingProps {
-  data: FeatureCollection<Geometry, GeoJsonProperties>;
-  selectedCountryId: number;
+  countryMapData: FeatureCollection<Geometry, GeoJsonProperties>;
   color: string;
 }

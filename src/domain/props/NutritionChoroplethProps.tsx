@@ -1,11 +1,11 @@
-import { FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
+import { FeatureCollection, Geometry } from 'geojson';
 import L from 'leaflet';
 
+import { CountryProps } from '../entities/country/CountryMapData';
+
 export default interface NutritionChoroplethProps {
-  data: FeatureCollection;
+  data: FeatureCollection<Geometry, CountryProps>;
   countryId: number;
-  regionNutritionData?: FeatureCollection;
-  selectedCountryName?: string;
-  regionLabelData?: FeatureCollection<Geometry, GeoJsonProperties>;
-  setRegionLabelTooltips: (tooltips: (prevRegionLabelData: L.Tooltip[]) => L.Tooltip[]) => void;
+  setRegionLabelTooltips: (tooltips: L.Tooltip[]) => void;
+  onDataUnavailable: () => void;
 }

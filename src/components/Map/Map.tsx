@@ -1,6 +1,6 @@
 import 'leaflet/dist/leaflet.css';
 
-import { Feature, FeatureCollection, GeoJSON, GeoJsonProperties, Geometry } from 'geojson';
+import { Feature, GeoJSON, Geometry } from 'geojson';
 import L, { Map as LeafletMap } from 'leaflet';
 import { useEffect, useRef, useState } from 'react';
 import { GeoJSON as LeafletGeoJSON, MapContainer, Pane, SVGOverlay, TileLayer } from 'react-leaflet';
@@ -19,9 +19,7 @@ import { useSelectedAlert } from '@/domain/contexts/SelectedAlertContext';
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSidebar } from '@/domain/contexts/SidebarContext';
-import { CountryData } from '@/domain/entities/country/CountryData.ts';
-import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data.ts';
-import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
+import { CountryMapData, CountryProps } from '@/domain/entities/country/CountryMapData.ts';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight';
 import { MapProps } from '@/domain/props/MapProps';
 import { MapOperations } from '@/operations/map/MapOperations';
@@ -40,25 +38,9 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
   const { closeSidebar } = useSidebar();
   const [renderer] = useState(new L.SVG({ padding: 0.5 }));
 
-  const [countryData, setCountryData] = useState<CountryData | undefined>();
-  const [countryIso3Data, setCountryIso3Data] = useState<CountryIso3Data | undefined>();
-  const [regionData, setRegionData] = useState<FeatureCollection<Geometry, GeoJsonProperties> | undefined>();
-  const [countryClickLoading, setCountryClickLoading] = useState<boolean>(false);
-  const [regionNutritionData, setRegionNutritionData] = useState<FeatureCollection | undefined>();
-  const [ipcRegionData, setIpcRegionData] = useState<FeatureCollection<Geometry, GeoJsonProperties> | undefined>();
-  const [selectedCountryName, setSelectedCountryName] = useState<string | undefined>(undefined);
-  const [regionLabelData, setRegionLabelData] = useState<FeatureCollection | undefined>(undefined);
   const [regionLabelTooltips, setRegionLabelTooltips] = useState<L.Tooltip[]>([]);
-  const [isDataAvailable, setIsDataAvailable] = useState<boolean>(true);
 
   const onZoomThresholdReached = () => {
-    MapOperations.resetSelectedCountryData(
-      setRegionData,
-      setCountryData,
-      setCountryIso3Data,
-      setRegionNutritionData,
-      setIpcRegionData
-    );
     setSelectedCountryId(null);
   };
 
@@ -67,36 +49,14 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
       closeSidebar();
       resetAlert();
 
-      MapOperations.resetSelectedCountryData(
-        setRegionData,
-        setCountryData,
-        setCountryIso3Data,
-        setRegionNutritionData,
-        setIpcRegionData
-      );
-
       const selectedCountryData: CountryMapData | undefined = countries.features.find(
         (country) => country.properties.adm0_id === selectedCountryId
       );
       if (selectedCountryData) {
-        MapOperations.fetchCountryData(
-          selectedMapType,
-          selectedCountryData,
-          setCountryClickLoading,
-          setRegionData,
-          setCountryData,
-          setCountryIso3Data,
-          setRegionNutritionData,
-          setIpcRegionData,
-          regionLabelData,
-          setRegionLabelData,
-          setIsDataAvailable
-        );
         window.gtag('event', `${selectedCountryData.properties.iso3}_country_selected`, {
           selectedMap: selectedMapType,
         });
         window.gtag('event', `${selectedCountryData.properties.iso3} _${selectedMapType}_countrymap_selected`);
-        setSelectedCountryName(selectedCountryData.properties.adm0_name);
         mapRef.current?.fitBounds(L.geoJSON(selectedCountryData as GeoJSON).getBounds(), { animate: true });
       }
     }
@@ -109,16 +69,13 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
     }
   }, [selectedCountryId, selectedMapType]);
 
-  useEffect(() => {
-    if (isDataAvailable) {
-      const selectedCountryData = countries.features.find(
-        (country) => country.properties.adm0_id === selectedCountryId
-      );
-      mapRef.current?.fitBounds(L.geoJSON(selectedCountryData as GeoJSON).getBounds(), { animate: true });
-    } else {
+  const onDataUnavailable = () => {
+    // timeout to make sure that the zoom in animation has ended
+    setTimeout(() => {
+      setSelectedCountryId(null);
       mapRef.current?.zoomOut(4, { animate: true });
-    }
-  }, [isDataAvailable]);
+    }, 300);
+  };
 
   return (
     <MapContainer
@@ -158,15 +115,10 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
             <FcsChoropleth
               key={country.properties.adm0_id}
               countryId={country.properties.adm0_id}
-              data={{ type: 'FeatureCollection', features: [country as Feature<Geometry, GeoJsonProperties>] }}
-              loading={countryClickLoading}
-              countryData={countryData}
-              countryIso3Data={countryIso3Data}
-              regionData={regionData}
-              selectedCountryName={selectedCountryName}
+              data={{ type: 'FeatureCollection', features: [country as Feature<Geometry, CountryProps>] }}
               fcsData={fcsData}
-              regionLabelData={regionLabelData}
               setRegionLabelTooltips={setRegionLabelTooltips}
+              onDataUnavailable={onDataUnavailable}
             />
           ))}
           {!selectedCountryId && (
@@ -180,13 +132,10 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
       {selectedMapType === GlobalInsight.NUTRITION &&
         countries.features.map((country) => (
           <NutritionChoropleth
-            key={country.properties.adm0_id}
             countryId={country.properties.adm0_id}
-            data={{ type: 'FeatureCollection', features: [country as Feature<Geometry, GeoJsonProperties>] }}
-            regionNutritionData={regionNutritionData}
-            selectedCountryName={selectedCountryName}
-            regionLabelData={regionLabelData}
+            data={{ type: 'FeatureCollection', features: [country as Feature<Geometry, CountryProps>] }}
             setRegionLabelTooltips={setRegionLabelTooltips}
+            onDataUnavailable={onDataUnavailable}
           />
         ))}
 
@@ -203,13 +152,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
       )}
 
       {selectedMapType === GlobalInsight.IPC && (
-        <IpcChoropleth
-          countries={countries}
-          countryData={countryData}
-          ipcRegionData={ipcRegionData}
-          selectedCountryName={selectedCountryName}
-          countryIso3Data={countryIso3Data}
-        />
+        <IpcChoropleth countries={countries} onDataUnavailable={onDataUnavailable} />
       )}
 
       <Pane name="countries_border" style={{ zIndex: 3 }}>

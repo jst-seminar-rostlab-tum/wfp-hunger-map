@@ -1,4 +1,5 @@
 import { useQueries, useQuery, UseQueryResult } from '@tanstack/react-query';
+import { FeatureCollection } from 'geojson';
 
 import { cachedQueryClient } from '@/config/queryClient';
 import container from '@/container';
@@ -7,6 +8,7 @@ import { isApiError } from '../entities/ApiError';
 import { AdditionalCountryData } from '../entities/country/AdditionalCountryData';
 import { CountryData, CountryDataRecord } from '../entities/country/CountryData';
 import { CountryIso3Data, CountryIso3DataRecord } from '../entities/country/CountryIso3Data';
+import { CountryMimiData } from '../entities/country/CountryMimiData';
 import { RegionIpc } from '../entities/region/RegionIpc';
 import CountryRepository from '../repositories/CountryRepository';
 
@@ -53,7 +55,23 @@ export const useRegionDataQuery = (countryId: number) =>
   useQuery<AdditionalCountryData, Error>(
     {
       queryKey: ['fetchRegionData', countryId],
-      queryFn: async () => countryRepo.getRegionData(countryId),
+      queryFn: async () => {
+        const res = await countryRepo.getRegionData(countryId);
+        if (Array.isArray(res) && res[1] === 404) {
+          throw new Error('Region data not found');
+        }
+        return res as AdditionalCountryData;
+      },
+      retry: false,
+    },
+    cachedQueryClient
+  );
+
+export const useRegionNutritionDataQuery = (countryId: number) =>
+  useQuery<CountryMimiData, Error>(
+    {
+      queryKey: ['fetchRegionNutritionData', countryId],
+      queryFn: async () => countryRepo.getRegionNutritionData(countryId),
     },
     cachedQueryClient
   );
@@ -100,6 +118,15 @@ export const useRegionIpcDataQuery = (countryId: number) =>
     {
       queryKey: ['fetchRegionIpcData', countryId],
       queryFn: async () => countryRepo.getRegionIpcData(countryId),
+    },
+    cachedQueryClient
+  );
+
+export const useRegionLabelQuery = () =>
+  useQuery<FeatureCollection>(
+    {
+      queryKey: ['fetchRegionLabelData'],
+      queryFn: countryRepo.getRegionLabelData,
     },
     cachedQueryClient
   );

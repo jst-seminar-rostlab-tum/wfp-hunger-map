@@ -24,7 +24,7 @@ export function ThemeSwitch({ isIconOnly = false }: ThemeSwitchProps) {
     return (
       <div className="flex items-center justify-between gap-4 w-full ml-1">
         {!isIconOnly && <small>Theme</small>}
-        <Skeleton className="rounded-full  w-14 h-7" />
+        <Skeleton aria-hidden="true" className="rounded-full  w-14 h-7" />
       </div>
     );
 
@@ -32,6 +32,7 @@ export function ThemeSwitch({ isIconOnly = false }: ThemeSwitchProps) {
     <div className="flex items-center justify-between gap-4 w-full ml-1">
       {!isIconOnly && <small>Theme</small>}
       <Switch
+        aria-label="theme-switch"
         classNames={{
           wrapper: ['bg-yellow-200', 'group-data-[selected=true]:bg-primary'],
           thumb: ['bg-yellow-400', 'group-data-[selected=true]:bg-black'],

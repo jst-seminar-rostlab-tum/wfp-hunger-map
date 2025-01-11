@@ -14,7 +14,13 @@ function StyledLink({
   isInternal?: boolean;
 }) {
   return (
-    <Link isExternal={!isInternal} size="lg" underline="hover" href={href} className={clsx('inline', className)}>
+    <Link
+      isExternal={!isInternal}
+      size="lg"
+      underline="hover"
+      href={href}
+      className={clsx('inline text-link dark:text-link', className)}
+    >
       {children}
     </Link>
   );

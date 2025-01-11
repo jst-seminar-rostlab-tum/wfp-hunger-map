@@ -1,5 +1,5 @@
 import { FeatureCollection } from 'geojson';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { GeoJSON, useMap } from 'react-leaflet';
 
 import AccordionModalSkeleton from '@/components/Accordions/AccordionModalSkeleton';
@@ -11,16 +11,15 @@ import { MapOperations } from '@/operations/map/MapOperations';
 import NutritionStateChoroplethOperations from '@/operations/map/NutritionStateChoroplethOperations';
 
 import CountryLoadingLayer from '../CountryLoading';
-import NutritionAccordion from './NutritionAccordion';
 
 export default function NutritionStateChoropleth({
   setRegionLabelTooltips,
   countryMapData,
   onDataUnavailable,
+  selectedNutrient,
 }: NutritionStateChoroplethProps) {
   const countryData = countryMapData.features[0].properties;
   const layersRef = useRef<LayerWithFeature[]>([]);
-  const [selectedNutrient, setSelectedNutrient] = useState<NutrientType>(NutrientType.MINI_SIMPLE);
   const selectedNutrientRef = useRef<NutrientType>(selectedNutrient);
   const map = useMap();
   const { data: nutritionData, isLoading } = useRegionNutritionDataQuery(countryData.adm0_id);
@@ -74,23 +73,16 @@ export default function NutritionStateChoropleth({
       <AccordionModalSkeleton />
     </>
   ) : (
-    <>
-      <NutritionAccordion
-        setSelectedNutrient={setSelectedNutrient}
-        selectedNutrient={selectedNutrient}
-        countryName={countryData.adm0_name}
+    nutritionData && (
+      <GeoJSON
+        data={nutritionData as FeatureCollection}
+        style={(feature) => NutritionStateChoroplethOperations.dynamicStyle(feature, selectedNutrient)}
+        onEachFeature={(feature, layer) => {
+          layersRef.current.push(layer);
+          NutritionStateChoroplethOperations.addNutritionTooltip(layer, feature, selectedNutrient);
+          NutritionStateChoroplethOperations.addHoverEffect(layer);
+        }}
       />
-      {nutritionData && (
-        <GeoJSON
-          data={nutritionData as FeatureCollection}
-          style={(feature) => NutritionStateChoroplethOperations.dynamicStyle(feature, selectedNutrient)}
-          onEachFeature={(feature, layer) => {
-            layersRef.current.push(layer);
-            NutritionStateChoroplethOperations.addNutritionTooltip(layer, feature, selectedNutrient);
-            NutritionStateChoroplethOperations.addHoverEffect(layer);
-          }}
-        />
-      )}
-    </>
+    )
   );
 }

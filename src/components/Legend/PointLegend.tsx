@@ -1,5 +1,17 @@
 import { PointLegendProps } from '@/domain/props/PointLegendProps';
 
+/**
+ * PointLegend component
+ *
+ * This component renders a visual legend for points, with an optional tooltip.
+ * Each legend item is represented by a color and label, which are passed through the `records` prop.
+ *
+ * If children are provided, the component will render them using the provided record data. Otherwise,
+ * it will render a default layout where each legend item displays a colored circle alongside a label.
+ *
+ * @param {PointLegendProps} props
+ * @returns {JSX.Element}
+ */
 export default function PointLegend({ records, children }: PointLegendProps) {
   return (
     <div className="relative flex flex-col w-full md:w-96 px-4 py-3">

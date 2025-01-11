@@ -6,6 +6,7 @@ import { CountryProps } from '@/domain/entities/country/CountryMapData';
 import { useIpcQuery } from '@/domain/hooks/globalHooks';
 import { IpcChoroplethProps } from '@/domain/props/IpcChoroplethProps';
 
+import IpcAccordion from './IpcAccordion';
 import IpcCountryChoropleth from './IpcCountryChoropleth';
 import IpcGlobalChoropleth from './IpcGlobalChoropleth';
 
@@ -18,10 +19,14 @@ function IpcChoropleth({ countries, onDataUnavailable }: IpcChoroplethProps) {
       {ipcData && <IpcGlobalChoropleth ipcData={ipcData} countries={countries} />}
 
       {selectedCountryId && (
-        <IpcCountryChoropleth
-          countryMapData={countries as FeatureCollection<Geometry, CountryProps>}
-          onDataUnavailable={onDataUnavailable}
-        />
+        <>
+          <IpcAccordion countryMapData={countries} />
+
+          <IpcCountryChoropleth
+            countryMapData={countries as FeatureCollection<Geometry, CountryProps>}
+            onDataUnavailable={onDataUnavailable}
+          />
+        </>
       )}
     </>
   );

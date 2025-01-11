@@ -2,14 +2,14 @@ import { Spacer } from '@nextui-org/react';
 import { UseQueryResult } from '@tanstack/react-query';
 
 import { CategoricalChart } from '@/components/Charts/CategoricalChart';
-import { LineChart } from '@/components/Charts/LineChart';
+import { ContinuousChart } from '@/components/Charts/ContinuousChart';
 import NoDataHint from '@/components/ComparisonPortal/NoDataHint';
 import CustomInfoCircle from '@/components/CustomInfoCircle/CustomInfoCircle';
 import { DataSourcePopover } from '@/components/Legend/DataSourcePopover';
 import descriptions from '@/domain/constant/dataSources/dataSourceDescriptions';
 import { AccordionItemProps } from '@/domain/entities/accordions/Accordions';
 import { CategoricalChartData } from '@/domain/entities/charts/CategoricalChartData';
-import { LineChartData } from '@/domain/entities/charts/LineChartData';
+import { ContinuousChartData } from '@/domain/entities/charts/ContinuousChartData.ts';
 import { ChartData } from '@/domain/entities/common/ChartData.ts';
 import { CountryComparisonChartData } from '@/domain/entities/comparison/CountryComparisonChartdata';
 import { CountryComparisonData } from '@/domain/entities/comparison/CountryComparisonData';
@@ -17,15 +17,15 @@ import { CountryDataRecord } from '@/domain/entities/country/CountryData';
 import { CountryIso3DataRecord } from '@/domain/entities/country/CountryIso3Data.ts';
 import { CountryMapData } from '@/domain/entities/country/CountryMapData';
 import { SNACKBAR_SHORT_DURATION } from '@/domain/entities/snackbar/Snackbar';
-import { LineChartDataType } from '@/domain/enums/LineChartDataType';
+import { ContinuousChartDataType } from '@/domain/enums/ContinuousChartDataType.ts';
 import { SnackbarPosition, SnackbarStatus } from '@/domain/enums/Snackbar';
 import { SnackbarProps } from '@/domain/props/SnackbarProps';
 import { formatToMillion } from '@/utils/formatting.ts';
 
 export class CountryComparisonOperations {
-  static getFcsChartData(countryDataList: CountryDataRecord[], countryMapData: CountryMapData[]): LineChartData {
+  static getFcsChartData(countryDataList: CountryDataRecord[], countryMapData: CountryMapData[]): ContinuousChartData {
     return this.chartWithoutEmptyLines({
-      type: LineChartDataType.LINE_CHART_DATA,
+      type: ContinuousChartDataType.LINE_CHART_DATA,
       xAxisType: 'datetime',
       yAxisLabel: 'Mill',
       lines: countryDataList.map((countryData) => ({
@@ -41,9 +41,9 @@ export class CountryComparisonOperations {
     });
   }
 
-  static getRcsiChartData(countryDataList: CountryDataRecord[], countryMapData: CountryMapData[]): LineChartData {
+  static getRcsiChartData(countryDataList: CountryDataRecord[], countryMapData: CountryMapData[]): ContinuousChartData {
     return this.chartWithoutEmptyLines({
-      type: LineChartDataType.LINE_CHART_DATA,
+      type: ContinuousChartDataType.LINE_CHART_DATA,
       xAxisType: 'datetime',
       yAxisLabel: 'Mill',
       lines: countryDataList.map((countryData) => ({
@@ -111,9 +111,9 @@ export class CountryComparisonOperations {
   static getBalanceOfTradeData(
     countryIso3DataList: CountryIso3DataRecord[],
     selectedCountries: CountryMapData[]
-  ): LineChartData {
+  ): ContinuousChartData {
     return this.chartWithoutEmptyLines({
-      type: LineChartDataType.LINE_CHART_DATA,
+      type: ContinuousChartDataType.LINE_CHART_DATA,
       xAxisType: 'datetime',
       yAxisLabel: 'Mill USD',
       lines: countryIso3DataList.map((countryIso3Data) => ({
@@ -129,9 +129,9 @@ export class CountryComparisonOperations {
     countryIso3DataList: CountryIso3DataRecord[],
     selectedCountries: CountryMapData[],
     type: 'headline' | 'food'
-  ): LineChartData {
+  ): ContinuousChartData {
     return this.chartWithoutEmptyLines({
-      type: LineChartDataType.LINE_CHART_DATA,
+      type: ContinuousChartDataType.LINE_CHART_DATA,
       xAxisType: 'datetime',
       yAxisLabel: 'Rate in %',
       lines: countryIso3DataList
@@ -153,7 +153,7 @@ export class CountryComparisonOperations {
     return countryMapData.find((country) => country.properties.iso3 === iso3)?.properties.adm0_name || '';
   }
 
-  static chartWithoutEmptyLines(chart: LineChartData): LineChartData {
+  static chartWithoutEmptyLines(chart: ContinuousChartData): ContinuousChartData {
     return {
       ...chart,
       lines: chart.lines.filter((line) => line.dataPoints.length > 0),
@@ -259,12 +259,13 @@ export class CountryComparisonOperations {
           <div>
             {fcsChartData && (
               <>
-                <LineChart
+                <ContinuousChart
                   title="Trend of the number of people with insufficient food consumption"
                   data={fcsChartData}
                   small
                   noPadding
                   transparentBackground
+                  chartHeight={300}
                 />
                 <NoDataHint
                   chartData={fcsChartData}
@@ -276,12 +277,13 @@ export class CountryComparisonOperations {
             <Spacer y={6} />
             {rcsiChartData && (
               <>
-                <LineChart
+                <ContinuousChart
                   title="Trend of the number of people using crisis or above crisis food-based coping"
                   data={rcsiChartData}
                   small
                   noPadding
                   transparentBackground
+                  chartHeight={300}
                 />
                 <NoDataHint
                   chartData={rcsiChartData}
@@ -320,7 +322,7 @@ export class CountryComparisonOperations {
           <div>
             {balanceOfTradeData && (
               <>
-                <LineChart data={balanceOfTradeData} small noPadding transparentBackground />
+                <ContinuousChart data={balanceOfTradeData} small noPadding transparentBackground chartHeight={300} />
                 <NoDataHint
                   chartData={balanceOfTradeData}
                   selectedCountryNames={selectedCountryNames}
@@ -339,12 +341,13 @@ export class CountryComparisonOperations {
           <div>
             {headlineInflationData && (
               <>
-                <LineChart
+                <ContinuousChart
                   title={descriptions.headlineInflation.title}
                   data={headlineInflationData}
                   small
                   noPadding
                   transparentBackground
+                  chartHeight={300}
                 />
                 <NoDataHint
                   chartData={headlineInflationData}
@@ -355,12 +358,13 @@ export class CountryComparisonOperations {
             )}
             {foodInflationData && (
               <>
-                <LineChart
+                <ContinuousChart
                   title={descriptions.foodInflation.title}
                   data={foodInflationData}
                   small
                   noPadding
                   transparentBackground
+                  chartHeight={300}
                 />
                 <NoDataHint
                   chartData={foodInflationData}

@@ -1,7 +1,7 @@
 import { Spacer } from '@nextui-org/react';
 
 import CustomCard from '@/components/Cards/Card';
-import { LineChart } from '@/components/Charts/LineChart';
+import { ContinuousChart } from '@/components/Charts/ContinuousChart';
 import CustomInfoCircle from '@/components/CustomInfoCircle/CustomInfoCircle';
 import { DataSourcePopover } from '@/components/Legend/DataSourcePopover';
 import descriptions from '@/domain/constant/dataSources/dataSourceDescriptions';
@@ -122,13 +122,25 @@ export class FcsFoodSecurityOperations {
         content: (
           <div>
             {fcsChartData ? (
-              <LineChart title={descriptions.fcs.title} data={fcsChartData} small noPadding transparentBackground />
+              <ContinuousChart
+                title={descriptions.fcs.title}
+                data={fcsChartData}
+                small
+                noPadding
+                transparentBackground
+              />
             ) : (
               <p>No data about food consumption available</p>
             )}
             <Spacer y={6} />
             {rcsiChartData ? (
-              <LineChart title={descriptions.rCsi.title} data={rcsiChartData} small noPadding transparentBackground />
+              <ContinuousChart
+                title={descriptions.rCsi.title}
+                data={rcsiChartData}
+                small
+                noPadding
+                transparentBackground
+              />
             ) : (
               <p>No data about food-based coping available</p>
             )}

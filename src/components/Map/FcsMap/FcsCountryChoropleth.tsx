@@ -9,7 +9,6 @@ import { FcsCountryChoroplethOperations } from '@/operations/map/FcsCountryChoro
 import { MapOperations } from '@/operations/map/MapOperations';
 
 import CountryLoadingLayer from '../CountryLoading';
-import FcsAccordion from './FcsAccordion';
 
 export default function FscCountryChoropleth({
   countryMapData,
@@ -51,19 +50,12 @@ export default function FscCountryChoropleth({
       <AccordionModalSkeleton />
     </>
   ) : (
-    <>
-      <FcsAccordion
-        countryCode={countryData.iso3}
-        countryId={countryData.adm0_id}
-        countryName={countryData.adm0_name}
-      />
-      <GeoJSON
-        data={regionData as FeatureCollection}
-        style={FcsCountryChoroplethOperations.styleFunction}
-        onEachFeature={(feature, layer) =>
-          FcsCountryChoroplethOperations.onEachFeature(feature, layer, regionData as FeatureCollection)
-        }
-      />
-    </>
+    <GeoJSON
+      data={regionData as FeatureCollection}
+      style={FcsCountryChoroplethOperations.styleFunction}
+      onEachFeature={(feature, layer) =>
+        FcsCountryChoroplethOperations.onEachFeature(feature, layer, regionData as FeatureCollection)
+      }
+    />
   );
 }

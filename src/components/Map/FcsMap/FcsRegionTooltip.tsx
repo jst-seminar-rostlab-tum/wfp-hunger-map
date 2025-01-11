@@ -1,9 +1,8 @@
 import { Feature, GeoJsonProperties, Geometry } from 'geojson';
 
+import { ContinuousChart } from '@/components/Charts/ContinuousChart';
 import { FcsRegionTooltipOperations } from '@/operations/map/FcsRegionTooltipOperations';
 import { formatToMillion } from '@/utils/formatting';
-
-import { LineChart } from '../../Charts/LineChart';
 
 interface FcsRegionTooltipProps {
   feature: Feature<Geometry, GeoJsonProperties>;
@@ -49,7 +48,7 @@ export default function FcsRegionTooltip({ feature }: FcsRegionTooltipProps) {
       </div>
       <div className="px-1">
         {feature.properties?.fcsGraph && (
-          <LineChart
+          <ContinuousChart
             title="Number of people with insufficient food consumption"
             data={FcsRegionTooltipOperations.getFcsChartData(feature.properties.fcsGraph)}
             small

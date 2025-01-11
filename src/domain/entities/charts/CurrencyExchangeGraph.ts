@@ -1,9 +1,9 @@
-import { LineChartDataType } from '@/domain/enums/LineChartDataType';
+import { ContinuousChartDataType } from '@/domain/enums/ContinuousChartDataType.ts';
 
 import { ChartData } from '../common/ChartData';
 
 export interface CurrencyExchangeGraph {
-  type: LineChartDataType.CURRENCY_EXCHANGE_CHART;
+  type: ContinuousChartDataType.CURRENCY_EXCHANGE_CHART;
   name: string;
   source: string;
   updated: string;

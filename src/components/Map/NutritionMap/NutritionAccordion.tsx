@@ -13,6 +13,7 @@ export default function NutritionAccordion({
   setSelectedNutrient,
   selectedNutrient,
   countryName,
+  loading,
 }: NutritionAccordionProps) {
   return (
     <div className="absolute left-[108px] top-4" style={{ zIndex: 1000 }}>
@@ -21,6 +22,7 @@ export default function NutritionAccordion({
           title={countryName ?? undefined}
           accordionModalActive
           maxWidth={600}
+          loading={loading}
           items={[
             {
               title: 'Micronutrients',

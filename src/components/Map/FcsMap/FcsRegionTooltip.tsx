@@ -8,7 +8,13 @@ interface FcsRegionTooltipProps {
   feature: Feature<Geometry, GeoJsonProperties>;
 }
 
-export default function FcsRegionTooltip({ feature }: FcsRegionTooltipProps) {
+/** FcsRegionTooltip function returns a component that displays the tooltip of a region in the fcs map
+ * @param {FcsRegionTooltipProps} props - The props of the component
+ * @param {FcsRegionTooltipProps.feature} props.feature - The feature of the region
+ * @returns {JSX.Element} - The rendered FcsRegionTooltip component
+ */
+
+export default function FcsRegionTooltip({ feature }: FcsRegionTooltipProps): JSX.Element {
   const fcsPeople = feature.properties?.fcs?.people;
   const fcsMillion = fcsPeople ? formatToMillion(fcsPeople) : null;
   const fcsRatio = feature?.properties?.fcs?.ratio;

@@ -5,7 +5,22 @@ import { useMediaQuery } from '@/utils/resolution.ts';
 
 import AccordionContainer from '../../Accordions/AccordionContainer';
 
-export default function FcsAccordion({ countryData, loading, countryIso3Data, countryName }: FcsAccordionProps) {
+/** FcsAccordion function returns a component that displays the food security and macroeconomic data of a country in an accordion
+ *  based upon it's mobile or desktop view.
+ * @param {FcsAccordionProps} props - The props of the component
+ * @param {FcsAccordionProps.countryData} props.countryData - The data of the country
+ * @param {FcsAccordionProps.loading} props.loading - The loading state of the component
+ * @param {FcsAccordionProps.countryIso3Data} props.countryIso3Data - The iso3 data of the country
+ * @param {FcsAccordionProps.countryName} props.countryName - The name of the country
+ * @returns {JSX.Element} - The rendered AccordionContainer component
+ */
+
+export default function FcsAccordion({
+  countryData,
+  loading,
+  countryIso3Data,
+  countryName,
+}: FcsAccordionProps): JSX.Element {
   const isMobile = useMediaQuery('(max-width: 700px)');
   const foodSecurityAccordionItems = FcsFoodSecurityOperations.getFcsFoodSecurityAccordionItems(
     countryData,

@@ -16,6 +16,19 @@ import PdfViewerOperations from '@/operations/pdf/PdfViewerOperations';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.mjs`;
 
+/**
+ * The `PdfViewer` component displays a PDF file in a viewer.
+ * Includes functionality for text selection, downloads, and scrolling through pages.
+ *
+ * @param {Object} props The properties for the PdfViewer component.
+ * @param {string | Blob | null} props.file The PDF file to be displayed.
+ * @param {() => void} [props.onClose] Function to close the PDF viewer.
+ * @param {(selectionText: string) => void} [props.onTooltipClick] Function to handle the tooltip click.
+ * @param {() => void} [props.onDownloadPdf] Function to download the PDF file.
+ * @param {() => void} [props.onDownloadJson] Function to download JSON data related to the PDF file.
+ * @param {() => void} [props.onDownloadCsv] Function to download CSV data related to the PDF file.
+ * @returns {JSX.Element} The rendered PdfViewer component.
+ */
 export default function PdfViewer({
   file,
   onClose,
@@ -23,7 +36,7 @@ export default function PdfViewer({
   onDownloadPdf,
   onDownloadJson,
   onDownloadCsv,
-}: PdfViewerProps) {
+}: PdfViewerProps): JSX.Element {
   const [totalPages, setTotalPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState(1);
   const [selectionText, setSelectionText] = useState<string | null>(null);

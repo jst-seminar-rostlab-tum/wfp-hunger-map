@@ -13,20 +13,16 @@ import NutritionChoroplethProps from '@/domain/props/NutritionChoroplethProps';
 import { MapOperations } from '@/operations/map/MapOperations';
 import NutritionChoroplethOperations from '@/operations/map/NutritionChoroplethOperations';
 
-import AccordionModalSkeleton from '../../Accordions/AccordionModalSkeleton';
-import CountryLoadingLayer from '../CountryLoading';
 import NutritionAccordion from './NutritionAccordion';
 import NutritionStateChoropleth from './NutritionStateChoropleth';
 
 export default function NutritionChoropleth({
   data,
   countryId,
-  regionNutritionData,
-  selectedCountryName,
-  regionLabelData,
   setRegionLabelTooltips,
-  isLoadingCountry,
+  onDataUnavailable,
 }: NutritionChoroplethProps) {
+  const countryData = data.features[0].properties;
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
   const { theme } = useTheme();
@@ -72,37 +68,22 @@ export default function NutritionChoropleth({
           }
         />
       )}
-      {/* Animated GeoJSON layer for the selected country */}
-      {selectedCountryId && (!regionNutritionData || !regionLabelData) && (
-        <>
-          <CountryLoadingLayer
-            data={data}
-            selectedCountryId={selectedCountryId}
-            color="hsl(var(--nextui-nutritionAnimation))"
-          />
-          <AccordionModalSkeleton />
-        </>
-      )}
+
       {countryId === selectedCountryId && (
-        <NutritionAccordion
-          setSelectedNutrient={setSelectedNutrient}
-          selectedNutrient={selectedNutrient}
-          countryName={selectedCountryName}
-          loading={isLoadingCountry}
-        />
-      )}
-      {
-        // if this country ('countryId') is selected and data is loaded ('regionNutritionData') show Choropleth for all states
-        regionNutritionData && countryId === selectedCountryId && regionLabelData && (
+        <>
+          <NutritionAccordion
+            setSelectedNutrient={setSelectedNutrient}
+            selectedNutrient={selectedNutrient}
+            countryName={countryData.adm0_name}
+          />
           <NutritionStateChoropleth
-            regionNutrition={regionNutritionData}
-            regionLabelData={regionLabelData}
+            onDataUnavailable={onDataUnavailable}
             setRegionLabelTooltips={setRegionLabelTooltips}
-            countryMapData={data.features[0] as CountryMapData}
+            countryMapData={data}
             selectedNutrient={selectedNutrient}
           />
-        )
-      }
+        </>
+      )}
     </div>
   );
 }

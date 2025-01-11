@@ -5,7 +5,9 @@ import React from 'react';
 import AccordionContainer from '@/components/Accordions/AccordionContainer';
 import CustomInfoCircle from '@/components/CustomInfoCircle/CustomInfoCircle';
 import { DataSourcePopover } from '@/components/Legend/DataSourcePopover';
+import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { NutrientType } from '@/domain/enums/NutrientType.ts';
+import { useRegionNutritionDataQuery } from '@/domain/hooks/countryHooks';
 import NutritionAccordionProps from '@/domain/props/NutritionAccordionProps';
 import NutritionStateChoroplethOperations from '@/operations/map/NutritionStateChoroplethOperations';
 
@@ -13,8 +15,10 @@ export default function NutritionAccordion({
   setSelectedNutrient,
   selectedNutrient,
   countryName,
-  loading,
 }: NutritionAccordionProps) {
+  const { selectedCountryId } = useSelectedCountryId();
+  const { isLoading } = useRegionNutritionDataQuery(selectedCountryId ?? 0, false);
+
   return (
     <div className="absolute left-[108px] top-4" style={{ zIndex: 1000 }}>
       <div className=" w-[350px] box-border">
@@ -22,7 +26,7 @@ export default function NutritionAccordion({
           title={countryName ?? undefined}
           accordionModalActive
           maxWidth={600}
-          loading={loading}
+          loading={isLoading}
           items={[
             {
               title: 'Micronutrients',

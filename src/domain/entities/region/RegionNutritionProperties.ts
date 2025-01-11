@@ -1,3 +1,5 @@
+import { CommonRegionProperties } from '../common/CommonRegionProperties';
+
 /**
  * Empty for every country, so unknown
  */
@@ -10,8 +12,6 @@ export type Nutrition = {
   zn_ai: number;
 };
 
-export interface RegionNutritionProperties {
-  Code: number;
-  Name: string;
+export interface RegionNutritionProperties extends CommonRegionProperties {
   nutrition: Nutrition;
 }

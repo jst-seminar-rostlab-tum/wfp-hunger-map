@@ -1,13 +1,13 @@
-import { FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
+import { FeatureCollection, Geometry } from 'geojson';
 import L from 'leaflet';
 
-import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
-import { NutrientType } from '@/domain/enums/NutrientType.ts';
+import { CountryProps } from '@/domain/entities/country/CountryMapData.ts';
+
+import { NutrientType } from '../enums/NutrientType';
 
 export interface NutritionStateChoroplethProps {
-  regionNutrition: FeatureCollection;
-  setRegionLabelTooltips: (tooltips: (prevRegionLabelData: L.Tooltip[]) => L.Tooltip[]) => void;
-  regionLabelData: FeatureCollection<Geometry, GeoJsonProperties>;
-  countryMapData: CountryMapData;
+  setRegionLabelTooltips: (tooltips: L.Tooltip[]) => void;
+  countryMapData: FeatureCollection<Geometry, CountryProps>;
+  onDataUnavailable: () => void;
   selectedNutrient: NutrientType;
 }

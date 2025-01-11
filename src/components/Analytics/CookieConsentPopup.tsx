@@ -4,6 +4,11 @@ import { useEffect, useState } from 'react';
 
 import { CustomButton } from '../Buttons/CustomButton';
 
+/**
+ * Always rendered component that handles Google Analytics tracking. If the cookie_consent local storage key is not set,
+ * it renders a popup. The user's choice is saved in local storage. If the user grants consent or the value of the
+ * local storage is true when the page loads, it dynamically loads the Google Analytics third-party script, starting the tracking.
+ */
 export function CookieConsentPopup() {
   const [cookieConsent, setCookieConsent] = useState<boolean | null>(null);
   const [loaded, setLoaded] = useState(false);

@@ -3,8 +3,12 @@ import { useEffect, useState } from 'react';
 
 import { CountryMapData, CountryMapDataWrapper } from '@/domain/entities/country/CountryMapData.ts';
 
-// returns a state value that is synchronized with a query param
-// assumes there is one that single query param, all others will be erased
+/**
+ * Return a state that is synchronized with the `countries` query param.
+ * Whereas the returned state value and update function work with arrays of `CountryMapData`, the query param is using the `adm0_id`.
+ *
+ * Note: It is assumed that there is only one relevant query param, any others will be erased on change.
+ */
 export const useSelectedCountries = (countryMapData: CountryMapDataWrapper) => {
   const PARAM_NAME = 'countries';
 
@@ -30,4 +34,55 @@ export const useSelectedCountries = (countryMapData: CountryMapDataWrapper) => {
   };
 
   return [selectedCountries, setSelectedCountriesFn] as const;
+};
+
+const useDebounce = (input: string, msDelay: number) => {
+  const [output, setOutput] = useState(input);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setOutput(input);
+    }, msDelay);
+
+    return () => clearTimeout(timeout);
+  }, [input, msDelay]);
+  return output;
+};
+
+/**
+ * Return a state that is synchronized with the `search` query param.
+ * Updates to the query params happen in a debounced way to keep the browser history clean.
+ *
+ * Note: It is assumed that there is only one relevant query param, any others will be erased on change.
+ */
+export const useSearchQuery = () => {
+  const PARAM_NAME = 'search';
+  const DEBOUNCE_MS = 350;
+
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const debouncedSearch = useDebounce(searchQuery, DEBOUNCE_MS);
+  const [recentUserInput, setRecentUserInput] = useState(false);
+
+  // get state values from query params (on browser navigation)
+  useEffect(() => {
+    // only update the state if the param change resulted from browser navigation
+    if (recentUserInput) setRecentUserInput(false);
+    else setSearchQuery(searchParams.get(PARAM_NAME) ?? '');
+  }, [searchParams]);
+
+  // set query params from debounced state (on search input change)
+  useEffect(() => {
+    router.push(`${pathname}?${PARAM_NAME}=${debouncedSearch}`);
+  }, [debouncedSearch]);
+
+  const setSearchQueryFn = (newValue: string) => {
+    setSearchQuery(newValue);
+    setRecentUserInput(true);
+  };
+
+  return [searchQuery, setSearchQueryFn] as const;
 };

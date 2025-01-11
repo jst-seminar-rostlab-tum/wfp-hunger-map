@@ -1,18 +1,21 @@
 import { Feature } from 'geojson';
 import L from 'leaflet';
 import { useTheme } from 'next-themes';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { GeoJSON } from 'react-leaflet';
 
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 import { LayerWithFeature } from '@/domain/entities/map/LayerWithFeature.ts';
+import { NutrientType } from '@/domain/enums/NutrientType.ts';
 import { useNutritionQuery } from '@/domain/hooks/globalHooks';
 import NutritionChoroplethProps from '@/domain/props/NutritionChoroplethProps';
 import { MapOperations } from '@/operations/map/MapOperations';
 import NutritionChoroplethOperations from '@/operations/map/NutritionChoroplethOperations';
 
-import CountryLoadingLayer from './CountryLoading';
+import AccordionModalSkeleton from '../../Accordions/AccordionModalSkeleton';
+import CountryLoadingLayer from '../CountryLoading';
+import NutritionAccordion from './NutritionAccordion';
 import NutritionStateChoropleth from './NutritionStateChoropleth';
 
 export default function NutritionChoropleth({
@@ -22,11 +25,13 @@ export default function NutritionChoropleth({
   selectedCountryName,
   regionLabelData,
   setRegionLabelTooltips,
+  isLoadingCountry,
 }: NutritionChoroplethProps) {
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
   const { theme } = useTheme();
   const { data: nutritionData } = useNutritionQuery(true);
+  const [selectedNutrient, setSelectedNutrient] = useState<NutrientType>(NutrientType.MINI_SIMPLE);
 
   // adding the country name as a tooltip to each layer (on hover)
   // the tooltip is not shown if the country is selected or there is no data available for the country
@@ -69,10 +74,21 @@ export default function NutritionChoropleth({
       )}
       {/* Animated GeoJSON layer for the selected country */}
       {selectedCountryId && (!regionNutritionData || !regionLabelData) && (
-        <CountryLoadingLayer
-          data={data}
-          selectedCountryId={selectedCountryId}
-          color="hsl(var(--nextui-nutritionAnimation))"
+        <>
+          <CountryLoadingLayer
+            data={data}
+            selectedCountryId={selectedCountryId}
+            color="hsl(var(--nextui-nutritionAnimation))"
+          />
+          <AccordionModalSkeleton />
+        </>
+      )}
+      {countryId === selectedCountryId && (
+        <NutritionAccordion
+          setSelectedNutrient={setSelectedNutrient}
+          selectedNutrient={selectedNutrient}
+          countryName={selectedCountryName}
+          loading={isLoadingCountry}
         />
       )}
       {
@@ -80,10 +96,10 @@ export default function NutritionChoropleth({
         regionNutritionData && countryId === selectedCountryId && regionLabelData && (
           <NutritionStateChoropleth
             regionNutrition={regionNutritionData}
-            countryName={selectedCountryName}
             regionLabelData={regionLabelData}
             setRegionLabelTooltips={setRegionLabelTooltips}
             countryMapData={data.features[0] as CountryMapData}
+            selectedNutrient={selectedNutrient}
           />
         )
       }

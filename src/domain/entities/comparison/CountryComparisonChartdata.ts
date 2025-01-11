@@ -1,13 +1,13 @@
 import { CategoricalChartData } from '../charts/CategoricalChartData';
-import { LineChartData } from '../charts/LineChartData';
+import { ContinuousChartData } from '../charts/ContinuousChartData.ts';
 
 export interface CountryComparisonChartData {
-  fcsChartData?: LineChartData;
-  rcsiChartData?: LineChartData;
+  fcsChartData?: ContinuousChartData;
+  rcsiChartData?: ContinuousChartData;
   foodSecurityBarChartData?: CategoricalChartData;
   populationBarChartData?: CategoricalChartData;
   importDependencyBarChartData?: CategoricalChartData;
-  balanceOfTradeData?: LineChartData;
-  headlineInflationData?: LineChartData;
-  foodInflationData?: LineChartData;
+  balanceOfTradeData?: ContinuousChartData;
+  headlineInflationData?: ContinuousChartData;
+  foodInflationData?: ContinuousChartData;
 }

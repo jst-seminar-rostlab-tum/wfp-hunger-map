@@ -1,10 +1,10 @@
 import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph.ts';
+import { ContinuousChartData } from '@/domain/entities/charts/ContinuousChartData.ts';
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph.ts';
 import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
-import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
 
-export default interface LineChartProps {
-  data: LineChartData | BalanceOfTradeGraph | CurrencyExchangeGraph | InflationGraphs;
+export default interface ContinuousChartProps {
+  data: ContinuousChartData | BalanceOfTradeGraph | CurrencyExchangeGraph | InflationGraphs;
 
   title?: string;
   description?: string;
@@ -12,6 +12,7 @@ export default interface LineChartProps {
   small?: boolean;
   noPadding?: boolean;
   transparentBackground?: boolean;
+  chartHeight?: number;
 
   disableExpandable?: boolean;
   disableBarChartSwitch?: boolean;

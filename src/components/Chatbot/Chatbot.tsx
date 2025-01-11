@@ -99,20 +99,22 @@ export default function HungerMapChatbot() {
       if (chats[currentChatIndex].isReportStarter && chats[currentChatIndex].context) {
         aiResponse = (
           await chatbot.sendMessage(text, {
+            chatId: chats[currentChatIndex].id,
             previous_messages: previousMessages,
             context: chats[currentChatIndex].context,
           })
         ).response;
         chats[currentChatIndex].isReportStarter = false;
       } else {
-        aiResponse = (await chatbot.sendMessage(text, { previous_messages: previousMessages })).response;
+        aiResponse = (
+          await chatbot.sendMessage(text, { chatId: chats[currentChatIndex].id, previous_messages: previousMessages })
+        ).response;
       }
     } catch (err) {
       if (err instanceof APIError) {
         aiResponse = `Ups! Unfortunately, it seems like there was a problem connecting to the server...\n ${err.status}: ${err.message}`;
       }
     }
-    // TODO: get data sources from response later
     const updatedChatsWithAI = structuredClone(chats);
     updatedChatsWithAI[currentChatIndex].messages.push({
       id: crypto.randomUUID(),

@@ -1,0 +1,104 @@
+COMMERCIAL LICENSE AGREEMENT
+
+Software Name: HungerMapLive CSEE
+Version: 1.0
+Copyright: © 2025 Center for Software Engineering Excellence (CSEE)
+Authors: 
+-	Technical Project Lead
+o	Lachezar Marinov (lachezarmarinov88@gmail.com)
+-	Team Leads (in alphabetical order)
+o	Bohdan Garchu (Frontend)
+o	Cansu Moran (Backend)
+o	Sámuel Fekete (Meta)
+-	Frontend (in alphabetical order)
+o	Ahmed Farouk Abdelsalam
+o	Armanpreet Ghotra
+o	Haidong Xu
+o	Jakob Schödl
+o	Linus Sander
+-	Backend (in alphabetical order)
+o	Georgi Peev
+o	Marius Moldovan
+o	Muhammed Emre Bayraktaroglu
+o	Shaurya Sharma
+-	Meta (in alphabetical order)
+o	Ahmet Selman Güclü
+o	Georgi Tsipov
+o	Lukas Fabio Weigmann
+-	Program Management (in alphabetical order)
+o	Amin Ben Saad
+o	Haochun Ma
+
+Website: csee.tech
+Contact: partners@csee.tech
+
+Introduction
+
+This software is dual-licensed under the GNU General Public License (GPL) for open-source use and a proprietary commercial license for business use. If you cannot or do not wish to comply with the terms of the GPL, you may purchase a commercial license.
+
+This document outlines the terms and conditions of the commercial license.
+
+1. Grant of License
+
+Upon purchase of the commercial license, you are granted a non-exclusive, non-transferable, revocable license to use the software under the following terms:
+
+	1.	Use the software for internal or external business purposes.
+	2.	Integrate the software into proprietary applications without the obligation to release your source code.
+	3.	Avoid GPL obligations related to derivative works and source code sharing.
+
+2. Scope of Use
+
+Under this commercial license, you may:
+
+	1.	Use the software in a proprietary or closed-source manner.
+	2.	Deploy the software as part of a Software-as-a-Service (SaaS) solution.
+	3.	Distribute the software as part of a proprietary product, provided that attribution is given to the original developer.
+
+3. Restrictions
+
+The following restrictions apply to the use of the software under the commercial license:
+
+	1.	The license is non-transferable and cannot be sublicensed without prior written consent from the licensor.
+	2.	You may not reverse-engineer, disassemble, or otherwise attempt to derive the source code of the proprietary software.
+	3.	You may not use the software in a manner that violates applicable laws or regulations.
+
+4. Fees and Payment
+
+License fees are required for commercial use. Pricing is determined based on the following models:
+
+	1.	Per-User License: A fee for each user or seat.
+	2.	Per-Server License: A fee for each server where the software is deployed.
+	3.	Enterprise License: A flat fee for unlimited use within an organization.
+
+Contact the Center for Software Engineering Excellence for a detailed pricing plan at partners@csee.tech.
+
+5. Term and Termination
+
+This license remains in effect until terminated. Licensor may terminate this license immediately if:
+
+	1.	Licensee fails to pay the required license fee.
+	2.	Licensee violates any terms of this agreement.
+
+Upon termination, the licensee must cease all use of the software and destroy all copies in their possession.
+
+6. Warranty Disclaimer
+
+The software is provided “as is” without warranties of any kind, express or implied, including but not limited to implied warranties of merchantability, fitness for a particular purpose, or non-infringement.
+
+7. Limitation of Liability
+
+Licensor shall not be liable for any damages, including but not limited to lost profits, business interruptions, or other incidental or consequential damages arising from the use of the software.
+
+8. Governing Law
+
+This agreement is governed by the laws of Germany, without regard to its conflict of laws provisions.
+
+9. Contact Information
+
+For inquiries regarding this commercial license, please contact:
+
+Center for Software Engineering Excellence
+Email: partners@csee.tech
+Website: csee.tech
+
+By purchasing and using the software under the commercial license, you agree to the terms and conditions outlined in this document.

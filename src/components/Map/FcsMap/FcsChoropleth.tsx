@@ -12,13 +12,15 @@ import { AccessibilityOperations } from '@/operations/map/AccessibilityOperation
 import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
 import { MapOperations } from '@/operations/map/MapOperations';
 
-import CountryLoadingLayer from './CountryLoading';
+import AccordionModalSkeleton from '../../Accordions/AccordionModalSkeleton';
+import CountryLoadingLayer from '../CountryLoading';
+import FcsAccordion from './FcsAccordion';
 import FscCountryChoropleth from './FcsCountryChoropleth';
 
 export default function FcsChoropleth({
   data,
   countryId,
-  loading,
+  isLoadingCountry,
   regionData,
   countryData,
   countryIso3Data,
@@ -79,19 +81,26 @@ export default function FcsChoropleth({
       )}
       {/* Animated GeoJSON layer for the selected country */}
       {selectedCountryId && (!regionData || !regionLabelData) && (
-        <CountryLoadingLayer
-          data={data}
-          selectedCountryId={selectedCountryId}
-          color="hsl(var(--nextui-fcsAnimation))"
+        <>
+          <CountryLoadingLayer
+            data={data}
+            selectedCountryId={selectedCountryId}
+            color="hsl(var(--nextui-fcsAnimation))"
+          />
+          <AccordionModalSkeleton />
+        </>
+      )}
+      {countryId === selectedCountryId && (
+        <FcsAccordion
+          countryData={countryData}
+          countryIso3Data={countryIso3Data}
+          loading={isLoadingCountry}
+          countryName={selectedCountryName}
         />
       )}
       {regionData && countryId === selectedCountryId && regionLabelData && (
         <FscCountryChoropleth
           regionData={regionData}
-          countryData={countryData}
-          countryIso3Data={countryIso3Data}
-          countryName={selectedCountryName}
-          loading={loading}
           handleBackButtonClick={handleBackClick}
           regionLabelData={regionLabelData}
           countryMapData={data.features[0] as CountryMapData}

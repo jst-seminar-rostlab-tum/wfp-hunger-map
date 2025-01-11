@@ -7,7 +7,7 @@ export default function NotFound() {
   return (
     <div className="flex flex-col h-screen">
       <Topbar />
-      <main className="flex h-full flex-col items-center justify-center gap-2 text-content">
+      <div className="flex h-full flex-col items-center justify-center gap-2 text-content">
         <section className="text-center">
           <h2 className="text-xl font-semibold">Ooops</h2>
           <p>The requested page could not be found.</p>
@@ -19,7 +19,7 @@ export default function NotFound() {
             </CustomButton>
           </a>
         </div>
-      </main>
+      </div>
     </div>
   );
 }

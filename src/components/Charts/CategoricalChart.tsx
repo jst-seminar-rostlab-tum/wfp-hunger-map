@@ -1,8 +1,7 @@
 'use client';
 
 import Highcharts from 'highcharts';
-import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { ChartContainer } from '@/components/Charts/helpers/ChartContainer';
 import { ChartType } from '@/domain/enums/ChartType.ts';
@@ -11,7 +10,7 @@ import CategoricalChartOperations from '@/operations/charts/CategoricalChartOper
 
 /**
  * The `CategoricalChart` component is a box that primarily renders a title, description text, and a bar chart.
- * It should be used to plot categorical data. For continues data please use the `LineChart` component.
+ * It should be used to plot categorical data. For continues data please use the `ContinuousChart` component.
  * This component has a width of 100%, so it adjusts to the width of its parent element in which it is used.
  * The height of the entire box depends on the provided text, while the chart itself has a fixed height.
  * It also provides the option to open the chart in a full-screen modal, where one can download the data as well.
@@ -22,6 +21,8 @@ import CategoricalChartOperations from '@/operations/charts/CategoricalChartOper
  * @param small when selected, all components in the line chart box become slightly smaller (optional)
  * @param noPadding when selected, the main box has no padding on all sides (optional)
  * @param transparentBackground when selected, the background of the entire component is transparent (optional)
+ * @param chartHeight with this parameter, the height of the actual chart can be set to a fixed value in pixels. If
+ *        chartHeight is not specified, the chart is given a fixed default height depending on `small`.
  * @param disableExpandable when selected, the functionality to open the chart in a larger modal is disabled (optional)
  * @param disablePieChartSwitch when selected, the functionality to switch to a pie chart is disabled (optional)
  * @param disableDownload when selected, the functionality to download the chart is disabled (optional)
@@ -33,23 +34,21 @@ export function CategoricalChart({
   small,
   noPadding,
   transparentBackground,
+  chartHeight,
   disableExpandable,
   disablePieChartSwitch,
   disableDownload,
 }: CategoricalChartProps) {
-  const { theme } = useTheme();
-
-  // build chart options for 'Highcharts'
-  const defaultChartOptions: Highcharts.Options | undefined = CategoricalChartOperations.getHighChartOptions(data);
-
   // controlling if a bar or pie chart is rendered; bar chart is the default
-  const [showPieChart, setShowPieChart] = useState(false);
-  const [chartOptions, setChartOptions] = useState(defaultChartOptions);
+  const [showPieChart, setShowPieChart] = useState<boolean>(false);
+  const [chartOptions, setChartOptions] = useState<Highcharts.Options | undefined>(
+    CategoricalChartOperations.getHighChartOptions(data, showPieChart)
+  );
 
-  // handling the bar and pie chart switch and the theme switch;
-  useEffect(() => {
+  // function to update/recalculate the chart options
+  const recalculateChartOptions = () => {
     setChartOptions(CategoricalChartOperations.getHighChartOptions(data, showPieChart));
-  }, [showPieChart, theme, data]);
+  };
 
   const alternativeSwitchButtonProps = disablePieChartSwitch
     ? undefined
@@ -62,13 +61,15 @@ export function CategoricalChart({
 
   return (
     <ChartContainer
-      chartOptions={chartOptions}
       chartData={data}
+      chartOptions={chartOptions}
+      recalculateChartOptions={recalculateChartOptions}
       title={title}
       description={description}
       small={small}
       noPadding={noPadding}
       transparentBackground={transparentBackground}
+      chartHeight={chartHeight}
       disableExpandable={disableExpandable}
       disableDownload={disableDownload}
       alternativeSwitchButtonProps={alternativeSwitchButtonProps}

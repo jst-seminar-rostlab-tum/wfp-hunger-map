@@ -9,6 +9,16 @@ import { NutrientType } from '@/domain/enums/NutrientType.ts';
 import NutritionAccordionProps from '@/domain/props/NutritionAccordionProps';
 import NutritionStateChoroplethOperations from '@/operations/map/NutritionStateChoroplethOperations';
 
+/** NutritionAccordion function renders the accordion for the Nutrition Map. Inside the accordion, 
+  the user can select a micronutrient using the NextUI dropdown component to display it on the map.
+ * @param {NutritionAccordionProps} props - The props of the component
+ * @param {setSelectedNutrient} props.React.Dispatch<React.SetStateAction<NutrientType>> - Function to set the selected nutrient
+ * @param {selectedNutrient} props.NutrientType - The selected nutrient
+ * @param {countryName} props.string - The name of the country
+ * @param {loading} props.boolean - The loading state of the component
+ * @returns {JSX.Element} AccordionContainer
+ */
+
 export default function NutritionAccordion({
   setSelectedNutrient,
   selectedNutrient,

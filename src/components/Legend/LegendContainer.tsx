@@ -56,7 +56,6 @@ export default function LegendContainer({ items, loading = false }: LegendContai
             aria-label="Map legend"
             className="
         relative flex items-center justify-center min-w-10 h-10 px-1 rounded-full bg-content1 shadow-md"
-            aria-label="Legends Information"
           >
             {/* TODO: Icon to be modified */}
             <CustomInfoCircle size={28} />

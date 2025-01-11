@@ -1,5 +1,13 @@
 import { Skeleton } from '@nextui-org/skeleton';
 
+/**
+ * MapLegendSkeleton component
+ *
+ * This component renders a skeleton version of the map legend component,
+ * used while data is being loaded.
+ *
+ * @returns {JSX.Element}
+ */
 export default function MapLegendSkeleton() {
   return (
     <>

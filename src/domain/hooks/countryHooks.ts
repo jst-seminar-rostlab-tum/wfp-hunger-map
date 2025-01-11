@@ -67,11 +67,12 @@ export const useRegionDataQuery = (countryId: number) =>
     cachedQueryClient
   );
 
-export const useRegionNutritionDataQuery = (countryId: number) =>
+export const useRegionNutritionDataQuery = (countryId: number, enabled = true) =>
   useQuery<CountryMimiData, Error>(
     {
       queryKey: ['fetchRegionNutritionData', countryId],
       queryFn: async () => countryRepo.getRegionNutritionData(countryId),
+      enabled: enabled && countryId > 0,
     },
     cachedQueryClient
   );

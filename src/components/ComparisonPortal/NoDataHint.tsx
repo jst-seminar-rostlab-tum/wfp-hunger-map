@@ -1,7 +1,7 @@
 import { Alert } from '@nextui-org/alert';
 import { useEffect, useState } from 'react';
 
-import { isLineChartData } from '@/domain/entities/charts/LineChartData';
+import { isContinuousChartData } from '@/domain/entities/charts/ContinuousChartData.ts';
 import { NoDataHintProps } from '@/domain/props/NoDataHintProps.ts';
 
 export default function NoDataHint({ chartData, selectedCountryNames, isLoading }: NoDataHintProps) {
@@ -10,7 +10,7 @@ export default function NoDataHint({ chartData, selectedCountryNames, isLoading 
   useEffect(() => {
     if (isLoading) return;
 
-    const countryNamesInChart = isLineChartData(chartData)
+    const countryNamesInChart = isContinuousChartData(chartData)
       ? chartData.lines.map((line) => line.name)
       : chartData.categories.map((category) => category.name);
     const missingCountryNames = selectedCountryNames.filter(

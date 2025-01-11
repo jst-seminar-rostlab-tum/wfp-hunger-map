@@ -1,5 +1,5 @@
 import CustomCard from '@/components/Cards/Card';
-import { LineChart } from '@/components/Charts/LineChart';
+import { ContinuousChart } from '@/components/Charts/ContinuousChart';
 import CustomInfoCircle from '@/components/CustomInfoCircle/CustomInfoCircle';
 import { DataSourcePopover } from '@/components/Legend/DataSourcePopover';
 import descriptions from '@/domain/constant/dataSources/dataSourceDescriptions';
@@ -50,7 +50,7 @@ export class FcsMacroEconomicOperations {
         content: (
           <div>
             {currencyExchangeChartData ? (
-              <LineChart data={currencyExchangeChartData} small noPadding transparentBackground />
+              <ContinuousChart data={currencyExchangeChartData} small noPadding transparentBackground />
             ) : (
               <p>No data about currency exchange available</p>
             )}
@@ -64,7 +64,7 @@ export class FcsMacroEconomicOperations {
         content: (
           <div>
             {balanceOfTradeChartData ? (
-              <LineChart data={balanceOfTradeChartData} small noPadding transparentBackground />
+              <ContinuousChart data={balanceOfTradeChartData} small noPadding transparentBackground />
             ) : (
               <p>No data about balance of trade available</p>
             )}
@@ -78,7 +78,7 @@ export class FcsMacroEconomicOperations {
         content: (
           <div>
             {headlineAndFoodInflationChartData ? (
-              <LineChart data={headlineAndFoodInflationChartData} small noPadding transparentBackground />
+              <ContinuousChart data={headlineAndFoodInflationChartData} small noPadding transparentBackground />
             ) : (
               <p>No data about headline and food inflation available</p>
             )}

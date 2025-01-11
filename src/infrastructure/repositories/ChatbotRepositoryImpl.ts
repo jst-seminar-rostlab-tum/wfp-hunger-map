@@ -1,3 +1,5 @@
+import { v4 as uuid } from 'uuid';
+
 import { APIError, QueryRequest, QueryResponse } from '@/domain/entities/chatbot/BackendCommunication.ts';
 import ChatbotRepository from '@/domain/repositories/ChatbotRepository';
 
@@ -14,6 +16,7 @@ export default class ChatbotRepositoryImpl implements ChatbotRepository {
   async sendMessage(message: string, options: Partial<Omit<QueryRequest, 'query'>>): Promise<QueryResponse> {
     try {
       const payload: QueryRequest = {
+        chatId: options.chatId || uuid(),
         reports_country_name: options.reports_country_name || '',
         query: message,
         version: options.version || 1,

@@ -13,6 +13,8 @@ export function SelectedMapProvider({ children }: { children: ReactNode }) {
   const [selectedMapType, setSelectedMapTypeState] = useState<GlobalInsight>(GlobalInsight.FOOD);
   const setSelectedMapType = (value: GlobalInsight) => {
     setSelectedMapTypeState(value);
+
+    // send event to Google Analytics
     window.gtag('event', `${value}_map_selected`);
   };
 

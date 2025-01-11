@@ -4,7 +4,7 @@ import PointLegendRecord from '@/domain/props/PointLegendRecord';
 
 export function CountryAlertLegendItem({ record }: { record: PointLegendRecord }) {
   return (
-    <div className="flex gap-3 items-baseline">
+    <div className="flex gap-3 items-baseline" key={record.label}>
       <div>
         <div className={`w-3 h-3 bg-${countryAlertsColors[record.label as CountryAlertType]} rounded-full relative`}>
           <div

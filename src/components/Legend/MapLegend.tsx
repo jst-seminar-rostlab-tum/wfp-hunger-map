@@ -10,6 +10,12 @@ import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { GradientLegendContainerItem } from '@/domain/props/GradientLegendContainerItem.ts';
 import PointLegendContainerItem from '@/domain/props/PointLegendContainerItem.ts';
 
+/**
+ * MapLegend component
+ *
+ * @returns A LegendContainer component with the legend items based on the selected
+ * map type, alert, and countryId.
+ */
 export default function MapLegend() {
   const { selectedMapType } = useSelectedMap();
   const { selectedAlert } = useSelectedAlert();

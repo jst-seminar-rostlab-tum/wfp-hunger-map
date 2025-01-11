@@ -9,6 +9,7 @@ export default interface CategoricalChartProps {
   small?: boolean;
   noPadding?: boolean;
   transparentBackground?: boolean;
+  chartHeight?: number;
 
   disableExpandable?: boolean;
   disablePieChartSwitch?: boolean;

@@ -1,8 +1,6 @@
 'use client';
 
 import { Accordion, AccordionItem } from '@nextui-org/accordion';
-import { Button } from '@nextui-org/button';
-import { Popover, PopoverContent, PopoverTrigger } from '@nextui-org/popover';
 import { Spinner } from '@nextui-org/spinner';
 import { useEffect, useState } from 'react';
 import Highlighter from 'react-highlight-words';
@@ -10,7 +8,7 @@ import Highlighter from 'react-highlight-words';
 import { AccordionContainerProps } from '@/domain/props/AccordionContainerProps';
 import AccordionOperations from '@/operations/accordions/AccordionOperations';
 
-import { ReadMore } from '../ReadMore/ReadMore';
+import { InfoPopover } from '../InfoPopover/InfoPopover';
 import { Tooltip } from '../Tooltip/Tooltip';
 
 /**
@@ -58,38 +56,21 @@ export default function AccordionBoxItems({
             className={`last:border-b-0 ${color} white:bg-white overflow-hidden shadow-md`}
             hideIndicator={noSelectionMode}
             title={
-              <div className="flex justify-between items-center w-full">
-                <div className="flex gap-4">
+              <span className="flex justify-between items-center w-full">
+                <span className="flex gap-4">
                   <Highlighter searchWords={highlightedTitleWords} textToHighlight={item.title} autoEscape />
                   {loading && <Spinner size="sm" />}
-                </div>
+                </span>
                 {item.tooltipInfo && (
                   <Tooltip text={item.tooltipInfo}>
                     {item.infoIcon && <span className="w-[37px] h-[37px] p-[5.5px]">{item.infoIcon}</span>}
                   </Tooltip>
                 )}
-                {item.popoverInfo && (
-                  <Popover>
-                    <PopoverTrigger>
-                      {item.infoIcon && (
-                        <Button isIconOnly className="w-[37px] h-[37px] p-[5.5px]" variant="light">
-                          {item.infoIcon}
-                        </Button>
-                      )}
-                    </PopoverTrigger>
-                    <PopoverContent>
-                      <div className="p-2 max-w-[400px] prose prose-sm dark:prose-invert prose-headings:text-medium">
-                        <ReadMore maxHeight={100} maxExpandedHeight={500}>
-                          {item.popoverInfo}
-                        </ReadMore>
-                      </div>
-                    </PopoverContent>
-                  </Popover>
-                )}
+                {item.popoverInfo && <InfoPopover infoIcon={item.infoIcon} popoverInfo={item.popoverInfo} />}
                 {!item.tooltipInfo && !item.popoverInfo && item.infoIcon && (
                   <span className="w-[37px] h-[37px] p-[5.5px]">{item.infoIcon}</span>
                 )}
-              </div>
+              </span>
             }
           >
             {item.description && <p className="text-sm text-balance pb-8 text-center">{item.description}</p>}

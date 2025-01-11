@@ -1,4 +1,5 @@
 import React, { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
+import { v4 as uuid } from 'uuid';
 
 import { useSnackbar } from '@/domain/contexts/SnackbarContext';
 import { IChat } from '@/domain/entities/chatbot/Chatbot';
@@ -53,7 +54,7 @@ export function ChatbotProvider({ children }: { children: ReactNode }) {
 
     if (!newChat) {
       chatToAdd = {
-        id: chats.length + 1,
+        id: uuid(),
         title: `Chat ${chats.length + 1}`,
         messages: [],
         isTyping: false,
@@ -100,7 +101,7 @@ export function ChatbotProvider({ children }: { children: ReactNode }) {
     };
 
     const newChat: IChat = {
-      id: chats.length + 1,
+      id: uuid(),
       title: `Report ${countryName}`,
       reports_country_name: countryName,
       isReportStarter: true,

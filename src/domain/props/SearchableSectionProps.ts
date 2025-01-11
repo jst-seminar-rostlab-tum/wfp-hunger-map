@@ -4,6 +4,7 @@ import { SearchableAccordionItemProps } from '@/domain/entities/accordions/Accor
 
 export interface SearchableElement {
   element: ReactNode;
+  // string of lowercase words seperated by single spaces and without duplicates
   containedWords: string;
 }
 

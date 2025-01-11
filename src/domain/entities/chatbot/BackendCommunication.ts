@@ -1,6 +1,7 @@
 import { IMessage } from './Chatbot';
 
 export interface QueryRequest {
+  chatId: string;
   reports_country_name?: string;
   query: string;
   version?: number;

@@ -3,7 +3,8 @@ import { useDisclosure } from '@nextui-org/modal';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { Maximize4 } from 'iconsax-react';
-import { useRef, useState } from 'react';
+import { useTheme } from 'next-themes';
+import { useEffect, useRef, useState } from 'react';
 
 import ChartAlternativeSwitchButton from '@/components/Charts/helpers/buttons/ChartAlternativeSwitchButton';
 import ChartDownloadButton from '@/components/Charts/helpers/buttons/ChartDownloadButton';
@@ -19,17 +20,19 @@ import ChartContainerProps from '@/domain/props/ChartContainerProps';
  * The height of the entire box depends on the provided text, while the chart itself has a fixed height.
  * It also provides the option to open the chart in a full-screen modal, where one can download the data as well.
  *
- * It is used by the `CategoricalChart` and `LineChart` components, which define the type of chart through the passed `chartOptions`.
- * The main goal of this component is to prevents code redundancy between `LineChart` and `CategoricalChart`.
+ * It is used by the `CategoricalChart` and `ContinuousChart` components, which define the type of chart through the passed `chartOptions`.
+ * The main goal of this component is to prevents code redundancy between `ContinuousChart` and `CategoricalChart`.
  */
 export function ChartContainer({
-  chartOptions,
   chartData,
+  chartOptions,
+  recalculateChartOptions,
   title,
   description,
   small,
   noPadding,
   transparentBackground,
+  chartHeight,
   disableExpandable,
   disableDownload,
   alternativeSwitchButtonProps,
@@ -37,16 +40,39 @@ export function ChartContainer({
 }: ChartContainerProps) {
   const TITLE_TEXT_SIZE = small ? 'text-sm' : 'text-md';
   const DESCRIPTION_TEXT_SIZE = small ? 'text-tiny' : 'text-sm';
-  const CHART_HEIGHT = small ? 12 : 16;
+  // eslint-disable-next-line no-nested-ternary
+  const CHART_HEIGHT = chartHeight ? `${chartHeight}px` : small ? '12rem' : '16rem';
   const ICON_BUTTON_SIZE = small ? 3 : 4;
   const HEADER_PADDING = title ? 3 : 0;
   const MAIN_BOX_PADDING_FACTOR = noPadding ? 0 : 1;
   const BOX_BACKGROUND = transparentBackground ? 'bg-transparent' : 'bg-background';
 
+  const { theme } = useTheme();
+
   const chartRef = useRef<HighchartsReact.RefObject | null>(null);
+  const [chartKey, setChartKey] = useState(0);
 
   // full screen modal state handling
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
+
+  // handling the theme switch
+  useEffect(() => {
+    // `theme` change does not guarantee that the NextUI CSS colors have already been changed;
+    // therefore we synchronize the update with the next repaint cycle, ensuring the CSS variables are updated
+    const rafId = requestAnimationFrame(() => recalculateChartOptions());
+    return () => cancelAnimationFrame(rafId);
+  }, [theme]);
+
+  // handling chart type switch
+  useEffect(() => {
+    recalculateChartOptions();
+    setChartKey((prev) => prev + 1); // forces chart to remount -> correct chart animation will be re-triggered
+  }, [alternativeSwitchButtonProps?.showAlternativeChart]);
+
+  // data changes and slider changes
+  useEffect(() => {
+    recalculateChartOptions();
+  }, [chartData, sliderProps?.selectedSliderRange]);
 
   // handling the x-axis range slider visibility
   const [showSlider, setShowSlider] = useState(false);
@@ -122,10 +148,11 @@ export function ChartContainer({
           highcharts={Highcharts}
           options={chartOptions}
           ref={chartRef}
+          key={chartKey}
           containerProps={{
             style: {
               width: '100%',
-              height: `${CHART_HEIGHT}rem`,
+              height: CHART_HEIGHT,
               borderRadius: '0 0 0.375rem 0.375rem',
             },
           }}

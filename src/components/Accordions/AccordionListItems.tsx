@@ -16,7 +16,16 @@ import { Tooltip } from '../Tooltip/Tooltip';
  * Accordion for the `AccordionModal` for mobile screen sizes. Accordion items are displayed as a list.
  * If only one item is provided, it will be expanded by default;
  * if multiple items are provided, they will all remain collapsed.
+ * @param {AccordionContainerProps} props - The props object.
+ * @param {AccordionItemProps[]} props.items - The items to display in the accordion.
+ * @param {boolean} [props.loading=false] - A boolean that indicates if the accordion is loading.
+ * @param {boolean} [props.multipleSelectionMode=false] - A boolean that indicates if multiple items can be selected.
+ * @param {boolean} [props.noSelectionMode=false] - A boolean that indicates if no item can be selected.
+ * @param {boolean} [props.expandAll=false] - A boolean that indicates if all items are expanded.
+ * @param {string[]} [props.highlightedTitleWords=[]] - The words to highlight in the title.
+ * @returns {JSX.Element} - The accordion list items component.
  */
+
 export default function AccordionListItems({
   items,
   loading = false,

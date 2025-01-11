@@ -12,7 +12,9 @@ import { useMediaQuery } from '@/utils/resolution.ts';
  * via a button at the bottom. This component provides the modal and the button to open it.
  * The content for the modal, including the accordions, is provided via the 'userAccordionsModal' hook.
  * Important: Exclusively used by `AccordionContainer` component.
+ * @returns {JSX.Element} - The accordion modal component.
  */
+
 export default function AccordionModal() {
   const isMobile = useMediaQuery('(max-width: 700px)');
   const isMobileXS = useMediaQuery('(max-width: 450px)');

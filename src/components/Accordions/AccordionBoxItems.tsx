@@ -16,7 +16,19 @@ import { Tooltip } from '../Tooltip/Tooltip';
 /**
  * Any number of items are displayed as collapsible accordion boxes stacked vertically.
  * Important: Exclusively used by `AccordionContainer` component.
+ * @param {AccordionContainerProps} props - The props object.
+ * @param {AccordionItemProps[]} props.items - The items to display in the accordion.
+ * @param {string} props.title - The title of the accordion.
+ * @param {boolean} [props.loading=false] - A boolean that indicates if the accordion is loading.
+ * @param {boolean} [props.multipleSelectionMode=false] - A boolean that indicates if multiple items can be selected.
+ * @param {boolean} [props.noSelectionMode=false] - A boolean that indicates if no item can be selected.
+ * @param {string} [props.color='bg-content1'] - The color of the accordion.
+ * @param {number} [props.maxWidth] - The maximum width of the accordion.
+ * @param {boolean} [props.expandAll=false] - A boolean that indicates if all items are expanded.
+ * @param {string[]} [props.highlightedTitleWords=[]] - The words to highlight in the title.
+ * @returns {JSX.Element} - The accordion box items component.
  */
+
 export default function AccordionBoxItems({
   items,
   title,

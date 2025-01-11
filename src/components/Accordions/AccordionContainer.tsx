@@ -13,7 +13,20 @@ import { useMediaQuery } from '@/utils/resolution.ts';
  * If 'accordionModalActive' is selected, a button is rendered at the bottom of the screen
  * for small screen sizes (mobile), allowing the accordions to open in a separate modal.
  * By default, the component adjusts to its parent's width. A max width (in px) can be configured using `maxWidth`.
+ * @param {AccordionContainerProps} props - The props object.
+ * @param {AccordionItemProps[]} props.items - The items to display in the accordion.
+ * @param {string} props.title - The title of the accordion.
+ * @param {boolean} [props.loading=false] - A boolean that indicates if the accordion is loading.
+ * @param {boolean} [props.multipleSelectionMode=false] - A boolean that indicates if multiple items can be selected.
+ * @param {boolean} [props.noSelectionMode=false] - A boolean that indicates if no item can be selected.
+ * @param {string} [props.color='bg-content1'] - The color of the accordion.
+ * @param {boolean} [props.accordionModalActive] - A boolean that indicates if the accordions are displayed in a modal on mobile screens.
+ * @param {number} [props.maxWidth] - The maximum width of the accordion.
+ * @param {boolean} [props.expandAll=false] - A boolean that indicates if all items are expanded.
+ * @param {string[]} [props.highlightedTitleWords=[]] - The words to highlight in the title.
+ * @returns {JSX.Element} - The accordion container component.
  */
+
 export default function AccordionContainer({
   items,
   title,

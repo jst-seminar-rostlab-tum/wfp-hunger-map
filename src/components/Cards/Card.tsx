@@ -6,6 +6,14 @@ import { v4 as uuid } from 'uuid';
 
 import { CardProps } from '@/domain/props/CardProps';
 
+/**
+ * A custom card component that displays a title and content.
+ * @param {CardProps} props - The props object.
+ * @param {string} props.title - The title of the card.
+ * @param {CardItemProps[]} props.content - The content of the card.
+ * @returns {JSX.Element} - The custom card component.
+ */
+
 export default function CustomCard({ title, content }: CardProps) {
   return (
     <Card className="w-fit h-auto min-w-[200px] justify-evenly m-2.5 dark:primary white:bg-white flex-grow">

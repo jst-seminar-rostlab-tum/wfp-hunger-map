@@ -1,5 +1,10 @@
 import { Skeleton } from '@nextui-org/skeleton';
 
+/**
+ * The skeleton for the accordion modal button.
+ * @returns {JSX.Element} - The accordion modal skeleton component.
+ */
+
 export default function AccordionModalSkeleton() {
   return (
     <div className="absolute bottom-10 right-28 z-9999">

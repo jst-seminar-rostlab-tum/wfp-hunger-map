@@ -3,6 +3,7 @@ import React from 'react';
 
 import AccordionModalSkeleton from '@/components/Accordions/AccordionModalSkeleton';
 import CountryLoadingLayer from '@/components/Map/CountryLoading';
+import IpcAccordion from '@/components/Map/IpcMap/IpcAccordion';
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { useIpcQuery } from '@/domain/hooks/globalHooks';
 import { IpcChoroplethProps } from '@/domain/props/IpcChoroplethProps';
@@ -15,6 +16,7 @@ function IpcChoropleth({
   countryData,
   ipcRegionData,
   selectedCountryName,
+  isLoadingCountry,
   countryIso3Data,
 }: IpcChoroplethProps) {
   const { data: ipcData } = useIpcQuery(true);
@@ -45,15 +47,15 @@ function IpcChoropleth({
           <AccordionModalSkeleton />
         </>
       )}
-
-      {ipcRegionData && (
-        <IpcCountryChoropleth
-          regionIpcData={ipcRegionData}
+      {selectedCountryId && (
+        <IpcAccordion
           countryData={countryData}
           countryName={selectedCountryName}
+          loading={isLoadingCountry}
           countryIso3Data={countryIso3Data}
         />
       )}
+      {ipcRegionData && <IpcCountryChoropleth regionIpcData={ipcRegionData} />}
     </>
   );
 }

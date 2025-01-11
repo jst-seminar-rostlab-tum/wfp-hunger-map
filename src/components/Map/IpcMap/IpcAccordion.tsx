@@ -3,7 +3,7 @@ import IpcAccordionProps from '@/domain/props/IpcAccordionProps';
 import { IpcFoodSecurityAccordionOperations } from '@/operations/map/IpcFoodSecurityOperations';
 import { useMediaQuery } from '@/utils/resolution.ts';
 
-export default function IpcAccordion({ countryData, countryName, countryIso3Data }: IpcAccordionProps) {
+export default function IpcAccordion({ countryData, countryName, loading, countryIso3Data }: IpcAccordionProps) {
   const deltaOneMonth = countryData?.fcsMinus1 ? countryData.fcs - countryData.fcsMinus1 : null;
   const deltaThreeMonth = countryData?.fcsMinus3 ? countryData.fcs - countryData.fcsMinus3 : null;
   const foodSecurityAccordionItems = IpcFoodSecurityAccordionOperations.getFoodSecurityAccordionItems(
@@ -20,9 +20,10 @@ export default function IpcAccordion({ countryData, countryName, countryIso3Data
         title={countryName}
         accordionModalActive
         maxWidth={600}
+        loading={loading}
         items={[foodSecurityAccordionItems, nutrititonAccordionItems]}
         multipleSelectionMode={!isMobile}
-        expandAll={!isMobile}
+        expandAll={!isMobile && !loading}
       />
     </div>
   );

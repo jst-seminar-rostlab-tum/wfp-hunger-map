@@ -13,12 +13,13 @@ import { MapOperations } from '@/operations/map/MapOperations';
 
 import AccordionModalSkeleton from '../../Accordions/AccordionModalSkeleton';
 import CountryLoadingLayer from '../CountryLoading';
+import FcsAccordion from './FcsAccordion';
 import FscCountryChoropleth from './FcsCountryChoropleth';
 
 export default function FcsChoropleth({
   data,
   countryId,
-  loading,
+  isLoadingCountry,
   regionData,
   countryData,
   countryIso3Data,
@@ -75,13 +76,17 @@ export default function FcsChoropleth({
           <AccordionModalSkeleton />
         </>
       )}
+      {countryId === selectedCountryId && (
+        <FcsAccordion
+          countryData={countryData}
+          countryIso3Data={countryIso3Data}
+          loading={isLoadingCountry}
+          countryName={selectedCountryName}
+        />
+      )}
       {regionData && countryId === selectedCountryId && regionLabelData && (
         <FscCountryChoropleth
           regionData={regionData}
-          countryData={countryData}
-          countryIso3Data={countryIso3Data}
-          countryName={selectedCountryName}
-          loading={loading}
           handleBackButtonClick={handleBackClick}
           regionLabelData={regionLabelData}
           countryMapData={data.features[0] as CountryMapData}

@@ -36,7 +36,7 @@ export default function FcsAccordion({ countryData, loading, countryIso3Data, co
           accordionModalActive
           maxWidth={600}
           items={foodSecurityAccordionItems}
-          expandAll
+          expandAll={!loading}
         />
       </div>
       <div className="absolute w-[350px] right-[1rem] inset-y-24 z-9999">

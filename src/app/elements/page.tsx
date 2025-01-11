@@ -5,12 +5,12 @@ import { useState } from 'react';
 import AccordionContainer from '@/components/Accordions/AccordionContainer';
 import { CustomButton } from '@/components/Buttons/CustomButton';
 import { CategoricalChart } from '@/components/Charts/CategoricalChart';
-import { LineChart } from '@/components/Charts/LineChart';
+import { ContinuousChart } from '@/components/Charts/ContinuousChart';
 import MapSkeleton from '@/components/Map/MapSkeleton';
 import SearchBar from '@/components/Search/SearchBar';
 import { CategoricalChartData } from '@/domain/entities/charts/CategoricalChartData.ts';
-import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
-import { LineChartDataType } from '@/domain/enums/LineChartDataType.ts';
+import { ContinuousChartData } from '@/domain/entities/charts/ContinuousChartData.ts';
+import { ContinuousChartDataType } from '@/domain/enums/ContinuousChartDataType.ts';
 import AccordionsOperations from '@/operations/accordions/AccordionOperations';
 
 import { ReactComponent as FoodSvg } from '../../../public/Images/FoodConsumption.svg';
@@ -21,8 +21,8 @@ import { ReactComponent as FoodSvg } from '../../../public/Images/FoodConsumptio
  */
 export default async function Elements() {
   const [searchTerm, setSearchTerm] = useState('');
-  const simpleAndSmallLineChartData: LineChartData = {
-    type: LineChartDataType.LINE_CHART_DATA,
+  const simpleAndSmallContinuousChartData: ContinuousChartData = {
+    type: ContinuousChartDataType.LINE_CHART_DATA,
     xAxisType: 'linear',
     lines: [
       {
@@ -37,8 +37,8 @@ export default async function Elements() {
     ],
   };
 
-  const maxedOutLineChartData: LineChartData = {
-    type: LineChartDataType.LINE_CHART_DATA,
+  const maxedOutContinuousChartData: ContinuousChartData = {
+    type: ContinuousChartDataType.LINE_CHART_DATA,
     xAxisType: 'linear',
     yAxisLabel: 'yield',
     lines: [
@@ -97,8 +97,8 @@ export default async function Elements() {
     ],
   };
 
-  const predictionDummyChartData: LineChartData = {
-    type: LineChartDataType.LINE_CHART_DATA,
+  const predictionDummyChartData: ContinuousChartData = {
+    type: ContinuousChartDataType.LINE_CHART_DATA,
     xAxisType: 'linear',
     yAxisLabel: 'Mill',
     predictionVerticalLineX: 3,
@@ -129,7 +129,7 @@ export default async function Elements() {
     ],
   };
 
-  const categoricalDummyChartData1: CategoricalChartData = {
+  const categoricalDummyChartData: CategoricalChartData = {
     yAxisLabel: 'Mill',
     categories: [
       {
@@ -143,8 +143,8 @@ export default async function Elements() {
     ],
   };
 
-  const emptyDummyChartData: LineChartData = {
-    type: LineChartDataType.LINE_CHART_DATA,
+  const emptyDummyChartData: ContinuousChartData = {
+    type: ContinuousChartDataType.LINE_CHART_DATA,
     xAxisType: 'linear',
     yAxisLabel: 'Mill',
     predictionVerticalLineX: 3,
@@ -174,8 +174,8 @@ export default async function Elements() {
       <AccordionContainer items={AccordionsOperations.getAccordionData()} />
       <div className="w-full h-fit flex flex-row flex-wrap gap-10 justify-around px-8 pt-40 pb-16 border-b border-gray-800">
         <div className="w-250px h-fit">
-          <LineChart
-            data={simpleAndSmallLineChartData}
+          <ContinuousChart
+            data={simpleAndSmallContinuousChartData}
             small
             disableDownload
             disableBarChartSwitch
@@ -184,20 +184,20 @@ export default async function Elements() {
           />
         </div>
         <div className="w-400px h-fit">
-          <LineChart
-            title="Maxed Out Line Chart"
+          <ContinuousChart
+            title="Maxed Out Continuous Chart"
             description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor onsetetur sadipscing elitr."
-            data={maxedOutLineChartData}
+            data={maxedOutContinuousChartData}
           />
         </div>
         <div className="w-400px h-fit">
-          <LineChart title="" data={predictionDummyChartData} />
+          <ContinuousChart title="" data={predictionDummyChartData} />
         </div>
         <div className="w-400px h-fit">
-          <CategoricalChart title="" data={categoricalDummyChartData1} />
+          <CategoricalChart title="" data={categoricalDummyChartData} />
         </div>
         <div className="w-400px h-fit">
-          <LineChart title="Forecast XYZ" data={emptyDummyChartData} />
+          <ContinuousChart title="Forecast XYZ" data={emptyDummyChartData} />
         </div>
       </div>
       <MapSkeleton />

@@ -2,12 +2,12 @@ import Highcharts from 'highcharts';
 import { Dispatch, SetStateAction } from 'react';
 
 import { CategoricalChartData } from '@/domain/entities/charts/CategoricalChartData.ts';
-import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
+import { ContinuousChartData } from '@/domain/entities/charts/ContinuousChartData.ts';
 import { ChartAlternativeSwitchButtonProps, ChartSliderProps } from '@/domain/props/ChartContainerProps';
 
 export default interface ChartModalProps {
-  chartOptions: Highcharts.Options;
-  chartData: LineChartData | CategoricalChartData;
+  chartOptions?: Highcharts.Options;
+  chartData: ContinuousChartData | CategoricalChartData;
 
   title?: string;
   description?: string;

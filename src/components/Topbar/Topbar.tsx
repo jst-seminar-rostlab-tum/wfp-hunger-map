@@ -23,7 +23,7 @@ export function Topbar() {
 
   return (
     <Navbar onMenuOpenChange={setIsMenuOpen} maxWidth="full" className="fixed pr-10">
-      <NavbarContent className="flex-1 min-w-[200px] mt-4">
+      <NavbarContent as="div" className="flex-1 min-w-[200px] mt-4">
         <NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} className="lg:hidden" />
         <NavbarBrand>
           <LogoWithText />
@@ -38,8 +38,8 @@ export function Topbar() {
           </NavbarItem>
         ))}
       </NavbarContent>
-      <NavbarContent justify="end" className="hidden lg:flex space-x-7">
-        <NavbarItem className="mt-4">
+      <NavbarContent as="div" justify="end" className="hidden lg:flex space-x-7">
+        <NavbarItem as="div" className="mt-4">
           <ThemeSwitch isIconOnly />
         </NavbarItem>
       </NavbarContent>

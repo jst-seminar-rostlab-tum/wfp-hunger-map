@@ -1,8 +1,8 @@
 import { AxisTypeValue, DashStyleValue } from 'highcharts';
 
-import { LineChartDataType } from '@/domain/enums/LineChartDataType';
+import { ContinuousChartDataType } from '@/domain/enums/ContinuousChartDataType.ts';
 
-export interface LineChartDataPoint {
+export interface ContinuousChartDataPoint {
   x: number;
   y?: number;
   yRangeMin?: number;
@@ -31,18 +31,18 @@ export interface ChartVerticalBand {
  * Important: if the `dashStyle` is not defined or 'Solid' the bars are filled entirely,
  * if any other `dashStyle` is chosen the bars are always filled with a "striped" pattern.
  *
- * If a line is marked as `prediction` the color and dash-style are automatically set by the LineChart component.
+ * If a line is marked as `prediction` the color and dash-style are automatically set by the ContinuousChart component.
  * If a `predictionVerticalLineX` is chosen a vertical band, titled with "Future" is added automatically,
  * starting from `predictionVerticalLineX` and spanning to the end of the chart.
  */
-export interface LineChartData {
-  type: LineChartDataType.LINE_CHART_DATA;
+export interface ContinuousChartData {
+  type: ContinuousChartDataType.LINE_CHART_DATA;
   xAxisType: AxisTypeValue;
   yAxisLabel?: string;
   predictionVerticalLineX?: number;
   lines: {
     name: string;
-    dataPoints: LineChartDataPoint[];
+    dataPoints: ContinuousChartDataPoint[];
     showRange?: boolean;
     color?: string;
     dashStyle?: DashStyleValue;
@@ -52,6 +52,6 @@ export interface LineChartData {
   verticalBands?: ChartVerticalBand[];
 }
 
-export function isLineChartData(data: unknown): data is LineChartData {
-  return (data as LineChartData).type === LineChartDataType.LINE_CHART_DATA;
+export function isContinuousChartData(data: unknown): data is ContinuousChartData {
+  return (data as ContinuousChartData).type === ContinuousChartDataType.LINE_CHART_DATA;
 }

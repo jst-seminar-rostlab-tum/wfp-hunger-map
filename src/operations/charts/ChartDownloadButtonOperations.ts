@@ -9,7 +9,7 @@ import patternFill from 'highcharts/modules/pattern-fill';
 import HighchartsReact from 'highcharts-react-official';
 
 import { CategoricalChartData } from '@/domain/entities/charts/CategoricalChartData.ts';
-import { LineChartData } from '@/domain/entities/charts/LineChartData.ts';
+import { ContinuousChartData } from '@/domain/entities/charts/ContinuousChartData.ts';
 
 // initialize the exporting module
 if (typeof Highcharts === 'object') {
@@ -59,7 +59,7 @@ export default class ChartDownloadButtonOperations {
   /**
    * Trigger download of the given line chart `data` as a json file.
    */
-  public static downloadDataJSON(data: LineChartData | CategoricalChartData): void {
+  public static downloadDataJSON(data: ContinuousChartData | CategoricalChartData): void {
     // convert data json object to string and encode as URI
     const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(data, null, 2))}`;
     // create a temporary link element and trigger the download

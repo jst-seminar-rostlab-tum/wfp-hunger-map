@@ -1,4 +1,4 @@
-export enum LineChartDataType {
+export enum ContinuousChartDataType {
   LINE_CHART_DATA = 'LINE_CHART_DATA',
   BALANCE_OF_TRADE_CHART = 'BALANCE_OF_TRADE_CHART',
   CURRENCY_EXCHANGE_CHART = 'CURRENCY_EXCHANGE_CHART',

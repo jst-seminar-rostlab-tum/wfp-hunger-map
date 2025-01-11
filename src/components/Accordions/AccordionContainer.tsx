@@ -9,7 +9,7 @@ import { AccordionContainerProps } from '@/domain/props/AccordionContainerProps'
 import { useMediaQuery } from '@/utils/resolution.ts';
 
 /**
- * This container allows any number of items to be displayed in an accordion.
+ * AccordionContainer allows any number of items to be displayed in an accordion.
  * If 'accordionModalActive' is selected, a button is rendered at the bottom of the screen
  * for small screen sizes (mobile), allowing the accordions to open in a separate modal.
  * By default, the component adjusts to its parent's width. A max width (in px) can be configured using `maxWidth`.

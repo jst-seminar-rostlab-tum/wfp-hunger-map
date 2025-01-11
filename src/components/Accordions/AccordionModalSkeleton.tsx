@@ -1,8 +1,12 @@
 import { Skeleton } from '@nextui-org/skeleton';
 
 /**
- * The skeleton for the accordion modal button.
- * @returns {JSX.Element} - The accordion modal skeleton component.
+ * AccordionModalSkeleton - A skeleton loader component for the accordion modal button.
+ * This component renders a responsive skeleton placeholder for the accordion modal button
+ * to indicate loading states. It adjusts its size and shape based on the screen width:
+ * - For screens smaller than 450px, it renders a circular skeleton.
+ * - For screens between 450px and 700px, it renders a rectangular skeleton with rounded edges.
+ * @returns {JSX.Element} The accordion modal skeleton component.
  */
 
 export default function AccordionModalSkeleton() {

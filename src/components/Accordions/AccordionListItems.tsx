@@ -13,9 +13,10 @@ import AccordionOperations from '@/operations/accordions/AccordionOperations';
 import { Tooltip } from '../Tooltip/Tooltip';
 
 /**
- * Accordion for the `AccordionModal` for mobile screen sizes. Accordion items are displayed as a list.
- * If only one item is provided, it will be expanded by default;
- * if multiple items are provided, they will all remain collapsed.
+ * AccordionListItems - A dynamic and responsive accordion component for the `AccordionModal` on mobile screens.
+ * This component displays a list of accordion items with customizable behavior:
+ * - If a single item is provided, it will be expanded by default.
+ * - If multiple items are provided, they remain collapsed unless specified otherwise.
  * @param {AccordionContainerProps} props - The props object.
  * @param {AccordionItemProps[]} props.items - The items to display in the accordion.
  * @param {boolean} [props.loading=false] - A boolean that indicates if the accordion is loading.
@@ -23,7 +24,7 @@ import { Tooltip } from '../Tooltip/Tooltip';
  * @param {boolean} [props.noSelectionMode=false] - A boolean that indicates if no item can be selected.
  * @param {boolean} [props.expandAll=false] - A boolean that indicates if all items are expanded.
  * @param {string[]} [props.highlightedTitleWords=[]] - The words to highlight in the title.
- * @returns {JSX.Element} - The accordion list items component.
+ * @returns {JSX.Element} - A responsive accordion component rendering a list of items with their respective content and interactions.
  */
 
 export default function AccordionListItems({

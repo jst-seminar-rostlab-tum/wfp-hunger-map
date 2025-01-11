@@ -7,10 +7,10 @@ import { v4 as uuid } from 'uuid';
 import { CardProps } from '@/domain/props/CardProps';
 
 /**
- * A custom card component that displays a title and content.
+ * A custom card component that displays a title and content. This component is designed to showcase content items, such as titles, text, icons, images, and value changes, in a card layout.
  * @param {CardProps} props - The props object.
  * @param {string} props.title - The title of the card.
- * @param {CardItemProps[]} props.content - The content of the card.
+ * @param {CardItemProps[]} props.content - The array of content items
  * @returns {JSX.Element} - The custom card component.
  */
 

@@ -8,11 +8,15 @@ import { useAccordionsModal } from '@/domain/contexts/AccodionsModalContext';
 import { useMediaQuery } from '@/utils/resolution.ts';
 
 /**
- * The accordions can be configured to be hidden in a modal on mobile screens, which can be accessed
- * via a button at the bottom. This component provides the modal and the button to open it.
- * The content for the modal, including the accordions, is provided via the 'userAccordionsModal' hook.
- * Important: Exclusively used by `AccordionContainer` component.
- * @returns {JSX.Element} - The accordion modal component.
+ * AccordionModal - A responsive component that provides a modal for displaying accordions on mobile screens.
+ * This component is specifically designed for mobile usage:
+ * - On screens smaller than 700px, it displays a button at the bottom right corner to open the modal.
+ * - On screens smaller than 450px, the button is circular and icon-only.
+ * - On screens between 450px and 700px, the button includes an "Insights" label alongside the icon.
+ * The modal content and title are managed via the `useAccordionsModal` hook.
+ * Important: This component is intended to be exclusively used by the `AccordionContainer` component.
+ *
+ * @returns {JSX.Element | null} The accordion modal component, or `null` if not in a mobile view or modal content is empty.
  */
 
 export default function AccordionModal() {

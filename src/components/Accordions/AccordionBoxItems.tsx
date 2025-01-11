@@ -14,7 +14,7 @@ import { ReadMore } from '../ReadMore/ReadMore';
 import { Tooltip } from '../Tooltip/Tooltip';
 
 /**
- * Any number of items are displayed as collapsible accordion boxes stacked vertically.
+ * AccordionBoxItems - component for displaying collapsible accordion boxes stacked vertically for desktop version.
  * Important: Exclusively used by `AccordionContainer` component.
  * @param {AccordionContainerProps} props - The props object.
  * @param {AccordionItemProps[]} props.items - The items to display in the accordion.

@@ -4,10 +4,22 @@ import { Nutrition } from '@/domain/entities/region/RegionNutritionProperties.ts
 import { NutrientType } from '@/domain/enums/NutrientType.ts';
 import NutritionStateChoroplethOperations from '@/operations/map/NutritionStateChoroplethOperations';
 
+/**
+ * NutritionRegionTooltipProps is an interface for the props of the NutritionRegionTooltip component.
+ * @param {feature} Feature<Geometry, GeoJsonProperties> - The feature of the region
+ * @param {selectedNutrient} NutrientType - The selected nutrient
+ */
 interface NutritionRegionTooltipProps {
   feature: Feature<Geometry, GeoJsonProperties>;
   selectedNutrient: NutrientType;
 }
+/** NutritionRegionTooltip Component rendering the tooltip for the Nutrition Map. The tooltiop displays the name of the region
+ * and the risk of inadequate intake of the selected nutrient.
+ * @param {NutritionRegionTooltipProps} props - The props of the component
+ * @param {feature} props.Feature<Geometry, GeoJsonProperties> - The feature of the region
+ * @param {selectedNutrient} props.NutrientType - The selected nutrient
+ * @returns {JSX.Element} Tooltip component which shows the name of the region and the value of selected micronutrient
+ */
 
 export default function NutritionRegionTooltip({ feature, selectedNutrient }: NutritionRegionTooltipProps) {
   const nutrientValue = feature ? feature?.properties?.nutrition[selectedNutrient as keyof Nutrition] : null;

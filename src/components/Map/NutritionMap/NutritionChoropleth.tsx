@@ -18,10 +18,10 @@ import CountryLoadingLayer from '../CountryLoading';
 import NutritionAccordion from './NutritionAccordion';
 import NutritionStateChoropleth from './NutritionStateChoropleth';
 
-/** NutritionChoropleth renders the choropleth for the Nutrition Map for global view. If the region data is available
+/** NutritionChoropleth renders the Nutrition Map for global view. If the region data is available
  * for the selected country, it renders the NutritionStateChoropleth for the states of the country.
  * @param {NutritionChoroplethProps} props - The props of the component
- * @param {data} props.GeoJSON - The GeoJSON data of the country
+ * @param {data} props.FeatureCollection - The GeoJSON data of the country
  * @param {countryId} props.string - The id of the country
  * @param {regionNutritionData} props.Feature - The GeoJSON data of the region
  * @param {selectedCountryName} props.string - The name of the selected country

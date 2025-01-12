@@ -18,6 +18,19 @@ import CountryLoadingLayer from '../CountryLoading';
 import NutritionAccordion from './NutritionAccordion';
 import NutritionStateChoropleth from './NutritionStateChoropleth';
 
+/** NutritionChoropleth renders the Nutrition Map for global view. If the region data is available
+ * for the selected country, it renders the NutritionStateChoropleth for the states of the country.
+ * @param {NutritionChoroplethProps} props - The props of the component.
+ * @param {FeatureCollection} props.data - The GeoJSON data of the country.
+ * @param {string} props.countryId - The ID of the country.
+ * @param {FeatureCollection} props.regionNutritionData - The GeoJSON data of the region.
+ * @param {string} props.selectedCountryName - The name of the selected country.
+ * @param {FeatureCollection<Geometry, GeoJsonProperties>} props.regionLabelData - The region data used for labeling.
+ * @param {(tooltips: (prevRegionLabelData: L.Tooltip[]) => L.Tooltip[]) => void} props.setRegionLabelTooltips - Function to set the region label tooltips.
+ * @param {boolean} props.isLoadingCountry - The loading state of the country.
+ * @returns {JSX.Element} - The rendered NutritionChoropleth component
+ */
+
 export default function NutritionChoropleth({
   data,
   countryId,
@@ -26,7 +39,7 @@ export default function NutritionChoropleth({
   regionLabelData,
   setRegionLabelTooltips,
   isLoadingCountry,
-}: NutritionChoroplethProps) {
+}: NutritionChoroplethProps): JSX.Element {
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
   const { theme } = useTheme();

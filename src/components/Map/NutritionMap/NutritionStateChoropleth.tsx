@@ -7,13 +7,24 @@ import { NutritionStateChoroplethProps } from '@/domain/props/NutritionStateProp
 import { MapOperations } from '@/operations/map/MapOperations';
 import NutritionStateChoroplethOperations from '@/operations/map/NutritionStateChoroplethOperations';
 
+/** NutritionStateChoropleth Component
+ * renders the Nutrition Map for country view.
+ * @param {NutritionStateChoroplethProps} props - The props of the component.
+ * @param {FeatureCollection} props.regionNutrition - The GeoJSON data of the region.
+ * @param {(tooltips: (prevRegionLabelData: L.Tooltip[]) => L.Tooltip[]) => void} props.setRegionLabelTooltips - Function to set the region label tooltips.
+ * @param {FeatureCollection<Geometry, GeoJsonProperties>} props.regionLabelData - The region data used for labeling.
+ * @param {CountryMapData} props.countryMapData - The map data of the country.
+ * @param {NutrientType} props.selectedNutrient - The selected nutrient.
+ * @returns {JSX.Element} - The rendered NutritionStateChoropleth component
+ */
+
 export default function NutritionStateChoropleth({
   regionNutrition,
   setRegionLabelTooltips,
   regionLabelData,
   countryMapData,
   selectedNutrient,
-}: NutritionStateChoroplethProps) {
+}: NutritionStateChoroplethProps): JSX.Element {
   const layersRef = useRef<LayerWithFeature[]>([]);
   const selectedNutrientRef = useRef<NutrientType>(selectedNutrient);
   const map = useMap();

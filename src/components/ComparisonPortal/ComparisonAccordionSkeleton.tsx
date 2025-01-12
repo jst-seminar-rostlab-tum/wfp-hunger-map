@@ -12,7 +12,7 @@ export default function ComparisonAccordionSkeleton() {
             key={uuid()}
             className="rounded-medium last:border-b-0 bg-content1 white:bg-white overflow-hidden shadow-md"
           >
-            <Skeleton className="rounded-lg bg-content1 dark:bg-content1">
+            <Skeleton aria-hidden="true" className="rounded-lg bg-content1 dark:bg-content1">
               <div className="h-[69px]" />
             </Skeleton>
           </div>

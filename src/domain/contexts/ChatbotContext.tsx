@@ -81,13 +81,12 @@ export function ChatbotProvider({ children }: { children: ReactNode }) {
   };
 
   /**
-   * Initiates a chat with a report based on the provided report name and report content.
-   * If a chat for that specific report already exists, it opens that chat; otherwise, it creates a new one.
-   * @param reportName - The name of the report.
-   * @param reportURL - The URL of the report to be processed.
+   * Initiates a chat with a report based on the provided country name and report content.
+   * If a chat for that specific already exists, it opens that chat; otherwise, it creates a new one.
+   * @param countryName - The name of the country related to the report.
    */
-  const initiateChatAboutReport = async (reportName: string, reportURL: string) => {
-    const reportChatIndex = chats.findIndex((chat) => chat.title === `Report ${reportName}`);
+  const initiateChatAboutReport = async (countryName: string) => {
+    const reportChatIndex = chats.findIndex((chat) => chat.title === `Report ${countryName}`);
     const reportChatExists = reportChatIndex !== -1;
 
     if (reportChatExists) {
@@ -95,26 +94,16 @@ export function ChatbotProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    const { extractPdfText } = await import('@/operations/chatbot/ExtractPdfText');
-    let reportText;
-    try {
-      reportText = await extractPdfText(reportURL, showSnackBar);
-    } catch {
-      reportText = '';
-    }
-
     const assistantMessage = {
       id: crypto.randomUUID(),
-      content: reportText
-        ? `Hey, how can I help you with this report about ${reportName}?`
-        : `Hey, unfortunately I'm currently unable to answer questions about this report. You can try it later or chat with me about other things!`,
+      content: `Hey, how can I help you with this report about ${countryName}?`,
       role: SenderRole.ASSISTANT,
     };
 
     const newChat: IChat = {
       id: uuid(),
-      title: `Report ${reportName}`,
-      context: reportText,
+      title: `Report ${countryName}`,
+      reports_country_name: countryName,
       isReportStarter: true,
       messages: [assistantMessage],
       isTyping: false,

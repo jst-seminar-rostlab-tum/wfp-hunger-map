@@ -12,6 +12,17 @@ import NutritionStateChoroplethOperations from '@/operations/map/NutritionStateC
 
 import CountryLoadingLayer from '../CountryLoading';
 
+/** NutritionStateChoropleth Component
+ * renders the Nutrition Map for country view.
+ * @param {NutritionStateChoroplethProps} props - The props of the component.
+ * @param {FeatureCollection} props.countryMapData - The GeoJSON data of the region.
+ * @param {(tooltips: (prevRegionLabelData: L.Tooltip[]) => L.Tooltip[]) => void} props.setRegionLabelTooltips - Function to set the region label tooltips.
+ * @param {NutrientType} props.selectedNutrient - The selected nutrient.
+ * @param {() => void} [props.onDataUnavailable] - A callback to signal to the parent component that there's no regional Nutrition data for this country
+
+ * @returns {JSX.Element} - The rendered NutritionStateChoropleth component
+ */
+
 export default function NutritionStateChoropleth({
   setRegionLabelTooltips,
   countryMapData,

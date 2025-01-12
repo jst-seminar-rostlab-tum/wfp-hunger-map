@@ -16,6 +16,16 @@ import NutritionChoroplethOperations from '@/operations/map/NutritionChoroplethO
 import NutritionAccordion from './NutritionAccordion';
 import NutritionStateChoropleth from './NutritionStateChoropleth';
 
+/** NutritionChoropleth renders the Nutrition Map for global view. If the region data is available
+ * for the selected country, it renders the NutritionStateChoropleth for the states of the country.
+ * @param {NutritionChoroplethProps} props - The props of the component.
+ * @param {FeatureCollection} props.data - The GeoJSON data of the country.
+ * @param {string} props.countryId - The ID of the country.
+ * @param {(tooltips: (prevRegionLabelData: L.Tooltip[]) => L.Tooltip[]) => void} props.setRegionLabelTooltips - Function to set the region label tooltips.
+ * @param {() => void} [props.onDataUnavailable] - A callback to signal to the parent component that there's no regional Nutrition data for this country
+ * @returns {JSX.Element} - The rendered NutritionChoropleth component
+ */
+
 export default function NutritionChoropleth({
   data,
   countryId,

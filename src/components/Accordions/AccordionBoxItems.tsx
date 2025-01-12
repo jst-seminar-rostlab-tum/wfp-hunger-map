@@ -12,9 +12,21 @@ import { InfoPopover } from '../InfoPopover/InfoPopover';
 import { Tooltip } from '../Tooltip/Tooltip';
 
 /**
- * Any number of items are displayed as collapsible accordion boxes stacked vertically.
+ * AccordionBoxItems - component for displaying collapsible accordion boxes stacked vertically for desktop version.
  * Important: Exclusively used by `AccordionContainer` component.
+ * @param {AccordionContainerProps} props - The props object.
+ * @param {AccordionItemProps[]} props.items - The items to display in the accordion.
+ * @param {string} props.title - The title of the accordion.
+ * @param {boolean} [props.loading=false] - A boolean that indicates if the accordion is loading.
+ * @param {boolean} [props.multipleSelectionMode=false] - A boolean that indicates if multiple items can be selected.
+ * @param {boolean} [props.noSelectionMode=false] - A boolean that indicates if no item can be selected.
+ * @param {string} [props.color='bg-content1'] - The color of the accordion.
+ * @param {number} [props.maxWidth] - The maximum width of the accordion.
+ * @param {boolean} [props.expandAll=false] - A boolean that indicates if all items are expanded.
+ * @param {string[]} [props.highlightedTitleWords=[]] - The words to highlight in the title.
+ * @returns {JSX.Element} - The accordion box items component.
  */
+
 export default function AccordionBoxItems({
   items,
   title,
@@ -53,12 +65,14 @@ export default function AccordionBoxItems({
           <AccordionItem
             key={typeof item.title === 'string' ? item.title : `accordion-item-${index}`}
             aria-label={typeof item.title === 'string' ? item.title : `Accordion Item ${index}`}
-            className={`last:border-b-0 ${color} white:bg-white overflow-hidden shadow-md`}
+            className={`last:border-b-0 ${color} overflow-hidden shadow-md`}
             hideIndicator={noSelectionMode}
             title={
               <span className="flex justify-between items-center w-full">
-                <span className="flex gap-4">
+                {/* Since lighthosue looks up the parent background-color styles in order until an explicit background definition is found. It should add background color in parent element, avoid third party component like accordion has other influence of bg color */}
+                <span className={`flex gap-4 ${color}`}>
                   <Highlighter searchWords={highlightedTitleWords} textToHighlight={item.title} autoEscape />
+
                   {loading && <Spinner size="sm" />}
                 </span>
                 {item.tooltipInfo && (

@@ -10,6 +10,14 @@ import { MapOperations } from '@/operations/map/MapOperations';
 
 import CountryLoadingLayer from '../CountryLoading';
 
+/** FscCountryChoropleth function returns a component that displays the fcs map for a country view
+ * @param {FscCountryChoroplethProps} props - The props of the component.
+ * @param {CountryMapData} props.countryMapData - The detailed map data of the country.
+ * @param {(tooltips: (prevRegionLabelData: L.Tooltip[]) => L.Tooltip[]) => void} props.setRegionLabelTooltips - A function to update the region label tooltips.
+ * @param {() => void} [props.onDataUnavailable] - A callback to signal to the parent component that there's no regional FCS data for this country
+ * @returns {JSX.Element} - The rendered FscCountryChoropleth component.
+ */
+
 export default function FscCountryChoropleth({
   countryMapData,
   setRegionLabelTooltips,

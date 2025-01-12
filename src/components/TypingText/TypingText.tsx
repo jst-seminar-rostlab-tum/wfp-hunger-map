@@ -29,7 +29,7 @@ export default function TypingText({
   onTypingStart,
   chatIndex = 1,
   onTypingComplete,
-}: TypingTextProps) {
+}: TypingTextProps): JSX.Element {
   const [displayedText, setDisplayedText] = useState('');
   const normalizedText = TypingAnimationOperations.normalizeMarkdown(initialText);
   const completionKey = STORAGE_KEYS.COMPLETION(textID);

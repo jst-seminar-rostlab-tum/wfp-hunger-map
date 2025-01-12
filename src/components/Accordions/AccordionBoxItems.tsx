@@ -53,12 +53,14 @@ export default function AccordionBoxItems({
           <AccordionItem
             key={typeof item.title === 'string' ? item.title : `accordion-item-${index}`}
             aria-label={typeof item.title === 'string' ? item.title : `Accordion Item ${index}`}
-            className={`last:border-b-0 ${color} white:bg-white overflow-hidden shadow-md`}
+            className={`last:border-b-0 ${color} overflow-hidden shadow-md`}
             hideIndicator={noSelectionMode}
             title={
               <span className="flex justify-between items-center w-full">
-                <span className="flex gap-4">
+                {/* Since lighthosue looks up the parent background-color styles in order until an explicit background definition is found. It should add background color in parent element, avoid third party component like accordion has other influence of bg color */}
+                <span className={`flex gap-4 ${color}`}>
                   <Highlighter searchWords={highlightedTitleWords} textToHighlight={item.title} autoEscape />
+
                   {loading && <Spinner size="sm" />}
                 </span>
                 {item.tooltipInfo && (

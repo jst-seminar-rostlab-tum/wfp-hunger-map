@@ -3,13 +3,13 @@
 import {
   Link,
   Navbar,
-  NavbarBrand,
   NavbarContent,
   NavbarItem,
   NavbarMenu,
   NavbarMenuItem,
   NavbarMenuToggle,
 } from '@nextui-org/react';
+import clsx from 'clsx';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
@@ -25,14 +25,17 @@ export function Topbar() {
     <Navbar onMenuOpenChange={setIsMenuOpen} maxWidth="full" className="fixed pr-10">
       <NavbarContent as="div" className="flex-1 min-w-[200px] mt-4">
         <NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} className="lg:hidden" />
-        <NavbarBrand>
-          <LogoWithText />
-        </NavbarBrand>
+        <LogoWithText />
       </NavbarContent>
       <NavbarContent className="hidden lg:flex gap-4 mt-4" justify="center">
         {pageLinks.map((item) => (
           <NavbarItem key={item.label} isActive={pathname === item.href}>
-            <Link href={item.href} className="text-medium" color={pathname === item.href ? 'primary' : 'foreground'}>
+            <Link
+              href={item.href}
+              className={clsx('text-medium text-black dark:text-white', {
+                'text-link dark:text-link': pathname === item.href,
+              })}
+            >
               {item.label}
             </Link>
           </NavbarItem>

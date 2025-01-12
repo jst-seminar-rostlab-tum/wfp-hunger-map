@@ -211,6 +211,7 @@ export default function HungerMapChatbot() {
           <Button
             onClick={toggleChat}
             className="relative flex items-center justify-center min-w-12 h-12 px-1 rounded-full bg-content1 hover:bg-content2 shadow-md"
+            aria-label="toggle chat"
           >
             <Bot size={24} />
           </Button>

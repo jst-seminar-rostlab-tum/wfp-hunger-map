@@ -8,6 +8,7 @@ import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 import { LayerWithFeature } from '@/domain/entities/map/LayerWithFeature.ts';
 import FcsChoroplethProps from '@/domain/props/FcsChoroplethProps';
+import { AccessibilityOperations } from '@/operations/map/AccessibilityOperations';
 import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
 import { MapOperations } from '@/operations/map/MapOperations';
 
@@ -50,6 +51,19 @@ export default function FcsChoropleth({
       }
     });
   }, [selectedCountryId]);
+
+  useEffect(() => {
+    const geoJsonLayer = geoJsonRef.current;
+
+    if (geoJsonLayer) {
+      geoJsonLayer.eachLayer((layer) => {
+        layer.on('add', AccessibilityOperations.addAriaLabelsAndStyles);
+      });
+
+      geoJsonLayer.on('layeradd', AccessibilityOperations.addAriaLabelsAndStyles);
+      geoJsonLayer.on('moveend', AccessibilityOperations.addAriaLabelsAndStyles);
+    }
+  }, [geoJsonRef]);
 
   return (
     <div>

@@ -15,17 +15,18 @@ import CategoricalChartOperations from '@/operations/charts/CategoricalChartOper
  * The height of the entire box depends on the provided text, while the chart itself has a fixed height.
  * It also provides the option to open the chart in a full-screen modal, where one can download the data as well.
  *
- * @param data the actual data to be used in the chart
- * @param title chart title (optional)
- * @param description chart description text (optional)
- * @param small when selected, all components in the line chart box become slightly smaller (optional)
- * @param noPadding when selected, the main box has no padding on all sides (optional)
- * @param transparentBackground when selected, the background of the entire component is transparent (optional)
- * @param chartHeight with this parameter, the height of the actual chart can be set to a fixed value in pixels. If
+ * @param {Object} props - The properties object
+ * @param {CategoricalChartData} props.data - the actual data to be used in the chart
+ * @param {string} props.title - chart title (optional)
+ * @param {string} props.description - chart description text (optional)
+ * @param {boolean} props.small - when selected, all components in the line chart box become slightly smaller (optional)
+ * @param {boolean} props.noPadding - when selected, the main box has no padding on all sides (optional)
+ * @param {boolean} props.transparentBackground - when selected, the background of the entire component is transparent (optional)
+ * @param {number} props.chartHeight - with this parameter, the height of the actual chart can be set to a fixed value in pixels. If
  *        chartHeight is not specified, the chart is given a fixed default height depending on `small`.
- * @param disableExpandable when selected, the functionality to open the chart in a larger modal is disabled (optional)
- * @param disablePieChartSwitch when selected, the functionality to switch to a pie chart is disabled (optional)
- * @param disableDownload when selected, the functionality to download the chart is disabled (optional)
+ * @param {boolean} props.disableExpandable - when selected, the functionality to open the chart in a larger modal is disabled (optional)
+ * @param {boolean} props.disablePieChartSwitch - when selected, the functionality to switch to a pie chart is disabled (optional)
+ * @param {boolean} props.disableDownload - when selected, the functionality to download the chart is disabled (optional)
  */
 export function CategoricalChart({
   data,

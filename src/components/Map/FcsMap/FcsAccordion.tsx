@@ -5,8 +5,8 @@ import { useMediaQuery } from '@/utils/resolution.ts';
 
 import AccordionContainer from '../../Accordions/AccordionContainer';
 
-/** FcsAccordion function returns a component that displays the food security and macroeconomic data of a country in an accordion
- *  based upon it's mobile or desktop view.
+/** The FcsAccordion function returns a component that displays a country's information on Population, Macroeconomics, 
+    Nutrition, Food Consumption trends, and more in an accordion format, dynamically adjusting its layout for mobile and desktop views.
  * @param {FcsAccordionProps} props - The props of the component
  * @param {FcsAccordionProps.countryData} props.countryData - The data of the country
  * @param {FcsAccordionProps.loading} props.loading - The loading state of the component

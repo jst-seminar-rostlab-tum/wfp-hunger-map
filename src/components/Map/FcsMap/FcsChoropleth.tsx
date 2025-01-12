@@ -16,20 +16,20 @@ import CountryLoadingLayer from '../CountryLoading';
 import FcsAccordion from './FcsAccordion';
 import FscCountryChoropleth from './FcsCountryChoropleth';
 
-/** FcsChoropleth function returns a component that displays the choropleth fcs map for global view
+/** FcsChoropleth function returns a component that displays the fcs map for global view
  *
- * @param {FcsChoroplethProps} props - The props of the component
- * @param {FcsChoroplethProps.data} props.FeatureCollection<Geometry, GeoJsonProperties> - The GeoJSON data of the country
- * @param {FcsChoroplethProps.countryId} props.countryId - The id of the country
- * @param {FcsChoroplethProps.isLoadingCountry} props.isLoadingCountry - The loading state of the country
- * @param {FcsChoroplethProps.regionData} props.regionData - The region data of the country
- * @param {FcsChoroplethProps.countryData} props.countryData - The data of the country
- * @param {FcsChoroplethProps.countryIso3Data} props.countryIso3Data - The iso3 data of the country
- * @param {FcsChoroplethProps.selectedCountryName} props.selectedCountryName - The name of the selected country
- * @param {FcsChoroplethProps.fcsData} props.fcsData - The fcs of the country
- * @param {FcsChoroplethProps.regionLabelData} props.regionLabelData - The region label data of the country
- * @param {FcsChoroplethProps.setRegionLabelTooltips} props.setRegionLabelTooltips - The function to set the region label tooltips
- * @returns {JSX.Element} - The rendered FcsChoropleth component
+ * @param {FcsChoroplethProps} props - The props of the component.
+ * @param {FeatureCollection<Geometry, GeoJsonProperties>} props.data - The GeoJSON data of the country.
+ * @param {string} props.countryId - The ID of the country.
+ * @param {boolean} props.isLoadingCountry - The loading state of the country.
+ * @param {FeatureCollection<Geometry, GeoJsonProperties>} props.regionData - The GeoJSON region data of the country.
+ * @param {Object} props.countryData - The data of the country.
+ * @param {Object} props.countryIso3Data - The ISO3 data of the country.
+ * @param {string} props.selectedCountryName - The name of the selected country.
+ * @param {Record<string, CountryFcsData>} props.fcsData - The FCS data of the country.
+ * @param {FeatureCollection<Geometry, GeoJsonProperties>} props.regionLabelData - The GeoJSON region data used to label the region.
+ * @param {(tooltips: (prevRegionLabelData: L.Tooltip[]) => L.Tooltip[]) => void} props.setRegionLabelTooltips - The function to set the region label tooltips.
+ * @returns {JSX.Element} - The rendered FcsChoropleth component.
  */
 
 export default function FcsChoropleth({

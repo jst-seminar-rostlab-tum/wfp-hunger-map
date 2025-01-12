@@ -96,18 +96,22 @@ export default function HungerMapChatbot() {
     const previousMessages = chats[currentChatIndex].messages;
     let aiResponse = '';
     try {
-      if (chats[currentChatIndex].isReportStarter && chats[currentChatIndex].context) {
+      if (chats[currentChatIndex].isReportStarter && chats[currentChatIndex].reports_country_name) {
         aiResponse = (
           await chatbot.sendMessage(text, {
             chatId: chats[currentChatIndex].id,
             previous_messages: previousMessages,
-            context: chats[currentChatIndex].context,
+            reports_country_name: chats[currentChatIndex].reports_country_name,
           })
         ).response;
         chats[currentChatIndex].isReportStarter = false;
       } else {
         aiResponse = (
-          await chatbot.sendMessage(text, { chatId: chats[currentChatIndex].id, previous_messages: previousMessages })
+          await chatbot.sendMessage(text, {
+            chatId: chats[currentChatIndex].id,
+            previous_messages: previousMessages,
+            reports_country_name: chats[currentChatIndex].reports_country_name,
+          })
         ).response;
       }
     } catch (err) {

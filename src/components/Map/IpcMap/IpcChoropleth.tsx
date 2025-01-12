@@ -24,6 +24,7 @@ function IpcChoropleth({
 
   return (
     <>
+      {/* Render the global IPC choropleth if ipcData is available */}
       {ipcData && (
         <IpcGlobalChoropleth
           ipcData={ipcData}
@@ -32,6 +33,8 @@ function IpcChoropleth({
           selectedCountryId={selectedCountryId}
         />
       )}
+
+      {/* Show loading layer and skeleton if ipcRegionData is not available and a country is selected */}
       {!ipcRegionData && selectedCountryId && (
         <>
           <CountryLoadingLayer
@@ -47,6 +50,8 @@ function IpcChoropleth({
           <AccordionModalSkeleton />
         </>
       )}
+
+      {/* Render the IPC accordion if a country is selected */}
       {selectedCountryId && (
         <IpcAccordion
           countryData={countryData}
@@ -55,6 +60,8 @@ function IpcChoropleth({
           countryIso3Data={countryIso3Data}
         />
       )}
+
+      {/* Render region IPC choropleth if ipcRegionData is available */}
       {ipcRegionData && <IpcCountryChoropleth regionIpcData={ipcRegionData} />}
     </>
   );

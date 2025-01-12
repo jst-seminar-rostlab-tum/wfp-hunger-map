@@ -17,14 +17,13 @@ import FcsAccordion from './FcsAccordion';
 import FscCountryChoropleth from './FcsCountryChoropleth';
 
 /** FcsChoropleth function returns a component that displays the fcs map for global view
- *
  * @param {FcsChoroplethProps} props - The props of the component.
  * @param {FeatureCollection<Geometry, GeoJsonProperties>} props.data - The GeoJSON data of the country.
  * @param {string} props.countryId - The ID of the country.
  * @param {boolean} props.isLoadingCountry - The loading state of the country.
  * @param {FeatureCollection<Geometry, GeoJsonProperties>} props.regionData - The GeoJSON region data of the country.
- * @param {Object} props.countryData - The data of the country.
- * @param {Object} props.countryIso3Data - The ISO3 data of the country.
+ * @param {CountryData} props.countryData - The data of the country.
+ * @param {CountryIso3Data} props.countryIso3Data - The ISO3 data of the country.
  * @param {string} props.selectedCountryName - The name of the selected country.
  * @param {Record<string, CountryFcsData>} props.fcsData - The FCS data of the country.
  * @param {FeatureCollection<Geometry, GeoJsonProperties>} props.regionLabelData - The GeoJSON region data used to label the region.

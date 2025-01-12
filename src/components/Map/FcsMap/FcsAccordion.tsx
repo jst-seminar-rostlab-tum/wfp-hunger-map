@@ -8,10 +8,10 @@ import AccordionContainer from '../../Accordions/AccordionContainer';
 /** The FcsAccordion function returns a component that displays a country's information on Population, Macroeconomics, 
     Nutrition, Food Consumption trends, and more in an accordion format, dynamically adjusting its layout for mobile and desktop views.
  * @param {FcsAccordionProps} props - The props of the component
- * @param {FcsAccordionProps.countryData} props.countryData - The data of the country
- * @param {FcsAccordionProps.loading} props.loading - The loading state of the component
- * @param {FcsAccordionProps.countryIso3Data} props.countryIso3Data - The iso3 data of the country
- * @param {FcsAccordionProps.countryName} props.countryName - The name of the country
+ * @param {CountryData} props.countryData - The data of the country
+ * @param {loading} props.loading - The loading state of the component
+ * @param {CountryIso3Data} props.countryIso3Data - The iso3 data of the country
+ * @param {string} props.countryName - The name of the country
  * @returns {JSX.Element} - The rendered AccordionContainer component
  */
 

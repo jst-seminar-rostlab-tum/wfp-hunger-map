@@ -22,8 +22,8 @@ import CategoricalChartOperations from '@/operations/charts/CategoricalChartOper
  * @param {boolean} props.small - when selected, all components in the line chart box become slightly smaller (optional)
  * @param {boolean} props.noPadding - when selected, the main box has no padding on all sides (optional)
  * @param {boolean} props.transparentBackground - when selected, the background of the entire component is transparent (optional)
- * @param {number} props.chartHeight - with this parameter, the height of the actual chart can be set to a fixed value in pixels. If
- *        chartHeight is not specified, the chart is given a fixed default height depending on `small`.
+ * @param {number} props.chartHeight - with this parameter, the height of the actual chart can be set to a fixed value in pixels;
+ *        If chartHeight is not specified, the chart is given a fixed default height depending on `small` (optional)
  * @param {boolean} props.disableExpandable - when selected, the functionality to open the chart in a larger modal is disabled (optional)
  * @param {boolean} props.disablePieChartSwitch - when selected, the functionality to switch to a pie chart is disabled (optional)
  * @param {boolean} props.disableDownload - when selected, the functionality to download the chart is disabled (optional)

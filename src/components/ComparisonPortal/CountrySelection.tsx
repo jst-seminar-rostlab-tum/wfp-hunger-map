@@ -9,13 +9,26 @@ import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
 
 import { CustomButton } from '../Buttons/CustomButton';
 
+/**
+ * A Select component that allows users to select up to 5 countries for comparison.
+ * Allows selection from a list of countries that have active FCS data.
+ * Since the api might not return data for all selected countries,
+ * the component accepts disabledCountryIds to disable countries that have missing data.
+ * @param {CountrySelectionProps} props Props for the CountrySelection component
+ * @param {CountryMapDataWrapper} props.countryMapData Country map data
+ * @param {GlobalFcsData} props.globalFcsData National FCS Data of all countries
+ * @param {CountryMapData[] | undefined} props.selectedCountries Selected countries
+ * @param {(countries: CountryMapData[]) => void} props.setSelectedCountries Function to set selected countries
+ * @param {string[]} props.disabledCountryIds Ids of countries that cannot be selected
+ * @returns {JSX.Element} The CountrySelection component
+ */
 export default function CountrySelection({
   countryMapData,
   globalFcsData,
   selectedCountries,
   setSelectedCountries,
   disabledCountryIds,
-}: CountrySelectionProps) {
+}: CountrySelectionProps): JSX.Element {
   const selectedKeys = useMemo(
     () => selectedCountries?.map((country) => country.properties.adm0_id.toString()),
     [selectedCountries]

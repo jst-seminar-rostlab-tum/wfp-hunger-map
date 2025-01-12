@@ -2,7 +2,11 @@ import { Skeleton } from '@nextui-org/skeleton';
 import React from 'react';
 import { v4 as uuid } from 'uuid';
 
-export default function ComparisonAccordionSkeleton() {
+/**
+ * A skeleton component for the ComparisonAccordion component.
+ * @returns {JSX.Element} The ComparisonAccordionSkeleton component
+ */
+export default function ComparisonAccordionSkeleton(): JSX.Element {
   const N_ITEMS = 5;
   return (
     <div className="overflow-x-auto rounded-lg shadow-none">

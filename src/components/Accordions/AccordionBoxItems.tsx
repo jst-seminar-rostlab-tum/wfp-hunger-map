@@ -70,7 +70,7 @@ export default function AccordionBoxItems({
             title={
               <span className="flex justify-between items-center w-full">
                 {/* Since lighthosue looks up the parent background-color styles in order until an explicit background definition is found. It should add background color in parent element, avoid third party component like accordion has other influence of bg color */}
-                <span className={`flex gap-4 ${color}`}>
+                <span className="flex gap-4 bg-white dark:bg-black">
                   <Highlighter searchWords={highlightedTitleWords} textToHighlight={item.title} autoEscape />
 
                   {loading && <Spinner size="sm" />}

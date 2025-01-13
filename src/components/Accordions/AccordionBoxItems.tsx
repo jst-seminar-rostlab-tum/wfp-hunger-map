@@ -33,7 +33,6 @@ export default function AccordionBoxItems({
   loading = false,
   multipleSelectionMode = false,
   noSelectionMode = false,
-  color = 'bg-content1',
   maxWidth,
   expandAll = false,
   highlightedTitleWords = [],

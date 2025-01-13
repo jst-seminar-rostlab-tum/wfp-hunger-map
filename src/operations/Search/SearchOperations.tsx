@@ -10,7 +10,8 @@ export class SearchOperations {
   /**
    * For each element, wrap the text contents of its components with a `Highlighter` component. In addition, store all contained words into `containedWords`.
    *
-   * @param textElements Elements to deal with. This value should never change since the array indices are used as keys.
+   * @param {ReactElement[]} textElements Elements to deal with. This value should never change since the array indices are used as keys.
+   * @return {SearchableElement[]} text elements with an additional `containedWords` prop
    */
   static makeTextElementsSearchable(textElements: ReactElement[]): SearchableElement[] {
     return textElements.map((item, index) => {
@@ -28,7 +29,9 @@ export class SearchOperations {
 
   /**
    * Find all contained words for an accordion of tables and store them into the respective `containedWords` fields.
-   * @param items Accordion items where every `content` field is assumed to contain a `CustomTable`.
+   *
+   * @param {AccordionItemProps[]} items Accordion items where every `content` field is assumed to contain a `CustomTable`.
+   * @return {SearchableAccordionItemProps[]} Accordion items with an additional `containedWords` field
    */
   static makeDataSourceAccordionSearchable(items: AccordionItemProps[]): SearchableAccordionItemProps[] {
     return items.map((item) => {
@@ -42,6 +45,9 @@ export class SearchOperations {
 
   /**
    * For each item, wrap the text contents of its components with a `Highlighter` component. In addition, store all contained words into `containedWords`.
+   *
+   * @param {AccordionItemProps[]} items Accordion items to deal with
+   * @return {SearchableAccordionItemProps[]} Accordion items with an additional `containedWords` prop
    */
   static makeAccordionItemsSearchable(items: AccordionItemProps[]): SearchableAccordionItemProps[] {
     return items.map((item) => {
@@ -59,6 +65,9 @@ export class SearchOperations {
 
   /**
    * Put all contained words from a table row into a lowercase string.
+   *
+   * @param {DataSourceDescription} item A single row from the data source table
+   * @return {string} All contained words prepared for search
    */
   static sanitizeTableRow(item: DataSourceDescription): string {
     return SearchOperations.sanitizeText(
@@ -73,6 +82,9 @@ export class SearchOperations {
 
   /**
    * Put all contained words from an accordion item into a lowercase string.
+   *
+   * @param {AccordionItemProps} item A single accordion item
+   * @return {string} All contained words from title and description prepared for search
    */
   private static sanitizeAccordionItem(item: AccordionItemProps): string {
     return SearchOperations.sanitizeText(
@@ -82,6 +94,9 @@ export class SearchOperations {
 
   /**
    * Convert a React Node into a string, omitting component names and props.
+   *
+   * @param {ReactNode} item The react node to deal with
+   * @return {string} A string of the rendered node without component names and props
    */
   private static sanitizeReactNode(item: ReactNode): string {
     if (item === undefined) return '';
@@ -94,6 +109,9 @@ export class SearchOperations {
 
   /**
    * Turn an arbitrary text into a string of the contained words that is lowercase, without redundant whitespace and has no duplicate words.
+   *
+   * @param {string} text An arbitrary text
+   * @return {string} The text prepared for search as described
    */
   private static sanitizeText(text: string) {
     return Array.from(

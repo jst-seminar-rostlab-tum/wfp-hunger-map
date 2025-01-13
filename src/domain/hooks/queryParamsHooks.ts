@@ -36,6 +36,14 @@ export const useSelectedCountries = (countryMapData: CountryMapDataWrapper) => {
   return [selectedCountries, setSelectedCountriesFn] as const;
 };
 
+/**
+ * Return a delayed version of `input` that only changes after `input` has been constant for `msDelay` Milliseconds.
+ * This is useful for not triggering an event while a user is typing.
+ *
+ * @param {string} input The raw user input
+ * @param {number} msDelay Number of milliseconds without input changes that leads to a changed the output
+ * @return {string} debounced input
+ */
 const useDebounce = (input: string, msDelay: number) => {
   const [output, setOutput] = useState(input);
 
@@ -54,6 +62,7 @@ const useDebounce = (input: string, msDelay: number) => {
  * Updates to the query params happen in a debounced way to keep the browser history clean.
  *
  * Note: It is assumed that there is only one relevant query param, any others will be erased on change.
+ * @return {[string, (newValue: string) => void]} the current (non-debounced) query and a function to update the query
  */
 export const useSearchQuery = () => {
   const PARAM_NAME = 'search';

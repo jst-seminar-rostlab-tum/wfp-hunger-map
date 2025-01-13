@@ -8,7 +8,7 @@ import { getSearchWords } from '@/utils/searchUtils';
 /**
  * Show a search bar that synchronizes with the `?search=...` query param.
  *
- * @param setSearchWords Function to call if the search input changes.
+ * @param {(searchWords: string[]) => void} setSearchWords Function to call if the search input changes.
  */
 function DocsSearchBar({ setSearchWords }: DocsSearchBarProps) {
   const [search, setSearch] = useSearchQuery();

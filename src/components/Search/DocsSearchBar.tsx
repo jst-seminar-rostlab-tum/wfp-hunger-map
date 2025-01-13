@@ -8,7 +8,6 @@ import { getSearchWords } from '@/utils/searchUtils';
 /**
  * Show a search bar that synchronizes with the `?search=...` query param.
  *
- * See `SearchOperations.tsx` for information on how to add the search feature to a new page.
  * @param setSearchWords Function to call if the search input changes.
  */
 function DocsSearchBar({ setSearchWords }: DocsSearchBarProps) {

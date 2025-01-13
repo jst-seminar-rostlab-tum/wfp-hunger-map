@@ -13,8 +13,6 @@ import NutritionChoroplethProps from '@/domain/props/NutritionChoroplethProps';
 import { MapOperations } from '@/operations/map/MapOperations';
 import NutritionChoroplethOperations from '@/operations/map/NutritionChoroplethOperations';
 
-import AccordionModalSkeleton from '../../Accordions/AccordionModalSkeleton';
-import CountryLoadingLayer from '../CountryLoading';
 import NutritionAccordion from './NutritionAccordion';
 import NutritionStateChoropleth from './NutritionStateChoropleth';
 
@@ -23,23 +21,18 @@ import NutritionStateChoropleth from './NutritionStateChoropleth';
  * @param {NutritionChoroplethProps} props - The props of the component.
  * @param {FeatureCollection} props.data - The GeoJSON data of the country.
  * @param {string} props.countryId - The ID of the country.
- * @param {FeatureCollection} props.regionNutritionData - The GeoJSON data of the region.
- * @param {string} props.selectedCountryName - The name of the selected country.
- * @param {FeatureCollection<Geometry, GeoJsonProperties>} props.regionLabelData - The region data used for labeling.
  * @param {(tooltips: (prevRegionLabelData: L.Tooltip[]) => L.Tooltip[]) => void} props.setRegionLabelTooltips - Function to set the region label tooltips.
- * @param {boolean} props.isLoadingCountry - The loading state of the country.
+ * @param {() => void} [props.onDataUnavailable] - A callback to signal to the parent component that there's no regional Nutrition data for this country
  * @returns {JSX.Element} - The rendered NutritionChoropleth component
  */
 
 export default function NutritionChoropleth({
   data,
   countryId,
-  regionNutritionData,
-  selectedCountryName,
-  regionLabelData,
   setRegionLabelTooltips,
-  isLoadingCountry,
-}: NutritionChoroplethProps): JSX.Element {
+  onDataUnavailable,
+}: NutritionChoroplethProps) {
+  const countryData = data.features[0].properties;
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
   const { theme } = useTheme();
@@ -85,37 +78,22 @@ export default function NutritionChoropleth({
           }
         />
       )}
-      {/* Animated GeoJSON layer for the selected country */}
-      {selectedCountryId && (!regionNutritionData || !regionLabelData) && (
-        <>
-          <CountryLoadingLayer
-            data={data}
-            selectedCountryId={selectedCountryId}
-            color="hsl(var(--nextui-nutritionAnimation))"
-          />
-          <AccordionModalSkeleton />
-        </>
-      )}
+
       {countryId === selectedCountryId && (
-        <NutritionAccordion
-          setSelectedNutrient={setSelectedNutrient}
-          selectedNutrient={selectedNutrient}
-          countryName={selectedCountryName}
-          loading={isLoadingCountry}
-        />
-      )}
-      {
-        // if this country ('countryId') is selected and data is loaded ('regionNutritionData') show Choropleth for all states
-        regionNutritionData && countryId === selectedCountryId && regionLabelData && (
+        <>
+          <NutritionAccordion
+            setSelectedNutrient={setSelectedNutrient}
+            selectedNutrient={selectedNutrient}
+            countryName={countryData.adm0_name}
+          />
           <NutritionStateChoropleth
-            regionNutrition={regionNutritionData}
-            regionLabelData={regionLabelData}
+            onDataUnavailable={onDataUnavailable}
             setRegionLabelTooltips={setRegionLabelTooltips}
-            countryMapData={data.features[0] as CountryMapData}
+            countryMapData={data}
             selectedNutrient={selectedNutrient}
           />
-        )
-      }
+        </>
+      )}
     </div>
   );
 }

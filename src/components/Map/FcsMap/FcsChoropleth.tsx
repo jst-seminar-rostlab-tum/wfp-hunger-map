@@ -12,8 +12,6 @@ import { AccessibilityOperations } from '@/operations/map/AccessibilityOperation
 import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
 import { MapOperations } from '@/operations/map/MapOperations';
 
-import AccordionModalSkeleton from '../../Accordions/AccordionModalSkeleton';
-import CountryLoadingLayer from '../CountryLoading';
 import FcsAccordion from './FcsAccordion';
 import FscCountryChoropleth from './FcsCountryChoropleth';
 
@@ -21,36 +19,23 @@ import FscCountryChoropleth from './FcsCountryChoropleth';
  * @param {FcsChoroplethProps} props - The props of the component.
  * @param {FeatureCollection<Geometry, GeoJsonProperties>} props.data - The GeoJSON data of the country.
  * @param {string} props.countryId - The ID of the country.
- * @param {boolean} props.isLoadingCountry - The loading state of the country.
- * @param {FeatureCollection<Geometry, GeoJsonProperties>} props.regionData - The GeoJSON region data of the country.
- * @param {CountryData} props.countryData - The data of the country.
- * @param {CountryIso3Data} props.countryIso3Data - The ISO3 data of the country.
- * @param {string} props.selectedCountryName - The name of the selected country.
  * @param {Record<string, CountryFcsData>} props.fcsData - The FCS data of the country.
- * @param {FeatureCollection<Geometry, GeoJsonProperties>} props.regionLabelData - The GeoJSON region data used to label the region.
  * @param {(tooltips: (prevRegionLabelData: L.Tooltip[]) => L.Tooltip[]) => void} props.setRegionLabelTooltips - The function to set the region label tooltips.
+ * @param {() => void} [props.onDataUnavailable] - A callback to signal to the parent component that there's no regional FCS data for this country
  * @returns {JSX.Element} - The rendered FcsChoropleth component.
  */
 
 export default function FcsChoropleth({
   data,
   countryId,
-  isLoadingCountry,
-  regionData,
-  countryData,
-  countryIso3Data,
-  selectedCountryName,
   fcsData,
-  regionLabelData,
+  onDataUnavailable,
   setRegionLabelTooltips,
 }: FcsChoroplethProps): JSX.Element {
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
   const { theme } = useTheme();
-
-  const handleBackClick = () => {
-    setSelectedCountryId(null);
-  };
+  const countryData = data.features[0].properties;
 
   // adding the country name as a tooltip to each layer (on hover); the tooltip is not shown if the country is selected
   useEffect(() => {
@@ -81,7 +66,8 @@ export default function FcsChoropleth({
   }, [geoJsonRef]);
 
   return (
-    <div>
+    <>
+      {/* hover or disabled layer */}
       {countryId !== selectedCountryId && (
         <GeoJSON
           ref={(instance) => {
@@ -94,34 +80,22 @@ export default function FcsChoropleth({
           }
         />
       )}
-      {/* Animated GeoJSON layer for the selected country */}
-      {selectedCountryId && (!regionData || !regionLabelData) && (
+
+      {/* regions or loading layer */}
+      {countryId === selectedCountryId && (
         <>
-          <CountryLoadingLayer
-            data={data}
-            selectedCountryId={selectedCountryId}
-            color="hsl(var(--nextui-fcsAnimation))"
+          <FcsAccordion
+            countryCode={countryData.iso3}
+            countryId={countryData.adm0_id}
+            countryName={countryData.adm0_name}
           />
-          <AccordionModalSkeleton />
+          <FscCountryChoropleth
+            countryMapData={data}
+            setRegionLabelTooltips={setRegionLabelTooltips}
+            onDataUnavailable={onDataUnavailable}
+          />
         </>
       )}
-      {countryId === selectedCountryId && (
-        <FcsAccordion
-          countryData={countryData}
-          countryIso3Data={countryIso3Data}
-          loading={isLoadingCountry}
-          countryName={selectedCountryName}
-        />
-      )}
-      {regionData && countryId === selectedCountryId && regionLabelData && (
-        <FscCountryChoropleth
-          regionData={regionData}
-          handleBackButtonClick={handleBackClick}
-          regionLabelData={regionLabelData}
-          countryMapData={data.features[0] as CountryMapData}
-          setRegionLabelTooltips={setRegionLabelTooltips}
-        />
-      )}
-    </div>
+    </>
   );
 }

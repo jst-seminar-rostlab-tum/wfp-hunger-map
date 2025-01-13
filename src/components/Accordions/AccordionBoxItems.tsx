@@ -65,7 +65,7 @@ export default function AccordionBoxItems({
           <AccordionItem
             key={typeof item.title === 'string' ? item.title : `accordion-item-${index}`}
             aria-label={typeof item.title === 'string' ? item.title : `Accordion Item ${index}`}
-            className={`last:border-b-0 ${color} overflow-hidden shadow-md`}
+            className="last:border-b-0 bg-white dark:bg-black overflow-hidden shadow-md"
             hideIndicator={noSelectionMode}
             title={
               <span className="flex justify-between items-center w-full">

@@ -33,6 +33,8 @@ export default function AccordionBoxItems({
   loading = false,
   multipleSelectionMode = false,
   noSelectionMode = false,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  color = 'bg-content1',
   maxWidth,
   expandAll = false,
   highlightedTitleWords = [],

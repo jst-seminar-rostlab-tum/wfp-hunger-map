@@ -15,6 +15,20 @@ import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
 import CountryRepository from '@/domain/repositories/CountryRepository.ts';
 
 export class MapOperations {
+  /**
+   * Fetching all data to be displayed in the map considering user interaction
+   * @param selectedMapType Currently selected mode
+   * @param selectedCountryData Data of the selected country
+   * @param setIsLoadingCountry Updates the loading state
+   * @param setRegionData Updates region data
+   * @param setCountryData Updates country data
+   * @param setCountryIso3Data Updates country ISO3 data
+   * @param setRegionNutritionData Updates region nutrition data
+   * @param setIpcRegionData Updates IPC region data
+   * @param regionLabelData Data for region labels containing names and positioning data
+   * @param setRegionLabelData Updates region label data
+   * @param setIsDataAvailable Indicates whether data is available or if an error occurred
+   */
   static async fetchCountryData(
     selectedMapType: GlobalInsight,
     selectedCountryData: CountryMapData,
@@ -118,6 +132,14 @@ export class MapOperations {
     }
   }
 
+  /**
+   * Resets states of the map holding data for leaflet layers
+   * @param setRegionData Updates region data
+   * @param setCountryData Updates country data
+   * @param setCountryIso3Data Updates country ISO3 data
+   * @param setRegionNutritionData Updates region nutrition data
+   * @param setIpcRegionData Updates IPC region data
+   */
   static resetSelectedCountryData(
     setRegionData: (regionData: FeatureCollection<Geometry, GeoJsonProperties> | undefined) => void,
     setCountryData: (countryData: CountryData | undefined) => void,
@@ -132,14 +154,19 @@ export class MapOperations {
     setIpcRegionData(undefined);
   }
 
+  /**
+   * Converts a list of country features into a GeoJSON FeatureCollection.
+   * @param countryFeatures list of country features to be converted
+   */
   static convertCountriesToFeatureCollection = <T, U>(countryFeatures: Feature<T, U>[]): FeatureCollection => ({
     type: 'FeatureCollection',
     features: countryFeatures as GeoJsonFeature<Geometry, GeoJsonProperties>[],
   });
 
   /**
-   * Create a 'HTMLDivElement' rending the given 'countryName' within a 'CountryHoverPopover'.
-   * Needed cause leaflet tooltips do not accept React components.
+   * Creates a 'HTMLDivElement' rendering the given 'countryName' within a 'CountryHoverPopover'.
+   * Needed because leaflet tooltips do not accept React components.
+   * @param countryName The name to be displayed in the popover
    */
   static createCountryNameTooltipElement(countryName: string): HTMLDivElement {
     const tooltipContainer = document.createElement('div');
@@ -148,6 +175,12 @@ export class MapOperations {
     return tooltipContainer;
   }
 
+  /**
+   * Updates the region labels for example when the user is zooming. Recalculates if the full label or "..." should be displayed.
+   * @param feature region data in GeoJSON format
+   * @param map leaflet map that is used for application
+   * @param tooltip tooltip element to be updated
+   */
   static updateRegionLabelTooltip(
     feature: GeoJsonFeature<Geometry, GeoJsonProperties>,
     map: L.Map,
@@ -167,6 +200,14 @@ export class MapOperations {
     tooltip.setContent(truncatedText);
   }
 
+  /**
+   * Initial setup of tooltips containing the region labels.
+   * @param feature region data in GeoJSON format
+   * @param regionLabelData data containing information about the labels of the regions and their positions
+   * @param countryMapData country data of the country the region that is being set up belongs to
+   * @param map leaflet map that is used for application
+   * @param setRegionLabelTooltips updates a list holding all the region label tooltips that are currently in use
+   */
   static setupRegionLabelTooltip(
     feature: GeoJsonFeature<Geometry, GeoJsonProperties>,
     regionLabelData: FeatureCollection<Geometry, GeoJsonProperties>,

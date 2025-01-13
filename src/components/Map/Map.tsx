@@ -32,6 +32,14 @@ import IpcChoropleth from './IpcMap/IpcChoropleth';
 import NutritionChoropleth from './NutritionMap/NutritionChoropleth';
 import ZoomControl from './ZoomControl';
 
+/**
+ * Main map component containing the layers of the leaflet map
+ * @param countries A FeatureCollection containing country-level geographic data used for the base shapes and other things
+ * @param disputedAreas FeatureCollection of disputed territories
+ * @param fcsData Food security data used for choropleth
+ * @param alertData Alert-related data for display within the map
+ * @constructor
+ */
 export default function Map({ countries, disputedAreas, fcsData, alertData }: MapProps) {
   const mapRef = useRef<LeafletMap | null>(null);
   const { selectedMapType } = useSelectedMap();

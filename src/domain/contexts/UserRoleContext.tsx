@@ -5,6 +5,7 @@ import { UserRole } from '../enums/UserRole';
 
 interface UserRoleState {
   userRole: UserRole;
+  isAdmin: boolean;
   setUserRole: (newRole: UserRole) => void;
 }
 
@@ -15,6 +16,7 @@ interface UserRoleState {
  */
 const UserRoleContext = createContext<UserRoleState>({
   userRole: UserRole.RESTRICTED_USER,
+  isAdmin: false,
   setUserRole: () => {},
 });
 
@@ -39,6 +41,7 @@ export function UserRoleProvider({ children }: { children: React.ReactNode }) {
   const value = useMemo(
     () => ({
       userRole,
+      isAdmin: userRole === UserRole.ADMIN,
       setUserRole: onUserRoleChange,
     }),
     [userRole]

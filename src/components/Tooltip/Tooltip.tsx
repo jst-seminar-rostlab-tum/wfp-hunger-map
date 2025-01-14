@@ -16,9 +16,20 @@ import TooltipProps from '@/domain/props/TooltipProps';
  * @param {string} props.titleStyle tailwind classes to style the title (optional)
  * @param {string} props.textStyle tailwind classes to style the text (optional)
  * @param {number} props.offset offset of the tooltip, default is set to 10 (optional)
+ * @param {TooltipPlacement} props.placement placement of the tooltip, default is set to 'top' (optional)
  * @constructor
  */
-export function Tooltip({ children, title, text, delay, warning, titleStyle, textStyle, offset = 10 }: TooltipProps) {
+export function Tooltip({
+  children,
+  title,
+  text,
+  delay,
+  warning,
+  titleStyle,
+  textStyle,
+  offset = 10,
+  placement,
+}: TooltipProps) {
   const RADIUS = 'sm';
   const SHADOW = 'md';
   const COLOR = 'default';
@@ -43,6 +54,7 @@ export function Tooltip({ children, title, text, delay, warning, titleStyle, tex
       offset={offset}
       radius={RADIUS}
       shadow={SHADOW}
+      placement={placement}
     >
       {Array.isArray(children) ? <div> {...children} </div> : children}
     </NextUITooltip>

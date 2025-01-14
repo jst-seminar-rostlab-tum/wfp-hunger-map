@@ -15,7 +15,6 @@ import {
   oceanBounds,
   SELECTED_COUNTRY_ZOOM_THRESHOLD,
 } from '@/domain/constant/map/Map';
-import { useSelectedAlert } from '@/domain/contexts/SelectedAlertContext';
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSidebar } from '@/domain/contexts/SidebarContext';
@@ -33,7 +32,6 @@ import ZoomControl from './ZoomControl';
 export default function Map({ countries, disputedAreas, fcsData, alertData }: MapProps) {
   const mapRef = useRef<LeafletMap | null>(null);
   const { selectedMapType } = useSelectedMap();
-  const { resetAlert } = useSelectedAlert();
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
   const { closeSidebar } = useSidebar();
   const [renderer] = useState(new L.SVG({ padding: 0.5 }));
@@ -47,7 +45,6 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
   useEffect(() => {
     if (selectedCountryId) {
       closeSidebar();
-      resetAlert();
 
       const selectedCountryData: CountryMapData | undefined = countries.features.find(
         (country) => country.properties.adm0_id === selectedCountryId
@@ -97,18 +94,31 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
       <ZoomControl threshold={SELECTED_COUNTRY_ZOOM_THRESHOLD} callback={onZoomThresholdReached} />
       <BackToGlobalButton />
 
+      {/* Ocean */}
       <Pane name="ocean" style={{ zIndex: 0 }}>
         <SVGOverlay bounds={oceanBounds}>
           <rect width="100%" height="100%" fill="hsl(var(--nextui-ocean))" />
         </SVGOverlay>
       </Pane>
-      <Pane name="countries_base" style={{ zIndex: 1 }}>
-        <LeafletGeoJSON
-          interactive={false}
-          data={MapOperations.convertCountriesToFeatureCollection(countries.features)}
-          style={countryBaseStyle}
-        />
-      </Pane>
+
+      {/* Countries */}
+      <LeafletGeoJSON
+        interactive={false}
+        data={MapOperations.convertCountriesToFeatureCollection(countries.features)}
+        style={countryBaseStyle}
+      />
+
+      {/* Country borders */}
+      <LeafletGeoJSON
+        data={MapOperations.convertCountriesToFeatureCollection(countries.features)}
+        style={countryBorderStyle}
+      />
+
+      {/* Disputed areas */}
+      <LeafletGeoJSON
+        data={MapOperations.convertCountriesToFeatureCollection(disputedAreas.features)}
+        style={disputedAreaStyle}
+      />
       {selectedMapType === GlobalInsight.FOOD && countries.features && (
         <>
           {countries.features.map((country) => (
@@ -122,7 +132,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
             />
           ))}
           {!selectedCountryId && (
-            <Pane name="fcs_raster" style={{ zIndex: 2 }}>
+            <Pane name="fcs_raster" style={{ zIndex: 401 }}>
               <TileLayer url="https://static.hungermapdata.org/proteus_tiles/{z}/{x}/{y}.png" tms />
             </Pane>
           )}
@@ -140,13 +150,13 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
         ))}
 
       {selectedMapType === GlobalInsight.VEGETATION && (
-        <Pane name="vegetation_raster" style={{ zIndex: 2 }}>
+        <Pane name="vegetation_raster" style={{ zIndex: 401 }}>
           <TileLayer url="https://dev.api.earthobservation.vam.wfp.org/tiles/latest/viq_dekad/{z}/{x}/{y}.png" />
         </Pane>
       )}
 
       {selectedMapType === GlobalInsight.RAINFALL && (
-        <Pane name="vegetation_raster" style={{ zIndex: 2 }}>
+        <Pane name="vegetation_raster" style={{ zIndex: 401 }}>
           <TileLayer url="https://dev.api.earthobservation.vam.wfp.org/tiles/latest/r3q_dekad/{z}/{x}/{y}.png" />
         </Pane>
       )}
@@ -154,19 +164,6 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
       {selectedMapType === GlobalInsight.IPC && (
         <IpcChoropleth countries={countries} onDataUnavailable={onDataUnavailable} />
       )}
-
-      <Pane name="countries_border" style={{ zIndex: 3 }}>
-        <LeafletGeoJSON
-          data={MapOperations.convertCountriesToFeatureCollection(countries.features)}
-          style={countryBorderStyle}
-        />
-      </Pane>
-      <Pane name="disputed_areas" style={{ zIndex: 4 }}>
-        <LeafletGeoJSON
-          data={MapOperations.convertCountriesToFeatureCollection(disputedAreas.features)}
-          style={disputedAreaStyle}
-        />
-      </Pane>
     </MapContainer>
   );
 }

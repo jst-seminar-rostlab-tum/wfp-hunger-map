@@ -33,15 +33,15 @@ export function Providers({ children, themeProps }: ProvidersProps) {
           <SidebarProvider>
             <UserRoleProvider>
               <SelectedMapProvider>
-                <SelectedAlertProvider>
-                  <SelectedCountryIdProvider>
+                <SelectedCountryIdProvider>
+                  <SelectedAlertProvider>
                     <AccordionsModalProvider>
                       <SnackbarProvider>
                         <ChatbotProvider>{children}</ChatbotProvider>
                       </SnackbarProvider>
                     </AccordionsModalProvider>
-                  </SelectedCountryIdProvider>
-                </SelectedAlertProvider>
+                  </SelectedAlertProvider>
+                </SelectedCountryIdProvider>
               </SelectedMapProvider>
             </UserRoleProvider>
           </SidebarProvider>

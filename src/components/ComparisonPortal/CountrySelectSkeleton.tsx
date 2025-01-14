@@ -1,7 +1,11 @@
 import { Skeleton } from '@nextui-org/skeleton';
 import React from 'react';
 
-export default function CountrySelectionSkeleton() {
+/**
+ * A skeleton component for the CountrySelection component.
+ * @returns {JSX.Element} The CountrySelectionSkeleton component
+ */
+export default function CountrySelectionSkeleton(): JSX.Element {
   return (
     <div className="pb-4 space-y-6">
       <div className="group flex flex-col w-full">

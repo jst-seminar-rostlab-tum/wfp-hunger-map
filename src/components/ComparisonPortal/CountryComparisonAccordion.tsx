@@ -10,11 +10,20 @@ import { CountryComparisonOperations } from '@/operations/comparison-portal/Coun
 
 import AccordionContainer from '../Accordions/AccordionContainer';
 
+/**
+ * The `CountryComparisonAccordion` component displays comparison accordion for selected countries.
+ * It fetches data for selected countries and displays comparison accordion items. Data fetching is done using custom hooks that allow for parallel fetching, error handling and caching.
+ * @param {CountryComparisonAccordionProps} props Props for the CountryComparisonAccordion component
+ * @param {CountryMapData[] | undefined} props.selectedCountries Selected countries
+ * @param {(newCountries: CountryMapData[]) => void} props.setSelectedCountries Function to set selected countries
+ * @param {Dispatch<SetStateAction<string[]>>} props.setDisabledCountryIds Function to set disabled country ids
+ * @returns {JSX.Element} The CountryComparisonAccordion component
+ */
 export default function CountryComparisonAccordion({
   selectedCountries,
   setSelectedCountries,
   setDisabledCountryIds,
-}: CountryComparisonAccordionProps) {
+}: CountryComparisonAccordionProps): JSX.Element {
   const { showSnackBar } = useSnackbar();
 
   const countryDataQuery = useCountryDataListQuery(

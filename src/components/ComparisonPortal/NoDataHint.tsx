@@ -4,7 +4,19 @@ import { useEffect, useState } from 'react';
 import { isContinuousChartData } from '@/domain/entities/charts/ContinuousChartData.ts';
 import { NoDataHintProps } from '@/domain/props/NoDataHintProps.ts';
 
-export default function NoDataHint({ chartData, selectedCountryNames, isLoading }: NoDataHintProps) {
+/**
+ * Displays an alert when there is one or more selected countries that are not present in the chart.
+ * @param {NoDataHintProps} props Props for the NoDataHint component
+ * @param {ContinuousChartData | CategoricalChartData} props.chartData Chart data
+ * @param {string[]} props.selectedCountryNames Selected country names
+ * @param {boolean} props.isLoading Whether the data is loading
+ * @returns {JSX.Element | null} The NoDataHint component if there is missing data, otherwise null
+ */
+export default function NoDataHint({
+  chartData,
+  selectedCountryNames,
+  isLoading,
+}: NoDataHintProps): JSX.Element | null {
   const [formattedMissingCountryNames, setFormattedMissingCountryNames] = useState<string | null>(null);
 
   useEffect(() => {

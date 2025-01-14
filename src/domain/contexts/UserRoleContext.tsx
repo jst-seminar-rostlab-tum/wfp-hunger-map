@@ -9,7 +9,8 @@ interface UserRoleState {
 }
 
 /**
- * React context that manages the role of the current user. Defaults to restrictedUser or whatever is stored in the 'userRole' cookie
+ * React context that manages the role of the current user.
+ * Defaults to restrictedUser, or whatever is stored in the 'userRole' cookie as long as forecasts are enabled in the environment.
  * Should be updated to store the JWT once proper authentication is implemented
  */
 const UserRoleContext = createContext<UserRoleState>({
@@ -21,14 +22,16 @@ export function UserRoleProvider({ children }: { children: React.ReactNode }) {
   const [userRole, setUserRole] = useState<UserRole>(UserRole.RESTRICTED_USER);
 
   const onUserRoleChange = (newRole: UserRole) => {
-    // TODO: store JWT instead of role
-    cookies.set('userRole', newRole);
-    setUserRole(newRole);
+    if (process.env.NEXT_PUBLIC_FORECASTS_ENABLED === 'true') {
+      // TODO: store JWT instead of role
+      cookies.set('userRole', newRole);
+      setUserRole(newRole);
+    }
   };
 
   useEffect(() => {
     const storedRole = cookies.get('userRole');
-    if (storedRole) {
+    if (storedRole && process.env.NEXT_PUBLIC_FORECASTS_ENABLED === 'true') {
       setUserRole(storedRole as UserRole);
     }
   }, []);

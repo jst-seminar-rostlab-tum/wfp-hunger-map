@@ -1,3 +1,4 @@
+import { TooltipPlacement } from '@nextui-org/tooltip';
 import { ReactNode } from 'react';
 
 export default interface TooltipProps {
@@ -9,4 +10,5 @@ export default interface TooltipProps {
   titleStyle?: string;
   textStyle?: string;
   offset?: number;
+  placement?: TooltipPlacement;
 }

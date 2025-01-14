@@ -31,15 +31,15 @@ export function Providers({ children, themeProps }: ProvidersProps) {
         <QueryClientProvider client={cachedQueryClient}>
           <SidebarProvider>
             <SelectedMapProvider>
-              <SelectedAlertProvider>
-                <SelectedCountryIdProvider>
+              <SelectedCountryIdProvider>
+                <SelectedAlertProvider>
                   <AccordionsModalProvider>
                     <SnackbarProvider>
                       <ChatbotProvider>{children}</ChatbotProvider>
                     </SnackbarProvider>
                   </AccordionsModalProvider>
-                </SelectedCountryIdProvider>
-              </SelectedAlertProvider>
+                </SelectedAlertProvider>
+              </SelectedCountryIdProvider>
             </SelectedMapProvider>
           </SidebarProvider>
           <ReactQueryDevtools initialIsOpen={false} />

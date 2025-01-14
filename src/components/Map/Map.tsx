@@ -15,7 +15,6 @@ import {
   oceanBounds,
   SELECTED_COUNTRY_ZOOM_THRESHOLD,
 } from '@/domain/constant/map/Map';
-import { useSelectedAlert } from '@/domain/contexts/SelectedAlertContext';
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSidebar } from '@/domain/contexts/SidebarContext';
@@ -33,7 +32,6 @@ import ZoomControl from './ZoomControl';
 export default function Map({ countries, disputedAreas, fcsData, alertData }: MapProps) {
   const mapRef = useRef<LeafletMap | null>(null);
   const { selectedMapType } = useSelectedMap();
-  const { resetAlert } = useSelectedAlert();
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
   const { closeSidebar } = useSidebar();
   const [renderer] = useState(new L.SVG({ padding: 0.5 }));
@@ -47,7 +45,6 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
   useEffect(() => {
     if (selectedCountryId) {
       closeSidebar();
-      resetAlert();
 
       const selectedCountryData: CountryMapData | undefined = countries.features.find(
         (country) => country.properties.adm0_id === selectedCountryId

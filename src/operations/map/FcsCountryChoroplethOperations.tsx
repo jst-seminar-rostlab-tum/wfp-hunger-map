@@ -4,8 +4,6 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 
 import FcsRegionTooltip from '@/components/Map/FcsMap/FcsRegionTooltip';
-import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
-import { MapOperations } from '@/operations/map/MapOperations';
 
 export class FcsCountryChoroplethOperations {
   static fcsFill(fcs?: number): string {
@@ -30,14 +28,8 @@ export class FcsCountryChoroplethOperations {
   static onEachFeature(
     feature: Feature<Geometry, GeoJsonProperties>,
     layer: L.Layer,
-    regionData: FeatureCollection<Geometry, GeoJsonProperties>,
-    regionLabelData: FeatureCollection<Geometry, GeoJsonProperties>,
-    countryMapData: CountryMapData,
-    map: L.Map,
-    setRegionLabelTooltips: (tooltips: (prevRegionLabelData: L.Tooltip[]) => L.Tooltip[]) => void
+    regionData: FeatureCollection<Geometry, GeoJsonProperties>
   ) {
-    MapOperations.setupRegionLabelTooltip(feature, regionLabelData, countryMapData, map, setRegionLabelTooltips);
-
     // Hover behavior
     layer.on('mouseover', () => {
       const hoveredRegionFeature = regionData.features.find(

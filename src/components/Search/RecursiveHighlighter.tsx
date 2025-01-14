@@ -11,6 +11,8 @@ import { getSearchWords } from '@/utils/searchUtils';
  * * if `children` is a React Element (e.g. p or div): create the element and continue within its children (if exist)
  * * if `children` is an array (i.e. there are multiple children): deal with each item recursively
  * * if `children` is a string: wrap it with a `Highlighter` component
+ *
+ * @param {string | React.ReactElement | string[] | undefined} children content that should be made highlightable
  */
 function RecursiveHighlighter({ children }: RecursiveHighlighterProps) {
   const searchParams = useSearchParams();

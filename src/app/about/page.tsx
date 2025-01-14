@@ -20,8 +20,9 @@ function Page() {
   ];
 
   const [searchWords, setSearchWords] = useState<string[]>([]);
-  const [visibleAccordions, setVisibleAccordions] = useState<Set<string>>(new Set());
 
+  // maintain a set of accordions with search results to be able to show "No results" if there are none
+  const [visibleAccordions, setVisibleAccordions] = useState<Set<string>>(new Set());
   const handleVisibilityChange = useCallback(
     (key: string, isVisible: boolean) =>
       setVisibleAccordions((prevState) => {

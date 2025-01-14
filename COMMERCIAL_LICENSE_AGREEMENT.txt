@@ -34,7 +34,7 @@ Contact: partners@csee.tech
 
 Introduction
 
-This software is dual-licensed under the GNU General Public License (GPL) for open-source use and a proprietary commercial license for business use. If you cannot or do not wish to comply with the terms of the GPL, you may purchase a commercial license.
+This software is dual-licensed under the Server Side Public License (SSPL) for open-source use and a proprietary commercial license for business use. If you cannot or do not wish to comply with the terms of the SSPL, you may purchase a commercial license.
 
 This document outlines the terms and conditions of the commercial license.
 
@@ -44,7 +44,7 @@ Upon purchase of the commercial license, you are granted a non-exclusive, non-tr
 
 	1.	Use the software for internal or external business purposes.
 	2.	Integrate the software into proprietary applications without the obligation to release your source code.
-	3.	Avoid GPL obligations related to derivative works and source code sharing.
+	3.	Avoid SSPL obligations related to derivative works and source code sharing.
 
 2. Scope of Use
 

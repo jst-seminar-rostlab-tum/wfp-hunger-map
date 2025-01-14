@@ -18,7 +18,7 @@ export default interface CountryRepository {
    * Returns all the regions of a country and their FCS & RCS data
    * @param countryId
    */
-  getRegionData(countryId: number): Promise<AdditionalCountryData>;
+  getRegionData(countryId: number): Promise<AdditionalCountryData | number[]>;
 
   /**
    * Returns nutrition, currency exchange, balance of trade and inflation data about a country
@@ -27,7 +27,7 @@ export default interface CountryRepository {
   getCountryIso3Data(countryCode: string): Promise<CountryIso3Data>;
 
   getCountryIso3Notes(countryCode: string): Promise<CountryIso3Notes>; // probably unused
-  getRegionNutritionData(countryId: number): Promise<CountryMimiData>; // probably unused
+  getRegionNutritionData(countryId: number): Promise<CountryMimiData>;
 
   /**
    * Returns the IPC data for each region of the country

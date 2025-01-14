@@ -11,7 +11,7 @@ export interface ITopic {
   topic_name: string;
   topic_description: string;
   options?: IOption[] | undefined;
-  roles: UserRole[];
+  roles?: UserRole[];
 }
 
 export interface ISubscribe {

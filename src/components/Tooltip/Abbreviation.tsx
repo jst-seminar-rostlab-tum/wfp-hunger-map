@@ -8,6 +8,13 @@ import { getSearchWords } from '@/utils/searchUtils';
 
 import CustomInfoCircle from '../CustomInfoCircle/CustomInfoCircle';
 
+/**
+ * Render an abbreviation underlined and with a small info icon. Show a tooltip with the long form on hover.
+ *
+ * @param {string} abbreviation a key from the object in `domain/constant/abbreviations`
+ * @param {boolean | undefined} searchable whether to highlight the abbreviation based on the `?search=...` query param
+ * @constructor
+ */
 function Abbreviation({ abbreviation, searchable = true }: { abbreviation: string; searchable?: boolean }) {
   const searchParams = useSearchParams();
   let searchWords: string[] = [];

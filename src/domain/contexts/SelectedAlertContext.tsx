@@ -1,19 +1,33 @@
-import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
+import { createContext, ReactNode, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
-import { AlertType } from '../enums/AlertType';
+import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
+import { AlertType } from '@/domain/enums/AlertType';
 
 interface SelectedAlertsState {
   selectedAlert: AlertType | null;
-  setSelectedAlert: (value: AlertType) => void;
   isAlertSelected: (alertType: AlertType) => boolean;
   toggleAlert: (alertType: AlertType) => void;
-  resetAlert: () => void;
 }
 
 const SelectedAlertContext = createContext<SelectedAlertsState | undefined>(undefined);
 
 export function SelectedAlertProvider({ children }: { children: ReactNode }) {
   const [selectedAlert, setSelectedAlert] = useState<AlertType | null>(AlertType.COUNTRY_ALERTS);
+  const prevAlertRef = useRef<AlertType | null>(null);
+  const prevCountryIdRef = useRef<number | null>(null);
+  const { selectedCountryId } = useSelectedCountryId();
+
+  useEffect(() => {
+    if (!prevCountryIdRef.current && selectedCountryId) {
+      // Country is selected. Store current alert before clearing it
+      prevAlertRef.current = selectedAlert;
+      setSelectedAlert(null);
+    } else if (prevCountryIdRef.current && !selectedCountryId && !selectedAlert) {
+      // Country is deselected and there is no alert selected. Restore previous alert
+      setSelectedAlert(prevAlertRef.current);
+    }
+    prevCountryIdRef.current = selectedCountryId;
+  }, [selectedCountryId]);
 
   const isAlertSelected = (alertType: AlertType) => selectedAlert === alertType;
   const toggleAlert = (alertType: AlertType) => {
@@ -27,15 +41,11 @@ export function SelectedAlertProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const resetAlert = () => setSelectedAlert(null);
-
   const value = useMemo(
     () => ({
       selectedAlert,
-      setSelectedAlert,
       isAlertSelected,
       toggleAlert,
-      resetAlert,
     }),
     [selectedAlert]
   );

@@ -3,22 +3,25 @@ import { useTheme } from 'next-themes';
 import React from 'react';
 import { GeoJSON } from 'react-leaflet';
 
+import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import IpcGlobalChoroplethProps from '@/domain/props/IpcGlobalChoroplethProps';
 import { IpcChoroplethOperations } from '@/operations/map/IpcChoroplethOperations';
 
-function IpcGlobalChoropleth({
-  ipcData,
-  countries,
-  setSelectedCountryId,
-  selectedCountryId,
-}: IpcGlobalChoroplethProps) {
+function IpcGlobalChoropleth({ ipcData, countries }: IpcGlobalChoroplethProps) {
   const { theme } = useTheme();
+  const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
 
   const ipcColorData = IpcChoroplethOperations.generateColorMap(ipcData, countries) as FeatureCollection<
     Geometry,
     GeoJsonProperties
   >;
 
+  /**
+   * Handle feature events for country polygons.
+   * This will highlight the country and show the IPC phase information.
+   * @param feature GeoJSON feature object
+   * @param layer Leaflet layer object
+   */
   const handleCountryFeature = (feature: Feature<Geometry, GeoJsonProperties>, layer: L.Layer) => {
     IpcChoroplethOperations.initializeCountryLayer(feature, layer, ipcData, setSelectedCountryId, selectedCountryId!);
   };

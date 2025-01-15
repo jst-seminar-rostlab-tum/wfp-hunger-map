@@ -11,6 +11,8 @@ import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
 import { CollapsedSidebarProps } from '@/domain/props/CollapsedSidebarProps';
 import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
 
+import { Tooltip } from '../Tooltip/Tooltip';
+
 export function CollapsedSidebar({ mapDataFetching }: CollapsedSidebarProps) {
   const { toggleSidebar } = useSidebar();
   const { selectedMapType, setSelectedMapType } = useSelectedMap();
@@ -32,18 +34,20 @@ export function CollapsedSidebar({ mapDataFetching }: CollapsedSidebarProps) {
         <CardBody>
           <div className="flex flex-col gap-1">
             {SidebarOperations.getSidebarMapTypes().map((item) => (
-              <Button
-                isIconOnly
-                key={item.key}
-                variant={selectedMapType === item.key ? undefined : 'light'}
-                className={selectedMapType === item.key ? 'bg-primary' : undefined}
-                onClick={() => onMapTypeSelect(item.key)}
-              >
-                <div className="flex items-center justify-center relative">
-                  <NextImage unoptimized loading="eager" src={item.icon} alt={item.label} width={24} height={24} />
-                  {mapDataFetching[item.key] && <Spinner className="absolute" color="white" />}
-                </div>
-              </Button>
+              <Tooltip text={item.label} placement="right">
+                <Button
+                  isIconOnly
+                  key={item.key}
+                  variant={selectedMapType === item.key ? undefined : 'light'}
+                  className={selectedMapType === item.key ? 'bg-primary' : undefined}
+                  onClick={() => onMapTypeSelect(item.key)}
+                >
+                  <div className="flex items-center justify-center relative">
+                    <NextImage unoptimized loading="eager" src={item.icon} alt={item.label} width={24} height={24} />
+                    {mapDataFetching[item.key] && <Spinner className="absolute" color="white" />}
+                  </div>
+                </Button>
+              </Tooltip>
             ))}
           </div>
         </CardBody>

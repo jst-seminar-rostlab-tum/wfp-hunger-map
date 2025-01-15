@@ -1,5 +1,8 @@
-import { FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
+import { FeatureCollection, Geometry } from 'geojson';
+
+import { CountryProps } from '../entities/country/CountryMapData';
 
 export default interface IpcCountryChoroplethProps {
-  regionIpcData: FeatureCollection<Geometry, GeoJsonProperties>;
+  countryMapData: FeatureCollection<Geometry, CountryProps>;
+  onDataUnavailable: () => void;
 }

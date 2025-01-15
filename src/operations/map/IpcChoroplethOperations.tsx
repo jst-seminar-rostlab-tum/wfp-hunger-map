@@ -8,6 +8,17 @@ import { CountryMapData, CountryMapDataWrapper } from '@/domain/entities/country
 import { inactiveCountryOverlayStyling } from '@/styles/MapColors.ts';
 
 export class IpcChoroplethOperations {
+  /**
+   * Returns the style for a global country feature based on IPC data.
+   *
+   * @param feature - The map feature representing a country.
+   * @param adm0code - The country’s administrative code.
+   * @param ipcData - An array of IPC data for countries.
+   * @param isDark - A boolean indicating whether the dark mode styling should be applied.
+   *
+   * @returns A style object for the country, including color, border weight, fill opacity,
+   *          and fill color based on IPC data, or inactive country styling if no IPC data is available.
+   */
   static ipcGlobalStyle = (
     feature: Feature<Geometry, GeoJsonProperties>,
     adm0code: number,
@@ -25,6 +36,14 @@ export class IpcChoroplethOperations {
       : inactiveCountryOverlayStyling(isDark);
   };
 
+  /**
+   * Returns a color based on the given IPC population value.
+   *
+   * @param ipcPopulation - The IPC population percentage (0 to 100), where lower values
+   *                        represent better conditions and higher values indicate greater
+   *                        food insecurity.
+   * @returns A color code representing the IPC population range.
+   */
   static fillGlobalIpc = (ipcPopulation: number | null) => {
     if (ipcPopulation === null) return 'none';
     if (ipcPopulation < 0.1) return '#F6D1C1';
@@ -36,6 +55,13 @@ export class IpcChoroplethOperations {
     return '#710013';
   };
 
+  /**
+   * Returns the style for a country based on its IPC phase.
+   *
+   * @param feature - The map feature representing a country, which includes IPC phase data.
+   * @returns An object containing style properties for the country, including color,
+   *          border weight, fill opacity, and the fill color based on the IPC phase.
+   */
   static ipcCountryStyle = (feature: Feature<Geometry, GeoJsonProperties> | undefined) => ({
     color: 'hsl(var(--nextui-countryBorders))',
     weight: 1,
@@ -43,6 +69,12 @@ export class IpcChoroplethOperations {
     fillColor: IpcChoroplethOperations.fillCountryIpc(feature?.properties?.ipcPhase),
   });
 
+  /**
+   * Returns a color based on the given IPC phase.
+   *
+   * @param phase - The IPC phase number (1-6) that determines the color.
+   * @returns A color code representing the IPC phase.
+   */
   static fillCountryIpc = (phase: number) => {
     if (phase === null) return 'hsl(var(--nextui-notAnalyzed))';
     if (phase === 1) return '#D1FAD1';
@@ -54,6 +86,14 @@ export class IpcChoroplethOperations {
     return 'hsl(var(--nextui-notAnalyzed))';
   };
 
+  /**
+   * Adds IPC data to map features based on their region IDs.
+   *
+   * @param ipcData - List of IPC data, each linked to a region by its adm0_code.
+   * @param mapData - Map data containing geographic features with region IDs (adm0_id).
+   *
+   * @returns A GeoJSON FeatureCollection with updated map features that include IPC data.
+   */
   static generateColorMap = (ipcData: CountryIpcData[], mapData: CountryMapDataWrapper) => {
     const ipcDataById = Object.fromEntries(ipcData.map((data: CountryIpcData) => [data.adm0_code, data]));
 
@@ -72,6 +112,14 @@ export class IpcChoroplethOperations {
     return ipcData.find((currentCountry: CountryIpcData) => currentCountry.adm0_name === countryName) || null;
   };
 
+  /**
+   * Initialize the country layer
+   * @param feature - GeoJSON feature object
+   * @param layer - Leaflet layer object
+   * @param ipcData - Array of country IPC data objects
+   * @param setSelectedCountryId - Function to set the selected country id
+   * @param selectedCountryId - The currently selected country id
+   */
   static initializeCountryLayer(
     feature: Feature<Geometry, GeoJsonProperties>,
     layer: L.Layer,
@@ -79,14 +127,24 @@ export class IpcChoroplethOperations {
     setSelectedCountryId: (id: number | null) => void,
     selectedCountryId: number
   ) {
+    // Check if the country is active
     if (this.checkIfActive(feature as CountryMapData, ipcData)) {
+      // If the country is not the currently selected country, create a tooltip
       if (feature.properties?.adm0_id !== selectedCountryId) {
         this.createTooltip(feature, layer, ipcData);
       }
+      // Attach events to the layer
       this.attachEvents(feature, layer, setSelectedCountryId, selectedCountryId);
     }
   }
 
+  /**
+   * Attach events to the layer
+   * @param feature - GeoJSON feature object
+   * @param layer - Leaflet layer object
+   * @param setSelectedCountryId - Function to set the selected country id
+   * @param selectedCountryId - The currently selected country id
+   */
   static attachEvents(
     feature: Feature<Geometry, GeoJsonProperties>,
     layer: L.Layer,
@@ -116,23 +174,39 @@ export class IpcChoroplethOperations {
       },
 
       mouseout: () => {
+        // Restore the original layer style
         pathLayer.setStyle(originalStyle);
         document.getElementsByClassName('leaflet-container').item(0)?.classList.remove('interactive');
-
         pathLayer.closeTooltip();
       },
     });
   }
 
+  /**
+   * Checks if a country feature is active based on IPC data.
+   * @param feature - The country map data feature to check.
+   * @param ipcData - An array of country IPC data objects.
+   * @returns A boolean indicating if the feature is active.
+   */
   static checkIfActive(feature: CountryMapData, ipcData: CountryIpcData[]): boolean {
+    // Create a lookup table for IPC data by feature's adm0_code
     const ipcDataById = Object.fromEntries(ipcData.map((data: CountryIpcData) => [data.adm0_code, data]));
+
+    // Check if IPC data exists for the feature
     return ipcDataById[feature.properties.adm0_id] !== undefined;
   }
 
+  /**
+   * Create a tooltip for a country feature with IPC data.
+   * @param feature - The country map data feature to create a tooltip for.
+   * @param layer - The Leaflet layer object to bind the tooltip to.
+   * @param ipcData - An array of country IPC data objects.
+   */
   static createTooltip(feature: Feature<Geometry, GeoJsonProperties>, layer: L.Layer, ipcData: CountryIpcData[]) {
     const countryName = feature?.properties?.adm0_name;
     const selectedCountryData = this.findIpcData(countryName, ipcData);
 
+    // Get the IPC data for the country
     const dateOfAnalysis = selectedCountryData?.date_of_analysis || 'N/A';
     const analysisPeriod = selectedCountryData?.analysis_period || 'N/A';
     const ipcPercent = selectedCountryData?.ipc_percent ?? 0;
@@ -163,12 +237,19 @@ export class IpcChoroplethOperations {
       />
     );
 
+    // Bind the tooltip to the layer
     layer.bindTooltip(tooltipContainer, { className: 'leaflet-tooltip', sticky: true, direction: 'top' });
   }
 
+  /**
+   * Attach mouseover and mouseout events to the region layer
+   * @param feature - GeoJSON feature object
+   * @param layer - Leaflet layer object
+   */
   static attachEventsRegion(feature: Feature<Geometry, GeoJsonProperties>, layer: L.Layer) {
     const pathLayer = layer as L.Path;
     const originalStyle = { ...pathLayer.options };
+
     layer.on({
       mouseover: () => {
         if (feature?.properties?.ipcPhase) {
@@ -180,6 +261,7 @@ export class IpcChoroplethOperations {
           });
         }
       },
+      // Restore the original layer style
       mouseout: () => {
         pathLayer.setStyle(originalStyle);
       },

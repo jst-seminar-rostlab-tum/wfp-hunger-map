@@ -20,6 +20,12 @@ function IpcCountryChoropleth({ countryMapData, onDataUnavailable }: IpcCountryC
     }
   }, [regionIpcData]);
 
+  /**
+   * Handle feature events for country polygons.
+   * This will highlight the country and show the IPC phase information.
+   * @param feature GeoJSON feature object
+   * @param layer Leaflet layer object
+   */
   const handleCountryFeature = (feature: Feature<Geometry, GeoJsonProperties>, layer: L.Layer) => {
     IpcChoroplethOperations.attachEventsRegion(feature, layer);
   };

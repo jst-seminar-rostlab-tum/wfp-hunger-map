@@ -15,6 +15,14 @@ import { FcsAccordionOperations } from './FcsAccordionOperations';
 import NutritionAccordionText from './NutritionAccordionText';
 
 export class IpcFoodSecurityAccordionOperations {
+  /**
+   * Generates the content for the food security accordion based on the provided country data and delta values.
+   *
+   * @param {CountryData | undefined} countryData - The data for the selected country, which includes food security information.
+   * @param {number | null} deltaOneMonth - The change in food security over the last month.
+   * @param {number | null} deltaThreeMonth - The change in food security over the last three months.
+   * @returns {AccordionItemProps} An array of accordion items.
+   */
   static getFoodSecurityAccordionItems(
     countryData: CountryData | undefined,
     deltaOneMonth: number | null,
@@ -29,6 +37,7 @@ export class IpcFoodSecurityAccordionOperations {
       popoverInfo: <DataSourcePopover dataSourceKeys={['population', 'fcs']} />,
       content: hasData ? (
         <div className={cardsWrapperClass}>
+          {/* A card with the population of the country */}
           <CustomCard
             title={descriptions.population.title}
             content={[
@@ -40,6 +49,7 @@ export class IpcFoodSecurityAccordionOperations {
               },
             ]}
           />
+          {/* A card with the food security data */}
           <CustomCard
             content={[
               {
@@ -71,6 +81,11 @@ export class IpcFoodSecurityAccordionOperations {
     };
   }
 
+  /**
+   * Returns an array of accordion items containing nutrition data for a given country.
+   * @param {CountryIso3Data | undefined} countryIso3Data - The country data.
+   * @returns {AccordionItemProps} An array of accordion items.
+   */
   static getNutritionAccordionItems(countryIso3Data: CountryIso3Data | undefined) {
     const nutritionData = FcsAccordionOperations.getNutritionData(countryIso3Data);
     const hasData = nutritionData && !(nutritionData.Acute == null && nutritionData.Chronic == null);

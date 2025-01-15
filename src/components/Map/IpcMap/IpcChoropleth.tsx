@@ -16,8 +16,10 @@ function IpcChoropleth({ countries, onDataUnavailable }: IpcChoroplethProps) {
 
   return (
     <>
+      {/* Render the global IPC choropleth if ipcData is available */}
       {ipcData && <IpcGlobalChoropleth ipcData={ipcData} countries={countries} />}
 
+      {/* Render region IPC choropleth and accordion if country is selected */}
       {selectedCountryId && (
         <>
           <IpcAccordion countryMapData={countries} />

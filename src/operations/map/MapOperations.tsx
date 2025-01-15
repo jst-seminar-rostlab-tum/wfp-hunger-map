@@ -54,9 +54,9 @@ export class MapOperations {
    * Initial setup of tooltips containing the region labels.
    * @param feature region data in GeoJSON format
    * @param regionLabelData data containing information about the labels of the regions and their positions
-   * @param countryMapData country data of the country the region that is being set up belongs to
+   * @param countryIso3 iso3 code for matching the regions with the country
    * @param map leaflet map that is used for application
-   * @param setRegionLabelTooltips updates a list holding all the region label tooltips that are currently in use
+   * @return the created tooltip object or undefined
    */
   static setupRegionLabelTooltip(
     feature: Feature<CommonRegionProperties>,

@@ -4,24 +4,14 @@ import { Select, SelectItem } from '@nextui-org/react';
 import { useEffect, useMemo } from 'react';
 
 import { useSnackbar } from '@/domain/contexts/SnackbarContext';
-import { GlobalFcsData } from '@/domain/entities/country/CountryFcsData';
-import { CountryMapDataWrapper } from '@/domain/entities/country/CountryMapData';
 import { SNACKBAR_SHORT_DURATION } from '@/domain/entities/snackbar/Snackbar';
 import { SnackbarPosition, SnackbarStatus } from '@/domain/enums/Snackbar';
 import { useRegionDataQuery } from '@/domain/hooks/countryHooks';
+import { RegionSelectionProps } from '@/domain/props/RegionSelectionProps';
 import { CountryComparisonOperations } from '@/operations/comparison-portal/CountryComparisonOperations';
 import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
 
 import SelectionSkeleton from './CountrySelectSkeleton';
-
-interface RegionSelectionProps {
-  countryMapData: CountryMapDataWrapper;
-  globalFcsData: GlobalFcsData;
-  selectedRegionComparisonCountry: string | undefined;
-  setSelectedRegionComparisonCountry: (country: string | undefined) => void;
-  selectedRegions: string[];
-  setSelectedRegions: (regions: string[]) => void;
-}
 
 export default function RegionSelection({
   countryMapData,

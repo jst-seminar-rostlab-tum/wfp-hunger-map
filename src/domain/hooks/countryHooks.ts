@@ -63,6 +63,7 @@ export const useRegionDataQuery = (countryId: number) =>
         return res as AdditionalCountryData;
       },
       retry: false,
+      enabled: !Number.isNaN(countryId),
     },
     cachedQueryClient
   );

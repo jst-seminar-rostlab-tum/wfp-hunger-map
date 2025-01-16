@@ -11,29 +11,106 @@ import { CountryMapData, CountryMapDataWrapper } from '@/domain/entities/country
  */
 export const useSelectedCountries = (countryMapData: CountryMapDataWrapper) => {
   const PARAM_NAME = 'countries';
-
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [selectedCountries, setSelectedCountries] = useState<CountryMapData[] | undefined>(undefined);
 
-  // get state values from query params
   useEffect(() => {
-    const searchParamCountryCodes = searchParams.get(PARAM_NAME)?.split(',') ?? [];
-    const newSelectedCountries = countryMapData.features.filter((availableCountry) =>
-      searchParamCountryCodes.includes(availableCountry.properties.adm0_id.toString())
+    const countryIds = searchParams.get(PARAM_NAME)?.split(',') ?? [];
+    const countries = countryMapData.features.filter((country) =>
+      countryIds.includes(country.properties.adm0_id.toString())
     );
-    setSelectedCountries(newSelectedCountries);
+    setSelectedCountries(countries);
   }, [searchParams]);
 
-  // update state and query params with new value
-  const setSelectedCountriesFn = (newValue: CountryMapData[] | undefined) => {
-    setSelectedCountries(newValue);
-    const selectedCountryIds = newValue?.map((country) => country.properties.adm0_id) ?? [];
-    router.push(`${pathname}?${PARAM_NAME}=${selectedCountryIds.join(',')}`);
+  const setSelectedCountriesFn = (countries: CountryMapData[] | undefined) => {
+    setSelectedCountries(countries);
+    const countryIds = countries?.map((c) => c.properties.adm0_id) ?? [];
+    const updatedParams = new URLSearchParams(searchParams.toString());
+    if (countryIds.length > 0) {
+      updatedParams.set(PARAM_NAME, countryIds.join(','));
+    } else {
+      updatedParams.delete(PARAM_NAME);
+    }
+    router.push(`${pathname}?${updatedParams.toString()}`);
   };
 
   return [selectedCountries, setSelectedCountriesFn] as const;
+};
+
+export const useSelectedTab = () => {
+  const PARAM_NAME = 'tab';
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [selectedTab, setSelectedTab] = useState<string>(() => {
+    return searchParams.get(PARAM_NAME) ?? 'country';
+  });
+
+  useEffect(() => {
+    setSelectedTab(searchParams.get(PARAM_NAME) ?? 'country');
+  }, [searchParams]);
+
+  const setSelectedTabFn = (tab: string) => {
+    setSelectedTab(tab);
+    const updatedParams = new URLSearchParams(searchParams.toString());
+    if (tab) {
+      updatedParams.set(PARAM_NAME, tab);
+    } else {
+      updatedParams.delete(PARAM_NAME);
+    }
+    router.push(`${pathname}?${updatedParams.toString()}`);
+  };
+
+  return [selectedTab, setSelectedTabFn] as const;
+};
+
+export const useSelectedRegions = () => {
+  const REGION_PARAM = 'regions';
+  const COMPARISON_COUNTRY_PARAM = 'regionComparisonCountry';
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
+  const [selectedRegionComparisonCountry, setSelectedRegionComparisonCountry] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    setSelectedRegions(searchParams.get(REGION_PARAM)?.split(',') ?? []);
+    setSelectedRegionComparisonCountry(searchParams.get(COMPARISON_COUNTRY_PARAM) ?? undefined);
+  }, [searchParams]);
+
+  const setSelectedRegionsFn = (regions: string[]) => {
+    setSelectedRegions(regions);
+    const updatedParams = new URLSearchParams(searchParams.toString());
+    if (regions.length > 0) {
+      updatedParams.set(REGION_PARAM, regions.join(','));
+    } else {
+      updatedParams.delete(REGION_PARAM);
+    }
+    router.push(`${pathname}?${updatedParams.toString()}`);
+  };
+
+  const setSelectedRegionComparisonCountryFn = (comparisonCountry: string | undefined) => {
+    setSelectedRegionComparisonCountry(comparisonCountry);
+    setSelectedRegions([]);
+    const updatedParams = new URLSearchParams(searchParams.toString());
+    if (comparisonCountry) {
+      updatedParams.set(COMPARISON_COUNTRY_PARAM, comparisonCountry);
+      updatedParams.delete(REGION_PARAM);
+    } else {
+      updatedParams.delete(COMPARISON_COUNTRY_PARAM);
+    }
+    router.push(`${pathname}?${updatedParams.toString()}`);
+  };
+
+  return {
+    selectedRegions,
+    setSelectedRegions: setSelectedRegionsFn,
+    selectedRegionComparisonCountry,
+    setSelectedRegionComparisonCountry: setSelectedRegionComparisonCountryFn,
+  };
 };
 
 /**

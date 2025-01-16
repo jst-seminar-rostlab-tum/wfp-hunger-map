@@ -29,6 +29,7 @@ export default function CountrySelection({
   setSelectedCountries,
   disabledCountryIds,
 }: CountrySelectionProps): JSX.Element {
+  const COUNTRY_LIMIT = 5;
   const selectedKeys = useMemo(
     () => selectedCountries?.map((country) => country.properties.adm0_id.toString()),
     [selectedCountries]
@@ -43,8 +44,7 @@ export default function CountrySelection({
     return availableCountries
       .filter(
         (country) =>
-          // if there are already 5 selected countries, disable the rest
-          selectedCountries.length >= 5 &&
+          selectedCountries.length >= COUNTRY_LIMIT &&
           !selectedCountries.find(
             (selectedCountry) => selectedCountry.properties.adm0_id === country.properties.adm0_id
           )

@@ -1,9 +1,15 @@
-import { Select, SelectItem } from '@nextui-org/react';
-import { useMemo } from 'react';
+'use client';
 
+import { Select, SelectItem } from '@nextui-org/react';
+import { useEffect, useMemo } from 'react';
+
+import { useSnackbar } from '@/domain/contexts/SnackbarContext';
 import { GlobalFcsData } from '@/domain/entities/country/CountryFcsData';
 import { CountryMapDataWrapper } from '@/domain/entities/country/CountryMapData';
+import { SNACKBAR_SHORT_DURATION } from '@/domain/entities/snackbar/Snackbar';
+import { SnackbarPosition, SnackbarStatus } from '@/domain/enums/Snackbar';
 import { useRegionDataQuery } from '@/domain/hooks/countryHooks';
+import { CountryComparisonOperations } from '@/operations/comparison-portal/CountryComparisonOperations';
 import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
 
 import SelectionSkeleton from './CountrySelectSkeleton';
@@ -25,11 +31,26 @@ export default function RegionSelection({
   selectedRegions,
   setSelectedRegions,
 }: RegionSelectionProps): JSX.Element {
+  const { data: regionData, isLoading, error } = useRegionDataQuery(Number(selectedRegionComparisonCountry));
+  const { showSnackBar } = useSnackbar();
   const availableCountries = useMemo(() => {
     return countryMapData.features.filter((country) => FcsChoroplethOperations.checkIfActive(country, globalFcsData));
   }, [countryMapData, globalFcsData]);
 
-  const { data: regionData, isLoading } = useRegionDataQuery(Number(selectedRegionComparisonCountry));
+  useEffect(() => {
+    if (error) {
+      const errorCountryName = CountryComparisonOperations.getCountryNameById(
+        Number(selectedRegionComparisonCountry),
+        countryMapData.features
+      );
+      showSnackBar({
+        message: `Error fetching region data for ${errorCountryName}`,
+        status: SnackbarStatus.Error,
+        position: SnackbarPosition.BottomMiddle,
+        duration: SNACKBAR_SHORT_DURATION,
+      });
+    }
+  }, [error]);
 
   return (
     <div className="pb-4 flex items-center gap-4">
@@ -67,7 +88,7 @@ export default function RegionSelection({
           className="w-full"
           variant="faded"
           color="primary"
-          isDisabled={!selectedRegionComparisonCountry}
+          isDisabled={error !== null || !selectedRegionComparisonCountry}
         >
           {(regionData?.features || []).map((region) => (
             <SelectItem

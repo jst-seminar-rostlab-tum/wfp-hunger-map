@@ -6,6 +6,7 @@ import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import { Button } from '@nextui-org/button';
 import { Chip } from '@nextui-org/chip';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react';
+import { Skeleton } from '@nextui-org/skeleton';
 import { Tooltip } from '@nextui-org/tooltip';
 import { DocumentDownload, Minus } from 'iconsax-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -43,6 +44,7 @@ export default function PdfViewer({
   const [tooltipPosition, setTooltipPosition] = useState<{ top: number; left: number } | null>(null);
   const [pageWidth, setPageWidth] = useState(window.innerWidth * 0.9);
   const topBarRef = useRef<HTMLDivElement>(null);
+  const [isDocumentLoading, setIsDocumentLoading] = useState<boolean>(true);
 
   const onResize = useCallback(() => {
     setPageWidth(topBarRef.current ? topBarRef.current.offsetWidth * 0.8 : window.innerWidth * 0.9);
@@ -104,11 +106,16 @@ export default function PdfViewer({
       {/* Top Bar */}
       <div ref={topBarRef} className="bg-background w-full py-4 flex justify-between items-center sticky top-0 z-10">
         <h1 className="text-lg font-semibold">Preview</h1>
-        <Chip className="absolute left-1/2 transform -translate-x-1/2 dark:bg-secondary bg-surfaceGrey" size="md">
-          <p className="text-sm text-black">
-            {pageNumber} / {totalPages}
-          </p>
-        </Chip>
+
+        {isDocumentLoading ? (
+          <Skeleton className="absolute left-1/2 transform -translate-x-1/2 rounded-full w-14 h-7 bg-content1 dark:bg-content1" />
+        ) : (
+          <Chip className="absolute left-1/2 transform -translate-x-1/2 dark:bg-secondary bg-surfaceGrey" size="md">
+            <p className="text-sm text-black">
+              {pageNumber} / {totalPages}
+            </p>
+          </Chip>
+        )}
         <div className="flex items-center space-x-2">
           <Dropdown>
             <DropdownTrigger>
@@ -140,7 +147,7 @@ export default function PdfViewer({
       </div>
 
       {/* PDF Viewer */}
-      <div className="w-full h-full bg-background flex-grow flex justify-center items-center pb-10 z-0">
+      <div className="w-full h-full bg-background flex-grow flex justify-center items-center pb-10 z-0 relative">
         <div className="max-w-3xl">
           {file && (
             <Document
@@ -156,11 +163,17 @@ export default function PdfViewer({
                   key={`page_${index + 1}`}
                   pageNumber={index + 1}
                   width={pageWidth}
+                  onRenderSuccess={() => {
+                    setIsDocumentLoading(false);
+                  }}
                 />
               ))}
             </Document>
           )}
         </div>
+        {isDocumentLoading && (
+          <Skeleton className="absolute top-0 left-20 right-20 bottom-0 bg-content1 dark:bg-content1" />
+        )}
       </div>
 
       {/* Tooltip */}

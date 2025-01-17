@@ -4,7 +4,6 @@ import { Accordion, AccordionItem } from '@nextui-org/accordion';
 import { Spinner } from '@nextui-org/spinner';
 import { useEffect, useState } from 'react';
 import Highlighter from 'react-highlight-words';
-import { v4 as uuid } from 'uuid';
 
 import { AccordionContainerProps } from '@/domain/props/AccordionContainerProps';
 import AccordionOperations from '@/operations/accordions/AccordionOperations';
@@ -56,7 +55,6 @@ export default function AccordionBoxItems({
         </div>
       )}
       <Accordion
-        key={uuid()}
         variant="splitted"
         selectionMode={selectionMode}
         className="p-0 mb-4"

@@ -24,7 +24,7 @@ import ContinuousChartOperations from '@/operations/charts/ContinuousChartOperat
  * 2. Add another switch case in `ContinuousChartOperations.convertToContinuousChartData` to convert the new interface to `ContinuousChartData`.
  *
  * @param {Object} props - The properties object
- * @param {ContinuousChartData | BalanceOfTradeGraph | CurrencyExchangeGraph | InflationGraphs} props.data
+ * @param {ContinuousChartData | CurrencyExchangeGraph | InflationGraphs} props.data
  *        the actual data to be used in the chart
  * @param {string} props.title chart title (optional)
  * @param {string} props.description chart description text (optional)

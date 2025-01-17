@@ -27,7 +27,7 @@ export default function FscCountryChoropleth({
 
   const map = useMap();
   const { data: regionData, isLoading: regionDataLoading, error } = useRegionDataQuery(countryData.adm0_id);
-  const { data: regionLabelData, isLoading: regionLabelDataLoading } = useRegionLabelQuery();
+  const { data: regionLabelData } = useRegionLabelQuery();
   const hasRendered = useRef(false);
   const dataLoaded = useMemo(() => !!regionData && !!regionLabelData, [regionData, regionLabelData]);
 
@@ -52,7 +52,7 @@ export default function FscCountryChoropleth({
     }
   }, [dataLoaded]);
 
-  return !regionData || !regionLabelData || regionDataLoading || regionLabelDataLoading ? (
+  return !regionData || regionDataLoading ? (
     <>
       <CountryLoadingLayer countryMapData={countryMapData} color="hsl(var(--nextui-fcsAnimation))" />
       <AccordionModalSkeleton />

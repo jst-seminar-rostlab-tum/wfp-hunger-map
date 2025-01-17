@@ -71,7 +71,7 @@ export class FcsAccordionOperations {
       ],
     };
 
-    if (rcsiForcastData) {
+    if (rcsiForcastData && process.env.NEXT_PUBLIC_FORECASTS_ENABLED === 'true') {
       rcsData.lines.push({
         name: descriptions.rCsi.forecastLegendTitle,
         showRange: true,

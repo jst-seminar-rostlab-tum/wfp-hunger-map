@@ -16,6 +16,7 @@ import { SelectedCountryIdProvider } from '@/domain/contexts/SelectedCountryIdCo
 import { SelectedMapProvider } from '@/domain/contexts/SelectedMapContext';
 import { SidebarProvider } from '@/domain/contexts/SidebarContext';
 import { SnackbarProvider } from '@/domain/contexts/SnackbarContext';
+import { UserRoleProvider } from '@/domain/contexts/UserRoleContext';
 
 export interface ProvidersProps {
   children: React.ReactNode;
@@ -30,17 +31,19 @@ export function Providers({ children, themeProps }: ProvidersProps) {
       <NextThemesProvider defaultTheme="system" {...themeProps}>
         <QueryClientProvider client={cachedQueryClient}>
           <SidebarProvider>
-            <SelectedMapProvider>
-              <SelectedCountryIdProvider>
-                <SelectedAlertProvider>
-                  <AccordionsModalProvider>
-                    <SnackbarProvider>
-                      <ChatbotProvider>{children}</ChatbotProvider>
-                    </SnackbarProvider>
-                  </AccordionsModalProvider>
-                </SelectedAlertProvider>
-              </SelectedCountryIdProvider>
-            </SelectedMapProvider>
+            <UserRoleProvider>
+              <SelectedMapProvider>
+                <SelectedCountryIdProvider>
+                  <SelectedAlertProvider>
+                    <AccordionsModalProvider>
+                      <SnackbarProvider>
+                        <ChatbotProvider>{children}</ChatbotProvider>
+                      </SnackbarProvider>
+                    </AccordionsModalProvider>
+                  </SelectedAlertProvider>
+                </SelectedCountryIdProvider>
+              </SelectedMapProvider>
+            </UserRoleProvider>
           </SidebarProvider>
           <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>

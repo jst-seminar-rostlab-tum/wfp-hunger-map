@@ -54,6 +54,7 @@ export const foodSecurityDescriptions = {
   fcs: {
     title: 'Food Consumption Score (FCS)',
     legendTitle: 'People with Insufficient Food Consumption',
+    forecastLegendTitle: 'Forecasted People with Insufficient Food Consumption',
     summary: 'Number of people with poor or borderline food consumption according to the Food Consumption Score (FCS).',
     description: (
       <>
@@ -116,6 +117,7 @@ export const foodSecurityDescriptions = {
   rCsi: {
     title: 'reduced Coping Strategies Index (rCSI)',
     legendTitle: 'People Using Crisis or Above Crisis Food-Based Coping',
+    forecastLegendTitle: 'Forecasted People Using Crisis or Above Crisis Food-Based Coping',
     summary: 'Frequency and severity of behaviors when faced with shortages of food.',
     description: (
       <>

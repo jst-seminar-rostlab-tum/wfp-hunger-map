@@ -51,9 +51,8 @@ export function CookieConsentPopup() {
           Decline
         </CustomButton>
         <CustomButton
-          color="secondary"
           size="sm"
-          className="-order-1 md:order-2 lg:-order-1 xl:order-2 text-content1"
+          className="-order-1 md:order-2 lg:-order-1 xl:order-2 text-content1 bg-analyBtn"
           onClick={() => setCookieConsent(true)}
         >
           Allow Analytics

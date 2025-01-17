@@ -1,5 +1,4 @@
 import descriptions from '@/domain/constant/dataSources/dataSourceDescriptions';
-import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph';
 import { ContinuousChartData } from '@/domain/entities/charts/ContinuousChartData.ts';
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph';
 import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs';
@@ -55,13 +54,27 @@ export class FcsAccordionOperations {
     };
   }
 
-  static getBalanceOfTradeChartData(countryIso3Data?: CountryIso3Data): BalanceOfTradeGraph | null {
+  static getBalanceOfTradeChartData(countryIso3Data?: CountryIso3Data): ContinuousChartData | null {
     if (!countryIso3Data?.balanceOfTradeGraph?.data) {
       return null;
     }
+
+    // if any value is more than a million -> formatToMillion() is applied to every value
+    const applyFormatToMillion = countryIso3Data.balanceOfTradeGraph.data.some((d) => Math.abs(d.y) >= 1000000);
+
     return {
-      type: ContinuousChartDataType.BALANCE_OF_TRADE_CHART,
-      data: countryIso3Data.balanceOfTradeGraph.data,
+      type: ContinuousChartDataType.LINE_CHART_DATA,
+      xAxisType: 'datetime',
+      yAxisLabel: applyFormatToMillion ? 'Mill USD' : 'USD',
+      lines: [
+        {
+          name: descriptions.balanceOfTrade.title,
+          dataPoints: countryIso3Data.balanceOfTradeGraph.data.map((d) => ({
+            x: new Date(d.x).getTime(),
+            y: applyFormatToMillion ? formatToMillion(d.y) : d.y,
+          })),
+        },
+      ],
     };
   }
 

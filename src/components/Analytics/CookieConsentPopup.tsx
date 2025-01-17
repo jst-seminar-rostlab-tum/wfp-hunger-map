@@ -52,7 +52,7 @@ export function CookieConsentPopup() {
         </CustomButton>
         <CustomButton
           size="sm"
-          className="-order-1 md:order-2 lg:-order-1 xl:order-2 text-content1 bg-analyBtn"
+          className="-order-1 md:order-2 lg:-order-1 xl:order-2 text-white bg-analyBtn"
           onClick={() => setCookieConsent(true)}
         >
           Allow Analytics

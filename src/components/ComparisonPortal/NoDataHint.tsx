@@ -28,6 +28,14 @@ export default function NoDataHint({
     const missingCountryNames = selectedCountryNames.filter(
       (countryName) => !countryNamesInChart.includes(countryName)
     );
+
+    // if there is no data for at least one country we do not show the warnings
+    // cause the chart components will display a "no data available" message
+    if (missingCountryNames.length === selectedCountryNames.length) {
+      setFormattedMissingCountryNames(null);
+      return;
+    }
+
     switch (missingCountryNames.length) {
       case 0:
         setFormattedMissingCountryNames(null);

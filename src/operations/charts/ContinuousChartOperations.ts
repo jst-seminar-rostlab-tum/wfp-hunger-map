@@ -10,12 +10,10 @@ import highchartsMore from 'highcharts/highcharts-more';
 import patternFill from 'highcharts/modules/pattern-fill';
 
 import descriptions from '@/domain/constant/dataSources/dataSourceDescriptions';
-import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph.ts';
 import { ContinuousChartData } from '@/domain/entities/charts/ContinuousChartData.ts';
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph.ts';
 import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
 import { ContinuousChartDataType } from '@/domain/enums/ContinuousChartDataType.ts';
-import { formatToMillion } from '@/utils/formatting.ts';
 import { getTailwindColor } from '@/utils/tailwind-util.ts';
 
 // initialize the exporting module
@@ -92,26 +90,11 @@ export default class ContinuousChartOperations {
    * that converts the new interface into `ContinuousChartData`.
    */
   public static convertToContinuousChartData(
-    data: ContinuousChartData | BalanceOfTradeGraph | CurrencyExchangeGraph | InflationGraphs
+    data: ContinuousChartData | CurrencyExchangeGraph | InflationGraphs
   ): ContinuousChartData {
     switch (data.type) {
       case ContinuousChartDataType.LINE_CHART_DATA:
         return data;
-
-      case ContinuousChartDataType.BALANCE_OF_TRADE_CHART:
-        return {
-          type: ContinuousChartDataType.LINE_CHART_DATA,
-          xAxisType: 'datetime',
-          yAxisLabel: 'Mill USD',
-          lines: [
-            {
-              name: descriptions.balanceOfTrade.title,
-              dataPoints: data.data.map((p) => {
-                return { x: new Date(p.x).getTime(), y: formatToMillion(p.y) };
-              }),
-            },
-          ],
-        };
 
       case ContinuousChartDataType.CURRENCY_EXCHANGE_CHART:
         return {

@@ -27,7 +27,7 @@ export class FcsFoodSecurityOperations {
     const nutritionData = FcsAccordionOperations.getNutritionData(countryIso3Data);
     return [
       {
-        title: 'Food Security',
+        title: 'Current Food Security',
         infoIcon: <CustomInfoCircle />,
         popoverInfo: <DataSourcePopover dataSourceKeys={['population', 'fcs']} />,
         content: (

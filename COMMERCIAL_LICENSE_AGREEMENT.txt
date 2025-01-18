@@ -5,29 +5,34 @@ Version: 1.0
 Copyright: © 2025 Center for Software Engineering Excellence (CSEE)
 Authors: 
 -	Technical Project Lead
-o	Lachezar Marinov (lachezarmarinov88@gmail.com)
+		Lachezar Marinov (lachezarmarinov88@gmail.com)
+
 -	Team Leads (in alphabetical order)
-o	Bohdan Garchu (Frontend)
-o	Cansu Moran (Backend)
-o	Sámuel Fekete (Meta)
+		Bohdan Garchu (Frontend)
+		Cansu Moran (Backend)
+		Sámuel Fekete (Meta)
+
 -	Frontend (in alphabetical order)
-o	Ahmed Farouk Abdelsalam
-o	Armanpreet Ghotra
-o	Haidong Xu
-o	Jakob Schödl
-o	Linus Sander
+		Ahmed Farouk Abdelsalam
+		Armanpreet Ghotra
+		Haidong Xu
+		Jakob Schödl
+		Linus Sander
+
 -	Backend (in alphabetical order)
-o	Georgi Peev
-o	Marius Moldovan
-o	Muhammed Emre Bayraktaroglu
-o	Shaurya Sharma
+		Georgi Peev
+		Marius Moldovan
+		Muhammed Emre Bayraktaroglu
+		Shaurya Sharma
+
 -	Meta (in alphabetical order)
-o	Ahmet Selman Güclü
-o	Georgi Tsipov
-o	Lukas Fabio Weigmann
+		Ahmet Selman Güclü
+		Georgi Tsipov
+		Lukas Fabio Weigmann
+
 -	Program Management (in alphabetical order)
-o	Amin Ben Saad
-o	Haochun Ma
+		Amin Ben Saad
+		Haochun Ma
 
 Website: csee.tech
 Contact: partners@csee.tech

@@ -26,7 +26,7 @@ export default function RegionComparisonAccordion({
     return RegionComparisonOperations.getComparisonAccordionItems(chartData);
   }, [regionData, selectedRegions, showRelativeNumbers]);
 
-  if (!accordionItems || isLoading) return <ComparisonAccordionSkeleton />;
+  if (!accordionItems || isLoading) return <ComparisonAccordionSkeleton nItems={2} />;
 
   if (selectedRegions.length < 2) {
     return (

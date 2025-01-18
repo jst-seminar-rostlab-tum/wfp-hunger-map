@@ -6,7 +6,7 @@ export default function Loading() {
     <>
       <h1>Comparison Portal</h1>
       <SelectionSkeleton />
-      <ComparisonAccordionSkeleton />
+      <ComparisonAccordionSkeleton nItems={5} />
     </>
   );
 }

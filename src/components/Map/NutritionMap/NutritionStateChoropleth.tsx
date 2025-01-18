@@ -33,7 +33,6 @@ export default function NutritionStateChoropleth({
   const map = useMap();
   const { data: nutritionData, isLoading } = useRegionNutritionDataQuery(countryData.adm0_id);
   const { data: regionLabelData } = useRegionLabelQuery();
-  const hasRendered = useRef(false);
   const dataLoaded = useMemo(() => !!nutritionData && !!regionLabelData, [nutritionData, regionLabelData]);
 
   useEffect(() => {
@@ -64,11 +63,7 @@ export default function NutritionStateChoropleth({
 
   useEffect(() => {
     let tooltips: L.Tooltip[] = [];
-    if (!hasRendered.current) {
-      // Skip the effect on the initial render
-      hasRendered.current = true;
-      return () => {};
-    }
+
     if (regionLabelData && nutritionData) {
       tooltips = nutritionData.features
         .map((f) => MapOperations.setupRegionLabelTooltip(f, regionLabelData, countryData.iso3, map))

@@ -1,5 +1,5 @@
 import { FeatureCollection } from 'geojson';
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { GeoJSON, useMap } from 'react-leaflet';
 
 import AccordionModalSkeleton from '@/components/Accordions/AccordionModalSkeleton';
@@ -23,7 +23,6 @@ export default function FscCountryChoropleth({ countryMapData, onDataUnavailable
   const map = useMap();
   const { data: regionData, isLoading: regionDataLoading, error } = useRegionDataQuery(countryData.adm0_id);
   const { data: regionLabelData, isLoading: regionLabelDataLoading } = useRegionLabelQuery();
-  const hasRendered = useRef(false);
   const dataLoaded = useMemo(() => !!regionData && !!regionLabelData, [regionData, regionLabelData]);
 
   useEffect(() => {
@@ -34,11 +33,6 @@ export default function FscCountryChoropleth({ countryMapData, onDataUnavailable
 
   useEffect(() => {
     let tooltips: L.Tooltip[] = [];
-    if (!hasRendered.current) {
-      // Skip the effect on the initial render
-      hasRendered.current = true;
-      return () => {};
-    }
 
     if (regionLabelData && regionData) {
       tooltips = regionData.features

@@ -47,14 +47,14 @@ export default function RegionSelection({
   }, [error]);
 
   return (
-    <div className="pb-4 flex items-center gap-4">
+    <div className="pb-4 flex items-center gap-4 flex-wrap justify-end">
       <Select
         placeholder="Select a country for region comparison"
         aria-label="Select a country for region comparison"
         selectionMode="single"
         onSelectionChange={(keys) => setSelectedRegionComparisonCountry(keys.currentKey)}
         selectedKeys={selectedRegionComparisonCountry ? [selectedRegionComparisonCountry] : []}
-        className="flex-1"
+        className="flex-1 basis-0"
         variant="faded"
         color="primary"
       >
@@ -79,7 +79,7 @@ export default function RegionSelection({
           selectionMode="multiple"
           onSelectionChange={(keys) => setSelectedRegions(Array.from(keys) as string[], nAvailableRegions)}
           selectedKeys={selectedRegions}
-          className="flex-1"
+          className="flex-1 basis-0"
           variant="faded"
           color="primary"
           isDisabled={error !== null || !selectedRegionComparisonCountry}
@@ -98,22 +98,26 @@ export default function RegionSelection({
           ))}
         </Select>
       )}
-      <CustomButton
-        variant="bordered"
-        onClick={() => setSelectedRegions('all')}
-        isDisabled={
-          isLoading || selectedRegionComparisonCountry === undefined || selectedRegions.length === nAvailableRegions
-        }
-      >
-        Select all
-      </CustomButton>
-      <CustomButton
-        variant="bordered"
-        onClick={() => setSelectedRegions([])}
-        isDisabled={isLoading || selectedRegionComparisonCountry === undefined || selectedRegions.length === 0}
-      >
-        Clear
-      </CustomButton>
+      <div className="flex gap-4 flex-1 md:flex-initial">
+        <CustomButton
+          className="flex-1"
+          variant="bordered"
+          onClick={() => setSelectedRegions('all')}
+          isDisabled={
+            isLoading || selectedRegionComparisonCountry === undefined || selectedRegions.length === nAvailableRegions
+          }
+        >
+          Select all
+        </CustomButton>
+        <CustomButton
+          className="flex-1"
+          variant="bordered"
+          onClick={() => setSelectedRegions([])}
+          isDisabled={isLoading || selectedRegionComparisonCountry === undefined || selectedRegions.length === 0}
+        >
+          Clear
+        </CustomButton>
+      </div>
     </div>
   );
 }

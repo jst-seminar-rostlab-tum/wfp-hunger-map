@@ -10,6 +10,7 @@ import { SnackbarPosition, SnackbarStatus } from '@/domain/enums/Snackbar';
 import { useRegionDataQuery } from '@/domain/hooks/countryHooks';
 import { RegionSelectionProps } from '@/domain/props/RegionSelectionProps';
 import { CountryComparisonOperations } from '@/operations/comparison-portal/CountryComparisonOperations';
+import { RegionSelectionOperations } from '@/operations/comparison-portal/RegionSelectionOperations';
 import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
 
 import SelectionSkeleton from './CountrySelectSkeleton';
@@ -23,6 +24,8 @@ export default function RegionSelection({
   setSelectedRegions,
 }: RegionSelectionProps): JSX.Element {
   const { data: regionData, isLoading, error } = useRegionDataQuery(Number(selectedRegionComparisonCountry));
+  const nAvailableRegions = regionData?.features.length;
+
   const { showSnackBar } = useSnackbar();
   const availableCountries = useMemo(() => {
     return countryMapData.features.filter((country) => FcsChoroplethOperations.checkIfActive(country, globalFcsData));
@@ -74,12 +77,15 @@ export default function RegionSelection({
           placeholder="Select regions"
           aria-label="Select regions for comparison"
           selectionMode="multiple"
-          onSelectionChange={(keys) => setSelectedRegions(Array.from(keys) as string[])}
+          onSelectionChange={(keys) => setSelectedRegions(Array.from(keys) as string[], nAvailableRegions)}
           selectedKeys={selectedRegions}
           className="flex-1"
           variant="faded"
           color="primary"
           isDisabled={error !== null || !selectedRegionComparisonCountry}
+          renderValue={(selectedItems) =>
+            RegionSelectionOperations.regionSelectRenderValue(selectedItems, nAvailableRegions)
+          }
         >
           {(regionData?.features || []).map((region) => (
             <SelectItem
@@ -96,9 +102,7 @@ export default function RegionSelection({
         variant="bordered"
         onClick={() => setSelectedRegions('all')}
         isDisabled={
-          isLoading ||
-          selectedRegionComparisonCountry === undefined ||
-          selectedRegions.length === regionData?.features.length
+          isLoading || selectedRegionComparisonCountry === undefined || selectedRegions.length === nAvailableRegions
         }
       >
         Select all

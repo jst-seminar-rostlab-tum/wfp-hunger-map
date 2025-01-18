@@ -7,5 +7,5 @@ export interface RegionSelectionProps {
   selectedRegionComparisonCountry: string | undefined;
   setSelectedRegionComparisonCountry: (country: string | undefined) => void;
   selectedRegions: string[] | 'all';
-  setSelectedRegions: (regions: string[] | 'all') => void;
+  setSelectedRegions: (regions: string[] | 'all', nAvailableRegions?: number) => void;
 }

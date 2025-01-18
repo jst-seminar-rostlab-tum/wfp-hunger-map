@@ -84,7 +84,11 @@ export const useSelectedRegions = () => {
     setSelectedRegionComparisonCountry(searchParams.get(COMPARISON_COUNTRY_PARAM) ?? undefined);
   }, [searchParams]);
 
-  const setSelectedRegionsFn = (regions: string[] | 'all') => {
+  const setSelectedRegionsFn = (regions: string[] | 'all', nAvailableRegions: number | undefined) => {
+    // Use 'all' instead of the array if possible to have a cleaner query param.
+    // eslint-disable-next-line no-param-reassign
+    if (regions.length === nAvailableRegions) regions = 'all';
+
     setSelectedRegions(regions);
     const updatedParams = new URLSearchParams(searchParams.toString());
     if (regions === 'all') {

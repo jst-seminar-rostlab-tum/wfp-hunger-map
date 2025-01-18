@@ -3,7 +3,8 @@ COMMERCIAL LICENSE AGREEMENT
 Software Name: HungerMapLive CSEE
 Version: 1.0
 Copyright: © 2025 Center for Software Engineering Excellence (CSEE)
-Authors: 
+Authors:
+
 -	Technical Project Lead
 		Lachezar Marinov (lachezarmarinov88@gmail.com)
 

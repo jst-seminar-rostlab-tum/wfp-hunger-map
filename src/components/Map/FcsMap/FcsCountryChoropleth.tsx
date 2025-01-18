@@ -50,7 +50,7 @@ export default function FscCountryChoropleth({
       );
       setRegionLabelTooltips(tooltips.filter((t): t is L.Tooltip => !!t));
     }
-  }, [dataLoaded]);
+  }, [dataLoaded, countryData.adm0_id]);
 
   return !regionData || !regionLabelData || regionDataLoading || regionLabelDataLoading ? (
     <>

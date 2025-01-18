@@ -65,6 +65,11 @@ export const useCountryDataListQuery = (
     cachedQueryClient
   );
 
+/**
+ * Query that fetches data on country regions, such as their coordinates, current FCS and rCSI values and historic FCS trends.
+ * @param {number} countryId `adm0_id` of the country to run the query for.
+ * @returns `{data: AdditionalCountryData, isLoading: boolean, error: Error | null}`
+ */
 export const useRegionDataQuery = (countryId: number) =>
   useQuery<AdditionalCountryData, Error>(
     {

@@ -5,7 +5,14 @@ import descriptions from '@/domain/constant/dataSources/dataSourceDescriptions';
 import DataSourceDescription from '@/domain/entities/dataSources/DataSourceDescription';
 import { prettifyURL } from '@/utils/formatting';
 
-// pass an array to show 1+ datasources with their title
+/**
+ * Renders the popover content for a single or multiple data sources.
+ * * Pass a `string` to render the descriptions of the respective data source without a heading.
+ * * Pass a `string[]` to render descriptions of all given data sources, preceded by headings and seperated with `<hr />` elements.
+ * * If you want to add a heading to a single data source, pass it as one-element array.
+ *
+ * @param {keyof typeof descriptions | (keyof typeof descriptions)[]} dataSourceKeys The keys of the data sources to render a description for.
+ */
 export function DataSourcePopover({
   dataSourceKeys,
 }: {

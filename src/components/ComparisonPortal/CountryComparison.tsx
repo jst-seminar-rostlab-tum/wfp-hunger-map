@@ -12,8 +12,10 @@ import CountrySelection from './CountrySelection';
 import RegionSelection from './RegionSelection';
 
 /**
- * The `CountryComparison` component is the parent component for the country comparison feature.
- * It contains the state for the selected countries and disabled countries, and updates query parameters accordingly using the `useSelectedCountries` hook.
+ * The `CountryComparison` component is the parent component for the country and region comparison features.
+ * It contains the state for the selected countries, regions as well as the current tab.
+ * As far as needed, those are synchronized with the query parameters using dedicated hooks.
+ *
  * @param {CountryPortalProps} props Props for the CountryComparison component
  * @param {CountryMapDataWrapper} props.countryMapData Country map data
  * @param {GlobalFcsData} props.globalFcsData National FCS Data of all countries

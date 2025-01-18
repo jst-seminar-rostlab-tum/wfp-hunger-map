@@ -1,7 +1,12 @@
 import { SelectedItems } from '@nextui-org/react';
 
 export class RegionSelectionOperations {
-  // selectedRegions contains all elements, never 'all'
+  /**
+   * Obtain the render value for the `RegionSelection` component.
+   * @param {SelectedItems} selectedRegions
+   * @param {number?} nAvailableRegions
+   * @return {string} Render value for the Select
+   */
   static regionSelectRenderValue(selectedRegions: SelectedItems, nAvailableRegions?: number) {
     if (selectedRegions.length === nAvailableRegions) return 'All regions';
     if (selectedRegions.length <= 3) {

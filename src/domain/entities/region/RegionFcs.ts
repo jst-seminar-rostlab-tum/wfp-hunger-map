@@ -1,5 +1,5 @@
 /**
- * This is displayed on the tooltip when you hover on a region
+ * Information on people with insufficient food consumption.
  */
 export interface RegionFcs {
   // FCS Score = share of people with insufficient food consumption (0-1)
@@ -12,7 +12,7 @@ export interface RegionFcs {
   ratioLow: number;
   ratioHigh: number;
 
-  // Number of people with insufficient food consumption (in Millions)
+  // Number of people with insufficient food consumption (in millions)
   people: number;
   peopleLow: number;
   peopleHigh: number;

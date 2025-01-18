@@ -7,7 +7,8 @@ import { CountryMapData, CountryMapDataWrapper } from '@/domain/entities/country
  * Return a state that is synchronized with the `countries` query param.
  * Whereas the returned state value and update function work with arrays of `CountryMapData`, the query param is using the `adm0_id`.
  *
- * Note: It is assumed that there is only one relevant query param, any others will be erased on change.
+ * @param {CountryMapDataWrapper} countryMapData Polygon and alert data for all selected countries
+ * @return `[selectedCountries, setSelectedCountries]` similar to a `useState<CountryMapData[] | undefined>` call
  */
 export const useSelectedCountries = (countryMapData: CountryMapDataWrapper) => {
   const PARAM_NAME = 'countries';
@@ -39,6 +40,11 @@ export const useSelectedCountries = (countryMapData: CountryMapDataWrapper) => {
   return [selectedCountries, setSelectedCountriesFn] as const;
 };
 
+/**
+ * Return a state that is synchronized with the `tab` query param.
+ *
+ * @return `[selectedTab, setSelectedTab]` similar to a `useState<string>` call
+ */
 export const useSelectedTab = () => {
   const PARAM_NAME = 'tab';
   const router = useRouter();
@@ -66,6 +72,13 @@ export const useSelectedTab = () => {
   return [selectedTab, setSelectedTabFn] as const;
 };
 
+/**
+ * Return a state that is synchronized with the `regions` and `regionComparisonCountry query params.
+ * Regions are stored as array of their IDs (converted to strings) or a single string `'all'`.
+ * The country is stored as `string` of its `adm0_id`.
+ *
+ * @return `{selectedRegions, setSelectedRegions, selectedRegionComparisonCountry, setSelectedRegionComparisonCountry}` similar to `useState` calls.
+ */
 export const useSelectedRegions = () => {
   const REGION_PARAM = 'regions';
   const COMPARISON_COUNTRY_PARAM = 'regionComparisonCountry';

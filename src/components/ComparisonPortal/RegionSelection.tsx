@@ -13,6 +13,15 @@ import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
 
 import SelectionSkeleton from './CountrySelectSkeleton';
 
+/**
+ * A Select component that allows users to select a single country and an unlimited number of its regions.
+ * @param {CountryMapDataWrapper} countryMapData Map polygons and hazards of all countries
+ * @param {GlobalFcsData} globalFcsData FCS data of all countries
+ * @param {string | undefined} selectedRegionComparisonCountry Country that is used for region comparison
+ * @param {(country: (string | undefined)) => void} setSelectedRegionComparisonCountry Setter for the country that is used for region comparison
+ * @param {string[] | 'all'} selectedRegions IDs of the Regions that are compared against each other
+ * @param {(regions: (string[] | 'all'), nAvailableRegions?: number) => void} setSelectedRegions Setter for the IDs of the Regions that are compared against each other
+ */
 export default function RegionSelection({
   countryMapData,
   globalFcsData,

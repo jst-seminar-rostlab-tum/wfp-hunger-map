@@ -1,4 +1,5 @@
-import { useCountryDataQuery, useCountryIso3DataQuery } from '@/domain/hooks/countryHooks';
+import { useUserRole } from '@/domain/contexts/UserRoleContext';
+import { useCountryDataQuery, useCountryForecastDataQuery, useCountryIso3DataQuery } from '@/domain/hooks/countryHooks';
 import FcsAccordionProps from '@/domain/props/FcsAccordionProps';
 import { FcsFoodSecurityOperations } from '@/operations/map/FcsFoodSecurityOperations';
 import { FcsMacroEconomicOperations } from '@/operations/map/FcsMacroEconomicOperations';
@@ -16,10 +17,13 @@ import AccordionContainer from '../../Accordions/AccordionContainer';
  */
 export default function FcsAccordion({ countryName, countryId, countryCode }: FcsAccordionProps) {
   const isMobile = useMediaQuery('(max-width: 700px)');
+  const { isAdmin } = useUserRole();
   const { data: countryData, isLoading: countryDataLoading } = useCountryDataQuery(countryId);
+  const { data: countryForecastData, isLoading: countryForecastDataLoading } = useCountryForecastDataQuery(countryId);
   const { data: countryIso3Data, isLoading: iso3DataLoading } = useCountryIso3DataQuery(countryCode);
   const foodSecurityAccordionItems = FcsFoodSecurityOperations.getFcsFoodSecurityAccordionItems(
     countryData,
+    isAdmin ? countryForecastData : undefined,
     countryIso3Data
   );
   const macroEconomicAccordionItems = FcsMacroEconomicOperations.getMacroEconomicAccordionItems(
@@ -30,7 +34,7 @@ export default function FcsAccordion({ countryName, countryId, countryCode }: Fc
   return isMobile ? (
     <div className="absolute w-[350px] left-[108px] top-4 z-9999">
       <AccordionContainer
-        loading={countryDataLoading || iso3DataLoading}
+        loading={countryDataLoading || iso3DataLoading || countryForecastDataLoading}
         title={countryName}
         accordionModalActive
         maxWidth={600}
@@ -41,13 +45,13 @@ export default function FcsAccordion({ countryName, countryId, countryCode }: Fc
     <>
       <div className="absolute w-[350px] left-[108px] top-4 z-9999 overflow-y-scroll max-h-screen">
         <AccordionContainer
-          loading={countryDataLoading || iso3DataLoading}
+          loading={countryDataLoading || iso3DataLoading || countryForecastDataLoading}
           title={countryName}
           multipleSelectionMode
           accordionModalActive
           maxWidth={600}
           items={foodSecurityAccordionItems}
-          expandAll={!countryDataLoading && !iso3DataLoading}
+          expandAll={!countryDataLoading && !iso3DataLoading && !countryForecastDataLoading}
         />
       </div>
       <div className="absolute w-[350px] right-[1rem] inset-y-24 z-9999">

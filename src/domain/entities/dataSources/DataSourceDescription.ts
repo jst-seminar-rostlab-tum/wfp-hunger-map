@@ -3,6 +3,7 @@ import { ReactElement, ReactNode } from 'react';
 export default interface DataSourceDescription {
   title: string;
   legendTitle?: string;
+  forecastLegendTitle?: string;
   summary: ReactNode;
   description?: string | ReactElement;
   readMoreLink?: string;

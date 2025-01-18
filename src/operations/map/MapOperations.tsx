@@ -8,14 +8,19 @@ import { CommonRegionProperties } from '@/domain/entities/common/CommonRegionPro
 import { Feature } from '@/domain/entities/common/Feature';
 
 export class MapOperations {
+  /**
+   * Converts a list of country features into a GeoJSON FeatureCollection.
+   * @param countryFeatures list of country features to be converted
+   */
   static convertCountriesToFeatureCollection = <T, U>(countryFeatures: Feature<T, U>[]): FeatureCollection => ({
     type: 'FeatureCollection',
     features: countryFeatures as GeoJsonFeature<Geometry, GeoJsonProperties>[],
   });
 
   /**
-   * Create a 'HTMLDivElement' rending the given 'countryName' within a 'CountryHoverPopover'.
-   * Needed cause leaflet tooltips do not accept React components.
+   * Creates a 'HTMLDivElement' rendering the given 'countryName' within a 'CountryHoverPopover'.
+   * Needed because leaflet tooltips do not accept React components.
+   * @param countryName The name to be displayed in the popover
    */
   static createCountryNameTooltipElement(countryName: string): HTMLDivElement {
     const tooltipContainer = document.createElement('div');
@@ -24,6 +29,12 @@ export class MapOperations {
     return tooltipContainer;
   }
 
+  /**
+   * Updates the region labels for example when the user is zooming. Recalculates if the full label or "..." should be displayed.
+   * @param feature region data in GeoJSON format
+   * @param map leaflet map that is used for application
+   * @param tooltip tooltip element to be updated
+   */
   static updateRegionLabelTooltip(feature: Feature<CommonRegionProperties>, map: L.Map, tooltip: L.Tooltip) {
     const bounds = L.geoJSON(feature).getBounds();
     const zoom = map.getZoom();
@@ -39,6 +50,14 @@ export class MapOperations {
     tooltip.setContent(truncatedText);
   }
 
+  /**
+   * Initial setup of tooltips containing the region labels.
+   * @param feature region data in GeoJSON format
+   * @param regionLabelData data containing information about the labels of the regions and their positions
+   * @param countryIso3 iso3 code for matching the regions with the country
+   * @param map leaflet map that is used for application
+   * @return the created tooltip object or undefined
+   */
   static setupRegionLabelTooltip(
     feature: Feature<CommonRegionProperties>,
     regionLabelData: FeatureCollection<Geometry, GeoJsonProperties>,

@@ -8,6 +8,9 @@ import { ConflictLayer } from './ConflictLayer';
 import { CountryAlertsLayer } from './CountryAlerts/CountryAlertsLayer';
 import { HazardLayer } from './HazardLayer';
 
+/**
+ * The alert layer that is placed in the leaflet map. Here new alerts can be added.
+ */
 export const AlertContainer = React.memo(({ countries, alertData }: AlertContainerProps) => {
   const { selectedAlert } = useSelectedAlert();
 

@@ -13,6 +13,11 @@ import { AlertsMenuProps } from '@/domain/props/AlertsMenuProps';
 import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
 import { useMediaQuery } from '@/utils/resolution';
 
+/**
+ * The menu component for switching between the alerts
+ * @param variant if the alert menu is currently placed inside or outside the sidebar
+ * @constructor
+ */
 export function AlertsMenu({ variant }: AlertsMenuProps) {
   const { isAlertSelected, toggleAlert } = useSelectedAlert();
   const { isFetching: conflictsFetching } = useConflictQuery(false);

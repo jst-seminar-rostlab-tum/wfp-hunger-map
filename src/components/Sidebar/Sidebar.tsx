@@ -28,6 +28,7 @@ import { useMediaQuery } from '@/utils/resolution';
 
 import PopupModal from '../PopupModal/PopupModal';
 import Subscribe from '../Subscribe/Subscribe';
+import { UserRoleSwitch } from './UserRoleSwitch';
 
 export function Sidebar({ countryMapData, fcsData }: SidebarProps) {
   const { isSidebarOpen, toggleSidebar, closeSidebar } = useSidebar();
@@ -79,6 +80,8 @@ export function Sidebar({ countryMapData, fcsData }: SidebarProps) {
             </Button>
           </div>
           <ThemeSwitch />
+          {/* Authentication mock */}
+          <UserRoleSwitch />
           <Autocomplete
             placeholder="Search a country"
             onSelectionChange={handleCountrySelect}

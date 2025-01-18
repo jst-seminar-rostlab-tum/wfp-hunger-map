@@ -1,10 +1,9 @@
-import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph.ts';
 import { ContinuousChartData } from '@/domain/entities/charts/ContinuousChartData.ts';
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph.ts';
 import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
 
 export default interface ContinuousChartProps {
-  data: ContinuousChartData | BalanceOfTradeGraph | CurrencyExchangeGraph | InflationGraphs;
+  data: ContinuousChartData | CurrencyExchangeGraph | InflationGraphs;
 
   title?: string;
   description?: string;

@@ -1,3 +1,5 @@
+import { UserRole } from '@/domain/enums/UserRole';
+
 export interface IOption {
   report_id: string;
   report_name: string;
@@ -9,6 +11,7 @@ export interface ITopic {
   topic_name: string;
   topic_description: string;
   options?: IOption[] | undefined;
+  roles?: UserRole[];
 }
 
 export interface ISubscribe {

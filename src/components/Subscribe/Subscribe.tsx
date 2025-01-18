@@ -17,6 +17,7 @@ import {
   UNSUCCESSFUL_SUBSCRIPTION,
 } from '@/domain/constant/subscribe/Subscribe';
 import { useSnackbar } from '@/domain/contexts/SnackbarContext';
+import { useUserRole } from '@/domain/contexts/UserRoleContext';
 import { SNACKBAR_SHORT_DURATION } from '@/domain/entities/snackbar/Snackbar';
 import { ITopic } from '@/domain/entities/subscribe/Subscribe';
 import { SnackbarPosition, SnackbarStatus } from '@/domain/enums/Snackbar';
@@ -29,6 +30,7 @@ import { SocialLink } from './SocialLink';
 
 export default function SubscriptionForm() {
   const subscribe = container.resolve<SubscriptionRepository>('SubscriptionRepository');
+  const { userRole } = useUserRole();
   const [name, setName] = useState('');
   const [organisation, setOrganisation] = useState('');
   const [email, setEmail] = useState('');
@@ -132,12 +134,13 @@ export default function SubscriptionForm() {
   };
 
   // use subscribe.getSubscribeTopics() to get the topics, when the component initializes
+  // filter the topics that are available to the current user based on the roles
   // and set it to the state
   useEffect(() => {
     subscribe.getSubscribeTopic().then((topics) => {
-      setAvailableTopics(topics);
+      setAvailableTopics(topics.filter((avalTopic) => !avalTopic.roles || avalTopic.roles.includes(userRole)));
     });
-  }, []);
+  }, [userRole]);
 
   return (
     <div className="flex flex-col items-center">

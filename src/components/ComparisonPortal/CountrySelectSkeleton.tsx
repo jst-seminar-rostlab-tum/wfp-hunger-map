@@ -7,7 +7,7 @@ import React from 'react';
  */
 export default function SelectionSkeleton(): JSX.Element {
   return (
-    <div className="w-full">
+    <div className="flex-1">
       <div className="group flex flex-col w-full">
         <div className="w-full flex flex-col">
           <Skeleton aria-hidden="true" className="relative px-3 gap-3 w-full shadow-sm h-10 min-h-10 rounded-medium">

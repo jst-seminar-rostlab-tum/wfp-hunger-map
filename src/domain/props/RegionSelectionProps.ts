@@ -6,6 +6,6 @@ export interface RegionSelectionProps {
   globalFcsData: GlobalFcsData;
   selectedRegionComparisonCountry: string | undefined;
   setSelectedRegionComparisonCountry: (country: string | undefined) => void;
-  selectedRegions: string[];
-  setSelectedRegions: (regions: string[]) => void;
+  selectedRegions: string[] | 'all';
+  setSelectedRegions: (regions: string[] | 'all') => void;
 }

@@ -3,6 +3,7 @@
 import { Select, SelectItem } from '@nextui-org/react';
 import { useEffect, useMemo } from 'react';
 
+import { CustomButton } from '@/components/Buttons/CustomButton';
 import { useSnackbar } from '@/domain/contexts/SnackbarContext';
 import { SNACKBAR_SHORT_DURATION } from '@/domain/entities/snackbar/Snackbar';
 import { SnackbarPosition, SnackbarStatus } from '@/domain/enums/Snackbar';
@@ -50,7 +51,7 @@ export default function RegionSelection({
         selectionMode="single"
         onSelectionChange={(keys) => setSelectedRegionComparisonCountry(keys.currentKey)}
         selectedKeys={selectedRegionComparisonCountry ? [selectedRegionComparisonCountry] : []}
-        className="w-full"
+        className="flex-1"
         variant="faded"
         color="primary"
       >
@@ -75,7 +76,7 @@ export default function RegionSelection({
           selectionMode="multiple"
           onSelectionChange={(keys) => setSelectedRegions(Array.from(keys) as string[])}
           selectedKeys={selectedRegions}
-          className="w-full"
+          className="flex-1"
           variant="faded"
           color="primary"
           isDisabled={error !== null || !selectedRegionComparisonCountry}
@@ -91,6 +92,24 @@ export default function RegionSelection({
           ))}
         </Select>
       )}
+      <CustomButton
+        variant="bordered"
+        onClick={() => setSelectedRegions('all')}
+        isDisabled={
+          isLoading ||
+          selectedRegionComparisonCountry === undefined ||
+          selectedRegions.length === regionData?.features.length
+        }
+      >
+        Select all
+      </CustomButton>
+      <CustomButton
+        variant="bordered"
+        onClick={() => setSelectedRegions([])}
+        isDisabled={isLoading || selectedRegionComparisonCountry === undefined || selectedRegions.length === 0}
+      >
+        Clear
+      </CustomButton>
     </div>
   );
 }

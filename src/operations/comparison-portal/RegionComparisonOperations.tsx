@@ -63,14 +63,17 @@ export class RegionComparisonOperations {
 
   static getChartData(
     regionData: AdditionalCountryData | undefined,
-    selectedRegions: string[],
+    selectedRegions: string[] | 'all',
     showRelativeNumbers: boolean
   ): RegionComparisonChartData {
     if (!regionData) return {};
-    const selectedRegionsSet = new Set(selectedRegions);
-    const selectedRegionProperties: RegionProperties[] = regionData.features
-      .filter((feature) => selectedRegionsSet.has(feature.id))
-      .map((feature) => feature.properties);
+
+    let selectedRegionFeatures = regionData.features;
+    if (selectedRegions !== 'all') {
+      const selectedRegionsSet = new Set(selectedRegions);
+      selectedRegionFeatures = selectedRegionFeatures.filter((feature) => selectedRegionsSet.has(feature.id));
+    }
+    const selectedRegionProperties = selectedRegionFeatures.map((feature) => feature.properties);
 
     return {
       fcsBarChartData: this.getBarChartData('fcs', selectedRegionProperties, showRelativeNumbers),

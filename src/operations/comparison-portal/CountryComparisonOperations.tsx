@@ -140,7 +140,7 @@ export class CountryComparisonOperations {
                 />
                 <NoDataHint
                   chartData={fcsChartData}
-                  selectedCountryNames={selectedCountryNames}
+                  requestedChartCategories={selectedCountryNames}
                   isLoading={isLoading}
                 />
               </>
@@ -158,7 +158,7 @@ export class CountryComparisonOperations {
                 />
                 <NoDataHint
                   chartData={rcsiChartData}
-                  selectedCountryNames={selectedCountryNames}
+                  requestedChartCategories={selectedCountryNames}
                   isLoading={isLoading}
                 />
               </>
@@ -177,7 +177,7 @@ export class CountryComparisonOperations {
                 <CategoricalChart data={importDependencyBarChartData} transparentBackground />
                 <NoDataHint
                   chartData={importDependencyBarChartData}
-                  selectedCountryNames={selectedCountryNames}
+                  requestedChartCategories={selectedCountryNames}
                   isLoading={isLoading}
                 />
               </>
@@ -196,7 +196,7 @@ export class CountryComparisonOperations {
                 <ContinuousChart data={balanceOfTradeData} small noPadding transparentBackground chartHeight={300} />
                 <NoDataHint
                   chartData={balanceOfTradeData}
-                  selectedCountryNames={selectedCountryNames}
+                  requestedChartCategories={selectedCountryNames}
                   isLoading={isLoading}
                 />
               </>
@@ -222,7 +222,7 @@ export class CountryComparisonOperations {
                 />
                 <NoDataHint
                   chartData={headlineInflationData}
-                  selectedCountryNames={selectedCountryNames}
+                  requestedChartCategories={selectedCountryNames}
                   isLoading={isLoading}
                 />
               </>
@@ -239,7 +239,7 @@ export class CountryComparisonOperations {
                 />
                 <NoDataHint
                   chartData={foodInflationData}
-                  selectedCountryNames={selectedCountryNames}
+                  requestedChartCategories={selectedCountryNames}
                   isLoading={isLoading}
                 />
               </>
@@ -378,7 +378,7 @@ export class CountryComparisonOperations {
     });
   }
 
-  private static chartWithoutEmptyLines(chart: ContinuousChartData): ContinuousChartData {
+  static chartWithoutEmptyLines(chart: ContinuousChartData): ContinuousChartData {
     return {
       ...chart,
       lines: chart.lines.filter((line) => line.dataPoints.length > 0),

@@ -2,6 +2,7 @@ import clsx from 'clsx';
 
 import { CategoricalChart } from '@/components/Charts/CategoricalChart';
 import { ContinuousChart } from '@/components/Charts/ContinuousChart';
+import NoDataHint from '@/components/ComparisonPortal/NoDataHint';
 import CustomInfoCircle from '@/components/CustomInfoCircle/CustomInfoCircle';
 import { DataSourcePopover } from '@/components/Legend/DataSourcePopover';
 import descriptions from '@/domain/constant/dataSources/dataSourceDescriptions';
@@ -12,14 +13,20 @@ import { RegionComparisonChartData } from '@/domain/entities/comparison/RegionCo
 import { AdditionalCountryData } from '@/domain/entities/country/AdditionalCountryData';
 import { RegionProperties } from '@/domain/entities/region/RegionProperties';
 import { ContinuousChartDataType } from '@/domain/enums/ContinuousChartDataType';
+import { CountryComparisonOperations } from '@/operations/comparison-portal/CountryComparisonOperations';
 import { formatToMillion } from '@/utils/formatting';
 
 export class RegionComparisonOperations {
-  static getComparisonAccordionItems({
-    fcsBarChartData,
-    rcsiBarChartData,
-    fcsGraphData,
-  }: RegionComparisonChartData): AccordionItemProps[] {
+  static getComparisonAccordionItems(
+    { fcsBarChartData, rcsiBarChartData, fcsGraphData }: RegionComparisonChartData,
+    selectedRegions: string[] | 'all',
+    regionFeatures: { properties: { Name: string }; id: number }[]
+  ): AccordionItemProps[] {
+    const selectedRegionFeatures =
+      selectedRegions === 'all'
+        ? regionFeatures
+        : regionFeatures.filter((regionFeature) => selectedRegions.includes(regionFeature.id.toString()));
+    const selectedRegionNames = selectedRegionFeatures.map((regionFeature) => regionFeature.properties.Name);
     return [
       {
         title: 'Current Food Security',
@@ -33,10 +40,16 @@ export class RegionComparisonOperations {
             })}
           >
             {fcsBarChartData && (
-              <CategoricalChart title={descriptions.fcs.legendTitle} data={fcsBarChartData} transparentBackground />
+              <div>
+                <CategoricalChart title={descriptions.fcs.legendTitle} data={fcsBarChartData} transparentBackground />
+                <NoDataHint chartData={fcsBarChartData} requestedChartCategories={selectedRegionNames} />
+              </div>
             )}
             {rcsiBarChartData && (
-              <CategoricalChart title={descriptions.rCsi.legendTitle} data={rcsiBarChartData} transparentBackground />
+              <div>
+                <CategoricalChart title={descriptions.rCsi.legendTitle} data={rcsiBarChartData} transparentBackground />
+                <NoDataHint chartData={rcsiBarChartData} requestedChartCategories={selectedRegionNames} />
+              </div>
             )}
           </div>
         ),
@@ -45,16 +58,15 @@ export class RegionComparisonOperations {
         title: 'Trend of insufficient food consumption',
         infoIcon: <CustomInfoCircle />,
         popoverInfo: <DataSourcePopover dataSourceKeys={['fcs', 'rCsi']} />,
-        content: (
+        content: fcsGraphData && (
           <div>
-            {fcsGraphData && (
-              <ContinuousChart
-                title={descriptions.fcs.legendTitle}
-                data={fcsGraphData}
-                transparentBackground
-                disableBarChartSwitch
-              />
-            )}
+            <ContinuousChart
+              title={descriptions.fcs.legendTitle}
+              data={fcsGraphData}
+              transparentBackground
+              disableBarChartSwitch
+            />
+            <NoDataHint chartData={fcsGraphData} requestedChartCategories={selectedRegionNames} />
           </div>
         ),
       },
@@ -62,12 +74,10 @@ export class RegionComparisonOperations {
   }
 
   static getChartData(
-    regionData: AdditionalCountryData | undefined,
+    regionData: AdditionalCountryData,
     selectedRegions: string[] | 'all',
     showRelativeNumbers: boolean
   ): RegionComparisonChartData {
-    if (!regionData) return {};
-
     let selectedRegionFeatures = regionData.features;
     if (selectedRegions !== 'all') {
       const selectedRegionsSet = new Set(selectedRegions);
@@ -89,15 +99,18 @@ export class RegionComparisonOperations {
   ): CategoricalChartData {
     return {
       yAxisLabel: showRelativeNumbers ? '% of population' : 'Mill',
-      categories: selectedRegionProperties.map((region) => ({
-        name: region.Name,
-        dataPoint: { y: showRelativeNumbers ? region[type].ratio : region[type].people },
-      })),
+      categories: selectedRegionProperties
+        .filter((region) => region[type] !== null)
+        .map((region) => ({
+          name: region.Name,
+          dataPoint: { y: showRelativeNumbers ? region[type]!.ratio : region[type]!.people },
+        })),
     };
   }
 
   private static getFcsGraph(selectedRegionProperties: RegionProperties[]): ContinuousChartData {
-    return {
+    const showErrorMargins = selectedRegionProperties.length <= 3;
+    return CountryComparisonOperations.chartWithoutEmptyLines({
       type: ContinuousChartDataType.LINE_CHART_DATA,
       xAxisType: 'datetime',
       yAxisLabel: 'Mill',
@@ -105,12 +118,21 @@ export class RegionComparisonOperations {
         return {
           name: region.Name,
           showRange: true,
-          dataPoints: region.fcsGraph.map((fcsChartData) => ({
-            x: new Date(fcsChartData.x).getTime(),
-            y: formatToMillion(fcsChartData.fcs),
-          })),
+          dataPoints:
+            region.fcsGraph?.map((fcsChartData) => {
+              return {
+                x: new Date(fcsChartData.x).getTime(),
+                y: formatToMillion(fcsChartData.fcs),
+                ...(showErrorMargins
+                  ? {
+                      yRangeMin: formatToMillion(fcsChartData.fcsLow),
+                      yRangeMax: formatToMillion(fcsChartData.fcsHigh),
+                    }
+                  : {}),
+              };
+            }) ?? [],
         };
       }),
-    };
+    });
   }
 }

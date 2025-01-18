@@ -4,6 +4,6 @@ import { CategoricalChartData } from '../entities/charts/CategoricalChartData';
 
 export interface NoDataHintProps {
   chartData: ContinuousChartData | CategoricalChartData;
-  selectedCountryNames: string[];
-  isLoading: boolean;
+  requestedChartCategories: string[];
+  isLoading?: boolean;
 }

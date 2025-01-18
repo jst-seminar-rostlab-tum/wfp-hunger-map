@@ -15,11 +15,11 @@ export function DataSourcePopover({
     return (
       <>
         {dataSourceKeys.map((dataSourceKey, index) => (
-          <>
+          <div key={dataSourceKey}>
             {index ? <hr /> : null}
             <h1>{descriptions[dataSourceKey]?.title}</h1>
             <DataSourcePopover dataSourceKeys={dataSourceKey} />
-          </>
+          </div>
         ))}
       </>
     );

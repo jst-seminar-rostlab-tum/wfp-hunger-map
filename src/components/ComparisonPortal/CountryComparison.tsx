@@ -3,6 +3,7 @@
 import { Tab, Tabs } from '@nextui-org/react';
 import { useState } from 'react';
 
+import RegionComparisonAccordion from '@/components/ComparisonPortal/RegionComparisonAccordion';
 import { useSelectedCountries, useSelectedRegions, useSelectedTab } from '@/domain/hooks/queryParamsHooks.ts';
 import CountryPortalProps from '@/domain/props/CountryComparisonProps';
 
@@ -57,6 +58,10 @@ export default function ComparisonPortal({ countryMapData, globalFcsData }: Coun
             setSelectedRegionComparisonCountry={setSelectedRegionComparisonCountry}
             selectedRegions={selectedRegions}
             setSelectedRegions={setSelectedRegions}
+          />
+          <RegionComparisonAccordion
+            selectedRegionComparisonCountry={selectedRegionComparisonCountry}
+            selectedRegions={selectedRegions}
           />
         </Tab>
       </Tabs>

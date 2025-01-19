@@ -1,12 +1,9 @@
-import { Feature } from 'geojson';
 import L from 'leaflet';
 import { useTheme } from 'next-themes';
 import React, { useEffect, useRef } from 'react';
 import { GeoJSON, useMap } from 'react-leaflet';
 
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
-import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
-import { LayerWithFeature } from '@/domain/entities/map/LayerWithFeature.ts';
 import FcsChoroplethProps from '@/domain/props/FcsChoroplethProps';
 import { AccessibilityOperations } from '@/operations/map/AccessibilityOperations';
 import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
@@ -39,37 +36,7 @@ export default function FcsChoropleth({
   // adding the country name as a tooltip to each layer (on hover); the tooltip is not shown if the country is selected
   useEffect(() => {
     if (!geoJsonRef.current || !map) return () => {};
-
-    const disableTooltips = () => {
-      geoJsonRef.current?.eachLayer((layer) => {
-        if (layer instanceof L.Path) {
-          const layerElement = layer.getElement();
-          if (layerElement && !layerElement.matches(':hover')) {
-            layer.unbindTooltip();
-          }
-        }
-      });
-    };
-
-    const enableTooltips = () => {
-      geoJsonRef.current?.eachLayer((layer: LayerWithFeature) => {
-        const feature = layer.feature as Feature;
-        if (FcsChoroplethOperations.checkIfActive(feature as CountryMapData, fcsData)) {
-          const tooltipContainer = MapOperations.createCountryNameTooltipElement(feature?.properties?.adm0_name);
-          layer.bindTooltip(tooltipContainer, { className: 'leaflet-tooltip', sticky: true });
-        }
-      });
-    };
-
-    enableTooltips();
-
-    map.on('dragstart', disableTooltips);
-    map.on('dragend', enableTooltips);
-
-    return () => {
-      map.off('dragstart', disableTooltips);
-      map.off('dragend', enableTooltips);
-    };
+    return MapOperations.handleCountryTooltip(geoJsonRef, map, fcsData);
   }, [selectedCountryId]);
 
   useEffect(() => {

@@ -6,6 +6,12 @@ import CountryHoverPopover from '@/components/CountryHoverPopover/CountryHoverPo
 import { MAP_MAX_ZOOM, REGION_LABEL_SENSITIVITY, SELECTED_COUNTRY_ZOOM_THRESHOLD } from '@/domain/constant/map/Map.ts';
 import { CommonRegionProperties } from '@/domain/entities/common/CommonRegionProperties';
 import { Feature } from '@/domain/entities/common/Feature';
+import { CountryFcsData } from '@/domain/entities/country/CountryFcsData.ts';
+import { CountryMapData, CountryProps } from '@/domain/entities/country/CountryMapData.ts';
+import { CountryNutrition } from '@/domain/entities/country/CountryNutrition.ts';
+import { LayerWithFeature } from '@/domain/entities/map/LayerWithFeature.ts';
+import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations.ts';
+import NutritionChoroplethOperations from '@/operations/map/NutritionChoroplethOperations.ts';
 
 export class MapOperations {
   /**
@@ -88,5 +94,50 @@ export class MapOperations {
       return tooltip;
     }
     return undefined;
+  }
+
+  static handleCountryTooltip(
+    geoJsonRef: React.MutableRefObject<L.GeoJSON | null>,
+    map: L.Map,
+    fcsData?: Record<string, CountryFcsData>,
+    nutritionData?: CountryNutrition,
+    countryMapData?: FeatureCollection<Geometry, CountryProps>
+  ) {
+    const disableTooltips = () => {
+      geoJsonRef.current?.eachLayer((layer) => {
+        if (layer instanceof L.Path) {
+          const layerElement = layer.getElement();
+          if (layerElement && !layerElement.matches(':hover')) {
+            layer.unbindTooltip();
+          }
+        }
+      });
+    };
+
+    const enableTooltips = () => {
+      geoJsonRef.current?.eachLayer((layer: LayerWithFeature) => {
+        layer.unbindTooltip();
+        const feature = layer.feature as CountryMapData;
+        if (
+          (fcsData && FcsChoroplethOperations.checkIfActive(feature as CountryMapData, fcsData)) ||
+          (nutritionData &&
+            countryMapData &&
+            NutritionChoroplethOperations.checkIfActive(countryMapData.features[0] as CountryMapData, nutritionData))
+        ) {
+          const tooltipContainer = MapOperations.createCountryNameTooltipElement(feature?.properties?.adm0_name);
+          layer.bindTooltip(tooltipContainer, { className: 'leaflet-tooltip', sticky: true });
+        }
+      });
+    };
+
+    enableTooltips();
+
+    map.on('dragstart', disableTooltips);
+    map.on('dragend', enableTooltips);
+
+    return () => {
+      map.off('dragstart', disableTooltips);
+      map.off('dragend', enableTooltips);
+    };
   }
 }

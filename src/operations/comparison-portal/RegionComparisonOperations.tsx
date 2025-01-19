@@ -9,6 +9,7 @@ import descriptions from '@/domain/constant/dataSources/dataSourceDescriptions';
 import { AccordionItemProps } from '@/domain/entities/accordions/Accordions';
 import { CategoricalChartData } from '@/domain/entities/charts/CategoricalChartData';
 import { ContinuousChartData } from '@/domain/entities/charts/ContinuousChartData';
+import { Feature } from '@/domain/entities/common/Feature';
 import { RegionComparisonChartData } from '@/domain/entities/comparison/RegionComparisonChartData';
 import { AdditionalCountryData } from '@/domain/entities/country/AdditionalCountryData';
 import { RegionProperties } from '@/domain/entities/region/RegionProperties';
@@ -20,7 +21,7 @@ export class RegionComparisonOperations {
   static getComparisonAccordionItems(
     { fcsBarChartData, rcsiBarChartData, fcsGraphData }: RegionComparisonChartData,
     selectedRegions: string[] | 'all',
-    regionFeatures: { properties: { Name: string }; id: number }[]
+    regionFeatures: (Feature<RegionProperties> & { id: string })[]
   ): AccordionItemProps[] {
     const selectedRegionFeatures =
       selectedRegions === 'all'
@@ -103,7 +104,7 @@ export class RegionComparisonOperations {
         .filter((region) => region[type] !== null)
         .map((region) => ({
           name: region.Name,
-          dataPoint: { y: showRelativeNumbers ? region[type]!.ratio : region[type]!.people },
+          dataPoint: { y: showRelativeNumbers ? region[type]!.ratio : formatToMillion(region[type]!.people)! },
         })),
     };
   }

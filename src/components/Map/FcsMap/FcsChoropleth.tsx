@@ -20,7 +20,6 @@ import FscCountryChoropleth from './FcsCountryChoropleth';
  * @param {FeatureCollection<Geometry, GeoJsonProperties>} props.data - The GeoJSON data of the country.
  * @param {string} props.countryId - The ID of the country.
  * @param {Record<string, CountryFcsData>} props.fcsData - The FCS data of the country.
- * @param {(tooltips: (prevRegionLabelData: L.Tooltip[]) => L.Tooltip[]) => void} props.setRegionLabelTooltips - The function to set the region label tooltips.
  * @param {() => void} [props.onDataUnavailable] - A callback to signal to the parent component that there's no regional FCS data for this country
  * @returns {JSX.Element} - The rendered FcsChoropleth component.
  */
@@ -30,7 +29,6 @@ export default function FcsChoropleth({
   countryId,
   fcsData,
   onDataUnavailable,
-  setRegionLabelTooltips,
 }: FcsChoroplethProps): JSX.Element {
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
@@ -89,11 +87,7 @@ export default function FcsChoropleth({
             countryId={countryData.adm0_id}
             countryName={countryData.adm0_name}
           />
-          <FscCountryChoropleth
-            countryMapData={data}
-            setRegionLabelTooltips={setRegionLabelTooltips}
-            onDataUnavailable={onDataUnavailable}
-          />
+          <FscCountryChoropleth countryMapData={data} onDataUnavailable={onDataUnavailable} />
         </>
       )}
     </>

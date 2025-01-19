@@ -16,7 +16,6 @@ import CountryLoadingLayer from '../CountryLoading';
  * renders the Nutrition Map for country view.
  * @param {NutritionStateChoroplethProps} props - The props of the component.
  * @param {FeatureCollection} props.countryMapData - The GeoJSON data of the region.
- * @param {(tooltips: (prevRegionLabelData: L.Tooltip[]) => L.Tooltip[]) => void} props.setRegionLabelTooltips - Function to set the region label tooltips.
  * @param {NutrientType} props.selectedNutrient - The selected nutrient.
  * @param {() => void} [props.onDataUnavailable] - A callback to signal to the parent component that there's no regional Nutrition data for this country
 
@@ -24,7 +23,6 @@ import CountryLoadingLayer from '../CountryLoading';
  */
 
 export default function NutritionStateChoropleth({
-  setRegionLabelTooltips,
   countryMapData,
   onDataUnavailable,
   selectedNutrient,
@@ -35,7 +33,6 @@ export default function NutritionStateChoropleth({
   const map = useMap();
   const { data: nutritionData, isLoading } = useRegionNutritionDataQuery(countryData.adm0_id);
   const { data: regionLabelData } = useRegionLabelQuery();
-  const hasRendered = useRef(false);
   const dataLoaded = useMemo(() => !!nutritionData && !!regionLabelData, [nutritionData, regionLabelData]);
 
   useEffect(() => {
@@ -65,17 +62,17 @@ export default function NutritionStateChoropleth({
   }, [nutritionData]);
 
   useEffect(() => {
-    if (!hasRendered.current) {
-      // Skip the effect on the initial render
-      hasRendered.current = true;
-      return;
-    }
+    let tooltips: L.Tooltip[] = [];
+
     if (regionLabelData && nutritionData) {
-      const tooltips = nutritionData.features.map((f) =>
-        MapOperations.setupRegionLabelTooltip(f, regionLabelData, countryData.iso3, map)
-      );
-      setRegionLabelTooltips(tooltips.filter((t): t is L.Tooltip => !!t));
+      tooltips = nutritionData.features
+        .map((f) => MapOperations.setupRegionLabelTooltip(f, regionLabelData, countryData.iso3, map))
+        .filter((t): t is L.Tooltip => !!t);
     }
+
+    return () => {
+      tooltips.forEach((tooltip) => tooltip.removeFrom(map));
+    };
   }, [dataLoaded]);
 
   return isLoading || !nutritionData ? (

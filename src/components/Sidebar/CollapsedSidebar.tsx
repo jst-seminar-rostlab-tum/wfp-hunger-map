@@ -34,10 +34,9 @@ export function CollapsedSidebar({ mapDataFetching }: CollapsedSidebarProps) {
         <CardBody>
           <div className="flex flex-col gap-1">
             {SidebarOperations.getSidebarMapTypes().map((item) => (
-              <Tooltip text={item.label} placement="right">
+              <Tooltip key={item.key} text={item.label} placement="right">
                 <Button
                   isIconOnly
-                  key={item.key}
                   variant={selectedMapType === item.key ? undefined : 'light'}
                   className={selectedMapType === item.key ? 'bg-primary' : undefined}
                   onClick={() => onMapTypeSelect(item.key)}

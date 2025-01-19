@@ -1,67 +1,117 @@
 import descriptions from '@/domain/constant/dataSources/dataSourceDescriptions';
-import { BalanceOfTradeGraph } from '@/domain/entities/charts/BalanceOfTradeGraph';
 import { ContinuousChartData } from '@/domain/entities/charts/ContinuousChartData.ts';
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph';
+import { FcsChartData } from '@/domain/entities/charts/FcsChartData';
 import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs';
+import { RcsiChartData } from '@/domain/entities/charts/RcsiChartData';
 import { CountryData } from '@/domain/entities/country/CountryData';
+import { CountryForecastData } from '@/domain/entities/country/CountryForecastData';
 import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data';
 import { ContinuousChartDataType } from '@/domain/enums/ContinuousChartDataType.ts';
 import { formatToMillion } from '@/utils/formatting';
 
 export class FcsAccordionOperations {
-  static getFcsChartData(countryData?: CountryData): ContinuousChartData | null {
+  static getFcsChartData(countryData?: CountryData, forecastData?: CountryForecastData): ContinuousChartData | null {
     if (!countryData?.fcsGraph) {
       return null;
     }
-    return {
+    const fcsData: ContinuousChartData = {
       type: ContinuousChartDataType.LINE_CHART_DATA,
       xAxisType: 'datetime',
       yAxisLabel: 'Mill',
+      predictionVerticalLineX: forecastData ? Date.now() : undefined,
       lines: [
         {
           name: descriptions.fcs.legendTitle,
           showRange: true,
-          dataPoints: countryData.fcsGraph.map((fcsChartData) => ({
-            x: new Date(fcsChartData.x).getTime(),
-            y: formatToMillion(fcsChartData.fcs),
-            yRangeMin: formatToMillion(fcsChartData.fcsLow),
-            yRangeMax: formatToMillion(fcsChartData.fcsHigh),
-          })),
+          dataPoints: countryData.fcsGraph.map(this.fcsChartMapper),
         },
       ],
     };
+
+    if (forecastData && process.env.NEXT_PUBLIC_FORECASTS_ENABLED === 'true') {
+      fcsData.lines.push({
+        name: descriptions.fcs.forecastLegendTitle,
+        showRange: true,
+        prediction: true,
+        dataPoints: forecastData.forecastedFcsGraph.map(this.fcsChartMapper),
+      });
+    }
+    return fcsData;
   }
 
-  static getRcsiChartData(countryData?: CountryData): ContinuousChartData | null {
+  private static fcsChartMapper(data: FcsChartData) {
+    return {
+      x: new Date(data.x).getTime(),
+      y: formatToMillion(data.fcs),
+      yRangeMin: formatToMillion(data.fcsLow),
+      yRangeMax: formatToMillion(data.fcsHigh),
+    };
+  }
+
+  static getRcsiChartData(
+    countryData?: CountryData,
+    rcsiForcastData?: CountryForecastData
+  ): ContinuousChartData | null {
     if (!countryData?.rcsiGraph) {
       return null;
     }
-    return {
+    const rcsData: ContinuousChartData = {
       type: ContinuousChartDataType.LINE_CHART_DATA,
       xAxisType: 'datetime',
       yAxisLabel: 'Mill',
+      predictionVerticalLineX: rcsiForcastData ? Date.now() : undefined,
       lines: [
         {
           name: descriptions.rCsi.legendTitle,
           showRange: true,
-          dataPoints: countryData.rcsiGraph.map((rcsiChartData) => ({
-            x: new Date(rcsiChartData.x).getTime(),
-            y: formatToMillion(rcsiChartData.rcsi),
-            yRangeMin: formatToMillion(rcsiChartData.rcsiLow),
-            yRangeMax: formatToMillion(rcsiChartData.rcsiHigh),
-          })),
+          dataPoints: countryData.rcsiGraph.map(this.rcsiChartMapper),
         },
       ],
     };
+
+    if (rcsiForcastData && process.env.NEXT_PUBLIC_FORECASTS_ENABLED === 'true') {
+      rcsData.lines.push({
+        name: descriptions.rCsi.forecastLegendTitle,
+        showRange: true,
+        prediction: true,
+        dataPoints: rcsiForcastData.forecastedRcsiGraph.map(this.rcsiChartMapper),
+      });
+    }
+
+    return rcsData;
   }
 
-  static getBalanceOfTradeChartData(countryIso3Data?: CountryIso3Data): BalanceOfTradeGraph | null {
+  private static rcsiChartMapper(data: RcsiChartData) {
+    return {
+      x: new Date(data.x).getTime(),
+      y: formatToMillion(data.rcsi),
+      yRangeMin: formatToMillion(data.rcsiLow),
+      yRangeMax: formatToMillion(data.rcsiHigh),
+    };
+  }
+
+  static getBalanceOfTradeChartData(countryIso3Data?: CountryIso3Data): ContinuousChartData | null {
     if (!countryIso3Data?.balanceOfTradeGraph?.data) {
       return null;
     }
+
+    // if any value is more than a million -> formatToMillion() is applied to every value
+    const applyFormatToMillion = countryIso3Data.balanceOfTradeGraph.data.some((d) => Math.abs(d.y) >= 1000000);
+
     return {
-      type: ContinuousChartDataType.BALANCE_OF_TRADE_CHART,
-      data: countryIso3Data.balanceOfTradeGraph.data,
+      type: ContinuousChartDataType.LINE_CHART_DATA,
+      xAxisType: 'datetime',
+      yAxisLabel: applyFormatToMillion ? 'Mill USD' : 'USD',
+      lines: [
+        {
+          name: descriptions.balanceOfTrade.title,
+          dataPoints: countryIso3Data.balanceOfTradeGraph.data.map((d) => ({
+            x: new Date(d.x).getTime(),
+            y: applyFormatToMillion ? formatToMillion(d.y) : d.y,
+          })),
+        },
+      ],
     };
   }
 

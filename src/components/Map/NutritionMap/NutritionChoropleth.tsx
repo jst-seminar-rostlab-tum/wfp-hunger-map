@@ -21,17 +21,11 @@ import NutritionStateChoropleth from './NutritionStateChoropleth';
  * @param {NutritionChoroplethProps} props - The props of the component.
  * @param {FeatureCollection} props.data - The GeoJSON data of the country.
  * @param {string} props.countryId - The ID of the country.
- * @param {(tooltips: (prevRegionLabelData: L.Tooltip[]) => L.Tooltip[]) => void} props.setRegionLabelTooltips - Function to set the region label tooltips.
  * @param {() => void} [props.onDataUnavailable] - A callback to signal to the parent component that there's no regional Nutrition data for this country
  * @returns {JSX.Element} - The rendered NutritionChoropleth component
  */
 
-export default function NutritionChoropleth({
-  data,
-  countryId,
-  setRegionLabelTooltips,
-  onDataUnavailable,
-}: NutritionChoroplethProps) {
+export default function NutritionChoropleth({ data, countryId, onDataUnavailable }: NutritionChoroplethProps) {
   const countryData = data.features[0].properties;
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
@@ -88,7 +82,6 @@ export default function NutritionChoropleth({
           />
           <NutritionStateChoropleth
             onDataUnavailable={onDataUnavailable}
-            setRegionLabelTooltips={setRegionLabelTooltips}
             countryMapData={data}
             selectedNutrient={selectedNutrient}
           />

@@ -4,9 +4,11 @@ import { FeatureCollection } from 'geojson';
 import { cachedQueryClient } from '@/config/queryClient';
 import container from '@/container';
 
+import { useUserRole } from '../contexts/UserRoleContext';
 import { isApiError } from '../entities/ApiError';
 import { AdditionalCountryData } from '../entities/country/AdditionalCountryData';
 import { CountryData, CountryDataRecord } from '../entities/country/CountryData';
+import { CountryForecastData } from '../entities/country/CountryForecastData';
 import { CountryIso3Data, CountryIso3DataRecord } from '../entities/country/CountryIso3Data';
 import { CountryMimiData } from '../entities/country/CountryMimiData';
 import { RegionIpc } from '../entities/region/RegionIpc';
@@ -22,6 +24,18 @@ export const useCountryDataQuery = (countryId: number) =>
     },
     cachedQueryClient
   );
+
+export const useCountryForecastDataQuery = (countryId: number) => {
+  const { isAdmin } = useUserRole();
+  return useQuery<CountryForecastData, Error>(
+    {
+      queryKey: ['fetchCountryForecastData', countryId],
+      queryFn: async () => countryRepo.getCountryForecastData(countryId),
+      enabled: isAdmin && process.env.NEXT_PUBLIC_FORECASTS_ENABLED === 'true',
+    },
+    cachedQueryClient
+  );
+};
 
 /**
  * Fetches country data for a list of country IDs.

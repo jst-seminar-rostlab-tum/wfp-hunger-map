@@ -29,14 +29,20 @@ import IpcChoropleth from './IpcMap/IpcChoropleth';
 import NutritionChoropleth from './NutritionMap/NutritionChoropleth';
 import ZoomControl from './ZoomControl';
 
+/**
+ * Main map component containing the layers of the leaflet map
+ * @param countries A FeatureCollection containing country-level geographic data used for the base shapes and other things
+ * @param disputedAreas FeatureCollection of disputed territories
+ * @param fcsData Food security data used for choropleth
+ * @param alertData Alert-related data for display within the map
+ * @constructor
+ */
 export default function Map({ countries, disputedAreas, fcsData, alertData }: MapProps) {
   const mapRef = useRef<LeafletMap | null>(null);
   const { selectedMapType } = useSelectedMap();
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
   const { closeSidebar } = useSidebar();
   const [renderer] = useState(new L.SVG({ padding: 0.5 }));
-
-  const [regionLabelTooltips, setRegionLabelTooltips] = useState<L.Tooltip[]>([]);
 
   const onZoomThresholdReached = () => {
     setSelectedCountryId(null);
@@ -56,13 +62,6 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
         window.gtag('event', `${selectedCountryData.properties.iso3} _${selectedMapType}_countrymap_selected`);
         mapRef.current?.fitBounds(L.geoJSON(selectedCountryData as GeoJSON).getBounds(), { animate: true });
       }
-    }
-
-    if (mapRef.current) {
-      regionLabelTooltips.forEach((tooltip) => {
-        tooltip.removeFrom(mapRef.current as L.Map);
-      });
-      setRegionLabelTooltips([]);
     }
   }, [selectedCountryId, selectedMapType]);
 
@@ -127,7 +126,6 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
               countryId={country.properties.adm0_id}
               data={{ type: 'FeatureCollection', features: [country as Feature<Geometry, CountryProps>] }}
               fcsData={fcsData}
-              setRegionLabelTooltips={setRegionLabelTooltips}
               onDataUnavailable={onDataUnavailable}
             />
           ))}
@@ -144,7 +142,6 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
           <NutritionChoropleth
             countryId={country.properties.adm0_id}
             data={{ type: 'FeatureCollection', features: [country as Feature<Geometry, CountryProps>] }}
-            setRegionLabelTooltips={setRegionLabelTooltips}
             onDataUnavailable={onDataUnavailable}
           />
         ))}

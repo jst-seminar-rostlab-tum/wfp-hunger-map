@@ -81,12 +81,10 @@ export function ChartContainer({
   if (!chartOptions) {
     return (
       <div
-        className={`w-full h-40 flex-col rounded-md ${BOX_BACKGROUND} text-secondary text-xs flex flex-row justify-center items-center`}
+        className={`w-full h-fit min-h-40 py-8 flex-col rounded-md ${BOX_BACKGROUND} text-secondary text-tiny flex flex-row gap-1 justify-center items-center`}
       >
         <p>no data available</p>
-        <p className="max-w-52 pt-1 text-[0.65rem] font-light text-center">
-          &#39;{title}&#39; chart cannot be displayed
-        </p>
+        <p className="max-w-80 font-light text-center">&#39;{title}&#39; chart cannot be displayed</p>
       </div>
     );
   }

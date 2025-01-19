@@ -6,6 +6,7 @@ import CustomInfoCircle from '@/components/CustomInfoCircle/CustomInfoCircle';
 import { DataSourcePopover } from '@/components/Legend/DataSourcePopover';
 import descriptions from '@/domain/constant/dataSources/dataSourceDescriptions';
 import { CountryData } from '@/domain/entities/country/CountryData';
+import { CountryForecastData } from '@/domain/entities/country/CountryForecastData';
 import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data';
 import { cardsWrapperClass } from '@/utils/primitives';
 
@@ -18,12 +19,13 @@ import NutritionAccordionText from './NutritionAccordionText';
 export class FcsFoodSecurityOperations {
   static getFcsFoodSecurityAccordionItems(
     countryData: CountryData | undefined,
+    countryForecastData: CountryForecastData | undefined,
     countryIso3Data: CountryIso3Data | undefined
   ) {
     const deltaOneMonth = countryData?.fcsMinus1 ? countryData.fcs - countryData.fcsMinus1 : null;
     const deltaThreeMonth = countryData?.fcsMinus3 ? countryData.fcs - countryData.fcsMinus3 : null;
-    const fcsChartData = FcsAccordionOperations.getFcsChartData(countryData);
-    const rcsiChartData = FcsAccordionOperations.getRcsiChartData(countryData);
+    const fcsChartData = FcsAccordionOperations.getFcsChartData(countryData, countryForecastData);
+    const rcsiChartData = FcsAccordionOperations.getRcsiChartData(countryData, countryForecastData);
     const nutritionData = FcsAccordionOperations.getNutritionData(countryIso3Data);
     return [
       {

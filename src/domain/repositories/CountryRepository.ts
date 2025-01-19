@@ -2,6 +2,7 @@ import { FeatureCollection } from 'geojson';
 
 import { AdditionalCountryData } from '../entities/country/AdditionalCountryData';
 import { CountryData } from '../entities/country/CountryData';
+import { CountryForecastData } from '../entities/country/CountryForecastData';
 import { CountryIso3Data } from '../entities/country/CountryIso3Data';
 import { CountryIso3Notes } from '../entities/country/CountryIso3Notes';
 import { CountryMimiData } from '../entities/country/CountryMimiData';
@@ -13,6 +14,12 @@ export default interface CountryRepository {
    * @param countryId
    */
   getCountryData(countryId: number): Promise<CountryData>;
+
+  /**
+   * Returns the forecasted FCS and RCS data about a country
+   * @param countryId
+   */
+  getCountryForecastData(countryId: number): Promise<CountryForecastData>;
 
   /**
    * Returns all the regions of a country and their FCS & RCS data

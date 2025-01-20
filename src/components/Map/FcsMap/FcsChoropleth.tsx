@@ -12,7 +12,6 @@ import { AccessibilityOperations } from '@/operations/map/AccessibilityOperation
 import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
 import { MapOperations } from '@/operations/map/MapOperations';
 
-import FcsAccordion from './FcsAccordion';
 import FscCountryChoropleth from './FcsCountryChoropleth';
 
 /** FcsChoropleth function returns a component that displays the fcs map for global view
@@ -33,7 +32,6 @@ export default function FcsChoropleth({
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
   const { theme } = useTheme();
-  const countryData = data.features[0].properties;
 
   // adding the country name as a tooltip to each layer (on hover); the tooltip is not shown if the country is selected
   useEffect(() => {
@@ -81,14 +79,7 @@ export default function FcsChoropleth({
 
       {/* regions or loading layer */}
       {countryId === selectedCountryId && (
-        <>
-          <FcsAccordion
-            countryCode={countryData.iso3}
-            countryId={countryData.adm0_id}
-            countryName={countryData.adm0_name}
-          />
-          <FscCountryChoropleth countryMapData={data} onDataUnavailable={onDataUnavailable} />
-        </>
+        <FscCountryChoropleth countryMapData={data} onDataUnavailable={onDataUnavailable} />
       )}
     </>
   );

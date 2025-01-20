@@ -4,11 +4,13 @@ import { GeoJSON } from 'react-leaflet';
 
 import AccordionModalSkeleton from '@/components/Accordions/AccordionModalSkeleton';
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
+import { CountryMapDataWrapper } from '@/domain/entities/country/CountryMapData';
 import { useRegionIpcDataQuery } from '@/domain/hooks/countryHooks';
 import IpcCountryChoroplethProps from '@/domain/props/IpcCountryChoroplethProps';
 import { IpcChoroplethOperations } from '@/operations/map/IpcChoroplethOperations';
 
 import CountryLoadingLayer from '../CountryLoading';
+import IpcAccordion from './IpcAccordion';
 
 function IpcCountryChoropleth({ countryMapData, onDataUnavailable }: IpcCountryChoroplethProps) {
   const { selectedCountryId } = useSelectedCountryId();
@@ -44,11 +46,14 @@ function IpcCountryChoropleth({ countryMapData, onDataUnavailable }: IpcCountryC
       <AccordionModalSkeleton />
     </>
   ) : (
-    <GeoJSON
-      style={IpcChoroplethOperations.ipcCountryStyle}
-      data={regionIpcData as FeatureCollection}
-      onEachFeature={handleCountryFeature}
-    />
+    <>
+      <IpcAccordion countryMapData={countryMapData as CountryMapDataWrapper} />
+      <GeoJSON
+        style={IpcChoroplethOperations.ipcCountryStyle}
+        data={regionIpcData as FeatureCollection}
+        onEachFeature={handleCountryFeature}
+      />
+    </>
   );
 }
 

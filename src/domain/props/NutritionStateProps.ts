@@ -8,4 +8,5 @@ export interface NutritionStateChoroplethProps {
   countryMapData: FeatureCollection<Geometry, CountryProps>;
   onDataUnavailable: () => void;
   selectedNutrient: NutrientType;
+  setSelectedNutrient: React.Dispatch<React.SetStateAction<NutrientType>>;
 }

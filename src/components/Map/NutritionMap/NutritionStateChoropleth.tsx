@@ -11,6 +11,7 @@ import { MapOperations } from '@/operations/map/MapOperations';
 import NutritionStateChoroplethOperations from '@/operations/map/NutritionStateChoroplethOperations';
 
 import CountryLoadingLayer from '../CountryLoading';
+import NutritionAccordion from './NutritionAccordion';
 
 /** NutritionStateChoropleth Component
  * renders the Nutrition Map for country view.
@@ -26,6 +27,7 @@ export default function NutritionStateChoropleth({
   countryMapData,
   onDataUnavailable,
   selectedNutrient,
+  setSelectedNutrient,
 }: NutritionStateChoroplethProps) {
   const countryData = countryMapData.features[0].properties;
   const layersRef = useRef<LayerWithFeature[]>([]);
@@ -82,15 +84,22 @@ export default function NutritionStateChoropleth({
     </>
   ) : (
     nutritionData && (
-      <GeoJSON
-        data={nutritionData as FeatureCollection}
-        style={(feature) => NutritionStateChoroplethOperations.dynamicStyle(feature, selectedNutrient)}
-        onEachFeature={(feature, layer) => {
-          layersRef.current.push(layer);
-          NutritionStateChoroplethOperations.addNutritionTooltip(layer, feature, selectedNutrient);
-          NutritionStateChoroplethOperations.addHoverEffect(layer);
-        }}
-      />
+      <>
+        <NutritionAccordion
+          setSelectedNutrient={setSelectedNutrient}
+          selectedNutrient={selectedNutrient}
+          countryName={countryData.adm0_name}
+        />
+        <GeoJSON
+          data={nutritionData as FeatureCollection}
+          style={(feature) => NutritionStateChoroplethOperations.dynamicStyle(feature, selectedNutrient)}
+          onEachFeature={(feature, layer) => {
+            layersRef.current.push(layer);
+            NutritionStateChoroplethOperations.addNutritionTooltip(layer, feature, selectedNutrient);
+            NutritionStateChoroplethOperations.addHoverEffect(layer);
+          }}
+        />
+      </>
     )
   );
 }

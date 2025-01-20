@@ -7,7 +7,7 @@ import { Autocomplete, AutocompleteItem, ScrollShadow, Spinner } from '@nextui-o
 import clsx from 'clsx';
 import { SidebarLeft } from 'iconsax-react';
 import NextImage from 'next/image';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import { AlertsMenu } from '@/components/AlertsMenu/AlertsMenu';
 import { LogoWithText } from '@/components/LogoWithText/LogoWithText';
@@ -30,7 +30,18 @@ import PopupModal from '../PopupModal/PopupModal';
 import Subscribe from '../Subscribe/Subscribe';
 import { UserRoleSwitch } from './UserRoleSwitch';
 
-export function Sidebar({ countryMapData, fcsData }: SidebarProps) {
+/**
+ * Main sidebar component for the WFP Hunger Map application.
+ * Provides navigation, country selection, theme switching, and global insights selection.
+ * Renders in either collapsed or expanded state based on the sidebar context.
+ *
+ * @component
+ * @param {SidebarProps} props - The props object.
+ * @param {FeatureCollection} props.countryMapData - Contains geographical and metadata information for all countries. Powers the country search autocomplete and map rendering
+ * @param {FCSData} props.fcsData - Contains Food Consumption Score data for each country. Used to determine data availability for countries
+ * @returns {React.JSX.Element} - The sidebar component.
+ */
+export function Sidebar({ countryMapData, fcsData }: SidebarProps): React.JSX.Element {
   const { isSidebarOpen, toggleSidebar, closeSidebar } = useSidebar();
   const { selectedMapType, setSelectedMapType } = useSelectedMap();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,6 +56,10 @@ export function Sidebar({ countryMapData, fcsData }: SidebarProps) {
     [GlobalInsight.NUTRITION]: nutritionDataIsFetching,
   };
 
+  /**
+   * Handles country selection from the autocomplete dropdown
+   * @param {React.Key | null} countryID - Selected country ID
+   */
   const handleCountrySelect = (countryID: React.Key | null) => {
     if (countryID) {
       setSelectedCountryId(Number(countryID));
@@ -55,6 +70,10 @@ export function Sidebar({ countryMapData, fcsData }: SidebarProps) {
     return <CollapsedSidebar mapDataFetching={mapDataFetching} />;
   }
 
+  /**
+   * Handles selection of different map types
+   * @param {GlobalInsight} mapType - Type of map
+   */
   const onMapTypeSelect = (mapType: GlobalInsight) => {
     clearAccordionModal();
     setSelectedMapType(mapType);

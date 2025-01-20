@@ -131,7 +131,7 @@ export class CountryComparisonOperations {
             {fcsChartData && (
               <>
                 <ContinuousChart
-                  title="Trend of the number of people with insufficient food consumption"
+                  title={descriptions.fcs.legendTitle}
                   data={fcsChartData}
                   small
                   noPadding
@@ -149,7 +149,7 @@ export class CountryComparisonOperations {
             {rcsiChartData && (
               <>
                 <ContinuousChart
-                  title="Trend of the number of people using crisis or above crisis food-based coping"
+                  title={descriptions.rCsi.legendTitle}
                   data={rcsiChartData}
                   small
                   noPadding

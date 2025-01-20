@@ -101,10 +101,10 @@ export class RegionComparisonOperations {
     return {
       yAxisLabel: showRelativeNumbers ? '% of population' : 'Mill',
       categories: selectedRegionProperties
-        .filter((region) => region[type] !== null)
+        .filter((region) => region[type] !== null && region[type]!.ratio !== null && region[type]!.people !== null)
         .map((region) => ({
           name: region.Name,
-          dataPoint: { y: showRelativeNumbers ? region[type]!.ratio : formatToMillion(region[type]!.people)! },
+          dataPoint: { y: showRelativeNumbers ? region[type]!.ratio! : formatToMillion(region[type]!.people)! },
         })),
     };
   }

@@ -3,19 +3,19 @@
  */
 export interface RegionFcs {
   // FCS Score = share of people with insufficient food consumption (0-1)
-  score: number;
-  scoreLow: number;
-  scoreHigh: number;
+  score: number | null;
+  scoreLow: number | null;
+  scoreHigh: number | null;
 
   // Percentage of people with insufficient food consumption (0-100, 2 decimals)
-  ratio: number;
-  ratioLow: number;
-  ratioHigh: number;
+  ratio: number | null;
+  ratioLow: number | null;
+  ratioHigh: number | null;
 
   // Number of people with insufficient food consumption (in millions)
-  people: number;
-  peopleLow: number;
-  peopleHigh: number;
+  people: number | null;
+  peopleLow: number | null;
+  peopleHigh: number | null;
 
   dataType: string;
 }

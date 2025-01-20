@@ -134,6 +134,11 @@ path.leaflet-interactive:focus {
   cursor: pointer;
 }
 
+/* for hazards marker icon */
+.leaflet-marker-icon.leaflet-interactive{
+  cursor: pointer;
+}
+
 .map-marker-with-margin {
   margin: 1px !important;
 }

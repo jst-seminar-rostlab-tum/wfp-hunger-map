@@ -10,7 +10,20 @@ import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations.ts
 import { IpcChoroplethOperations } from '@/operations/map/IpcChoroplethOperations';
 import NutritionChoroplethOperations from '@/operations/map/NutritionChoroplethOperations.ts';
 
+/**
+ * Operations class handling sidebar-related functionality for the WFP Hunger Map.
+ * Manages map types, alert types, and data availability checks.
+ *
+ * @class
+ */
 export class SidebarOperations {
+  /**
+   * Returns available map types for the sidebar navigation.
+   *
+   * @returns {SidebarMapType[]} Array of map types with their metadata
+   * @example
+   * const mapTypes = SidebarOperations.getSidebarMapTypes();
+   */
   public static getSidebarMapTypes(): SidebarMapType[] {
     return [
       {
@@ -41,6 +54,10 @@ export class SidebarOperations {
     ];
   }
 
+  /**
+   * Predefined alert types available in the sidebar.
+   * @static
+   */
   static sidebarAlertTypes: SidebarAlertType[] = [
     {
       key: AlertType.COUNTRY_ALERTS,
@@ -59,18 +76,45 @@ export class SidebarOperations {
     },
   ];
 
+  /**
+   * Returns available alert types for the sidebar.
+   *
+   * @returns {SidebarAlertType[]} Array of alert types
+   */
   public static getSidebarAlertTypes(): SidebarAlertType[] {
     return SidebarOperations.sidebarAlertTypes;
   }
 
+  /**
+   * Finds an alert type by its key.
+   *
+   * @param {AlertType} key - The alert type key to search for
+   * @returns {SidebarAlertType | undefined} The found alert type or undefined
+   */
   public static getSidebarAlertTypeByKey(key: AlertType): SidebarAlertType | undefined {
     return SidebarOperations.sidebarAlertTypes.find((alert) => alert.key === key);
   }
 
+  /**
+   * Type guard to check if an alert type has subalerts.
+   *
+   * @param {SidebarAlertType} item - The alert type to check
+   * @returns {boolean} True if the item has subalerts
+   */
   public static hasSubalerts(item: SidebarAlertType): item is SidebarAlertType & { subalerts: SidebarAlertType[] } {
     return 'subalerts' in item;
   }
 
+  /**
+   * Checks if data is available for a given country and map type.
+   *
+   * @param {CountryMapData} country - Country to check
+   * @param {GlobalInsight} selectedMapType - Selected map type
+   * @param {Record<string, CountryFcsData>} fcsData - Food consumption score data
+   * @param {CountryNutrition | undefined} nutritionData - Nutrition data
+   * @param {CountryIpcData[] | undefined} ipcData - IPC data
+   * @returns {boolean} True if data is available
+   */
   static checkAvailabilityOfData(
     country: CountryMapData,
     selectedMapType: GlobalInsight,

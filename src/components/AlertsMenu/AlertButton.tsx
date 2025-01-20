@@ -7,6 +7,33 @@ import { forwardRef } from 'react';
 import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { AlertButtonProps } from '@/domain/props/AlertButtonProps';
 
+/**
+ * AlertButton component renders a circular button with an icon, used in the alerts menu.
+ * Supports loading states, selection states, and forwards refs.
+ *
+ * @component
+ * @example
+ * ```tsx
+ * <AlertButton
+ *   icon="/path/to/icon.svg"
+ *   label="Hazard Alert"
+ *   isSelected={false}
+ *   isLoading={false}
+ *   onClick={() => {}}
+ * />
+ * ```
+ *
+ * @param {AlertButtonProps} props - Component props
+ * @param {string} props.icon - Path to the icon image
+ * @param {string} props.label - Button label (used for accessibility)
+ * @param {boolean} [props.isSelected] - Whether the button is in selected state
+ * @param {boolean} [props.isLoading] - Whether to show loading spinner
+ * @param {() => void} props.onClick - Click handler function
+ * @param {string} [props.className] - Additional CSS classes
+ * @param {React.Ref<HTMLButtonElement>} ref - Forwarded ref
+ *
+ * @returns {ForwardRefExoticComponent<AlertButtonProps & RefAttributes<HTMLButtonElement>>} The alert button component
+ */
 export const AlertButton = forwardRef<HTMLButtonElement, AlertButtonProps>(
   ({ icon, label, isSelected, isLoading, onClick, className, ...props }, ref) => {
     const { isSidebarOpen } = useSidebar();

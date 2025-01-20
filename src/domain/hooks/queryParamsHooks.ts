@@ -59,7 +59,6 @@ export const useSelectedTab = () => {
   }, [searchParams]);
 
   const setSelectedTabFn = (tab: string) => {
-    setSelectedTab(tab);
     const updatedParams = new URLSearchParams(searchParams.toString());
     if (tab) {
       updatedParams.set(PARAM_NAME, tab);

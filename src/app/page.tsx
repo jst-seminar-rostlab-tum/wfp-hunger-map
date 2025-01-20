@@ -14,12 +14,14 @@ export default async function Home() {
   const countryFcsDataPromise = globalRepo.getFcsData();
   const disputedAreasPromise = globalRepo.getDisputedAreas();
   const alertDataPromise = globalRepo.getAlertData();
+  console.time('page.tsx');
   const [countryMapData, fcsData, disputedAreas, alertData] = await Promise.all([
     countryMapDataPromise,
     countryFcsDataPromise,
     disputedAreasPromise,
     alertDataPromise,
   ]);
+  console.timeEnd('page.tsx');
 
   return (
     <>

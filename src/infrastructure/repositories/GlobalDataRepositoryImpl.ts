@@ -28,33 +28,41 @@ export default class GlobalDataRepositoryImpl implements GlobalDataRepository {
   }
 
   async getAlertData(): Promise<CountryAlertData[]> {
+    console.time('alerts');
     const response = await fetch(`${process.env.NEXT_PUBLIC_V3_API_URL}/adm0/alertsAndCentroids.json`, {
       next: { revalidate: 3600 * 12 },
     });
     const data: ResponseWrapper<CountryAlertData[]> = await response.json();
+    console.timeEnd('alerts');
     return data.body;
   }
 
   async getDisputedAreas(): Promise<DisputedAreas> {
+    console.time('disputedAreas');
     const response = await fetch(`https://cdn.hungermapdata.org/hungermap/adm0_disputed_areas_lowres.json`, {
       next: { revalidate: 3600 * 12 },
     });
+    console.timeEnd('disputedAreas');
     return response.json();
   }
 
   async getMapDataForCountries(): Promise<CountryMapDataWrapper> {
+    console.time('mapData');
     const response = await fetch(`${process.env.NEXT_PUBLIC_V3_API_URL}/adm0data.json`, {
       next: { revalidate: 3600 * 12 }, // Next can't actually cache this, because the response is larger than 2MB
     });
     const data: ResponseWrapper<CountryMapDataWrapper> = await response.json();
+    console.timeEnd('mapData');
     return data.body;
   }
 
   async getFcsData(): Promise<GlobalFcsData> {
+    console.time('fcs');
     const response = await fetch(`${process.env.NEXT_PUBLIC_V3_API_URL}/adm0/fcs.json`, {
       next: { revalidate: 3600 * 12 },
     });
     const data: ResponseWrapper<GlobalFcsData> = await response.json();
+    console.timeEnd('fcs');
     return data.body;
   }
 

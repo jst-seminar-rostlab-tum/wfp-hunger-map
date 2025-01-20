@@ -114,7 +114,7 @@ export class RegionComparisonOperations {
   }
 
   private static getFcsGraph(selectedRegionProperties: RegionProperties[]): ContinuousChartData {
-    const showErrorMargins = selectedRegionProperties.length <= 3;
+    const showErrorMargins = selectedRegionProperties.length <= 5;
     return CountryComparisonOperations.chartWithoutEmptyLines({
       type: ContinuousChartDataType.LINE_CHART_DATA,
       xAxisType: 'datetime',

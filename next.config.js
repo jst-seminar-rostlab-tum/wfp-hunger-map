@@ -12,14 +12,6 @@ const nextConfig = {
   },
   cacheHandler: require.resolve('next/dist/server/lib/incremental-cache/file-system-cache.js'),
   productionBrowserSourceMaps: true,
-  async headers() {
-    return [
-      {
-        source: '/(.*)',
-        headers: [{ key: 'cache-control', value: 'public, max-age=43200' }],
-      },
-    ];
-  },
 };
 
 module.exports = nextConfig;

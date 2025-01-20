@@ -102,7 +102,6 @@ export class RegionComparisonOperations {
     selectedRegionProperties: RegionProperties[],
     showRelativeNumbers: boolean
   ): CategoricalChartData {
-    console.log(selectedRegionProperties);
     return {
       yAxisLabel: showRelativeNumbers ? '% of population' : 'Mill',
       categories: selectedRegionProperties

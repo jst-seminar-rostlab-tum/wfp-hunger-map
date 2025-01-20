@@ -96,7 +96,7 @@ export default function RegionSelection({
         >
           {(regionData?.features || []).map((region) => (
             <SelectItem
-              key={region.id}
+              key={region.properties.Code}
               aria-label={region.properties.Name}
               className="transition-all hover:text-background dark:text-foreground"
             >

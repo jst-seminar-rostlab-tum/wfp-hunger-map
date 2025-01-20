@@ -21,12 +21,14 @@ export class RegionComparisonOperations {
   static getComparisonAccordionItems(
     { fcsBarChartData, rcsiBarChartData, fcsGraphData }: RegionComparisonChartData,
     selectedRegions: string[] | 'all',
-    regionFeatures: (Feature<RegionProperties> & { id: string })[]
+    regionFeatures: (Feature<RegionProperties> & { id?: string })[]
   ): AccordionItemProps[] {
     const selectedRegionFeatures =
       selectedRegions === 'all'
         ? regionFeatures
-        : regionFeatures.filter((regionFeature) => selectedRegions.includes(regionFeature.id.toString()));
+        : regionFeatures.filter(
+            (regionFeature) => regionFeature.id && selectedRegions.includes(regionFeature.id?.toString())
+          );
     const selectedRegionNames = selectedRegionFeatures.map((regionFeature) => regionFeature.properties.Name);
     return [
       {
@@ -82,7 +84,9 @@ export class RegionComparisonOperations {
     let selectedRegionFeatures = regionData.features;
     if (selectedRegions !== 'all') {
       const selectedRegionsSet = new Set(selectedRegions);
-      selectedRegionFeatures = selectedRegionFeatures.filter((feature) => selectedRegionsSet.has(feature.id));
+      selectedRegionFeatures = selectedRegionFeatures.filter((feature) =>
+        selectedRegionsSet.has(feature.properties.Code.toString())
+      );
     }
     const selectedRegionProperties = selectedRegionFeatures.map((feature) => feature.properties);
 
@@ -98,6 +102,7 @@ export class RegionComparisonOperations {
     selectedRegionProperties: RegionProperties[],
     showRelativeNumbers: boolean
   ): CategoricalChartData {
+    console.log(selectedRegionProperties);
     return {
       yAxisLabel: showRelativeNumbers ? '% of population' : 'Mill',
       categories: selectedRegionProperties

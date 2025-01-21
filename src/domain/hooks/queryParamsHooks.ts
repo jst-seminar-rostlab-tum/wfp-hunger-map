@@ -3,6 +3,13 @@ import { useEffect, useState } from 'react';
 
 import { CountryMapData, CountryMapDataWrapper } from '@/domain/entities/country/CountryMapData.ts';
 
+const pushRoute = (pathname: string, searchParams: URLSearchParams) => {
+  // use browser history API instead of next.js router to avoid refetching
+  if (typeof window !== 'undefined') {
+    window.history.pushState({}, '', `${pathname}?${searchParams.toString()}`);
+  }
+};
+
 /**
  * Return a state that is synchronized with the `countries` query param.
  * Whereas the returned state value and update function work with arrays of `CountryMapData`, the query param is using the `adm0_id`.
@@ -12,7 +19,6 @@ import { CountryMapData, CountryMapDataWrapper } from '@/domain/entities/country
  */
 export const useSelectedCountries = (countryMapData: CountryMapDataWrapper) => {
   const PARAM_NAME = 'countries';
-  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [selectedCountries, setSelectedCountries] = useState<CountryMapData[] | undefined>(undefined);
@@ -34,7 +40,7 @@ export const useSelectedCountries = (countryMapData: CountryMapDataWrapper) => {
     } else {
       updatedParams.delete(PARAM_NAME);
     }
-    router.push(`${pathname}?${updatedParams.toString()}`);
+    pushRoute(pathname, updatedParams);
   };
 
   return [selectedCountries, setSelectedCountriesFn] as const;
@@ -47,7 +53,6 @@ export const useSelectedCountries = (countryMapData: CountryMapDataWrapper) => {
  */
 export const useSelectedTab = () => {
   const PARAM_NAME = 'tab';
-  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [selectedTab, setSelectedTab] = useState<string>(() => {
@@ -65,7 +70,7 @@ export const useSelectedTab = () => {
     } else {
       updatedParams.delete(PARAM_NAME);
     }
-    router.push(`${pathname}?${updatedParams.toString()}`);
+    pushRoute(pathname, updatedParams);
   };
 
   return [selectedTab, setSelectedTabFn] as const;
@@ -81,7 +86,6 @@ export const useSelectedTab = () => {
 export const useSelectedRegions = () => {
   const REGION_PARAM = 'regions';
   const COMPARISON_COUNTRY_PARAM = 'regionComparisonCountry';
-  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -110,7 +114,7 @@ export const useSelectedRegions = () => {
     } else {
       updatedParams.delete(REGION_PARAM);
     }
-    router.push(`${pathname}?${updatedParams.toString()}`);
+    pushRoute(pathname, updatedParams);
   };
 
   const setSelectedRegionComparisonCountryFn = (comparisonCountry: string | undefined) => {
@@ -123,7 +127,7 @@ export const useSelectedRegions = () => {
     } else {
       updatedParams.delete(COMPARISON_COUNTRY_PARAM);
     }
-    router.push(`${pathname}?${updatedParams.toString()}`);
+    pushRoute(pathname, updatedParams);
   };
 
   return {

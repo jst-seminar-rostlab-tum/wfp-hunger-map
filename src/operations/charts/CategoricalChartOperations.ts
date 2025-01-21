@@ -38,7 +38,7 @@ export default class CategoricalChartOperations {
     let tooltip = '';
     points?.forEach((p) => {
       if (p.point.options.y) {
-        tooltip += `<br><span style="color:${p.color}">\u25CF</span> <div>${p.point.options.y}</div>`;
+        tooltip += `<br><span style="color:${p.color}">\u25CF</span> <div> ${p.key} ${p.point.options.y} </div>`;
       }
     });
     return tooltip;

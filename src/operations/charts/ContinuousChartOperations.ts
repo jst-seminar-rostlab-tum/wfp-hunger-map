@@ -65,7 +65,17 @@ export default class ContinuousChartOperations {
     }
     points?.forEach((p) => {
       if (p.point.options.y) {
-        tooltip += `<br><span style="color:${p.series.color}">\u25CF</span> <div>${p.point.options.y}</div>`;
+        if (
+          p.point.series.name === 'Balance of Trade' ||
+          p.point.series.name === 'Headline Inflation' ||
+          p.point.series.name === 'Food Inflation' ||
+          p.point.series.name === 'People Using Crisis or Above Crisis Food-Based Coping' ||
+          p.point.series.name === 'People with Insufficient Food Consumption'
+        ) {
+          tooltip += `<br><span style="color:${p.series.color}">\u25CF</span> <div>${p.point.options.y}</div>`;
+        } else {
+          tooltip += `<br><span style="color:${p.color}">\u25CF</span> <div> ${p.point.series.name} ${p.point.options.y} </div>`;
+        }
       } else if (p.point.options.high !== undefined && p.point.options.low !== undefined) {
         tooltip += `<div style="color: ${getTailwindColor('--nextui-secondary')}"> (<div>${p.point.options.low} - ${p.point.options.high}</div>)</div>`;
       }

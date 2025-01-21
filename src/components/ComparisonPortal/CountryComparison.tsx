@@ -35,7 +35,10 @@ export default function ComparisonPortal({ countryMapData, globalFcsData }: Coun
         onSelectionChange={(key) => setSelectedTab(key as string)}
         size="md"
         variant="underlined"
-        className="justify-center px-1"
+        classNames={{
+          base: 'justify-center px-1',
+          cursor: 'w-full',
+        }}
         fullWidth
       >
         <Tab key="country" title="Country Comparison">

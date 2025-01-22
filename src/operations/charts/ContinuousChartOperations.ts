@@ -64,7 +64,7 @@ export default class ContinuousChartOperations {
       tooltip = `<b>${x}</b>`;
     }
     points?.forEach((p) => {
-      if (p.point.options.y) {
+      if (p.point.options.y !== undefined) {
         tooltip += `<br><span style="color:${p.series.color}">\u25CF</span> <div>${p.point.options.y}</div>`;
       } else if (p.point.options.high !== undefined && p.point.options.low !== undefined) {
         tooltip += `<div style="color: ${getTailwindColor('--nextui-secondary')}"> (<div>${p.point.options.low} - ${p.point.options.high}</div>)</div>`;

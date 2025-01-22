@@ -137,3 +137,12 @@ path.leaflet-interactive:focus {
 .map-marker-with-margin {
   margin: 1px !important;
 }
+
+.hide-scrollbar {
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Opera */
+}

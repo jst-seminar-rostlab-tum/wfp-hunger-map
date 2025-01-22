@@ -6,13 +6,22 @@
 
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-This is the repository for the World Food Program's HungerMap.
+This is the repository for the World Food Program's HungerMap. For a more information, check out the **[documentation](https://docs-wfp-hungermap.netlify.app/)**.
 
 This software is dual-licensed:
 
 1. **Open-Source License**: Distributed under the terms of the Server Side Publc License (SSPL). See the `LICENSE` file for details.
 2. **Commercial License**: Available for businesses requiring proprietary use. Contact the Center for Software Engineering Excellence at partners@csee.tech for more information.
    Failure to comply with either license will constitute a violation of intellectual property rights.
+
+## Table of contents
+
+- [Contibutors](#contributors-)
+- [Technologies Used](#technologies-used)
+- [Feature list](#feature-list)
+- [Local development](#local-development)
+- [Deployment](#deployment)
+- [Development guidelines](#development-guidelines)
 
 ## Contributors ✨
 
@@ -68,7 +77,27 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 - [Highcharts](https://www.highcharts.com/), [highcharts-react](https://github.com/highcharts/highcharts-react)
 - [Tanstack Query](https://tanstack.com/query/latest)
 
-## How to Use
+## Feature list
+
+Among many others, the application contains the following features:
+
+### Hunger data visualized on multiple map and alert types
+
+TODO F-268
+
+### Information pages
+
+TODO F-269
+
+### Chatbot
+
+TODO F-275
+
+### Comparison portal
+
+TODO?
+
+## Local development
 
 **Make sure to use yarn instead of npm!**
 
@@ -78,11 +107,32 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 yarn install
 ```
 
+### Set up `.env` file
+
+Create a file called `.env` in the root of the project and populate it with the following values:
+
+```
+NEXT_PUBLIC_API_URL=https://api.hungermapdata.org/v2
+NEXT_PUBLIC_V3_API_URL=https://b8m0cvbhz3.execute-api.eu-west-1.amazonaws.com/v3
+NEXT_PUBLIC_CHATBOT_API_URL=https://wfpbackend.onrender.com
+NEXT_PUBLIC_EMAIL_SERVICE=https://wpf-email-service-backend.onrender.com
+NEXT_PUBLIC_GA_ID=<google analytics id>     # Google Analytics ID, optional
+NEXT_PUBLIC_FORECASTS_ENABLED=true
+```
+
 ### Run the development server
 
 ```bash
 yarn dev
 ```
+
+## Deployment
+
+The application can easily be deployed to PaaS platforms supporting Next.js such as Netlify or Vercel. In addition, the repository contains a Dockerfile, with which you can easily deploy it on any server. Requirements: Docker installed on the machine.
+
+1. [Populate the `.env` file](#set-up-env-file)
+2. Build the image: `docker build -t wfp-hungermap .`
+3. Start the container: `docker run -p 3000:3000 wfp-hungermap`
 
 ## Development guidelines
 
@@ -122,19 +172,19 @@ The point of DI is that the dependencies of services should not be hardcoded, in
 - Example of how to use the container to resolve a dependency can be found in `src/app/elements/page.tsx`.
 - A list of all dependencies and their implementations can be found in `src/container.tsx`.
 
-## Accessibility score
+### Accessibility score
 
-### Form elements must have labels
+#### Form elements must have labels
 
 Programmatically associate labels with all form controls. The recommended method for most circumstances is to use the label element and an explicit association using the for and id attributes. The examples here are ordered from the most common acceptable solution to the least common acceptable solution. For more information, please check: https://dequeuniversity.com/rules/axe/4.9/label
 
-### list HTML structure
+#### list HTML structure
 
 Ensure all ordered and unordered lists (defined by ul or ol elements) contain only li content elements.
 
 For more information, please check: https://dequeuniversity.com/rules/axe/4.9/list
 
-### Color contrast
+#### Color contrast
 
 Ensure all text elements have sufficient color contrast between the text in the foreground and background color behind it.
 
@@ -142,10 +192,10 @@ Success Criterion: Ensure color contrast of at least 4.5:1 for small text or 3:1
 
 For more information, please check: https://dequeuniversity.com/rules/axe/4.9/color-contrast
 
-### Aira-label
+#### Aira-label
 
 For more information, please check: https://dequeuniversity.com/rules/axe/4.9/aria-command-name
 
-### Target size
+#### Target size
 
 For more information, please check:https://dequeuniversity.com/rules/axe/4.9/target-size

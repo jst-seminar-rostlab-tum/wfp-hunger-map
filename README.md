@@ -126,6 +126,20 @@ NEXT_PUBLIC_FORECASTS_ENABLED=true
 yarn dev
 ```
 
+### Lint your code
+
+To check if there are any lint errors, run
+
+```bash
+yarn lint
+```
+
+To fix any lint errors, run
+
+```bash
+yarn lint:fix
+```
+
 ## Deployment
 
 The application can easily be deployed to PaaS platforms supporting Next.js such as Netlify or Vercel. In addition, the repository contains a Dockerfile, with which you can easily deploy it on any server. Requirements: Docker installed on the machine.

@@ -111,10 +111,12 @@ yarn install
 
 Create a file called `.env` in the root of the project and populate it with the following values:
 
+To use the chatbot feature of the application, start [its backend](https://github.com/jst-seminar-rostlab-tum/wpf-chatbot-backend) locally.
+
 ```
 NEXT_PUBLIC_API_URL=https://api.hungermapdata.org/v2
 NEXT_PUBLIC_V3_API_URL=https://b8m0cvbhz3.execute-api.eu-west-1.amazonaws.com/v3
-NEXT_PUBLIC_CHATBOT_API_URL=https://wfpbackend.onrender.com
+NEXT_PUBLIC_CHATBOT_API_URL=<chatbot API URL>
 NEXT_PUBLIC_EMAIL_SERVICE=https://wpf-email-service-backend.onrender.com
 NEXT_PUBLIC_GA_ID=<google analytics id>     # Google Analytics ID, optional
 NEXT_PUBLIC_FORECASTS_ENABLED=true

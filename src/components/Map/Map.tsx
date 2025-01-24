@@ -20,9 +20,11 @@ import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { CountryMapData, CountryProps } from '@/domain/entities/country/CountryMapData.ts';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight';
+import { useSelectedMapType } from '@/domain/hooks/queryParamsHooks';
 import { MapProps } from '@/domain/props/MapProps';
 import { MapOperations } from '@/operations/map/MapOperations';
 
+import ShareButton from '../ShareButton/shareComponent';
 import { AlertContainer } from './Alerts/AlertContainer';
 import FcsChoropleth from './FcsMap/FcsChoropleth';
 import IpcChoropleth from './IpcMap/IpcChoropleth';
@@ -43,6 +45,8 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
   const { closeSidebar } = useSidebar();
   const [renderer] = useState(new L.SVG({ padding: 0.5 }));
+  const [selectedMapTypeQuery, setSelectedMapTypeQuery] = useSelectedMapType();
+  const [currentUrl, setCurrentUrl] = useState<string>(window.location.href);
 
   const onZoomThresholdReached = () => {
     setSelectedCountryId(null);
@@ -72,6 +76,43 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
       mapRef.current?.zoomOut(4, { animate: true });
     }, 300);
   };
+
+  useEffect(() => {
+    if (selectedMapType === GlobalInsight.IPC) {
+      setSelectedMapTypeQuery('ipc');
+    } else if (selectedMapType === GlobalInsight.NUTRITION) {
+      setSelectedMapTypeQuery('nutrition');
+    } else if (selectedMapType === GlobalInsight.RAINFALL) {
+      setSelectedMapTypeQuery('rainfall');
+    } else if (selectedMapType === GlobalInsight.VEGETATION) {
+      setSelectedMapTypeQuery('vegetation');
+    } else {
+      setSelectedMapTypeQuery('fcs');
+    }
+  }, [selectedMapType, setSelectedMapTypeQuery, selectedMapTypeQuery]);
+
+  useEffect(() => {
+    const updateUrl = () => {
+      const newUrl = window.location.href;
+      if (newUrl !== currentUrl) {
+        setCurrentUrl(newUrl);
+      }
+    };
+    const handlePopState = () => {
+      updateUrl();
+    };
+    const handleHashChange = () => {
+      updateUrl();
+    };
+    const intervalId = setInterval(updateUrl, 100);
+    window.addEventListener('popstate', handlePopState);
+    window.addEventListener('hashchange', handleHashChange);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('hashchange', handleHashChange);
+      clearInterval(intervalId);
+    };
+  }, [currentUrl]);
 
   return (
     <MapContainer
@@ -161,6 +202,9 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
       {selectedMapType === GlobalInsight.IPC && (
         <IpcChoropleth countries={countries} onDataUnavailable={onDataUnavailable} />
       )}
+      <div className="absolute right-[75px] top-[20px] z-[9999]">
+        <ShareButton text="World Food Programme Hunger Map" url={currentUrl} />
+      </div>
     </MapContainer>
   );
 }

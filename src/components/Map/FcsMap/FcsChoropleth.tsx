@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from 'react';
 import { GeoJSON, useMap } from 'react-leaflet';
 
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
+import { useSelectedCountry } from '@/domain/hooks/queryParamsHooks';
 import FcsChoroplethProps from '@/domain/props/FcsChoroplethProps';
 import { AccessibilityOperations } from '@/operations/map/AccessibilityOperations';
 import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
@@ -32,12 +33,20 @@ export default function FcsChoropleth({
   const { theme } = useTheme();
   const countryData = data.features[0].properties;
   const map = useMap();
+  const [selectedCountry, setSelectedCountry] = useSelectedCountry();
 
-  // adding the country name as a tooltip to each layer (on hover); the tooltip is not shown if the country is selected
   useEffect(() => {
     if (!geoJsonRef.current || !map) return () => {};
     return MapOperations.handleCountryTooltip(geoJsonRef, map, fcsData);
-  }, [selectedCountryId]);
+  }, [selectedCountryId, map, fcsData]);
+
+  useEffect(() => {
+    if (countryId === selectedCountryId) {
+      setSelectedCountry(selectedCountryId);
+    } else if (!selectedCountryId) {
+      setSelectedCountry(undefined);
+    }
+  }, [countryId, selectedCountryId, setSelectedCountry, selectedCountry]);
 
   useEffect(() => {
     const geoJsonLayer = geoJsonRef.current;

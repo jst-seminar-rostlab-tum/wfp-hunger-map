@@ -18,7 +18,7 @@ export default function BackToGlobalButton() {
   };
 
   return selectedCountryId ? (
-    <div className="absolute right-[75px] top-[20px] z-[9999]">
+    <div className="absolute right-[193px] top-[20px] z-[9999]">
       <Button
         color="primary"
         className="flex items-center space-x-2 text-white"

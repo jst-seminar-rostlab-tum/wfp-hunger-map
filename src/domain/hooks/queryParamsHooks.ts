@@ -1,7 +1,13 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+import { useSelectedAlert } from '@/domain/contexts/SelectedAlertContext';
 import { CountryMapData, CountryMapDataWrapper } from '@/domain/entities/country/CountryMapData.ts';
+
+import { useSelectedCountryId } from '../contexts/SelectedCountryIdContext';
+import { useSelectedMap } from '../contexts/SelectedMapContext';
+import { AlertType } from '../enums/AlertType';
+import { GlobalInsight } from '../enums/GlobalInsight';
 
 /**
  * Return a state that is synchronized with the `countries` query param.
@@ -29,8 +35,8 @@ export const useSelectedCountries = (countryMapData: CountryMapDataWrapper) => {
   // update state and query params with new value
   const setSelectedCountriesFn = (newValue: CountryMapData[] | undefined) => {
     setSelectedCountries(newValue);
-    const selectedCountryIds = newValue?.map((country) => country.properties.adm0_id) ?? [];
-    router.push(`${pathname}?${PARAM_NAME}=${selectedCountryIds.join(',')}`);
+    const selectedCountryIdQuerys = newValue?.map((country) => country.properties.adm0_id) ?? [];
+    router.push(`${pathname}?${PARAM_NAME}=${selectedCountryIdQuerys.join(',')}`);
   };
 
   return [selectedCountries, setSelectedCountriesFn] as const;
@@ -94,4 +100,109 @@ export const useSearchQuery = () => {
   };
 
   return [searchQuery, setSearchQueryFn] as const;
+};
+
+export const useSelectedCountry = () => {
+  const PARAM_NAME = 'countryId';
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [selectedCountryIdQuery, setSelectedCountryIdQuery] = useState<number | undefined>(undefined);
+  const { setSelectedCountryId } = useSelectedCountryId();
+
+  useEffect(() => {
+    const countryId = searchParams.get(PARAM_NAME);
+    setSelectedCountryIdQuery(countryId ? parseInt(countryId, 10) : undefined);
+    setSelectedCountryId(countryId ? parseInt(countryId, 10) : null);
+  }, [searchParams]);
+
+  const setSelectedCountryIdQueryFn = (id: number | undefined) => {
+    setSelectedCountryIdQuery(id);
+    const updatedParams = new URLSearchParams(searchParams.toString());
+    if (id !== undefined) {
+      updatedParams.set(PARAM_NAME, id.toString());
+    } else {
+      updatedParams.delete(PARAM_NAME);
+    }
+
+    router.push(`${pathname}?${updatedParams.toString()}`);
+  };
+
+  return [selectedCountryIdQuery, setSelectedCountryIdQueryFn] as const;
+};
+
+export const useSelectedMapType = () => {
+  const { setSelectedMapType } = useSelectedMap();
+  const PARAM_NAME = 'selectedMap';
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [selectedMap, setSelectedMap] = useState<string>('fcs');
+
+  useEffect(() => {
+    const mapType = searchParams.get(PARAM_NAME);
+
+    if (mapType === 'nutrition') {
+      setSelectedMap('nutrition');
+      setSelectedMapType(GlobalInsight.NUTRITION);
+    } else if (mapType === 'ipc') {
+      setSelectedMap('ipc');
+      setSelectedMapType(GlobalInsight.IPC);
+    } else if (mapType === 'rainfall') {
+      setSelectedMap('rainfall');
+      setSelectedMapType(GlobalInsight.RAINFALL);
+    } else if (mapType === 'vegetation') {
+      setSelectedMap('vegetation');
+      setSelectedMapType(GlobalInsight.VEGETATION);
+    } else {
+      setSelectedMap('fcs');
+      setSelectedMapType(GlobalInsight.FOOD);
+    }
+  }, [searchParams]);
+
+  const setSelectedMapFn = (mapType: string) => {
+    setSelectedMap(mapType);
+    const updatedParams = new URLSearchParams(searchParams.toString());
+    updatedParams.set(PARAM_NAME, mapType);
+    router.push(`${pathname}?${updatedParams.toString()}`);
+  };
+
+  return [selectedMap, setSelectedMapFn] as const;
+};
+export const useSelectedAlertQuery = () => {
+  const { toggleAlert } = useSelectedAlert();
+  const [selectedAlert, setSelectedAlert] = useState<AlertType>(AlertType.COUNTRY_ALERTS);
+  const PARAM_NAME = 'alert';
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const alertType = searchParams.get(PARAM_NAME);
+    if (alertType) {
+      if (alertType === 'conflicts') {
+        console.log('Toggling CONFLICTS alert');
+        toggleAlert(AlertType.CONFLICTS);
+        setSelectedAlert(AlertType.CONFLICTS);
+      } else if (alertType === 'hazards') {
+        console.log('Toggling HAZARDS alert');
+        toggleAlert(AlertType.HAZARDS);
+        setSelectedAlert(AlertType.HAZARDS);
+      } else if (alertType === 'countryAlerts') {
+        console.log('Toggling COUNTRY_ALERTS alert');
+        toggleAlert(AlertType.COUNTRY_ALERTS);
+        setSelectedAlert(AlertType.COUNTRY_ALERTS);
+      }
+    }
+  }, [searchParams]);
+
+  const setAlertQueryFn = (alertType: AlertType) => {
+    setSelectedAlert(alertType);
+    const updatedParams = new URLSearchParams(searchParams.toString());
+    updatedParams.set(PARAM_NAME, alertType);
+    console.log('Updated query param:', updatedParams.toString());
+    router.push(`${pathname}?${updatedParams.toString()}`);
+  };
+
+  return [selectedAlert, setAlertQueryFn] as const;
 };

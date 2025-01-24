@@ -1,7 +1,8 @@
 'use client';
 
 import { Divider, Input } from '@nextui-org/react';
-import { Facebook, Instagram, Twitch, Youtube } from 'iconsax-react';
+import { Facebook, Global, Instagram, Musicnote, Xrp, Youtube } from 'iconsax-react';
+import { Linkedin } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 
 import container from '@/container';
@@ -192,17 +193,26 @@ export default function SubscriptionForm() {
       </form>
 
       <div className="flex gap-1">
-        <SocialLink href="https://twitch.com/">
-          <Twitch size={24} color="#6441A4" />
-        </SocialLink>
-        <SocialLink href="https://facebook.com/">
+        <SocialLink href="https://www.facebook.com/WorldFoodProgramme">
           <Facebook size={24} color="#1877F2" />
         </SocialLink>
-        <SocialLink href="https://youtube.com/">
+        <SocialLink href="https://www.youtube.com/@WorldFoodProgramme">
           <Youtube size={24} color="#FF0000" />
         </SocialLink>
-        <SocialLink href="https://instagram.com/">
+        <SocialLink href="https://www.instagram.com/Worldfoodprogramme/">
           <Instagram size={24} color="#E1306C" />
+        </SocialLink>
+        <SocialLink href="https://www.wfp.org/">
+          <Global size={24} color="#FF8A65" />
+        </SocialLink>
+        <SocialLink href="https://x.com/WFP">
+          <Xrp size={24} color="#1DA1F2" />
+        </SocialLink>
+        <SocialLink href="https://www.tiktok.com/@worldfoodprogramme">
+          <Musicnote size={24} color="#6441A4" />
+        </SocialLink>
+        <SocialLink href="https://www.linkedin.com/company/unwfp/">
+          <Linkedin size={24} color="#0077B5" />
         </SocialLink>
       </div>
     </div>

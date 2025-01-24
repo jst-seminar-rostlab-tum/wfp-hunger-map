@@ -1,5 +1,3 @@
-'use client';
-
 import { Modal, ModalBody, ModalContent, ModalHeader } from '@nextui-org/modal';
 
 import PopupModalProps from '@/domain/props/PopupModalProps';

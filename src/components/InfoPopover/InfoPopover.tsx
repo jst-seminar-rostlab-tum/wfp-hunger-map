@@ -15,7 +15,7 @@ export function InfoPopover({
   return (
     <Popover className="m-2">
       <PopoverTrigger>
-        <Button isIconOnly radius="full" className="w-[37px] h-[37px]" variant="light" aria-label="info icon">
+        <Button as="span" isIconOnly radius="full" className="w-[37px] h-[37px]" variant="light" aria-label="info icon">
           {infoIcon}
         </Button>
       </PopoverTrigger>

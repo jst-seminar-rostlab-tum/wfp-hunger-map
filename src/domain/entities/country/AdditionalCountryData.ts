@@ -8,6 +8,6 @@ export interface AdditionalCountryData {
   };
   // One region of the country
   features: (Feature<RegionProperties> & {
-    id: string;
+    id?: string;
   })[];
 }

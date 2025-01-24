@@ -3,37 +3,142 @@ import { useEffect, useState } from 'react';
 
 import { CountryMapData, CountryMapDataWrapper } from '@/domain/entities/country/CountryMapData.ts';
 
+const pushRoute = (pathname: string, searchParams: URLSearchParams) => {
+  // use browser history API instead of next.js router to avoid refetching
+  if (typeof window !== 'undefined') {
+    window.history.pushState({}, '', `${pathname}?${searchParams.toString()}`);
+  }
+};
+
 /**
  * Return a state that is synchronized with the `countries` query param.
  * Whereas the returned state value and update function work with arrays of `CountryMapData`, the query param is using the `adm0_id`.
  *
- * Note: It is assumed that there is only one relevant query param, any others will be erased on change.
+ * @param {CountryMapDataWrapper} countryMapData Polygon and alert data for all selected countries
+ * @return `[selectedCountries, setSelectedCountries]` similar to a `useState<CountryMapData[] | undefined>` call
  */
 export const useSelectedCountries = (countryMapData: CountryMapDataWrapper) => {
   const PARAM_NAME = 'countries';
-
-  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [selectedCountries, setSelectedCountries] = useState<CountryMapData[] | undefined>(undefined);
 
-  // get state values from query params
   useEffect(() => {
-    const searchParamCountryCodes = searchParams.get(PARAM_NAME)?.split(',') ?? [];
-    const newSelectedCountries = countryMapData.features.filter((availableCountry) =>
-      searchParamCountryCodes.includes(availableCountry.properties.adm0_id.toString())
+    const countryIds = searchParams.get(PARAM_NAME)?.split(',') ?? [];
+    const countries = countryMapData.features.filter((country) =>
+      countryIds.includes(country.properties.adm0_id.toString())
     );
-    setSelectedCountries(newSelectedCountries);
+    setSelectedCountries(countries);
   }, [searchParams]);
 
-  // update state and query params with new value
-  const setSelectedCountriesFn = (newValue: CountryMapData[] | undefined) => {
-    setSelectedCountries(newValue);
-    const selectedCountryIds = newValue?.map((country) => country.properties.adm0_id) ?? [];
-    router.push(`${pathname}?${PARAM_NAME}=${selectedCountryIds.join(',')}`);
+  const setSelectedCountriesFn = (countries: CountryMapData[] | undefined) => {
+    setSelectedCountries(countries);
+    const countryIds = countries?.map((c) => c.properties.adm0_id) ?? [];
+    const updatedParams = new URLSearchParams(searchParams.toString());
+    if (countryIds.length > 0) {
+      updatedParams.set(PARAM_NAME, countryIds.join(','));
+    } else {
+      updatedParams.delete(PARAM_NAME);
+    }
+    pushRoute(pathname, updatedParams);
   };
 
   return [selectedCountries, setSelectedCountriesFn] as const;
+};
+
+/**
+ * Return a state that is synchronized with the `tab` query param.
+ *
+ * @return `[selectedTab, setSelectedTab]` similar to a `useState<string>` call
+ */
+export const useSelectedTab = () => {
+  const PARAM_NAME = 'tab';
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [selectedTab, setSelectedTab] = useState<string>(() => {
+    return searchParams.get(PARAM_NAME) ?? 'country';
+  });
+
+  useEffect(() => {
+    setSelectedTab(searchParams.get(PARAM_NAME) ?? 'country');
+  }, [searchParams]);
+
+  const setSelectedTabFn = (tab: string) => {
+    const updatedParams = new URLSearchParams(searchParams.toString());
+    if (tab) {
+      updatedParams.set(PARAM_NAME, tab);
+    } else {
+      updatedParams.delete(PARAM_NAME);
+    }
+    pushRoute(pathname, updatedParams);
+  };
+
+  return [selectedTab, setSelectedTabFn] as const;
+};
+
+/**
+ * Return a state that is synchronized with the `regions` and `regionComparisonCountry` query params.
+ * Regions are stored as array of their IDs (converted to strings) or a single string `'all'`.
+ * The country is stored as `string` of its `adm0_id`.
+ *
+ * @return `{selectedRegions, setSelectedRegions, selectedRegionComparisonCountry, setSelectedRegionComparisonCountry}` similar to `useState` calls.
+ */
+export const useSelectedRegions = () => {
+  const REGION_PARAM = 'regions';
+  const COMPARISON_COUNTRY_PARAM = 'regionComparisonCountry';
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const [selectedRegions, setSelectedRegions] = useState<string[] | 'all' | undefined>(undefined);
+  // undefined if loading, null if not set
+  const [selectedRegionComparisonCountry, setSelectedRegionComparisonCountry] = useState<string | null | undefined>(
+    undefined
+  );
+
+  useEffect(() => {
+    const regionParam = searchParams.get(REGION_PARAM);
+    if (regionParam === 'all') setSelectedRegions('all');
+    else setSelectedRegions(regionParam?.split(',') ?? []);
+
+    setSelectedRegionComparisonCountry(searchParams.get(COMPARISON_COUNTRY_PARAM) ?? null);
+  }, [searchParams]);
+
+  const setSelectedRegionsFn = (regions: string[] | 'all', nAvailableRegions: number | undefined) => {
+    // Use 'all' instead of the array if possible to have a cleaner query param.
+    // eslint-disable-next-line no-param-reassign
+    if (regions.length === nAvailableRegions) regions = 'all';
+
+    setSelectedRegions(regions);
+    const updatedParams = new URLSearchParams(searchParams.toString());
+    if (regions === 'all') {
+      updatedParams.set(REGION_PARAM, 'all');
+    } else if (regions.length > 0) {
+      updatedParams.set(REGION_PARAM, regions.join(','));
+    } else {
+      updatedParams.delete(REGION_PARAM);
+    }
+    pushRoute(pathname, updatedParams);
+  };
+
+  const setSelectedRegionComparisonCountryFn = (comparisonCountry: string | null) => {
+    setSelectedRegionComparisonCountry(comparisonCountry);
+    setSelectedRegions([]);
+    const updatedParams = new URLSearchParams(searchParams.toString());
+    if (comparisonCountry) {
+      updatedParams.set(COMPARISON_COUNTRY_PARAM, comparisonCountry);
+      updatedParams.delete(REGION_PARAM);
+    } else {
+      updatedParams.delete(COMPARISON_COUNTRY_PARAM);
+    }
+    pushRoute(pathname, updatedParams);
+  };
+
+  return {
+    selectedRegions,
+    setSelectedRegions: setSelectedRegionsFn,
+    selectedRegionComparisonCountry,
+    setSelectedRegionComparisonCountry: setSelectedRegionComparisonCountryFn,
+  };
 };
 
 /**

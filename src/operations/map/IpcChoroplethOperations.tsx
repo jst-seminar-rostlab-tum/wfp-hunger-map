@@ -5,6 +5,7 @@ import { createRoot } from 'react-dom/client';
 import CountryHoverPopover from '@/components/CountryHoverPopover/CountryHoverPopover';
 import { CountryIpcData } from '@/domain/entities/country/CountryIpcData';
 import { CountryMapData, CountryMapDataWrapper } from '@/domain/entities/country/CountryMapData';
+import { IpcPhases } from '@/domain/enums/IpcPhases';
 import { inactiveCountryOverlayStyling } from '@/styles/MapColors.ts';
 
 export class IpcChoroplethOperations {
@@ -133,6 +134,10 @@ export class IpcChoroplethOperations {
       if (feature.properties?.adm0_id !== selectedCountryId) {
         this.createTooltip(feature, layer, ipcData);
       }
+      // to handle tooltip for regions with Not Analyzed Data in country view
+      else {
+        IpcChoroplethOperations.initializeRegionLayer(feature, layer);
+      }
       // Attach events to the layer
       this.attachEvents(feature, layer, setSelectedCountryId, selectedCountryId);
     }
@@ -242,6 +247,16 @@ export class IpcChoroplethOperations {
   }
 
   /**
+   * Initializes the region layer by creating a tooltip and attaching events.
+   * @param feature - GeoJSON feature object representing the region
+   * @param layer - Leaflet layer object to which the tooltip and events are bound
+   */
+  static initializeRegionLayer(feature: Feature<Geometry, GeoJsonProperties>, layer: L.Layer) {
+    IpcChoroplethOperations.createPhaseTooltip(feature, layer);
+    IpcChoroplethOperations.attachEventsRegion(feature, layer);
+  }
+
+  /**
    * Attach mouseover and mouseout events to the region layer
    * @param feature - GeoJSON feature object
    * @param layer - Leaflet layer object
@@ -260,11 +275,57 @@ export class IpcChoroplethOperations {
             fillColor: 'hsl(var(--nextui-ipcHoverRegion))',
           });
         }
+        pathLayer.openTooltip();
       },
       // Restore the original layer style
       mouseout: () => {
         pathLayer.setStyle(originalStyle);
+        pathLayer.closeTooltip();
       },
     });
+  }
+
+  /**
+   * Creates a tooltip for the IPC phase of a region.
+   * @param feature - GeoJSON feature object
+   * @param layer - Leaflet layer object
+   */
+  static createPhaseTooltip(feature: Feature<Geometry, GeoJsonProperties>, layer: L.Layer) {
+    const tooltipContainer = document.createElement('div');
+    const root = createRoot(tooltipContainer);
+
+    root.render(
+      <div className="p-3 bg-background text-foreground rounded-medium z-50">
+        <h1 className="text-sm font-semibold">{IpcChoroplethOperations.getPhaseText(feature?.properties?.ipcPhase)}</h1>
+      </div>
+    );
+
+    // Bind the tooltip to the layer
+    layer.bindTooltip(tooltipContainer, {
+      className: 'leaflet-tooltip',
+      sticky: true,
+    });
+  }
+
+  /**
+   * Get the IPC phase text given the phase number.
+   * @param phaseNumber - The phase number (1-5)
+   * @returns - The IPC phase text
+   */
+  static getPhaseText(phaseNumber: number): string {
+    switch (phaseNumber) {
+      case 1:
+        return IpcPhases.PHASE_1;
+      case 2:
+        return IpcPhases.PHASE_2;
+      case 3:
+        return IpcPhases.PHASE_3;
+      case 4:
+        return IpcPhases.PHASE_4;
+      case 5:
+        return IpcPhases.PHASE_5;
+      default:
+        return 'Not Analyzed Data';
+    }
   }
 }

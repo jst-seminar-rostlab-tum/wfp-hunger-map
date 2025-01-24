@@ -96,6 +96,15 @@ export class MapOperations {
     return undefined;
   }
 
+  /**
+   * Handle the tooltip functionality for the country names in the world view
+   * @param geoJsonRef reference to the cloropleth element i.e. the country the tooltip is being attached to
+   * @param map the leaflet map
+   * @param fcsData (Optional) food consumption data - needs to be set when calling from FCS cloropleth
+   * @param nutritionData (Optional) nutrition data - needs to be set when calling from nutrition cloropleth
+   * @param countryMapData (Optional) general data about the country the tooltip is being attached to - needs to be set when calling from nutrition cloropleth
+   * @returns A method destructing the map listeners
+   */
   static handleCountryTooltip(
     geoJsonRef: React.MutableRefObject<L.GeoJSON | null>,
     map: L.Map,

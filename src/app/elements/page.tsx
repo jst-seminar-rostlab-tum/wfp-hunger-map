@@ -134,7 +134,11 @@ export default async function Elements() {
     categories: [
       {
         name: 'Category A',
-        dataPoint: { y: 5 },
+        dataPoint: {
+          y: 5,
+          yRangeMin: 4,
+          yRangeMax: 6,
+        },
       },
       {
         name: 'Category B',

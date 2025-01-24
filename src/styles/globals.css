@@ -134,6 +134,20 @@ path.leaflet-interactive:focus {
   cursor: pointer;
 }
 
+/* for hazards marker icon */
+.leaflet-marker-icon.leaflet-interactive{
+  cursor: pointer;
+}
+
 .map-marker-with-margin {
   margin: 1px !important;
+}
+
+.hide-scrollbar {
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Opera */
 }

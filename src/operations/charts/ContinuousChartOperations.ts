@@ -64,7 +64,7 @@ export default class ContinuousChartOperations {
       tooltip = `<b>${x}</b>`;
     }
     points?.forEach((p) => {
-      if (p.point.options.y) {
+      if (p.point.options.y !== undefined) {
         if (
           p.point.series.name === 'Balance of Trade' ||
           p.point.series.name === 'Headline Inflation' ||
@@ -72,9 +72,10 @@ export default class ContinuousChartOperations {
           p.point.series.name === 'People Using Crisis or Above Crisis Food-Based Coping' ||
           p.point.series.name === 'People with Insufficient Food Consumption'
         ) {
-          tooltip += `<br><span style="color:${p.series.color}">\u25CF</span> <div>${p.point.options.y}</div>`;
-        } else {
-          tooltip += `<br><span style="color:${p.color}">\u25CF</span> <div> ${p.point.series.name}: ${p.point.options.y} </div>`;
+        tooltip += `<br><span style="color:${p.series.color}">\u25CF</span> <div>${p.point.options.y}</div>`;
+        }
+        else {
+          tooltip += `<br><span style="color:${p.series.color}">\u25CF</span> <div> ${p.point.series.name}: ${p.point.options.y}</div>`;
         }
       } else if (p.point.options.high !== undefined && p.point.options.low !== undefined) {
         tooltip += `<div style="color: ${getTailwindColor('--nextui-secondary')}"> (<div>${p.point.options.low} - ${p.point.options.high}</div>)</div>`;

@@ -238,6 +238,9 @@ const config = {
             link: '#005999',
             notAnalyzed: '#CFCFCF',
             ipcHoverRegion: '#A5B1B3',
+
+            // analytics btn
+            analyBtn: '#0054B8',
           },
         },
         dark: {
@@ -289,6 +292,9 @@ const config = {
             link: '#0A9BFF',
             notAnalyzed: '#A6A6A6',
             ipcHoverRegion: '#757E80',
+
+            // analytics btn
+            analyBtn: '#0054B8',
           },
         },
       },

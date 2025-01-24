@@ -1,12 +1,9 @@
-import { Feature } from 'geojson';
 import L from 'leaflet';
 import { useTheme } from 'next-themes';
 import React, { useEffect, useRef } from 'react';
-import { GeoJSON } from 'react-leaflet';
+import { GeoJSON, useMap } from 'react-leaflet';
 
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
-import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
-import { LayerWithFeature } from '@/domain/entities/map/LayerWithFeature.ts';
 import FcsChoroplethProps from '@/domain/props/FcsChoroplethProps';
 import { AccessibilityOperations } from '@/operations/map/AccessibilityOperations';
 import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
@@ -20,7 +17,6 @@ import FscCountryChoropleth from './FcsCountryChoropleth';
  * @param {FeatureCollection<Geometry, GeoJsonProperties>} props.data - The GeoJSON data of the country.
  * @param {string} props.countryId - The ID of the country.
  * @param {Record<string, CountryFcsData>} props.fcsData - The FCS data of the country.
- * @param {(tooltips: (prevRegionLabelData: L.Tooltip[]) => L.Tooltip[]) => void} props.setRegionLabelTooltips - The function to set the region label tooltips.
  * @param {() => void} [props.onDataUnavailable] - A callback to signal to the parent component that there's no regional FCS data for this country
  * @returns {JSX.Element} - The rendered FcsChoropleth component.
  */
@@ -30,26 +26,17 @@ export default function FcsChoropleth({
   countryId,
   fcsData,
   onDataUnavailable,
-  setRegionLabelTooltips,
 }: FcsChoroplethProps): JSX.Element {
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
   const { theme } = useTheme();
   const countryData = data.features[0].properties;
+  const map = useMap();
 
   // adding the country name as a tooltip to each layer (on hover); the tooltip is not shown if the country is selected
   useEffect(() => {
-    if (!geoJsonRef.current) return;
-    geoJsonRef.current.eachLayer((layer: LayerWithFeature) => {
-      if (!layer) return;
-      const feature = layer.feature as Feature;
-      if (FcsChoroplethOperations.checkIfActive(feature as CountryMapData, fcsData)) {
-        const tooltipContainer = MapOperations.createCountryNameTooltipElement(feature?.properties?.adm0_name);
-        layer.bindTooltip(tooltipContainer, { className: 'leaflet-tooltip', sticky: true });
-      } else {
-        layer.unbindTooltip();
-      }
-    });
+    if (!geoJsonRef.current || !map) return () => {};
+    return MapOperations.handleCountryTooltip(geoJsonRef, map, fcsData);
   }, [selectedCountryId]);
 
   useEffect(() => {
@@ -89,11 +76,7 @@ export default function FcsChoropleth({
             countryId={countryData.adm0_id}
             countryName={countryData.adm0_name}
           />
-          <FscCountryChoropleth
-            countryMapData={data}
-            setRegionLabelTooltips={setRegionLabelTooltips}
-            onDataUnavailable={onDataUnavailable}
-          />
+          <FscCountryChoropleth countryMapData={data} onDataUnavailable={onDataUnavailable} />
         </>
       )}
     </>

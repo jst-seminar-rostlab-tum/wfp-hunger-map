@@ -37,7 +37,7 @@ export default class CategoricalChartOperations {
   private static chartTooltipFormatter(points: TooltipFormatterContextObject[] | undefined) {
     let tooltip = '';
     points?.forEach((p) => {
-      if (p.point.options.y) {
+      if (p.point.options.y !== undefined) {
         tooltip += `<br><span style="color:${p.color}">\u25CF</span> <div>${p.point.options.y}</div>`;
       }
     });
@@ -162,6 +162,7 @@ export default class CategoricalChartOperations {
           grouping: true,
           shadow: false,
           borderWidth: 0,
+          colorByPoint: true, // use different colors for each bar
         },
         pie: {
           animation: true,

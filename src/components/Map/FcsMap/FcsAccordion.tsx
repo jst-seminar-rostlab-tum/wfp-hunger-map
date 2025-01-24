@@ -1,3 +1,5 @@
+import { useMap } from 'react-leaflet';
+
 import { useUserRole } from '@/domain/contexts/UserRoleContext';
 import { useCountryDataQuery, useCountryForecastDataQuery, useCountryIso3DataQuery } from '@/domain/hooks/countryHooks';
 import FcsAccordionProps from '@/domain/props/FcsAccordionProps';
@@ -30,6 +32,18 @@ export default function FcsAccordion({ countryName, countryId, countryCode }: Fc
     countryData,
     countryIso3Data
   );
+  const mapInstance = useMap();
+  const disableMapScroll = () => {
+    if (mapInstance && mapInstance.scrollWheelZoom) {
+      mapInstance.scrollWheelZoom.disable();
+    }
+  };
+
+  const enableMapScroll = () => {
+    if (mapInstance && mapInstance.scrollWheelZoom) {
+      mapInstance.scrollWheelZoom.enable();
+    }
+  };
 
   return isMobile ? (
     <div className="absolute w-[350px] left-[108px] top-4 z-9999">
@@ -43,7 +57,19 @@ export default function FcsAccordion({ countryName, countryId, countryCode }: Fc
     </div>
   ) : (
     <>
-      <div className="absolute w-[350px] left-[108px] top-4 z-9999 overflow-y-scroll max-h-screen">
+      <div
+        className="absolute w-[350px] left-[108px] top-4 z-9999 overflow-y-scroll max-h-screen"
+        onMouseEnter={disableMapScroll}
+        onMouseLeave={enableMapScroll}
+        onWheel={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        onTouchMove={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+      >
         <AccordionContainer
           loading={countryDataLoading || iso3DataLoading || countryForecastDataLoading}
           title={countryName}

@@ -3,7 +3,11 @@ import { Dispatch, SetStateAction } from 'react';
 
 import { CategoricalChartData } from '@/domain/entities/charts/CategoricalChartData.ts';
 import { ContinuousChartData } from '@/domain/entities/charts/ContinuousChartData.ts';
-import { ChartAlternativeSwitchButtonProps, ChartSliderProps } from '@/domain/props/ChartContainerProps';
+import {
+  ChartAlternativeSwitchButtonProps,
+  ChartRelativeNumbersSwitchButtonProps,
+  ChartSliderProps,
+} from '@/domain/props/ChartContainerProps';
 
 export default interface ChartModalProps {
   chartOptions?: Highcharts.Options;
@@ -25,4 +29,7 @@ export default interface ChartModalProps {
   sliderProps?: ChartSliderProps;
   showSlider?: boolean;
   setShowSlider?: Dispatch<SetStateAction<boolean>>;
+
+  // relative numbers switch
+  relativeNumbersSwitchButtonProps?: ChartRelativeNumbersSwitchButtonProps;
 }

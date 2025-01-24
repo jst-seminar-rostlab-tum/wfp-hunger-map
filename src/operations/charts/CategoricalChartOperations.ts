@@ -69,6 +69,7 @@ export default class CategoricalChartOperations {
     pieChart?: boolean,
     relativeNumbers?: boolean
   ): Highcharts.Options | undefined {
+
     const seriesData = [];
     const categories = [];
     const populationSum = data.categories.reduce((acc, c) => acc + c.dataPoint.y, 0);
@@ -91,11 +92,14 @@ export default class CategoricalChartOperations {
 
       // build series object for highchart
       let yTrans = categoryData.dataPoint.y;
+      console.log("------")
+      console.log(yTrans)
       if (relativeNumbers) {
         yTrans /= populationSum;
         yTrans *= 100;
         yTrans = Math.round(yTrans * 10) / 10;
       }
+      console.log(yTrans)
       seriesData.push({
         name: categoryData.name,
         y: yTrans,

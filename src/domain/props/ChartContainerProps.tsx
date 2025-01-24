@@ -5,6 +5,7 @@ import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import { CategoricalChartData } from '@/domain/entities/charts/CategoricalChartData.ts';
 import { ContinuousChartData } from '@/domain/entities/charts/ContinuousChartData.ts';
 import { ChartType } from '@/domain/enums/ChartType.ts';
+import ChartRelativeNumbersSwitchButton from "@/components/Charts/helpers/buttons/ChartRelativeNumbersSwitchButton.tsx";
 
 /**
  * helpers props
@@ -21,6 +22,12 @@ export interface ChartAlternativeSwitchButtonProps {
   alternativeChartType: ChartType;
   showAlternativeChart: boolean;
   setShowAlternativeChart: Dispatch<SetStateAction<boolean>>;
+  size?: number;
+}
+
+export interface ChartRelativeNumbersSwitchButtonProps {
+  showRelativeNumbers: boolean;
+  setShowRelativeNumbers: Dispatch<SetStateAction<boolean>>;
   size?: number;
 }
 
@@ -56,7 +63,8 @@ export default interface ChartContainerProps {
 
   disableExpandable?: boolean;
   disableDownload?: boolean;
-  disableRelativeAbsoluteNumbersSwitch?: boolean;
+
+  relativeNumbersSwitchButtonProps?: ChartRelativeNumbersSwitchButtonProps;
 
   alternativeSwitchButtonProps?: ChartAlternativeSwitchButtonProps;
 

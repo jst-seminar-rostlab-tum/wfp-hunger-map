@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import ChartAlternativeSwitchButton from '@/components/Charts/helpers/buttons/ChartAlternativeSwitchButton';
 import ChartDownloadButton from '@/components/Charts/helpers/buttons/ChartDownloadButton';
+import ChartRelativeNumbersSwitchButton from '@/components/Charts/helpers/buttons/ChartRelativeNumbersSwitchButton';
 import ChartSliderButton from '@/components/Charts/helpers/buttons/ChartSliderButton';
 import ChartSlider from '@/components/Charts/helpers/ChartSlider';
 import ChartModalProps from '@/domain/props/ChartModalProps';
@@ -30,6 +31,7 @@ export function ChartModal({
   sliderProps,
   showSlider,
   setShowSlider,
+  relativeNumbersSwitchButtonProps,
 }: ChartModalProps) {
   const { theme } = useTheme();
 
@@ -65,6 +67,10 @@ export function ChartModal({
             <div className="flex flex-row w-fit h-full gap-0.5 sm:gap-4 md:gap-6">
               {sliderProps && showSlider && setShowSlider && (
                 <ChartSliderButton showSlider={showSlider} setShowSlider={setShowSlider} />
+              )}
+
+              {relativeNumbersSwitchButtonProps && (
+                <ChartRelativeNumbersSwitchButton {...relativeNumbersSwitchButtonProps} />
               )}
 
               {alternativeSwitchButtonProps && <ChartAlternativeSwitchButton {...alternativeSwitchButtonProps} />}

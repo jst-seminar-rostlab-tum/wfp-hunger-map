@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import ChartAlternativeSwitchButton from '@/components/Charts/helpers/buttons/ChartAlternativeSwitchButton';
 import ChartDownloadButton from '@/components/Charts/helpers/buttons/ChartDownloadButton';
+import ChartRelativeNumbersSwitchButton from '@/components/Charts/helpers/buttons/ChartRelativeNumbersSwitchButton';
 import ChartSliderButton from '@/components/Charts/helpers/buttons/ChartSliderButton';
 import { ChartModal } from '@/components/Charts/helpers/ChartModal';
 import ChartSlider from '@/components/Charts/helpers/ChartSlider';
@@ -35,7 +36,7 @@ export function ChartContainer({
   chartHeight,
   disableExpandable,
   disableDownload,
-  disableRelativeAbsoluteNumbersSwitch,
+  relativeNumbersSwitchButtonProps,
   alternativeSwitchButtonProps,
   sliderProps,
 }: ChartContainerProps) {
@@ -56,6 +57,9 @@ export function ChartContainer({
   // full screen modal state handling
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
 
+  // handling the x-axis range slider visibility
+  const [showSlider, setShowSlider] = useState(false);
+
   // handling the theme switch
   useEffect(() => {
     // `theme` change does not guarantee that the NextUI CSS colors have already been changed;
@@ -70,13 +74,10 @@ export function ChartContainer({
     setChartKey((prev) => prev + 1); // forces chart to remount -> correct chart animation will be re-triggered
   }, [alternativeSwitchButtonProps?.showAlternativeChart]);
 
-  // data changes and slider changes
+  // data changes and all other chart options changes
   useEffect(() => {
     recalculateChartOptions();
-  }, [chartData, sliderProps?.selectedSliderRange]);
-
-  // handling the x-axis range slider visibility
-  const [showSlider, setShowSlider] = useState(false);
+  }, [chartData, relativeNumbersSwitchButtonProps?.showRelativeNumbers, sliderProps?.selectedSliderRange]);
 
   // if chartOptions is undefined -> display "no data available"
   if (!chartOptions) {
@@ -110,8 +111,8 @@ export function ChartContainer({
             }
             {
               // button to toggle between relative and absolute number (only available in the categorical chart)
-              disableRelativeAbsoluteNumbersSwitch && (
-                <ChartSliderButton showSlider={showSlider} setShowSlider={setShowSlider} size={ICON_BUTTON_SIZE} />
+              relativeNumbersSwitchButtonProps && (
+                <ChartRelativeNumbersSwitchButton {...relativeNumbersSwitchButtonProps} size={ICON_BUTTON_SIZE} />
               )
             }
             {
@@ -182,6 +183,7 @@ export function ChartContainer({
         sliderProps={sliderProps}
         showSlider={showSlider}
         setShowSlider={setShowSlider}
+        relativeNumbersSwitchButtonProps={relativeNumbersSwitchButtonProps}
       />
     </>
   );

@@ -10,12 +10,12 @@ export const metadata: Metadata = {
     template: `%s - ${siteConfig.name}`,
   },
   description:
-    'Compare real-time global hunger data across different countries and regions. Obtain food insecurity statistics from the WFP Hunger Map Comparison Portal, tailored to various time zones. A valuable resource for humanitarian efforts and research.',
+    'Compare real-time global hunger data across different countries and regions. A valuable resource for humanitarian efforts and research.',
   keywords: siteConfig.keywords,
   openGraph: {
     title: `Comparison Portal - ${siteConfig.name}`,
     description:
-      'Compare real-time global hunger data across different countries and regions. Obtain food insecurity statistics from the WFP Hunger Map Comparison Portal, tailored to various time zones. Essential for humanitarian aid and research.',
+      'Compare real-time global hunger data across different countries and regions. Essential for humanitarian aid and research.',
     url: `${siteConfig.domain}/comparison-portal`,
     images: [
       {
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: `Comparison Portal - ${siteConfig.name}`,
     description:
-      'Access comparable global hunger data from the WFP Hunger Map Comparison Portal, tailored to different countries and time zones.',
+      'Access comparable global hunger data from the WFP Hunger Map Comparison Portal, tailored to different countries and regions.',
     images: [
       {
         url: '/Images/Comparison-preview.png',

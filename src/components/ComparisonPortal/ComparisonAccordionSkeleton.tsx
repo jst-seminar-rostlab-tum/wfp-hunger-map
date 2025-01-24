@@ -4,14 +4,13 @@ import { v4 as uuid } from 'uuid';
 
 /**
  * A skeleton component for the ComparisonAccordion component.
- * @returns {JSX.Element} The ComparisonAccordionSkeleton component
+ * @param {number} nItems Number of accordion items for the skeleton.
  */
-export default function ComparisonAccordionSkeleton(): JSX.Element {
-  const N_ITEMS = 5;
+export default function ComparisonAccordionSkeleton({ nItems }: { nItems: number }): JSX.Element {
   return (
     <div className="overflow-x-auto rounded-lg shadow-none">
       <div className="flex flex-col gap-2 mb-4">
-        {[...Array(N_ITEMS)].map(() => (
+        {[...Array(nItems)].map(() => (
           <div
             key={uuid()}
             className="rounded-medium last:border-b-0 bg-content1 white:bg-white overflow-hidden shadow-md"

@@ -52,7 +52,7 @@ export default function CountrySelection({
   }, [selectedCountries, availableCountries, disabledCountryIds]);
 
   return (
-    <div className="pb-4 flex items-center gap-4">
+    <div className="pb-4 flex items-center gap-4 flex-wrap">
       <Select
         placeholder="Select up to 5 countries"
         aria-label="Select countries for comparison"
@@ -63,7 +63,7 @@ export default function CountrySelection({
         defaultSelectedKeys={selectedKeys}
         selectedKeys={selectedKeys}
         disabledKeys={disabledKeys}
-        className="w-full"
+        className="flex-1"
         variant="faded"
         color="primary"
       >
@@ -83,6 +83,7 @@ export default function CountrySelection({
         variant="bordered"
         onClick={() => setSelectedCountries([])}
         isDisabled={selectedCountries === undefined || selectedCountries.length === 0}
+        className="flex-1 sm:flex-initial"
       >
         Clear
       </CustomButton>

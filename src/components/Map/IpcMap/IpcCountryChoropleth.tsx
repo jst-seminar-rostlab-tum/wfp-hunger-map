@@ -39,7 +39,7 @@ function IpcCountryChoropleth({ countryMapData, onDataUnavailable }: IpcCountryC
       key={selectedCountryId}
       style={IpcChoroplethOperations.ipcCountryStyle}
       data={regionIpcData as FeatureCollection}
-      onEachFeature={IpcChoroplethOperations.attachEventsRegion}
+      onEachFeature={IpcChoroplethOperations.initializeRegionLayer}
     />
   );
 }

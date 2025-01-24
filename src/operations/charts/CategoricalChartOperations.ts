@@ -162,6 +162,7 @@ export default class CategoricalChartOperations {
           grouping: true,
           shadow: false,
           borderWidth: 0,
+          colorByPoint: true, // use different colors for each bar
         },
         pie: {
           animation: true,

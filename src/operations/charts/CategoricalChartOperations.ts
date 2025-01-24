@@ -194,7 +194,7 @@ export default class CategoricalChartOperations {
           stemWidth: 1.5,
           whiskerLength: '30%',
           whiskerWidth: 1.5,
-          colorByPoint: true,
+          colorByPoint: true, // use different colors for each bar
         },
         pie: {
           animation: true,

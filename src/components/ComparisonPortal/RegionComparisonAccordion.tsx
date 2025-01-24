@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 
 import ComparisonAccordionSkeleton from '@/components/ComparisonPortal/ComparisonAccordionSkeleton';
+import ManyRegionsAlert from '@/components/ComparisonPortal/ManyRegionsAlert';
 import { useRegionDataQuery } from '@/domain/hooks/countryHooks';
 import { RegionComparisonAccordionProps } from '@/domain/props/RegionComparisonAccordionProps';
 import { RegionComparisonOperations } from '@/operations/comparison-portal/RegionComparisonOperations';
@@ -25,20 +26,33 @@ export default function RegionComparisonAccordion({
   const [showRelativeNumbers] = useState(false);
 
   const accordionItems = useMemo(() => {
-    if (!regionData) return [];
+    if (!regionData || !selectedRegions) return [];
     const chartData = RegionComparisonOperations.getChartData(regionData, selectedRegions, showRelativeNumbers);
     return RegionComparisonOperations.getComparisonAccordionItems(chartData, selectedRegions, regionData.features);
   }, [regionData, selectedRegions, showRelativeNumbers]);
 
-  if (!accordionItems || isLoading) return <ComparisonAccordionSkeleton nItems={2} />;
+  const nSelectedRegions = selectedRegions === 'all' ? regionData?.features.length : selectedRegions?.length;
 
-  if (selectedRegions.length < 2) {
+  if (!accordionItems || isLoading || regionData === undefined)
+    return (
+      <>
+        <ManyRegionsAlert nSelectedRegions={nSelectedRegions} />
+        <ComparisonAccordionSkeleton nItems={nSelectedRegions === undefined ? 3 : 2} />
+      </>
+    );
+
+  if (selectedRegions !== undefined && selectedRegions.length < 2) {
     return (
       <p className="pb-4">
-        Select {selectedRegions.length === 1 ? 'one additional region' : 'two or more regions'} to start a comparison.
+        Select {selectedRegions?.length === 1 ? 'one additional region' : 'two or more regions'} to start a comparison.
       </p>
     );
   }
 
-  return <AccordionContainer multipleSelectionMode loading={isLoading} items={accordionItems} />;
+  return (
+    <>
+      <ManyRegionsAlert nSelectedRegions={nSelectedRegions} />
+      <AccordionContainer multipleSelectionMode loading={isLoading} items={accordionItems} />
+    </>
+  );
 }

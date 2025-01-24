@@ -111,7 +111,11 @@ export default function RegionSelection({
           variant="bordered"
           onClick={() => setSelectedRegions('all')}
           isDisabled={
-            isLoading || selectedRegionComparisonCountry === undefined || selectedRegions.length === nAvailableRegions
+            isLoading ||
+            selectedRegionComparisonCountry === undefined ||
+            selectedRegions === undefined ||
+            selectedRegions === 'all' ||
+            selectedRegions.length === nAvailableRegions
           }
         >
           Select all
@@ -120,7 +124,12 @@ export default function RegionSelection({
           className="flex-1"
           variant="bordered"
           onClick={() => setSelectedRegions([])}
-          isDisabled={isLoading || selectedRegionComparisonCountry === undefined || selectedRegions.length === 0}
+          isDisabled={
+            isLoading ||
+            selectedRegionComparisonCountry === undefined ||
+            selectedRegions === undefined ||
+            selectedRegions.length === 0
+          }
         >
           Clear
         </CustomButton>

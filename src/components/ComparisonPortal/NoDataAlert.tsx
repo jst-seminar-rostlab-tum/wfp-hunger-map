@@ -6,6 +6,7 @@ import { NoDataAlertProps } from '@/domain/props/NoDataAlertProps.ts';
 
 /**
  * Displays an alert when there is one or more selected chart categories (i.e. countries or regions) that are not present in the chart.
+ * Otherwise, returns null.
  * @param {NoDataAlertProps} props Props for the NoDataAlert component
  * @param {ContinuousChartData | CategoricalChartData} props.chartData Chart data
  * @param {string[]} props.requestedChartCategories Selected country names

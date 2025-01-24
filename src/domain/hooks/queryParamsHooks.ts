@@ -77,7 +77,7 @@ export const useSelectedTab = () => {
 };
 
 /**
- * Return a state that is synchronized with the `regions` and `regionComparisonCountry query params.
+ * Return a state that is synchronized with the `regions` and `regionComparisonCountry` query params.
  * Regions are stored as array of their IDs (converted to strings) or a single string `'all'`.
  * The country is stored as `string` of its `adm0_id`.
  *
@@ -89,7 +89,7 @@ export const useSelectedRegions = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [selectedRegions, setSelectedRegions] = useState<string[] | 'all'>([]);
+  const [selectedRegions, setSelectedRegions] = useState<string[] | 'all' | undefined>(undefined);
   const [selectedRegionComparisonCountry, setSelectedRegionComparisonCountry] = useState<string | undefined>(undefined);
 
   useEffect(() => {

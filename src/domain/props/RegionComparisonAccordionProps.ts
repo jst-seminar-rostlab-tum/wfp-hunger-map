@@ -1,4 +1,4 @@
 export interface RegionComparisonAccordionProps {
   selectedRegionComparisonCountry: string | undefined;
-  selectedRegions: string[] | 'all';
+  selectedRegions: string[] | 'all' | undefined;
 }

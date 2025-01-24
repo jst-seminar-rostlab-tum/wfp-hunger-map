@@ -39,6 +39,8 @@ export default class CategoricalChartOperations {
     points?.forEach((p) => {
       if (p.point.options.y !== undefined) {
         tooltip += `<br><span style="color:${p.color}">\u25CF</span> <div>${p.point.options.y}</div>`;
+      } else if (p.point.options.high !== undefined && p.point.options.low !== undefined) {
+        tooltip += `<div style="color: ${getTailwindColor('--nextui-secondary')}"> (<div>${p.point.options.low} - ${p.point.options.high}</div>)</div>`;
       }
     });
     return tooltip;
@@ -62,6 +64,7 @@ export default class CategoricalChartOperations {
   public static getHighChartOptions(data: CategoricalChartData, pieChart?: boolean): Highcharts.Options | undefined {
     const seriesData = [];
     const categories = [];
+    const seriesRangeData = [];
     const defaultCategoriesColors = CategoricalChartOperations.getCategoriesColorList();
     for (let i = 0; i < data.categories.length; i += 1) {
       const categoryData = data.categories[i];
@@ -78,12 +81,27 @@ export default class CategoricalChartOperations {
       // collect category names
       categories.push(categoryData.name);
 
+      // check if range should be displayed
+      const showRange =
+        !pieChart && categoryData.dataPoint.yRangeMin !== undefined && categoryData.dataPoint.yRangeMax !== undefined;
+
       // build series object for highchart
       seriesData.push({
         name: categoryData.name,
         y: categoryData.dataPoint.y,
         color: categoryColor,
+        opacity: showRange ? 0.6 : 1,
       });
+
+      // check if range should be displayed
+      if (showRange) {
+        seriesRangeData.push({
+          x: i,
+          low: categoryData.dataPoint.yRangeMin,
+          high: categoryData.dataPoint.yRangeMax,
+          color: categoryColor,
+        });
+      }
     }
 
     // if there is not a single series -> we return 'undefined' -> 'undefined' is to be interpreted as "no data available"
@@ -155,6 +173,14 @@ export default class CategoricalChartOperations {
           data: seriesData,
           type: pieChart ? 'pie' : 'column',
         },
+        {
+          name: 'Range',
+          type: 'errorbar', // Error bar series
+          data: seriesRangeData, // Use the error bar data
+          tooltip: {
+            pointFormat: '(Range: {point.low} - {point.high})',
+          },
+        },
       ],
       plotOptions: {
         column: {
@@ -162,6 +188,13 @@ export default class CategoricalChartOperations {
           grouping: true,
           shadow: false,
           borderWidth: 0,
+          colorByPoint: true,
+        },
+        errorbar: {
+          stemWidth: 1.5,
+          whiskerLength: '30%',
+          whiskerWidth: 1.5,
+          colorByPoint: true,
         },
         pie: {
           animation: true,

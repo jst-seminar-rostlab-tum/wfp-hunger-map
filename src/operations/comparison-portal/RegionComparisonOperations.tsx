@@ -108,7 +108,11 @@ export class RegionComparisonOperations {
         .filter((region) => region[type] !== null && region[type]!.ratio !== null && region[type]!.people !== null)
         .map((region) => ({
           name: region.Name,
-          dataPoint: { y: showRelativeNumbers ? region[type]!.ratio! : formatToMillion(region[type]!.people)! },
+          dataPoint: {
+            y: showRelativeNumbers ? region[type]!.ratio! : formatToMillion(region[type]!.people)!,
+            yRangeMin: showRelativeNumbers ? region[type]!.ratioLow! : formatToMillion(region[type]!.peopleLow)!,
+            yRangeMax: showRelativeNumbers ? region[type]!.ratioHigh! : formatToMillion(region[type]!.peopleHigh)!,
+          },
         })),
     };
   }

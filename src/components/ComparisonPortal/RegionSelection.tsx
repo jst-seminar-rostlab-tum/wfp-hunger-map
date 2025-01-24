@@ -30,7 +30,11 @@ export default function RegionSelection({
   selectedRegions,
   setSelectedRegions,
 }: RegionSelectionProps): JSX.Element {
-  const { data: regionData, isLoading, error } = useRegionDataQuery(Number(selectedRegionComparisonCountry));
+  const {
+    data: regionData,
+    isLoading,
+    error,
+  } = useRegionDataQuery(Number(selectedRegionComparisonCountry ?? undefined));
   const nAvailableRegions = regionData?.features.length;
 
   const { showSnackBar } = useSnackbar();
@@ -41,7 +45,7 @@ export default function RegionSelection({
   useEffect(() => {
     if (error) {
       const errorCountryName = CountryComparisonOperations.getCountryNameById(
-        Number(selectedRegionComparisonCountry),
+        Number(selectedRegionComparisonCountry ?? undefined),
         countryMapData.features
       );
       showSnackBar({
@@ -55,29 +59,33 @@ export default function RegionSelection({
 
   return (
     <div className="pb-4 flex items-center gap-4 flex-wrap justify-end">
-      <Select
-        placeholder="Select a country for region comparison"
-        aria-label="Select a country for region comparison"
-        selectionMode="single"
-        onSelectionChange={(keys) => setSelectedRegionComparisonCountry(keys.currentKey)}
-        selectedKeys={selectedRegionComparisonCountry ? [selectedRegionComparisonCountry] : []}
-        className="flex-1 basis-0"
-        variant="faded"
-        color="primary"
-      >
-        {availableCountries
-          .sort((a, b) => a.properties.adm0_name.localeCompare(b.properties.adm0_name))
-          .map((country) => (
-            <SelectItem
-              key={country.properties.adm0_id.toString()}
-              aria-label={country.properties.adm0_name}
-              className="transition-all hover:text-background dark:text-foreground"
-            >
-              {country.properties.adm0_name}
-            </SelectItem>
-          ))}
-      </Select>
-      {isLoading ? (
+      {selectedRegionComparisonCountry === undefined ? (
+        <SelectionSkeleton />
+      ) : (
+        <Select
+          placeholder="Select a country for region comparison"
+          aria-label="Select a country for region comparison"
+          selectionMode="single"
+          onSelectionChange={(keys) => setSelectedRegionComparisonCountry(keys.currentKey ?? null)}
+          selectedKeys={selectedRegionComparisonCountry ? [selectedRegionComparisonCountry] : []}
+          className="flex-1 basis-0 min-w-48"
+          variant="faded"
+          color="primary"
+        >
+          {availableCountries
+            .sort((a, b) => a.properties.adm0_name.localeCompare(b.properties.adm0_name))
+            .map((country) => (
+              <SelectItem
+                key={country.properties.adm0_id.toString()}
+                aria-label={country.properties.adm0_name}
+                className="transition-all hover:text-background dark:text-foreground"
+              >
+                {country.properties.adm0_name}
+              </SelectItem>
+            ))}
+        </Select>
+      )}
+      {selectedRegionComparisonCountry === undefined || isLoading ? (
         <SelectionSkeleton />
       ) : (
         <Select
@@ -86,7 +94,7 @@ export default function RegionSelection({
           selectionMode="multiple"
           onSelectionChange={(keys) => setSelectedRegions(Array.from(keys) as string[], nAvailableRegions)}
           selectedKeys={selectedRegions}
-          className="flex-1 basis-0"
+          className="flex-1 basis-0 min-w-48"
           variant="faded"
           color="primary"
           isDisabled={error !== null || !selectedRegionComparisonCountry}
@@ -112,7 +120,7 @@ export default function RegionSelection({
           onClick={() => setSelectedRegions('all')}
           isDisabled={
             isLoading ||
-            selectedRegionComparisonCountry === undefined ||
+            !selectedRegionComparisonCountry ||
             selectedRegions === undefined ||
             selectedRegions === 'all' ||
             selectedRegions.length === nAvailableRegions
@@ -126,7 +134,7 @@ export default function RegionSelection({
           onClick={() => setSelectedRegions([])}
           isDisabled={
             isLoading ||
-            selectedRegionComparisonCountry === undefined ||
+            !selectedRegionComparisonCountry ||
             selectedRegions === undefined ||
             selectedRegions.length === 0
           }

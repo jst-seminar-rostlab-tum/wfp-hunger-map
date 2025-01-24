@@ -4,8 +4,8 @@ import { CountryMapDataWrapper } from '../entities/country/CountryMapData';
 export interface RegionSelectionProps {
   countryMapData: CountryMapDataWrapper;
   globalFcsData: GlobalFcsData;
-  selectedRegionComparisonCountry: string | undefined;
-  setSelectedRegionComparisonCountry: (country: string | undefined) => void;
+  selectedRegionComparisonCountry: string | null | undefined;
+  setSelectedRegionComparisonCountry: (country: string | null) => void;
   selectedRegions: string[] | 'all' | undefined;
   setSelectedRegions: (regions: string[] | 'all', nAvailableRegions?: number) => void;
 }

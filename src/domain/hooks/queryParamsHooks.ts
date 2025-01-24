@@ -90,14 +90,17 @@ export const useSelectedRegions = () => {
   const searchParams = useSearchParams();
 
   const [selectedRegions, setSelectedRegions] = useState<string[] | 'all' | undefined>(undefined);
-  const [selectedRegionComparisonCountry, setSelectedRegionComparisonCountry] = useState<string | undefined>(undefined);
+  // undefined if loading, null if not set
+  const [selectedRegionComparisonCountry, setSelectedRegionComparisonCountry] = useState<string | null | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     const regionParam = searchParams.get(REGION_PARAM);
     if (regionParam === 'all') setSelectedRegions('all');
     else setSelectedRegions(regionParam?.split(',') ?? []);
 
-    setSelectedRegionComparisonCountry(searchParams.get(COMPARISON_COUNTRY_PARAM) ?? undefined);
+    setSelectedRegionComparisonCountry(searchParams.get(COMPARISON_COUNTRY_PARAM) ?? null);
   }, [searchParams]);
 
   const setSelectedRegionsFn = (regions: string[] | 'all', nAvailableRegions: number | undefined) => {
@@ -117,7 +120,7 @@ export const useSelectedRegions = () => {
     pushRoute(pathname, updatedParams);
   };
 
-  const setSelectedRegionComparisonCountryFn = (comparisonCountry: string | undefined) => {
+  const setSelectedRegionComparisonCountryFn = (comparisonCountry: string | null) => {
     setSelectedRegionComparisonCountry(comparisonCountry);
     setSelectedRegions([]);
     const updatedParams = new URLSearchParams(searchParams.toString());

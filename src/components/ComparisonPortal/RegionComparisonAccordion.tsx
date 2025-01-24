@@ -20,7 +20,7 @@ export default function RegionComparisonAccordion({
   selectedRegions,
   selectedRegionComparisonCountry,
 }: RegionComparisonAccordionProps) {
-  const { data: regionData, isLoading } = useRegionDataQuery(Number(selectedRegionComparisonCountry));
+  const { data: regionData, isLoading } = useRegionDataQuery(Number(selectedRegionComparisonCountry ?? undefined));
 
   // TODO (F-254): Toggle this within the chart options. If the pie chart is selected, switch to false and hide the toggle button.
   const [showRelativeNumbers] = useState(false);
@@ -31,6 +31,14 @@ export default function RegionComparisonAccordion({
     return RegionComparisonOperations.getComparisonAccordionItems(chartData, selectedRegions, regionData.features);
   }, [regionData, selectedRegions, showRelativeNumbers]);
 
+  if (selectedRegions !== undefined && selectedRegions.length < 2) {
+    return (
+      <p className="pb-4">
+        Select {selectedRegions?.length === 1 ? 'one additional region' : 'two or more regions'} to start a comparison.
+      </p>
+    );
+  }
+
   const nSelectedRegions = selectedRegions === 'all' ? regionData?.features.length : selectedRegions?.length;
 
   if (!accordionItems || isLoading || regionData === undefined)
@@ -40,14 +48,6 @@ export default function RegionComparisonAccordion({
         <ComparisonAccordionSkeleton nItems={nSelectedRegions === undefined ? 3 : 2} />
       </>
     );
-
-  if (selectedRegions !== undefined && selectedRegions.length < 2) {
-    return (
-      <p className="pb-4">
-        Select {selectedRegions?.length === 1 ? 'one additional region' : 'two or more regions'} to start a comparison.
-      </p>
-    );
-  }
 
   return (
     <>

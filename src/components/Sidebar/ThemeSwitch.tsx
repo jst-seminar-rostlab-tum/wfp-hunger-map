@@ -53,6 +53,12 @@ export function ThemeSwitch({ isIconOnly = false }: ThemeSwitchProps): React.JSX
         }}
         isSelected={theme === 'dark'}
         onChange={handleThemeChange}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleThemeChange();
+          }
+        }}
         thumbIcon={
           theme === 'dark' ? (
             <Moon size={16} variant="Bold" color="white" />

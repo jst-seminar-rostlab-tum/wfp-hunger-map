@@ -288,6 +288,12 @@ export default function HungerMapChatbot() {
                         <Button
                           key={prompt.id}
                           onClick={(event) => handleSubmit(event, prompt.value)}
+                          onKeyDown={(event) => {
+                            if (event.key === 'Enter' || event.key === ' ') {
+                              event.preventDefault();
+                              handleSubmit(event, prompt.value);
+                            }
+                          }}
                           className="truncate w-full mb-2 max-w-[250px] sm:max-w-[400px] border border-solid border-black dark:border-white bg-transparent hover:bg-chatbotDefaultPromptHover dark:hover:bg-chatbotDefaultPromptHover"
                           title={prompt.value}
                         >

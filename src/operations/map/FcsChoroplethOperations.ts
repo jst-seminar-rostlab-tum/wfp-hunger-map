@@ -49,7 +49,7 @@ class FcsChoroplethOperations {
         }
       },
       keydown: (e) => {
-        if (e.originalEvent.key === 'Enter') {
+        if (e.originalEvent.key === 'Enter' || e.originalEvent.key === ' ') {
           FcsChoroplethOperations.handleCountryClick(feature, setSelectedCountryId);
           document.getElementsByClassName('leaflet-container').item(0)?.classList.remove('interactive');
         }

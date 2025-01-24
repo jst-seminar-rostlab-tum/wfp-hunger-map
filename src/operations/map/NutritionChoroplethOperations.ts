@@ -42,22 +42,28 @@ export default class NutritionChoroplethOperations {
         }
         document.getElementsByClassName('leaflet-container').item(0)?.classList.remove('interactive');
       },
-    });
-    layer.on('mouseover', () => {
-      if (this.checkIfActive(feature, nutritionData)) {
-        pathLayer.setStyle({
-          fillOpacity: 0.8,
-        });
-        document.getElementsByClassName('leaflet-container').item(0)?.classList.add('interactive');
-      }
-    });
-    pathLayer.on('mouseout', () => {
-      if (this.checkIfActive(feature, nutritionData)) {
-        pathLayer.setStyle({
-          fillOpacity: 0.5,
-        });
-        document.getElementsByClassName('leaflet-container').item(0)?.classList.remove('interactive');
-      }
+      mouseover: () => {
+        if (this.checkIfActive(feature, nutritionData)) {
+          pathLayer.setStyle({
+            fillOpacity: 0.8,
+          });
+          document.getElementsByClassName('leaflet-container').item(0)?.classList.add('interactive');
+        }
+      },
+      mouseout: () => {
+        if (this.checkIfActive(feature, nutritionData)) {
+          pathLayer.setStyle({
+            fillOpacity: 0.5,
+          });
+          document.getElementsByClassName('leaflet-container').item(0)?.classList.remove('interactive');
+        }
+      },
+      keydown: (e) => {
+        if (e.originalEvent.key === 'Enter' || e.originalEvent.key === ' ') {
+          NutritionChoroplethOperations.handleCountryClick(feature, setSelectedCountryId);
+          document.getElementsByClassName('leaflet-container').item(0)?.classList.remove('interactive');
+        }
+      },
     });
   }
 

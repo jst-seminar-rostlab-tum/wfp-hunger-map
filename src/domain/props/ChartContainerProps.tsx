@@ -56,6 +56,7 @@ export default interface ChartContainerProps {
 
   disableExpandable?: boolean;
   disableDownload?: boolean;
+  disableRelativeAbsoluteNumbersSwitch?: boolean;
 
   alternativeSwitchButtonProps?: ChartAlternativeSwitchButtonProps;
 

@@ -34,11 +34,15 @@ export default class CategoricalChartOperations {
   /**
    * Tooltip formatter function for `Options.tooltip.formatter` usage only.
    */
-  private static chartTooltipFormatter(points: TooltipFormatterContextObject[] | undefined) {
+  private static chartTooltipFormatter(points: TooltipFormatterContextObject[] | undefined, relativeNumbers?: boolean) {
     let tooltip = '';
     points?.forEach((p) => {
       if (p.point.options.y !== undefined) {
-        tooltip += `<br><span style="color:${p.color}">\u25CF</span> <div>${p.point.options.y}</div>`;
+        if (relativeNumbers) {
+          tooltip += `<br><span style="color:${p.color}">\u25CF</span> <div>${p.point.options.y}%</div>`;
+        } else {
+          tooltip += `<br><span style="color:${p.color}">\u25CF</span> <div>${p.point.options.y}</div>`;
+        }
       }
     });
     return tooltip;
@@ -56,13 +60,20 @@ export default class CategoricalChartOperations {
    * for a bar chart or pie chart, out of a given `CategoricalChartData` instance.
    * @param data `CategoricalChartData` object, containing all data to be plotted in the chart
    * @param pieChart if true, a pie chart instead of a bar chart is created
+   * @param relativeNumbers if true relative numbers (percentages) are calculated automatically
    * @return 'Highcharts.Options' ready to be passed to the Highcharts component,
    * or 'undefined' if there is no data available to be plotted in the chart (to be interpreted as "no data available")
    */
-  public static getHighChartOptions(data: CategoricalChartData, pieChart?: boolean): Highcharts.Options | undefined {
+  public static getHighChartOptions(
+    data: CategoricalChartData,
+    pieChart?: boolean,
+    relativeNumbers?: boolean
+  ): Highcharts.Options | undefined {
     const seriesData = [];
     const categories = [];
+    const populationSum = data.categories.reduce((acc, c) => acc + c.dataPoint.y, 0);
     const defaultCategoriesColors = CategoricalChartOperations.getCategoriesColorList();
+
     for (let i = 0; i < data.categories.length; i += 1) {
       const categoryData = data.categories[i];
 
@@ -79,9 +90,15 @@ export default class CategoricalChartOperations {
       categories.push(categoryData.name);
 
       // build series object for highchart
+      let yTrans = categoryData.dataPoint.y;
+      if (relativeNumbers) {
+        yTrans /= populationSum;
+        yTrans *= 100;
+        yTrans = Math.round(yTrans * 10) / 10;
+      }
       seriesData.push({
         name: categoryData.name,
-        y: categoryData.dataPoint.y,
+        y: yTrans,
         color: categoryColor,
       });
     }
@@ -128,6 +145,9 @@ export default class CategoricalChartOperations {
             fontSize: '0.7rem',
           },
           formatter() {
+            if (relativeNumbers) {
+              return `${this.value}%`;
+            }
             return Highcharts.numberFormat(this.value as number, -1);
           },
         },
@@ -138,7 +158,7 @@ export default class CategoricalChartOperations {
         enabled: !pieChart,
         shared: true,
         formatter() {
-          return CategoricalChartOperations.chartTooltipFormatter(this.points);
+          return CategoricalChartOperations.chartTooltipFormatter(this.points, relativeNumbers);
         },
         backgroundColor: getTailwindColor('--nextui-chartsLegendBackground'),
         style: {

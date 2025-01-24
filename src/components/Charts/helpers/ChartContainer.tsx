@@ -35,6 +35,7 @@ export function ChartContainer({
   chartHeight,
   disableExpandable,
   disableDownload,
+  disableRelativeAbsoluteNumbersSwitch,
   alternativeSwitchButtonProps,
   sliderProps,
 }: ChartContainerProps) {
@@ -104,6 +105,12 @@ export function ChartContainer({
             {
               // button to hide/show the slider to e.g. manipulate the plotted x-axis range of the chart
               sliderProps && (
+                <ChartSliderButton showSlider={showSlider} setShowSlider={setShowSlider} size={ICON_BUTTON_SIZE} />
+              )
+            }
+            {
+              // button to toggle between relative and absolute number (only available in the categorical chart)
+              disableRelativeAbsoluteNumbersSwitch && (
                 <ChartSliderButton showSlider={showSlider} setShowSlider={setShowSlider} size={ICON_BUTTON_SIZE} />
               )
             }

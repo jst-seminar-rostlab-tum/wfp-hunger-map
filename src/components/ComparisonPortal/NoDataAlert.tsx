@@ -2,21 +2,21 @@ import { Alert } from '@nextui-org/alert';
 import { useEffect, useState } from 'react';
 
 import { isContinuousChartData } from '@/domain/entities/charts/ContinuousChartData.ts';
-import { NoDataHintProps } from '@/domain/props/NoDataHintProps.ts';
+import { NoDataAlertProps } from '@/domain/props/NoDataAlertProps.ts';
 
 /**
  * Displays an alert when there is one or more selected chart categories (i.e. countries or regions) that are not present in the chart.
- * @param {NoDataHintProps} props Props for the NoDataHint component
+ * @param {NoDataAlertProps} props Props for the NoDataAlert component
  * @param {ContinuousChartData | CategoricalChartData} props.chartData Chart data
  * @param {string[]} props.requestedChartCategories Selected country names
  * @param {boolean} props.isLoading Whether the data is loading
- * @returns {JSX.Element | null} The NoDataHint component if there is missing data, otherwise null
+ * @returns {JSX.Element | null} The NoDataAlert component if there is missing data, otherwise null
  */
-export default function NoDataHint({
+export default function NoDataAlert({
   chartData,
   requestedChartCategories,
   isLoading = false,
-}: NoDataHintProps): JSX.Element | null {
+}: NoDataAlertProps): JSX.Element | null {
   const [formattedMissingCategories, setFormattedMissingCategories] = useState<string | null>(null);
 
   useEffect(() => {

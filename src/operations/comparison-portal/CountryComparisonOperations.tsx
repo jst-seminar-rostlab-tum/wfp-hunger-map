@@ -3,7 +3,7 @@ import { UseQueryResult } from '@tanstack/react-query';
 
 import { CategoricalChart } from '@/components/Charts/CategoricalChart';
 import { ContinuousChart } from '@/components/Charts/ContinuousChart';
-import NoDataHint from '@/components/ComparisonPortal/NoDataHint';
+import NoDataAlert from '@/components/ComparisonPortal/NoDataAlert';
 import CustomInfoCircle from '@/components/CustomInfoCircle/CustomInfoCircle';
 import { DataSourcePopover } from '@/components/Legend/DataSourcePopover';
 import descriptions from '@/domain/constant/dataSources/dataSourceDescriptions';
@@ -138,7 +138,7 @@ export class CountryComparisonOperations {
                   transparentBackground
                   chartHeight={300}
                 />
-                <NoDataHint
+                <NoDataAlert
                   chartData={fcsChartData}
                   requestedChartCategories={selectedCountryNames}
                   isLoading={isLoading}
@@ -156,7 +156,7 @@ export class CountryComparisonOperations {
                   transparentBackground
                   chartHeight={300}
                 />
-                <NoDataHint
+                <NoDataAlert
                   chartData={rcsiChartData}
                   requestedChartCategories={selectedCountryNames}
                   isLoading={isLoading}
@@ -175,7 +175,7 @@ export class CountryComparisonOperations {
             {importDependencyBarChartData && (
               <>
                 <CategoricalChart data={importDependencyBarChartData} transparentBackground />
-                <NoDataHint
+                <NoDataAlert
                   chartData={importDependencyBarChartData}
                   requestedChartCategories={selectedCountryNames}
                   isLoading={isLoading}
@@ -194,7 +194,7 @@ export class CountryComparisonOperations {
             {balanceOfTradeData && (
               <>
                 <ContinuousChart data={balanceOfTradeData} small noPadding transparentBackground chartHeight={300} />
-                <NoDataHint
+                <NoDataAlert
                   chartData={balanceOfTradeData}
                   requestedChartCategories={selectedCountryNames}
                   isLoading={isLoading}
@@ -220,7 +220,7 @@ export class CountryComparisonOperations {
                   transparentBackground
                   chartHeight={300}
                 />
-                <NoDataHint
+                <NoDataAlert
                   chartData={headlineInflationData}
                   requestedChartCategories={selectedCountryNames}
                   isLoading={isLoading}
@@ -237,7 +237,7 @@ export class CountryComparisonOperations {
                   transparentBackground
                   chartHeight={300}
                 />
-                <NoDataHint
+                <NoDataAlert
                   chartData={foodInflationData}
                   requestedChartCategories={selectedCountryNames}
                   isLoading={isLoading}

@@ -2,7 +2,7 @@ import clsx from 'clsx';
 
 import { CategoricalChart } from '@/components/Charts/CategoricalChart';
 import { ContinuousChart } from '@/components/Charts/ContinuousChart';
-import NoDataHint from '@/components/ComparisonPortal/NoDataHint';
+import NoDataAlert from '@/components/ComparisonPortal/NoDataAlert';
 import CustomInfoCircle from '@/components/CustomInfoCircle/CustomInfoCircle';
 import { DataSourcePopover } from '@/components/Legend/DataSourcePopover';
 import descriptions from '@/domain/constant/dataSources/dataSourceDescriptions';
@@ -45,13 +45,13 @@ export class RegionComparisonOperations {
             {fcsBarChartData && (
               <div>
                 <CategoricalChart title={descriptions.fcs.legendTitle} data={fcsBarChartData} transparentBackground />
-                <NoDataHint chartData={fcsBarChartData} requestedChartCategories={selectedRegionNames} />
+                <NoDataAlert chartData={fcsBarChartData} requestedChartCategories={selectedRegionNames} />
               </div>
             )}
             {rcsiBarChartData && (
               <div>
                 <CategoricalChart title={descriptions.rCsi.legendTitle} data={rcsiBarChartData} transparentBackground />
-                <NoDataHint chartData={rcsiBarChartData} requestedChartCategories={selectedRegionNames} />
+                <NoDataAlert chartData={rcsiBarChartData} requestedChartCategories={selectedRegionNames} />
               </div>
             )}
           </div>
@@ -69,7 +69,7 @@ export class RegionComparisonOperations {
               transparentBackground
               disableBarChartSwitch
             />
-            <NoDataHint chartData={fcsGraphData} requestedChartCategories={selectedRegionNames} />
+            <NoDataAlert chartData={fcsGraphData} requestedChartCategories={selectedRegionNames} />
           </div>
         ),
       },

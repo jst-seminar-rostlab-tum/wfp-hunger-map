@@ -59,7 +59,7 @@ export default function AccordionBoxItems({
         key={uuid()}
         variant="splitted"
         selectionMode={selectionMode}
-        className="p-0 mb-4"
+        className="p-0"
         selectedKeys={expandedItems}
         onSelectionChange={(keys) => setExpandedItems(keys as Set<string>)}
       >

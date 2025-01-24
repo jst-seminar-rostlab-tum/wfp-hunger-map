@@ -24,7 +24,7 @@ export default function BackToGlobalButton() {
         className="flex items-center space-x-2 text-white"
         variant="solid"
         startContent={<Undo />}
-        onClick={handleBackButtonClick}
+        onPress={handleBackButtonClick}
       >
         Global View
       </Button>

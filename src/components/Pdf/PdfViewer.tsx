@@ -127,13 +127,13 @@ export default function PdfViewer({
               color="secondary"
               disabledKeys={PdfViewerOperations.getDisabledKeys(onDownloadPdf, onDownloadJson, onDownloadCsv)}
             >
-              <DropdownItem key="pdf" onClick={onDownloadPdf}>
+              <DropdownItem key="pdf" onPress={onDownloadPdf}>
                 PDF
               </DropdownItem>
-              <DropdownItem key="json" onClick={onDownloadJson}>
+              <DropdownItem key="json" onPress={onDownloadJson}>
                 JSON
               </DropdownItem>
-              <DropdownItem key="csv" onClick={onDownloadCsv}>
+              <DropdownItem key="csv" onPress={onDownloadCsv}>
                 CSV
               </DropdownItem>
             </DropdownMenu>
@@ -184,7 +184,7 @@ export default function PdfViewer({
             showArrow
             isOpen
             content={
-              <Button size="sm" color="primary" onClick={() => onTooltipClick?.(selectionText)}>
+              <Button size="sm" color="primary" onPress={() => onTooltipClick?.(selectionText)}>
                 Ask AI
               </Button>
             }

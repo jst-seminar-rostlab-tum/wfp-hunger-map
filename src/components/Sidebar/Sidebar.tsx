@@ -94,7 +94,7 @@ export function Sidebar({ countryMapData, fcsData }: SidebarProps): React.JSX.El
         <CardHeader>
           <div className="flex items-center w-full gap-2 justify-between">
             <LogoWithText />
-            <Button isIconOnly variant="light" onClick={toggleSidebar} aria-label="Close sidebar">
+            <Button isIconOnly variant="light" onPress={toggleSidebar} aria-label="Close sidebar">
               <SidebarLeft size={24} />
             </Button>
           </div>
@@ -174,7 +174,7 @@ export function Sidebar({ countryMapData, fcsData }: SidebarProps): React.JSX.El
                       'justify-start dark:text-white',
                       selectedMapType === item.key ? 'bg-primary text-white' : 'text-black'
                     )}
-                    onClick={() => onMapTypeSelect(item.key)}
+                    onPress={() => onMapTypeSelect(item.key)}
                   >
                     {item.label}
                   </Button>
@@ -189,7 +189,7 @@ export function Sidebar({ countryMapData, fcsData }: SidebarProps): React.JSX.El
             </div>
 
             <div className="flex flex-col gap-2 pt-4">
-              <Button radius="full" onClick={() => setIsModalOpen(!isModalOpen)} size="sm" className="w-fit text-white">
+              <Button radius="full" onPress={() => setIsModalOpen(!isModalOpen)} size="sm" className="w-fit text-white">
                 SUBSCRIBE
               </Button>
               <PopupModal

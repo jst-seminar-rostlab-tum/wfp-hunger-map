@@ -48,6 +48,12 @@ class FcsChoroplethOperations {
           document.getElementsByClassName('leaflet-container').item(0)?.classList.remove('interactive');
         }
       },
+      keydown: (e) => {
+        if (e.originalEvent.key === 'Enter') {
+          FcsChoroplethOperations.handleCountryClick(feature, setSelectedCountryId);
+          document.getElementsByClassName('leaflet-container').item(0)?.classList.remove('interactive');
+        }
+      },
     });
   }
 

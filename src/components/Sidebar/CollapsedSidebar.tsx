@@ -43,7 +43,7 @@ export function CollapsedSidebar({ mapDataFetching }: CollapsedSidebarProps): Re
     <div className="absolute top-0 left-0 z-sidebarCollapsed pt-4 pl-4">
       <Card className="h-full">
         <CardHeader className="flex justify-center items-center">
-          <Button isIconOnly variant="light" onClick={toggleSidebar} aria-label="Close sidebar">
+          <Button isIconOnly variant="light" onPress={toggleSidebar} aria-label="Close sidebar">
             <SidebarRight size={24} />
           </Button>
         </CardHeader>
@@ -55,7 +55,7 @@ export function CollapsedSidebar({ mapDataFetching }: CollapsedSidebarProps): Re
                   isIconOnly
                   variant={selectedMapType === item.key ? undefined : 'light'}
                   className={selectedMapType === item.key ? 'bg-primary' : undefined}
-                  onClick={() => onMapTypeSelect(item.key)}
+                  onPress={() => onMapTypeSelect(item.key)}
                 >
                   <div className="flex items-center justify-center relative">
                     <NextImage unoptimized loading="eager" src={item.icon} alt={item.label} width={24} height={24} />

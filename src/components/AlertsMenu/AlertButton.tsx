@@ -35,7 +35,7 @@ import { AlertButtonProps } from '@/domain/props/AlertButtonProps';
  * @returns {ForwardRefExoticComponent<AlertButtonProps & RefAttributes<HTMLButtonElement>>} The alert button component
  */
 export const AlertButton = forwardRef<HTMLButtonElement, AlertButtonProps>(
-  ({ icon, label, isSelected, isLoading, onClick, className, ...props }, ref) => {
+  ({ icon, label, isSelected, isLoading, onPress, className, ...props }, ref) => {
     const { isSidebarOpen } = useSidebar();
     return (
       <Button
@@ -52,7 +52,7 @@ export const AlertButton = forwardRef<HTMLButtonElement, AlertButtonProps>(
           },
           className
         )}
-        onClick={onClick}
+        onPress={onPress}
         ref={ref}
         {...props}
       >

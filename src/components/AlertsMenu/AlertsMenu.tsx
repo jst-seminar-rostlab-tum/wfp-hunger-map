@@ -72,7 +72,7 @@ export function AlertsMenu({ variant }: AlertsMenuProps) {
                       icon={subalert.icon}
                       label={subalert.label}
                       isSelected={isAlertSelected(subalert.key)}
-                      onClick={() => handleAlertButtonClick(subalert.key)}
+                      onPress={() => handleAlertButtonClick(subalert.key)}
                       isLoading={alertFetching[item.key]}
                     />
                   </Tooltip>
@@ -87,7 +87,7 @@ export function AlertsMenu({ variant }: AlertsMenuProps) {
               label={item.label}
               isSelected={isAlertSelected(item.key)}
               isLoading={alertFetching[item.key]}
-              onClick={() => {
+              onPress={() => {
                 handleAlertButtonClick(item.key);
               }}
             />

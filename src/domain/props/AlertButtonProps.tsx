@@ -3,6 +3,6 @@ export interface AlertButtonProps {
   label: string;
   isSelected: boolean;
   isLoading: boolean;
-  onClick?: () => void;
+  onPress?: () => void;
   className?: string;
 }

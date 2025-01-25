@@ -51,6 +51,7 @@ function CustomTable<D>({
   format = 'simple',
   showBorders = true,
   zebraRows = true,
+  minTableWidth = 400,
 }: CustomTableProps<D>) {
   // Extract search terms from the URL query parameters
   const searchWords = getSearchWords(useSearchParams().get('search') ?? '');
@@ -95,7 +96,7 @@ function CustomTable<D>({
         classNames={{
           base: clsx({
             'border-2 rounded-xl dark:border-default-200': showBorders, // Add border styles if enabled
-            'min-w-[300px]': true, // Force horizontal scroll by setting a large min-width
+            [`min-w-[${minTableWidth}px]`]: true, // Force horizontal scroll by setting a large min-width
           }),
           thead: clsx({
             '[&>tr:last-child]:hidden': true, // Hide the last child row in the header

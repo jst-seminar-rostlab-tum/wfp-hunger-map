@@ -1,7 +1,6 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import { useSelectedAlert } from '@/domain/contexts/SelectedAlertContext';
 import { CountryMapData, CountryMapDataWrapper } from '@/domain/entities/country/CountryMapData.ts';
 
 import { useSelectedCountryId } from '../contexts/SelectedCountryIdContext';
@@ -171,7 +170,7 @@ export const useSelectedMapType = () => {
 };
 
 export const useSelectedAlertQuery = () => {
-  const { selectedAlert, setSelectedAlert } = useSelectedAlert();
+  const [selectedAlert, setSelectedAlert] = useState<AlertType | null>(AlertType.COUNTRY_ALERTS);
   const PARAM_NAME = 'alert';
   const router = useRouter();
   const pathname = usePathname();
@@ -179,27 +178,27 @@ export const useSelectedAlertQuery = () => {
 
   useEffect(() => {
     const alertType = searchParams.get(PARAM_NAME);
-    console.log(alertType, selectedAlert);
     switch (alertType) {
+      case 'none':
+        setSelectedAlert(null);
+        break;
       case 'conflicts':
         setSelectedAlert(AlertType.CONFLICTS);
         break;
       case 'hazards':
-        console.log('setting AlertType', AlertType.HAZARDS);
         setSelectedAlert(AlertType.HAZARDS);
         break;
       case 'countryAlerts':
-        setSelectedAlert(AlertType.COUNTRY_ALERTS);
-        break;
       default:
+        setSelectedAlert(AlertType.COUNTRY_ALERTS);
         break;
     }
   }, [searchParams]);
 
-  const setAlertQueryFn = (alertType: AlertType) => {
+  const setAlertQueryFn = (alertType: AlertType | null) => {
     setSelectedAlert(alertType);
     const updatedParams = new URLSearchParams(searchParams.toString());
-    updatedParams.set(PARAM_NAME, alertType);
+    updatedParams.set(PARAM_NAME, alertType ?? 'none');
     router.push(`${pathname}?${updatedParams.toString()}`);
   };
 

@@ -1,21 +1,12 @@
-import {
-  createContext,
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { createContext, ReactNode, useContext, useEffect, useMemo, useRef } from 'react';
 
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { AlertType } from '@/domain/enums/AlertType';
+import { useSelectedAlertQuery } from '@/domain/hooks/queryParamsHooks';
 
 interface SelectedAlertsState {
   selectedAlert: AlertType | null;
-  setSelectedAlert: Dispatch<SetStateAction<AlertType | null>>;
+  setSelectedAlert: (alertType: AlertType | null) => void;
   isAlertSelected: (alertType: AlertType) => boolean;
   toggleAlert: (alertType: AlertType) => void;
 }
@@ -23,7 +14,7 @@ interface SelectedAlertsState {
 const SelectedAlertContext = createContext<SelectedAlertsState | undefined>(undefined);
 
 export function SelectedAlertProvider({ children }: { children: ReactNode }) {
-  const [selectedAlert, setSelectedAlert] = useState<AlertType | null>(AlertType.COUNTRY_ALERTS);
+  const [selectedAlert, setSelectedAlert] = useSelectedAlertQuery();
   const prevAlertRef = useRef<AlertType | null>(null);
   const prevCountryIdRef = useRef<number | null>(null);
   const { selectedCountryId } = useSelectedCountryId();

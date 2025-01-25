@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { useSelectedAlert } from '@/domain/contexts/SelectedAlertContext';
 import { AlertType } from '@/domain/enums/AlertType';
-import { useSelectedAlertQuery } from '@/domain/hooks/queryParamsHooks';
 import { AlertContainerProps } from '@/domain/props/AlertConatinerProps';
 
 import { ConflictLayer } from './ConflictLayer';
@@ -14,17 +13,6 @@ import { HazardLayer } from './HazardLayer';
  */
 export const AlertContainer = React.memo(({ countries, alertData }: AlertContainerProps) => {
   const { selectedAlert } = useSelectedAlert();
-  const [selectedAlertType, setSelectedAlertType] = useSelectedAlertQuery();
-
-  useEffect(() => {
-    if (selectedAlert === AlertType.HAZARDS) {
-      setSelectedAlertType(AlertType.HAZARDS);
-    } else if (selectedAlert === AlertType.CONFLICTS) {
-      setSelectedAlertType(AlertType.CONFLICTS);
-    } else if (selectedAlert === AlertType.COUNTRY_ALERTS) {
-      setSelectedAlertType(AlertType.COUNTRY_ALERTS);
-    }
-  }, [selectedAlert, setSelectedAlertType, selectedAlertType]);
 
   switch (selectedAlert) {
     case AlertType.CONFLICTS:

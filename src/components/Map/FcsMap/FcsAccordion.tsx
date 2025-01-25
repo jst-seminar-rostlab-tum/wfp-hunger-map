@@ -78,6 +78,7 @@ export default function FcsAccordion({ countryName, countryId, countryCode }: Fc
           maxWidth={600}
           items={foodSecurityAccordionItems}
           expandAll={!countryDataLoading && !iso3DataLoading && !countryForecastDataLoading}
+          noPadding
         />
       </div>
       <div className="absolute w-[350px] right-[1rem] inset-y-24 z-9999">

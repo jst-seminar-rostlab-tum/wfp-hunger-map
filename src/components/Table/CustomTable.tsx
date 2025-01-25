@@ -86,7 +86,7 @@ function CustomTable<D>({
   const leftAlignedColumns = new Set(columns.filter((c) => c.alignLeft).map((c) => c.columnId));
 
   return (
-    <div className="w-full overflow-x-scroll">
+    <div className="w-full overflow-x-auto">
       <Table
         removeWrapper
         aria-label={ariaLabel}

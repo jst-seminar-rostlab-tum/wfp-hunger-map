@@ -51,7 +51,7 @@ function CustomTable<D>({
   format = 'simple',
   showBorders = true,
   zebraRows = true,
-  minTableWidth = 400,
+  minTableWidth,
 }: CustomTableProps<D>) {
   // Extract search terms from the URL query parameters
   const searchWords = getSearchWords(useSearchParams().get('search') ?? '');
@@ -86,7 +86,7 @@ function CustomTable<D>({
   const leftAlignedColumns = new Set(columns.filter((c) => c.alignLeft).map((c) => c.columnId));
 
   return (
-    <div className="w-full overflow-x-auto">
+    <div className="w-full overflow-x-scroll">
       <Table
         removeWrapper
         aria-label={ariaLabel}
@@ -96,7 +96,8 @@ function CustomTable<D>({
         classNames={{
           base: clsx({
             'border-2 rounded-xl dark:border-default-200': showBorders, // Add border styles if enabled
-            [`min-w-[${minTableWidth}px]`]: true, // Force horizontal scroll by setting a large min-width
+            [`min-w-[${minTableWidth}px]`]: minTableWidth, // Apply dynamic class if minTableWidth exists
+            'min-w-[400px]': !minTableWidth, // Fallback to the old value if minTableWidth is not provided
           }),
           thead: clsx({
             '[&>tr:last-child]:hidden': true, // Hide the last child row in the header

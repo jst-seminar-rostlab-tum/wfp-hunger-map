@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import SearchBar from '@/components/Search/SearchBar';
-import { useSearchQuery } from '@/domain/hooks/queryParamsHooks';
+import { useSearchQueryParam } from '@/domain/hooks/queryParamsHooks';
 import { DocsSearchBarProps } from '@/domain/props/DocsSearchBarProps';
 import { getSearchWords } from '@/utils/searchUtils';
 
@@ -11,7 +11,7 @@ import { getSearchWords } from '@/utils/searchUtils';
  * @param {(searchWords: string[]) => void} setSearchWords Function to call if the search input changes.
  */
 function DocsSearchBar({ setSearchWords }: DocsSearchBarProps) {
-  const [search, setSearch] = useSearchQuery();
+  const [search, setSearch] = useSearchQueryParam();
 
   useEffect(() => {
     setSearchWords(getSearchWords(search));

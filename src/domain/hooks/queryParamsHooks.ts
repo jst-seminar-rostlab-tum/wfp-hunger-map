@@ -14,7 +14,7 @@ import { GlobalInsight } from '../enums/GlobalInsight';
  *
  * Note: It is assumed that there is only one relevant query param, any others will be erased on change.
  */
-export const useSelectedCountries = (countryMapData: CountryMapDataWrapper) => {
+export const useSelectedCountriesParam = (countryMapData: CountryMapDataWrapper) => {
   const PARAM_NAME = 'countries';
 
   const router = useRouter();
@@ -69,7 +69,7 @@ const useDebounce = (input: string, msDelay: number) => {
  * Note: It is assumed that there is only one relevant query param, any others will be erased on change.
  * @return {[string, (newValue: string) => void]} the current (non-debounced) query and a function to update the query
  */
-export const useSearchQuery = () => {
+export const useSearchQueryParam = () => {
   const PARAM_NAME = 'search';
   const DEBOUNCE_MS = 350;
 
@@ -101,7 +101,7 @@ export const useSearchQuery = () => {
   return [searchQuery, setSearchQueryFn] as const;
 };
 
-export const useSelectedCountry = () => {
+export const useSelectedCountryParam = () => {
   const PARAM_NAME = 'countryId';
   const router = useRouter();
   const pathname = usePathname();
@@ -130,7 +130,7 @@ export const useSelectedCountry = () => {
   return [selectedCountryIdQuery, setSelectedCountryIdQueryFn] as const;
 };
 
-export const useSelectedMapType = () => {
+export const useSelectedMapTypeParam = () => {
   const { setSelectedMapType } = useSelectedMap();
   const PARAM_NAME = 'selectedMap';
   const router = useRouter();
@@ -169,7 +169,7 @@ export const useSelectedMapType = () => {
   return [selectedMap, setSelectedMapFn] as const;
 };
 
-export const useSelectedAlertQuery = () => {
+export const useSelectedAlertParam = () => {
   const [selectedAlert, setSelectedAlert] = useState<AlertType | null>(AlertType.COUNTRY_ALERTS);
   const PARAM_NAME = 'alert';
   const router = useRouter();
@@ -195,12 +195,12 @@ export const useSelectedAlertQuery = () => {
     }
   }, [searchParams]);
 
-  const setAlertQueryFn = (alertType: AlertType | null) => {
+  const setAlertFn = (alertType: AlertType | null) => {
     setSelectedAlert(alertType);
     const updatedParams = new URLSearchParams(searchParams.toString());
     updatedParams.set(PARAM_NAME, alertType ?? 'none');
     router.push(`${pathname}?${updatedParams.toString()}`);
   };
 
-  return [selectedAlert, setAlertQueryFn] as const;
+  return [selectedAlert, setAlertFn] as const;
 };

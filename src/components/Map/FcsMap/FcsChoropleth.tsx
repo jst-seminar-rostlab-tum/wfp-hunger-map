@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from 'react';
 import { GeoJSON, useMap } from 'react-leaflet';
 
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
-import { useSelectedCountry } from '@/domain/hooks/queryParamsHooks';
+import { useSelectedCountryParam } from '@/domain/hooks/queryParamsHooks';
 import FcsChoroplethProps from '@/domain/props/FcsChoroplethProps';
 import { AccessibilityOperations } from '@/operations/map/AccessibilityOperations';
 import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
@@ -33,7 +33,7 @@ export default function FcsChoropleth({
   const { theme } = useTheme();
   const countryData = data.features[0].properties;
   const map = useMap();
-  const [selectedCountry, setSelectedCountry] = useSelectedCountry();
+  const [selectedCountry, setSelectedCountry] = useSelectedCountryParam();
 
   useEffect(() => {
     if (!geoJsonRef.current || !map) return () => {};

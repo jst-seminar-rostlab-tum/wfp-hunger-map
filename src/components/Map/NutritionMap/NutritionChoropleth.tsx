@@ -7,7 +7,7 @@ import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 import { NutrientType } from '@/domain/enums/NutrientType.ts';
 import { useNutritionQuery } from '@/domain/hooks/globalHooks';
-import { useSelectedCountry } from '@/domain/hooks/queryParamsHooks';
+import { useSelectedCountryParam } from '@/domain/hooks/queryParamsHooks';
 import NutritionChoroplethProps from '@/domain/props/NutritionChoroplethProps';
 import { MapOperations } from '@/operations/map/MapOperations';
 import NutritionChoroplethOperations from '@/operations/map/NutritionChoroplethOperations';
@@ -32,7 +32,7 @@ export default function NutritionChoropleth({ data, countryId, onDataUnavailable
   const { data: nutritionData } = useNutritionQuery(true);
   const [selectedNutrient, setSelectedNutrient] = useState<NutrientType>(NutrientType.MINI_SIMPLE);
   const map = useMap();
-  const [selectedCountry, setSelectedCountry] = useSelectedCountry();
+  const [selectedCountry, setSelectedCountry] = useSelectedCountryParam();
 
   // adding the country name as a tooltip to each layer (on hover)
   // the tooltip is not shown if the country is selected or there is no data available for the country

@@ -2,7 +2,7 @@ import { createContext, ReactNode, useContext, useEffect, useMemo, useRef } from
 
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { AlertType } from '@/domain/enums/AlertType';
-import { useSelectedAlertQuery } from '@/domain/hooks/queryParamsHooks';
+import { useSelectedAlertParam } from '@/domain/hooks/queryParamsHooks';
 
 interface SelectedAlertsState {
   selectedAlert: AlertType | null;
@@ -14,7 +14,7 @@ interface SelectedAlertsState {
 const SelectedAlertContext = createContext<SelectedAlertsState | undefined>(undefined);
 
 export function SelectedAlertProvider({ children }: { children: ReactNode }) {
-  const [selectedAlert, setSelectedAlert] = useSelectedAlertQuery();
+  const [selectedAlert, setSelectedAlert] = useSelectedAlertParam();
   const prevAlertRef = useRef<AlertType | null>(null);
   const prevCountryIdRef = useRef<number | null>(null);
   const { selectedCountryId } = useSelectedCountryId();

@@ -17,7 +17,7 @@ export default class ChatbotRepositoryImpl implements ChatbotRepository {
     try {
       const payload: QueryRequest = {
         chatId: options.chatId || uuid(),
-        reports_country_name: options.reports_country_name || '',
+        report_context: options.report_context || undefined,
         query: message,
         version: options.version || 1,
         chatbot_type: options.chatbot_type || 'gpt-4',

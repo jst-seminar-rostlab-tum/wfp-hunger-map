@@ -7,7 +7,7 @@ import { Autocomplete, AutocompleteItem, ScrollShadow, Spinner } from '@nextui-o
 import clsx from 'clsx';
 import { SidebarLeft } from 'iconsax-react';
 import NextImage from 'next/image';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { AlertsMenu } from '@/components/AlertsMenu/AlertsMenu';
 import { LogoWithText } from '@/components/LogoWithText/LogoWithText';
@@ -22,6 +22,7 @@ import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { AlertsMenuVariant } from '@/domain/enums/AlertsMenuVariant';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
 import { useIpcQuery, useNutritionQuery } from '@/domain/hooks/globalHooks.ts';
+import { useSelectedCountryParam, useSelectedMapTypeParam } from '@/domain/hooks/queryParamsHooks';
 import SidebarProps from '@/domain/props/SidebarProps.ts';
 import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
 import { useMediaQuery } from '@/utils/resolution';
@@ -50,6 +51,8 @@ export function Sidebar({ countryMapData, fcsData }: SidebarProps): React.JSX.El
   const { clearAccordionModal } = useAccordionsModal();
   const { isFetching: ipcDataIsFetching, data: ipcData } = useIpcQuery(false);
   const { isFetching: nutritionDataIsFetching, data: nutritionData } = useNutritionQuery(false);
+  const [selectedCountry, setSelectedCountry] = useSelectedCountryParam();
+  const [selectedMapTypeQuery, setSelectedMapTypeQuery] = useSelectedMapTypeParam();
 
   const mapDataFetching: Partial<Record<GlobalInsight, boolean>> = {
     [GlobalInsight.IPC]: ipcDataIsFetching,
@@ -66,6 +69,15 @@ export function Sidebar({ countryMapData, fcsData }: SidebarProps): React.JSX.El
     }
   };
 
+  useEffect(() => {
+    if (selectedCountryId) {
+      setSelectedCountry(selectedCountryId);
+      handleCountrySelect(selectedCountryId);
+    } else if (!selectedCountryId) {
+      setSelectedCountry(undefined);
+    }
+  }, [selectedCountryId, setSelectedCountry, selectedCountry]);
+
   if (!isSidebarOpen) {
     return <CollapsedSidebar mapDataFetching={mapDataFetching} />;
   }
@@ -81,6 +93,25 @@ export function Sidebar({ countryMapData, fcsData }: SidebarProps): React.JSX.El
       closeSidebar();
     }
   };
+
+  useEffect(() => {
+    if (selectedMapType === GlobalInsight.IPC) {
+      setSelectedMapTypeQuery('ipc');
+      onMapTypeSelect(GlobalInsight.IPC);
+    } else if (selectedMapType === GlobalInsight.NUTRITION) {
+      setSelectedMapTypeQuery('nutrition');
+      onMapTypeSelect(GlobalInsight.NUTRITION);
+    } else if (selectedMapType === GlobalInsight.RAINFALL) {
+      setSelectedMapTypeQuery('rainfall');
+      onMapTypeSelect(GlobalInsight.RAINFALL);
+    } else if (selectedMapType === GlobalInsight.VEGETATION) {
+      setSelectedMapTypeQuery('vegetation');
+      onMapTypeSelect(GlobalInsight.VEGETATION);
+    } else {
+      setSelectedMapTypeQuery('fcs');
+      onMapTypeSelect(GlobalInsight.FOOD);
+    }
+  }, [selectedMapType, setSelectedMapTypeQuery, selectedMapTypeQuery]);
 
   return (
     <div className="w-screen h-dvh absolute top-0 left-0 z-sidebarFullScreen sm:w-[280px] sm:h-[calc(100dvh-2rem)] sm:z-sidebarExpanded sm:top-4 sm:left-4">

@@ -6,7 +6,6 @@ import { useSelectedAlertParam } from '@/domain/hooks/queryParamsHooks';
 
 interface SelectedAlertsState {
   selectedAlert: AlertType | null;
-  setSelectedAlert: (alertType: AlertType | null) => void;
   isAlertSelected: (alertType: AlertType) => boolean;
   toggleAlert: (alertType: AlertType) => void;
 }
@@ -48,7 +47,6 @@ export function SelectedAlertProvider({ children }: { children: ReactNode }) {
       selectedAlert,
       isAlertSelected,
       toggleAlert,
-      setSelectedAlert,
     }),
     [selectedAlert]
   );

@@ -169,9 +169,9 @@ export const useSelectedMapType = () => {
 
   return [selectedMap, setSelectedMapFn] as const;
 };
+
 export const useSelectedAlertQuery = () => {
-  const { toggleAlert } = useSelectedAlert();
-  const [selectedAlert, setSelectedAlert] = useState<AlertType>(AlertType.COUNTRY_ALERTS);
+  const { selectedAlert, setSelectedAlert } = useSelectedAlert();
   const PARAM_NAME = 'alert';
   const router = useRouter();
   const pathname = usePathname();
@@ -179,20 +179,20 @@ export const useSelectedAlertQuery = () => {
 
   useEffect(() => {
     const alertType = searchParams.get(PARAM_NAME);
-    if (alertType) {
-      if (alertType === 'conflicts') {
-        console.log('Toggling CONFLICTS alert');
-        toggleAlert(AlertType.CONFLICTS);
+    console.log(alertType, selectedAlert);
+    switch (alertType) {
+      case 'conflicts':
         setSelectedAlert(AlertType.CONFLICTS);
-      } else if (alertType === 'hazards') {
-        console.log('Toggling HAZARDS alert');
-        toggleAlert(AlertType.HAZARDS);
+        break;
+      case 'hazards':
+        console.log('setting AlertType', AlertType.HAZARDS);
         setSelectedAlert(AlertType.HAZARDS);
-      } else if (alertType === 'countryAlerts') {
-        console.log('Toggling COUNTRY_ALERTS alert');
-        toggleAlert(AlertType.COUNTRY_ALERTS);
+        break;
+      case 'countryAlerts':
         setSelectedAlert(AlertType.COUNTRY_ALERTS);
-      }
+        break;
+      default:
+        break;
     }
   }, [searchParams]);
 
@@ -200,7 +200,6 @@ export const useSelectedAlertQuery = () => {
     setSelectedAlert(alertType);
     const updatedParams = new URLSearchParams(searchParams.toString());
     updatedParams.set(PARAM_NAME, alertType);
-    console.log('Updated query param:', updatedParams.toString());
     router.push(`${pathname}?${updatedParams.toString()}`);
   };
 

@@ -1,10 +1,21 @@
-import { createContext, ReactNode, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  createContext,
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { AlertType } from '@/domain/enums/AlertType';
 
 interface SelectedAlertsState {
   selectedAlert: AlertType | null;
+  setSelectedAlert: Dispatch<SetStateAction<AlertType | null>>;
   isAlertSelected: (alertType: AlertType) => boolean;
   toggleAlert: (alertType: AlertType) => void;
 }
@@ -46,6 +57,7 @@ export function SelectedAlertProvider({ children }: { children: ReactNode }) {
       selectedAlert,
       isAlertSelected,
       toggleAlert,
+      setSelectedAlert,
     }),
     [selectedAlert]
   );

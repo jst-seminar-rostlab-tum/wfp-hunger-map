@@ -3,7 +3,7 @@ import { UseQueryResult } from '@tanstack/react-query';
 
 import { CategoricalChart } from '@/components/Charts/CategoricalChart';
 import { ContinuousChart } from '@/components/Charts/ContinuousChart';
-import NoDataHint from '@/components/ComparisonPortal/NoDataHint';
+import NoDataAlert from '@/components/ComparisonPortal/NoDataAlert';
 import CustomInfoCircle from '@/components/CustomInfoCircle/CustomInfoCircle';
 import { DataSourcePopover } from '@/components/Legend/DataSourcePopover';
 import descriptions from '@/domain/constant/dataSources/dataSourceDescriptions';
@@ -23,141 +23,12 @@ import { SnackbarProps } from '@/domain/props/SnackbarProps';
 import { formatToMillion } from '@/utils/formatting.ts';
 
 export class CountryComparisonOperations {
-  static getFcsChartData(countryDataList: CountryDataRecord[], countryMapData: CountryMapData[]): ContinuousChartData {
-    return this.chartWithoutEmptyLines({
-      type: ContinuousChartDataType.LINE_CHART_DATA,
-      xAxisType: 'datetime',
-      yAxisLabel: 'Mill',
-      lines: countryDataList.map((countryData) => ({
-        name: this.getCountryNameById(countryData.id, countryMapData),
-        showRange: true,
-        dataPoints: countryData.fcsGraph.map((fcsChartData) => ({
-          x: new Date(fcsChartData.x).getTime(),
-          y: formatToMillion(fcsChartData.fcs),
-          yRangeMin: formatToMillion(fcsChartData.fcsLow),
-          yRangeMax: formatToMillion(fcsChartData.fcsHigh),
-        })),
-      })),
-    });
-  }
-
-  static getRcsiChartData(countryDataList: CountryDataRecord[], countryMapData: CountryMapData[]): ContinuousChartData {
-    return this.chartWithoutEmptyLines({
-      type: ContinuousChartDataType.LINE_CHART_DATA,
-      xAxisType: 'datetime',
-      yAxisLabel: 'Mill',
-      lines: countryDataList.map((countryData) => ({
-        name: this.getCountryNameById(countryData.id, countryMapData),
-        showRange: true,
-        dataPoints: countryData.rcsiGraph
-          .filter((rcsiChartData) => rcsiChartData.rcsi !== null)
-          .map((rcsiChartData) => ({
-            x: new Date(rcsiChartData.x).getTime(),
-            y: formatToMillion(rcsiChartData.rcsi),
-            yRangeMin: formatToMillion(rcsiChartData.rcsiLow),
-            yRangeMax: formatToMillion(rcsiChartData.rcsiHigh),
-          })),
-      })),
-    });
-  }
-
-  static getPopulationBarChartData(
-    countryDataList: CountryDataRecord[],
-    countryMapData: CountryMapData[]
-  ): CategoricalChartData {
-    return {
-      yAxisLabel: 'Mill',
-      categories: countryDataList.map((countryData) => ({
-        name: this.getCountryNameById(countryData.id, countryMapData),
-        dataPoint: {
-          y: countryData.population,
-        },
-      })),
-    };
-  }
-
-  static getFoodSecurityBarChartData(
-    countryDataList: CountryDataRecord[],
-    countryMapData: CountryMapData[]
-  ): CategoricalChartData {
-    return {
-      yAxisLabel: 'Mill',
-      categories: countryDataList.map((countryData) => ({
-        name: this.getCountryNameById(countryData.id, countryMapData),
-        dataPoint: {
-          y: countryData.fcs,
-        },
-      })),
-    };
-  }
-
-  static getImportDependencyBarChartData(
-    countryDataList: CountryDataRecord[],
-    selectedCountries: CountryMapData[]
-  ): CategoricalChartData {
-    return {
-      yAxisLabel: '% of Cereals',
-      categories: countryDataList
-        .filter((countryData) => countryData.importDependency !== null)
-        .map((countryData) => ({
-          name: this.getCountryNameById(countryData.id, selectedCountries),
-          dataPoint: {
-            y: countryData.importDependency!,
-          },
-        })),
-    };
-  }
-
-  static getBalanceOfTradeData(
-    countryIso3DataList: CountryIso3DataRecord[],
-    selectedCountries: CountryMapData[]
-  ): ContinuousChartData {
-    return this.chartWithoutEmptyLines({
-      type: ContinuousChartDataType.LINE_CHART_DATA,
-      xAxisType: 'datetime',
-      yAxisLabel: 'Mill USD',
-      lines: countryIso3DataList.map((countryIso3Data) => ({
-        name: this.getCountryNameByIso3(countryIso3Data.id, selectedCountries),
-        dataPoints: countryIso3Data.balanceOfTradeGraph.data.map((p) => {
-          return { x: new Date(p.x).getTime(), y: formatToMillion(p.y) };
-        }),
-      })),
-    });
-  }
-
-  static getInflationData(
-    countryIso3DataList: CountryIso3DataRecord[],
-    selectedCountries: CountryMapData[],
-    type: 'headline' | 'food'
-  ): ContinuousChartData {
-    return this.chartWithoutEmptyLines({
-      type: ContinuousChartDataType.LINE_CHART_DATA,
-      xAxisType: 'datetime',
-      yAxisLabel: 'Rate in %',
-      lines: countryIso3DataList
-        .filter((countryIso3Data) => countryIso3Data.inflationGraphs[type].data !== undefined)
-        .map((countryIso3Data) => ({
-          name: this.getCountryNameByIso3(countryIso3Data.id, selectedCountries),
-          dataPoints: (countryIso3Data.inflationGraphs[type].data as ChartData[]).map((p) => {
-            return { x: new Date(p.x).getTime(), y: p.y };
-          }),
-        })),
-    });
-  }
-
   static getCountryNameById(id: number, countryMapData: CountryMapData[]): string {
     return countryMapData.find((country) => country.properties.adm0_id === id)?.properties.adm0_name || '';
   }
 
   static getCountryNameByIso3(iso3: string, countryMapData: CountryMapData[]): string {
     return countryMapData.find((country) => country.properties.iso3 === iso3)?.properties.adm0_name || '';
-  }
-
-  static chartWithoutEmptyLines(chart: ContinuousChartData): ContinuousChartData {
-    return {
-      ...chart,
-      lines: chart.lines.filter((line) => line.dataPoints.length > 0),
-    };
   }
 
   static getChartData(
@@ -229,7 +100,7 @@ export class CountryComparisonOperations {
   ): AccordionItemProps[] {
     return [
       {
-        title: 'Food Security',
+        title: 'Current Food Security',
         infoIcon: <CustomInfoCircle />,
         popoverInfo: <DataSourcePopover dataSourceKeys={['population', 'fcs']} />,
         content: (
@@ -260,16 +131,16 @@ export class CountryComparisonOperations {
             {fcsChartData && (
               <>
                 <ContinuousChart
-                  title="Trend of the number of people with insufficient food consumption"
+                  title={descriptions.fcs.legendTitle}
                   data={fcsChartData}
                   small
                   noPadding
                   transparentBackground
                   chartHeight={300}
                 />
-                <NoDataHint
+                <NoDataAlert
                   chartData={fcsChartData}
-                  selectedCountryNames={selectedCountryNames}
+                  requestedChartCategories={selectedCountryNames}
                   isLoading={isLoading}
                 />
               </>
@@ -278,16 +149,16 @@ export class CountryComparisonOperations {
             {rcsiChartData && (
               <>
                 <ContinuousChart
-                  title="Trend of the number of people using crisis or above crisis food-based coping"
+                  title={descriptions.rCsi.legendTitle}
                   data={rcsiChartData}
                   small
                   noPadding
                   transparentBackground
                   chartHeight={300}
                 />
-                <NoDataHint
+                <NoDataAlert
                   chartData={rcsiChartData}
-                  selectedCountryNames={selectedCountryNames}
+                  requestedChartCategories={selectedCountryNames}
                   isLoading={isLoading}
                 />
               </>
@@ -304,9 +175,9 @@ export class CountryComparisonOperations {
             {importDependencyBarChartData && (
               <>
                 <CategoricalChart data={importDependencyBarChartData} transparentBackground />
-                <NoDataHint
+                <NoDataAlert
                   chartData={importDependencyBarChartData}
-                  selectedCountryNames={selectedCountryNames}
+                  requestedChartCategories={selectedCountryNames}
                   isLoading={isLoading}
                 />
               </>
@@ -323,9 +194,9 @@ export class CountryComparisonOperations {
             {balanceOfTradeData && (
               <>
                 <ContinuousChart data={balanceOfTradeData} small noPadding transparentBackground chartHeight={300} />
-                <NoDataHint
+                <NoDataAlert
                   chartData={balanceOfTradeData}
-                  selectedCountryNames={selectedCountryNames}
+                  requestedChartCategories={selectedCountryNames}
                   isLoading={isLoading}
                 />
               </>
@@ -349,9 +220,9 @@ export class CountryComparisonOperations {
                   transparentBackground
                   chartHeight={300}
                 />
-                <NoDataHint
+                <NoDataAlert
                   chartData={headlineInflationData}
-                  selectedCountryNames={selectedCountryNames}
+                  requestedChartCategories={selectedCountryNames}
                   isLoading={isLoading}
                 />
               </>
@@ -366,9 +237,9 @@ export class CountryComparisonOperations {
                   transparentBackground
                   chartHeight={300}
                 />
-                <NoDataHint
+                <NoDataAlert
                   chartData={foodInflationData}
-                  selectedCountryNames={selectedCountryNames}
+                  requestedChartCategories={selectedCountryNames}
                   isLoading={isLoading}
                 />
               </>
@@ -377,5 +248,140 @@ export class CountryComparisonOperations {
         ),
       },
     ];
+  }
+
+  private static getFcsChartData(
+    countryDataList: CountryDataRecord[],
+    countryMapData: CountryMapData[]
+  ): ContinuousChartData {
+    return this.chartWithoutEmptyLines({
+      type: ContinuousChartDataType.LINE_CHART_DATA,
+      xAxisType: 'datetime',
+      yAxisLabel: 'Mill',
+      lines: countryDataList.map((countryData) => ({
+        name: this.getCountryNameById(countryData.id, countryMapData),
+        showRange: true,
+        dataPoints: countryData.fcsGraph.map((fcsChartData) => ({
+          x: new Date(fcsChartData.x).getTime(),
+          y: formatToMillion(fcsChartData.fcs),
+          yRangeMin: formatToMillion(fcsChartData.fcsLow),
+          yRangeMax: formatToMillion(fcsChartData.fcsHigh),
+        })),
+      })),
+    });
+  }
+
+  private static getRcsiChartData(
+    countryDataList: CountryDataRecord[],
+    countryMapData: CountryMapData[]
+  ): ContinuousChartData {
+    return this.chartWithoutEmptyLines({
+      type: ContinuousChartDataType.LINE_CHART_DATA,
+      xAxisType: 'datetime',
+      yAxisLabel: 'Mill',
+      lines: countryDataList.map((countryData) => ({
+        name: this.getCountryNameById(countryData.id, countryMapData),
+        showRange: true,
+        dataPoints: countryData.rcsiGraph
+          .filter((rcsiChartData) => rcsiChartData.rcsi !== null)
+          .map((rcsiChartData) => ({
+            x: new Date(rcsiChartData.x).getTime(),
+            y: formatToMillion(rcsiChartData.rcsi),
+            yRangeMin: formatToMillion(rcsiChartData.rcsiLow),
+            yRangeMax: formatToMillion(rcsiChartData.rcsiHigh),
+          })),
+      })),
+    });
+  }
+
+  private static getPopulationBarChartData(
+    countryDataList: CountryDataRecord[],
+    countryMapData: CountryMapData[]
+  ): CategoricalChartData {
+    return {
+      yAxisLabel: 'Mill',
+      categories: countryDataList.map((countryData) => ({
+        name: this.getCountryNameById(countryData.id, countryMapData),
+        dataPoint: {
+          y: countryData.population,
+        },
+      })),
+    };
+  }
+
+  private static getFoodSecurityBarChartData(
+    countryDataList: CountryDataRecord[],
+    countryMapData: CountryMapData[]
+  ): CategoricalChartData {
+    return {
+      yAxisLabel: 'Mill',
+      categories: countryDataList.map((countryData) => ({
+        name: this.getCountryNameById(countryData.id, countryMapData),
+        dataPoint: {
+          y: countryData.fcs,
+        },
+      })),
+    };
+  }
+
+  private static getImportDependencyBarChartData(
+    countryDataList: CountryDataRecord[],
+    selectedCountries: CountryMapData[]
+  ): CategoricalChartData {
+    return {
+      yAxisLabel: '% of Cereals',
+      categories: countryDataList
+        .filter((countryData) => countryData.importDependency !== null)
+        .map((countryData) => ({
+          name: this.getCountryNameById(countryData.id, selectedCountries),
+          dataPoint: {
+            y: countryData.importDependency!,
+          },
+        })),
+    };
+  }
+
+  private static getBalanceOfTradeData(
+    countryIso3DataList: CountryIso3DataRecord[],
+    selectedCountries: CountryMapData[]
+  ): ContinuousChartData {
+    return this.chartWithoutEmptyLines({
+      type: ContinuousChartDataType.LINE_CHART_DATA,
+      xAxisType: 'datetime',
+      yAxisLabel: 'Mill USD',
+      lines: countryIso3DataList.map((countryIso3Data) => ({
+        name: this.getCountryNameByIso3(countryIso3Data.id, selectedCountries),
+        dataPoints: countryIso3Data.balanceOfTradeGraph.data.map((p) => {
+          return { x: new Date(p.x).getTime(), y: formatToMillion(p.y) };
+        }),
+      })),
+    });
+  }
+
+  private static getInflationData(
+    countryIso3DataList: CountryIso3DataRecord[],
+    selectedCountries: CountryMapData[],
+    type: 'headline' | 'food'
+  ): ContinuousChartData {
+    return this.chartWithoutEmptyLines({
+      type: ContinuousChartDataType.LINE_CHART_DATA,
+      xAxisType: 'datetime',
+      yAxisLabel: 'Rate in %',
+      lines: countryIso3DataList
+        .filter((countryIso3Data) => countryIso3Data.inflationGraphs[type].data !== undefined)
+        .map((countryIso3Data) => ({
+          name: this.getCountryNameByIso3(countryIso3Data.id, selectedCountries),
+          dataPoints: (countryIso3Data.inflationGraphs[type].data as ChartData[]).map((p) => {
+            return { x: new Date(p.x).getTime(), y: p.y };
+          }),
+        })),
+    });
+  }
+
+  static chartWithoutEmptyLines(chart: ContinuousChartData): ContinuousChartData {
+    return {
+      ...chart,
+      lines: chart.lines.filter((line) => line.dataPoints.length > 0),
+    };
   }
 }

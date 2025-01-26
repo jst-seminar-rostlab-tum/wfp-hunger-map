@@ -1,7 +1,16 @@
 import NextImage from 'next/image';
 import NextLink from 'next/link';
+import React from 'react';
 
-export function LogoWithText() {
+/**
+ * LogoWithText component renders the WFP HungerMap logo with text.
+ * Includes the WFP logo image and "HungerMap LIVE" text next to it.
+ * Links to the home page when clicked.
+ *
+ * @component
+ * @returns {React.JSX.Element} A linked logo and text combination
+ */
+export function LogoWithText(): React.JSX.Element {
   return (
     <NextLink href="/">
       <div className="flex items-center gap-2">

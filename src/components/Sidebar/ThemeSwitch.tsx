@@ -4,11 +4,25 @@ import { Skeleton } from '@nextui-org/skeleton';
 import { Switch } from '@nextui-org/switch';
 import { Moon, Sun1 } from 'iconsax-react';
 import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { ThemeSwitchProps } from '@/domain/props/ThemeSwitchProps';
 
-export function ThemeSwitch({ isIconOnly = false }: ThemeSwitchProps) {
+/**
+ * Theme switcher component that toggles between light and dark modes.
+ * Supports both icon-only and labeled variants.
+ *
+ * @component
+ * @param {ThemeSwitchProps} props - Component properties
+ * @param {boolean} [props.isIconOnly=false] - When true, hides the "Theme" label
+ *
+ * @accessibility
+ * - Provides aria-label for the switch
+ * - Shows loading skeleton during SSR/hydration
+ *
+ * @returns {React.JSX.Element} Theme switch component with optional label
+ */
+export function ThemeSwitch({ isIconOnly = false }: ThemeSwitchProps): React.JSX.Element {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
 

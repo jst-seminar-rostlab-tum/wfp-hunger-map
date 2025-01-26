@@ -1,4 +1,4 @@
-import { Feature, FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
+import { FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
 import React, { useEffect } from 'react';
 import { GeoJSON } from 'react-leaflet';
 
@@ -22,23 +22,13 @@ function IpcCountryChoropleth({ countryMapData, onDataUnavailable }: IpcCountryC
     }
   }, [regionIpcData]);
 
-  /**
-   * Handle feature events for country polygons.
-   * This will highlight the country and show the IPC phase information.
-   * @param feature GeoJSON feature object
-   * @param layer Leaflet layer object
-   */
-  const handleCountryFeature = (feature: Feature<Geometry, GeoJsonProperties>, layer: L.Layer) => {
-    IpcChoroplethOperations.attachEventsRegion(feature, layer);
-  };
-
   return isLoading || !regionIpcData ? (
     <>
       <CountryLoadingLayer
         countryMapData={
           {
             type: 'FeatureCollection',
-            features: countryMapData.features.filter((feature) => feature?.properties?.adm0_id === selectedCountryId),
+            features: [countryMapData.features.find((feature) => feature?.properties?.adm0_id === selectedCountryId)],
           } as FeatureCollection<Geometry, GeoJsonProperties>
         }
         color="hsl(var(--nextui-ipcAnimation))"
@@ -49,9 +39,11 @@ function IpcCountryChoropleth({ countryMapData, onDataUnavailable }: IpcCountryC
     <>
       <IpcAccordion countryMapData={countryMapData as CountryMapDataWrapper} />
       <GeoJSON
+        // manually force the component to rerender (because the key changes) when the selected country (and thus, the ipc region data) changes
+        key={selectedCountryId}
         style={IpcChoroplethOperations.ipcCountryStyle}
         data={regionIpcData as FeatureCollection}
-        onEachFeature={handleCountryFeature}
+        onEachFeature={IpcChoroplethOperations.initializeRegionLayer}
       />
     </>
   );

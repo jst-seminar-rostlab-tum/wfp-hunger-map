@@ -1,0 +1,126 @@
+{
+  "projectName": "wfp-hunger-map",
+  "projectOwner": "jst-seminar-rostlab-tum",
+  "repoType": "github",
+  "repoHost": "https://github.com/",
+  "files": ["README.md"],
+  "imageSize": 100,
+  "commit": false,
+  "commitConvention": "eslint",
+  "contributors": [
+    {
+      "login": "marinovl7",
+      "name": "Lachezar Marinov",
+      "avatar_url": "https://avatars.githubusercontent.com/u/99186919?v=4",
+      "profile": "https://github.com/marinovl7",
+      "contributions": ["projectManagement", "review", "code"]
+    },
+    {
+      "login": "bohdangarchu",
+      "name": "Bohdan Garchu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/107936554?v=4",
+      "profile": "https://github.com/bohdangarchu",
+      "contributions": ["code", "projectManagement", "review"]
+    },
+    {
+      "login": "cansumoran",
+      "name": "Cansu Moran",
+      "avatar_url": "https://avatars.githubusercontent.com/u/47862390?v=4",
+      "profile": "https://github.com/cansumoran",
+      "contributions": ["code", "projectManagement", "review"]
+    },
+    {
+      "login": "Tschonti",
+      "name": "Sámuel Fekete",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13004605?v=4",
+      "profile": "https://github.com/Tschonti",
+      "contributions": ["code", "projectManagement", "review"]
+    },
+    {
+      "login": "ahmedfarouk2000",
+      "name": "Ahmed Farouk",
+      "avatar_url": "https://avatars.githubusercontent.com/u/93868173?v=4",
+      "profile": "https://github.com/ahmedfarouk2000",
+      "contributions": ["code"]
+    },
+    {
+      "login": "ArmanpreetGhotra",
+      "name": "Armanpreet Ghotra",
+      "avatar_url": "https://avatars.githubusercontent.com/u/142525678?v=4",
+      "profile": "https://github.com/ArmanpreetGhotra",
+      "contributions": ["code"]
+    },
+    {
+      "login": "Esoteriker",
+      "name": "Haidong Xu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/51016146?v=4",
+      "profile": "https://github.com/Esoteriker",
+      "contributions": ["code"]
+    },
+    {
+      "login": "jschoedl",
+      "name": "Jakob Schödl",
+      "avatar_url": "https://avatars.githubusercontent.com/u/71393992?v=4",
+      "profile": "https://github.com/jschoedl",
+      "contributions": ["code"]
+    },
+    {
+      "login": "plaume8",
+      "name": "Linus Sander",
+      "avatar_url": "https://avatars.githubusercontent.com/u/126587385?v=4",
+      "profile": "https://github.com/plaume8",
+      "contributions": ["code"]
+    },
+    {
+      "login": "ahmtslmngcl",
+      "name": "Ahmet Selman Güclü",
+      "avatar_url": "https://avatars.githubusercontent.com/u/77407148?v=4",
+      "profile": "https://github.com/ahmtslmngcl",
+      "contributions": ["code"]
+    },
+    {
+      "login": "georgi4444",
+      "name": "Georgi Tsipov",
+      "avatar_url": "https://avatars.githubusercontent.com/u/76964999?v=4",
+      "profile": "https://github.com/georgi4444",
+      "contributions": ["code"]
+    },
+    {
+      "login": "Lukas0912",
+      "name": "Lukas Fabio Weigmann",
+      "avatar_url": "https://avatars.githubusercontent.com/u/109222100?v=4",
+      "profile": "https://github.com/Lukas0912",
+      "contributions": ["code"]
+    },
+    {
+      "login": "ahmedfarouk2000",
+      "name": "Georgi Peev",
+      "avatar_url": "https://avatars.githubusercontent.com/u/43567515?v=4",
+      "profile": "https://github.com/ahmedfarouk2000",
+      "contributions": ["code"]
+    },
+    {
+      "login": "Marius-Moldo",
+      "name": "Marius Moldovan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/68606110?v=4",
+      "profile": "https://github.com/Marius-Moldo",
+      "contributions": ["code"]
+    },
+    {
+      "login": "memreo",
+      "name": "Muhammed Emre Bayraktaroglu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/69143179?v=4",
+      "profile": "https://github.com/memreo",
+      "contributions": ["code"]
+    },
+    {
+      "login": "shauryainf",
+      "name": "Shaurya Sharma",
+      "avatar_url": "https://avatars.githubusercontent.com/u/101364820?v=4",
+      "profile": "https://github.com/shauryainf",
+      "contributions": ["code"]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "linkToUsage": false
+}

@@ -41,6 +41,7 @@ export default function HungerAlert({ countryFcsData, countryMapData }: HungerAl
           onClick={toggleModal}
           style={{ width: '4rem', height: '4rem' }}
           type="button"
+          aria-label={`View details about ${countriesWithHighHunger.length} countries experiencing highest levels of hunger`}
         >
           <p className="text-4xl">{countriesWithHighHunger.length}</p>
         </button>

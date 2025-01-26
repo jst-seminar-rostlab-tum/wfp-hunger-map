@@ -1,7 +1,7 @@
 'use client';
 
 import Highcharts from 'highcharts';
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from 'react';
 
 import { ChartContainer } from '@/components/Charts/helpers/ChartContainer';
 import { ChartType } from '@/domain/enums/ChartType.ts';
@@ -27,7 +27,7 @@ import CategoricalChartOperations from '@/operations/charts/CategoricalChartOper
  * @param {boolean} props.disableExpandable - when selected, the functionality to open the chart in a larger modal is disabled (optional)
  * @param {boolean} props.disablePieChartSwitch - when selected, the functionality to switch to a pie chart is disabled (optional)
  * @param {boolean} props.disableDownload - when selected, the functionality to download the chart is disabled (optional)
- * @param {boolean} props.disableRelativeAbsoluteNumbersSwitch - when selected, the option to switch to relative values is disabled (optional)
+ * @param {boolean} props.disableRelativeNumbersSwitch - when selected, the option to switch to relative values is disabled (optional)
  */
 export function CategoricalChart({
   data,
@@ -54,7 +54,8 @@ export function CategoricalChart({
 
   // function to update/recalculate the chart options
   const recalculateChartOptions = () => {
-    setChartOptions(CategoricalChartOperations.getHighChartOptions(data, showPieChart, ));
+
+    setChartOptions(a);
   };
 
   const alternativeSwitchButtonProps = disablePieChartSwitch

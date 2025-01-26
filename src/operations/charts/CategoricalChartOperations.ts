@@ -95,6 +95,7 @@ export default class CategoricalChartOperations {
       console.log("------")
       console.log(yTrans)
       if (relativeNumbers) {
+        console.log("do relative")
         yTrans /= populationSum;
         yTrans *= 100;
         yTrans = Math.round(yTrans * 10) / 10;

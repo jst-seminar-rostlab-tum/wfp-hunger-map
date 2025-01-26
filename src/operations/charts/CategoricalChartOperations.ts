@@ -51,8 +51,9 @@ export default class CategoricalChartOperations {
   /**
    * Tooltip formatter function for `Options.plotOptions.pie.dataLabels.formatter` usage only.
    */
-  private static pieDataLabelsFormatter(point: Highcharts.Point, data: CategoricalChartData) {
-    return `<p>${point.name}: </p><p style="color:${point.color}">${point.y} ${data.yAxisLabel}</p>`;
+  private static pieDataLabelsFormatter(point: Highcharts.Point, data: CategoricalChartData, relativeNumbers?: boolean) {
+    const suffix = relativeNumbers ? '%' : data.yAxisLabel;
+    return `<p>${point.name}: </p><p style="color:${point.color}">${point.y} ${suffix}</p>`;
   }
 
   /**
@@ -69,7 +70,6 @@ export default class CategoricalChartOperations {
     pieChart?: boolean,
     relativeNumbers?: boolean
   ): Highcharts.Options | undefined {
-
     const seriesData = [];
     const categories = [];
     const populationSum = data.categories.reduce((acc, c) => acc + c.dataPoint.y, 0);
@@ -92,15 +92,11 @@ export default class CategoricalChartOperations {
 
       // build series object for highchart
       let yTrans = categoryData.dataPoint.y;
-      console.log("------")
-      console.log(yTrans)
       if (relativeNumbers) {
-        console.log("do relative")
         yTrans /= populationSum;
         yTrans *= 100;
         yTrans = Math.round(yTrans * 10) / 10;
       }
-      console.log(yTrans)
       seriesData.push({
         name: categoryData.name,
         y: yTrans,
@@ -139,7 +135,7 @@ export default class CategoricalChartOperations {
       yAxis: {
         visible: !pieChart,
         title: {
-          text: data.yAxisLabel,
+          text: relativeNumbers ? '%' : data.yAxisLabel,
           style: {
             color: getTailwindColor('--nextui-secondary'),
           },
@@ -198,7 +194,7 @@ export default class CategoricalChartOperations {
           dataLabels: {
             enabled: true,
             formatter() {
-              return CategoricalChartOperations.pieDataLabelsFormatter(this.point, data);
+              return CategoricalChartOperations.pieDataLabelsFormatter(this.point, data, relativeNumbers);
             },
             style: {
               color: getTailwindColor('--nextui-secondary'),

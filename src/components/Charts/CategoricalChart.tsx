@@ -54,8 +54,7 @@ export function CategoricalChart({
 
   // function to update/recalculate the chart options
   const recalculateChartOptions = () => {
-
-    setChartOptions(a);
+    setChartOptions(CategoricalChartOperations.getHighChartOptions(data, showPieChart, showRelativeNumbers));
   };
 
   const alternativeSwitchButtonProps = disablePieChartSwitch

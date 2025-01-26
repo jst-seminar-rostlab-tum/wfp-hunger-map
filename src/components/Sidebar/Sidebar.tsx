@@ -83,7 +83,11 @@ export function Sidebar({ countryMapData, fcsData }: SidebarProps): React.JSX.El
   };
 
   return (
-    <div className="w-screen h-dvh absolute top-0 left-0 z-sidebarFullScreen sm:w-[280px] sm:h-[calc(100dvh-2rem)] sm:z-sidebarExpanded sm:top-4 sm:left-4">
+    <div
+      className="w-screen h-dvh absolute top-0 left-0 z-sidebarFullScreen sm:w-[280px] sm:h-[calc(100dvh-2rem)] sm:z-sidebarExpanded sm:top-4 sm:left-4"
+      aria-label="Map controls and navigation sidebar - expanded view"
+      role="complementary"
+    >
       <Card
         classNames={{
           base: 'h-full rounded-none sm:rounded-large',
@@ -94,8 +98,8 @@ export function Sidebar({ countryMapData, fcsData }: SidebarProps): React.JSX.El
         <CardHeader>
           <div className="flex items-center w-full gap-2 justify-between">
             <LogoWithText />
-            <Button isIconOnly variant="light" onPress={toggleSidebar} aria-label="Close sidebar">
-              <SidebarLeft size={24} />
+            <Button isIconOnly variant="light" onPress={toggleSidebar} aria-label="Collapse sidebar">
+              <SidebarLeft size={24} aria-hidden="true" />
             </Button>
           </div>
           <ThemeSwitch />
@@ -150,7 +154,11 @@ export function Sidebar({ countryMapData, fcsData }: SidebarProps): React.JSX.El
           <ScrollShadow className="w-full h-full flex flex-col">
             <div className="w-full">
               <span className="text-tiny text-foreground-500 pl-1">Global Insights</span>
-              <div className="flex flex-col gap-1 pt-1">
+              <div
+                className="flex flex-col gap-1 pt-1"
+                role="radiogroup"
+                aria-label="Global insights map type selection"
+              >
                 {SidebarOperations.getSidebarMapTypes().map((item) => (
                   <Button
                     startContent={
@@ -175,6 +183,10 @@ export function Sidebar({ countryMapData, fcsData }: SidebarProps): React.JSX.El
                       selectedMapType === item.key ? 'bg-primary text-white' : 'text-black'
                     )}
                     onPress={() => onMapTypeSelect(item.key)}
+                    role="radio"
+                    aria-label={`Show ${item.label} global insight map`}
+                    aria-busy={mapDataFetching[item.key]}
+                    aria-checked={selectedMapType === item.key}
                   >
                     {item.label}
                   </Button>
@@ -201,7 +213,7 @@ export function Sidebar({ countryMapData, fcsData }: SidebarProps): React.JSX.El
               >
                 <Subscribe />
               </PopupModal>
-              <div className="grid grid-cols-2 gap-2 pl-3">
+              <nav className="grid grid-cols-2 gap-2 pl-3" aria-label="Footer links">
                 {pageLinks
                   .filter((page) => page.label !== 'Home')
                   .map((page) => (
@@ -209,7 +221,7 @@ export function Sidebar({ countryMapData, fcsData }: SidebarProps): React.JSX.El
                       {page.label}
                     </Link>
                   ))}
-              </div>
+              </nav>
             </div>
           </ScrollShadow>
         </CardBody>

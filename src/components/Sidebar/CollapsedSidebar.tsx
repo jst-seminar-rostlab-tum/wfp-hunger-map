@@ -57,7 +57,7 @@ export function CollapsedSidebar({ mapDataFetching }: CollapsedSidebarProps): Re
           </Button>
         </CardHeader>
         <CardBody>
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1" role="radiogroup" aria-label="Global insights map type selection">
             {SidebarOperations.getSidebarMapTypes().map((item) => (
               <Tooltip key={item.key} text={item.label} placement="right">
                 <Button
@@ -65,8 +65,10 @@ export function CollapsedSidebar({ mapDataFetching }: CollapsedSidebarProps): Re
                   variant={selectedMapType === item.key ? undefined : 'light'}
                   className={selectedMapType === item.key ? 'bg-primary' : undefined}
                   onPress={() => onMapTypeSelect(item.key)}
+                  role="radio"
                   aria-label={`Show ${item.label} global insight map`}
                   aria-busy={mapDataFetching[item.key]}
+                  aria-checked={selectedMapType === item.key}
                 >
                   <div className="flex items-center justify-center relative" aria-hidden="true">
                     <NextImage unoptimized loading="eager" src={item.icon} alt={item.label} width={24} height={24} />

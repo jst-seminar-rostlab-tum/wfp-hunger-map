@@ -40,11 +40,20 @@ export function CollapsedSidebar({ mapDataFetching }: CollapsedSidebarProps): Re
   };
 
   return (
-    <div className="absolute top-0 left-0 z-sidebarCollapsed pt-4 pl-4">
+    <div
+      className="absolute top-0 left-0 z-sidebarCollapsed pt-4 pl-4"
+      role="complementary"
+      aria-label="Global insights map controls - collapsed sidebar view"
+    >
       <Card className="h-full">
         <CardHeader className="flex justify-center items-center">
-          <Button isIconOnly variant="light" onPress={toggleSidebar} aria-label="Close sidebar">
-            <SidebarRight size={24} />
+          <Button
+            isIconOnly
+            variant="light"
+            onPress={toggleSidebar}
+            aria-label="Expand sidebar map controls and navigation"
+          >
+            <SidebarRight aria-hidden="true" focusable="false" size={24} />
           </Button>
         </CardHeader>
         <CardBody>
@@ -56,8 +65,10 @@ export function CollapsedSidebar({ mapDataFetching }: CollapsedSidebarProps): Re
                   variant={selectedMapType === item.key ? undefined : 'light'}
                   className={selectedMapType === item.key ? 'bg-primary' : undefined}
                   onPress={() => onMapTypeSelect(item.key)}
+                  aria-label={`Show ${item.label} global insight map`}
+                  aria-busy={mapDataFetching[item.key]}
                 >
-                  <div className="flex items-center justify-center relative">
+                  <div className="flex items-center justify-center relative" aria-hidden="true">
                     <NextImage unoptimized loading="eager" src={item.icon} alt={item.label} width={24} height={24} />
                     {mapDataFetching[item.key] && <Spinner className="absolute" color="white" />}
                   </div>

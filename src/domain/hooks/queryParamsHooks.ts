@@ -136,34 +136,54 @@ export const useSelectedMapTypeParam = () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [selectedMap, setSelectedMap] = useState<string>('fcs');
+  const [selectedMap, setSelectedMap] = useState<GlobalInsight>(GlobalInsight.FOOD);
 
   useEffect(() => {
+    // Only set map based on URL query param if the user hasn't explicitly chosen a map yet
     const mapType = searchParams.get(PARAM_NAME);
+    console.log('useeffect', mapType);
 
-    if (mapType === 'nutrition') {
-      setSelectedMap('nutrition');
-      setSelectedMapType(GlobalInsight.NUTRITION);
-    } else if (mapType === 'ipc') {
-      setSelectedMap('ipc');
-      setSelectedMapType(GlobalInsight.IPC);
-    } else if (mapType === 'rainfall') {
-      setSelectedMap('rainfall');
-      setSelectedMapType(GlobalInsight.RAINFALL);
-    } else if (mapType === 'vegetation') {
-      setSelectedMap('vegetation');
-      setSelectedMapType(GlobalInsight.VEGETATION);
-    } else {
-      setSelectedMap('fcs');
-      setSelectedMapType(GlobalInsight.FOOD);
+    if (mapType && selectedMap === GlobalInsight.FOOD) {
+      // Only update state based on query param if the state is not yet set (i.e., default is FOOD)
+      switch (mapType) {
+        case 'nutrition':
+          setSelectedMap(GlobalInsight.NUTRITION);
+          setSelectedMapType(GlobalInsight.NUTRITION);
+          break;
+        case 'ipc':
+          setSelectedMap(GlobalInsight.IPC);
+          setSelectedMapType(GlobalInsight.IPC);
+          break;
+        case 'rainfall':
+          setSelectedMap(GlobalInsight.RAINFALL);
+          setSelectedMapType(GlobalInsight.RAINFALL);
+          break;
+        case 'vegetation':
+          setSelectedMap(GlobalInsight.VEGETATION);
+          setSelectedMapType(GlobalInsight.VEGETATION);
+          break;
+        default:
+          setSelectedMap(GlobalInsight.FOOD);
+          setSelectedMapType(GlobalInsight.FOOD);
+          break;
+      }
     }
-  }, [searchParams]);
+  }, [searchParams, selectedMap, setSelectedMapType]);
 
-  const setSelectedMapFn = (mapType: string) => {
+  const setSelectedMapFn = (mapType: GlobalInsight) => {
+    // Update the selected map type as per the user's choice
     setSelectedMap(mapType);
+    setSelectedMapType(mapType); // Sync with context
+
+    console.log('fn', mapType);
+
+    // Update URL query parameter
     const updatedParams = new URLSearchParams(searchParams.toString());
-    updatedParams.set(PARAM_NAME, mapType);
-    router.push(`${pathname}?${updatedParams.toString()}`);
+    updatedParams.set(PARAM_NAME, mapType.toLowerCase());
+    const newUrl = `${pathname}?${updatedParams.toString()}`;
+    console.log('New URL:', newUrl);
+
+    router.push(newUrl);
   };
 
   return [selectedMap, setSelectedMapFn] as const;

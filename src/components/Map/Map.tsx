@@ -20,7 +20,7 @@ import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { CountryMapData, CountryProps } from '@/domain/entities/country/CountryMapData.ts';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight';
-import { useSelectedMapTypeParam } from '@/domain/hooks/queryParamsHooks';
+import { useSelectedCountryParam, useSelectedMapTypeParam } from '@/domain/hooks/queryParamsHooks';
 import { MapProps } from '@/domain/props/MapProps';
 import { MapOperations } from '@/operations/map/MapOperations';
 
@@ -47,6 +47,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
   const [renderer] = useState(new L.SVG({ padding: 0.5 }));
   const [selectedMapTypeQuery, setSelectedMapTypeQuery] = useSelectedMapTypeParam();
   const [currentUrl, setCurrentUrl] = useState<string>(window.location.href);
+  const [selectedCountry, setSelectedCountry] = useSelectedCountryParam();
 
   const onZoomThresholdReached = () => {
     setSelectedCountryId(null);
@@ -78,18 +79,35 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
   };
 
   useEffect(() => {
-    if (selectedMapType === GlobalInsight.IPC) {
-      setSelectedMapTypeQuery('ipc');
-    } else if (selectedMapType === GlobalInsight.NUTRITION) {
-      setSelectedMapTypeQuery('nutrition');
-    } else if (selectedMapType === GlobalInsight.RAINFALL) {
-      setSelectedMapTypeQuery('rainfall');
-    } else if (selectedMapType === GlobalInsight.VEGETATION) {
-      setSelectedMapTypeQuery('vegetation');
-    } else {
-      setSelectedMapTypeQuery('fcs');
+    if (selectedMapType === GlobalInsight.RAINFALL || selectedMapType === GlobalInsight.VEGETATION) {
+      setSelectedCountryId(null);
+      mapRef.current?.zoomOut(4, { animate: true });
     }
-  }, [selectedMapType, setSelectedMapTypeQuery, selectedMapTypeQuery]);
+    if (selectedCountryId) {
+      // Find the selected country data from countries
+      const selectedCountryData: CountryMapData | undefined = countries.features.find(
+        (country) => country.properties.adm0_id === selectedCountryId
+      );
+
+      if (selectedCountryData) {
+        // Get current zoom level of the map
+        const currentZoom = mapRef.current?.getZoom();
+        if (currentZoom && currentZoom <= 4) {
+          mapRef.current?.fitBounds(L.geoJSON(selectedCountryData as GeoJSON).getBounds(), { animate: true });
+        }
+      } else {
+        mapRef.current?.zoomOut(4, { animate: true });
+      }
+    }
+    setSelectedMapTypeQuery(selectedMapType);
+  }, [
+    selectedMapType,
+    setSelectedMapTypeQuery,
+    selectedMapTypeQuery,
+    setSelectedCountry,
+    selectedCountry,
+    selectedCountryId,
+  ]);
 
   useEffect(() => {
     const updateUrl = () => {

@@ -54,9 +54,10 @@ export const AlertButton = forwardRef<HTMLButtonElement, AlertButtonProps>(
         )}
         onPress={onPress}
         ref={ref}
+        aria-busy={isLoading}
         {...props}
       >
-        <div className="w-6 h-6 flex items-center justify-center relative">
+        <div className="w-6 h-6 flex items-center justify-center relative" aria-hidden="true">
           <NextImage
             unoptimized
             loading="eager"

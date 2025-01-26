@@ -47,7 +47,7 @@ export function AlertsMenu({ variant }: AlertsMenuProps) {
   };
 
   return (
-    <div className="flex gap-1">
+    <div className="flex gap-1" role="group" aria-label="Alert controls">
       {SidebarOperations.getSidebarAlertTypes().map((item) =>
         SidebarOperations.hasSubalerts(item) ? (
           <Popover placement={variant === 'inside' ? 'bottom' : 'top'} key={item.key}>
@@ -60,12 +60,13 @@ export function AlertsMenu({ variant }: AlertsMenuProps) {
                     label={item.label}
                     isSelected={isSubAlertClicked(item.key)}
                     isLoading={alertFetching[item.key]}
+                    aria-label={`Show ${item.label} subalerts menu`}
                   />
                 </PopoverTrigger>
               </div>
             </Tooltip>
             <PopoverContent>
-              <div className="gap-1 flex">
+              <div className="gap-1 flex" aria-label={`${item.label} subalerts`}>
                 {item.subalerts.map((subalert) => (
                   <Tooltip key={subalert.key} text={subalert.label}>
                     <AlertButton
@@ -74,6 +75,9 @@ export function AlertsMenu({ variant }: AlertsMenuProps) {
                       isSelected={isAlertSelected(subalert.key)}
                       onPress={() => handleAlertButtonClick(subalert.key)}
                       isLoading={alertFetching[item.key]}
+                      role="switch"
+                      aria-label={`Toggle ${item.label} alerts`}
+                      aria-checked={isAlertSelected(subalert.key)}
                     />
                   </Tooltip>
                 ))}
@@ -81,7 +85,7 @@ export function AlertsMenu({ variant }: AlertsMenuProps) {
             </PopoverContent>
           </Popover>
         ) : (
-          <Tooltip key={item.key} text={item.label}>
+          <Tooltip key={item.key} text={item.label} aria-hidden="true" supressAnnounce>
             <AlertButton
               icon={item.icon}
               label={item.label}
@@ -90,6 +94,9 @@ export function AlertsMenu({ variant }: AlertsMenuProps) {
               onPress={() => {
                 handleAlertButtonClick(item.key);
               }}
+              role="switch"
+              aria-label={`Toggle ${item.label} alerts`}
+              aria-checked={isAlertSelected(item.key)}
             />
           </Tooltip>
         )

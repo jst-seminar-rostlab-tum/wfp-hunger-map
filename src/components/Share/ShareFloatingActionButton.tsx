@@ -9,11 +9,23 @@ import { Button } from '@nextui-org/button';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/dropdown';
 import { useEffect, useState } from 'react';
 
+import { useSnackbar } from '@/domain/contexts/SnackbarContext';
+import { SNACKBAR_SHORT_DURATION } from '@/domain/entities/snackbar/Snackbar';
+import { SnackbarPosition, SnackbarStatus } from '@/domain/enums/Snackbar';
+
 export function ShareFloatingActionButton() {
   const [message, setMessage] = useState<string>();
+  const { showSnackBar } = useSnackbar();
 
   const handleLinkCopy = () => {
-    navigator.clipboard.writeText(window.location.href);
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      showSnackBar({
+        message: 'Link copied to clipboard!',
+        status: SnackbarStatus.Success,
+        position: SnackbarPosition.BottomMiddle,
+        duration: SNACKBAR_SHORT_DURATION,
+      });
+    });
   };
 
   const handleWhatsAppShare = () => {

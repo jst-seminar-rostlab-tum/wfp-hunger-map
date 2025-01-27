@@ -89,9 +89,10 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
       zoomControl={false}
       style={{ height: '100%', width: '100%', zIndex: 1 }}
     >
-      <AlertContainer countries={countries} alertData={alertData} />
-      <ZoomControl threshold={SELECTED_COUNTRY_ZOOM_THRESHOLD} callback={onZoomThresholdReached} />
       <BackToGlobalButton />
+      <ZoomControl threshold={SELECTED_COUNTRY_ZOOM_THRESHOLD} callback={onZoomThresholdReached} />
+
+      <AlertContainer countries={countries} alertData={alertData} />
 
       {/* Ocean */}
       <Pane name="ocean" style={{ zIndex: 0 }}>

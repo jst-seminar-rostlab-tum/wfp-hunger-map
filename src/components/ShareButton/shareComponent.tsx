@@ -7,6 +7,7 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import { Box, IconButton, Modal, Stack } from '@mui/material';
 import { Button } from '@nextui-org/button';
+import { useTheme } from 'next-themes';
 import React, { useState } from 'react';
 
 import { useSnackbar } from '@/domain/contexts/SnackbarContext';
@@ -22,6 +23,8 @@ interface ShareButtonProps {
 function ShareButton({ text, url }: ShareButtonProps) {
   const [openModal, setOpenModal] = useState(false);
   const { showSnackBar } = useSnackbar();
+  const { theme } = useTheme();
+  const iconColor = theme === 'dark' ? '#ECEDEE' : '#000000';
 
   const message = encodeURIComponent(`${text} ${url}`);
 
@@ -90,7 +93,7 @@ function ShareButton({ text, url }: ShareButtonProps) {
             width: 100,
             boxShadow: 24,
             borderRadius: '8px',
-            backgroundColor: '#D4D4D8',
+            backgroundColor: theme === 'dark' ? '#000000' : '#ECEDEE',
           }}
         >
           <Stack spacing={2} direction="column" alignItems="center" sx={{ mt: 2 }}>
@@ -98,41 +101,77 @@ function ShareButton({ text, url }: ShareButtonProps) {
             <div className="flex flex-col items-center space-y-4 py-3">
               {/* Copy URL Icon */}
               <Tooltip text="Copy URL" placement="left">
-                <IconButton onClick={handleCopy} sx={{ ':hover': { color: '#1e40af' } }}>
+                <IconButton
+                  onClick={handleCopy}
+                  sx={{
+                    color: iconColor,
+                    ':hover': { color: '#1e40af' },
+                  }}
+                >
                   <LinkIcon />
                 </IconButton>
               </Tooltip>
               {/* WhatsApp Share Icon */}
               <Tooltip text="WhatsApp" placement="left">
-                <IconButton onClick={handleWhatsAppShare} sx={{ ':hover': { color: 'green' } }}>
+                <IconButton
+                  onClick={handleWhatsAppShare}
+                  sx={{
+                    color: iconColor,
+                    ':hover': { color: 'green' },
+                  }}
+                >
                   <WhatsAppIcon />
                 </IconButton>
               </Tooltip>
 
               {/* Email Share Icon */}
               <Tooltip text="Email" placement="left">
-                <IconButton onClick={handleEmailShare} sx={{ ':hover': { color: '#f44336' } }}>
+                <IconButton
+                  onClick={handleEmailShare}
+                  sx={{
+                    color: iconColor,
+                    ':hover': { color: '#f44336' },
+                  }}
+                >
                   <EmailIcon />
                 </IconButton>
               </Tooltip>
 
               {/* Facebook Share Icon */}
               <Tooltip text="Facebook" placement="left">
-                <IconButton onClick={handleFacebookShare} sx={{ ':hover': { color: '#1877F2' } }}>
+                <IconButton
+                  onClick={handleFacebookShare}
+                  sx={{
+                    color: iconColor,
+                    ':hover': { color: '#1877F2' },
+                  }}
+                >
                   <FacebookIcon />
                 </IconButton>
               </Tooltip>
 
               {/* Twitter Share Icon */}
               <Tooltip text="X" placement="left">
-                <IconButton onClick={handleTwitterShare} sx={{ ':hover': { color: '#1DA1F2' } }}>
+                <IconButton
+                  onClick={handleTwitterShare}
+                  sx={{
+                    color: iconColor,
+                    ':hover': { color: '#1DA1F2' },
+                  }}
+                >
                   <TwitterIcon />
                 </IconButton>
               </Tooltip>
 
               {/* LinkedIn Share Icon */}
               <Tooltip text="LinkedIn" placement="left">
-                <IconButton onClick={handleLinkedInShare} sx={{ ':hover': { color: '#0077b5' } }}>
+                <IconButton
+                  onClick={handleLinkedInShare}
+                  sx={{
+                    color: iconColor,
+                    ':hover': { color: '#0077b5' },
+                  }}
+                >
                   <LinkedInIcon />
                 </IconButton>
               </Tooltip>
@@ -143,5 +182,4 @@ function ShareButton({ text, url }: ShareButtonProps) {
     </div>
   );
 }
-
 export default ShareButton;

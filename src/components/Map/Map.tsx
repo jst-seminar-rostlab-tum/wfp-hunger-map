@@ -83,22 +83,6 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
       setSelectedCountryId(null);
       mapRef.current?.zoomOut(4, { animate: true });
     }
-    if (selectedCountryId) {
-      // Find the selected country data from countries
-      const selectedCountryData: CountryMapData | undefined = countries.features.find(
-        (country) => country.properties.adm0_id === selectedCountryId
-      );
-
-      if (selectedCountryData) {
-        // Get current zoom level of the map
-        const currentZoom = mapRef.current?.getZoom();
-        if (currentZoom && currentZoom <= 4) {
-          mapRef.current?.fitBounds(L.geoJSON(selectedCountryData as GeoJSON).getBounds(), { animate: true });
-        }
-      } else {
-        mapRef.current?.zoomOut(4, { animate: true });
-      }
-    }
     setSelectedMapTypeQuery(selectedMapType);
   }, [
     selectedMapType,

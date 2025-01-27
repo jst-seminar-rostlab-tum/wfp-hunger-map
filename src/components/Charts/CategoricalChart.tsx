@@ -27,7 +27,6 @@ import CategoricalChartOperations from '@/operations/charts/CategoricalChartOper
  * @param {boolean} props.disableExpandable - when selected, the functionality to open the chart in a larger modal is disabled (optional)
  * @param {boolean} props.disablePieChartSwitch - when selected, the functionality to switch to a pie chart is disabled (optional)
  * @param {boolean} props.disableDownload - when selected, the functionality to download the chart is disabled (optional)
- * @param {boolean} props.disableRelativeNumbersSwitch - when selected, the option to switch to relative values is disabled (optional)
  */
 export function CategoricalChart({
   data,
@@ -40,7 +39,6 @@ export function CategoricalChart({
   disableExpandable,
   disablePieChartSwitch,
   disableDownload,
-  disableRelativeNumbersSwitch,
 }: CategoricalChartProps) {
   // controlling if a bar or pie chart is rendered; bar chart is the default
   const [showPieChart, setShowPieChart] = useState<boolean>(false);
@@ -66,12 +64,13 @@ export function CategoricalChart({
         setShowAlternativeChart: setShowPieChart,
       };
 
-  const relativeNumbersSwitchButtonProps = disableRelativeNumbersSwitch
-    ? undefined
-    : {
+  const relativeNumbersExist = data.categories.some((c) => c.dataPoint.yRelative !== undefined);
+  const relativeNumbersSwitchButtonProps = relativeNumbersExist
+    ? {
         showRelativeNumbers,
         setShowRelativeNumbers,
-      };
+      }
+    : undefined;
 
   return (
     <ChartContainer

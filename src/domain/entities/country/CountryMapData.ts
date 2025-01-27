@@ -23,6 +23,9 @@ export type CountryProps = {
   dataType?: string;
 };
 
+/**
+ * Stores polygons for countries, as well as whether any alerts are active in the country.
+ */
 export type CountryMapData = Feature<CountryProps, LatLngExpression[][][] | LatLngExpression[][]>;
 export interface CountryMapDataWrapper {
   type: string;

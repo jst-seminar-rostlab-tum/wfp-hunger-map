@@ -3,8 +3,6 @@ import { useEffect, useState } from 'react';
 
 import { CountryMapData, CountryMapDataWrapper } from '@/domain/entities/country/CountryMapData.ts';
 
-import { useSelectedCountryId } from '../contexts/SelectedCountryIdContext';
-import { useSelectedMap } from '../contexts/SelectedMapContext';
 import { AlertType } from '../enums/AlertType';
 import { GlobalInsight } from '../enums/GlobalInsight';
 
@@ -106,19 +104,17 @@ export const useSelectedCountryParam = () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [selectedCountryIdQuery, setSelectedCountryIdQuery] = useState<number | undefined>(undefined);
-  const { setSelectedCountryId } = useSelectedCountryId();
+  const [selectedCountryIdQuery, setSelectedCountryIdQuery] = useState<number | null>(null);
 
   useEffect(() => {
     const countryId = searchParams.get(PARAM_NAME);
-    setSelectedCountryIdQuery(countryId ? parseInt(countryId, 10) : undefined);
-    setSelectedCountryId(countryId ? parseInt(countryId, 10) : null);
+    setSelectedCountryIdQuery(countryId ? parseInt(countryId, 10) : null);
   }, [searchParams]);
 
-  const setSelectedCountryIdQueryFn = (id: number | undefined) => {
+  const setSelectedCountryIdQueryFn = (id: number | null) => {
     setSelectedCountryIdQuery(id);
     const updatedParams = new URLSearchParams(searchParams.toString());
-    if (id !== undefined) {
+    if (id !== null && id !== undefined) {
       updatedParams.set(PARAM_NAME, id.toString());
     } else {
       updatedParams.delete(PARAM_NAME);
@@ -131,7 +127,6 @@ export const useSelectedCountryParam = () => {
 };
 
 export const useSelectedMapTypeParam = () => {
-  const { setSelectedMapType } = useSelectedMap();
   const PARAM_NAME = 'selectedMap';
   const router = useRouter();
   const pathname = usePathname();
@@ -140,47 +135,33 @@ export const useSelectedMapTypeParam = () => {
 
   useEffect(() => {
     const mapType = searchParams.get(PARAM_NAME);
+    console.log('useEffect', mapType);
     // Update the state based on the query param (only if it's valid and differs from current state)
-    if (mapType) {
-      let mapEnum: GlobalInsight;
-      switch (mapType) {
-        case 'nutrition':
-          mapEnum = GlobalInsight.NUTRITION;
-          break;
-        case 'ipc':
-          mapEnum = GlobalInsight.IPC;
-          break;
-        case 'rainfall':
-          mapEnum = GlobalInsight.RAINFALL;
-          break;
-        case 'vegetation':
-          mapEnum = GlobalInsight.VEGETATION;
-          break;
-        default:
-          mapEnum = GlobalInsight.FOOD;
-          break;
-      }
-
-      // Update only if the selected map differs
-      if (mapEnum !== selectedMap) {
-        setSelectedMap(mapEnum);
-        setSelectedMapType(mapEnum);
-      }
+    switch (mapType) {
+      case 'nutrition':
+        setSelectedMap(GlobalInsight.NUTRITION);
+        break;
+      case 'ipc':
+        setSelectedMap(GlobalInsight.IPC);
+        break;
+      case 'rainfall':
+        setSelectedMap(GlobalInsight.RAINFALL);
+        break;
+      case 'vegetation':
+        setSelectedMap(GlobalInsight.VEGETATION);
+        break;
+      default:
+        setSelectedMap(GlobalInsight.FOOD);
+        break;
     }
   }, [searchParams]);
 
   const setSelectedMapFn = (mapType: GlobalInsight) => {
-    // Update the selected map type
     setSelectedMap(mapType);
-    // Update URL query parameter
-    let updatedParams = new URLSearchParams(searchParams.toString());
+    console.log('fn', mapType);
+    const updatedParams = new URLSearchParams(searchParams.toString());
     updatedParams.set(PARAM_NAME, mapType.toLowerCase() ?? 'none');
     router.push(`${pathname}?${updatedParams.toString()}`);
-    setTimeout(() => {
-      updatedParams = new URLSearchParams(searchParams.toString());
-      updatedParams.set(PARAM_NAME, mapType.toLowerCase() ?? 'none');
-      router.push(`${pathname}?${updatedParams.toString()}`);
-    }, 10);
   };
 
   return [selectedMap, setSelectedMapFn] as const;

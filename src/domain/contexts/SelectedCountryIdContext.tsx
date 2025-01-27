@@ -1,4 +1,6 @@
-import { createContext, useContext, useMemo, useState } from 'react';
+import { createContext, useContext, useMemo } from 'react';
+
+import { useSelectedCountryParam } from '@/domain/hooks/queryParamsHooks';
 
 interface SelectedCountryIdState {
   selectedCountryId: number | null;
@@ -8,7 +10,7 @@ interface SelectedCountryIdState {
 const SelectedCountryIdContext = createContext<SelectedCountryIdState | undefined>(undefined);
 
 export function SelectedCountryIdProvider({ children }: { children: React.ReactNode }) {
-  const [selectedCountryId, setSelectedCountryId] = useState<number | null>(null);
+  const [selectedCountryId, setSelectedCountryId] = useSelectedCountryParam();
 
   const value = useMemo(
     () => ({

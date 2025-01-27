@@ -1,10 +1,9 @@
 import { FeatureCollection, Geometry } from 'geojson';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { CountryProps } from '@/domain/entities/country/CountryMapData';
 import { useIpcQuery } from '@/domain/hooks/globalHooks';
-import { useSelectedCountryParam } from '@/domain/hooks/queryParamsHooks';
 import { IpcChoroplethProps } from '@/domain/props/IpcChoroplethProps';
 
 import IpcAccordion from './IpcAccordion';
@@ -14,15 +13,6 @@ import IpcGlobalChoropleth from './IpcGlobalChoropleth';
 function IpcChoropleth({ countries, onDataUnavailable }: IpcChoroplethProps) {
   const { data: ipcData } = useIpcQuery(true);
   const { selectedCountryId } = useSelectedCountryId();
-  const [selectedCountry, setSelectedCountry] = useSelectedCountryParam();
-
-  useEffect(() => {
-    if (selectedCountryId) {
-      setSelectedCountry(selectedCountryId); // Update query param
-    } else if (!selectedCountryId) {
-      setSelectedCountry(undefined); // Clear query param if no country is selected
-    }
-  }, [selectedCountryId, setSelectedCountry, selectedCountry]);
 
   return (
     <>

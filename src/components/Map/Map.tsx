@@ -20,7 +20,6 @@ import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
 import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { CountryMapData, CountryProps } from '@/domain/entities/country/CountryMapData.ts';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight';
-import { useSelectedMapTypeParam } from '@/domain/hooks/queryParamsHooks';
 import { MapProps } from '@/domain/props/MapProps';
 import { MapOperations } from '@/operations/map/MapOperations';
 
@@ -45,7 +44,6 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
   const { closeSidebar } = useSidebar();
   const [renderer] = useState(new L.SVG({ padding: 0.5 }));
-  const [selectedMapTypeQuery, setSelectedMapTypeQuery] = useSelectedMapTypeParam();
   const [currentUrl, setCurrentUrl] = useState<string>(window.location.href);
 
   const onZoomThresholdReached = () => {
@@ -82,8 +80,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
       setSelectedCountryId(null);
       mapRef.current?.zoomOut(4, { animate: true });
     }
-    setSelectedMapTypeQuery(selectedMapType);
-  }, [selectedMapType, selectedMapTypeQuery]);
+  }, [selectedMapType]);
 
   useEffect(() => {
     const updateUrl = () => {

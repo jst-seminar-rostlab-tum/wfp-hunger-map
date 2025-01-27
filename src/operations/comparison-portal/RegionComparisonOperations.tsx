@@ -76,11 +76,7 @@ export class RegionComparisonOperations {
     ];
   }
 
-  static getChartData(
-    regionData: AdditionalCountryData,
-    selectedRegions: string[] | 'all',
-    showRelativeNumbers: boolean
-  ): RegionComparisonChartData {
+  static getChartData(regionData: AdditionalCountryData, selectedRegions: string[] | 'all'): RegionComparisonChartData {
     let selectedRegionFeatures = regionData.features;
     if (selectedRegions !== 'all') {
       const selectedRegionsSet = new Set(selectedRegions);
@@ -91,24 +87,26 @@ export class RegionComparisonOperations {
     const selectedRegionProperties = selectedRegionFeatures.map((feature) => feature.properties);
 
     return {
-      fcsBarChartData: this.getBarChartData('fcs', selectedRegionProperties, showRelativeNumbers),
-      rcsiBarChartData: this.getBarChartData('rcsi', selectedRegionProperties, showRelativeNumbers),
+      fcsBarChartData: this.getBarChartData('fcs', selectedRegionProperties),
+      rcsiBarChartData: this.getBarChartData('rcsi', selectedRegionProperties),
       fcsGraphData: this.getFcsGraph(selectedRegionProperties),
     };
   }
 
   private static getBarChartData(
     type: 'fcs' | 'rcsi',
-    selectedRegionProperties: RegionProperties[],
-    showRelativeNumbers: boolean
+    selectedRegionProperties: RegionProperties[]
   ): CategoricalChartData {
     return {
-      yAxisLabel: showRelativeNumbers ? '% of population' : 'Mill',
+      yAxisLabel: 'Mill',
       categories: selectedRegionProperties
         .filter((region) => region[type] !== null && region[type]!.ratio !== null && region[type]!.people !== null)
         .map((region) => ({
           name: region.Name,
-          dataPoint: { y: showRelativeNumbers ? region[type]!.ratio! : formatToMillion(region[type]!.people)! },
+          dataPoint: {
+            y: formatToMillion(region[type]!.people)!,
+            yRelative: region[type]!.ratio!,
+          },
         })),
     };
   }

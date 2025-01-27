@@ -5,7 +5,6 @@ import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import { CategoricalChartData } from '@/domain/entities/charts/CategoricalChartData.ts';
 import { ContinuousChartData } from '@/domain/entities/charts/ContinuousChartData.ts';
 import { ChartType } from '@/domain/enums/ChartType.ts';
-import ChartRelativeNumbersSwitchButton from "@/components/Charts/helpers/buttons/ChartRelativeNumbersSwitchButton.tsx";
 
 /**
  * helpers props

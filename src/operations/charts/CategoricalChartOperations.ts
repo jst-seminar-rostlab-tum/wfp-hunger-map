@@ -146,7 +146,7 @@ export default class CategoricalChartOperations {
       yAxis: {
         visible: !pieChart,
         title: {
-          text: relativeNumbers ? '%' : data.yAxisLabel,
+          text: relativeNumbers ? '% of population' : data.yAxisLabel,
           style: {
             color: getTailwindColor('--nextui-secondary'),
           },

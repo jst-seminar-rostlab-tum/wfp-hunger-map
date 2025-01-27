@@ -27,7 +27,7 @@ export default function RegionComparisonAccordion({
 
   const accordionItems = useMemo(() => {
     if (!regionData || !selectedRegions) return [];
-    const chartData = RegionComparisonOperations.getChartData(regionData, selectedRegions, showRelativeNumbers);
+    const chartData = RegionComparisonOperations.getChartData(regionData, selectedRegions);
     return RegionComparisonOperations.getComparisonAccordionItems(chartData, selectedRegions, regionData.features);
   }, [regionData, selectedRegions, showRelativeNumbers]);
 

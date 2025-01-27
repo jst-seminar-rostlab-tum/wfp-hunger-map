@@ -139,51 +139,48 @@ export const useSelectedMapTypeParam = () => {
   const [selectedMap, setSelectedMap] = useState<GlobalInsight>(GlobalInsight.FOOD);
 
   useEffect(() => {
-    // Only set map based on URL query param if the user hasn't explicitly chosen a map yet
     const mapType = searchParams.get(PARAM_NAME);
-    console.log('useeffect', mapType);
-
-    if (mapType && selectedMap === GlobalInsight.FOOD) {
-      // Only update state based on query param if the state is not yet set (i.e., default is FOOD)
+    // Update the state based on the query param (only if it's valid and differs from current state)
+    if (mapType) {
+      let mapEnum: GlobalInsight;
       switch (mapType) {
         case 'nutrition':
-          setSelectedMap(GlobalInsight.NUTRITION);
-          setSelectedMapType(GlobalInsight.NUTRITION);
+          mapEnum = GlobalInsight.NUTRITION;
           break;
         case 'ipc':
-          setSelectedMap(GlobalInsight.IPC);
-          setSelectedMapType(GlobalInsight.IPC);
+          mapEnum = GlobalInsight.IPC;
           break;
         case 'rainfall':
-          setSelectedMap(GlobalInsight.RAINFALL);
-          setSelectedMapType(GlobalInsight.RAINFALL);
+          mapEnum = GlobalInsight.RAINFALL;
           break;
         case 'vegetation':
-          setSelectedMap(GlobalInsight.VEGETATION);
-          setSelectedMapType(GlobalInsight.VEGETATION);
+          mapEnum = GlobalInsight.VEGETATION;
           break;
         default:
-          setSelectedMap(GlobalInsight.FOOD);
-          setSelectedMapType(GlobalInsight.FOOD);
+          mapEnum = GlobalInsight.FOOD;
           break;
       }
+
+      // Update only if the selected map differs
+      if (mapEnum !== selectedMap) {
+        setSelectedMap(mapEnum);
+        setSelectedMapType(mapEnum);
+      }
     }
-  }, [searchParams, selectedMap, setSelectedMapType]);
+  }, [searchParams]);
 
   const setSelectedMapFn = (mapType: GlobalInsight) => {
-    // Update the selected map type as per the user's choice
+    // Update the selected map type
     setSelectedMap(mapType);
-    setSelectedMapType(mapType); // Sync with context
-
-    console.log('fn', mapType);
-
     // Update URL query parameter
-    const updatedParams = new URLSearchParams(searchParams.toString());
-    updatedParams.set(PARAM_NAME, mapType.toLowerCase());
-    const newUrl = `${pathname}?${updatedParams.toString()}`;
-    console.log('New URL:', newUrl);
-
-    router.push(newUrl);
+    let updatedParams = new URLSearchParams(searchParams.toString());
+    updatedParams.set(PARAM_NAME, mapType.toLowerCase() ?? 'none');
+    router.push(`${pathname}?${updatedParams.toString()}`);
+    setTimeout(() => {
+      updatedParams = new URLSearchParams(searchParams.toString());
+      updatedParams.set(PARAM_NAME, mapType.toLowerCase() ?? 'none');
+      router.push(`${pathname}?${updatedParams.toString()}`);
+    }, 10);
   };
 
   return [selectedMap, setSelectedMapFn] as const;

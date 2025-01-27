@@ -113,7 +113,7 @@ export class IpcFoodSecurityAccordionOperations {
           )}
           {nutritionData.Chronic != null && (
             <CustomCard
-              title={descriptions.malnutritionAcute.legendTitle}
+              title={descriptions.malnutritionChronic.legendTitle}
               content={[
                 {
                   svgIcon: <Nutrition className="w-[40px] h-[40px] object-contain" />,

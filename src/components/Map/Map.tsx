@@ -40,7 +40,7 @@ import ZoomControl from './ZoomControl';
  */
 export default function Map({ countries, disputedAreas, fcsData, alertData }: MapProps) {
   const mapRef = useRef<LeafletMap | null>(null);
-  const { selectedMapType } = useSelectedMap();
+  const { selectedMapType, setSelectedMapType } = useSelectedMap();
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
   const { closeSidebar } = useSidebar();
   const [renderer] = useState(new L.SVG({ padding: 0.5 }));
@@ -80,6 +80,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
       setSelectedCountryId(null);
       mapRef.current?.zoomOut(4, { animate: true });
     }
+    setSelectedMapType(selectedMapType);
   }, [selectedMapType]);
 
   useEffect(() => {

@@ -114,7 +114,7 @@ export const useSelectedCountryParam = () => {
   const setSelectedCountryIdQueryFn = (id: number | null) => {
     setSelectedCountryIdQuery(id);
     const updatedParams = new URLSearchParams(searchParams.toString());
-    if (id !== null && id !== undefined) {
+    if (id !== null) {
       updatedParams.set(PARAM_NAME, id.toString());
     } else {
       updatedParams.delete(PARAM_NAME);

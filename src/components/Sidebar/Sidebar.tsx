@@ -73,7 +73,7 @@ export function Sidebar({ countryMapData, fcsData }: SidebarProps): React.JSX.El
       setSelectedCountry(selectedCountryId);
       handleCountrySelect(selectedCountryId);
     } else if (!selectedCountryId) {
-      setSelectedCountry(undefined);
+      setSelectedCountry(null);
     }
   }, [selectedCountryId, setSelectedCountry, selectedCountry]);
 

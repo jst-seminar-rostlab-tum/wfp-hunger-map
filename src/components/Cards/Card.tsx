@@ -20,16 +20,16 @@ export default function CustomCard({ title, content }: CardProps) {
       <CardBody className="flex flex-col items-left justify-center overflow-hidden max-h-[300px] py-2">
         <div className="flex flex-row flex-wrap gap-6 ">
           {content.map((item) => (
-            <div key={uuid()} className="flex flex-row gap-2 items-start">
+            <div key={uuid()} className="flex flex-row gap-2 items-center">
               {item.svgIcon && <div className="svg-icon w-[50px] h-[50px]">{item.svgIcon}</div>}
               {!item.svgIcon && item.imageSrc && (
                 <Image alt={item.altText || ''} className="w-[50px] h-[50px] -mt-4" src={item.imageSrc} />
               )}
               <div className="flex flex-col">
-                {title && <h2 className="text-sm text-left">{title}</h2>}
-                {item.text && <h2 className={`text-left ${item.textClass || 'text-xs'}`}>{item.text}</h2>}
+                {title && <h2 className="text-base text-left">{title}</h2>}
+                {item.text && <h2 className={`text-left ${item.textClass || 'text-sm'}`}>{item.text}</h2>}
                 {item.value && (
-                  <p className="text-sm text-left">
+                  <p className={`text-left ${item.textClass || 'text-sm'}`}>
                     {typeof item.value === 'number' ? `${item.value.toFixed(2)} M` : item.value || 'N/A'}
                   </p>
                 )}

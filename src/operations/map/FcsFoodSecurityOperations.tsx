@@ -130,6 +130,7 @@ export class FcsFoodSecurityOperations {
                 small
                 noPadding
                 transparentBackground
+                simplifyTooltip
               />
             ) : (
               <p>No data about food consumption available</p>
@@ -142,6 +143,7 @@ export class FcsFoodSecurityOperations {
                 small
                 noPadding
                 transparentBackground
+                simplifyTooltip
               />
             ) : (
               <p>No data about food-based coping available</p>

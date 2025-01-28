@@ -72,7 +72,7 @@ export class FcsMacroEconomicOperations {
         ),
       },
       {
-        title: 'Headline and food inflation',
+        title: 'Headline and Food Inflation',
         infoIcon: <CustomInfoCircle />,
         popoverInfo: <DataSourcePopover dataSourceKeys={['headlineInflation', 'foodInflation']} />,
         content: (

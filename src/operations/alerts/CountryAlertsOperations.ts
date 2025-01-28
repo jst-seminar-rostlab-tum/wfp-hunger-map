@@ -62,39 +62,31 @@ export default class CountryAlertsOperations {
     const result: CountryAlert[] = [];
 
     if (!countries.features) return result;
+    alerts.forEach((alertData) => {
+      const country = countries.features.find((c) => c.properties.adm0_id === parseInt(alertData.adm0_code, 10));
+      if (!country) return;
 
-    // TODO remove this weird logic once the backend endpoint is fixed!
-    alerts
-      .filter((alertData) => typeof alertData.adm0_code === 'number')
-      .forEach((alertData) => {
-        const country = countries.features.find((c) => c.properties.adm0_id === parseInt(alertData.adm0_code, 10));
-        const centroid = alerts.find(
-          // eslint-disable-next-line eqeqeq
-          (ad) => typeof ad.adm0_code === 'string' && ad.adm0_code == alertData.adm0_code
-        )?.centroid;
-        if (!country || !centroid) return;
+      if (alertData.alerts.conflict) {
+        result.push({
+          type: CountryAlertType.FATALITY,
+          position: this.getRandomAroundCenter(country, alertData.centroid, CountryAlertType.FATALITY),
+        });
+      }
 
-        if (alertData.alerts.conflict) {
-          result.push({
-            type: CountryAlertType.FATALITY,
-            position: this.getRandomAroundCenter(country, centroid, CountryAlertType.FATALITY),
-          });
-        }
+      if (alertData.alerts.climateWet) {
+        result.push({
+          type: CountryAlertType.CLIMATE_WET,
+          position: this.getRandomAroundCenter(country, alertData.centroid, CountryAlertType.CLIMATE_WET),
+        });
+      }
 
-        if (alertData.alerts.climateWet) {
-          result.push({
-            type: CountryAlertType.CLIMATE_WET,
-            position: this.getRandomAroundCenter(country, centroid, CountryAlertType.CLIMATE_WET),
-          });
-        }
-
-        if (alertData.alerts.climateDry) {
-          result.push({
-            type: CountryAlertType.CLIMATE_DRY,
-            position: this.getRandomAroundCenter(country, centroid, CountryAlertType.CLIMATE_DRY),
-          });
-        }
-      });
+      if (alertData.alerts.climateDry) {
+        result.push({
+          type: CountryAlertType.CLIMATE_DRY,
+          position: this.getRandomAroundCenter(country, alertData.centroid, CountryAlertType.CLIMATE_DRY),
+        });
+      }
+    });
     return result;
   }
 }

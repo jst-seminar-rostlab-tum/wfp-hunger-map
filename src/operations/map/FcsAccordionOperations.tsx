@@ -34,7 +34,7 @@ export class FcsAccordionOperations {
         name: descriptions.fcs.forecastLegendTitle,
         showRange: true,
         prediction: true,
-        dataPoints: forecastData.forecastedFcsGraph.map(this.fcsChartMapper),
+        dataPoints: forecastData.fcsGraph.map(this.fcsChartMapper),
       });
     }
     return fcsData;
@@ -75,7 +75,7 @@ export class FcsAccordionOperations {
         name: descriptions.rCsi.forecastLegendTitle,
         showRange: true,
         prediction: true,
-        dataPoints: rcsiForcastData.forecastedRcsiGraph.map(this.rcsiChartMapper),
+        dataPoints: rcsiForcastData.rcsiGraph.map(this.rcsiChartMapper),
       });
     }
 

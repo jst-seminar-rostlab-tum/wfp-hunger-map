@@ -7,7 +7,6 @@ import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data';
 import { CountryIso3Notes } from '@/domain/entities/country/CountryIso3Notes';
 import { CountryMimiData } from '@/domain/entities/country/CountryMimiData';
 import { RegionIpc } from '@/domain/entities/region/RegionIpc';
-import { ForecastedMockData } from '@/domain/forecastedMockData';
 import CountryRepository from '@/domain/repositories/CountryRepository';
 
 export default class CountryRepositoryImpl implements CountryRepository {
@@ -16,12 +15,9 @@ export default class CountryRepositoryImpl implements CountryRepository {
     return response.json();
   }
 
-  // the endpoint is not yet implemented, so we use mock data
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async getCountryForecastData(countryId: number): Promise<CountryForecastData> {
-    // const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/adm0/${countryId}/countryForecastData.json`);
-    // return response.json();
-    return ForecastedMockData;
+    const response = await fetch(`${process.env.NEXT_PUBLIC_FORECAST_API_URL}/${countryId}/predictions.json`);
+    return response.json();
   }
 
   async getRegionData(countryId: number): Promise<AdditionalCountryData> {

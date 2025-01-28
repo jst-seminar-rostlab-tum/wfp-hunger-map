@@ -31,9 +31,8 @@ export default class GlobalDataRepositoryImpl implements GlobalDataRepository {
     const response = await fetch(`${process.env.NEXT_PUBLIC_V3_API_URL}/adm0/alertsAndCentroids.json`, {
       next: { revalidate: 3600 * 12 },
     });
-    return response.json();
-    // const data: ResponseWrapper<CountryAlertData[]>  = await response.json();
-    // return data.body;
+    const data: ResponseWrapper<CountryAlertData[]> = await response.json();
+    return data.body;
   }
 
   async getDisputedAreas(): Promise<DisputedAreas> {
@@ -44,27 +43,22 @@ export default class GlobalDataRepositoryImpl implements GlobalDataRepository {
   }
 
   async getMapDataForCountries(): Promise<CountryMapDataWrapper> {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_V3_API_URL}/adm0data.json`, {
+    const response1 = await fetch(`${process.env.NEXT_PUBLIC_V3_API_URL}/adm0data1.json`, {
       next: { revalidate: 3600 * 12 },
     });
-    return response.json();
-    // const response1 = await fetch(`${process.env.NEXT_PUBLIC_V3_API_URL}/adm0data1.json`, {
-    //   next: { revalidate: 3600 * 12 },
-    // });
-    // const response2 = await fetch(`${process.env.NEXT_PUBLIC_V3_API_URL}/adm0data2.json`, {
-    //   next: { revalidate: 3600 * 12 },
-    // });
-    // const [data1, data2]: CountryMapDataWrapper[] = await Promise.all([response1.json(), response2.json()]);
-    // return { type: data1.type, features: [...data1.features, ...data2.features] };
+    const response2 = await fetch(`${process.env.NEXT_PUBLIC_V3_API_URL}/adm0data2.json`, {
+      next: { revalidate: 3600 * 12 },
+    });
+    const [data1, data2]: CountryMapDataWrapper[] = await Promise.all([response1.json(), response2.json()]);
+    return { type: data1.type, features: [...data1.features, ...data2.features] };
   }
 
   async getFcsData(): Promise<GlobalFcsData> {
     const response = await fetch(`${process.env.NEXT_PUBLIC_V3_API_URL}/adm0/fcs.json`, {
       next: { revalidate: 3600 * 12 },
     });
-    return response.json();
-    // const data: ResponseWrapper<GlobalFcsData> = await response.json();
-    // return data.body;
+    const data: ResponseWrapper<GlobalFcsData> = await response.json();
+    return data.body;
   }
 
   async getIpcData(): Promise<CountryIpcData[]> {

@@ -255,16 +255,17 @@ export const nutritionDescriptions = {
     legendTitle: 'Risk of Inadequate Micronutrient Intake',
     summary: (
       <span>
-        The <Abbreviation abbreviation="MIMI" /> project is modelling and mapping the risk of inadequate micronutrient
-        intake to inform decision making in the short-medium term.
+        The MIMI project is modelling and mapping the risk of inadequate micronutrient intake to inform decision making
+        in the short-medium term.
       </span>
     ),
     description: (
       <>
         <p>
-          MIMI is helping to close gaps in the nutrition data landscape by applying novel approaches to model and map
-          the risk of inadequate micronutrient intake and potential contribution from fortification scenarios, to inform
-          decision making and advocacy for fortification and other micronutrient programmes in the short-medium term.
+          <Abbreviation abbreviation="MIMI" /> is helping to close gaps in the nutrition data landscape by applying
+          novel approaches to model and map the risk of inadequate micronutrient intake and potential contribution from
+          fortification scenarios, to inform decision making and advocacy for fortification and other micronutrient
+          programmes in the short-medium term.
         </p>
         <p>
           <b>Key components of the current MIMI project:</b>

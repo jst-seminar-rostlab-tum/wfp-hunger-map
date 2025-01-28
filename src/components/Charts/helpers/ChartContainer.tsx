@@ -44,7 +44,6 @@ export function ChartContainer({
   const DESCRIPTION_TEXT_SIZE = small ? 'text-tiny' : 'text-sm';
   // eslint-disable-next-line no-nested-ternary
   const CHART_HEIGHT = chartHeight ? `${chartHeight}px` : small ? '12rem' : '16rem';
-  const ICON_BUTTON_SIZE = small ? 3 : 4;
   const HEADER_PADDING = title ? 3 : 0;
   const MAIN_BOX_PADDING_FACTOR = noPadding ? 0 : 1;
   const BOX_BACKGROUND = transparentBackground ? 'bg-transparent' : 'bg-background';
@@ -106,33 +105,29 @@ export function ChartContainer({
             {
               // button to switch between different chart types
               alternativeSwitchButtonProps && (
-                <ChartAlternativeSwitchButton {...alternativeSwitchButtonProps} size={ICON_BUTTON_SIZE} />
+                <ChartAlternativeSwitchButton {...alternativeSwitchButtonProps} small={small} />
               )
             }
             {
               // button to toggle between relative and absolute number (only available in the categorical chart)
               relativeNumbersSwitchButtonProps && (
-                <ChartRelativeNumbersSwitchButton {...relativeNumbersSwitchButtonProps} size={ICON_BUTTON_SIZE} />
+                <ChartRelativeNumbersSwitchButton {...relativeNumbersSwitchButtonProps} small={small} />
               )
             }
             {
               // button to hide/show the slider to e.g. manipulate the plotted x-axis range of the chart
-              sliderProps && (
-                <ChartSliderButton showSlider={showSlider} setShowSlider={setShowSlider} size={ICON_BUTTON_SIZE} />
-              )
+              sliderProps && <ChartSliderButton showSlider={showSlider} setShowSlider={setShowSlider} small={small} />
             }
             {
               // button to download chart as png, svg, etc.
-              !disableDownload && (
-                <ChartDownloadButton chartRef={chartRef} chartData={chartData} size={ICON_BUTTON_SIZE} />
-              )
+              !disableDownload && <ChartDownloadButton chartRef={chartRef} chartData={chartData} small={small} />
             }
             {
               // button to trigger the full screen modal; rendered if `disableExpandable` is not selected
               !disableExpandable && (
                 <Tooltip text="Enlarge Chart">
                   <Button isIconOnly variant="light" size="sm" onClick={onOpen}>
-                    <Maximize4 className={`h-${ICON_BUTTON_SIZE} w-${ICON_BUTTON_SIZE}`} />
+                    <Maximize4 className={`h-${small ? 3 : 4} w-${small ? 3 : 4}`} />
                   </Button>
                 </Tooltip>
               )

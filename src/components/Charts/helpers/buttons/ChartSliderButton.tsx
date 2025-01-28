@@ -7,7 +7,9 @@ import { ChartSliderButtonProps } from '@/domain/props/ChartContainerProps';
 /**
  * This component is tied to the `ChartContainer` and `ChartModal` component and should not be used independently.
  */
-export default function ChartSliderButton({ showSlider, setShowSlider, size = 4 }: ChartSliderButtonProps) {
+export default function ChartSliderButton({ showSlider, setShowSlider, small = false }: ChartSliderButtonProps) {
+  const SIZE = small ? 3 : 4;
+
   return (
     <Tooltip text="x-Axis Slider">
       <Button
@@ -18,7 +20,7 @@ export default function ChartSliderButton({ showSlider, setShowSlider, size = 4 
           setShowSlider(!showSlider);
         }}
       >
-        <Settings className={`h-${size} w-${size}`} />
+        <Settings className={`h-${SIZE} w-${SIZE}`} />
       </Button>
     </Tooltip>
   );

@@ -11,13 +11,14 @@ import { ChartRelativeNumbersSwitchButtonProps } from '@/domain/props/ChartConta
 export default function ChartRelativeNumbersSwitchButton({
   showRelativeNumbers,
   setShowRelativeNumbers,
-  size = 4,
+  small = false,
 }: ChartRelativeNumbersSwitchButtonProps) {
+  const SIZE = small ? 3 : 4;
   const switchToText = showRelativeNumbers ? 'absolute' : 'relative';
   const icon = showRelativeNumbers ? (
-    <Sigma className={`h-${size} w-${size}`} />
+    <Sigma className={`h-${SIZE} w-${SIZE}`} />
   ) : (
-    <Percent className={`h-${size} w-${size}`} />
+    <Percent className={`h-${SIZE} w-${SIZE}`} />
   );
 
   return (

@@ -1,5 +1,5 @@
 import { Button } from '@nextui-org/button';
-import { PercentageSquare, Scroll } from 'iconsax-react';
+import { Percent, Sigma } from 'lucide-react';
 import React from 'react';
 
 import { Tooltip } from '@/components/Tooltip/Tooltip';
@@ -15,9 +15,9 @@ export default function ChartRelativeNumbersSwitchButton({
 }: ChartRelativeNumbersSwitchButtonProps) {
   const switchToText = showRelativeNumbers ? 'absolute' : 'relative';
   const icon = showRelativeNumbers ? (
-    <Scroll className={`h-${size} w-${size}`} />
+    <Sigma className={`h-${size} w-${size}`} />
   ) : (
-    <PercentageSquare className={`h-${size} w-${size}`} />
+    <Percent className={`h-${size} w-${size}`} />
   );
 
   return (

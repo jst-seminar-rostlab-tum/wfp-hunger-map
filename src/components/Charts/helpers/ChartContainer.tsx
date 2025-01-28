@@ -104,9 +104,9 @@ export function ChartContainer({
             className={`flex flex-row gap-0.5 pt-${0.5 * MAIN_BOX_PADDING_FACTOR} pr-${0.5 * MAIN_BOX_PADDING_FACTOR}`}
           >
             {
-              // button to hide/show the slider to e.g. manipulate the plotted x-axis range of the chart
-              sliderProps && (
-                <ChartSliderButton showSlider={showSlider} setShowSlider={setShowSlider} size={ICON_BUTTON_SIZE} />
+              // button to switch between different chart types
+              alternativeSwitchButtonProps && (
+                <ChartAlternativeSwitchButton {...alternativeSwitchButtonProps} size={ICON_BUTTON_SIZE} />
               )
             }
             {
@@ -116,9 +116,9 @@ export function ChartContainer({
               )
             }
             {
-              // button to switch between different chart types
-              alternativeSwitchButtonProps && (
-                <ChartAlternativeSwitchButton {...alternativeSwitchButtonProps} size={ICON_BUTTON_SIZE} />
+              // button to hide/show the slider to e.g. manipulate the plotted x-axis range of the chart
+              sliderProps && (
+                <ChartSliderButton showSlider={showSlider} setShowSlider={setShowSlider} size={ICON_BUTTON_SIZE} />
               )
             }
             {

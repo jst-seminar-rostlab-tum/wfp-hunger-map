@@ -234,10 +234,8 @@ export const nutritionDescriptions = {
         <ul>
           <li>
             <b>Stunting:</b> Height is lower by &gt; 2{' '}
-            <StyledLink href="https://en.wikipedia.org/wiki/Standard_deviation" className="text-sm">
-              standard deviations
-            </StyledLink>{' '}
-            from the median height for age of reference population
+            <StyledLink href="https://en.wikipedia.org/wiki/Standard_deviation">standard deviations</StyledLink> from
+            the median height for age of reference population
           </li>
           <li>
             <b>Severe stunting:</b> Height is lower by &gt; 3 standard deviations from the median height for age of

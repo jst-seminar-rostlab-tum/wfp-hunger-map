@@ -1,4 +1,4 @@
-import { Feature } from 'geojson';
+import { Feature, GeoJsonProperties, Geometry } from 'geojson';
 import { PathOptions } from 'leaflet';
 import { createRoot } from 'react-dom/client';
 
@@ -40,14 +40,20 @@ export default class NutritionStateChoroplethOperations {
     };
   }
 
-  public static addHoverEffect(layer: LayerWithFeature): void {
+  public static addEvents(
+    layer: LayerWithFeature,
+    feature: Feature<Geometry, GeoJsonProperties> | undefined,
+    selectedNutrient: NutrientType
+  ): void {
     const pathLayer = layer as L.Path;
     pathLayer.on({
       mouseover: () => {
         pathLayer.setStyle({ fillOpacity: 0.6 });
+        this.addNutritionTooltip(layer, feature, selectedNutrient);
       },
       mouseout: () => {
         pathLayer.setStyle({ fillOpacity: 1 });
+        pathLayer.unbindTooltip();
       },
     });
   }
@@ -61,12 +67,14 @@ export default class NutritionStateChoroplethOperations {
     root.render(<NutritionRegionTooltip feature={feature} selectedNutrient={selectedNutrient} />);
 
     layer.unbindTooltip();
-    layer.bindTooltip(tooltipContainer, {
-      className: 'state-tooltip',
-      direction: 'top',
-      offset: [0, -10],
-      permanent: false,
-      sticky: true,
-    });
+    layer
+      .bindTooltip(tooltipContainer, {
+        className: 'state-tooltip',
+        direction: 'top',
+        offset: [0, -10],
+        permanent: false,
+        sticky: true,
+      })
+      .openTooltip();
   }
 }

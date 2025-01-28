@@ -252,7 +252,6 @@ export class IpcChoroplethOperations {
    * @param layer - Leaflet layer object to which the tooltip and events are bound
    */
   static initializeRegionLayer(feature: Feature<Geometry, GeoJsonProperties>, layer: L.Layer) {
-    IpcChoroplethOperations.createPhaseTooltip(feature, layer);
     IpcChoroplethOperations.attachEventsRegion(feature, layer);
   }
 
@@ -275,12 +274,12 @@ export class IpcChoroplethOperations {
             fillColor: 'hsl(var(--nextui-ipcHoverRegion))',
           });
         }
-        pathLayer.openTooltip();
+        IpcChoroplethOperations.createPhaseTooltip(feature, layer);
       },
       // Restore the original layer style
       mouseout: () => {
         pathLayer.setStyle(originalStyle);
-        pathLayer.closeTooltip();
+        pathLayer.unbindTooltip();
       },
     });
   }
@@ -301,10 +300,12 @@ export class IpcChoroplethOperations {
     );
 
     // Bind the tooltip to the layer
-    layer.bindTooltip(tooltipContainer, {
-      className: 'leaflet-tooltip',
-      sticky: true,
-    });
+    layer
+      .bindTooltip(tooltipContainer, {
+        className: 'leaflet-tooltip',
+        sticky: true,
+      })
+      .openTooltip();
   }
 
   /**

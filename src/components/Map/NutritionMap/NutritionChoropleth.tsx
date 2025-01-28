@@ -1,14 +1,13 @@
 import L from 'leaflet';
 import { useTheme } from 'next-themes';
-import React, { useEffect, useRef, useState } from 'react';
-import { GeoJSON, useMap } from 'react-leaflet';
+import React, { useRef, useState } from 'react';
+import { GeoJSON } from 'react-leaflet';
 
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 import { NutrientType } from '@/domain/enums/NutrientType.ts';
 import { useNutritionQuery } from '@/domain/hooks/globalHooks';
 import NutritionChoroplethProps from '@/domain/props/NutritionChoroplethProps';
-import { MapOperations } from '@/operations/map/MapOperations';
 import NutritionChoroplethOperations from '@/operations/map/NutritionChoroplethOperations';
 
 import NutritionAccordion from './NutritionAccordion';
@@ -30,14 +29,6 @@ export default function NutritionChoropleth({ data, countryId, onDataUnavailable
   const { theme } = useTheme();
   const { data: nutritionData } = useNutritionQuery(true);
   const [selectedNutrient, setSelectedNutrient] = useState<NutrientType>(NutrientType.MINI_SIMPLE);
-  const map = useMap();
-
-  // adding the country name as a tooltip to each layer (on hover)
-  // the tooltip is not shown if the country is selected or there is no data available for the country
-  useEffect(() => {
-    if (!geoJsonRef.current || !nutritionData || !map) return () => {};
-    return MapOperations.handleCountryTooltip(geoJsonRef, map, undefined, nutritionData, data);
-  }, [selectedCountryId, nutritionData]);
 
   return (
     <div>

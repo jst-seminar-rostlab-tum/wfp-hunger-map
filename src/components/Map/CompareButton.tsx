@@ -24,23 +24,11 @@ export default function CompareButton() {
   }
 
   return isMobile ? (
-    <Button
-      color="primary"
-      className="flex items-center space-x-2"
-      variant="solid"
-      onClick={handleCompareButtonClick}
-      isIconOnly
-    >
+    <Button color="primary" variant="solid" onClick={handleCompareButtonClick} isIconOnly>
       <ArrowRightLeft />
     </Button>
   ) : (
-    <Button
-      color="primary"
-      className="flex items-center space-x-2"
-      variant="solid"
-      startContent={<ArrowRightLeft />}
-      onClick={handleCompareButtonClick}
-    >
+    <Button color="primary" variant="solid" startContent={<ArrowRightLeft />} onClick={handleCompareButtonClick}>
       Compare
     </Button>
   );

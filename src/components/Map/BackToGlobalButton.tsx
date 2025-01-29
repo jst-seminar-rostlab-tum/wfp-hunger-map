@@ -24,23 +24,11 @@ export default function BackToGlobalButton() {
   }
 
   return isMobile ? (
-    <Button
-      color="primary"
-      className="flex items-center space-x-2 text-white"
-      variant="solid"
-      onClick={handleBackButtonClick}
-      isIconOnly
-    >
+    <Button color="primary" variant="solid" onClick={handleBackButtonClick} isIconOnly>
       <Undo />
     </Button>
   ) : (
-    <Button
-      color="primary"
-      className="flex items-center space-x-2 text-white"
-      variant="solid"
-      startContent={<Undo />}
-      onClick={handleBackButtonClick}
-    >
+    <Button color="primary" variant="solid" startContent={<Undo />} onClick={handleBackButtonClick}>
       Global View
     </Button>
   );

@@ -11,22 +11,22 @@ import { ChartSortingButtonProps } from '@/domain/props/ChartContainerProps';
  * It renders a button to open a dropdown menu to select the sorting for the chart.
  */
 export default function ChartSortingButton({ sorting, setSorting, small = false }: ChartSortingButtonProps) {
-  const SIZE = small ? 3 : 4;
+  const className = small ? 'h-3 w-3' : 'h-4 w-4';
 
   let selectedSortingIcon;
   switch (sorting) {
     case CategoricalChartSorting.NAMES_ASC:
-      selectedSortingIcon = <ArrowDownAZ className={`h-${SIZE} w-${SIZE}`} />;
+      selectedSortingIcon = <ArrowDownAZ className={className} />;
       break;
     case CategoricalChartSorting.NAMES_DESC:
-      selectedSortingIcon = <ArrowDownZA className={`h-${SIZE} w-${SIZE}`} />;
+      selectedSortingIcon = <ArrowDownZA className={className} />;
       break;
     case CategoricalChartSorting.VALUES_ASC:
-      selectedSortingIcon = <ArrowDownNarrowWide className={`h-${SIZE} w-${SIZE}`} />;
+      selectedSortingIcon = <ArrowDownNarrowWide className={className} />;
       break;
     case CategoricalChartSorting.VALUES_DESC:
     default:
-      selectedSortingIcon = <ArrowDownWideNarrow className={`h-${SIZE} w-${SIZE}`} />;
+      selectedSortingIcon = <ArrowDownWideNarrow className={className} />;
   }
 
   return (

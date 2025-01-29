@@ -5,6 +5,7 @@ import { CategoricalChartData } from '@/domain/entities/charts/CategoricalChartD
 import { ContinuousChartData } from '@/domain/entities/charts/ContinuousChartData.ts';
 import {
   ChartAlternativeSwitchButtonProps,
+  ChartRelativeNumbersSwitchButtonProps,
   ChartSliderProps,
   ChartSortingButtonProps,
 } from '@/domain/props/ChartContainerProps';
@@ -31,4 +32,7 @@ export default interface ChartModalProps {
   sliderProps?: ChartSliderProps;
   showSlider?: boolean;
   setShowSlider?: Dispatch<SetStateAction<boolean>>;
+
+  // relative numbers switch
+  relativeNumbersSwitchButtonProps?: ChartRelativeNumbersSwitchButtonProps;
 }

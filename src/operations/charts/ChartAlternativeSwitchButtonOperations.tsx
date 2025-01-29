@@ -4,16 +4,16 @@ import React from 'react';
 import { ChartType } from '@/domain/enums/ChartType.ts';
 
 export default class ChartDownloadButtonOperations {
-  public static getChartTypeIcon(chartType: ChartType, size: number) {
+  public static getChartTypeIcon(chartType: ChartType, className: string) {
     switch (chartType) {
       case ChartType.LINE:
-        return <Diagram className={`h-${size} w-${size}`} />;
+        return <Diagram className={className} />;
       case ChartType.COLUMN:
-        return <Chart className={`h-${size} w-${size}`} />;
+        return <Chart className={className} />;
       case ChartType.PIE:
-        return <Graph className={`h-${size} w-${size}`} />;
+        return <Graph className={className} />;
       default:
-        return <Chart className={`h-${size} w-${size}`} />;
+        return <Chart className={className} />;
     }
   }
 

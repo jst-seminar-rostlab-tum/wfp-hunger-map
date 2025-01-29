@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import ChartAlternativeSwitchButton from '@/components/Charts/helpers/buttons/ChartAlternativeSwitchButton';
 import ChartDownloadButton from '@/components/Charts/helpers/buttons/ChartDownloadButton';
+import ChartRelativeNumbersSwitchButton from '@/components/Charts/helpers/buttons/ChartRelativeNumbersSwitchButton';
 import ChartSliderButton from '@/components/Charts/helpers/buttons/ChartSliderButton';
 import { ChartModal } from '@/components/Charts/helpers/ChartModal';
 import ChartSlider from '@/components/Charts/helpers/ChartSlider';
@@ -35,6 +36,7 @@ export function ChartContainer({
   chartHeight,
   disableExpandable,
   disableDownload,
+  relativeNumbersSwitchButtonProps,
   alternativeSwitchButtonProps,
   sortingButtonProps,
   sliderProps,
@@ -43,7 +45,6 @@ export function ChartContainer({
   const DESCRIPTION_TEXT_SIZE = small ? 'text-tiny' : 'text-sm';
   // eslint-disable-next-line no-nested-ternary
   const CHART_HEIGHT = chartHeight ? `${chartHeight}px` : small ? '12rem' : '16rem';
-  const ICON_BUTTON_SIZE = small ? 3 : 4;
   const HEADER_PADDING = title ? 3 : 0;
   const MAIN_BOX_PADDING_FACTOR = noPadding ? 0 : 1;
   const BOX_BACKGROUND = transparentBackground ? 'bg-transparent' : 'bg-background';
@@ -55,6 +56,9 @@ export function ChartContainer({
 
   // full screen modal state handling
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
+
+  // handling the x-axis range slider visibility
+  const [showSlider, setShowSlider] = useState(false);
 
   // handling the theme switch
   useEffect(() => {
@@ -70,13 +74,15 @@ export function ChartContainer({
     setChartKey((prev) => prev + 1); // forces chart to remount -> correct chart animation will be re-triggered
   }, [alternativeSwitchButtonProps?.showAlternativeChart]);
 
-  // data changes and slider changes
+  // data changes and all other chart options changes
   useEffect(() => {
     recalculateChartOptions();
-  }, [chartData, sortingButtonProps?.sorting, sliderProps?.selectedSliderRange]);
-
-  // handling the x-axis range slider visibility
-  const [showSlider, setShowSlider] = useState(false);
+  }, [
+    chartData,
+    sortingButtonProps?.sorting,
+    relativeNumbersSwitchButtonProps?.showRelativeNumbers,
+    sliderProps?.selectedSliderRange,
+  ]);
 
   // if chartOptions is undefined -> display "no data available"
   if (!chartOptions) {
@@ -103,29 +109,31 @@ export function ChartContainer({
             className={`flex flex-row gap-0.5 pt-${0.5 * MAIN_BOX_PADDING_FACTOR} pr-${0.5 * MAIN_BOX_PADDING_FACTOR}`}
           >
             {
-              // button to hide/show the slider to e.g. manipulate the plotted x-axis range of the chart
-              sliderProps && (
-                <ChartSliderButton showSlider={showSlider} setShowSlider={setShowSlider} size={ICON_BUTTON_SIZE} />
+              // button to switch between different chart types
+              alternativeSwitchButtonProps && (
+                <ChartAlternativeSwitchButton {...alternativeSwitchButtonProps} small={small} />
               )
             }
             {
-              // button to switch between different chart types
-              alternativeSwitchButtonProps && (
-                <ChartAlternativeSwitchButton {...alternativeSwitchButtonProps} size={ICON_BUTTON_SIZE} />
+              // button to toggle between relative and absolute number (only available in the categorical chart)
+              relativeNumbersSwitchButtonProps && (
+                <ChartRelativeNumbersSwitchButton {...relativeNumbersSwitchButtonProps} small={small} />
               )
+            }
+            {
+              // button to hide/show the slider to e.g. manipulate the plotted x-axis range of the chart
+              sliderProps && <ChartSliderButton showSlider={showSlider} setShowSlider={setShowSlider} small={small} />
             }
             {
               // button to download chart as png, svg, etc.
-              !disableDownload && (
-                <ChartDownloadButton chartRef={chartRef} chartData={chartData} size={ICON_BUTTON_SIZE} />
-              )
+              !disableDownload && <ChartDownloadButton chartRef={chartRef} chartData={chartData} small={small} />
             }
             {
               // button to trigger the full screen modal; rendered if `disableExpandable` is not selected
               !disableExpandable && (
                 <Tooltip text="Enlarge Chart">
                   <Button isIconOnly variant="light" size="sm" onClick={onOpen}>
-                    <Maximize4 className={`h-${ICON_BUTTON_SIZE} w-${ICON_BUTTON_SIZE}`} />
+                    <Maximize4 className={small ? 'h-3 w-3' : 'h-4 w-4'} />
                   </Button>
                 </Tooltip>
               )
@@ -177,6 +185,7 @@ export function ChartContainer({
         sliderProps={sliderProps}
         showSlider={showSlider}
         setShowSlider={setShowSlider}
+        relativeNumbersSwitchButtonProps={relativeNumbersSwitchButtonProps}
       />
     </>
   );

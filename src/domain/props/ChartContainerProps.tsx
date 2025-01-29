@@ -14,7 +14,7 @@ import { ChartType } from '@/domain/enums/ChartType.ts';
 export interface ChartSliderButtonProps {
   showSlider: boolean;
   setShowSlider: Dispatch<SetStateAction<boolean>>;
-  size?: number;
+  small?: boolean;
 }
 
 export interface ChartAlternativeSwitchButtonProps {
@@ -22,7 +22,25 @@ export interface ChartAlternativeSwitchButtonProps {
   alternativeChartType: ChartType;
   showAlternativeChart: boolean;
   setShowAlternativeChart: Dispatch<SetStateAction<boolean>>;
-  size?: number;
+  small?: boolean;
+}
+
+export interface ChartRelativeNumbersSwitchButtonProps {
+  showRelativeNumbers: boolean;
+  setShowRelativeNumbers: Dispatch<SetStateAction<boolean>>;
+  small?: boolean;
+}
+
+export interface ChartDownloadButtonProps {
+  chartRef: MutableRefObject<HighchartsReact.RefObject | null>;
+  chartData: ContinuousChartData | CategoricalChartData;
+  small?: boolean;
+}
+
+export interface ChartSortingButtonProps {
+  sorting: CategoricalChartSorting;
+  setSorting: Dispatch<SetStateAction<CategoricalChartSorting>>;
+  small?: boolean;
 }
 
 export interface ChartSliderProps {
@@ -31,18 +49,6 @@ export interface ChartSliderProps {
   sliderMax: number;
   selectedSliderRange: number[]; // [rangeMin, rangeMax]
   setSelectedSliderRange: Dispatch<SetStateAction<number[]>>;
-}
-
-export interface ChartDownloadButtonProps {
-  chartRef: MutableRefObject<HighchartsReact.RefObject | null>;
-  chartData: ContinuousChartData | CategoricalChartData;
-  size?: number;
-}
-
-export interface ChartSortingButtonProps {
-  sorting: CategoricalChartSorting;
-  setSorting: Dispatch<SetStateAction<CategoricalChartSorting>>;
-  small?: boolean;
 }
 
 /**
@@ -63,6 +69,8 @@ export default interface ChartContainerProps {
 
   disableExpandable?: boolean;
   disableDownload?: boolean;
+
+  relativeNumbersSwitchButtonProps?: ChartRelativeNumbersSwitchButtonProps;
 
   alternativeSwitchButtonProps?: ChartAlternativeSwitchButtonProps;
 

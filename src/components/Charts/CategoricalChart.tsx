@@ -1,7 +1,7 @@
 'use client';
 
 import Highcharts from 'highcharts';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { ChartContainer } from '@/components/Charts/helpers/ChartContainer';
 import { CategoricalChartSorting } from '@/domain/enums/CategoricalChartSorting.ts';
@@ -15,6 +15,9 @@ import CategoricalChartOperations from '@/operations/charts/CategoricalChartOper
  * This component has a width of 100%, so it adjusts to the width of its parent element in which it is used.
  * The height of the entire box depends on the provided text, while the chart itself has a fixed height.
  * It also provides the option to open the chart in a full-screen modal, where one can download the data as well.
+ * If at least one of the categories in props.data includes the variable `yRelative`, and thus contains not only
+ * normal variables but also relative variables, the user will automatically be given the option to switch between
+ * relative and absolute variables.
  *
  * @param {Object} props - The properties object
  * @param {CategoricalChartData} props.data - the actual data to be used in the chart
@@ -48,16 +51,33 @@ export function CategoricalChart({
 
   const [sorting, setSorting] = useState<CategoricalChartSorting>(CategoricalChartSorting.VALUES_DESC);
 
+  // handling toggling between relative and absolute numbers
+  const [showRelativeNumbers, setShowRelativeNumbers] = useState(false);
+
   const [chartOptions, setChartOptions] = useState<Highcharts.Options | undefined>(
-    CategoricalChartOperations.getHighChartOptions(data, sorting, showPieChart)
+    CategoricalChartOperations.getHighChartOptions(data, sorting, showPieChart, showRelativeNumbers)
   );
 
   // function to update/recalculate the chart options
   const recalculateChartOptions = () => {
-    setChartOptions(CategoricalChartOperations.getHighChartOptions(data, sorting, showPieChart));
+    setChartOptions(CategoricalChartOperations.getHighChartOptions(data, sorting, showPieChart, showRelativeNumbers));
   };
 
-  const alternativeSwitchButtonProps = disablePieChartSwitch
+  // special: if the user switches to the relative data,
+  // we make sure that only the bar chart is shown and one can not switch to the pie chart
+  const [disablePieChartSwitchForRelativeData, setDisablePieChartSwitchForRelativeData] = useState(
+    disablePieChartSwitch || false
+  );
+  useEffect(() => {
+    if (showRelativeNumbers) {
+      setShowPieChart(false);
+      setDisablePieChartSwitchForRelativeData(true);
+    } else {
+      setDisablePieChartSwitchForRelativeData(disablePieChartSwitch || false);
+    }
+  }, [showRelativeNumbers]);
+
+  const alternativeSwitchButtonProps = disablePieChartSwitchForRelativeData
     ? undefined
     : {
         defaultChartType: ChartType.COLUMN,
@@ -73,6 +93,14 @@ export function CategoricalChart({
         setSorting,
       };
 
+  const relativeNumbersExist = data.categories.some((c) => c.dataPoint.yRelative !== undefined);
+  const relativeNumbersSwitchButtonProps = relativeNumbersExist
+    ? {
+        showRelativeNumbers,
+        setShowRelativeNumbers,
+      }
+    : undefined;
+
   return (
     <ChartContainer
       chartData={data}
@@ -86,6 +114,7 @@ export function CategoricalChart({
       chartHeight={chartHeight}
       disableExpandable={disableExpandable}
       disableDownload={disableDownload}
+      relativeNumbersSwitchButtonProps={relativeNumbersSwitchButtonProps}
       alternativeSwitchButtonProps={alternativeSwitchButtonProps}
       sortingButtonProps={sortingButtonProps}
     />

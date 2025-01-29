@@ -50,8 +50,13 @@ export default class CategoricalChartOperations {
   /**
    * Tooltip formatter function for `Options.plotOptions.pie.dataLabels.formatter` usage only.
    */
-  private static pieDataLabelsFormatter(point: Highcharts.Point, data: CategoricalChartData) {
-    return `<p>${point.name}: </p><p style="color:${point.color}">${point.y} ${data.yAxisLabel}</p>`;
+  private static pieDataLabelsFormatter(
+    point: Highcharts.Point,
+    data: CategoricalChartData,
+    relativeNumbers?: boolean
+  ) {
+    const suffix = relativeNumbers ? '%' : data.yAxisLabel;
+    return `<p>${point.name}: </p><p style="color:${point.color}">${point.y} ${suffix}</p>`;
   }
 
   /**
@@ -60,22 +65,25 @@ export default class CategoricalChartOperations {
    * @param data `CategoricalChartData` object, containing all data to be plotted in the chart
    * @param sorting selected sorting of the chart
    * @param pieChart if true, a pie chart instead of a bar chart is created
+   * @param relativeNumbers if true relative numbers (percentages) are calculated automatically
    * @return 'Highcharts.Options' ready to be passed to the Highcharts component,
    * or 'undefined' if there is no data available to be plotted in the chart (to be interpreted as "no data available")
    */
   public static getHighChartOptions(
     data: CategoricalChartData,
     sorting: CategoricalChartSorting,
-    pieChart?: boolean
+    pieChart?: boolean,
+    relativeNumbers?: boolean
   ): Highcharts.Options | undefined {
     // sort data
-    CategoricalChartOperations.sortData(data, sorting);
+    CategoricalChartOperations.sortData(data, sorting, relativeNumbers);
 
     // build highchart options
     const seriesData = [];
     const categories = [];
     const seriesRangeData = [];
     const defaultCategoriesColors = CategoricalChartOperations.getCategoriesColorList();
+
     for (let i = 0; i < data.categories.length; i += 1) {
       const categoryData = data.categories[i];
 
@@ -98,7 +106,7 @@ export default class CategoricalChartOperations {
       // build series object for highchart
       seriesData.push({
         name: categoryData.name,
-        y: categoryData.dataPoint.y,
+        y: relativeNumbers ? categoryData.dataPoint.yRelative : categoryData.dataPoint.y,
         color: categoryColor,
         opacity: showRange ? 0.6 : 1,
       });
@@ -107,8 +115,8 @@ export default class CategoricalChartOperations {
       if (showRange) {
         seriesRangeData.push({
           x: i,
-          low: categoryData.dataPoint.yRangeMin,
-          high: categoryData.dataPoint.yRangeMax,
+          low: relativeNumbers ? categoryData.dataPoint.yRangeMinRelative : categoryData.dataPoint.yRangeMin,
+          high: relativeNumbers ? categoryData.dataPoint.yRangeMaxRelative : categoryData.dataPoint.yRangeMax,
           color: categoryColor,
         });
       }
@@ -145,7 +153,7 @@ export default class CategoricalChartOperations {
       yAxis: {
         visible: !pieChart,
         title: {
-          text: data.yAxisLabel,
+          text: relativeNumbers ? '% of population' : data.yAxisLabel,
           style: {
             color: getTailwindColor('--nextui-secondary'),
           },
@@ -156,6 +164,9 @@ export default class CategoricalChartOperations {
             fontSize: '0.7rem',
           },
           formatter() {
+            if (relativeNumbers) {
+              return `${this.value}%`;
+            }
             return Highcharts.numberFormat(this.value as number, -1);
           },
         },
@@ -215,7 +226,7 @@ export default class CategoricalChartOperations {
           dataLabels: {
             enabled: true,
             formatter() {
-              return CategoricalChartOperations.pieDataLabelsFormatter(this.point, data);
+              return CategoricalChartOperations.pieDataLabelsFormatter(this.point, data, relativeNumbers);
             },
             style: {
               color: getTailwindColor('--nextui-secondary'),
@@ -239,7 +250,7 @@ export default class CategoricalChartOperations {
   /**
    * Sorting the categories data according to the selected sorting.
    */
-  public static sortData(data: CategoricalChartData, sorting: CategoricalChartSorting) {
+  public static sortData(data: CategoricalChartData, sorting: CategoricalChartSorting, relativeNumbers?: boolean) {
     switch (sorting) {
       case CategoricalChartSorting.NAMES_ASC:
         data.categories.sort((a, b) => a.name.localeCompare(b.name));
@@ -248,11 +259,19 @@ export default class CategoricalChartOperations {
         data.categories.sort((a, b) => b.name.localeCompare(a.name));
         break;
       case CategoricalChartSorting.VALUES_ASC:
-        data.categories.sort((a, b) => a.dataPoint.y - b.dataPoint.y);
+        if (relativeNumbers) {
+          data.categories.sort((a, b) => (a.dataPoint.yRelative || 0) - (b.dataPoint.yRelative || 0));
+        } else {
+          data.categories.sort((a, b) => (a.dataPoint.y || 0) - (b.dataPoint.y || 0));
+        }
         break;
       case CategoricalChartSorting.VALUES_DESC:
       default:
-        data.categories.sort((a, b) => b.dataPoint.y - a.dataPoint.y);
+        if (relativeNumbers) {
+          data.categories.sort((a, b) => (b.dataPoint.yRelative || 0) - (a.dataPoint.yRelative || 0));
+        } else {
+          data.categories.sort((a, b) => b.dataPoint.y - a.dataPoint.y);
+        }
     }
   }
 }

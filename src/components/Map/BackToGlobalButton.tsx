@@ -8,10 +8,12 @@ import { useAccordionsModal } from '@/domain/contexts/AccodionsModalContext';
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { useMediaQuery } from '@/utils/resolution';
 
+import { Tooltip } from '../Tooltip/Tooltip';
+
 export default function BackToGlobalButton() {
   const { selectedCountryId } = useSelectedCountryId();
   const { clearAccordionModal } = useAccordionsModal();
-  const isMobile = useMediaQuery('(max-width: 700px)');
+  const isMobile = useMediaQuery('(max-width: 800px)');
   const map = useMap();
 
   const handleBackButtonClick = (): void => {
@@ -24,9 +26,11 @@ export default function BackToGlobalButton() {
   }
 
   return isMobile ? (
-    <Button color="primary" variant="solid" onClick={handleBackButtonClick} isIconOnly>
-      <Undo />
-    </Button>
+    <Tooltip text="Global View" placement="bottom">
+      <Button color="primary" variant="solid" onClick={handleBackButtonClick} isIconOnly>
+        <Undo />
+      </Button>
+    </Tooltip>
   ) : (
     <Button color="primary" variant="solid" startContent={<Undo />} onClick={handleBackButtonClick}>
       Global View

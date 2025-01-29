@@ -67,7 +67,6 @@ export function ChartModal({
           <div className="flex flex-row justify-between w-full h-full">
             <h2 className="flex flex-col justify-center font-normal text-sm sm:text-md md:text-lg"> {title} </h2>
             <div className="flex flex-row w-fit h-full gap-0.5 sm:gap-4 md:gap-6">
-
               {alternativeSwitchButtonProps && <ChartAlternativeSwitchButton {...alternativeSwitchButtonProps} />}
 
               {relativeNumbersSwitchButtonProps && (

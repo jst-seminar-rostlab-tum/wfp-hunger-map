@@ -76,7 +76,7 @@ export default class CategoricalChartOperations {
     relativeNumbers?: boolean
   ): Highcharts.Options | undefined {
     // sort data
-    CategoricalChartOperations.sortData(data, sorting);
+    CategoricalChartOperations.sortData(data, sorting, relativeNumbers);
 
     // build highchart options
     const seriesData = [];
@@ -250,7 +250,7 @@ export default class CategoricalChartOperations {
   /**
    * Sorting the categories data according to the selected sorting.
    */
-  public static sortData(data: CategoricalChartData, sorting: CategoricalChartSorting) {
+  public static sortData(data: CategoricalChartData, sorting: CategoricalChartSorting, relativeNumbers?: boolean) {
     switch (sorting) {
       case CategoricalChartSorting.NAMES_ASC:
         data.categories.sort((a, b) => a.name.localeCompare(b.name));
@@ -259,11 +259,19 @@ export default class CategoricalChartOperations {
         data.categories.sort((a, b) => b.name.localeCompare(a.name));
         break;
       case CategoricalChartSorting.VALUES_ASC:
-        data.categories.sort((a, b) => a.dataPoint.y - b.dataPoint.y);
+        if (relativeNumbers) {
+          data.categories.sort((a, b) => (a.dataPoint.yRelative || 0) - (b.dataPoint.yRelative || 0));
+        } else {
+          data.categories.sort((a, b) => (a.dataPoint.y || 0) - (b.dataPoint.y || 0));
+        }
         break;
       case CategoricalChartSorting.VALUES_DESC:
       default:
-        data.categories.sort((a, b) => b.dataPoint.y - a.dataPoint.y);
+        if (relativeNumbers) {
+          data.categories.sort((a, b) => (b.dataPoint.yRelative || 0) - (a.dataPoint.yRelative || 0));
+        } else {
+          data.categories.sort((a, b) => b.dataPoint.y - a.dataPoint.y);
+        }
     }
   }
 }

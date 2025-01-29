@@ -20,7 +20,7 @@ import { useMediaQuery } from '@/utils/resolution.ts';
  */
 
 export default function AccordionModal() {
-  const isMobile = useMediaQuery('(max-width: 700px)');
+  const isMobile = useMediaQuery('(max-width: 1000px)');
   const isMobileXS = useMediaQuery('(max-width: 450px)');
   const { modalContent, modalTitle } = useAccordionsModal();
   const {

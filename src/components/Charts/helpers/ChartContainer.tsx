@@ -73,7 +73,7 @@ export function ChartContainer({
   // data changes and slider changes
   useEffect(() => {
     recalculateChartOptions();
-  }, [chartData, sliderProps?.selectedSliderRange]);
+  }, [chartData, sortingButtonProps?.sorting, sliderProps?.selectedSliderRange]);
 
   // handling the x-axis range slider visibility
   const [showSlider, setShowSlider] = useState(false);

@@ -16,10 +16,10 @@ export default function ChartSortingButton({ sorting, setSorting, small = false 
   let selectedSortingIcon;
   switch (sorting) {
     case CategoricalChartSorting.NAMES_ASC:
-      selectedSortingIcon = <ArrowDownZA className={`h-${SIZE} w-${SIZE}`} />;
+      selectedSortingIcon = <ArrowDownAZ className={`h-${SIZE} w-${SIZE}`} />;
       break;
     case CategoricalChartSorting.NAMES_DESC:
-      selectedSortingIcon = <ArrowDownAZ className={`h-${SIZE} w-${SIZE}`} />;
+      selectedSortingIcon = <ArrowDownZA className={`h-${SIZE} w-${SIZE}`} />;
       break;
     case CategoricalChartSorting.VALUES_ASC:
       selectedSortingIcon = <ArrowDownNarrowWide className={`h-${SIZE} w-${SIZE}`} />;
@@ -61,19 +61,19 @@ export default function ChartSortingButton({ sorting, setSorting, small = false 
           variant="light"
           size="sm"
           className="w-full justify-start"
-          onPress={() => setSorting(CategoricalChartSorting.NAMES_DESC)}
+          onPress={() => setSorting(CategoricalChartSorting.NAMES_ASC)}
           startContent={<ArrowDownAZ className="h-4 w-4" />}
         >
-          Sort names ascending
+          Sort names A-Z
         </Button>
         <Button
           variant="light"
           size="sm"
           className="w-full justify-start"
-          onPress={() => setSorting(CategoricalChartSorting.NAMES_ASC)}
+          onPress={() => setSorting(CategoricalChartSorting.NAMES_DESC)}
           startContent={<ArrowDownZA className="h-4 w-4" />}
         >
-          Sort names descending
+          Sort names Z-A
         </Button>
       </PopoverContent>
     </Popover>

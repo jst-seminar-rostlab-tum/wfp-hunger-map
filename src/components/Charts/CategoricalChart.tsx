@@ -49,12 +49,12 @@ export function CategoricalChart({
   const [sorting, setSorting] = useState<CategoricalChartSorting>(CategoricalChartSorting.VALUES_DESC);
 
   const [chartOptions, setChartOptions] = useState<Highcharts.Options | undefined>(
-    CategoricalChartOperations.getHighChartOptions(data, showPieChart)
+    CategoricalChartOperations.getHighChartOptions(data, sorting, showPieChart)
   );
 
   // function to update/recalculate the chart options
   const recalculateChartOptions = () => {
-    setChartOptions(CategoricalChartOperations.getHighChartOptions(data, showPieChart));
+    setChartOptions(CategoricalChartOperations.getHighChartOptions(data, sorting, showPieChart));
   };
 
   const alternativeSwitchButtonProps = disablePieChartSwitch

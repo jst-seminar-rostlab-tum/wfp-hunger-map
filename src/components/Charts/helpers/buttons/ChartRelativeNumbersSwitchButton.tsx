@@ -13,13 +13,9 @@ export default function ChartRelativeNumbersSwitchButton({
   setShowRelativeNumbers,
   small = false,
 }: ChartRelativeNumbersSwitchButtonProps) {
-  const SIZE = small ? 3 : 4;
+  const className = small ? 'h-3 w-3' : 'h-4 w-4';
   const switchToText = showRelativeNumbers ? 'absolute' : 'relative';
-  const icon = showRelativeNumbers ? (
-    <Sigma className={`h-${SIZE} w-${SIZE}`} />
-  ) : (
-    <Percent className={`h-${SIZE} w-${SIZE}`} />
-  );
+  const icon = showRelativeNumbers ? <Sigma className={className} /> : <Percent className={className} />;
 
   return (
     <Tooltip text={`Show ${switchToText} numbers`}>

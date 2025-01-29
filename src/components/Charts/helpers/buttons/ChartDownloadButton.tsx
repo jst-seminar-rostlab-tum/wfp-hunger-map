@@ -11,14 +11,14 @@ import ChartDownloadButtonOperations from '@/operations/charts/ChartDownloadButt
  * It renders a button to open a dropdown menu to download the chart as csv, png, etc.
  */
 export default function ChartDownloadButton({ chartRef, chartData, small = false }: ChartDownloadButtonProps) {
-  const SIZE = small ? 3 : 4;
+  const className = small ? 'h-3 w-3' : 'h-4 w-4';
 
   return (
     <Popover placement="bottom" offset={10} backdrop="opaque">
       <PopoverTrigger>
         <Button isIconOnly variant="light" size="sm">
           <Tooltip text="Export Chart / Data" offset={20}>
-            <DocumentDownload className={`h-${SIZE} w-${SIZE}`} />
+            <DocumentDownload className={className} />
           </Tooltip>
         </Button>
       </PopoverTrigger>

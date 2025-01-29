@@ -133,7 +133,7 @@ export function ChartContainer({
               !disableExpandable && (
                 <Tooltip text="Enlarge Chart">
                   <Button isIconOnly variant="light" size="sm" onClick={onOpen}>
-                    <Maximize4 className={`h-${small ? 3 : 4} w-${small ? 3 : 4}`} />
+                    <Maximize4 className={small ? 'h-3 w-3' : 'h-4 w-4'} />
                   </Button>
                 </Tooltip>
               )

@@ -1,6 +1,6 @@
 import 'leaflet/dist/leaflet.css';
 
-import { Feature, GeoJSON, Geometry } from 'geojson';
+import { Feature, Geometry } from 'geojson';
 import L, { Map as LeafletMap } from 'leaflet';
 import { useEffect, useRef, useState } from 'react';
 import { GeoJSON as LeafletGeoJSON, MapContainer, Pane, SVGOverlay, TileLayer } from 'react-leaflet';
@@ -17,8 +17,7 @@ import {
 } from '@/domain/constant/map/Map';
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import { useSelectedMap } from '@/domain/contexts/SelectedMapContext';
-import { useSidebar } from '@/domain/contexts/SidebarContext';
-import { CountryMapData, CountryProps } from '@/domain/entities/country/CountryMapData.ts';
+import { CountryProps } from '@/domain/entities/country/CountryMapData.ts';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight';
 import { MapProps } from '@/domain/props/MapProps';
 import { MapOperations } from '@/operations/map/MapOperations';
@@ -42,30 +41,12 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
   const mapRef = useRef<LeafletMap | null>(null);
   const { selectedMapType, setSelectedMapType } = useSelectedMap();
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
-  const { closeSidebar } = useSidebar();
   const [renderer] = useState(new L.SVG({ padding: 0.5 }));
   const [currentUrl, setCurrentUrl] = useState<string>(window.location.href);
 
   const onZoomThresholdReached = () => {
     setSelectedCountryId(null);
   };
-
-  useEffect(() => {
-    if (selectedCountryId) {
-      closeSidebar();
-
-      const selectedCountryData: CountryMapData | undefined = countries.features.find(
-        (country) => country.properties.adm0_id === selectedCountryId
-      );
-      if (selectedCountryData) {
-        window.gtag('event', `${selectedCountryData.properties.iso3}_country_selected`, {
-          selectedMap: selectedMapType,
-        });
-        window.gtag('event', `${selectedCountryData.properties.iso3} _${selectedMapType}_countrymap_selected`);
-        mapRef.current?.fitBounds(L.geoJSON(selectedCountryData as GeoJSON).getBounds(), { animate: true });
-      }
-    }
-  }, [selectedCountryId, selectedMapType]);
 
   const onDataUnavailable = () => {
     // timeout to make sure that the zoom in animation has ended
@@ -123,7 +104,11 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
       style={{ height: '100%', width: '100%', zIndex: 1 }}
     >
       <AlertContainer countries={countries} alertData={alertData} />
-      <ZoomControl threshold={SELECTED_COUNTRY_ZOOM_THRESHOLD} callback={onZoomThresholdReached} />
+      <ZoomControl
+        threshold={SELECTED_COUNTRY_ZOOM_THRESHOLD}
+        callback={onZoomThresholdReached}
+        countries={countries}
+      />
       <BackToGlobalButton />
 
       {/* Ocean */}

@@ -11,6 +11,7 @@ import * as React from 'react';
 import { cachedQueryClient } from '@/config/queryClient';
 import { AccordionsModalProvider } from '@/domain/contexts/AccodionsModalContext';
 import { ChatbotProvider } from '@/domain/contexts/ChatbotContext';
+import { QueryParamsProvider } from '@/domain/contexts/QueryParamsContext';
 import { SelectedAlertProvider } from '@/domain/contexts/SelectedAlertContext';
 import { SelectedCountryIdProvider } from '@/domain/contexts/SelectedCountryIdContext';
 import { SelectedMapProvider } from '@/domain/contexts/SelectedMapContext';
@@ -32,17 +33,19 @@ export function Providers({ children, themeProps }: ProvidersProps) {
         <QueryClientProvider client={cachedQueryClient}>
           <SidebarProvider>
             <UserRoleProvider>
-              <SelectedMapProvider>
-                <SelectedCountryIdProvider>
-                  <SelectedAlertProvider>
-                    <AccordionsModalProvider>
-                      <SnackbarProvider>
-                        <ChatbotProvider>{children}</ChatbotProvider>
-                      </SnackbarProvider>
-                    </AccordionsModalProvider>
-                  </SelectedAlertProvider>
-                </SelectedCountryIdProvider>
-              </SelectedMapProvider>
+              <QueryParamsProvider>
+                <SelectedMapProvider>
+                  <SelectedCountryIdProvider>
+                    <SelectedAlertProvider>
+                      <AccordionsModalProvider>
+                        <SnackbarProvider>
+                          <ChatbotProvider>{children}</ChatbotProvider>
+                        </SnackbarProvider>
+                      </AccordionsModalProvider>
+                    </SelectedAlertProvider>
+                  </SelectedCountryIdProvider>
+                </SelectedMapProvider>
+              </QueryParamsProvider>
             </UserRoleProvider>
           </SidebarProvider>
           <ReactQueryDevtools initialIsOpen={false} />

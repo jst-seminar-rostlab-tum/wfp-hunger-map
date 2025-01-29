@@ -7,7 +7,7 @@ import { Autocomplete, AutocompleteItem, ScrollShadow, Spinner } from '@nextui-o
 import clsx from 'clsx';
 import { SidebarLeft } from 'iconsax-react';
 import NextImage from 'next/image';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { AlertsMenu } from '@/components/AlertsMenu/AlertsMenu';
 import { LogoWithText } from '@/components/LogoWithText/LogoWithText';
@@ -22,7 +22,6 @@ import { useSidebar } from '@/domain/contexts/SidebarContext';
 import { AlertsMenuVariant } from '@/domain/enums/AlertsMenuVariant';
 import { GlobalInsight } from '@/domain/enums/GlobalInsight.ts';
 import { useIpcQuery, useNutritionQuery } from '@/domain/hooks/globalHooks.ts';
-import { useSelectedCountryParam } from '@/domain/hooks/queryParamsHooks';
 import SidebarProps from '@/domain/props/SidebarProps.ts';
 import { SidebarOperations } from '@/operations/sidebar/SidebarOperations';
 import { useMediaQuery } from '@/utils/resolution';
@@ -51,7 +50,6 @@ export function Sidebar({ countryMapData, fcsData }: SidebarProps): React.JSX.El
   const { clearAccordionModal } = useAccordionsModal();
   const { isFetching: ipcDataIsFetching, data: ipcData } = useIpcQuery(false);
   const { isFetching: nutritionDataIsFetching, data: nutritionData } = useNutritionQuery(false);
-  const [selectedCountry, setSelectedCountry] = useSelectedCountryParam();
 
   const mapDataFetching: Partial<Record<GlobalInsight, boolean>> = {
     [GlobalInsight.IPC]: ipcDataIsFetching,
@@ -67,15 +65,6 @@ export function Sidebar({ countryMapData, fcsData }: SidebarProps): React.JSX.El
       setSelectedCountryId(Number(countryID));
     }
   };
-
-  useEffect(() => {
-    if (selectedCountryId) {
-      setSelectedCountry(selectedCountryId);
-      handleCountrySelect(selectedCountryId);
-    } else if (!selectedCountryId) {
-      setSelectedCountry(null);
-    }
-  }, [selectedCountryId, setSelectedCountry, selectedCountry]);
 
   if (!isSidebarOpen) {
     return <CollapsedSidebar mapDataFetching={mapDataFetching} />;

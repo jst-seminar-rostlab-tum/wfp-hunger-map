@@ -15,7 +15,6 @@ export function SelectedMapProvider({ children }: { children: ReactNode }) {
   const [selectedMapType, setSelectedMapTypeState] = useSelectedMapTypeParam();
   const setSelectedMapType = (value: GlobalInsight) => {
     setSelectedMapTypeState(value);
-    console.log('context', selectedMapType);
     // send event to Google Analytics
     window.gtag('event', `${value}_map_selected`);
   };

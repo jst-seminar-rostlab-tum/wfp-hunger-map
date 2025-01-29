@@ -135,7 +135,6 @@ export const useSelectedMapTypeParam = () => {
 
   useEffect(() => {
     const mapType = searchParams.get(PARAM_NAME);
-    console.log('useEffect', mapType);
     // Update the state based on the query param (only if it's valid and differs from current state)
     switch (mapType) {
       case 'nutrition':
@@ -158,7 +157,6 @@ export const useSelectedMapTypeParam = () => {
 
   const setSelectedMapFn = (mapType: GlobalInsight) => {
     setSelectedMap(mapType);
-    console.log('fn', mapType);
     const updatedParams = new URLSearchParams(searchParams.toString());
     updatedParams.set(PARAM_NAME, mapType.toLowerCase() ?? 'none');
     router.push(`${pathname}?${updatedParams.toString()}`);

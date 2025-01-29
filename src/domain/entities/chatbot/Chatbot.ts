@@ -7,6 +7,11 @@ export interface IMessage {
   dataSources?: string[];
 }
 
+export interface IReportContext {
+  type: 'country' | 'year_in_review';
+  value: string;
+}
+
 export interface IChat {
   id: string;
   title: string;
@@ -15,4 +20,5 @@ export interface IChat {
   messages: IMessage[];
   isTyping: boolean;
   timestamp: number;
+  report_context?: IReportContext;
 }

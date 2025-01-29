@@ -2,7 +2,7 @@ import React, { createContext, ReactNode, useContext, useEffect, useMemo, useSta
 import { v4 as uuid } from 'uuid';
 
 import { useSnackbar } from '@/domain/contexts/SnackbarContext';
-import { IChat } from '@/domain/entities/chatbot/Chatbot';
+import { IChat, IReportContext } from '@/domain/entities/chatbot/Chatbot';
 import { SenderRole } from '@/domain/enums/SenderRole';
 import ChatbotOperations from '@/operations/chatbot/Chatbot';
 import { useMediaQuery } from '@/utils/resolution';
@@ -14,7 +14,7 @@ interface ChatbotContextType {
   setCurrentChatIndex: React.Dispatch<React.SetStateAction<number>>;
   openChat: (chatIndex: number) => void;
   startNewChat: (newChat?: IChat) => void;
-  initiateChatAboutReport: (countryName: string, report: string) => Promise<void>;
+  initiateChatAboutReport: (value: string, type: IReportContext['type']) => Promise<void>;
   isOpen: boolean;
   isMobile: boolean;
   isSidebarOpen: boolean;
@@ -81,12 +81,14 @@ export function ChatbotProvider({ children }: { children: ReactNode }) {
   };
 
   /**
-   * Initiates a chat with a report based on the provided country name and report content.
-   * If a chat for that specific already exists, it opens that chat; otherwise, it creates a new one.
-   * @param countryName - The name of the country related to the report.
+   * Initiates a chat with a report based on the provided context type and value.
+   * If a chat for that specific context already exists, it opens that chat; otherwise, it creates a new one.
+   * @param value - The value (country name or year) for the report
+   * @param type - The type of report context ('country' or 'year_in_review')
    */
-  const initiateChatAboutReport = async (countryName: string) => {
-    const reportChatIndex = chats.findIndex((chat) => chat.title === `Report ${countryName}`);
+  const initiateChatAboutReport = async (value: string, type: IReportContext['type']) => {
+    const chatTitle = type === 'country' ? `Report ${value}` : `${value} Year in Review`;
+    const reportChatIndex = chats.findIndex((chat) => chat.title === chatTitle);
     const reportChatExists = reportChatIndex !== -1;
 
     if (reportChatExists) {
@@ -96,14 +98,20 @@ export function ChatbotProvider({ children }: { children: ReactNode }) {
 
     const assistantMessage = {
       id: crypto.randomUUID(),
-      content: `Hey, how can I help you with this report about ${countryName}?`,
+      content:
+        type === 'country'
+          ? `Hey, how can I help you with this report about ${value}?`
+          : `Hey, how can I help you with the Year in Review report for ${value}?`,
       role: SenderRole.ASSISTANT,
     };
 
     const newChat: IChat = {
       id: uuid(),
-      title: `Report ${countryName}`,
-      reports_country_name: countryName,
+      title: chatTitle,
+      report_context: {
+        type,
+        value,
+      },
       isReportStarter: true,
       messages: [assistantMessage],
       isTyping: false,

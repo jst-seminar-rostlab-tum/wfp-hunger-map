@@ -10,7 +10,6 @@ import { useNutritionQuery } from '@/domain/hooks/globalHooks';
 import NutritionChoroplethProps from '@/domain/props/NutritionChoroplethProps';
 import NutritionChoroplethOperations from '@/operations/map/NutritionChoroplethOperations';
 
-import NutritionAccordion from './NutritionAccordion';
 import NutritionStateChoropleth from './NutritionStateChoropleth';
 
 /** NutritionChoropleth renders the Nutrition Map for global view. If the region data is available
@@ -23,7 +22,6 @@ import NutritionStateChoropleth from './NutritionStateChoropleth';
  */
 
 export default function NutritionChoropleth({ data, countryId, onDataUnavailable }: NutritionChoroplethProps) {
-  const countryData = data.features[0].properties;
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
   const { theme } = useTheme();
@@ -55,18 +53,12 @@ export default function NutritionChoropleth({ data, countryId, onDataUnavailable
       )}
 
       {countryId === selectedCountryId && (
-        <>
-          <NutritionAccordion
-            setSelectedNutrient={setSelectedNutrient}
-            selectedNutrient={selectedNutrient}
-            countryName={countryData.adm0_name}
-          />
-          <NutritionStateChoropleth
-            onDataUnavailable={onDataUnavailable}
-            countryMapData={data}
-            selectedNutrient={selectedNutrient}
-          />
-        </>
+        <NutritionStateChoropleth
+          onDataUnavailable={onDataUnavailable}
+          countryMapData={data}
+          selectedNutrient={selectedNutrient}
+          setSelectedNutrient={setSelectedNutrient}
+        />
       )}
     </div>
   );

@@ -55,7 +55,8 @@ export default class ContinuousChartOperations {
   private static chartTooltipFormatter(
     xAxisType: AxisTypeValue,
     x: string | number | undefined,
-    points: TooltipFormatterContextObject[] | undefined
+    points: TooltipFormatterContextObject[] | undefined,
+    simplifyTooltip?: boolean
   ) {
     let tooltip = '';
     if (xAxisType === 'datetime' && typeof x === 'number') {
@@ -65,7 +66,11 @@ export default class ContinuousChartOperations {
     }
     points?.forEach((p) => {
       if (p.point.options.y !== undefined) {
-        tooltip += `<br><span style="color:${p.series.color}">\u25CF</span> <div>${p.point.options.y}</div>`;
+        if (simplifyTooltip) {
+          tooltip += `<br><span style="color:${p.series.color}">\u25CF</span> <div> ${p.point.options.y} </div>`;
+        } else {
+          tooltip += `<br><span style="color:${p.series.color}">\u25CF</span> <div> ${p.point.series.name}: ${p.point.options.y} </div>`;
+        }
       } else if (p.point.options.high !== undefined && p.point.options.low !== undefined) {
         tooltip += `<div style="color: ${getTailwindColor('--nextui-secondary')}"> (<div>${p.point.options.low} - ${p.point.options.high}</div>)</div>`;
       }
@@ -165,6 +170,7 @@ export default class ContinuousChartOperations {
    * can be manipulated; important: if a min is defined a max must be defined as well and vice versa.
    *
    * @param data `ContinuousChartData` object, containing all data to be plotted in the chart
+   * @param simplifyTooltip disabling the category labels in the chart's tooltip
    * @param barChart if true, bars are plotted instead of lines
    * @param xAxisSelectedMinIdx index of selected x-axis range min value
    * @param xAxisSelectedMaxIdx index of selected x-axis range max value
@@ -173,6 +179,7 @@ export default class ContinuousChartOperations {
    */
   public static getHighChartOptions(
     data: ContinuousChartData,
+    simplifyTooltip?: boolean,
     xAxisSelectedMinIdx?: number,
     xAxisSelectedMaxIdx?: number,
     barChart?: boolean
@@ -356,7 +363,7 @@ export default class ContinuousChartOperations {
       tooltip: {
         shared: true,
         formatter() {
-          return ContinuousChartOperations.chartTooltipFormatter(data.xAxisType, this.x, this.points);
+          return ContinuousChartOperations.chartTooltipFormatter(data.xAxisType, this.x, this.points, simplifyTooltip);
         },
         backgroundColor: getTailwindColor('--nextui-chartsLegendBackground'),
         style: {

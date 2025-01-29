@@ -43,12 +43,14 @@ export default class GlobalDataRepositoryImpl implements GlobalDataRepository {
   }
 
   async getMapDataForCountries(): Promise<CountryMapDataWrapper> {
-    const response1 = await fetch(`${process.env.NEXT_PUBLIC_V3_API_URL}/adm0data1.json`, {
-      next: { revalidate: 3600 * 12 },
-    });
-    const response2 = await fetch(`${process.env.NEXT_PUBLIC_V3_API_URL}/adm0data2.json`, {
-      next: { revalidate: 3600 * 12 },
-    });
+    const [response1, response2] = await Promise.all([
+      fetch(`${process.env.NEXT_PUBLIC_V3_API_URL}/adm0data1.json`, {
+        next: { revalidate: 3600 * 12 },
+      }),
+      fetch(`${process.env.NEXT_PUBLIC_V3_API_URL}/adm0data2.json`, {
+        next: { revalidate: 3600 * 12 },
+      }),
+    ]);
     const [data1, data2]: CountryMapDataWrapper[] = await Promise.all([response1.json(), response2.json()]);
     return { type: data1.type, features: [...data1.features, ...data2.features] };
   }

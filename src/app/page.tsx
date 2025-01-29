@@ -27,7 +27,7 @@ export default async function Home() {
       <AlertsMenuWrapper />
       <Chatbot />
       <MapLoader countries={countryMapData} fcsData={fcsData} disputedAreas={disputedAreas} alertData={alertData} />
-      <HungerAlertLoader countryMapData={countryMapData} countryFcsData={fcsData} />
+      <HungerAlertLoader countryFcsData={fcsData} />
       <MapLegendLoader />
       <AccordionModal />
     </>

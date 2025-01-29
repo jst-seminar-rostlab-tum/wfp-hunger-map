@@ -33,6 +33,7 @@ export default interface CustomTableProps<D> {
   className?: string;
   zebraRows?: boolean;
   showBorders?: boolean;
+  minTableWidth?: number;
 }
 
 export type DataSourceTableRow = {

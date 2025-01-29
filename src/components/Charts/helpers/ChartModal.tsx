@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from 'react';
 import ChartAlternativeSwitchButton from '@/components/Charts/helpers/buttons/ChartAlternativeSwitchButton';
 import ChartDownloadButton from '@/components/Charts/helpers/buttons/ChartDownloadButton';
 import ChartSliderButton from '@/components/Charts/helpers/buttons/ChartSliderButton';
+import ChartSortingButton from '@/components/Charts/helpers/buttons/ChartSortingButton';
 import ChartSlider from '@/components/Charts/helpers/ChartSlider';
 import ChartModalProps from '@/domain/props/ChartModalProps';
 
@@ -27,6 +28,7 @@ export function ChartModal({
   onClose,
   onOpenChange,
   alternativeSwitchButtonProps,
+  sortingButtonProps,
   sliderProps,
   showSlider,
   setShowSlider,
@@ -68,6 +70,8 @@ export function ChartModal({
               )}
 
               {alternativeSwitchButtonProps && <ChartAlternativeSwitchButton {...alternativeSwitchButtonProps} />}
+
+              {sortingButtonProps && <ChartSortingButton {...sortingButtonProps} />}
 
               {!disableDownload && <ChartDownloadButton chartRef={chartRef} chartData={chartData} />}
             </div>

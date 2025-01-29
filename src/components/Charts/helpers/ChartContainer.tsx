@@ -36,6 +36,7 @@ export function ChartContainer({
   disableExpandable,
   disableDownload,
   alternativeSwitchButtonProps,
+  sortingButtonProps,
   sliderProps,
 }: ChartContainerProps) {
   const TITLE_TEXT_SIZE = small ? 'text-sm' : 'text-md';
@@ -172,6 +173,7 @@ export function ChartContainer({
         onClose={onClose}
         onOpenChange={onOpenChange}
         alternativeSwitchButtonProps={alternativeSwitchButtonProps}
+        sortingButtonProps={sortingButtonProps}
         sliderProps={sliderProps}
         showSlider={showSlider}
         setShowSlider={setShowSlider}

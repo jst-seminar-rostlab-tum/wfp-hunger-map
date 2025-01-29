@@ -6,10 +6,12 @@ import { useMap } from 'react-leaflet';
 
 import { useAccordionsModal } from '@/domain/contexts/AccodionsModalContext';
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
+import { useMediaQuery } from '@/utils/resolution';
 
 export default function BackToGlobalButton() {
   const { selectedCountryId } = useSelectedCountryId();
   const { clearAccordionModal } = useAccordionsModal();
+  const isMobile = useMediaQuery('(max-width: 700px)');
   const map = useMap();
 
   const handleBackButtonClick = (): void => {
@@ -17,17 +19,29 @@ export default function BackToGlobalButton() {
     clearAccordionModal();
   };
 
-  return selectedCountryId ? (
-    <div className="absolute right-[75px] top-[20px] z-[9999]">
-      <Button
-        color="primary"
-        className="flex items-center space-x-2 text-white"
-        variant="solid"
-        startContent={<Undo />}
-        onClick={handleBackButtonClick}
-      >
-        Global View
-      </Button>
-    </div>
-  ) : null;
+  if (selectedCountryId === null) {
+    return null;
+  }
+
+  return isMobile ? (
+    <Button
+      color="primary"
+      className="flex items-center space-x-2 text-white"
+      variant="solid"
+      onClick={handleBackButtonClick}
+      isIconOnly
+    >
+      <Undo />
+    </Button>
+  ) : (
+    <Button
+      color="primary"
+      className="flex items-center space-x-2 text-white"
+      variant="solid"
+      startContent={<Undo />}
+      onClick={handleBackButtonClick}
+    >
+      Global View
+    </Button>
+  );
 }

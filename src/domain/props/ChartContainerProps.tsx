@@ -4,6 +4,7 @@ import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 
 import { CategoricalChartData } from '@/domain/entities/charts/CategoricalChartData.ts';
 import { ContinuousChartData } from '@/domain/entities/charts/ContinuousChartData.ts';
+import { CategoricalChartSorting } from '@/domain/enums/CategoricalChartSorting.ts';
 import { ChartType } from '@/domain/enums/ChartType.ts';
 
 /**
@@ -38,6 +39,12 @@ export interface ChartDownloadButtonProps {
   size?: number;
 }
 
+export interface ChartSortingButtonProps {
+  sorting: CategoricalChartSorting;
+  setSorting: Dispatch<SetStateAction<CategoricalChartSorting>>;
+  small?: boolean;
+}
+
 /**
  * main `ChartContainer` props
  */
@@ -58,6 +65,8 @@ export default interface ChartContainerProps {
   disableDownload?: boolean;
 
   alternativeSwitchButtonProps?: ChartAlternativeSwitchButtonProps;
+
+  sortingButtonProps?: ChartSortingButtonProps;
 
   sliderProps?: ChartSliderProps;
 }

@@ -36,6 +36,7 @@ export function ChartContainer({
   disableExpandable,
   disableDownload,
   alternativeSwitchButtonProps,
+  sortingButtonProps,
   sliderProps,
 }: ChartContainerProps) {
   const TITLE_TEXT_SIZE = small ? 'text-sm' : 'text-md';
@@ -72,7 +73,7 @@ export function ChartContainer({
   // data changes and slider changes
   useEffect(() => {
     recalculateChartOptions();
-  }, [chartData, sliderProps?.selectedSliderRange]);
+  }, [chartData, sortingButtonProps?.sorting, sliderProps?.selectedSliderRange]);
 
   // handling the x-axis range slider visibility
   const [showSlider, setShowSlider] = useState(false);
@@ -172,6 +173,7 @@ export function ChartContainer({
         onClose={onClose}
         onOpenChange={onOpenChange}
         alternativeSwitchButtonProps={alternativeSwitchButtonProps}
+        sortingButtonProps={sortingButtonProps}
         sliderProps={sliderProps}
         showSlider={showSlider}
         setShowSlider={setShowSlider}

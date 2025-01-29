@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from 'react';
 import ChartAlternativeSwitchButton from '@/components/Charts/helpers/buttons/ChartAlternativeSwitchButton';
 import ChartDownloadButton from '@/components/Charts/helpers/buttons/ChartDownloadButton';
 import ChartSliderButton from '@/components/Charts/helpers/buttons/ChartSliderButton';
+import ChartSortingButton from '@/components/Charts/helpers/buttons/ChartSortingButton';
 import ChartSlider from '@/components/Charts/helpers/ChartSlider';
 import ChartModalProps from '@/domain/props/ChartModalProps';
 
@@ -27,6 +28,7 @@ export function ChartModal({
   onClose,
   onOpenChange,
   alternativeSwitchButtonProps,
+  sortingButtonProps,
   sliderProps,
   showSlider,
   setShowSlider,
@@ -63,11 +65,13 @@ export function ChartModal({
           <div className="flex flex-row justify-between w-full h-full">
             <h2 className="flex flex-col justify-center font-normal text-sm sm:text-md md:text-lg"> {title} </h2>
             <div className="flex flex-row w-fit h-full gap-0.5 sm:gap-4 md:gap-6">
-              {sliderProps && showSlider && setShowSlider && (
+              {sliderProps !== undefined && showSlider !== undefined && setShowSlider !== undefined && (
                 <ChartSliderButton showSlider={showSlider} setShowSlider={setShowSlider} />
               )}
 
               {alternativeSwitchButtonProps && <ChartAlternativeSwitchButton {...alternativeSwitchButtonProps} />}
+
+              {sortingButtonProps && <ChartSortingButton {...sortingButtonProps} />}
 
               {!disableDownload && <ChartDownloadButton chartRef={chartRef} chartData={chartData} />}
             </div>
@@ -89,7 +93,7 @@ export function ChartModal({
         </ModalBody>
         {
           // slider to e.g. manipulate the plotted x-axis range of the chart
-          sliderProps && (
+          showSlider && sliderProps !== undefined && (
             <ModalFooter>
               <div className="w-full">
                 <ChartSlider {...sliderProps} />

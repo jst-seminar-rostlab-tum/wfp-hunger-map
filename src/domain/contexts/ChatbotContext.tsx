@@ -103,7 +103,7 @@ export function ChatbotProvider({ children }: { children: ReactNode }) {
   /**
    * Initiates a chat with a report based on the provided context type and value.
    * If a chat for that specific context already exists, it opens that chat; otherwise, it creates a new one.
-   * @param reportContext - The report context containing type ('country' or 'year_of_review'), 
+   * @param reportContext - The report context containing type ('country' or 'year_of_review'),
    *                        value (country name or year) and the optional selected text from the report by the user
    */
   const initiateChatAboutReport: (reportContext: IReportContext) => Promise<void> = async (

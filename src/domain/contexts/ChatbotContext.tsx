@@ -3,7 +3,6 @@ import { v4 as uuid } from 'uuid';
 
 import { useSnackbar } from '@/domain/contexts/SnackbarContext';
 import { IChat, IReportContext } from '@/domain/entities/chatbot/Chatbot';
-import { IChat, IReportContext } from '@/domain/entities/chatbot/Chatbot';
 import { SenderRole } from '@/domain/enums/SenderRole';
 import ChatbotOperations from '@/operations/chatbot/Chatbot';
 import { useMediaQuery } from '@/utils/resolution';

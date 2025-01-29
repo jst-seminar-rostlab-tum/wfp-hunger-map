@@ -2,7 +2,7 @@
 
 import { Accordion, AccordionItem } from '@nextui-org/accordion';
 import { Spinner } from '@nextui-org/spinner';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { v4 as uuid } from 'uuid';
 
@@ -45,19 +45,53 @@ export default function AccordionBoxItems({
   const selectionMode = AccordionOperations.getSelectionModeType(noSelectionMode, multipleSelectionMode);
   const maxWidthClass = maxWidth ? `max-w-[${maxWidth}px]` : '';
 
+  const accordionRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [popoverPositions, setPopoverPositions] = useState<Record<string, { top: number; right: number }>>({});
+
   useEffect(() => {
     if (expandAll) setExpandedItems('all');
     else setExpandedItems(new Set());
   }, [expandAll]);
 
+  useEffect(() => {
+    const updatePositions = () => {
+      if (!accordionRef.current) return;
+      if (!containerRef.current) return;
+
+      const containerPosition = containerRef.current.getBoundingClientRect();
+      const positions: Record<string, { top: number; right: number }> = {};
+
+      Array.from(accordionRef.current.children).forEach((child) => {
+        const key = child.getAttribute('id');
+
+        if (key) {
+          // find the position of an element with id="popover-info-placeholder" inside the child
+          const placeholder = child.querySelector('#popover-info-placeholder');
+          if (!placeholder) return;
+          // get the position of the placeholder element
+          const rect = placeholder.getBoundingClientRect();
+          positions[key] = {
+            top: rect.top - containerPosition.top,
+            right: 43,
+          };
+        }
+      });
+
+      setPopoverPositions(positions);
+    };
+    updatePositions();
+  }, [expandedItems, items]);
+
   return (
-    <div className={`w-full ${maxWidthClass} overflow-x-auto rounded-lg shadow-none`}>
+    <div ref={containerRef} className={`w-full ${maxWidthClass} overflow-x-auto rounded-lg shadow-none relative`}>
       {title && (
         <div className="bg-primary p-4 break-words text-balance rounded-lg mb-2">
           <h1 className="text-2xl font-black font-sans text-white">{title}</h1>
         </div>
       )}
       <Accordion
+        ref={accordionRef}
         key={uuid()}
         variant="splitted"
         selectionMode={selectionMode}
@@ -65,10 +99,11 @@ export default function AccordionBoxItems({
         selectedKeys={expandedItems}
         onSelectionChange={(keys) => setExpandedItems(keys as Set<string>)}
       >
-        {items.map((item, index) => (
+        {items.map((item) => (
           <AccordionItem
-            key={typeof item.title === 'string' ? item.title : `accordion-item-${index}`}
-            aria-label={typeof item.title === 'string' ? item.title : `Accordion Item ${index}`}
+            id={item.title}
+            key={item.title}
+            aria-label={item.title}
             className={`last:border-b-0 ${color} overflow-hidden shadow-md`}
             hideIndicator={noSelectionMode}
             title={
@@ -84,10 +119,7 @@ export default function AccordionBoxItems({
                     {item.infoIcon && <span className="w-[37px] h-[37px] p-[5.5px]">{item.infoIcon}</span>}
                   </Tooltip>
                 )}
-                {item.popoverInfo && <InfoPopover infoIcon={item.infoIcon} popoverInfo={item.popoverInfo} />}
-                {!item.tooltipInfo && !item.popoverInfo && item.infoIcon && (
-                  <span className="w-[37px] h-[37px] p-[5.5px]">{item.infoIcon}</span>
-                )}
+                {item.popoverInfo && <span id="popover-info-placeholder" className="w-[37px] h-[37px] p-[5.5px]" />}
               </span>
             }
           >
@@ -96,6 +128,22 @@ export default function AccordionBoxItems({
           </AccordionItem>
         ))}
       </Accordion>
+      {items.map((item) => {
+        const key = item.title;
+        const position = popoverPositions[key];
+        return (
+          <div
+            key={`popover-item-${key}`}
+            style={{
+              position: 'absolute',
+              top: position?.top,
+              right: position?.right,
+            }}
+          >
+            {item.popoverInfo && <InfoPopover infoIcon={item.infoIcon} popoverInfo={item.popoverInfo} />}
+          </div>
+        );
+      })}
     </div>
   );
 }

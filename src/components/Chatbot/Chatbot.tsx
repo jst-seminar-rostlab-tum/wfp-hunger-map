@@ -352,7 +352,7 @@ export default function HungerMapChatbot() {
                     onChange={(inputEvent) => setInput(inputEvent.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder={TYPING_PLACEHOLDER}
-                    className="max-h-20 rounded-xl border border-solid border-black bg-chatbotInputArea dark:bg-chatbotInputArea flex-grow px-3 py-2 dark:text-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none overflow-hidden"
+                    className="max-h-20 rounded-xl border border-solid border-black bg-chatbotInputArea dark:bg-chatbotInputArea flex-grow px-3 py-2 dark:text-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none overflow-visible"
                     rows={1}
                   />
                   <Tooltip text="Submit">

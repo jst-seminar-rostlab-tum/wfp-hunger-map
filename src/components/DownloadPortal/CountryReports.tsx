@@ -18,7 +18,6 @@ export default function CountryReports({ countryCodesData }: CountryReportsProps
   const [pdfFile, setPdfFile] = useState<PdfFile | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [selectedCountry, setSelectedCountry] = useState<CountryCodesData | null>(null);
-
   const { initiateChatAboutReport } = useChatbot();
   const { showSnackBar } = useSnackbar();
 
@@ -56,6 +55,8 @@ export default function CountryReports({ countryCodesData }: CountryReportsProps
             DownloadPortalOperations.downloadCountryReport(selectedCountry, showSnackBar);
           }
         }}
+        onAskAIButtonClick={initiateChatAboutReport}
+        reportContext={{ type: 'country', value: selectedCountry?.country.name ?? '' }}
       />
     </div>
   );

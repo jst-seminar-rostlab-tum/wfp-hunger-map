@@ -1,3 +1,4 @@
+import { IReportContext } from '../entities/chatbot/Chatbot';
 import { PdfFile } from './PdfViewerProps';
 
 export default interface PdfPreviewProps {
@@ -6,4 +7,6 @@ export default interface PdfPreviewProps {
   pdfFile: PdfFile | null;
   error: string | null;
   onDownloadPdf: () => void;
+  onAskAIButtonClick?: (reportContext: IReportContext) => void;
+  reportContext: IReportContext;
 }

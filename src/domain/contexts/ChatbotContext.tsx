@@ -14,12 +14,13 @@ interface ChatbotContextType {
   setCurrentChatIndex: React.Dispatch<React.SetStateAction<number>>;
   openChat: (chatIndex: number) => void;
   startNewChat: (newChat?: IChat) => void;
-  initiateChatAboutReport: (value: string, type: IReportContext['type']) => Promise<void>;
+  initiateChatAboutReport: (reportContext: IReportContext) => Promise<void>;
   isOpen: boolean;
   isMobile: boolean;
   isSidebarOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  updateChatWithSelection: (selectionText: string) => void;
 }
 
 const ChatbotContext = createContext<ChatbotContextType | undefined>(undefined);
@@ -81,38 +82,70 @@ export function ChatbotProvider({ children }: { children: ReactNode }) {
   };
 
   /**
+   * Updates the current chat with the selected text of the user and adds an assistant message
+   * @param selectionText - The text selected from the report by the user
+   */
+  const updateChatWithSelection = (selectionText: string) => {
+    const chatToUpdate = chats[currentChatIndex];
+    if (chatToUpdate.reportContext) {
+      const assistantMessage = {
+        id: crypto.randomUUID(),
+        content: `I see you've selected some text from the report. How can I help you understand this part better?`,
+        role: SenderRole.ASSISTANT,
+      };
+
+      chatToUpdate.messages.push(assistantMessage);
+      chatToUpdate.reportContext.selectionText = selectionText;
+      setChats([...chats]);
+    }
+  };
+
+  /**
    * Initiates a chat with a report based on the provided context type and value.
    * If a chat for that specific context already exists, it opens that chat; otherwise, it creates a new one.
-   * @param value - The value (country name or year) for the report
-   * @param type - The type of report context ('country' or 'year_in_review')
+   * @param reportContext - The report context containing type ('country' or 'year_of_review'), 
+   *                        value (country name or year) and the optional selected text from the report by the user
    */
-  const initiateChatAboutReport = async (value: string, type: IReportContext['type']) => {
+  const initiateChatAboutReport: (reportContext: IReportContext) => Promise<void> = async (
+    reportContext: IReportContext
+  ) => {
+    const { type } = reportContext;
+    const { value } = reportContext;
+    const { selectionText } = reportContext;
     const chatTitle = type === 'country' ? `Report ${value}` : `${value} Year in Review`;
     const reportChatIndex = chats.findIndex((chat) => chat.title === chatTitle);
     const reportChatExists = reportChatIndex !== -1;
 
     if (reportChatExists) {
       openChat(reportChatIndex);
+      if (selectionText) {
+        updateChatWithSelection(selectionText);
+      }
       return;
     }
 
+    const content = selectionText
+      ? `I see you've selected some text from this ${
+          type === 'country' ? 'Country Report about' : 'Year in Review for'
+        } ${value}. How can I help you understand this part better?`
+      : `Hey, how can I help you with this ${
+          type === 'country' ? 'Country Report about' : 'Year in Review for'
+        } ${value}?`;
+
     const assistantMessage = {
       id: crypto.randomUUID(),
-      content:
-        type === 'country'
-          ? `Hey, how can I help you with this report about ${value}?`
-          : `Hey, how can I help you with the Year in Review report for ${value}?`,
+      content,
       role: SenderRole.ASSISTANT,
     };
 
     const newChat: IChat = {
       id: uuid(),
       title: chatTitle,
-      report_context: {
+      reportContext: {
         type,
         value,
+        ...(selectionText ? { selectionText } : {}),
       },
-      isReportStarter: true,
       messages: [assistantMessage],
       isTyping: false,
       timestamp: Date.now(),
@@ -135,6 +168,7 @@ export function ChatbotProvider({ children }: { children: ReactNode }) {
       isSidebarOpen,
       setIsOpen,
       setIsSidebarOpen,
+      updateChatWithSelection,
     }),
     [chats, currentChatIndex, isOpen, isMobile, isSidebarOpen]
   );

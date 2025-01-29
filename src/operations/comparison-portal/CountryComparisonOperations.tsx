@@ -319,6 +319,7 @@ export class CountryComparisonOperations {
         name: this.getCountryNameById(countryData.id, countryMapData),
         dataPoint: {
           y: countryData.fcs,
+          yRelative: Math.round((countryData.fcs / countryData.population) * 1000) / 10,
         },
       })),
     };

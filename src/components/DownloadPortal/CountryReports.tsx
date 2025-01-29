@@ -44,6 +44,7 @@ export default function CountryReports({ countryCodesData }: CountryReportsProps
           showSnackBar
         )}
         ariaLabel="Country Reports"
+        minTableWidth={300}
       />
       <PdfPreview
         isModalOpen={isModalOpen}

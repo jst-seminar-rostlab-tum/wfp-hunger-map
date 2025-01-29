@@ -1,12 +1,7 @@
-import EmailIcon from '@mui/icons-material/Email';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import LinkIcon from '@mui/icons-material/Link';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import ShareIcon from '@mui/icons-material/Share';
-import TwitterIcon from '@mui/icons-material/Twitter';
-import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import { Button } from '@nextui-org/button';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/dropdown';
+import { Facebook, Link1, Whatsapp } from 'iconsax-react';
+import { Linkedin, Mail, Share2, XIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import { useSnackbar } from '@/domain/contexts/SnackbarContext';
@@ -60,26 +55,26 @@ export function ShareFloatingActionButton() {
           className="fixed bottom-6 right-6 w-16 h-16 rounded-full shadow-lg focus:outline-none"
           isIconOnly
         >
-          <ShareIcon />
+          <Share2 />
         </Button>
       </DropdownTrigger>
       <DropdownMenu aria-label="Share Options">
-        <DropdownItem key="link" onClick={handleLinkCopy} startContent={<LinkIcon />}>
+        <DropdownItem key="link" onClick={handleLinkCopy} startContent={<Link1 />}>
           Copy Link
         </DropdownItem>
-        <DropdownItem key="whatsapp" onClick={handleWhatsAppShare} startContent={<WhatsAppIcon />}>
+        <DropdownItem key="whatsapp" onClick={handleWhatsAppShare} startContent={<Whatsapp />}>
           WhatsApp
         </DropdownItem>
-        <DropdownItem key="email" onClick={handleEmailShare} startContent={<EmailIcon />}>
+        <DropdownItem key="email" onClick={handleEmailShare} startContent={<Mail />}>
           Email
         </DropdownItem>
-        <DropdownItem key="facebook" onClick={handleFacebookShare} startContent={<FacebookIcon />}>
+        <DropdownItem key="facebook" onClick={handleFacebookShare} startContent={<Facebook />}>
           Facebook
         </DropdownItem>
-        <DropdownItem key="twitter" onClick={handleTwitterShare} startContent={<TwitterIcon />}>
-          Twitter
+        <DropdownItem key="twitter" onClick={handleTwitterShare} startContent={<XIcon />}>
+          X
         </DropdownItem>
-        <DropdownItem key="linkedin" onClick={handleLinkedInShare} startContent={<LinkedInIcon />}>
+        <DropdownItem key="linkedin" onClick={handleLinkedInShare} startContent={<Linkedin />}>
           LinkedIn
         </DropdownItem>
       </DropdownMenu>

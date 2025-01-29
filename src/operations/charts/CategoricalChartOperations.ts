@@ -38,7 +38,7 @@ export default class CategoricalChartOperations {
     let tooltip = '';
     points?.forEach((p) => {
       if (p.point.options.y !== undefined) {
-        tooltip += `<br><span style="color:${p.color}">\u25CF</span> <div>${p.point.options.y}</div>`;
+        tooltip += `<br><span style="color:${p.color}">\u25CF</span> <div> ${p.key}: ${p.point.options.y}</div>`;
       } else if (p.point.options.high !== undefined && p.point.options.low !== undefined) {
         tooltip += `<div style="color: ${getTailwindColor('--nextui-secondary')}"> (<div>${p.point.options.low} - ${p.point.options.high}</div>)</div>`;
       }

@@ -24,6 +24,7 @@ import { useMediaQuery } from '@/utils/resolution.ts';
  * @param {number} [props.maxWidth] - The maximum width of the accordion.
  * @param {boolean} [props.expandAll=false] - A boolean that indicates if all items are expanded.
  * @param {string[]} [props.highlightedTitleWords=[]] - The words to highlight in the title.
+ * @param {boolean} [props.noPadding=false] - A boolean that indicates if bottom margin is needed for the accordion.
  * @returns {JSX.Element} - The accordion container component.
  */
 
@@ -38,6 +39,7 @@ export default function AccordionContainer({
   maxWidth,
   expandAll = false,
   highlightedTitleWords = [],
+  noPadding = false,
 }: AccordionContainerProps) {
   const isMobile = useMediaQuery('(max-width: 700px)');
   const { setModalContent, setModalTitle } = useAccordionsModal();
@@ -73,6 +75,7 @@ export default function AccordionContainer({
       maxWidth={maxWidth}
       expandAll={expandAll}
       highlightedTitleWords={highlightedTitleWords}
+      noPadding={noPadding}
     />
   ) : null;
 }

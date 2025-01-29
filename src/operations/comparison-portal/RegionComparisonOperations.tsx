@@ -105,7 +105,11 @@ export class RegionComparisonOperations {
           name: region.Name,
           dataPoint: {
             y: formatToMillion(region[type]!.people)!,
+            yRangeMin: formatToMillion(region[type]!.peopleLow)!,
+            yRangeMax: formatToMillion(region[type]!.peopleHigh)!,
             yRelative: region[type]!.ratio!,
+            yRangeMinRelative: region[type]!.ratioLow!,
+            yRangeMaxRelative: region[type]!.ratioHigh!,
           },
         })),
     };

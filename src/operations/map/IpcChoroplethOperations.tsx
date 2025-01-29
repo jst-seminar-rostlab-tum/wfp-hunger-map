@@ -296,7 +296,8 @@ export class IpcChoroplethOperations {
 
     root.render(
       <div className="p-3 bg-background text-foreground rounded-medium z-50">
-        <h1 className="text-sm font-semibold">{IpcChoroplethOperations.getPhaseText(feature?.properties?.ipcPhase)}</h1>
+        <h1 className="text-sm font-semibold">{feature?.properties?.areaName}</h1>
+        <h2 className="text-sm">{IpcChoroplethOperations.getPhaseText(feature?.properties?.ipcPhase)}</h2>
       </div>
     );
 

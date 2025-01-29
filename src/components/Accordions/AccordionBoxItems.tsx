@@ -25,6 +25,7 @@ import { Tooltip } from '../Tooltip/Tooltip';
  * @param {number} [props.maxWidth] - The maximum width of the accordion.
  * @param {boolean} [props.expandAll=false] - A boolean that indicates if all items are expanded.
  * @param {string[]} [props.highlightedTitleWords=[]] - The words to highlight in the title.
+ * @param {boolean} [props.noPadding=false] - A boolean that indicates if bottom margin is needed for the accordion.
  * @returns {JSX.Element} - The accordion box items component.
  */
 
@@ -38,6 +39,7 @@ export default function AccordionBoxItems({
   maxWidth,
   expandAll = false,
   highlightedTitleWords = [],
+  noPadding = false,
 }: AccordionContainerProps) {
   const [expandedItems, setExpandedItems] = useState<Set<string> | 'all'>(new Set());
   const selectionMode = AccordionOperations.getSelectionModeType(noSelectionMode, multipleSelectionMode);
@@ -59,7 +61,7 @@ export default function AccordionBoxItems({
         key={uuid()}
         variant="splitted"
         selectionMode={selectionMode}
-        className="p-0 mb-4"
+        className={`p-0 ${noPadding ? '' : 'mb-4'}`}
         selectedKeys={expandedItems}
         onSelectionChange={(keys) => setExpandedItems(keys as Set<string>)}
       >

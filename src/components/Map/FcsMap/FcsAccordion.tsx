@@ -58,7 +58,7 @@ export default function FcsAccordion({ countryName, countryId, countryCode }: Fc
   ) : (
     <>
       <div
-        className="absolute w-[350px] left-[108px] top-4 z-9999 overflow-y-scroll max-h-screen"
+        className="absolute w-[350px] left-[108px] top-4 z-9999 overflow-y-scroll max-h-[92vh]"
         onMouseEnter={disableMapScroll}
         onMouseLeave={enableMapScroll}
         onWheel={(e) => {
@@ -78,6 +78,7 @@ export default function FcsAccordion({ countryName, countryId, countryCode }: Fc
           maxWidth={600}
           items={foodSecurityAccordionItems}
           expandAll={!countryDataLoading && !iso3DataLoading && !countryForecastDataLoading}
+          noPadding
         />
       </div>
       <div className="absolute w-[350px] right-[1rem] inset-y-24 z-9999">

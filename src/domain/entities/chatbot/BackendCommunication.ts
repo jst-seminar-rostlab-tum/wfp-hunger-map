@@ -1,8 +1,8 @@
-import { IMessage } from './Chatbot';
+import { IMessage, IReportContext } from './Chatbot';
 
 export interface QueryRequest {
   chatId: string;
-  reports_country_name?: string;
+  report_context?: IReportContext;
   query: string;
   version?: number;
   chatbot_type?: string;

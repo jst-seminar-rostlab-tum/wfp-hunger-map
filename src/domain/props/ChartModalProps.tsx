@@ -7,6 +7,7 @@ import {
   ChartAlternativeSwitchButtonProps,
   ChartRelativeNumbersSwitchButtonProps,
   ChartSliderProps,
+  ChartSortingButtonProps,
 } from '@/domain/props/ChartContainerProps';
 
 export default interface ChartModalProps {
@@ -24,6 +25,8 @@ export default interface ChartModalProps {
 
   // alternative chart switch
   alternativeSwitchButtonProps?: ChartAlternativeSwitchButtonProps;
+
+  sortingButtonProps?: ChartSortingButtonProps;
 
   // slider props
   sliderProps?: ChartSliderProps;

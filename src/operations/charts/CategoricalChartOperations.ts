@@ -5,6 +5,7 @@ import highchartsMore from 'highcharts/highcharts-more';
 import patternFill from 'highcharts/modules/pattern-fill';
 
 import { CategoricalChartData } from '@/domain/entities/charts/CategoricalChartData.ts';
+import { CategoricalChartSorting } from '@/domain/enums/CategoricalChartSorting.ts';
 import { getTailwindColor } from '@/utils/tailwind-util.ts';
 
 // initialize the exporting module
@@ -38,7 +39,7 @@ export default class CategoricalChartOperations {
     let tooltip = '';
     points?.forEach((p) => {
       if (p.point.options.y !== undefined) {
-        tooltip += `<br><span style="color:${p.color}">\u25CF</span> <div>${p.point.options.y}</div>`;
+        tooltip += `<br><span style="color:${p.color}">\u25CF</span> <div> ${p.key}: ${p.point.options.y}</div>`;
       } else if (p.point.options.high !== undefined && p.point.options.low !== undefined) {
         tooltip += `<div style="color: ${getTailwindColor('--nextui-secondary')}"> (<div>${p.point.options.low} - ${p.point.options.high}</div>)</div>`;
       }
@@ -62,6 +63,7 @@ export default class CategoricalChartOperations {
    * With this static function, the CategoricalChart component can build the `HighCharts.Options` object
    * for a bar chart or pie chart, out of a given `CategoricalChartData` instance.
    * @param data `CategoricalChartData` object, containing all data to be plotted in the chart
+   * @param sorting selected sorting of the chart
    * @param pieChart if true, a pie chart instead of a bar chart is created
    * @param relativeNumbers if true relative numbers (percentages) are calculated automatically
    * @return 'Highcharts.Options' ready to be passed to the Highcharts component,
@@ -69,9 +71,14 @@ export default class CategoricalChartOperations {
    */
   public static getHighChartOptions(
     data: CategoricalChartData,
+    sorting: CategoricalChartSorting,
     pieChart?: boolean,
     relativeNumbers?: boolean
   ): Highcharts.Options | undefined {
+    // sort data
+    CategoricalChartOperations.sortData(data, sorting);
+
+    // build highchart options
     const seriesData = [];
     const categories = [];
     const seriesRangeData = [];
@@ -238,5 +245,25 @@ export default class CategoricalChartOperations {
         },
       },
     };
+  }
+
+  /**
+   * Sorting the categories data according to the selected sorting.
+   */
+  public static sortData(data: CategoricalChartData, sorting: CategoricalChartSorting) {
+    switch (sorting) {
+      case CategoricalChartSorting.NAMES_ASC:
+        data.categories.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case CategoricalChartSorting.NAMES_DESC:
+        data.categories.sort((a, b) => b.name.localeCompare(a.name));
+        break;
+      case CategoricalChartSorting.VALUES_ASC:
+        data.categories.sort((a, b) => a.dataPoint.y - b.dataPoint.y);
+        break;
+      case CategoricalChartSorting.VALUES_DESC:
+      default:
+        data.categories.sort((a, b) => b.dataPoint.y - a.dataPoint.y);
+    }
   }
 }

@@ -4,6 +4,7 @@ import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 
 import { CategoricalChartData } from '@/domain/entities/charts/CategoricalChartData.ts';
 import { ContinuousChartData } from '@/domain/entities/charts/ContinuousChartData.ts';
+import { CategoricalChartSorting } from '@/domain/enums/CategoricalChartSorting.ts';
 import { ChartType } from '@/domain/enums/ChartType.ts';
 
 /**
@@ -33,6 +34,12 @@ export interface ChartRelativeNumbersSwitchButtonProps {
 export interface ChartDownloadButtonProps {
   chartRef: MutableRefObject<HighchartsReact.RefObject | null>;
   chartData: ContinuousChartData | CategoricalChartData;
+  small?: boolean;
+}
+
+export interface ChartSortingButtonProps {
+  sorting: CategoricalChartSorting;
+  setSorting: Dispatch<SetStateAction<CategoricalChartSorting>>;
   small?: boolean;
 }
 
@@ -66,6 +73,8 @@ export default interface ChartContainerProps {
   relativeNumbersSwitchButtonProps?: ChartRelativeNumbersSwitchButtonProps;
 
   alternativeSwitchButtonProps?: ChartAlternativeSwitchButtonProps;
+
+  sortingButtonProps?: ChartSortingButtonProps;
 
   sliderProps?: ChartSliderProps;
 }

@@ -15,4 +15,5 @@ export default interface CategoricalChartProps {
   disablePieChartSwitch?: boolean;
   disableDownload?: boolean;
   disableRelativeNumbersSwitch?: boolean;
+  disableSorting?: boolean;
 }

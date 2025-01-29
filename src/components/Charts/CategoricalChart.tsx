@@ -4,6 +4,7 @@ import Highcharts from 'highcharts';
 import { useEffect, useState } from 'react';
 
 import { ChartContainer } from '@/components/Charts/helpers/ChartContainer';
+import { CategoricalChartSorting } from '@/domain/enums/CategoricalChartSorting.ts';
 import { ChartType } from '@/domain/enums/ChartType.ts';
 import CategoricalChartProps from '@/domain/props/CategoricalChartProps';
 import CategoricalChartOperations from '@/operations/charts/CategoricalChartOperations.ts';
@@ -30,6 +31,7 @@ import CategoricalChartOperations from '@/operations/charts/CategoricalChartOper
  * @param {boolean} props.disableExpandable - when selected, the functionality to open the chart in a larger modal is disabled (optional)
  * @param {boolean} props.disablePieChartSwitch - when selected, the functionality to switch to a pie chart is disabled (optional)
  * @param {boolean} props.disableDownload - when selected, the functionality to download the chart is disabled (optional)
+ * @param {boolean} props.disableSorting - when selected, sorting button is hidden in the chart full size modal (optional)
  */
 export function CategoricalChart({
   data,
@@ -42,20 +44,23 @@ export function CategoricalChart({
   disableExpandable,
   disablePieChartSwitch,
   disableDownload,
+  disableSorting,
 }: CategoricalChartProps) {
   // controlling if a bar or pie chart is rendered; bar chart is the default
   const [showPieChart, setShowPieChart] = useState<boolean>(false);
+
+  const [sorting, setSorting] = useState<CategoricalChartSorting>(CategoricalChartSorting.VALUES_DESC);
 
   // handling toggling between relative and absolute numbers
   const [showRelativeNumbers, setShowRelativeNumbers] = useState(false);
 
   const [chartOptions, setChartOptions] = useState<Highcharts.Options | undefined>(
-    CategoricalChartOperations.getHighChartOptions(data, showPieChart, showRelativeNumbers)
+    CategoricalChartOperations.getHighChartOptions(data, sorting, showPieChart, showRelativeNumbers)
   );
 
   // function to update/recalculate the chart options
   const recalculateChartOptions = () => {
-    setChartOptions(CategoricalChartOperations.getHighChartOptions(data, showPieChart, showRelativeNumbers));
+    setChartOptions(CategoricalChartOperations.getHighChartOptions(data, sorting, showPieChart, showRelativeNumbers));
   };
 
   // special: if the user switches to the relative data,
@@ -81,6 +86,13 @@ export function CategoricalChart({
         setShowAlternativeChart: setShowPieChart,
       };
 
+  const sortingButtonProps = disableSorting
+    ? undefined
+    : {
+        sorting,
+        setSorting,
+      };
+
   const relativeNumbersExist = data.categories.some((c) => c.dataPoint.yRelative !== undefined);
   const relativeNumbersSwitchButtonProps = relativeNumbersExist
     ? {
@@ -104,6 +116,7 @@ export function CategoricalChart({
       disableDownload={disableDownload}
       relativeNumbersSwitchButtonProps={relativeNumbersSwitchButtonProps}
       alternativeSwitchButtonProps={alternativeSwitchButtonProps}
+      sortingButtonProps={sortingButtonProps}
     />
   );
 }

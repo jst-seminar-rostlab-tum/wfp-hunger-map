@@ -37,6 +37,7 @@ import ContinuousChartOperations from '@/operations/charts/ContinuousChartOperat
  * @param {boolean} props.disableBarChartSwitch when selected, the functionality to switch to a bar chart is disabled (optional)
  * @param {boolean} props.disableXAxisSlider when selected, the functionality to change the x-axis range via a slider is disabled (optional)
  * @param {boolean} props.disableDownload when selected, the functionality to download the chart is disabled (optional)
+ * @param {boolean} props.simplifyTooltip when selected, the labels of the categories are not shown in the chart's tooltip (optional)
  */
 export function ContinuousChart({
   data,
@@ -50,6 +51,7 @@ export function ContinuousChart({
   disableBarChartSwitch,
   disableXAxisSlider,
   disableDownload,
+  simplifyTooltip,
 }: ContinuousChartProps) {
   // make sure data is converted to `continuousChartData`
   const continuousChartData: ContinuousChartData = ContinuousChartOperations.convertToContinuousChartData(data);
@@ -69,7 +71,7 @@ export function ContinuousChart({
   // controlling if a line or bar chart is rendered; line chart is the default
   const [showBarChart, setShowBarChart] = useState<boolean>(false);
   const [chartOptions, setChartOptions] = useState<Highcharts.Options | undefined>(
-    ContinuousChartOperations.getHighChartOptions(continuousChartData)
+    ContinuousChartOperations.getHighChartOptions(continuousChartData, simplifyTooltip)
   );
 
   // function to update/recalculate the chart options
@@ -80,6 +82,7 @@ export function ContinuousChart({
       setChartOptions(
         ContinuousChartOperations.getHighChartOptions(
           continuousChartData,
+          simplifyTooltip,
           selectedXAxisRange[0],
           selectedXAxisRange[1],
           true
@@ -87,7 +90,12 @@ export function ContinuousChart({
       );
     } else {
       setChartOptions(
-        ContinuousChartOperations.getHighChartOptions(continuousChartData, selectedXAxisRange[0], selectedXAxisRange[1])
+        ContinuousChartOperations.getHighChartOptions(
+          continuousChartData,
+          simplifyTooltip,
+          selectedXAxisRange[0],
+          selectedXAxisRange[1]
+        )
       );
     }
   };

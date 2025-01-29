@@ -38,6 +38,7 @@ export function ChartContainer({
   disableDownload,
   relativeNumbersSwitchButtonProps,
   alternativeSwitchButtonProps,
+  sortingButtonProps,
   sliderProps,
 }: ChartContainerProps) {
   const TITLE_TEXT_SIZE = small ? 'text-sm' : 'text-md';
@@ -76,7 +77,12 @@ export function ChartContainer({
   // data changes and all other chart options changes
   useEffect(() => {
     recalculateChartOptions();
-  }, [chartData, relativeNumbersSwitchButtonProps?.showRelativeNumbers, sliderProps?.selectedSliderRange]);
+  }, [
+    chartData,
+    sortingButtonProps?.sorting,
+    relativeNumbersSwitchButtonProps?.showRelativeNumbers,
+    sliderProps?.selectedSliderRange,
+  ]);
 
   // if chartOptions is undefined -> display "no data available"
   if (!chartOptions) {
@@ -175,6 +181,7 @@ export function ChartContainer({
         onClose={onClose}
         onOpenChange={onOpenChange}
         alternativeSwitchButtonProps={alternativeSwitchButtonProps}
+        sortingButtonProps={sortingButtonProps}
         sliderProps={sliderProps}
         showSlider={showSlider}
         setShowSlider={setShowSlider}

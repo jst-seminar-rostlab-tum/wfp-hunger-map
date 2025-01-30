@@ -35,7 +35,7 @@ export default function RegionSelection({
     isLoading,
     error,
   } = useRegionDataQuery(Number(selectedRegionComparisonCountry ?? undefined));
-  const nAvailableRegions = regionData?.features.length;
+  const nAvailableRegions = regionData?.features?.length;
 
   const { showSnackBar } = useSnackbar();
   const availableCountries = useMemo(() => {

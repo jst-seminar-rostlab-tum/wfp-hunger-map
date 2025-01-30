@@ -3,6 +3,7 @@
 import { Button } from '@nextui-org/button';
 import { useState } from 'react';
 
+import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import LegendContainerProps from '@/domain/props/LegendContainerProps';
 import { LegendOperations } from '@/operations/legends/LegendOperations.ts';
 import { useMediaQuery } from '@/utils/resolution';
@@ -26,10 +27,12 @@ import PointLegend from './PointLegend';
  * @returns {JSX.Element}
  */
 export default function LegendContainer({ items, loading = false }: LegendContainerProps) {
-  const isMobile = useMediaQuery('(max-width: 700px)');
+  const isUnder1000 = useMediaQuery('(max-width: 1000px)');
+  const isUnder700 = useMediaQuery('(max-width: 700px)');
+  const { selectedCountryId } = useSelectedCountryId();
   const [showInfoPopup, setInfoPopup] = useState(false);
 
-  return !isMobile ? (
+  return !isUnder1000 || (!isUnder700 && !selectedCountryId) ? (
     <div className="w-[450px] absolute bottom-0 right-20 z-legend">
       <AccordionContainer
         loading={loading}
@@ -57,7 +60,6 @@ export default function LegendContainer({ items, loading = false }: LegendContai
             className="
         relative flex items-center justify-center min-w-10 h-10 px-1 rounded-full bg-content1 shadow-md"
           >
-            {/* TODO: Icon to be modified */}
             <CustomInfoCircle size={28} />
           </Button>
         </Tooltip>

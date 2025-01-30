@@ -13,15 +13,19 @@ import PdfLoader from './PdfLoader';
  * @param {() => void} props.toggleModal Function to toggle the modal's open state.
  * @param {string | Blob | null} props.pdfFile The PDF file to be displayed in the modal.
  * @param {string | null} [props.error] An error message to display if the PDF cannot be loaded.
+ * @param {IReportContext} [props.reportContext] The context of the report to be used for the 'Ask AI' button.
  * @param {() => void} [props.onDownloadPdf] Function to handle downloading the PDF file.
  * @returns {JSX.Element} The rendered PdfPreview component.
+ * @param {(IReportContext) => void} Function to be called when the AskAI button is clicked
  */
 export default function PdfPreview({
   isModalOpen,
   toggleModal,
   pdfFile,
   error,
+  reportContext,
   onDownloadPdf,
+  onAskAIButtonClick,
 }: PdfPreviewProps): JSX.Element {
   return (
     <Modal
@@ -35,13 +39,20 @@ export default function PdfPreview({
       }}
       className="bg-background"
       hideCloseButton
+      isDismissable={false}
     >
       <ModalContent>
         <ModalBody>
           {error ? (
             <div className="bg-background text-danger border rounded-md p-4 text-center">{error}</div>
           ) : (
-            <PdfLoader file={pdfFile} onDownloadPdf={onDownloadPdf} onClose={toggleModal} />
+            <PdfLoader
+              file={pdfFile}
+              onAskAIButtonClick={onAskAIButtonClick}
+              reportContext={reportContext}
+              onDownloadPdf={onDownloadPdf}
+              onClose={toggleModal}
+            />
           )}
         </ModalBody>
       </ModalContent>

@@ -144,6 +144,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
       {selectedMapType === GlobalInsight.NUTRITION &&
         countries.features.map((country) => (
           <NutritionChoropleth
+            key={country.properties.adm0_id}
             countryId={country.properties.adm0_id}
             data={{ type: 'FeatureCollection', features: [country as Feature<Geometry, CountryProps>] }}
             onDataUnavailable={onDataUnavailable}

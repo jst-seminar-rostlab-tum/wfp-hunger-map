@@ -24,7 +24,7 @@ export class DownloadPortalOperations {
   static formatCountryTableData(
     data: CountryCodesData[],
     setSelectedCountry: (countryData: CountryCodesData) => void,
-    initiateChatAboutReport: (country: string, type: IReportContext['type']) => Promise<void>,
+    initiateChatAboutReport: (reportContext: IReportContext) => Promise<void>,
     setPdfFile: (file: Blob | null) => void,
     setError: (error: string | null) => void,
     toggleModal: () => void,
@@ -56,7 +56,7 @@ export class DownloadPortalOperations {
         <div className="flex justify-center items-center">
           <Bot
             size={20}
-            onClick={() => initiateChatAboutReport(item.country.name, 'country')}
+            onClick={() => initiateChatAboutReport({ type: 'country', value: item.country.name })}
             className="cursor-pointer"
           />
         </div>
@@ -67,7 +67,7 @@ export class DownloadPortalOperations {
   static formatYearInReviewTableData(
     data: YearInReview[],
     setSelectedReport: (report: YearInReview) => void,
-    initiateChatAboutReport: (year: string, type: IReportContext['type']) => Promise<void>,
+    initiateChatAboutReport: (reportContext: IReportContext) => Promise<void>,
     setPdfFile: (file: Blob | null) => void,
     setError: (error: string | null) => void,
     toggleModal: () => void,
@@ -104,7 +104,7 @@ export class DownloadPortalOperations {
             onClick={() => {
               const year = item.label.match(/\d{4}/)?.[0];
               if (year) {
-                initiateChatAboutReport(year, 'year_in_review');
+                initiateChatAboutReport({ type: 'year_in_review', value: year });
               }
             }}
             className="cursor-pointer"

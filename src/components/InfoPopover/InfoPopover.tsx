@@ -13,7 +13,16 @@ export function InfoPopover({
   popoverInfo: React.ReactNode;
 }) {
   return (
-    <Popover className="m-2">
+    <Popover
+      className="m-2"
+      shouldCloseOnInteractOutside={(element) => {
+        // needed when used inside the accorion
+        if (element.getAttribute('type') === 'button') {
+          return false;
+        }
+        return true;
+      }}
+    >
       <PopoverTrigger>
         <Button as="span" isIconOnly radius="full" className="w-[37px] h-[37px]" variant="light" aria-label="info icon">
           {infoIcon}

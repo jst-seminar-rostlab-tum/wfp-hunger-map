@@ -18,7 +18,7 @@ import AccordionContainer from '../../Accordions/AccordionContainer';
  * @returns {JSX.Element} - The rendered AccordionContainer component
  */
 export default function FcsAccordion({ countryName, countryId, countryCode }: FcsAccordionProps) {
-  const isMobile = useMediaQuery('(max-width: 700px)');
+  const isMobile = useMediaQuery('(max-width: 1000px)');
   const { isAdmin } = useUserRole();
   const { data: countryData, isLoading: countryDataLoading } = useCountryDataQuery(countryId);
   const { data: countryForecastData, isLoading: countryForecastDataLoading } = useCountryForecastDataQuery(countryId);
@@ -58,15 +58,13 @@ export default function FcsAccordion({ countryName, countryId, countryCode }: Fc
   ) : (
     <>
       <div
-        className="absolute w-[350px] left-[108px] top-4 z-9999 overflow-y-scroll max-h-[92vh]"
+        className="absolute w-[350px] left-[108px] top-4 z-9999 overflow-y-scroll max-h-[91vh]"
         onMouseEnter={disableMapScroll}
         onMouseLeave={enableMapScroll}
         onWheel={(e) => {
-          e.preventDefault();
           e.stopPropagation();
         }}
         onTouchMove={(e) => {
-          e.preventDefault();
           e.stopPropagation();
         }}
       >
@@ -81,7 +79,7 @@ export default function FcsAccordion({ countryName, countryId, countryCode }: Fc
           noPadding
         />
       </div>
-      <div className="absolute w-[350px] right-[1rem] inset-y-24 z-9999">
+      <div className="absolute w-[350px] right-[1rem] top-24 z-9999">
         <AccordionContainer
           loading={countryDataLoading || iso3DataLoading}
           accordionModalActive

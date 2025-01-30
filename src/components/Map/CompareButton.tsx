@@ -10,7 +10,7 @@ import { useMediaQuery } from '@/utils/resolution';
 import { Tooltip } from '../Tooltip/Tooltip';
 
 export default function CompareButton() {
-  const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
+  const { selectedCountryId } = useSelectedCountryId();
   const { selectedMapType } = useSelectedMap();
   const isMobile = useMediaQuery('(max-width: 800px)');
   const router = useRouter();
@@ -18,7 +18,6 @@ export default function CompareButton() {
     router.push(
       `comparison-portal?countries=${selectedCountryId}&tab=region&regionComparisonCountry=${selectedCountryId}`
     );
-    setSelectedCountryId(null);
   };
 
   if (selectedCountryId === null || selectedMapType !== GlobalInsight.FOOD) {

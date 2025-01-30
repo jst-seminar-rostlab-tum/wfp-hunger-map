@@ -7,7 +7,10 @@ import { readAlertFromQueryParam, readMapTypeFromQueryParam } from '@/operations
 const QueryParamsContext = createContext<QueryParamState | undefined>(undefined);
 
 export function QueryParamsProvider({ children }: { children: React.ReactNode }) {
+  // currently, only params for the map (at / ) are considered - if other paths follow, add them here
+  const PATHNAMES = ['/'];
   const router = useRouter();
+
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -23,15 +26,17 @@ export function QueryParamsProvider({ children }: { children: React.ReactNode })
 
   // load state values from URL
   useEffect(() => {
+    if (!PATHNAMES.includes(pathname)) return;
     const countryId = searchParams.get('countryId') ? Number(searchParams.get('countryId')) : null;
     const alert = readAlertFromQueryParam(searchParams.get('alert'), countryId);
     const mapType = readMapTypeFromQueryParam(searchParams.get('mapType'));
 
     setQueryParams((prevParams) => ({ ...prevParams, alert, countryId, mapType }));
-  }, [searchParams]);
+  }, [searchParams, pathname]);
 
   // update URL from state values
   useEffect(() => {
+    if (!PATHNAMES.includes(pathname)) return;
     const stringifiedParams = Object.entries(queryParams)
       .filter((entry) => entry[1] !== null && entry[1] !== undefined)
       .map(([key, value]) => [key, value!.toString()]);

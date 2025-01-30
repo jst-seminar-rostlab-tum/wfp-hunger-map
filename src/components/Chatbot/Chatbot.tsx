@@ -269,7 +269,7 @@ export default function HungerMapChatbot() {
               </div>
             </CardHeader>
             <Divider className="bg-chatbotDivider dark:bg-chatbotDivider" />
-            <CardBody>
+            <CardBody className="h-4/5">
               {/* overlay area in mobile version */}
               {isMobile && isSidebarOpen && (
                 /* since it has been show as overlay style here, once click this area then close side panel better not use button here */
@@ -286,12 +286,12 @@ export default function HungerMapChatbot() {
                   <div className="flex flex-col items-center pt-4 space-y-4">
                     <p className="text-center text-xl max-w-[80%] mb-2">{WELCOME_MESSAGE}</p>
                     <p className="text-center text-md max-w-[80%] mb-2text">{SUB_WELCOME_MESSAGE}</p>
-                    <div className="flex flex-col items-center space-y-2 w-full max-w-md">
+                    <div className="flex flex-col items-center w-full max-w-md">
                       {DEFAULT_PROMPT.map((prompt) => (
                         <Button
                           key={prompt.id}
                           onClick={(event) => handleSubmit(event, prompt.value)}
-                          className="truncate w-full mb-2 max-w-[250px] sm:max-w-[400px] border border-solid border-black dark:border-white bg-transparent hover:bg-chatbotDefaultPromptHover dark:hover:bg-chatbotDefaultPromptHover"
+                          className="truncate w-full mb-3 max-w-[250px] sm:max-w-[400px] border border-solid border-black dark:border-white bg-transparent hover:bg-chatbotDefaultPromptHover dark:hover:bg-chatbotDefaultPromptHover"
                           title={prompt.value}
                         >
                           <span className="truncate">{prompt.value}</span>
@@ -346,7 +346,7 @@ export default function HungerMapChatbot() {
               </ScrollShadow>
             </CardBody>
             <Divider className="bg-chatbotDivider dark:bg-chatbotDivider" />
-            <CardFooter className="p-4">
+            <CardFooter className="p-2">
               <form onSubmit={handleSubmit} className="w-full">
                 <div className="flex space-x-2">
                   <textarea
@@ -355,7 +355,7 @@ export default function HungerMapChatbot() {
                     onChange={(inputEvent) => setInput(inputEvent.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder={TYPING_PLACEHOLDER}
-                    className="rounded-xl border border-solid border-black bg-chatbotInputArea dark:bg-chatbotInputArea flex-grow px-3 py-2 dark:text-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none overflow-hidden"
+                    className="max-h-20 rounded-xl border border-solid border-black bg-chatbotInputArea dark:bg-chatbotInputArea flex-grow px-3 py-2 dark:text-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none overflow-visible"
                     rows={1}
                   />
                   <Tooltip text="Submit">

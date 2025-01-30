@@ -85,7 +85,7 @@ export function AlertsMenu({ variant }: AlertsMenuProps) {
             </PopoverContent>
           </Popover>
         ) : (
-          <Tooltip key={item.key} text={item.label} aria-hidden="true" supressAnnounce>
+          <Tooltip key={item.key} text={item.label} aria-hidden="true">
             <AlertButton
               icon={item.icon}
               label={item.label}

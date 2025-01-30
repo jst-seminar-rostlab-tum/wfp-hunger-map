@@ -3,9 +3,6 @@ import { useEffect, useState } from 'react';
 
 import { CountryMapData, CountryMapDataWrapper } from '@/domain/entities/country/CountryMapData.ts';
 
-import { AlertType } from '../enums/AlertType';
-import { GlobalInsight } from '../enums/GlobalInsight';
-
 /**
  * Return a state that is synchronized with the `countries` query param.
  * Whereas the returned state value and update function work with arrays of `CountryMapData`, the query param is using the `adm0_id`.
@@ -32,8 +29,8 @@ export const useSelectedCountriesParam = (countryMapData: CountryMapDataWrapper)
   // update state and query params with new value
   const setSelectedCountriesFn = (newValue: CountryMapData[] | undefined) => {
     setSelectedCountries(newValue);
-    const selectedCountryIdQuerys = newValue?.map((country) => country.properties.adm0_id) ?? [];
-    router.push(`${pathname}?${PARAM_NAME}=${selectedCountryIdQuerys.join(',')}`);
+    const selectedCountryIds = newValue?.map((country) => country.properties.adm0_id) ?? [];
+    router.push(`${pathname}?${PARAM_NAME}=${selectedCountryIds.join(',')}`);
   };
 
   return [selectedCountries, setSelectedCountriesFn] as const;
@@ -97,106 +94,4 @@ export const useSearchQueryParam = () => {
   };
 
   return [searchQuery, setSearchQueryFn] as const;
-};
-
-export const useSelectedCountryParam = () => {
-  const PARAM_NAME = 'countryId';
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const [selectedCountryIdQuery, setSelectedCountryIdQuery] = useState<number | null>(null);
-
-  useEffect(() => {
-    const countryId = searchParams.get(PARAM_NAME);
-    setSelectedCountryIdQuery(countryId ? parseInt(countryId, 10) : null);
-  }, [searchParams]);
-
-  const setSelectedCountryIdQueryFn = (id: number | null) => {
-    setSelectedCountryIdQuery(id);
-    const updatedParams = new URLSearchParams(searchParams.toString());
-    if (id !== null) {
-      updatedParams.set(PARAM_NAME, id.toString());
-    } else {
-      updatedParams.delete(PARAM_NAME);
-    }
-
-    router.push(`${pathname}?${updatedParams.toString()}`);
-  };
-
-  return [selectedCountryIdQuery, setSelectedCountryIdQueryFn] as const;
-};
-
-export const useSelectedMapTypeParam = () => {
-  const PARAM_NAME = 'selectedMap';
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const [selectedMap, setSelectedMap] = useState<GlobalInsight>(GlobalInsight.FOOD);
-
-  useEffect(() => {
-    const mapType = searchParams.get(PARAM_NAME);
-    // Update the state based on the query param (only if it's valid and differs from current state)
-    switch (mapType) {
-      case 'nutrition':
-        setSelectedMap(GlobalInsight.NUTRITION);
-        break;
-      case 'ipc':
-        setSelectedMap(GlobalInsight.IPC);
-        break;
-      case 'rainfall':
-        setSelectedMap(GlobalInsight.RAINFALL);
-        break;
-      case 'vegetation':
-        setSelectedMap(GlobalInsight.VEGETATION);
-        break;
-      default:
-        setSelectedMap(GlobalInsight.FOOD);
-        break;
-    }
-  }, [searchParams]);
-
-  const setSelectedMapFn = (mapType: GlobalInsight) => {
-    setSelectedMap(mapType);
-    const updatedParams = new URLSearchParams(searchParams.toString());
-    updatedParams.set(PARAM_NAME, mapType.toLowerCase() ?? 'none');
-    router.push(`${pathname}?${updatedParams.toString()}`);
-  };
-
-  return [selectedMap, setSelectedMapFn] as const;
-};
-
-export const useSelectedAlertParam = () => {
-  const [selectedAlert, setSelectedAlert] = useState<AlertType | null>(AlertType.COUNTRY_ALERTS);
-  const PARAM_NAME = 'alert';
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    const alertType = searchParams.get(PARAM_NAME);
-    switch (alertType) {
-      case 'none':
-        setSelectedAlert(null);
-        break;
-      case 'conflicts':
-        setSelectedAlert(AlertType.CONFLICTS);
-        break;
-      case 'hazards':
-        setSelectedAlert(AlertType.HAZARDS);
-        break;
-      case 'countryAlerts':
-      default:
-        setSelectedAlert(AlertType.COUNTRY_ALERTS);
-        break;
-    }
-  }, [searchParams]);
-
-  const setAlertFn = (alertType: AlertType | null) => {
-    setSelectedAlert(alertType);
-    const updatedParams = new URLSearchParams(searchParams.toString());
-    updatedParams.set(PARAM_NAME, alertType ?? 'none');
-    router.push(`${pathname}?${updatedParams.toString()}`);
-  };
-
-  return [selectedAlert, setAlertFn] as const;
 };

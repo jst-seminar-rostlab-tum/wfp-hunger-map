@@ -74,7 +74,7 @@ export default function SubscriptionForm() {
   const handleSelectionChange = (selectedTopic: ITopic | undefined) => {
     setTopic(selectedTopic?.topic_id);
     setIsTopicInvalid(!selectedTopic);
-    setOptions(selectedTopic?.options?.map((option) => option.report_id));
+    setOptions(selectedTopic?.options?.map((option) => option.country_id));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {

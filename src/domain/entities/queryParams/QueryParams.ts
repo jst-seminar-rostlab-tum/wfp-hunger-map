@@ -1,10 +1,12 @@
 import React from 'react';
 
 import { AlertType } from '@/domain/enums/AlertType';
+import { GlobalInsight } from '@/domain/enums/GlobalInsight';
 
 export type QueryParams = {
   alert: AlertType | null;
   countryId: number | null;
+  mapType: GlobalInsight;
 };
 export type QueryParamKey = keyof QueryParams;
 

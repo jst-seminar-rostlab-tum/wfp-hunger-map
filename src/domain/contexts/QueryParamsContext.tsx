@@ -2,6 +2,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 import { QueryParamKey, QueryParams, QueryParamState } from '@/domain/entities/queryParams/QueryParams';
+import { GlobalInsight } from '@/domain/enums/GlobalInsight';
 
 import { AlertType } from '../enums/AlertType';
 
@@ -20,6 +21,21 @@ const readAlertFromQueryParam = (alertParam: string | null, countryId: number | 
     default:
       if (countryId) return null;
       return AlertType.COUNTRY_ALERTS;
+  }
+};
+
+const readMapTypeFromQueryParam = (mapTypeParam: string | null) => {
+  switch (mapTypeParam) {
+    case 'nutrition':
+      return GlobalInsight.NUTRITION;
+    case 'ipc':
+      return GlobalInsight.IPC;
+    case 'rainfall':
+      return GlobalInsight.RAINFALL;
+    case 'vegetation':
+      return GlobalInsight.VEGETATION;
+    default:
+      return GlobalInsight.FOOD;
   }
 };
 
@@ -42,7 +58,9 @@ export function QueryParamsProvider({ children }: { children: React.ReactNode })
   useEffect(() => {
     const countryId = searchParams.get('countryId') ? Number(searchParams.get('countryId')) : null;
     const alert = readAlertFromQueryParam(searchParams.get('alert'), countryId);
-    setQueryParams((prevParams) => ({ ...prevParams, alert, countryId }));
+    const mapType = readMapTypeFromQueryParam(searchParams.get('mapType'));
+
+    setQueryParams((prevParams) => ({ ...prevParams, alert, countryId, mapType }));
   }, [searchParams]);
 
   // update URL from state values

@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useContext, useMemo } from 'react';
 
-import { useSelectedMapTypeParam } from '@/domain/hooks/queryParamsHooks';
+import { useQueryParams } from '@/domain/contexts/QueryParamsContext';
 
 import { GlobalInsight } from '../enums/GlobalInsight';
 
@@ -12,19 +12,19 @@ interface SelectedMapTypeState {
 const SelectedMapContext = createContext<SelectedMapTypeState | undefined>(undefined);
 
 export function SelectedMapProvider({ children }: { children: ReactNode }) {
-  const [selectedMapType, setSelectedMapTypeState] = useSelectedMapTypeParam();
+  const { queryParams, setQueryParam } = useQueryParams();
   const setSelectedMapType = (value: GlobalInsight) => {
-    setSelectedMapTypeState(value);
+    setQueryParam('mapType', value);
     // send event to Google Analytics
     window.gtag('event', `${value}_map_selected`);
   };
 
   const value = useMemo(
     () => ({
-      selectedMapType,
+      selectedMapType: queryParams.mapType ?? GlobalInsight.FOOD,
       setSelectedMapType,
     }),
-    [selectedMapType]
+    [queryParams.mapType]
   );
 
   return <SelectedMapContext.Provider value={value}>{children}</SelectedMapContext.Provider>;

@@ -114,7 +114,7 @@ export default function PdfViewer({
             <Button
               size="sm"
               color="primary"
-              onClick={() => {
+              onPress={() => {
                 onAskAIButtonClick?.({
                   type: reportContext.type,
                   value: reportContext.value,

@@ -27,12 +27,12 @@ export default function CompareButton() {
 
   return isMobile ? (
     <Tooltip text="Compare Countries" placement="bottom">
-      <Button color="primary" variant="solid" onClick={handleCompareButtonClick} isIconOnly>
+      <Button color="primary" variant="solid" onPress={handleCompareButtonClick} isIconOnly>
         <ArrowRightLeft />
       </Button>
     </Tooltip>
   ) : (
-    <Button color="primary" variant="solid" startContent={<ArrowRightLeft />} onClick={handleCompareButtonClick}>
+    <Button color="primary" variant="solid" startContent={<ArrowRightLeft />} onPress={handleCompareButtonClick}>
       Compare
     </Button>
   );

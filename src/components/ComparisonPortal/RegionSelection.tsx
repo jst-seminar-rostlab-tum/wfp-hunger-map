@@ -117,7 +117,7 @@ export default function RegionSelection({
         <CustomButton
           className="flex-1"
           variant="bordered"
-          onClick={() => setSelectedRegions('all')}
+          onPress={() => setSelectedRegions('all')}
           isDisabled={
             isLoading ||
             !selectedRegionComparisonCountry ||
@@ -131,7 +131,7 @@ export default function RegionSelection({
         <CustomButton
           className="flex-1"
           variant="bordered"
-          onClick={() => setSelectedRegions([])}
+          onPress={() => setSelectedRegions([])}
           isDisabled={
             isLoading ||
             !selectedRegionComparisonCountry ||

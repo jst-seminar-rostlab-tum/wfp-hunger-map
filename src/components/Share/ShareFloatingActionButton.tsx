@@ -59,22 +59,22 @@ export function ShareFloatingActionButton() {
         </Button>
       </DropdownTrigger>
       <DropdownMenu aria-label="Share Options">
-        <DropdownItem key="link" onClick={handleLinkCopy} startContent={<Link1 />}>
+        <DropdownItem key="link" onPress={handleLinkCopy} startContent={<Link1 />}>
           Copy Link
         </DropdownItem>
-        <DropdownItem key="whatsapp" onClick={handleWhatsAppShare} startContent={<Whatsapp />}>
+        <DropdownItem key="whatsapp" onPress={handleWhatsAppShare} startContent={<Whatsapp />}>
           WhatsApp
         </DropdownItem>
-        <DropdownItem key="email" onClick={handleEmailShare} startContent={<Mail />}>
+        <DropdownItem key="email" onPress={handleEmailShare} startContent={<Mail />}>
           Email
         </DropdownItem>
-        <DropdownItem key="facebook" onClick={handleFacebookShare} startContent={<Facebook />}>
+        <DropdownItem key="facebook" onPress={handleFacebookShare} startContent={<Facebook />}>
           Facebook
         </DropdownItem>
-        <DropdownItem key="twitter" onClick={handleTwitterShare} startContent={<XIcon />}>
+        <DropdownItem key="twitter" onPress={handleTwitterShare} startContent={<XIcon />}>
           X
         </DropdownItem>
-        <DropdownItem key="linkedin" onClick={handleLinkedInShare} startContent={<Linkedin />}>
+        <DropdownItem key="linkedin" onPress={handleLinkedInShare} startContent={<Linkedin />}>
           LinkedIn
         </DropdownItem>
       </DropdownMenu>

@@ -4,7 +4,7 @@ import SubscriptionRepository from '@/domain/repositories/SubscriptionRepository
 export default class SubscriptionRepositoryImpl implements SubscriptionRepository {
   async subscribe(subscribe: ISubscribe): Promise<ISubscribeResponse> {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_EMAIL_SERVICE}/subscribe`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_EMAIL_SERVICE}/api/subscribe`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -24,7 +24,7 @@ export default class SubscriptionRepositoryImpl implements SubscriptionRepositor
 
   async getSubscribeTopic(): Promise<ITopic[]> {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_EMAIL_SERVICE}/topics`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_EMAIL_SERVICE}/api/topics`);
       if (response.ok) {
         const data = await response.json();
         if (Array.isArray(data) && data.length > 0) {

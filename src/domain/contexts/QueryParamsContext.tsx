@@ -2,42 +2,9 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 import { QueryParamKey, QueryParams, QueryParamState } from '@/domain/entities/queryParams/QueryParams';
-import { GlobalInsight } from '@/domain/enums/GlobalInsight';
-
-import { AlertType } from '../enums/AlertType';
+import { readAlertFromQueryParam, readMapTypeFromQueryParam } from '@/operations/queryParams/QueryParamOperations';
 
 const QueryParamsContext = createContext<QueryParamState | undefined>(undefined);
-
-const readAlertFromQueryParam = (alertParam: string | null, countryId: number | null) => {
-  switch (alertParam) {
-    case 'none':
-      return null;
-    case 'conflicts':
-      return AlertType.CONFLICTS;
-    case 'hazards':
-      return AlertType.HAZARDS;
-    case 'countryAlerts':
-      return AlertType.COUNTRY_ALERTS;
-    default:
-      if (countryId) return null;
-      return AlertType.COUNTRY_ALERTS;
-  }
-};
-
-const readMapTypeFromQueryParam = (mapTypeParam: string | null) => {
-  switch (mapTypeParam) {
-    case 'nutrition':
-      return GlobalInsight.NUTRITION;
-    case 'ipc':
-      return GlobalInsight.IPC;
-    case 'rainfall':
-      return GlobalInsight.RAINFALL;
-    case 'vegetation':
-      return GlobalInsight.VEGETATION;
-    default:
-      return GlobalInsight.FOOD;
-  }
-};
 
 export function QueryParamsProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -76,6 +43,13 @@ export function QueryParamsProvider({ children }: { children: React.ReactNode })
   return <QueryParamsContext.Provider value={value}>{children}</QueryParamsContext.Provider>;
 }
 
+/**
+ * Provides getters and setters for state values that are synchronized to query parameters.
+ * * `setQueryParam('myParam', value)` updates the state and URL of the specified param
+ * * `setQueryParams` is the setState function to update all values simultaneously
+ * * `queryParams.myParam` returns the current value of a query param
+ * @returns `{ setQueryParam, setQueryParams, queryParams }`
+ */
 export function useQueryParams() {
   const context = useContext(QueryParamsContext);
   if (!context) {

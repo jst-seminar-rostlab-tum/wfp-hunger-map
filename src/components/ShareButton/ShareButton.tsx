@@ -16,6 +16,10 @@ import { SnackbarPosition, SnackbarStatus } from '@/domain/enums/Snackbar';
 
 import { Tooltip } from '../Tooltip/Tooltip';
 
+/**
+ * Displays a share button for the current URL including query params.
+ * @param {string} text Text to include in the shared message, `' ' + url` will be added to this
+ */
 function ShareButton({ text }: { text: string }) {
   const [openModal, setOpenModal] = useState(false);
   const [url, setUrl] = useState('');

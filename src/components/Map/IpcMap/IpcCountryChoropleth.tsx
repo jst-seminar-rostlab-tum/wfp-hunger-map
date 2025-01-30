@@ -4,11 +4,13 @@ import { GeoJSON } from 'react-leaflet';
 
 import AccordionModalSkeleton from '@/components/Accordions/AccordionModalSkeleton';
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
+import { CountryMapDataWrapper } from '@/domain/entities/country/CountryMapData';
 import { useRegionIpcDataQuery } from '@/domain/hooks/countryHooks';
 import IpcCountryChoroplethProps from '@/domain/props/IpcCountryChoroplethProps';
 import { IpcChoroplethOperations } from '@/operations/map/IpcChoroplethOperations';
 
 import CountryLoadingLayer from '../CountryLoading';
+import IpcAccordion from './IpcAccordion';
 
 function IpcCountryChoropleth({ countryMapData, onDataUnavailable }: IpcCountryChoroplethProps) {
   const { selectedCountryId } = useSelectedCountryId();
@@ -34,13 +36,16 @@ function IpcCountryChoropleth({ countryMapData, onDataUnavailable }: IpcCountryC
       <AccordionModalSkeleton />
     </>
   ) : (
-    <GeoJSON
-      // manually force the component to rerender (because the key changes) when the selected country (and thus, the ipc region data) changes
-      key={selectedCountryId}
-      style={IpcChoroplethOperations.ipcCountryStyle}
-      data={regionIpcData as FeatureCollection}
-      onEachFeature={IpcChoroplethOperations.attachEventsRegion}
-    />
+    <>
+      <IpcAccordion countryMapData={countryMapData as CountryMapDataWrapper} />
+      <GeoJSON
+        // manually force the component to rerender (because the key changes) when the selected country (and thus, the ipc region data) changes
+        key={selectedCountryId}
+        style={IpcChoroplethOperations.ipcCountryStyle}
+        data={regionIpcData as FeatureCollection}
+        onEachFeature={IpcChoroplethOperations.initializeRegionLayer}
+      />
+    </>
   );
 }
 

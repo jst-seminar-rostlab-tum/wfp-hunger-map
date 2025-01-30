@@ -8,6 +8,7 @@ const wikiItems = (
     descriptions.hazards,
     descriptions.malnutritionAcute,
     descriptions.malnutritionChronic,
+    descriptions.micronutrients,
     descriptions.rainfall,
     descriptions.rCsi,
     descriptions.undernourishment,

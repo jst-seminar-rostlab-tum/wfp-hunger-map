@@ -7,6 +7,7 @@ import descriptions from '@/domain/constant/dataSources/dataSourceDescriptions';
 import { CountryData } from '@/domain/entities/country/CountryData';
 import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data';
 import { cardsWrapperClass } from '@/utils/primitives';
+import { useMediaQuery } from '@/utils/resolution.ts';
 
 import { ReactComponent as FoodConsumption } from '../../../public/Images/FoodConsumption.svg';
 import { ReactComponent as Nutrition } from '../../../public/Images/Nutrition.svg';
@@ -30,6 +31,7 @@ export class IpcFoodSecurityAccordionOperations {
   ) {
     const hasData =
       countryData && countryData.population && countryData.fcs && deltaOneMonth !== null && deltaThreeMonth !== null;
+    const isMobile = useMediaQuery('(max-width: 700px)');
 
     return {
       title: 'Food Security',
@@ -56,7 +58,7 @@ export class IpcFoodSecurityAccordionOperations {
                 svgIcon: <FoodConsumption className="w-[50px] h-[50px] object-contain" />,
                 text: descriptions.fcs.legendTitle,
                 value: countryData.fcs ? `${countryData.fcs.toFixed(2)} M` : 'N/A',
-                textClass: 'text-xs',
+                textClass: isMobile ? 'text-base' : 'text-sm',
                 changeValues: [
                   {
                     imageSrc: deltaOneMonth && deltaOneMonth > 0 ? '/Images/ArrowUp.svg' : '/Images/ArrowDown.svg',
@@ -111,7 +113,7 @@ export class IpcFoodSecurityAccordionOperations {
           )}
           {nutritionData.Chronic != null && (
             <CustomCard
-              title={descriptions.malnutritionAcute.legendTitle}
+              title={descriptions.malnutritionChronic.legendTitle}
               content={[
                 {
                   svgIcon: <Nutrition className="w-[40px] h-[40px] object-contain" />,

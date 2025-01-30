@@ -5,6 +5,7 @@ import highchartsMore from 'highcharts/highcharts-more';
 import patternFill from 'highcharts/modules/pattern-fill';
 
 import { CategoricalChartData } from '@/domain/entities/charts/CategoricalChartData.ts';
+import { CategoricalChartSorting } from '@/domain/enums/CategoricalChartSorting.ts';
 import { getTailwindColor } from '@/utils/tailwind-util.ts';
 
 // initialize the exporting module
@@ -38,7 +39,9 @@ export default class CategoricalChartOperations {
     let tooltip = '';
     points?.forEach((p) => {
       if (p.point.options.y !== undefined) {
-        tooltip += `<br><span style="color:${p.color}">\u25CF</span> <div>${p.point.options.y}</div>`;
+        tooltip += `<br><span style="color:${p.color}">\u25CF</span> <div> ${p.key}: ${p.point.options.y}</div>`;
+      } else if (p.point.options.high !== undefined && p.point.options.low !== undefined) {
+        tooltip += `<div style="color: ${getTailwindColor('--nextui-secondary')}"> (<div>${p.point.options.low} - ${p.point.options.high}</div>)</div>`;
       }
     });
     return tooltip;
@@ -47,22 +50,40 @@ export default class CategoricalChartOperations {
   /**
    * Tooltip formatter function for `Options.plotOptions.pie.dataLabels.formatter` usage only.
    */
-  private static pieDataLabelsFormatter(point: Highcharts.Point, data: CategoricalChartData) {
-    return `<p>${point.name}: </p><p style="color:${point.color}">${point.y} ${data.yAxisLabel}</p>`;
+  private static pieDataLabelsFormatter(
+    point: Highcharts.Point,
+    data: CategoricalChartData,
+    relativeNumbers?: boolean
+  ) {
+    const suffix = relativeNumbers ? '%' : data.yAxisLabel;
+    return `<p>${point.name}: </p><p style="color:${point.color}">${point.y} ${suffix}</p>`;
   }
 
   /**
    * With this static function, the CategoricalChart component can build the `HighCharts.Options` object
    * for a bar chart or pie chart, out of a given `CategoricalChartData` instance.
    * @param data `CategoricalChartData` object, containing all data to be plotted in the chart
+   * @param sorting selected sorting of the chart
    * @param pieChart if true, a pie chart instead of a bar chart is created
+   * @param relativeNumbers if true relative numbers (percentages) are calculated automatically
    * @return 'Highcharts.Options' ready to be passed to the Highcharts component,
    * or 'undefined' if there is no data available to be plotted in the chart (to be interpreted as "no data available")
    */
-  public static getHighChartOptions(data: CategoricalChartData, pieChart?: boolean): Highcharts.Options | undefined {
+  public static getHighChartOptions(
+    data: CategoricalChartData,
+    sorting: CategoricalChartSorting,
+    pieChart?: boolean,
+    relativeNumbers?: boolean
+  ): Highcharts.Options | undefined {
+    // sort data
+    CategoricalChartOperations.sortData(data, sorting, relativeNumbers);
+
+    // build highchart options
     const seriesData = [];
     const categories = [];
+    const seriesRangeData = [];
     const defaultCategoriesColors = CategoricalChartOperations.getCategoriesColorList();
+
     for (let i = 0; i < data.categories.length; i += 1) {
       const categoryData = data.categories[i];
 
@@ -78,12 +99,27 @@ export default class CategoricalChartOperations {
       // collect category names
       categories.push(categoryData.name);
 
+      // check if range should be displayed
+      const showRange =
+        !pieChart && categoryData.dataPoint.yRangeMin !== undefined && categoryData.dataPoint.yRangeMax !== undefined;
+
       // build series object for highchart
       seriesData.push({
         name: categoryData.name,
-        y: categoryData.dataPoint.y,
+        y: relativeNumbers ? categoryData.dataPoint.yRelative : categoryData.dataPoint.y,
         color: categoryColor,
+        opacity: showRange ? 0.6 : 1,
       });
+
+      // check if range should be displayed
+      if (showRange) {
+        seriesRangeData.push({
+          x: i,
+          low: relativeNumbers ? categoryData.dataPoint.yRangeMinRelative : categoryData.dataPoint.yRangeMin,
+          high: relativeNumbers ? categoryData.dataPoint.yRangeMaxRelative : categoryData.dataPoint.yRangeMax,
+          color: categoryColor,
+        });
+      }
     }
 
     // if there is not a single series -> we return 'undefined' -> 'undefined' is to be interpreted as "no data available"
@@ -117,7 +153,7 @@ export default class CategoricalChartOperations {
       yAxis: {
         visible: !pieChart,
         title: {
-          text: data.yAxisLabel,
+          text: relativeNumbers ? '% of population' : data.yAxisLabel,
           style: {
             color: getTailwindColor('--nextui-secondary'),
           },
@@ -128,6 +164,9 @@ export default class CategoricalChartOperations {
             fontSize: '0.7rem',
           },
           formatter() {
+            if (relativeNumbers) {
+              return `${this.value}%`;
+            }
             return Highcharts.numberFormat(this.value as number, -1);
           },
         },
@@ -155,6 +194,14 @@ export default class CategoricalChartOperations {
           data: seriesData,
           type: pieChart ? 'pie' : 'column',
         },
+        {
+          name: 'Range',
+          type: 'errorbar', // Error bar series
+          data: seriesRangeData, // Use the error bar data
+          tooltip: {
+            pointFormat: '(Range: {point.low} - {point.high})',
+          },
+        },
       ],
       plotOptions: {
         column: {
@@ -162,6 +209,13 @@ export default class CategoricalChartOperations {
           grouping: true,
           shadow: false,
           borderWidth: 0,
+          colorByPoint: true,
+        },
+        errorbar: {
+          stemWidth: 1.5,
+          whiskerLength: '30%',
+          whiskerWidth: 1.5,
+          colorByPoint: true, // use different colors for each bar
         },
         pie: {
           animation: true,
@@ -172,7 +226,7 @@ export default class CategoricalChartOperations {
           dataLabels: {
             enabled: true,
             formatter() {
-              return CategoricalChartOperations.pieDataLabelsFormatter(this.point, data);
+              return CategoricalChartOperations.pieDataLabelsFormatter(this.point, data, relativeNumbers);
             },
             style: {
               color: getTailwindColor('--nextui-secondary'),
@@ -191,5 +245,33 @@ export default class CategoricalChartOperations {
         },
       },
     };
+  }
+
+  /**
+   * Sorting the categories data according to the selected sorting.
+   */
+  public static sortData(data: CategoricalChartData, sorting: CategoricalChartSorting, relativeNumbers?: boolean) {
+    switch (sorting) {
+      case CategoricalChartSorting.NAMES_ASC:
+        data.categories.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case CategoricalChartSorting.NAMES_DESC:
+        data.categories.sort((a, b) => b.name.localeCompare(a.name));
+        break;
+      case CategoricalChartSorting.VALUES_ASC:
+        if (relativeNumbers) {
+          data.categories.sort((a, b) => (a.dataPoint.yRelative || 0) - (b.dataPoint.yRelative || 0));
+        } else {
+          data.categories.sort((a, b) => (a.dataPoint.y || 0) - (b.dataPoint.y || 0));
+        }
+        break;
+      case CategoricalChartSorting.VALUES_DESC:
+      default:
+        if (relativeNumbers) {
+          data.categories.sort((a, b) => (b.dataPoint.yRelative || 0) - (a.dataPoint.yRelative || 0));
+        } else {
+          data.categories.sort((a, b) => b.dataPoint.y - a.dataPoint.y);
+        }
+    }
   }
 }

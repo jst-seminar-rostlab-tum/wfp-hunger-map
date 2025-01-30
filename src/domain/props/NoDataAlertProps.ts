@@ -2,8 +2,8 @@ import { ContinuousChartData } from '@/domain/entities/charts/ContinuousChartDat
 
 import { CategoricalChartData } from '../entities/charts/CategoricalChartData';
 
-export interface NoDataHintProps {
+export interface NoDataAlertProps {
   chartData: ContinuousChartData | CategoricalChartData;
-  selectedCountryNames: string[];
-  isLoading: boolean;
+  requestedChartCategories: string[];
+  isLoading?: boolean;
 }

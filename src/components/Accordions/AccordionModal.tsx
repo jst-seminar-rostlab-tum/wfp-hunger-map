@@ -7,6 +7,8 @@ import { ArrowUp2 } from 'iconsax-react';
 import { useAccordionsModal } from '@/domain/contexts/AccodionsModalContext';
 import { useMediaQuery } from '@/utils/resolution.ts';
 
+import { Tooltip } from '../Tooltip/Tooltip';
+
 /**
  * AccordionModal - A responsive component that provides a modal for displaying accordions on mobile screens.
  * This component is specifically designed for mobile usage:
@@ -32,15 +34,17 @@ export default function AccordionModal() {
   return isMobile && modalContent !== null ? (
     <>
       {isMobileXS ? (
-        <Button
-          color="primary"
-          variant="solid"
-          className="absolute z-accordionsModalButton bottom-10 right-28 rounded-full text-white"
-          isIconOnly
-          onClick={onAccordionModalOpen}
-        >
-          <ArrowUp2 className="h-5 w-5" />
-        </Button>
+        <Tooltip text="Country Insights" placement="top">
+          <Button
+            color="primary"
+            variant="solid"
+            className="absolute z-accordionsModalButton bottom-10 right-10 rounded-full text-white"
+            isIconOnly
+            onClick={onAccordionModalOpen}
+          >
+            <ArrowUp2 className="h-5 w-5" />
+          </Button>
+        </Tooltip>
       ) : (
         <Button
           color="primary"

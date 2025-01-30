@@ -7,7 +7,7 @@ import RegionComparisonAccordion from '@/components/ComparisonPortal/RegionCompa
 import { useSelectedCountriesParam, useSelectedRegions, useSelectedTab } from '@/domain/hooks/queryParamsHooks.ts';
 import CountryPortalProps from '@/domain/props/CountryComparisonProps';
 
-import { ShareFloatingActionButton } from '../Share/ShareFloatingActionButton';
+import { ShareButton } from '../Share/ShareButton';
 import CountryComparisonAccordion from './CountryComparisonAccordion';
 import CountrySelection from './CountrySelection';
 import RegionSelection from './RegionSelection';
@@ -71,7 +71,7 @@ export default function CountryComparison({ countryMapData, globalFcsData }: Cou
           />
         </Tab>
       </Tabs>
-      <ShareFloatingActionButton />
+      <ShareButton buttonStyle="floating" />
     </div>
   );
 }

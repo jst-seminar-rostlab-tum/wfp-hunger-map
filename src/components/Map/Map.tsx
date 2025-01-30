@@ -6,7 +6,6 @@ import { useEffect, useRef, useState } from 'react';
 import { GeoJSON as LeafletGeoJSON, MapContainer, Pane, SVGOverlay, TileLayer } from 'react-leaflet';
 
 import BackToGlobalButton from '@/components/Map/BackToGlobalButton';
-import ShareButton from '@/components/ShareButton/ShareButton';
 import {
   countryBaseStyle,
   countryBorderStyle,
@@ -23,6 +22,7 @@ import { GlobalInsight } from '@/domain/enums/GlobalInsight';
 import { MapProps } from '@/domain/props/MapProps';
 import { MapOperations } from '@/operations/map/MapOperations';
 
+import { ShareButton } from '../Share/ShareButton';
 import { AlertContainer } from './Alerts/AlertContainer';
 import CompareButton from './CompareButton';
 import FcsChoropleth from './FcsMap/FcsChoropleth';
@@ -89,6 +89,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
       <div className="absolute right-[75px] top-[20px] z-[9999] flex space-x-2">
         <CompareButton />
         <BackToGlobalButton />
+        <ShareButton buttonStyle="default" />
       </div>
 
       {/* Ocean */}
@@ -159,9 +160,6 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
       {selectedMapType === GlobalInsight.IPC && (
         <IpcChoropleth countries={countries} onDataUnavailable={onDataUnavailable} />
       )}
-      <div className="absolute right-[75px] top-[20px] z-[9999]">
-        <ShareButton text="World Food Programme Hunger Map" />
-      </div>
     </MapContainer>
   );
 }

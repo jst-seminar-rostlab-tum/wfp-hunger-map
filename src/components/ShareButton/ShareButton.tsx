@@ -7,25 +7,31 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import { Box, IconButton, Modal, Stack } from '@mui/material';
 import { Button } from '@nextui-org/button';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { useTheme } from 'next-themes';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useSnackbar } from '@/domain/contexts/SnackbarContext';
 import { SnackbarPosition, SnackbarStatus } from '@/domain/enums/Snackbar';
 
 import { Tooltip } from '../Tooltip/Tooltip';
 
-interface ShareButtonProps {
-  text: string;
-  url: string;
-}
-
-function ShareButton({ text, url }: ShareButtonProps) {
+function ShareButton({ text }: { text: string }) {
   const [openModal, setOpenModal] = useState(false);
+  const [url, setUrl] = useState('');
+
   const { showSnackBar } = useSnackbar();
   const { theme } = useTheme();
-  const iconColor = theme === 'dark' ? '#ECEDEE' : '#000000';
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setUrl(`${window.location.origin}${pathname}${searchParams.toString() ? `?${searchParams}` : ''}`);
+    }
+  }, [pathname, searchParams]);
+
+  const iconColor = theme === 'dark' ? '#ECEDEE' : '#000000';
   const message = encodeURIComponent(`${text} ${url}`);
 
   // Share handlers

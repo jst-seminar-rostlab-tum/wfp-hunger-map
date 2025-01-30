@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import { GeoJSON as LeafletGeoJSON, MapContainer, Pane, SVGOverlay, TileLayer } from 'react-leaflet';
 
 import BackToGlobalButton from '@/components/Map/BackToGlobalButton';
+import ShareButton from '@/components/ShareButton/ShareButton';
 import {
   countryBaseStyle,
   countryBorderStyle,
@@ -22,7 +23,6 @@ import { GlobalInsight } from '@/domain/enums/GlobalInsight';
 import { MapProps } from '@/domain/props/MapProps';
 import { MapOperations } from '@/operations/map/MapOperations';
 
-import ShareButton from '../ShareButton/shareComponent';
 import { AlertContainer } from './Alerts/AlertContainer';
 import FcsChoropleth from './FcsMap/FcsChoropleth';
 import IpcChoropleth from './IpcMap/IpcChoropleth';
@@ -42,7 +42,6 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
   const { selectedMapType, setSelectedMapType } = useSelectedMap();
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
   const [renderer] = useState(new L.SVG({ padding: 0.5 }));
-  const [currentUrl, setCurrentUrl] = useState<string>(window.location.href);
 
   const onZoomThresholdReached = () => {
     setSelectedCountryId(null);
@@ -63,29 +62,6 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
     }
     setSelectedMapType(selectedMapType);
   }, [selectedMapType]);
-
-  useEffect(() => {
-    const updateUrl = () => {
-      const newUrl = window.location.href;
-      if (newUrl !== currentUrl) {
-        setCurrentUrl(newUrl);
-      }
-    };
-    const handlePopState = () => {
-      updateUrl();
-    };
-    const handleHashChange = () => {
-      updateUrl();
-    };
-    const intervalId = setInterval(updateUrl, 100);
-    window.addEventListener('popstate', handlePopState);
-    window.addEventListener('hashchange', handleHashChange);
-    return () => {
-      window.removeEventListener('popstate', handlePopState);
-      window.removeEventListener('hashchange', handleHashChange);
-      clearInterval(intervalId);
-    };
-  }, [currentUrl]);
 
   return (
     <MapContainer
@@ -180,7 +156,7 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
         <IpcChoropleth countries={countries} onDataUnavailable={onDataUnavailable} />
       )}
       <div className="absolute right-[75px] top-[20px] z-[9999]">
-        <ShareButton text="World Food Programme Hunger Map" url={currentUrl} />
+        <ShareButton text="World Food Programme Hunger Map" />
       </div>
     </MapContainer>
   );

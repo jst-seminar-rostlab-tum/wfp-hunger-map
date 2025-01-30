@@ -95,8 +95,7 @@ export default function NutritionStateChoropleth({
           style={(feature) => NutritionStateChoroplethOperations.dynamicStyle(feature, selectedNutrient)}
           onEachFeature={(feature, layer) => {
             layersRef.current.push(layer);
-            NutritionStateChoroplethOperations.addNutritionTooltip(layer, feature, selectedNutrient);
-            NutritionStateChoroplethOperations.addHoverEffect(layer);
+            NutritionStateChoroplethOperations.addEvents(layer, feature, selectedNutrient);
           }}
         />
       </>

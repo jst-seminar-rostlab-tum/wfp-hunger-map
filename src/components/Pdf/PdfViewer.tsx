@@ -7,7 +7,6 @@ import { Button } from '@nextui-org/button';
 import { Chip } from '@nextui-org/chip';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react';
 import { Skeleton } from '@nextui-org/skeleton';
-import { Tooltip } from '@nextui-org/tooltip';
 import { DocumentDownload, Minus } from 'iconsax-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
@@ -24,24 +23,25 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
  * @param {Object} props The properties for the PdfViewer component.
  * @param {string | Blob | null} props.file The PDF file to be displayed.
  * @param {() => void} [props.onClose] Function to close the PDF viewer.
- * @param {(selectionText: string) => void} [props.onTooltipClick] Function to handle the tooltip click.
+ * @param {(IReportContext) => void} Function to be called when the AskAI button is clicked
  * @param {() => void} [props.onDownloadPdf] Function to download the PDF file.
  * @param {() => void} [props.onDownloadJson] Function to download JSON data related to the PDF file.
  * @param {() => void} [props.onDownloadCsv] Function to download CSV data related to the PDF file.
+ * @param {IReportContext} [props.reportContext] The context of the report to be used for the 'Ask AI' button.
  * @returns {JSX.Element} The rendered PdfViewer component.
  */
 export default function PdfViewer({
   file,
   onClose,
-  onTooltipClick,
+  onAskAIButtonClick,
   onDownloadPdf,
   onDownloadJson,
   onDownloadCsv,
+  reportContext,
 }: PdfViewerProps): JSX.Element {
   const [totalPages, setTotalPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState(1);
   const [selectionText, setSelectionText] = useState<string | null>(null);
-  const [tooltipPosition, setTooltipPosition] = useState<{ top: number; left: number } | null>(null);
   const [pageWidth, setPageWidth] = useState(window.innerWidth * 0.9);
   const topBarRef = useRef<HTMLDivElement>(null);
   const [isDocumentLoading, setIsDocumentLoading] = useState<boolean>(true);
@@ -68,13 +68,6 @@ export default function PdfViewer({
     }
 
     setSelectionText(text);
-
-    const rect = activeSelection.getRangeAt(0).getBoundingClientRect();
-
-    setTooltipPosition({
-      top: rect.top + window.scrollY - 10,
-      left: rect.left + rect.width / 2,
-    });
   };
 
   useEffect(() => {
@@ -117,6 +110,22 @@ export default function PdfViewer({
           </Chip>
         )}
         <div className="flex items-center space-x-2">
+          {onAskAIButtonClick && selectionText && (
+            <Button
+              size="sm"
+              color="primary"
+              onClick={() => {
+                onAskAIButtonClick?.({
+                  type: reportContext.type,
+                  value: reportContext.value,
+                  selectionText,
+                });
+                setSelectionText(null);
+              }}
+            >
+              Ask AI
+            </Button>
+          )}
           <Dropdown>
             <DropdownTrigger>
               <Button isIconOnly variant="light" size="sm">
@@ -175,24 +184,6 @@ export default function PdfViewer({
           <Skeleton className="absolute top-0 left-20 right-20 bottom-0 bg-content1 dark:bg-content1" />
         )}
       </div>
-
-      {/* Tooltip */}
-      {onTooltipClick && tooltipPosition && selectionText && (
-        <div className="absolute z-20 p-2 rounded-lg" style={{ top: tooltipPosition.top, left: tooltipPosition.left }}>
-          <Tooltip
-            color="primary"
-            showArrow
-            isOpen
-            content={
-              <Button size="sm" color="primary" onClick={() => onTooltipClick?.(selectionText)}>
-                Ask AI
-              </Button>
-            }
-          >
-            <div />
-          </Tooltip>
-        </div>
-      )}
     </div>
   );
 }

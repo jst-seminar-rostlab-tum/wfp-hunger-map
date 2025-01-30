@@ -26,6 +26,7 @@ import {
 } from '@/domain/constant/chatbot/Chatbot';
 import { useChatbot } from '@/domain/contexts/ChatbotContext';
 import { APIError } from '@/domain/entities/chatbot/BackendCommunication';
+import { IMessage, IReportContext } from '@/domain/entities/chatbot/Chatbot';
 import { SenderRole } from '@/domain/enums/SenderRole';
 import ChatbotRepository from '@/domain/repositories/ChatbotRepository';
 import ChatbotOperations from '@/operations/chatbot/Chatbot';
@@ -87,47 +88,52 @@ export default function HungerMapChatbot() {
     }
   };
 
-  /**
-   * Handle AI response
-   * @param text is user input text
-   * @param updatedChats is the updated chats object
-   */
-  const handleAIResponse = async (text: string): Promise<void> => {
-    const previousMessages = chats[currentChatIndex].messages;
-    let aiResponse = '';
+  const getAIResponse = async (
+    text: string,
+    chatContext: {
+      chatId: string;
+      previous_messages: IMessage[];
+      report_context?: IReportContext;
+    }
+  ): Promise<string> => {
     try {
-      if (chats[currentChatIndex].isReportStarter && chats[currentChatIndex].reports_country_name) {
-        aiResponse = (
-          await chatbot.sendMessage(text, {
-            chatId: chats[currentChatIndex].id,
-            previous_messages: previousMessages,
-            report_context: {
-              type: 'country',
-              value: chats[currentChatIndex].report_context?.value || '',
-            },
-          })
-        ).response;
-        chats[currentChatIndex].isReportStarter = false;
-      } else {
-        aiResponse = (
-          await chatbot.sendMessage(text, {
-            chatId: chats[currentChatIndex].id,
-            previous_messages: previousMessages,
-            report_context: chats[currentChatIndex].report_context,
-          })
-        ).response;
-      }
+      const response = await chatbot.sendMessage(text, chatContext);
+      return response.response;
     } catch (err) {
       if (err instanceof APIError) {
-        aiResponse = `Ups! Unfortunately, it seems like there was a problem connecting to the server...\n ${err.status}: ${err.message}`;
+        return `Ups! Unfortunately, it seems like there was a problem connecting to the server...\n ${err.status}: ${err.message}`;
       }
+      return 'An unexpected error occurred. Please try again.';
     }
+  };
+
+  const handleAIResponse = async (text: string): Promise<void> => {
+    const currentChat = chats[currentChatIndex];
+    const chatContext = {
+      chatId: currentChat.id,
+      previous_messages: currentChat.messages,
+      report_context: currentChat.reportContext,
+    };
+
+    let userMessage = text;
+
+    if (currentChat.reportContext?.selectionText) {
+      userMessage = `${
+        text
+      }\nI am specifically relating to this section of the report: "${currentChat.reportContext.selectionText}"
+      \n Don't include any additional information about the report which is not in this section.`;
+      currentChat.reportContext.selectionText = undefined;
+    }
+
+    const aiResponse = await getAIResponse(userMessage, chatContext);
+
     const updatedChatsWithAI = structuredClone(chats);
     updatedChatsWithAI[currentChatIndex].messages.push({
       id: crypto.randomUUID(),
       content: aiResponse,
       role: SenderRole.ASSISTANT,
     });
+
     setChats(updatedChatsWithAI);
   };
 

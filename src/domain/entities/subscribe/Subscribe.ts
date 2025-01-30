@@ -18,7 +18,7 @@ export interface ISubscribe {
   name: string;
   email: string;
   organisation: string;
-  country_ids?: string[];
+  option_ids?: string[];
   topic_id?: string;
 }
 

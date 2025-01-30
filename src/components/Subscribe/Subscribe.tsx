@@ -104,7 +104,7 @@ export default function SubscriptionForm() {
             name,
             email,
             organisation,
-            country_ids: options,
+            option_ids: options,
             topic_id: topic,
           })
           .then((res) => {

@@ -23,4 +23,4 @@ export const OPEN_SIDE_BAR = 'Open chat side bar';
 
 export const CLOSE_SIDE_BAR = 'Close chat side bar';
 
-export const TRIGGER_CHAT = 'Trigger hungermap chatbot';
+export const TRIGGER_CHAT = 'Chatbot';

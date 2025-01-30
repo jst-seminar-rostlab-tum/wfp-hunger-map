@@ -5,8 +5,8 @@ import { RegionFcs } from './RegionFcs';
 import { RegionRcsi } from './RegionRcs';
 
 export interface RegionProperties extends CommonRegionProperties {
-  fcs: RegionFcs;
+  fcs: RegionFcs | null;
   centroid: Coordinate;
-  fcsGraph: RegionFcsChartData[]; // seems to be unsused in current implementation, but this is the biggest chunk of the data
-  rcsi: RegionRcsi; // also not shown
+  fcsGraph: RegionFcsChartData[] | null;
+  rcsi: RegionRcsi | null;
 }

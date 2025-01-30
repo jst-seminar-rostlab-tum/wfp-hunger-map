@@ -24,6 +24,7 @@ import { MapProps } from '@/domain/props/MapProps';
 import { MapOperations } from '@/operations/map/MapOperations';
 
 import { AlertContainer } from './Alerts/AlertContainer';
+import CompareButton from './CompareButton';
 import FcsChoropleth from './FcsMap/FcsChoropleth';
 import IpcChoropleth from './IpcMap/IpcChoropleth';
 import NutritionChoropleth from './NutritionMap/NutritionChoropleth';
@@ -89,10 +90,12 @@ export default function Map({ countries, disputedAreas, fcsData, alertData }: Ma
       zoomControl={false}
       style={{ height: '100%', width: '100%', zIndex: 1 }}
     >
-      <BackToGlobalButton />
-      <ZoomControl threshold={SELECTED_COUNTRY_ZOOM_THRESHOLD} callback={onZoomThresholdReached} />
-
       <AlertContainer countries={countries} alertData={alertData} />
+      <ZoomControl threshold={SELECTED_COUNTRY_ZOOM_THRESHOLD} callback={onZoomThresholdReached} />
+      <div className="absolute right-[75px] top-[20px] z-[9999] flex space-x-2">
+        <CompareButton />
+        <BackToGlobalButton />
+      </div>
 
       {/* Ocean */}
       <Pane name="ocean" style={{ zIndex: 0 }}>

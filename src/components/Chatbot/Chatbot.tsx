@@ -101,7 +101,10 @@ export default function HungerMapChatbot() {
           await chatbot.sendMessage(text, {
             chatId: chats[currentChatIndex].id,
             previous_messages: previousMessages,
-            reports_country_name: chats[currentChatIndex].reports_country_name,
+            report_context: {
+              type: 'country',
+              value: chats[currentChatIndex].report_context?.value || '',
+            },
           })
         ).response;
         chats[currentChatIndex].isReportStarter = false;
@@ -110,7 +113,7 @@ export default function HungerMapChatbot() {
           await chatbot.sendMessage(text, {
             chatId: chats[currentChatIndex].id,
             previous_messages: previousMessages,
-            reports_country_name: chats[currentChatIndex].reports_country_name,
+            report_context: chats[currentChatIndex].report_context,
           })
         ).response;
       }

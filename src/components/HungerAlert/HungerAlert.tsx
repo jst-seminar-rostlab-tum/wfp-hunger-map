@@ -58,6 +58,7 @@ export default function HungerAlert({ countryFcsData, countryMapData }: HungerAl
             data={displayedRows}
             className="mb-3 min-h-[26rem]"
             ariaLabel="Number of countries with high levels of hunger"
+            minTableWidth={300}
           />
           <Pagination isCompact showControls page={page} total={totalPages} onChange={(newPage) => setPage(newPage)} />
         </div>

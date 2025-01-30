@@ -9,6 +9,7 @@ import { CountryData } from '@/domain/entities/country/CountryData';
 import { CountryForecastData } from '@/domain/entities/country/CountryForecastData';
 import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data';
 import { cardsWrapperClass } from '@/utils/primitives';
+import { useMediaQuery } from '@/utils/resolution.ts';
 
 import { ReactComponent as FoodConsumption } from '../../../public/Images/FoodConsumption.svg';
 import { ReactComponent as Nutrition } from '../../../public/Images/Nutrition.svg';
@@ -27,9 +28,10 @@ export class FcsFoodSecurityOperations {
     const fcsChartData = FcsAccordionOperations.getFcsChartData(countryData, countryForecastData);
     const rcsiChartData = FcsAccordionOperations.getRcsiChartData(countryData, countryForecastData);
     const nutritionData = FcsAccordionOperations.getNutritionData(countryIso3Data);
+    const isMobile = useMediaQuery('(max-width: 700px)');
     return [
       {
-        title: 'Food Security',
+        title: 'Current Food Security',
         infoIcon: <CustomInfoCircle />,
         popoverInfo: <DataSourcePopover dataSourceKeys={['population', 'fcs']} />,
         content: (
@@ -51,7 +53,7 @@ export class FcsFoodSecurityOperations {
                   svgIcon: <FoodConsumption className="w-[50px] h-[50px] object-contain" />,
                   text: descriptions.fcs.legendTitle,
                   value: countryData?.fcs ? `${countryData.fcs.toFixed(2)} M` : 'N/A',
-                  textClass: 'text-xs',
+                  textClass: isMobile ? 'text-base' : 'text-sm',
                   changeValues: [
                     {
                       imageSrc: deltaOneMonth && deltaOneMonth > 0 ? '/Images/ArrowUp.svg' : '/Images/ArrowDown.svg',
@@ -130,6 +132,7 @@ export class FcsFoodSecurityOperations {
                 small
                 noPadding
                 transparentBackground
+                simplifyTooltip
               />
             ) : (
               <p>No data about food consumption available</p>
@@ -142,6 +145,7 @@ export class FcsFoodSecurityOperations {
                 small
                 noPadding
                 transparentBackground
+                simplifyTooltip
               />
             ) : (
               <p>No data about food-based coping available</p>

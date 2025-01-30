@@ -17,4 +17,5 @@ export default interface ContinuousChartProps {
   disableBarChartSwitch?: boolean;
   disableXAxisSlider?: boolean;
   disableDownload?: boolean;
+  simplifyTooltip?: boolean;
 }

@@ -28,6 +28,7 @@ import { useMediaQuery } from '@/utils/resolution';
 
 import PopupModal from '../PopupModal/PopupModal';
 import Subscribe from '../Subscribe/Subscribe';
+import { Tooltip } from '../Tooltip/Tooltip';
 import { UserRoleSwitch } from './UserRoleSwitch';
 
 /**
@@ -98,9 +99,11 @@ export function Sidebar({ countryMapData, fcsData }: SidebarProps): React.JSX.El
         <CardHeader>
           <div className="flex items-center w-full gap-2 justify-between">
             <LogoWithText />
-            <Button isIconOnly variant="light" onPress={toggleSidebar} aria-label="Collapse sidebar">
-              <SidebarLeft size={24} aria-hidden="true" />
-            </Button>
+            <Tooltip text="Close sidebar" placement="right">
+              <Button isIconOnly variant="light" onPress={toggleSidebar} aria-label="Collapse sidebar">
+                <SidebarLeft size={24} aria-hidden="true" />
+              </Button>
+            </Tooltip>
           </div>
           <ThemeSwitch />
           {/* Authentication mock */}

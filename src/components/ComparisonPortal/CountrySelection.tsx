@@ -1,5 +1,3 @@
-'use client';
-
 import { Select, SelectItem } from '@nextui-org/react';
 import { useMemo } from 'react';
 
@@ -29,6 +27,7 @@ export default function CountrySelection({
   setSelectedCountries,
   disabledCountryIds,
 }: CountrySelectionProps): JSX.Element {
+  const COUNTRY_LIMIT = 5;
   const selectedKeys = useMemo(
     () => selectedCountries?.map((country) => country.properties.adm0_id.toString()),
     [selectedCountries]
@@ -43,8 +42,7 @@ export default function CountrySelection({
     return availableCountries
       .filter(
         (country) =>
-          // if there are already 5 selected countries, disable the rest
-          selectedCountries.length >= 5 &&
+          selectedCountries.length >= COUNTRY_LIMIT &&
           !selectedCountries.find(
             (selectedCountry) => selectedCountry.properties.adm0_id === country.properties.adm0_id
           )
@@ -54,7 +52,7 @@ export default function CountrySelection({
   }, [selectedCountries, availableCountries, disabledCountryIds]);
 
   return (
-    <div className="pb-4 flex items-center gap-4">
+    <div className="pb-4 flex items-center gap-4 flex-wrap">
       <Select
         placeholder="Select up to 5 countries"
         aria-label="Select countries for comparison"
@@ -65,7 +63,7 @@ export default function CountrySelection({
         defaultSelectedKeys={selectedKeys}
         selectedKeys={selectedKeys}
         disabledKeys={disabledKeys}
-        className="w-full"
+        className="flex-1"
         variant="faded"
         color="primary"
       >
@@ -85,6 +83,7 @@ export default function CountrySelection({
         variant="bordered"
         onPress={() => setSelectedCountries([])}
         isDisabled={selectedCountries === undefined || selectedCountries.length === 0}
+        className="flex-1 sm:flex-initial"
       >
         Clear
       </CustomButton>

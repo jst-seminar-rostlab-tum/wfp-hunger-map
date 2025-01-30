@@ -19,7 +19,7 @@ export function AlertsMenuWrapper(): React.JSX.Element | null {
     return null;
   }
   return (
-    <div className="absolute bottom-10 left-4 z-alertsMenu">
+    <div className="absolute bottom-2 left-4 z-alertsMenu">
       <AlertsMenu variant={AlertsMenuVariant.Outside} />
     </div>
   );

@@ -35,6 +35,7 @@ export default function YearInReviewReports({ yearInReviewReports }: YearInRevie
           showSnackBar
         )}
         ariaLabel="Year In Review Reports"
+        minTableWidth={300}
       />
       <PdfPreview
         isModalOpen={isModalOpen}

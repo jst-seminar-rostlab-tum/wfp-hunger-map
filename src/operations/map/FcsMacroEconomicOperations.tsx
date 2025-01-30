@@ -64,7 +64,7 @@ export class FcsMacroEconomicOperations {
         content: (
           <div>
             {balanceOfTradeChartData ? (
-              <ContinuousChart data={balanceOfTradeChartData} small noPadding transparentBackground />
+              <ContinuousChart data={balanceOfTradeChartData} small noPadding transparentBackground simplifyTooltip />
             ) : (
               <p>No data about balance of trade available</p>
             )}
@@ -72,13 +72,19 @@ export class FcsMacroEconomicOperations {
         ),
       },
       {
-        title: 'Headline and food inflation',
+        title: 'Headline and Food Inflation',
         infoIcon: <CustomInfoCircle />,
         popoverInfo: <DataSourcePopover dataSourceKeys={['headlineInflation', 'foodInflation']} />,
         content: (
           <div>
             {headlineAndFoodInflationChartData ? (
-              <ContinuousChart data={headlineAndFoodInflationChartData} small noPadding transparentBackground />
+              <ContinuousChart
+                data={headlineAndFoodInflationChartData}
+                small
+                noPadding
+                transparentBackground
+                simplifyTooltip
+              />
             ) : (
               <p>No data about headline and food inflation available</p>
             )}

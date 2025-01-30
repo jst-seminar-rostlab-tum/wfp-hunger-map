@@ -47,14 +47,16 @@ export function CollapsedSidebar({ mapDataFetching }: CollapsedSidebarProps): Re
     >
       <Card className="h-full">
         <CardHeader className="flex justify-center items-center">
-          <Button
-            isIconOnly
-            variant="light"
-            onPress={toggleSidebar}
-            aria-label="Expand sidebar map controls and navigation"
-          >
-            <SidebarRight aria-hidden="true" focusable="false" size={24} />
-          </Button>
+          <Tooltip text="Open sidebar" placement="right">
+            <Button
+              isIconOnly
+              variant="light"
+              onPress={toggleSidebar}
+              aria-label="Expand sidebar map controls and navigation"
+            >
+              <SidebarRight aria-hidden="true" focusable="false" size={24} />
+            </Button>
+          </Tooltip>
         </CardHeader>
         <CardBody>
           <div className="flex flex-col gap-1" role="radiogroup" aria-label="Global insights map type selection">

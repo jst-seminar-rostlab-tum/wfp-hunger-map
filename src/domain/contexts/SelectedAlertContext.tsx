@@ -1,8 +1,7 @@
-import { createContext, ReactNode, useContext, useEffect, useMemo, useRef } from 'react';
+import { createContext, ReactNode, useContext, useMemo } from 'react';
 
-import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
+import { useQueryParams } from '@/domain/contexts/QueryParamsContext';
 import { AlertType } from '@/domain/enums/AlertType';
-import { useSelectedAlertParam } from '@/domain/hooks/queryParamsHooks';
 
 interface SelectedAlertsState {
   selectedAlert: AlertType | null;
@@ -13,29 +12,14 @@ interface SelectedAlertsState {
 const SelectedAlertContext = createContext<SelectedAlertsState | undefined>(undefined);
 
 export function SelectedAlertProvider({ children }: { children: ReactNode }) {
-  const [selectedAlert, setSelectedAlert] = useSelectedAlertParam();
-  const prevAlertRef = useRef<AlertType | null>(null);
-  const prevCountryIdRef = useRef<number | null>(null);
-  const { selectedCountryId } = useSelectedCountryId();
+  const { queryParams, setQueryParam } = useQueryParams();
 
-  useEffect(() => {
-    if (!prevCountryIdRef.current && selectedCountryId) {
-      // Country is selected. Store current alert before clearing it
-      prevAlertRef.current = selectedAlert;
-      setSelectedAlert(null);
-    } else if (prevCountryIdRef.current && !selectedCountryId && !selectedAlert) {
-      // Country is deselected and there is no alert selected. Restore previous alert
-      setSelectedAlert(prevAlertRef.current);
-    }
-    prevCountryIdRef.current = selectedCountryId;
-  }, [selectedCountryId]);
-
-  const isAlertSelected = (alertType: AlertType) => selectedAlert === alertType;
+  const isAlertSelected = (alertType: AlertType) => queryParams.alert === alertType;
   const toggleAlert = (alertType: AlertType) => {
     if (isAlertSelected(alertType)) {
-      setSelectedAlert(null);
+      setQueryParam('alert', null);
     } else {
-      setSelectedAlert(alertType);
+      setQueryParam('alert', alertType);
 
       // send event to Google Analytics
       window.gtag('event', `${alertType}_alert_selected`);
@@ -44,11 +28,11 @@ export function SelectedAlertProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo(
     () => ({
-      selectedAlert,
+      selectedAlert: queryParams.alert ?? null,
       isAlertSelected,
       toggleAlert,
     }),
-    [selectedAlert]
+    [queryParams.alert]
   );
 
   return <SelectedAlertContext.Provider value={value}>{children}</SelectedAlertContext.Provider>;

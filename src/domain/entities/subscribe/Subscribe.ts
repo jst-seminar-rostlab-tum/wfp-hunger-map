@@ -1,7 +1,7 @@
 import { UserRole } from '@/domain/enums/UserRole';
 
 export interface IOption {
-  report_id: string;
+  country_id: string;
   report_name: string;
 }
 

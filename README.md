@@ -83,27 +83,39 @@ Explore the most exciting new or improved features of the new HugerMap here thro
 
 ### Hunger data visualized on multiple map and alert types
 
-https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/home_page_new.mp4
+<video controls>
+  <source src="https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/home_page_new.mp4" type="video/mp4">
+</video>
 
 ### Information pages
 
-![](https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/info_pages.mp4)
+<video controls>
+  <source src="https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/info_pages.mp4" type="video/mp4">
+</video>
 
 ### Chatbot
 
-![](https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/chatbot_feature.mp4)
+<video controls>
+  <source src="https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/chatbot_feature.mp4" type="video/mp4">
+</video>
 
 ### Comparison portal
 
-![](https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/comparison_portal.mp4)
+<video controls>
+  <source src="https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/comparison_portal.mp4" type="video/mp4">
+</video>
 
 ### Download portal
 
-![](https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/download_portal.mp4)
+<video controls>
+  <source src="https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/download_portal.mp4" type="video/mp4">
+</video>
 
 ### Email service
 
-![](https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/email_service.mp4)
+<video controls>
+  <source src="https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/email_service.mp4" type="video/mp4">
+</video>
 
 ## Local development
 

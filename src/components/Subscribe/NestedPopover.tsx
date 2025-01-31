@@ -60,11 +60,13 @@ export function NestedPopover({ items, onSelectionChange }: NestedPopoverProps) 
 
   // nested menu item click logic: to select the item since is multiple
   const selectNestedOption = (option: IOption, topic: ITopic): void => {
-    setSelectedOptions((prev) =>
-      prev.some((item) => item.report_id === option.report_id)
-        ? prev.filter((item) => item.report_id !== option.report_id)
-        : [...prev, option]
-    );
+    setSelectedOptions((prevOptions) => {
+      const isOptionSelected = prevOptions.find((selectedOption) => selectedOption.country_id === option.country_id);
+      if (isOptionSelected) {
+        return prevOptions.filter((selectedOption) => selectedOption.country_id !== option.country_id);
+      }
+      return [...prevOptions, option];
+    });
     if (selectedTopic && selectedTopic.topic_id !== topic.topic_id) {
       // clear options if the topic is changed
       setSelectedOptions([option]);
@@ -99,7 +101,7 @@ export function NestedPopover({ items, onSelectionChange }: NestedPopoverProps) 
   };
 
   const ifOptionsSelected = (option: IOption): boolean => {
-    return selectedOptions.find((selectedItem) => selectedItem.report_id === option.report_id) !== undefined;
+    return selectedOptions.some((selectedOption) => selectedOption.country_id === option.country_id);
   };
 
   useEffect(() => {
@@ -172,7 +174,7 @@ export function NestedPopover({ items, onSelectionChange }: NestedPopoverProps) 
                       <ul>
                         {item.options?.map((option) => (
                           <li
-                            key={option.report_id}
+                            key={option.country_id}
                             className={clsx(
                               'flex justify-between items-center',
                               ifOptionsSelected(option)

@@ -3,7 +3,6 @@ import L from 'leaflet';
 
 import { CountryFcsData } from '@/domain/entities/country/CountryFcsData.ts';
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
-import { MapOperations } from '@/operations/map/MapOperations';
 import { inactiveCountryOverlayStyling } from '@/styles/MapColors';
 
 class FcsChoroplethOperations {
@@ -41,14 +40,12 @@ class FcsChoroplethOperations {
         if (this.checkIfActive(feature as CountryMapData, fcsData)) {
           pathLayer.setStyle({ fillOpacity: 0.3, fillColor: 'hsl(var(--nextui-countryHover))' });
           document.getElementsByClassName('leaflet-container').item(0)?.classList.add('interactive');
-          MapOperations.attachCountryNameTooltip(feature, layer);
         }
       },
       mouseout: () => {
         if (this.checkIfActive(feature as CountryMapData, fcsData)) {
           pathLayer.setStyle({ fillOpacity: 0 });
           document.getElementsByClassName('leaflet-container').item(0)?.classList.remove('interactive');
-          layer.unbindTooltip();
         }
       },
       keydown: (e) => {

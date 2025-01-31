@@ -2,10 +2,10 @@ import { Skeleton } from '@nextui-org/skeleton';
 import React from 'react';
 
 /**
- * A skeleton for the Select component.
+ * A skeleton for the ComparisonPortal component.
  * @returns {JSX.Element}
  */
-export default function SelectionSkeleton(): JSX.Element {
+export default function ComparisonPortalSkeleton(): JSX.Element {
   return (
     <div className="flex-1 basis-0 min-w-48">
       <div className="group flex flex-col w-full">

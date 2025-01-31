@@ -81,41 +81,12 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 
 Explore the most exciting new or improved features of the new HugerMap here through these showcase videos.
 
-### Hunger data visualized on multiple map and alert types
-
-<video controls>
-  <source src="https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/home_page_new.mp4" type="video/mp4">
-</video>
-
-### Information pages
-
-<video controls>
-  <source src="https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/info_pages.mp4" type="video/mp4">
-</video>
-
-### Chatbot
-
-<video controls>
-  <source src="https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/chatbot_feature.mp4" type="video/mp4">
-</video>
-
-### Comparison portal
-
-<video controls>
-  <source src="https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/comparison_portal.mp4" type="video/mp4">
-</video>
-
-### Download portal
-
-<video controls>
-  <source src="https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/download_portal.mp4" type="video/mp4">
-</video>
-
-### Email service
-
-<video controls>
-  <source src="https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/email_service.mp4" type="video/mp4">
-</video>
+- [Hunger data visualized on multiple map and alert types](https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/home_page_new.mp4)
+- [Information pages](https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/info_pages.mp4)
+- [Chatbot](https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/chatbot_feature.mp4)
+- [Comparison portal](https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/comparison_portal.mp4)
+- [Download portal](https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/download_portal.mp4)
+- [Email service](https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/email_service.mp4)
 
 ## Local development
 

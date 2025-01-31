@@ -6,7 +6,7 @@ import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 import { inactiveCountryOverlayStyling } from '@/styles/MapColors';
 
 class FcsChoroplethOperations {
-  static async handleCountryClick(
+  static handleCountryClick(
     feature: Feature<Geometry, GeoJsonProperties>,
     setSelectedCountryId: (countryId: number) => void
   ) {

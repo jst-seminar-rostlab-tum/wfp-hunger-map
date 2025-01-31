@@ -21,10 +21,7 @@ export default class NutritionChoroplethOperations {
     return nutritionData.body?.find((c) => c.adm0_code === feature.properties.adm0_id) !== undefined;
   }
 
-  private static async handleCountryClick(
-    feature: CountryMapData,
-    setSelectedCountryId: (countryId: number | null) => void
-  ) {
+  private static handleCountryClick(feature: CountryMapData, setSelectedCountryId: (countryId: number | null) => void) {
     setSelectedCountryId(feature.properties?.adm0_id);
   }
 

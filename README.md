@@ -18,7 +18,7 @@ This software is dual-licensed:
 
 - [Contibutors](#contributors-)
 - [Technologies Used](#technologies-used)
-- [Feature list](#feature-list)
+- [Feature highlights](#feature-highlights)
 - [Local development](#local-development)
 - [Deployment](#deployment)
 - [Development guidelines](#development-guidelines)
@@ -77,25 +77,16 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 - [Highcharts](https://www.highcharts.com/), [highcharts-react](https://github.com/highcharts/highcharts-react)
 - [Tanstack Query](https://tanstack.com/query/latest)
 
-## Feature list
+## Feature highlights
 
-Among many others, the application contains the following features:
+Explore the most exciting new or improved features of the new HugerMap here through these showcase videos.
 
-### Hunger data visualized on multiple map and alert types
-
-TODO F-268
-
-### Information pages
-
-TODO F-269
-
-### Chatbot
-
-TODO F-275
-
-### Comparison portal
-
-TODO?
+- [Hunger data visualized on multiple map and alert types](https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/home_page_new.mp4)
+- [Information pages](https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/info_pages.mp4)
+- [Chatbot](https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/chatbot_feature.mp4)
+- [Comparison portal](https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/comparison_portal.mp4)
+- [Download portal](https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/download_portal.mp4)
+- [Email service](https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/email_service.mp4)
 
 ## Local development
 

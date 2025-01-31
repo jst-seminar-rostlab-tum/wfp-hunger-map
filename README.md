@@ -83,7 +83,7 @@ Explore the most exciting new or improved features of the new HugerMap here thro
 
 ### Hunger data visualized on multiple map and alert types
 
-![](https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/home_page_new.mp4)
+https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/home_page_new.mp4
 
 ### Information pages
 

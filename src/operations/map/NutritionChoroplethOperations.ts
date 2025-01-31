@@ -1,9 +1,7 @@
-import { Feature } from 'geojson';
 import L from 'leaflet';
 
 import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 import { CountryNutrition } from '@/domain/entities/country/CountryNutrition.ts';
-import { MapOperations } from '@/operations/map/MapOperations';
 import { inactiveCountryOverlayStyling } from '@/styles/MapColors.ts';
 
 export default class NutritionChoroplethOperations {
@@ -51,7 +49,6 @@ export default class NutritionChoroplethOperations {
           fillOpacity: 0.8,
         });
         document.getElementsByClassName('leaflet-container').item(0)?.classList.add('interactive');
-        MapOperations.attachCountryNameTooltip(feature as Feature, layer);
       }
     });
     pathLayer.on('mouseout', () => {
@@ -60,7 +57,6 @@ export default class NutritionChoroplethOperations {
           fillOpacity: 0.5,
         });
         document.getElementsByClassName('leaflet-container').item(0)?.classList.remove('interactive');
-        layer.unbindTooltip();
       }
     });
   }

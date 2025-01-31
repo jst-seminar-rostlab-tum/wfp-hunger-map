@@ -6,6 +6,12 @@ import CountryHoverPopover from '@/components/CountryHoverPopover/CountryHoverPo
 import { MAP_MAX_ZOOM, REGION_LABEL_SENSITIVITY, SELECTED_COUNTRY_ZOOM_THRESHOLD } from '@/domain/constant/map/Map.ts';
 import { CommonRegionProperties } from '@/domain/entities/common/CommonRegionProperties';
 import { Feature } from '@/domain/entities/common/Feature';
+import { CountryFcsData } from '@/domain/entities/country/CountryFcsData.ts';
+import { CountryMapData, CountryProps } from '@/domain/entities/country/CountryMapData.ts';
+import { CountryNutrition } from '@/domain/entities/country/CountryNutrition.ts';
+import { LayerWithFeature } from '@/domain/entities/map/LayerWithFeature.ts';
+import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations.ts';
+import NutritionChoroplethOperations from '@/operations/map/NutritionChoroplethOperations.ts';
 
 export class MapOperations {
   /**
@@ -16,6 +22,18 @@ export class MapOperations {
     type: 'FeatureCollection',
     features: countryFeatures as GeoJsonFeature<Geometry, GeoJsonProperties>[],
   });
+
+  /**
+   * Creates a 'HTMLDivElement' rendering the given 'countryName' within a 'CountryHoverPopover'.
+   * Needed because leaflet tooltips do not accept React components.
+   * @param countryName The name to be displayed in the popover
+   */
+  static createCountryNameTooltipElement(countryName: string): HTMLDivElement {
+    const tooltipContainer = document.createElement('div');
+    const root = createRoot(tooltipContainer);
+    root.render(<CountryHoverPopover header={countryName} />);
+    return tooltipContainer;
+  }
 
   /**
    * Updates the region labels for example when the user is zooming. Recalculates if the full label or "..." should be displayed.
@@ -79,14 +97,56 @@ export class MapOperations {
   }
 
   /**
-   * Attach a very basic tooltip showing the name of the passed country to the passed layer
-   * @param feature - country feature with the name that has to be shown in the tooltip
-   * @param layer - layer the tooltip is attached to
+   * Handle the tooltip functionality for the country names in the world view
+   * @param geoJsonRef reference to the cloropleth element i.e. the country the tooltip is being attached to
+   * @param map the leaflet map
+   * @param fcsData (Optional) food consumption data - needs to be set when calling from FCS cloropleth
+   * @param nutritionData (Optional) nutrition data - needs to be set when calling from nutrition cloropleth
+   * @param countryMapData (Optional) general data about the country the tooltip is being attached to - needs to be set when calling from nutrition cloropleth
+   * @returns A method destructing the map listeners
    */
-  static attachCountryNameTooltip(feature: GeoJsonFeature<Geometry, GeoJsonProperties>, layer: L.Layer) {
-    const tooltipContainer = document.createElement('div');
-    const root = createRoot(tooltipContainer);
-    root.render(<CountryHoverPopover header={feature?.properties?.adm0_name} />);
-    layer.bindTooltip(tooltipContainer, { className: 'leaflet-tooltip', sticky: true }).openTooltip();
+  static handleCountryTooltip(
+    geoJsonRef: React.MutableRefObject<L.GeoJSON | null>,
+    map: L.Map,
+    fcsData?: Record<string, CountryFcsData>,
+    nutritionData?: CountryNutrition,
+    countryMapData?: FeatureCollection<Geometry, CountryProps>
+  ) {
+    const disableTooltips = () => {
+      geoJsonRef.current?.eachLayer((layer) => {
+        if (layer instanceof L.Path) {
+          const layerElement = layer.getElement();
+          if (layerElement && !layerElement.matches(':hover')) {
+            layer.unbindTooltip();
+          }
+        }
+      });
+    };
+
+    const enableTooltips = () => {
+      geoJsonRef.current?.eachLayer((layer: LayerWithFeature) => {
+        layer.unbindTooltip();
+        const feature = layer.feature as CountryMapData;
+        if (
+          (fcsData && FcsChoroplethOperations.checkIfActive(feature as CountryMapData, fcsData)) ||
+          (nutritionData &&
+            countryMapData &&
+            NutritionChoroplethOperations.checkIfActive(countryMapData.features[0] as CountryMapData, nutritionData))
+        ) {
+          const tooltipContainer = MapOperations.createCountryNameTooltipElement(feature?.properties?.adm0_name);
+          layer.bindTooltip(tooltipContainer, { className: 'leaflet-tooltip', sticky: true });
+        }
+      });
+    };
+
+    enableTooltips();
+
+    map.on('dragstart', disableTooltips);
+    map.on('dragend', enableTooltips);
+
+    return () => {
+      map.off('dragstart', disableTooltips);
+      map.off('dragend', enableTooltips);
+    };
   }
 }

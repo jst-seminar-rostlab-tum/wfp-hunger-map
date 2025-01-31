@@ -1,12 +1,13 @@
 import L from 'leaflet';
 import { useTheme } from 'next-themes';
 import React, { useEffect, useRef } from 'react';
-import { GeoJSON } from 'react-leaflet';
+import { GeoJSON, useMap } from 'react-leaflet';
 
 import { useSelectedCountryId } from '@/domain/contexts/SelectedCountryIdContext';
 import FcsChoroplethProps from '@/domain/props/FcsChoroplethProps';
 import { AccessibilityOperations } from '@/operations/map/AccessibilityOperations';
 import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
+import { MapOperations } from '@/operations/map/MapOperations';
 
 import FscCountryChoropleth from './FcsCountryChoropleth';
 
@@ -28,6 +29,13 @@ export default function FcsChoropleth({
   const geoJsonRef = useRef<L.GeoJSON | null>(null);
   const { selectedCountryId, setSelectedCountryId } = useSelectedCountryId();
   const { theme } = useTheme();
+  const map = useMap();
+
+  // adding the country name as a tooltip to each layer (on hover); the tooltip is not shown if the country is selected
+  useEffect(() => {
+    if (!geoJsonRef.current || !map) return () => {};
+    return MapOperations.handleCountryTooltip(geoJsonRef, map, fcsData);
+  }, [selectedCountryId]);
 
   useEffect(() => {
     const geoJsonLayer = geoJsonRef.current;

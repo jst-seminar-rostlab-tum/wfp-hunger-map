@@ -1,11 +1,11 @@
 import ComparisonAccordionSkeleton from '@/components/ComparisonPortal/ComparisonAccordionSkeleton';
-import SelectionSkeleton from '@/components/ComparisonPortal/CountrySelectSkeleton';
+import ComparisonPortalSkeleton from '@/components/ComparisonPortal/ComparisonPortalSkeleton';
 
 export default function Loading() {
   return (
     <>
       <h1>Comparison Portal</h1>
-      <SelectionSkeleton />
+      <ComparisonPortalSkeleton />
       <ComparisonAccordionSkeleton nItems={5} />
     </>
   );

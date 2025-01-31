@@ -41,7 +41,7 @@ export default function AccordionContainer({
   highlightedTitleWords = [],
   noPadding = false,
 }: AccordionContainerProps) {
-  const isMobile = useMediaQuery('(max-width: 700px)');
+  const isMobile = useMediaQuery('(max-width: 1000px)');
   const { setModalContent, setModalTitle } = useAccordionsModal();
 
   // If 'accordionModalActive' is enabled, the accordions are hidden in a modal on mobile screens,

@@ -43,9 +43,11 @@ export function CollapsedSidebar({ mapDataFetching }: CollapsedSidebarProps): Re
     <div className="absolute top-0 left-0 z-sidebarCollapsed pt-4 pl-4">
       <Card className="h-full">
         <CardHeader className="flex justify-center items-center">
-          <Button isIconOnly variant="light" onClick={toggleSidebar} aria-label="Close sidebar">
-            <SidebarRight size={24} />
-          </Button>
+          <Tooltip text="Open sidebar" placement="right">
+            <Button isIconOnly variant="light" onClick={toggleSidebar} aria-label="Open sidebar">
+              <SidebarRight size={24} />
+            </Button>
+          </Tooltip>
         </CardHeader>
         <CardBody>
           <div className="flex flex-col gap-1">

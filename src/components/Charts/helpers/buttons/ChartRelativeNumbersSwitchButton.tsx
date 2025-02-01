@@ -19,7 +19,7 @@ export default function ChartRelativeNumbersSwitchButton({
 
   return (
     <Tooltip text={`Show ${switchToText} numbers`}>
-      <Button isIconOnly variant="light" size="sm" onClick={() => setShowRelativeNumbers(!showRelativeNumbers)}>
+      <Button isIconOnly variant="light" size="sm" onPress={() => setShowRelativeNumbers(!showRelativeNumbers)}>
         {icon}
       </Button>
     </Tooltip>

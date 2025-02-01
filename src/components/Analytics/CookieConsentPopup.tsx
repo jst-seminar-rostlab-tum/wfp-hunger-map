@@ -47,13 +47,13 @@ export function CookieConsentPopup() {
         collected or shared.
       </p>
       <div className="flex flex-col md:flex-row lg:flex-col xl:flex-row gap-2">
-        <CustomButton size="sm" color="secondary" className="text-content1" onClick={() => setCookieConsent(false)}>
+        <CustomButton size="sm" color="secondary" className="text-content1" onPress={() => setCookieConsent(false)}>
           Decline
         </CustomButton>
         <CustomButton
           size="sm"
           className="-order-1 md:order-2 lg:-order-1 xl:order-2 text-white bg-analyBtn"
-          onClick={() => setCookieConsent(true)}
+          onPress={() => setCookieConsent(true)}
         >
           Allow Analytics
         </CustomButton>

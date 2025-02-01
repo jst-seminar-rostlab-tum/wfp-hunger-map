@@ -27,12 +27,12 @@ export default function BackToGlobalButton() {
 
   return isMobile ? (
     <Tooltip text="Global View" placement="bottom">
-      <Button color="primary" variant="solid" onClick={handleBackButtonClick} isIconOnly>
+      <Button color="primary" variant="solid" onPress={handleBackButtonClick} isIconOnly>
         <Undo />
       </Button>
     </Tooltip>
   ) : (
-    <Button color="primary" variant="solid" startContent={<Undo />} onClick={handleBackButtonClick}>
+    <Button color="primary" variant="solid" startContent={<Undo />} onPress={handleBackButtonClick}>
       Global View
     </Button>
   );

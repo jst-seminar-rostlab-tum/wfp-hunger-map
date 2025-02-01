@@ -81,7 +81,7 @@ export default function CountrySelection({
       </Select>
       <CustomButton
         variant="bordered"
-        onClick={() => setSelectedCountries([])}
+        onPress={() => setSelectedCountries([])}
         isDisabled={selectedCountries === undefined || selectedCountries.length === 0}
         className="flex-1 sm:flex-initial"
       >

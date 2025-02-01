@@ -218,7 +218,7 @@ export default function HungerMapChatbot() {
       {!isOpen && (
         <Tooltip text={TRIGGER_CHAT}>
           <Button
-            onClick={toggleChat}
+            onPress={toggleChat}
             className="relative flex items-center justify-center min-w-12 h-12 px-1 rounded-full bg-content1 hover:bg-content2 shadow-md"
             aria-label="toggle chat"
           >
@@ -251,7 +251,7 @@ export default function HungerMapChatbot() {
                   <Button
                     variant="light"
                     isIconOnly
-                    onClick={() => setIsSidebarOpen((previousValue) => !previousValue)}
+                    onPress={() => setIsSidebarOpen((previousValue) => !previousValue)}
                   >
                     {isSidebarOpen ? <SidebarLeft size={24} /> : <SidebarRight size={24} />}
                   </Button>
@@ -262,13 +262,13 @@ export default function HungerMapChatbot() {
               <div className="flex items-center space-x-2">
                 {!isMobile && (
                   <Tooltip text={isFullScreen ? EXIT_FULL_SCREEN : ENTER_FULL_SCREEN}>
-                    <Button variant="light" isIconOnly onClick={toggleFullScreen}>
+                    <Button variant="light" isIconOnly onPress={toggleFullScreen}>
                       {isFullScreen ? <Minus size={24} /> : <Maximize4 size={24} />}
                     </Button>
                   </Tooltip>
                 )}
                 <Tooltip text="Close Chat">
-                  <Button variant="light" isIconOnly onClick={toggleChat}>
+                  <Button variant="light" isIconOnly onPress={toggleChat}>
                     <CloseSquare size={24} />
                   </Button>
                 </Tooltip>
@@ -297,6 +297,12 @@ export default function HungerMapChatbot() {
                         <Button
                           key={prompt.id}
                           onClick={(event) => handleSubmit(event, prompt.value)}
+                          onKeyDown={(event) => {
+                            if (event.key === 'Enter' || event.key === ' ') {
+                              event.preventDefault();
+                              handleSubmit(event, prompt.value);
+                            }
+                          }}
                           className="truncate w-full mb-3 max-w-[250px] sm:max-w-[400px] border border-solid border-black dark:border-white bg-transparent hover:bg-chatbotDefaultPromptHover dark:hover:bg-chatbotDefaultPromptHover"
                           title={prompt.value}
                         >

@@ -24,7 +24,7 @@ export default function ChatbotSidebar({
     >
       <CardBody className="p-4">
         <Button
-          onClick={() => onStartNewChat()}
+          onPress={() => onStartNewChat()}
           className="bg-transparent w-full h-10 mb-4 flex justify-center items-center gap-2 border-1.5 border-solid border-black dark:border-white text-black dark:text-white hover:bg-chatbotSidebarBtnHover dark:hover:bg-chatbotSidebarBtnHover"
         >
           <AddCircle size={24} />
@@ -34,7 +34,7 @@ export default function ChatbotSidebar({
           {chats.map((chat, index) => (
             <Button
               key={chat.id}
-              onClick={() => onSelectChat(index)}
+              onPress={() => onSelectChat(index)}
               className={clsx(
                 'text-black dark:text-white bg-transparent hover:bg-chatbotSidebarBtnHover dark:hover:bg-chatbotSidebarBtnHover justify-start w-full h-10 mb-3 flex gap-2',
                 currentChatIndex === index ? 'bg-chatbotSidebarBtnHover dark:bg-chatbotSidebarBtnHover' : ''

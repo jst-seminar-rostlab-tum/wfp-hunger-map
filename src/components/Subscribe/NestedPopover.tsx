@@ -118,7 +118,7 @@ export function NestedPopover({ items, onSelectionChange }: NestedPopoverProps) 
           <Button
             variant="bordered"
             className="w-full h-12 hover:bg-blue-100 dark:hover:bg-gray-700 border-gray-200 dark:border-gray-100"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            onPress={() => setIsMenuOpen(!isMenuOpen)}
           >
             <div className="flex flex-row items-center truncate">
               {selectedTopic ? <p>{SELECTED_TOPICS}</p> : <p>{CLICK_TO_SELECT}</p>}

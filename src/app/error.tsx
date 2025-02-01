@@ -21,7 +21,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
           <p>Please try again or go back to the Home page.</p>
         </section>
         <div className="flex flex-row gap-2 mt-4">
-          <CustomButton variant="solid" size="lg" onClick={() => reset()}>
+          <CustomButton variant="solid" size="lg" onPress={() => reset()}>
             Try again
           </CustomButton>
           <a href="/">

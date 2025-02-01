@@ -8,6 +8,7 @@ import FcsChoroplethProps from '@/domain/props/FcsChoroplethProps';
 import { AccessibilityOperations } from '@/operations/map/AccessibilityOperations';
 import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
 import { MapOperations } from '@/operations/map/MapOperations';
+import { isIOSTouchDevice } from '@/utils/devices';
 
 import FscCountryChoropleth from './FcsCountryChoropleth';
 
@@ -33,7 +34,7 @@ export default function FcsChoropleth({
 
   // adding the country name as a tooltip to each layer (on hover); the tooltip is not shown if the country is selected
   useEffect(() => {
-    if (!geoJsonRef.current || !map) return () => {};
+    if (!geoJsonRef.current || !map || isIOSTouchDevice()) return () => {};
     return MapOperations.handleCountryTooltip(geoJsonRef, map, fcsData);
   }, [selectedCountryId]);
 

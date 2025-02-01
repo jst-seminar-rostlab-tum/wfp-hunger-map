@@ -7,6 +7,7 @@ import { CountryIpcData } from '@/domain/entities/country/CountryIpcData';
 import { CountryMapData, CountryMapDataWrapper } from '@/domain/entities/country/CountryMapData';
 import { IpcPhases } from '@/domain/enums/IpcPhases';
 import { inactiveCountryOverlayStyling } from '@/styles/MapColors.ts';
+import { isIOSTouchDevice } from '@/utils/devices';
 
 export class IpcChoroplethOperations {
   /**
@@ -158,12 +159,21 @@ export class IpcChoroplethOperations {
     const pathLayer = layer as L.Path;
     const originalStyle = { ...pathLayer.options };
 
-    layer.on({
+    const events: L.LeafletEventHandlerFnMap = {
       click: () => {
         setSelectedCountryId(feature?.properties?.adm0_id);
         document.getElementsByClassName('leaflet-container').item(0)?.classList.remove('interactive');
       },
-      mouseover: () => {
+      keydown: (e) => {
+        if (e.originalEvent.key === 'Enter' || e.originalEvent.key === ' ') {
+          setSelectedCountryId(feature?.properties?.adm0_id);
+          document.getElementsByClassName('leaflet-container').item(0)?.classList.remove('interactive');
+        }
+      },
+    };
+
+    if (!isIOSTouchDevice()) {
+      events.mouseover = () => {
         if (feature.properties?.adm0_id !== selectedCountryId) {
           pathLayer.setStyle({ ...originalStyle, fillOpacity: 0.6 });
         } else {
@@ -176,21 +186,17 @@ export class IpcChoroplethOperations {
         document.getElementsByClassName('leaflet-container').item(0)?.classList.add('interactive');
 
         this.createTooltip(feature, layer, ipcData);
-      },
+      };
 
-      mouseout: () => {
+      events.mouseout = () => {
         // Restore the original layer style
         pathLayer.setStyle(originalStyle);
         document.getElementsByClassName('leaflet-container').item(0)?.classList.remove('interactive');
         pathLayer.unbindTooltip();
-      },
-      keydown: (e) => {
-        if (e.originalEvent.key === 'Enter' || e.originalEvent.key === ' ') {
-          setSelectedCountryId(feature?.properties?.adm0_id);
-          document.getElementsByClassName('leaflet-container').item(0)?.classList.remove('interactive');
-        }
-      },
-    });
+      };
+    }
+
+    layer.on(events);
   }
 
   /**

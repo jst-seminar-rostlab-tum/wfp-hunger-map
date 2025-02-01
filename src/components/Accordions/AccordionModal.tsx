@@ -38,7 +38,7 @@ export default function AccordionModal() {
           <Button
             color="primary"
             variant="solid"
-            className="absolute z-accordionsModalButton bottom-10 right-10 rounded-full text-white"
+            className="absolute z-accordionsModalButton bottom-10 right-28 rounded-full text-white"
             isIconOnly
             onPress={onAccordionModalOpen}
           >

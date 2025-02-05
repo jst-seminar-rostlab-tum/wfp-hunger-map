@@ -155,4 +155,59 @@ export class FcsFoodSecurityOperations {
       },
     ];
   }
+
+  static createMockData(countryData?: CountryData): CountryForecastData {
+    const mockForecastData: CountryForecastData = {
+      forecastedFcsGraph: [],
+      forecastedRcsiGraph: [],
+    };
+    if (!countryData) return mockForecastData;
+    const date = new Date(countryData.fcsGraph[countryData.fcsGraph.length - 1].x);
+    let { fcs } = countryData.fcsGraph[countryData.fcsGraph.length - 1];
+    let { rcsi } = countryData.rcsiGraph[countryData.rcsiGraph.length - 1];
+    for (let i = 0; i < 90; i += 1) {
+      const rand = Math.random();
+      let newFcs;
+      if (rand < 0.25) {
+        newFcs = fcs * 1.002;
+      } else if (rand < 0.5) {
+        newFcs = fcs * 1.005;
+      } else if (rand < 0.75) {
+        newFcs = fcs * 0.999;
+      } else {
+        newFcs = fcs * 0.997;
+      }
+      mockForecastData.forecastedFcsGraph.push({
+        fcs: newFcs,
+        fcsHigh: newFcs,
+        fcsLow: newFcs,
+        x: date.toISOString().split('T')[0],
+      });
+      fcs = newFcs;
+
+      if (rcsi) {
+        const randRcsi = Math.random();
+        let newRcsi;
+        if (randRcsi < 0.25) {
+          newRcsi = rcsi * 1.002;
+        } else if (randRcsi < 0.5) {
+          newRcsi = rcsi * 1.005;
+        } else if (randRcsi < 0.75) {
+          newRcsi = rcsi * 0.999;
+        } else {
+          newRcsi = rcsi * 0.997;
+        }
+        mockForecastData.forecastedRcsiGraph.push({
+          rcsi: newRcsi,
+          rcsiHigh: newRcsi,
+          rcsiLow: newRcsi,
+          x: date.toISOString().split('T')[0],
+        });
+        rcsi = newRcsi;
+      }
+
+      date.setDate(date.getDate() + 1);
+    }
+    return mockForecastData;
+  }
 }

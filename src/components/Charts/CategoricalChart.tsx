@@ -68,6 +68,7 @@ export function CategoricalChart({
   const [disablePieChartSwitchForRelativeData, setDisablePieChartSwitchForRelativeData] = useState(
     disablePieChartSwitch || false
   );
+
   useEffect(() => {
     if (showRelativeNumbers) {
       setShowPieChart(false);

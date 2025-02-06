@@ -4,8 +4,9 @@ import Highcharts, { TooltipFormatterContextObject } from 'highcharts';
 import highchartsMore from 'highcharts/highcharts-more';
 import patternFill from 'highcharts/modules/pattern-fill';
 
-import { CategoricalChartData } from '@/domain/entities/charts/CategoricalChartData.ts';
-import { CategoricalChartSorting } from '@/domain/enums/CategoricalChartSorting.ts';
+import { CategoricalChartData } from '@/domain/entities/charts/CategoricalChartData';
+import { CategoricalChartSorting } from '@/domain/enums/CategoricalChartSorting';
+import ChartColorsOperations from '@/operations/charts/ChartColorsOperations';
 import { getTailwindColor } from '@/utils/tailwind-util.ts';
 
 // initialize the exporting module
@@ -19,19 +20,6 @@ if (typeof Highcharts === 'object') {
  * the chart `Highcharts.Options` object required by the Highcharts component.
  */
 export default class CategoricalChartOperations {
-  /**
-   * The first four bar colors are fixed; if more than four vars are rendered,
-   * the default Highcharts colors will be used.
-   */
-  private static getCategoriesColorList() {
-    return [
-      getTailwindColor('--nextui-clusterRed'),
-      getTailwindColor('--nextui-clusterGreen'),
-      getTailwindColor('--nextui-clusterBlue'),
-      getTailwindColor('--nextui-clusterOrange'),
-    ];
-  }
-
   /**
    * Tooltip formatter function for `Options.tooltip.formatter` usage only.
    */
@@ -78,23 +66,16 @@ export default class CategoricalChartOperations {
     // sort data
     CategoricalChartOperations.sortData(data, sorting, relativeNumbers);
 
+    // get color map
+    const colorMap = ChartColorsOperations.getColorMapperForCategoricalData(data);
+
     // build highchart options
     const seriesData = [];
     const categories = [];
     const seriesRangeData = [];
-    const defaultCategoriesColors = CategoricalChartOperations.getCategoriesColorList();
 
     for (let i = 0; i < data.categories.length; i += 1) {
       const categoryData = data.categories[i];
-
-      // the first four category colors are fixed; however, they can also be overridden by the `color` property;
-      // if more than four lines are rendered the default Highcharts colors will be used (`categoryColor` stays undefined)
-      let categoryColor;
-      if (categoryData.color) {
-        categoryColor = categoryData.color;
-      } else {
-        categoryColor = defaultCategoriesColors.pop();
-      }
 
       // collect category names
       categories.push(categoryData.name);
@@ -107,7 +88,7 @@ export default class CategoricalChartOperations {
       seriesData.push({
         name: categoryData.name,
         y: relativeNumbers ? categoryData.dataPoint.yRelative : categoryData.dataPoint.y,
-        color: categoryColor,
+        color: colorMap.get(categoryData.name),
         opacity: showRange ? 0.6 : 1,
       });
 
@@ -117,7 +98,7 @@ export default class CategoricalChartOperations {
           x: i,
           low: relativeNumbers ? categoryData.dataPoint.yRangeMinRelative : categoryData.dataPoint.yRangeMin,
           high: relativeNumbers ? categoryData.dataPoint.yRangeMaxRelative : categoryData.dataPoint.yRangeMax,
-          color: categoryColor,
+          color: colorMap.get(categoryData.name),
         });
       }
     }

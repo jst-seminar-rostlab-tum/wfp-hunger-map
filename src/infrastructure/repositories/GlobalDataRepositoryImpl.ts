@@ -51,8 +51,11 @@ export default class GlobalDataRepositoryImpl implements GlobalDataRepository {
         next: { revalidate: 3600 * 12 },
       }),
     ]);
-    const [data1, data2]: CountryMapDataWrapper[] = await Promise.all([response1.json(), response2.json()]);
-    return { type: data1.type, features: [...data1.features, ...data2.features] };
+    const [data1, data2]: ResponseWrapper<CountryMapDataWrapper>[] = await Promise.all([
+      response1.json(),
+      response2.json(),
+    ]);
+    return { type: data1.body.type, features: [...data1.body.features, ...data2.body.features] };
   }
 
   async getFcsData(): Promise<GlobalFcsData> {

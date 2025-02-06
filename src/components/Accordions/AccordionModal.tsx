@@ -38,9 +38,9 @@ export default function AccordionModal() {
           <Button
             color="primary"
             variant="solid"
-            className="absolute z-accordionsModalButton bottom-10 right-10 rounded-full text-white"
+            className="absolute z-accordionsModalButton bottom-10 right-28 rounded-full text-white"
             isIconOnly
-            onClick={onAccordionModalOpen}
+            onPress={onAccordionModalOpen}
           >
             <ArrowUp2 className="h-5 w-5" />
           </Button>
@@ -51,7 +51,7 @@ export default function AccordionModal() {
           variant="solid"
           className="absolute z-accordionsModalButton bottom-10 right-28 text-white"
           startContent={<ArrowUp2 className="h-5 w-5" />}
-          onClick={onAccordionModalOpen}
+          onPress={onAccordionModalOpen}
         >
           Insights
         </Button>

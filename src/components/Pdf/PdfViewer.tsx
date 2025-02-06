@@ -114,7 +114,7 @@ export default function PdfViewer({
             <Button
               size="sm"
               color="primary"
-              onClick={() => {
+              onPress={() => {
                 onAskAIButtonClick?.({
                   type: reportContext.type,
                   value: reportContext.value,
@@ -136,13 +136,13 @@ export default function PdfViewer({
               color="secondary"
               disabledKeys={PdfViewerOperations.getDisabledKeys(onDownloadPdf, onDownloadJson, onDownloadCsv)}
             >
-              <DropdownItem key="pdf" onClick={onDownloadPdf}>
+              <DropdownItem key="pdf" onPress={onDownloadPdf}>
                 PDF
               </DropdownItem>
-              <DropdownItem key="json" onClick={onDownloadJson}>
+              <DropdownItem key="json" onPress={onDownloadJson}>
                 JSON
               </DropdownItem>
-              <DropdownItem key="csv" onClick={onDownloadCsv}>
+              <DropdownItem key="csv" onPress={onDownloadCsv}>
                 CSV
               </DropdownItem>
             </DropdownMenu>

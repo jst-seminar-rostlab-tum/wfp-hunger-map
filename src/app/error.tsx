@@ -24,10 +24,10 @@ export default function Error({ error }: { error: Error & { digest?: string } })
           <p>Please try again or go back to the Home page.</p>
         </section>
         <div className="flex flex-row gap-2 mt-4">
-          <CustomButton variant="solid" size="lg" onClick={() => router.back()}>
+          <CustomButton variant="solid" size="lg" onPress={() => router.back()}>
             Go Back
           </CustomButton>
-          <CustomButton variant="solid" size="lg" onClick={() => window.location.reload()}>
+          <CustomButton variant="solid" size="lg" onPress={() => window.location.reload()}>
             Reload Page
           </CustomButton>
           <a href="/">

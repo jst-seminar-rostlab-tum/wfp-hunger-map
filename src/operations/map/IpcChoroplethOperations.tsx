@@ -184,6 +184,12 @@ export class IpcChoroplethOperations {
         document.getElementsByClassName('leaflet-container').item(0)?.classList.remove('interactive');
         pathLayer.unbindTooltip();
       },
+      keydown: (e) => {
+        if (e.originalEvent.key === 'Enter' || e.originalEvent.key === ' ') {
+          setSelectedCountryId(feature?.properties?.adm0_id);
+          document.getElementsByClassName('leaflet-container').item(0)?.classList.remove('interactive');
+        }
+      },
     });
   }
 

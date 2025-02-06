@@ -25,10 +25,10 @@ export default async function Home() {
     <>
       <Sidebar countryMapData={countryMapData} fcsData={fcsData} />
       <AlertsMenuWrapper />
-      <Chatbot />
-      <MapLoader countries={countryMapData} fcsData={fcsData} disputedAreas={disputedAreas} alertData={alertData} />
       <HungerAlertLoader countryMapData={countryMapData} countryFcsData={fcsData} />
+      <Chatbot />
       <MapLegendLoader />
+      <MapLoader countries={countryMapData} fcsData={fcsData} disputedAreas={disputedAreas} alertData={alertData} />
       <AccordionModal />
     </>
   );

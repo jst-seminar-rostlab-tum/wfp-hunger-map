@@ -132,7 +132,7 @@ export function ChartContainer({
               // button to trigger the full screen modal; rendered if `disableExpandable` is not selected
               !disableExpandable && (
                 <Tooltip text="Enlarge Chart">
-                  <Button isIconOnly variant="light" size="sm" onClick={onOpen}>
+                  <Button isIconOnly variant="light" size="sm" onPress={onOpen}>
                     <Maximize4 className={small ? 'h-3 w-3' : 'h-4 w-4'} />
                   </Button>
                 </Tooltip>

@@ -36,31 +36,38 @@ export function ThemeSwitch({ isIconOnly = false }: ThemeSwitchProps): React.JSX
 
   if (!mounted)
     return (
-      <div className="flex items-center justify-between gap-4 w-full ml-1">
-        {!isIconOnly && <small>Theme</small>}
-        <Skeleton aria-hidden="true" className="rounded-full  w-14 h-7" />
+      <div className="flex items-center justify-between gap-4 w-full max-w-full" aria-hidden="true">
+        {!isIconOnly && <small className="pt-0.5">Theme</small>}
+        <Skeleton aria-hidden="true" className="rounded-full w-12 h-7" />
       </div>
     );
 
   return (
-    <div className="flex items-center justify-between gap-4 w-full ml-1">
-      {!isIconOnly && <small>Theme</small>}
-      <Switch
-        aria-label="theme-switch"
-        classNames={{
-          wrapper: ['bg-yellow-200', 'group-data-[selected=true]:bg-primary'],
-          thumb: ['bg-yellow-400', 'group-data-[selected=true]:bg-black'],
-        }}
-        isSelected={theme === 'dark'}
-        onChange={handleThemeChange}
-        thumbIcon={
-          theme === 'dark' ? (
-            <Moon size={16} variant="Bold" color="white" />
-          ) : (
-            <Sun1 size={16} variant="Bold" color="white" />
-          )
+    <Switch
+      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+      classNames={{
+        base: 'flex items-center gap-4 w-full max-w-full justify-between',
+        wrapper: 'order-2 bg-yellow-200 group-data-[selected=true]:bg-primary',
+        thumb: ['bg-yellow-400', 'group-data-[selected=true]:bg-black'],
+        label: 'order-1 text-tiny ms-0',
+      }}
+      isSelected={theme === 'dark'}
+      onChange={handleThemeChange}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleThemeChange();
         }
-      />
-    </div>
+      }}
+      thumbIcon={
+        theme === 'dark' ? (
+          <Moon size={16} variant="Bold" color="white" aria-hidden="true" />
+        ) : (
+          <Sun1 size={16} variant="Bold" color="white" aria-hidden="true" />
+        )
+      }
+    >
+      {!isIconOnly && 'Theme'}
+    </Switch>
   );
 }

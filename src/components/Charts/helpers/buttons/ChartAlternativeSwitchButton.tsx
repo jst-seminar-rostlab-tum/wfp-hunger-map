@@ -27,7 +27,7 @@ export default function ChartAlternativeSwitchButton({
 
   return (
     <Tooltip text={`Switch to ${chartSwitchTitle} Chart`}>
-      <Button isIconOnly variant="light" size="sm" onClick={() => setShowAlternativeChart(!showAlternativeChart)}>
+      <Button isIconOnly variant="light" size="sm" onPress={() => setShowAlternativeChart(!showAlternativeChart)}>
         {chartSwitchIcon}
       </Button>
     </Tooltip>

@@ -14,15 +14,17 @@ export function UserRoleSwitch() {
   };
 
   return process.env.NEXT_PUBLIC_FORECASTS_ENABLED === 'true' ? (
-    <div className="flex items-center justify-between gap-4 w-full ml-1">
-      <small>Admin mode</small>
-      <Switch
-        classNames={{
-          wrapper: ['bg-gray-200 dark:bg-gray-400'],
-        }}
-        isSelected={userRole === UserRole.ADMIN}
-        onValueChange={onSwitchChange}
-      />
-    </div>
+    <Switch
+      aria-label={`Switch to ${userRole === UserRole.ADMIN ? 'restricted' : 'admin'} mode`}
+      classNames={{
+        base: 'flex items-center gap-4 w-full max-w-full justify-between',
+        wrapper: 'order-2 bg-gray-200 dark:bg-gray-400',
+        label: 'order-1 text-tiny ms-0',
+      }}
+      isSelected={userRole === UserRole.ADMIN}
+      onValueChange={onSwitchChange}
+    >
+      Admin mode
+    </Switch>
   ) : null;
 }

@@ -40,26 +40,39 @@ export function CollapsedSidebar({ mapDataFetching }: CollapsedSidebarProps): Re
   };
 
   return (
-    <div className="absolute top-0 left-0 z-sidebarCollapsed pt-4 pl-4">
+    <div
+      className="absolute top-0 left-0 z-sidebarCollapsed pt-4 pl-4"
+      role="complementary"
+      aria-label="Global insights map controls - collapsed sidebar view"
+    >
       <Card className="h-full">
         <CardHeader className="flex justify-center items-center">
           <Tooltip text="Open sidebar" placement="right">
-            <Button isIconOnly variant="light" onClick={toggleSidebar} aria-label="Open sidebar">
-              <SidebarRight size={24} />
+            <Button
+              isIconOnly
+              variant="light"
+              onPress={toggleSidebar}
+              aria-label="Expand sidebar map controls and navigation"
+            >
+              <SidebarRight aria-hidden="true" focusable="false" size={24} />
             </Button>
           </Tooltip>
         </CardHeader>
         <CardBody>
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1" role="radiogroup" aria-label="Global insights map type selection">
             {SidebarOperations.getSidebarMapTypes().map((item) => (
               <Tooltip key={item.key} text={item.label} placement="right">
                 <Button
                   isIconOnly
                   variant={selectedMapType === item.key ? undefined : 'light'}
                   className={selectedMapType === item.key ? 'bg-primary' : undefined}
-                  onClick={() => onMapTypeSelect(item.key)}
+                  onPress={() => onMapTypeSelect(item.key)}
+                  role="radio"
+                  aria-label={`Show ${item.label} global insight map`}
+                  aria-busy={mapDataFetching[item.key]}
+                  aria-checked={selectedMapType === item.key}
                 >
-                  <div className="flex items-center justify-center relative">
+                  <div className="flex items-center justify-center relative" aria-hidden="true">
                     <NextImage unoptimized loading="eager" src={item.icon} alt={item.label} width={24} height={24} />
                     {mapDataFetching[item.key] && <Spinner className="absolute" color="white" />}
                   </div>

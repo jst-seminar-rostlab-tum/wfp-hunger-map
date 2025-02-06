@@ -14,6 +14,7 @@ import { ContinuousChartData } from '@/domain/entities/charts/ContinuousChartDat
 import { CurrencyExchangeGraph } from '@/domain/entities/charts/CurrencyExchangeGraph.ts';
 import { InflationGraphs } from '@/domain/entities/charts/InflationGraphs.ts';
 import { ContinuousChartDataType } from '@/domain/enums/ContinuousChartDataType.ts';
+import ChartColorsOperations from '@/operations/charts/ChartColorsOperations';
 import { getTailwindColor } from '@/utils/tailwind-util.ts';
 
 // initialize the exporting module
@@ -34,19 +35,6 @@ export default class ContinuousChartOperations {
    */
   private static getPredictionsDashStyles(): DashStyleValue[] {
     return ['ShortDashDotDot', 'ShortDash', 'LongDashDotDot', 'LongDash', 'DashDot', 'Dot', 'Dash'];
-  }
-
-  /**
-   * The first four line colors are fixed; if more than four lines are rendered,
-   * the default Highcharts colors will be used.
-   */
-  private static getLineColorList() {
-    return [
-      getTailwindColor('--nextui-clusterRed'),
-      getTailwindColor('--nextui-clusterGreen'),
-      getTailwindColor('--nextui-clusterBlue'),
-      getTailwindColor('--nextui-clusterOrange'),
-    ];
   }
 
   /**
@@ -184,6 +172,9 @@ export default class ContinuousChartOperations {
     xAxisSelectedMaxIdx?: number,
     barChart?: boolean
   ): Highcharts.Options | undefined {
+    // get color map
+    const colorMap = ChartColorsOperations.getColorMapperForContinuousData(data);
+
     // get selected x-axis range min and max values
     const xAxisDistinctValues = ContinuousChartOperations.getDistinctXAxisValues(data);
     const xAxisSelectedMin = xAxisSelectedMinIdx !== undefined ? xAxisDistinctValues[xAxisSelectedMinIdx] : undefined;
@@ -191,23 +182,10 @@ export default class ContinuousChartOperations {
 
     // parsing all given data series
     const series: SeriesOptionsType[] = [];
-    const defaultLineColors = ContinuousChartOperations.getLineColorList();
     const defaultPredictionsDashStyles = ContinuousChartOperations.getPredictionsDashStyles();
     let atLeastOneSeriesAvailable = false;
     for (let i = 0; i < data.lines.length; i += 1) {
       const lineData = data.lines[i];
-
-      // the first four line colors are fixed; however, they can also be overridden by the `color` property;
-      // if `prediction` is set, the standard predictions color is used
-      // if more than four lines are rendered the default Highcharts colors will be used (`categoryColor` stays undefined)
-      let categoryColor;
-      if (lineData.color) {
-        categoryColor = lineData.color;
-      } else if (lineData.prediction) {
-        categoryColor = getTailwindColor('--nextui-chartForecast');
-      } else {
-        categoryColor = defaultLineColors.pop();
-      }
 
       // select dash style
       let categoryDashStyle: DashStyleValue = 'Solid';
@@ -242,7 +220,7 @@ export default class ContinuousChartOperations {
             lineData.name,
             categoryData,
             categoryDashStyle,
-            categoryColor,
+            colorMap.get(lineData.name),
             lineData.showRange
           )
         );
@@ -252,7 +230,7 @@ export default class ContinuousChartOperations {
           type: 'line',
           name: lineData.name,
           data: categoryData,
-          color: categoryColor,
+          color: colorMap.get(lineData.name),
           dashStyle: categoryDashStyle,
         });
       }
@@ -283,7 +261,7 @@ export default class ContinuousChartOperations {
             type: 'errorbar',
             data: areaSeriesData,
             linkedTo: ':previous',
-            color: categoryColor,
+            color: colorMap.get(lineData.name),
             dashStyle: 'Solid',
           });
         } else {
@@ -292,7 +270,7 @@ export default class ContinuousChartOperations {
             name: `${lineData.name} - range`,
             type: 'arearange',
             data: areaSeriesData,
-            color: categoryColor,
+            color: colorMap.get(lineData.name),
             linkedTo: ':previous',
             dashStyle: lineData.dashStyle,
           });
@@ -377,42 +355,42 @@ export default class ContinuousChartOperations {
       series,
       plotOptions: {
         line: {
-          animation: true,
+          animation: false,
           marker: {
             enabled: false,
             radius: 1,
-            animation: true,
+            animation: false,
             symbol: 'circle',
           },
         },
         spline: {
-          animation: true,
+          animation: false,
           marker: {
             enabled: false,
             radius: 1,
-            animation: true,
+            animation: false,
             symbol: 'circle',
           },
         },
         arearange: {
-          animation: true,
+          animation: false,
           fillOpacity: 0.2,
           lineWidth: 0,
           marker: {
             enabled: false,
             radius: 1,
-            animation: true,
+            animation: false,
             symbol: 'diamond',
           },
         },
         column: {
-          animation: true,
+          animation: false,
           grouping: true,
           shadow: false,
           borderWidth: 1,
         },
         errorbar: {
-          animation: true,
+          animation: false,
           whiskerLength: '50%',
           lineWidth: 1.5,
           color: 'black',

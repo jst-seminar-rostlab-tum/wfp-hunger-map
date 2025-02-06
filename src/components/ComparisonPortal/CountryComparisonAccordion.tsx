@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import ComparisonAccordionSkeleton from '@/components/ComparisonPortal/ComparisonAccordionSkeleton';
 import { useSnackbar } from '@/domain/contexts/SnackbarContext';
@@ -58,6 +58,10 @@ export default function CountryComparisonAccordion({
     () => CountryComparisonOperations.getFilteredCountryData(countryDataQuery, countryIso3DataQuery),
     [countryDataQuery, countryIso3DataQuery]
   );
+
+  useEffect(() => {
+    countryDataQuery.forEach((query) => query.refetch());
+  }, [selectedCountries]);
 
   const accordionItems = useMemo(() => {
     if (!selectedCountries) return undefined;

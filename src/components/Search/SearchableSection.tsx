@@ -27,12 +27,6 @@ function SearchableSection({
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
-    if (Math.random() > 0.7) {
-      throw new Error('Random error');
-    }
-  }, []);
-
-  useEffect(() => {
     if (accordionItems) {
       setFilteredAccordionItems(filterSearchableItems<SearchableAccordionItemProps>(accordionItems, searchWords));
     }

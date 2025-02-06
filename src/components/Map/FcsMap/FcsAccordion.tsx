@@ -28,7 +28,9 @@ export default function FcsAccordion({ countryName, countryId, countryCode }: Fc
   const { data: countryIso3Data, isLoading: iso3DataLoading } = useCountryIso3DataQuery(countryCode);
   const foodSecurityAccordionItems = FcsFoodSecurityOperations.getFcsFoodSecurityAccordionItems(
     countryData,
-    isAdmin ? /* countryForecastData */ FcsFoodSecurityOperations.createMockData(countryData) : undefined,
+    isAdmin
+      ? /* countryForecastData */ FcsFoodSecurityOperations.createMockData(countryData, countryId !== 141) // declining predictions for Lebanon
+      : undefined,
     countryIso3Data
   );
   const macroEconomicAccordionItems = FcsMacroEconomicOperations.getMacroEconomicAccordionItems(

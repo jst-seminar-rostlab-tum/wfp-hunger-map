@@ -1,11 +1,14 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 import { CustomButton } from '@/components/Buttons/CustomButton';
 import { Topbar } from '@/components/Topbar/Topbar';
 
-export default function Error({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
+export default function Error({ error }: { error: Error & { digest?: string } }) {
+  const router = useRouter();
+
   useEffect(() => {
     // Log the error to an error reporting service
     /* eslint-disable no-console */
@@ -21,8 +24,11 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
           <p>Please try again or go back to the Home page.</p>
         </section>
         <div className="flex flex-row gap-2 mt-4">
-          <CustomButton variant="solid" size="lg" onPress={() => reset()}>
-            Try again
+          <CustomButton variant="solid" size="lg" onPress={() => router.back()}>
+            Go Back
+          </CustomButton>
+          <CustomButton variant="solid" size="lg" onPress={() => window.location.reload()}>
+            Reload Page
           </CustomButton>
           <a href="/">
             <CustomButton variant="solid" size="lg">

@@ -355,42 +355,42 @@ export default class ContinuousChartOperations {
       series,
       plotOptions: {
         line: {
-          animation: true,
+          animation: false,
           marker: {
             enabled: false,
             radius: 1,
-            animation: true,
+            animation: false,
             symbol: 'circle',
           },
         },
         spline: {
-          animation: true,
+          animation: false,
           marker: {
             enabled: false,
             radius: 1,
-            animation: true,
+            animation: false,
             symbol: 'circle',
           },
         },
         arearange: {
-          animation: true,
+          animation: false,
           fillOpacity: 0.2,
           lineWidth: 0,
           marker: {
             enabled: false,
             radius: 1,
-            animation: true,
+            animation: false,
             symbol: 'diamond',
           },
         },
         column: {
-          animation: true,
+          animation: false,
           grouping: true,
           shadow: false,
           borderWidth: 1,
         },
         errorbar: {
-          animation: true,
+          animation: false,
           whiskerLength: '50%',
           lineWidth: 1.5,
           color: 'black',

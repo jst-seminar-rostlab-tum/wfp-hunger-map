@@ -186,20 +186,21 @@ export default class CategoricalChartOperations {
       ],
       plotOptions: {
         column: {
-          animation: true,
+          animation: false,
           grouping: true,
           shadow: false,
           borderWidth: 0,
           colorByPoint: true,
         },
         errorbar: {
+          animation: false,
           stemWidth: 1.5,
           whiskerLength: '30%',
           whiskerWidth: 1.5,
           colorByPoint: true, // use different colors for each bar
         },
         pie: {
-          animation: true,
+          animation: false,
           allowPointSelect: false,
           cursor: 'default',
           innerSize: '60%',

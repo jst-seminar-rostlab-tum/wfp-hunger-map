@@ -57,7 +57,7 @@ export function ReadMore({
           <Button
             variant="light"
             size="sm"
-            onClick={() => setIsExpanded(!isExpanded)}
+            onPress={() => setIsExpanded(!isExpanded)}
             endContent={isExpanded ? <ArrowUp2 size={16} /> : <ArrowDown2 size={16} />}
             aria-label={isExpanded ? collapseButtonText : expandButtonText}
           >

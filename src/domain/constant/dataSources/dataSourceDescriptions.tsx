@@ -234,10 +234,8 @@ export const nutritionDescriptions = {
         <ul>
           <li>
             <b>Stunting:</b> Height is lower by &gt; 2{' '}
-            <StyledLink href="https://en.wikipedia.org/wiki/Standard_deviation" className="text-sm">
-              standard deviations
-            </StyledLink>{' '}
-            from the median height for age of reference population
+            <StyledLink href="https://en.wikipedia.org/wiki/Standard_deviation">standard deviations</StyledLink> from
+            the median height for age of reference population
           </li>
           <li>
             <b>Severe stunting:</b> Height is lower by &gt; 3 standard deviations from the median height for age of
@@ -255,16 +253,17 @@ export const nutritionDescriptions = {
     legendTitle: 'Risk of Inadequate Micronutrient Intake',
     summary: (
       <span>
-        The <Abbreviation abbreviation="MIMI" /> project is modelling and mapping the risk of inadequate micronutrient
-        intake to inform decision making in the short-medium term.
+        The MIMI project is modelling and mapping the risk of inadequate micronutrient intake to inform decision making
+        in the short-medium term.
       </span>
     ),
     description: (
       <>
         <p>
-          MIMI is helping to close gaps in the nutrition data landscape by applying novel approaches to model and map
-          the risk of inadequate micronutrient intake and potential contribution from fortification scenarios, to inform
-          decision making and advocacy for fortification and other micronutrient programmes in the short-medium term.
+          <Abbreviation abbreviation="MIMI" /> is helping to close gaps in the nutrition data landscape by applying
+          novel approaches to model and map the risk of inadequate micronutrient intake and potential contribution from
+          fortification scenarios, to inform decision making and advocacy for fortification and other micronutrient
+          programmes in the short-medium term.
         </p>
         <p>
           <b>Key components of the current MIMI project:</b>

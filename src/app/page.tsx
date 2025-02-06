@@ -26,9 +26,9 @@ export default async function Home() {
       <Sidebar countryMapData={countryMapData} fcsData={fcsData} />
       <AlertsMenuWrapper />
       <Chatbot />
-      <MapLoader countries={countryMapData} fcsData={fcsData} disputedAreas={disputedAreas} alertData={alertData} />
       <HungerAlertLoader countryFcsData={fcsData} />
       <MapLegendLoader />
+      <MapLoader countries={countryMapData} fcsData={fcsData} disputedAreas={disputedAreas} alertData={alertData} />
       <AccordionModal />
     </>
   );

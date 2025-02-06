@@ -7,12 +7,18 @@ export interface IMessage {
   dataSources?: string[];
 }
 
+export interface IReportContext {
+  type: 'country' | 'year_in_review';
+  value: string;
+  selectionText?: string;
+}
+
 export interface IChat {
   id: string;
   title: string;
   reports_country_name?: string;
-  isReportStarter?: boolean;
   messages: IMessage[];
   isTyping: boolean;
   timestamp: number;
+  reportContext?: IReportContext;
 }

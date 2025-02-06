@@ -177,8 +177,11 @@ export const useSearchQuery = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [searchQuery, setSearchQuery] = useState('');
+  // The query in real-time (should be equal to what's in the search bar)
+  const [searchQuery, setSearchQuery] = useState(searchParams.get(PARAM_NAME) ?? '');
+  // The debounced query (should be equal to what's in the query parameter)
   const debouncedSearch = useDebounce(searchQuery, DEBOUNCE_MS);
+  // True if the last update of the search query came from a key press (not from a URL change)
   const [recentUserInput, setRecentUserInput] = useState(false);
 
   // get state values from query params (on browser navigation)
@@ -188,11 +191,13 @@ export const useSearchQuery = () => {
     else setSearchQuery(searchParams.get(PARAM_NAME) ?? '');
   }, [searchParams]);
 
-  // set query params from debounced state (on search input change)
+  // set query params from debounced state
   useEffect(() => {
-    router.push(`${pathname}?${PARAM_NAME}=${debouncedSearch}`);
+    if (debouncedSearch) router.push(`${pathname}?${PARAM_NAME}=${debouncedSearch}`);
+    else router.push(pathname);
   }, [debouncedSearch]);
 
+  // handle user input
   const setSearchQueryFn = (newValue: string) => {
     setSearchQuery(newValue);
     setRecentUserInput(true);

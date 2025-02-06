@@ -1,6 +1,7 @@
+import mockConflict from '@/domain/constant/alerts/mockConflict.json';
 import { Conflict } from '@/domain/entities/alerts/Conflict';
 import { Hazard } from '@/domain/entities/alerts/Hazard';
-import { FeatureCollectionWrapper } from '@/domain/entities/common/FeatureCollectionWrapper';
+// import { FeatureCollectionWrapper } from '@/domain/entities/common/FeatureCollectionWrapper';
 import { ResponseWrapper } from '@/domain/entities/common/ResponseWrapper';
 import { AlertRepository } from '@/domain/repositories/AlertRepository';
 
@@ -12,8 +13,8 @@ export class AlertRepositoryImpl implements AlertRepository {
   }
 
   async getConflictData(): Promise<Conflict[]> {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/acled.geojson`);
-    const data: FeatureCollectionWrapper<Conflict> = await response.json();
-    return data.body.features;
+    // const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/acled.geojson`);
+    // const data: FeatureCollectionWrapper<Conflict> = await response.json();
+    return mockConflict.body.features as Conflict[];
   }
 }

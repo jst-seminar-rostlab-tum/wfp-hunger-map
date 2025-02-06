@@ -13,19 +13,21 @@ export default function ChartAlternativeSwitchButton({
   alternativeChartType,
   showAlternativeChart,
   setShowAlternativeChart,
-  size = 4,
+  small = false,
 }: ChartAlternativeSwitchButtonProps) {
+  const className = small ? 'h-3 w-3' : 'h-4 w-4';
+
   const chartSwitchTitle = showAlternativeChart
     ? ChartDownloadButtonOperations.getChartTypeTitle(defaultChartType)
     : ChartDownloadButtonOperations.getChartTypeTitle(alternativeChartType);
 
   const chartSwitchIcon = showAlternativeChart
-    ? ChartDownloadButtonOperations.getChartTypeIcon(defaultChartType, size)
-    : ChartDownloadButtonOperations.getChartTypeIcon(alternativeChartType, size);
+    ? ChartDownloadButtonOperations.getChartTypeIcon(defaultChartType, className)
+    : ChartDownloadButtonOperations.getChartTypeIcon(alternativeChartType, className);
 
   return (
     <Tooltip text={`Switch to ${chartSwitchTitle} Chart`}>
-      <Button isIconOnly variant="light" size="sm" onClick={() => setShowAlternativeChart(!showAlternativeChart)}>
+      <Button isIconOnly variant="light" size="sm" onPress={() => setShowAlternativeChart(!showAlternativeChart)}>
         {chartSwitchIcon}
       </Button>
     </Tooltip>

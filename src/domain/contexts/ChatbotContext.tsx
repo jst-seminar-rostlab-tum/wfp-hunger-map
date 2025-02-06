@@ -2,7 +2,7 @@ import React, { createContext, ReactNode, useContext, useEffect, useMemo, useSta
 import { v4 as uuid } from 'uuid';
 
 import { useSnackbar } from '@/domain/contexts/SnackbarContext';
-import { IChat } from '@/domain/entities/chatbot/Chatbot';
+import { IChat, IReportContext } from '@/domain/entities/chatbot/Chatbot';
 import { SenderRole } from '@/domain/enums/SenderRole';
 import ChatbotOperations from '@/operations/chatbot/Chatbot';
 import { useMediaQuery } from '@/utils/resolution';
@@ -14,12 +14,13 @@ interface ChatbotContextType {
   setCurrentChatIndex: React.Dispatch<React.SetStateAction<number>>;
   openChat: (chatIndex: number) => void;
   startNewChat: (newChat?: IChat) => void;
-  initiateChatAboutReport: (countryName: string, report: string) => Promise<void>;
+  initiateChatAboutReport: (reportContext: IReportContext) => Promise<void>;
   isOpen: boolean;
   isMobile: boolean;
   isSidebarOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  updateChatWithSelection: (selectionText: string) => void;
 }
 
 const ChatbotContext = createContext<ChatbotContextType | undefined>(undefined);
@@ -81,30 +82,70 @@ export function ChatbotProvider({ children }: { children: ReactNode }) {
   };
 
   /**
-   * Initiates a chat with a report based on the provided country name and report content.
-   * If a chat for that specific already exists, it opens that chat; otherwise, it creates a new one.
-   * @param countryName - The name of the country related to the report.
+   * Updates the current chat with the selected text of the user and adds an assistant message
+   * @param selectionText - The text selected from the report by the user
    */
-  const initiateChatAboutReport = async (countryName: string) => {
-    const reportChatIndex = chats.findIndex((chat) => chat.title === `Report ${countryName}`);
+  const updateChatWithSelection = (selectionText: string) => {
+    const chatToUpdate = chats[currentChatIndex];
+    if (chatToUpdate.reportContext) {
+      const assistantMessage = {
+        id: crypto.randomUUID(),
+        content: `I see you've selected some text from the report. How can I help you understand this part better?`,
+        role: SenderRole.ASSISTANT,
+      };
+
+      chatToUpdate.messages.push(assistantMessage);
+      chatToUpdate.reportContext.selectionText = selectionText;
+      setChats([...chats]);
+    }
+  };
+
+  /**
+   * Initiates a chat with a report based on the provided context type and value.
+   * If a chat for that specific context already exists, it opens that chat; otherwise, it creates a new one.
+   * @param reportContext - The report context containing type ('country' or 'year_of_review'),
+   *                        value (country name or year) and the optional selected text from the report by the user
+   */
+  const initiateChatAboutReport: (reportContext: IReportContext) => Promise<void> = async (
+    reportContext: IReportContext
+  ) => {
+    const { type } = reportContext;
+    const { value } = reportContext;
+    const { selectionText } = reportContext;
+    const chatTitle = type === 'country' ? `Report ${value}` : `${value} Year in Review`;
+    const reportChatIndex = chats.findIndex((chat) => chat.title === chatTitle);
     const reportChatExists = reportChatIndex !== -1;
 
     if (reportChatExists) {
       openChat(reportChatIndex);
+      if (selectionText) {
+        updateChatWithSelection(selectionText);
+      }
       return;
     }
 
+    const content = selectionText
+      ? `I see you've selected some text from this ${
+          type === 'country' ? 'Country Report about' : 'Year in Review for'
+        } ${value}. How can I help you understand this part better?`
+      : `Hey, how can I help you with this ${
+          type === 'country' ? 'Country Report about' : 'Year in Review for'
+        } ${value}?`;
+
     const assistantMessage = {
       id: crypto.randomUUID(),
-      content: `Hey, how can I help you with this report about ${countryName}?`,
+      content,
       role: SenderRole.ASSISTANT,
     };
 
     const newChat: IChat = {
       id: uuid(),
-      title: `Report ${countryName}`,
-      reports_country_name: countryName,
-      isReportStarter: true,
+      title: chatTitle,
+      reportContext: {
+        type,
+        value,
+        ...(selectionText ? { selectionText } : {}),
+      },
       messages: [assistantMessage],
       isTyping: false,
       timestamp: Date.now(),
@@ -127,6 +168,7 @@ export function ChatbotProvider({ children }: { children: ReactNode }) {
       isSidebarOpen,
       setIsOpen,
       setIsSidebarOpen,
+      updateChatWithSelection,
     }),
     [chats, currentChatIndex, isOpen, isMobile, isSidebarOpen]
   );

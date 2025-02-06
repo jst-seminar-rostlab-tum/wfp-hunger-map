@@ -29,7 +29,7 @@ Authors:
 -	Meta (in alphabetical order)
 		Ahmet Selman Güclü
 		Georgi Tsipov
-		Lukas Fabio Weigmann
+		Lukas Weigmann
 
 -	Program Management (in alphabetical order)
 		Amin Ben Saad

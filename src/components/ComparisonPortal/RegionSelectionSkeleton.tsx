@@ -1,5 +1,4 @@
 import { Skeleton } from '@nextui-org/skeleton';
-import React from 'react';
 
 /**
  * A skeleton for the Select component.

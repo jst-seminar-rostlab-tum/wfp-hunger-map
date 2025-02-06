@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 import ComparisonAccordionSkeleton from '@/components/ComparisonPortal/ComparisonAccordionSkeleton';
 import ManyRegionsAlert from '@/components/ComparisonPortal/ManyRegionsAlert';
@@ -22,14 +22,11 @@ export default function RegionComparisonAccordion({
 }: RegionComparisonAccordionProps) {
   const { data: regionData, isLoading } = useRegionDataQuery(Number(selectedRegionComparisonCountry ?? undefined));
 
-  // TODO (F-254): Toggle this within the chart options. If the pie chart is selected, switch to false and hide the toggle button.
-  const [showRelativeNumbers] = useState(false);
-
   const accordionItems = useMemo(() => {
     if (!regionData || !selectedRegions) return [];
-    const chartData = RegionComparisonOperations.getChartData(regionData, selectedRegions, showRelativeNumbers);
+    const chartData = RegionComparisonOperations.getChartData(regionData, selectedRegions);
     return RegionComparisonOperations.getComparisonAccordionItems(chartData, selectedRegions, regionData.features);
-  }, [regionData, selectedRegions, showRelativeNumbers]);
+  }, [regionData, selectedRegions]);
 
   if (selectedRegions !== undefined && selectedRegions.length < 2) {
     return (

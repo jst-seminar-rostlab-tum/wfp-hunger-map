@@ -2,6 +2,7 @@ import { CalendarDate } from '@internationalized/date';
 import { DocumentDownload, SearchNormal1 } from 'iconsax-react';
 import { Bot } from 'lucide-react';
 
+import { IReportContext } from '@/domain/entities/chatbot/Chatbot';
 import { CountryCodesData } from '@/domain/entities/country/CountryCodesData';
 import { ICountryData } from '@/domain/entities/download/Country';
 import { SNACKBAR_SHORT_DURATION } from '@/domain/entities/snackbar/Snackbar';
@@ -23,7 +24,7 @@ export class DownloadPortalOperations {
   static formatCountryTableData(
     data: CountryCodesData[],
     setSelectedCountry: (countryData: CountryCodesData) => void,
-    initiateChatAboutReport: (country: string, report: string) => Promise<void>,
+    initiateChatAboutReport: (reportContext: IReportContext) => Promise<void>,
     setPdfFile: (file: Blob | null) => void,
     setError: (error: string | null) => void,
     toggleModal: () => void,
@@ -55,7 +56,7 @@ export class DownloadPortalOperations {
         <div className="flex justify-center items-center">
           <Bot
             size={20}
-            onClick={() => initiateChatAboutReport(item.country.name, item.url.summary)}
+            onClick={() => initiateChatAboutReport({ type: 'country', value: item.country.name })}
             className="cursor-pointer"
           />
         </div>
@@ -66,7 +67,7 @@ export class DownloadPortalOperations {
   static formatYearInReviewTableData(
     data: YearInReview[],
     setSelectedReport: (report: YearInReview) => void,
-    initiateChatAboutReport: (country: string, report: string) => Promise<void>,
+    initiateChatAboutReport: (reportContext: IReportContext) => Promise<void>,
     setPdfFile: (file: Blob | null) => void,
     setError: (error: string | null) => void,
     toggleModal: () => void,
@@ -101,7 +102,10 @@ export class DownloadPortalOperations {
           <Bot
             size={20}
             onClick={() => {
-              initiateChatAboutReport(item.label, item.url);
+              const year = item.label.match(/\d{4}/)?.[0];
+              if (year) {
+                initiateChatAboutReport({ type: 'year_in_review', value: year });
+              }
             }}
             className="cursor-pointer"
           />

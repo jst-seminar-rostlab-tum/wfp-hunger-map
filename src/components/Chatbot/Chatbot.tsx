@@ -26,6 +26,7 @@ import {
 } from '@/domain/constant/chatbot/Chatbot';
 import { useChatbot } from '@/domain/contexts/ChatbotContext';
 import { APIError } from '@/domain/entities/chatbot/BackendCommunication';
+import { IMessage, IReportContext } from '@/domain/entities/chatbot/Chatbot';
 import { SenderRole } from '@/domain/enums/SenderRole';
 import ChatbotRepository from '@/domain/repositories/ChatbotRepository';
 import ChatbotOperations from '@/operations/chatbot/Chatbot';
@@ -87,44 +88,52 @@ export default function HungerMapChatbot() {
     }
   };
 
-  /**
-   * Handle AI response
-   * @param text is user input text
-   * @param updatedChats is the updated chats object
-   */
-  const handleAIResponse = async (text: string): Promise<void> => {
-    const previousMessages = chats[currentChatIndex].messages;
-    let aiResponse = '';
+  const getAIResponse = async (
+    text: string,
+    chatContext: {
+      chatId: string;
+      previous_messages: IMessage[];
+      report_context?: IReportContext;
+    }
+  ): Promise<string> => {
     try {
-      if (chats[currentChatIndex].isReportStarter && chats[currentChatIndex].reports_country_name) {
-        aiResponse = (
-          await chatbot.sendMessage(text, {
-            chatId: chats[currentChatIndex].id,
-            previous_messages: previousMessages,
-            reports_country_name: chats[currentChatIndex].reports_country_name,
-          })
-        ).response;
-        chats[currentChatIndex].isReportStarter = false;
-      } else {
-        aiResponse = (
-          await chatbot.sendMessage(text, {
-            chatId: chats[currentChatIndex].id,
-            previous_messages: previousMessages,
-            reports_country_name: chats[currentChatIndex].reports_country_name,
-          })
-        ).response;
-      }
+      const response = await chatbot.sendMessage(text, chatContext);
+      return response.response;
     } catch (err) {
       if (err instanceof APIError) {
-        aiResponse = `Ups! Unfortunately, it seems like there was a problem connecting to the server...\n ${err.status}: ${err.message}`;
+        return `Ups! Unfortunately, it seems like there was a problem connecting to the server...\n ${err.status}: ${err.message}`;
       }
+      return 'An unexpected error occurred. Please try again.';
     }
+  };
+
+  const handleAIResponse = async (text: string): Promise<void> => {
+    const currentChat = chats[currentChatIndex];
+    const chatContext = {
+      chatId: currentChat.id,
+      previous_messages: currentChat.messages,
+      report_context: currentChat.reportContext,
+    };
+
+    let userMessage = text;
+
+    if (currentChat.reportContext?.selectionText) {
+      userMessage = `${
+        text
+      }\nI am specifically relating to this section of the report: "${currentChat.reportContext.selectionText}"
+      \n Don't include any additional information about the report which is not in this section.`;
+      currentChat.reportContext.selectionText = undefined;
+    }
+
+    const aiResponse = await getAIResponse(userMessage, chatContext);
+
     const updatedChatsWithAI = structuredClone(chats);
     updatedChatsWithAI[currentChatIndex].messages.push({
       id: crypto.randomUUID(),
       content: aiResponse,
       role: SenderRole.ASSISTANT,
     });
+
     setChats(updatedChatsWithAI);
   };
 
@@ -209,7 +218,7 @@ export default function HungerMapChatbot() {
       {!isOpen && (
         <Tooltip text={TRIGGER_CHAT}>
           <Button
-            onClick={toggleChat}
+            onPress={toggleChat}
             className="relative flex items-center justify-center min-w-12 h-12 px-1 rounded-full bg-content1 hover:bg-content2 shadow-md"
             aria-label="toggle chat"
           >
@@ -242,7 +251,7 @@ export default function HungerMapChatbot() {
                   <Button
                     variant="light"
                     isIconOnly
-                    onClick={() => setIsSidebarOpen((previousValue) => !previousValue)}
+                    onPress={() => setIsSidebarOpen((previousValue) => !previousValue)}
                   >
                     {isSidebarOpen ? <SidebarLeft size={24} /> : <SidebarRight size={24} />}
                   </Button>
@@ -253,20 +262,20 @@ export default function HungerMapChatbot() {
               <div className="flex items-center space-x-2">
                 {!isMobile && (
                   <Tooltip text={isFullScreen ? EXIT_FULL_SCREEN : ENTER_FULL_SCREEN}>
-                    <Button variant="light" isIconOnly onClick={toggleFullScreen}>
+                    <Button variant="light" isIconOnly onPress={toggleFullScreen}>
                       {isFullScreen ? <Minus size={24} /> : <Maximize4 size={24} />}
                     </Button>
                   </Tooltip>
                 )}
                 <Tooltip text="Close Chat">
-                  <Button variant="light" isIconOnly onClick={toggleChat}>
+                  <Button variant="light" isIconOnly onPress={toggleChat}>
                     <CloseSquare size={24} />
                   </Button>
                 </Tooltip>
               </div>
             </CardHeader>
             <Divider className="bg-chatbotDivider dark:bg-chatbotDivider" />
-            <CardBody>
+            <CardBody className="h-4/5">
               {/* overlay area in mobile version */}
               {isMobile && isSidebarOpen && (
                 /* since it has been show as overlay style here, once click this area then close side panel better not use button here */
@@ -283,12 +292,18 @@ export default function HungerMapChatbot() {
                   <div className="flex flex-col items-center pt-4 space-y-4">
                     <p className="text-center text-xl max-w-[80%] mb-2">{WELCOME_MESSAGE}</p>
                     <p className="text-center text-md max-w-[80%] mb-2text">{SUB_WELCOME_MESSAGE}</p>
-                    <div className="flex flex-col items-center space-y-2 w-full max-w-md">
+                    <div className="flex flex-col items-center w-full max-w-md">
                       {DEFAULT_PROMPT.map((prompt) => (
                         <Button
                           key={prompt.id}
                           onClick={(event) => handleSubmit(event, prompt.value)}
-                          className="truncate w-full mb-2 max-w-[250px] sm:max-w-[400px] border border-solid border-black dark:border-white bg-transparent hover:bg-chatbotDefaultPromptHover dark:hover:bg-chatbotDefaultPromptHover"
+                          onKeyDown={(event) => {
+                            if (event.key === 'Enter' || event.key === ' ') {
+                              event.preventDefault();
+                              handleSubmit(event, prompt.value);
+                            }
+                          }}
+                          className="truncate w-full mb-3 max-w-[250px] sm:max-w-[400px] border border-solid border-black dark:border-white bg-transparent hover:bg-chatbotDefaultPromptHover dark:hover:bg-chatbotDefaultPromptHover"
                           title={prompt.value}
                         >
                           <span className="truncate">{prompt.value}</span>
@@ -343,7 +358,7 @@ export default function HungerMapChatbot() {
               </ScrollShadow>
             </CardBody>
             <Divider className="bg-chatbotDivider dark:bg-chatbotDivider" />
-            <CardFooter className="p-4">
+            <CardFooter className="p-2">
               <form onSubmit={handleSubmit} className="w-full">
                 <div className="flex space-x-2">
                   <textarea
@@ -352,7 +367,7 @@ export default function HungerMapChatbot() {
                     onChange={(inputEvent) => setInput(inputEvent.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder={TYPING_PLACEHOLDER}
-                    className="rounded-xl border border-solid border-black bg-chatbotInputArea dark:bg-chatbotInputArea flex-grow px-3 py-2 dark:text-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none overflow-hidden"
+                    className="max-h-20 rounded-xl border border-solid border-black bg-chatbotInputArea dark:bg-chatbotInputArea flex-grow px-3 py-2 dark:text-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none overflow-visible"
                     rows={1}
                   />
                   <Tooltip text="Submit">

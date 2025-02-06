@@ -95,7 +95,7 @@ const config = {
         sidebarExpanded: '41',
         sidebarCollapsed: '40',
         sidebarFullScreen: '41',
-        chatbotExpanded: '41',
+        chatbotExpanded: '100',
         chatbotCollapsed: '40',
         chatbotFullScreen: '41',
         alertsMenu: '40',

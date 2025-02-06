@@ -11,4 +11,5 @@ export interface AccordionContainerProps {
   maxWidth?: number;
   expandAll?: boolean;
   highlightedTitleWords?: string[];
+  noPadding?: boolean;
 }

@@ -20,6 +20,7 @@ export default function YearInReviewReports({ yearInReviewReports }: YearInRevie
   const { initiateChatAboutReport } = useChatbot();
   const toggleModal = () => setModalOpen((prev) => !prev);
   const { showSnackBar } = useSnackbar();
+  const yearOfReport = selectedReport?.label.match(/\d{4}/)?.[0];
 
   return (
     <div>
@@ -35,6 +36,7 @@ export default function YearInReviewReports({ yearInReviewReports }: YearInRevie
           showSnackBar
         )}
         ariaLabel="Year In Review Reports"
+        minTableWidth={300}
       />
       <PdfPreview
         isModalOpen={isModalOpen}
@@ -45,6 +47,11 @@ export default function YearInReviewReports({ yearInReviewReports }: YearInRevie
           if (selectedReport) {
             DownloadPortalOperations.downloadYearInReviewReport(selectedReport, showSnackBar);
           }
+        }}
+        onAskAIButtonClick={initiateChatAboutReport}
+        reportContext={{
+          type: 'year_in_review',
+          value: yearOfReport ?? '',
         }}
       />
     </div>

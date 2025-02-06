@@ -4,6 +4,7 @@ import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 
 import { CategoricalChartData } from '@/domain/entities/charts/CategoricalChartData.ts';
 import { ContinuousChartData } from '@/domain/entities/charts/ContinuousChartData.ts';
+import { CategoricalChartSorting } from '@/domain/enums/CategoricalChartSorting.ts';
 import { ChartType } from '@/domain/enums/ChartType.ts';
 
 /**
@@ -13,7 +14,7 @@ import { ChartType } from '@/domain/enums/ChartType.ts';
 export interface ChartSliderButtonProps {
   showSlider: boolean;
   setShowSlider: Dispatch<SetStateAction<boolean>>;
-  size?: number;
+  small?: boolean;
 }
 
 export interface ChartAlternativeSwitchButtonProps {
@@ -21,7 +22,25 @@ export interface ChartAlternativeSwitchButtonProps {
   alternativeChartType: ChartType;
   showAlternativeChart: boolean;
   setShowAlternativeChart: Dispatch<SetStateAction<boolean>>;
-  size?: number;
+  small?: boolean;
+}
+
+export interface ChartRelativeNumbersSwitchButtonProps {
+  showRelativeNumbers: boolean;
+  setShowRelativeNumbers: Dispatch<SetStateAction<boolean>>;
+  small?: boolean;
+}
+
+export interface ChartDownloadButtonProps {
+  chartRef: MutableRefObject<HighchartsReact.RefObject | null>;
+  chartData: ContinuousChartData | CategoricalChartData;
+  small?: boolean;
+}
+
+export interface ChartSortingButtonProps {
+  sorting: CategoricalChartSorting;
+  setSorting: Dispatch<SetStateAction<CategoricalChartSorting>>;
+  small?: boolean;
 }
 
 export interface ChartSliderProps {
@@ -30,12 +49,6 @@ export interface ChartSliderProps {
   sliderMax: number;
   selectedSliderRange: number[]; // [rangeMin, rangeMax]
   setSelectedSliderRange: Dispatch<SetStateAction<number[]>>;
-}
-
-export interface ChartDownloadButtonProps {
-  chartRef: MutableRefObject<HighchartsReact.RefObject | null>;
-  chartData: ContinuousChartData | CategoricalChartData;
-  size?: number;
 }
 
 /**
@@ -57,7 +70,11 @@ export default interface ChartContainerProps {
   disableExpandable?: boolean;
   disableDownload?: boolean;
 
+  relativeNumbersSwitchButtonProps?: ChartRelativeNumbersSwitchButtonProps;
+
   alternativeSwitchButtonProps?: ChartAlternativeSwitchButtonProps;
+
+  sortingButtonProps?: ChartSortingButtonProps;
 
   sliderProps?: ChartSliderProps;
 }

@@ -6,7 +6,7 @@ import { CountryMapData } from '@/domain/entities/country/CountryMapData.ts';
 import { inactiveCountryOverlayStyling } from '@/styles/MapColors';
 
 class FcsChoroplethOperations {
-  static async handleCountryClick(
+  static handleCountryClick(
     feature: Feature<Geometry, GeoJsonProperties>,
     setSelectedCountryId: (countryId: number) => void
   ) {
@@ -45,6 +45,12 @@ class FcsChoroplethOperations {
       mouseout: () => {
         if (this.checkIfActive(feature as CountryMapData, fcsData)) {
           pathLayer.setStyle({ fillOpacity: 0 });
+          document.getElementsByClassName('leaflet-container').item(0)?.classList.remove('interactive');
+        }
+      },
+      keydown: (e) => {
+        if (e.originalEvent.key === 'Enter' || e.originalEvent.key === ' ') {
+          FcsChoroplethOperations.handleCountryClick(feature, setSelectedCountryId);
           document.getElementsByClassName('leaflet-container').item(0)?.classList.remove('interactive');
         }
       },

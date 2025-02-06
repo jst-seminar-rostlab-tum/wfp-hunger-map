@@ -11,7 +11,7 @@ import { CountryComparisonOperations } from '@/operations/comparison-portal/Coun
 import { RegionSelectionOperations } from '@/operations/comparison-portal/RegionSelectionOperations';
 import FcsChoroplethOperations from '@/operations/map/FcsChoroplethOperations';
 
-import SelectionSkeleton from './CountrySelectSkeleton';
+import SelectionSkeleton from './RegionSelectionSkeleton';
 
 /**
  * A Select component that allows users to select a single country and an unlimited number of its regions.
@@ -35,7 +35,7 @@ export default function RegionSelection({
     isLoading,
     error,
   } = useRegionDataQuery(Number(selectedRegionComparisonCountry ?? undefined));
-  const nAvailableRegions = regionData?.features.length;
+  const nAvailableRegions = regionData?.features?.length;
 
   const { showSnackBar } = useSnackbar();
   const availableCountries = useMemo(() => {
@@ -117,7 +117,7 @@ export default function RegionSelection({
         <CustomButton
           className="flex-1"
           variant="bordered"
-          onClick={() => setSelectedRegions('all')}
+          onPress={() => setSelectedRegions('all')}
           isDisabled={
             isLoading ||
             !selectedRegionComparisonCountry ||
@@ -131,7 +131,7 @@ export default function RegionSelection({
         <CustomButton
           className="flex-1"
           variant="bordered"
-          onClick={() => setSelectedRegions([])}
+          onPress={() => setSelectedRegions([])}
           isDisabled={
             isLoading ||
             !selectedRegionComparisonCountry ||

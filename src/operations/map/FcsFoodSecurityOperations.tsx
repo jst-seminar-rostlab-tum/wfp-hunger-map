@@ -9,6 +9,7 @@ import { CountryData } from '@/domain/entities/country/CountryData';
 import { CountryForecastData } from '@/domain/entities/country/CountryForecastData';
 import { CountryIso3Data } from '@/domain/entities/country/CountryIso3Data';
 import { cardsWrapperClass } from '@/utils/primitives';
+import { useMediaQuery } from '@/utils/resolution.ts';
 
 import { ReactComponent as FoodConsumption } from '../../../public/Images/FoodConsumption.svg';
 import { ReactComponent as Nutrition } from '../../../public/Images/Nutrition.svg';
@@ -27,6 +28,7 @@ export class FcsFoodSecurityOperations {
     const fcsChartData = FcsAccordionOperations.getFcsChartData(countryData, countryForecastData);
     const rcsiChartData = FcsAccordionOperations.getRcsiChartData(countryData, countryForecastData);
     const nutritionData = FcsAccordionOperations.getNutritionData(countryIso3Data);
+    const isMobile = useMediaQuery('(max-width: 700px)');
     return [
       {
         title: 'Current Food Security',
@@ -51,7 +53,7 @@ export class FcsFoodSecurityOperations {
                   svgIcon: <FoodConsumption className="w-[50px] h-[50px] object-contain" />,
                   text: descriptions.fcs.legendTitle,
                   value: countryData?.fcs ? `${countryData.fcs.toFixed(2)} M` : 'N/A',
-                  textClass: 'text-xs',
+                  textClass: isMobile ? 'text-base' : 'text-sm',
                   changeValues: [
                     {
                       imageSrc: deltaOneMonth && deltaOneMonth > 0 ? '/Images/ArrowUp.svg' : '/Images/ArrowDown.svg',
@@ -130,6 +132,7 @@ export class FcsFoodSecurityOperations {
                 small
                 noPadding
                 transparentBackground
+                simplifyTooltip
               />
             ) : (
               <p>No data about food consumption available</p>
@@ -142,6 +145,7 @@ export class FcsFoodSecurityOperations {
                 small
                 noPadding
                 transparentBackground
+                simplifyTooltip
               />
             ) : (
               <p>No data about food-based coping available</p>
@@ -150,5 +154,60 @@ export class FcsFoodSecurityOperations {
         ),
       },
     ];
+  }
+
+  static createMockData(countryData?: CountryData): CountryForecastData {
+    const mockForecastData: CountryForecastData = {
+      forecastedFcsGraph: [],
+      forecastedRcsiGraph: [],
+    };
+    if (!countryData) return mockForecastData;
+    const date = new Date(countryData.fcsGraph[countryData.fcsGraph.length - 1].x);
+    let { fcs } = countryData.fcsGraph[countryData.fcsGraph.length - 1];
+    let { rcsi } = countryData.rcsiGraph[countryData.rcsiGraph.length - 1];
+    for (let i = 0; i < 90; i += 1) {
+      const rand = Math.random();
+      let newFcs;
+      if (rand < 0.25) {
+        newFcs = fcs * 1.002;
+      } else if (rand < 0.5) {
+        newFcs = fcs * 1.005;
+      } else if (rand < 0.75) {
+        newFcs = fcs * 0.999;
+      } else {
+        newFcs = fcs * 0.997;
+      }
+      mockForecastData.forecastedFcsGraph.push({
+        fcs: newFcs,
+        fcsHigh: newFcs,
+        fcsLow: newFcs,
+        x: date.toISOString().split('T')[0],
+      });
+      fcs = newFcs;
+
+      if (rcsi) {
+        const randRcsi = Math.random();
+        let newRcsi;
+        if (randRcsi < 0.25) {
+          newRcsi = rcsi * 1.002;
+        } else if (randRcsi < 0.5) {
+          newRcsi = rcsi * 1.005;
+        } else if (randRcsi < 0.75) {
+          newRcsi = rcsi * 0.999;
+        } else {
+          newRcsi = rcsi * 0.997;
+        }
+        mockForecastData.forecastedRcsiGraph.push({
+          rcsi: newRcsi,
+          rcsiHigh: newRcsi,
+          rcsiLow: newRcsi,
+          x: date.toISOString().split('T')[0],
+        });
+        rcsi = newRcsi;
+      }
+
+      date.setDate(date.getDate() + 1);
+    }
+    return mockForecastData;
   }
 }

@@ -1,9 +1,7 @@
 # World Food Programme - HungerMap
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-
 [![All Contributors](https://img.shields.io/badge/all_contributors-16-orange.svg?style=flat-square)](#contributors-)
-
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 This is the repository for the World Food Program's HungerMap. For a more information, check out the **[documentation](https://docs-wfp-hungermap.netlify.app/)**.
@@ -18,7 +16,7 @@ This software is dual-licensed:
 
 - [Contibutors](#contributors-)
 - [Technologies Used](#technologies-used)
-- [Feature list](#feature-list)
+- [Feature highlights](#feature-highlights)
 - [Local development](#local-development)
 - [Deployment](#deployment)
 - [Development guidelines](#development-guidelines)
@@ -33,7 +31,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tbody>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/marinovl7"><img src="https://avatars.githubusercontent.com/u/99186919?v=4?s=100" width="100px;" alt="Lachezar Marinov"/><br /><sub><b>Lachezar Marinov</b></sub></a><br /><a href="#projectManagement-marinovl7" title="Project Management">📆</a> <a href="https://github.com//jst-seminar-rostlab-tum/wfp-hunger-map/commits?author=bohdangarchu" title="Code">💻</a> <a href="https://github.com//jst-seminar-rostlab-tum/wfp-hunger-map/pulls?q=is%3Apr+reviewed-by%3Amarinovl7" title="Reviewed Pull Requests">👀</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/marinovl7"><img src="https://avatars.githubusercontent.com/u/99186919?v=4?s=100" width="100px;" alt="Lachezar Marinov"/><br /><sub><b>Lachezar Marinov</b></sub></a><br /><a href="#projectManagement-marinovl7" title="Project Management">📆</a> <a href="https://github.com//jst-seminar-rostlab-tum/wfp-hunger-map/pulls?q=is%3Apr+reviewed-by%3Amarinovl7" title="Reviewed Pull Requests">👀</a> <a href="https://github.com//jst-seminar-rostlab-tum/wfp-hunger-map/commits?author=marinovl7" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/bohdangarchu"><img src="https://avatars.githubusercontent.com/u/107936554?v=4?s=100" width="100px;" alt="Bohdan Garchu"/><br /><sub><b>Bohdan Garchu</b></sub></a><br /><a href="https://github.com//jst-seminar-rostlab-tum/wfp-hunger-map/commits?author=bohdangarchu" title="Code">💻</a> <a href="#projectManagement-bohdangarchu" title="Project Management">📆</a> <a href="https://github.com//jst-seminar-rostlab-tum/wfp-hunger-map/pulls?q=is%3Apr+reviewed-by%3Abohdangarchu" title="Reviewed Pull Requests">👀</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/cansumoran"><img src="https://avatars.githubusercontent.com/u/47862390?v=4?s=100" width="100px;" alt="Cansu Moran"/><br /><sub><b>Cansu Moran</b></sub></a><br /><a href="https://github.com//jst-seminar-rostlab-tum/wfp-hunger-map/commits?author=cansumoran" title="Code">💻</a> <a href="#projectManagement-cansumoran" title="Project Management">📆</a> <a href="https://github.com//jst-seminar-rostlab-tum/wfp-hunger-map/pulls?q=is%3Apr+reviewed-by%3Acansumoran" title="Reviewed Pull Requests">👀</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Tschonti"><img src="https://avatars.githubusercontent.com/u/13004605?v=4?s=100" width="100px;" alt="Sámuel Fekete"/><br /><sub><b>Sámuel Fekete</b></sub></a><br /><a href="https://github.com//jst-seminar-rostlab-tum/wfp-hunger-map/commits?author=Tschonti" title="Code">💻</a> <a href="#projectManagement-Tschonti" title="Project Management">📆</a> <a href="https://github.com//jst-seminar-rostlab-tum/wfp-hunger-map/pulls?q=is%3Apr+reviewed-by%3ATschonti" title="Reviewed Pull Requests">👀</a></td>
@@ -46,7 +44,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/plaume8"><img src="https://avatars.githubusercontent.com/u/126587385?v=4?s=100" width="100px;" alt="Linus Sander"/><br /><sub><b>Linus Sander</b></sub></a><br /><a href="https://github.com//jst-seminar-rostlab-tum/wfp-hunger-map/commits?author=plaume8" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/ahmtslmngcl"><img src="https://avatars.githubusercontent.com/u/77407148?v=4?s=100" width="100px;" alt="Ahmet Selman Güclü"/><br /><sub><b>Ahmet Selman Güclü</b></sub></a><br /><a href="https://github.com//jst-seminar-rostlab-tum/wfp-hunger-map/commits?author=ahmtslmngcl" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/georgi4444"><img src="https://avatars.githubusercontent.com/u/76964999?v=4?s=100" width="100px;" alt="Georgi Tsipov"/><br /><sub><b>Georgi Tsipov</b></sub></a><br /><a href="https://github.com//jst-seminar-rostlab-tum/wfp-hunger-map/commits?author=georgi4444" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Lukas0912"><img src="https://avatars.githubusercontent.com/u/109222100?v=4?s=100" width="100px;" alt="Lukas Fabio Weigmann"/><br /><sub><b>Lukas Fabio Weigmann</b></sub></a><br /><a href="https://github.com//jst-seminar-rostlab-tum/wfp-hunger-map/commits?author=Lukas0912" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Lukas0912"><img src="https://avatars.githubusercontent.com/u/109222100?v=4?s=100" width="100px;" alt="Lukas Weigmann"/><br /><sub><b>Lukas Weigmann</b></sub></a><br /><a href="https://github.com//jst-seminar-rostlab-tum/wfp-hunger-map/commits?author=Lukas0912" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/ahmedfarouk2000"><img src="https://avatars.githubusercontent.com/u/43567515?v=4?s=100" width="100px;" alt="Georgi Peev"/><br /><sub><b>Georgi Peev</b></sub></a><br /><a href="https://github.com//jst-seminar-rostlab-tum/wfp-hunger-map/commits?author=ahmedfarouk2000" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Marius-Moldo"><img src="https://avatars.githubusercontent.com/u/68606110?v=4?s=100" width="100px;" alt="Marius Moldovan"/><br /><sub><b>Marius Moldovan</b></sub></a><br /><a href="https://github.com//jst-seminar-rostlab-tum/wfp-hunger-map/commits?author=Marius-Moldo" title="Code">💻</a></td>
     </tr>
@@ -77,25 +75,16 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 - [Highcharts](https://www.highcharts.com/), [highcharts-react](https://github.com/highcharts/highcharts-react)
 - [Tanstack Query](https://tanstack.com/query/latest)
 
-## Feature list
+## Feature highlights
 
-Among many others, the application contains the following features:
+Explore the most exciting new or improved features of the new HugerMap here through these showcase videos.
 
-### Hunger data visualized on multiple map and alert types
-
-TODO F-268
-
-### Information pages
-
-TODO F-269
-
-### Chatbot
-
-TODO F-275
-
-### Comparison portal
-
-TODO?
+- [Hunger data visualized on multiple map and alert types](https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/home_page_new.mp4)
+- [Information pages](https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/info_pages.mp4)
+- [Chatbot](https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/chatbot_feature.mp4)
+- [Comparison portal](https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/comparison_portal.mp4)
+- [Download portal](https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/download_portal.mp4)
+- [Email service](https://github.com/jst-seminar-rostlab-tum/wfp-hungermap-docs/raw/refs/heads/main/static/videos/email_service.mp4)
 
 ## Local development
 

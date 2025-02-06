@@ -130,16 +130,13 @@ export class IpcChoroplethOperations {
   ) {
     // Check if the country is active
     if (this.checkIfActive(feature as CountryMapData, ipcData)) {
-      // If the country is not the currently selected country, create a tooltip
-      if (feature.properties?.adm0_id !== selectedCountryId) {
-        this.createTooltip(feature, layer, ipcData);
-      }
       // to handle tooltip for regions with Not Analyzed Data in country view
-      else {
+      if (feature.properties?.adm0_id === selectedCountryId) {
         IpcChoroplethOperations.initializeRegionLayer(feature, layer);
       }
+
       // Attach events to the layer
-      this.attachEvents(feature, layer, setSelectedCountryId, selectedCountryId);
+      this.attachEvents(feature, layer, setSelectedCountryId, selectedCountryId, ipcData);
     }
   }
 
@@ -149,12 +146,14 @@ export class IpcChoroplethOperations {
    * @param layer - Leaflet layer object
    * @param setSelectedCountryId - Function to set the selected country id
    * @param selectedCountryId - The currently selected country id
+   * @param ipcData - Array of country IPC data objects
    */
   static attachEvents(
     feature: Feature<Geometry, GeoJsonProperties>,
     layer: L.Layer,
     setSelectedCountryId: (id: number | null) => void,
-    selectedCountryId: number
+    selectedCountryId: number,
+    ipcData: CountryIpcData[]
   ) {
     const pathLayer = layer as L.Path;
     const originalStyle = { ...pathLayer.options };
@@ -175,14 +174,21 @@ export class IpcChoroplethOperations {
         }
 
         document.getElementsByClassName('leaflet-container').item(0)?.classList.add('interactive');
-        pathLayer.openTooltip();
+
+        this.createTooltip(feature, layer, ipcData);
       },
 
       mouseout: () => {
         // Restore the original layer style
         pathLayer.setStyle(originalStyle);
         document.getElementsByClassName('leaflet-container').item(0)?.classList.remove('interactive');
-        pathLayer.closeTooltip();
+        pathLayer.unbindTooltip();
+      },
+      keydown: (e) => {
+        if (e.originalEvent.key === 'Enter' || e.originalEvent.key === ' ') {
+          setSelectedCountryId(feature?.properties?.adm0_id);
+          document.getElementsByClassName('leaflet-container').item(0)?.classList.remove('interactive');
+        }
       },
     });
   }
@@ -243,7 +249,7 @@ export class IpcChoroplethOperations {
     );
 
     // Bind the tooltip to the layer
-    layer.bindTooltip(tooltipContainer, { className: 'leaflet-tooltip', sticky: true, direction: 'top' });
+    layer.bindTooltip(tooltipContainer, { className: 'leaflet-tooltip', sticky: true, direction: 'top' }).openTooltip();
   }
 
   /**
@@ -252,7 +258,6 @@ export class IpcChoroplethOperations {
    * @param layer - Leaflet layer object to which the tooltip and events are bound
    */
   static initializeRegionLayer(feature: Feature<Geometry, GeoJsonProperties>, layer: L.Layer) {
-    IpcChoroplethOperations.createPhaseTooltip(feature, layer);
     IpcChoroplethOperations.attachEventsRegion(feature, layer);
   }
 
@@ -275,12 +280,12 @@ export class IpcChoroplethOperations {
             fillColor: 'hsl(var(--nextui-ipcHoverRegion))',
           });
         }
-        pathLayer.openTooltip();
+        IpcChoroplethOperations.createPhaseTooltip(feature, layer);
       },
       // Restore the original layer style
       mouseout: () => {
         pathLayer.setStyle(originalStyle);
-        pathLayer.closeTooltip();
+        pathLayer.unbindTooltip();
       },
     });
   }
@@ -296,15 +301,18 @@ export class IpcChoroplethOperations {
 
     root.render(
       <div className="p-3 bg-background text-foreground rounded-medium z-50">
-        <h1 className="text-sm font-semibold">{IpcChoroplethOperations.getPhaseText(feature?.properties?.ipcPhase)}</h1>
+        <h1 className="text-sm font-semibold">{feature?.properties?.areaName}</h1>
+        <h2 className="text-sm">{IpcChoroplethOperations.getPhaseText(feature?.properties?.ipcPhase)}</h2>
       </div>
     );
 
     // Bind the tooltip to the layer
-    layer.bindTooltip(tooltipContainer, {
-      className: 'leaflet-tooltip',
-      sticky: true,
-    });
+    layer
+      .bindTooltip(tooltipContainer, {
+        className: 'leaflet-tooltip',
+        sticky: true,
+      })
+      .openTooltip();
   }
 
   /**

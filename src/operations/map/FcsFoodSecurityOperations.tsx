@@ -156,10 +156,10 @@ export class FcsFoodSecurityOperations {
     ];
   }
 
-  static createMockData(countryData?: CountryData): CountryForecastData {
+  static createMockData(countryData?: CountryData, rising = true): CountryForecastData {
     const mockForecastData: CountryForecastData = {
-      forecastedFcsGraph: [],
-      forecastedRcsiGraph: [],
+      fcsGraph: [],
+      rcsiGraph: [],
     };
     if (!countryData) return mockForecastData;
     const date = new Date(countryData.fcsGraph[countryData.fcsGraph.length - 1].x);
@@ -168,16 +168,16 @@ export class FcsFoodSecurityOperations {
     for (let i = 0; i < 90; i += 1) {
       const rand = Math.random();
       let newFcs;
-      if (rand < 0.25) {
-        newFcs = fcs * 1.002;
-      } else if (rand < 0.5) {
-        newFcs = fcs * 1.005;
-      } else if (rand < 0.75) {
-        newFcs = fcs * 0.999;
+      if (rand < 0.3) {
+        newFcs = fcs * (rising ? 1.003 : 0.98);
+      } else if (rand < 0.6) {
+        newFcs = fcs * (rising ? 1.006 : 0.995);
+      } else if (rand < 0.8) {
+        newFcs = fcs * (rising ? 0.998 : 1.003);
       } else {
-        newFcs = fcs * 0.997;
+        newFcs = fcs * (rising ? 0.995 : 1.006);
       }
-      mockForecastData.forecastedFcsGraph.push({
+      mockForecastData.fcsGraph.push({
         fcs: newFcs,
         fcsHigh: newFcs,
         fcsLow: newFcs,
@@ -189,15 +189,15 @@ export class FcsFoodSecurityOperations {
         const randRcsi = Math.random();
         let newRcsi;
         if (randRcsi < 0.25) {
-          newRcsi = rcsi * 1.002;
+          newRcsi = rcsi * (rising ? 1.003 : 0.98);
         } else if (randRcsi < 0.5) {
-          newRcsi = rcsi * 1.005;
+          newRcsi = rcsi * (rising ? 1.006 : 0.995);
         } else if (randRcsi < 0.75) {
-          newRcsi = rcsi * 0.999;
+          newRcsi = rcsi * (rising ? 0.998 : 1.003);
         } else {
-          newRcsi = rcsi * 0.997;
+          newRcsi = rcsi * (rising ? 0.995 : 1.006);
         }
-        mockForecastData.forecastedRcsiGraph.push({
+        mockForecastData.rcsiGraph.push({
           rcsi: newRcsi,
           rcsiHigh: newRcsi,
           rcsiLow: newRcsi,

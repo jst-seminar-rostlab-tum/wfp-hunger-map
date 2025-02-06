@@ -13,7 +13,7 @@ import HungerAlertProps from '@/domain/props/HungerAlertProps';
 import HungerAlertOperations from '../../operations/hungerAlert/HungerAlertOperations.ts';
 import { Tooltip } from '../Tooltip/Tooltip';
 
-export default function HungerAlert({ countryFcsData, countryMapData }: HungerAlertProps) {
+export default function HungerAlert({ countryFcsData }: HungerAlertProps) {
   const ROWS_PER_PAGE = 10;
 
   const [page, setPage] = useState(1);
@@ -22,7 +22,7 @@ export default function HungerAlert({ countryFcsData, countryMapData }: HungerAl
   const toggleModal = () => setIsModalOpen((prevIsModalOpen) => !prevIsModalOpen);
 
   const countriesWithHighHunger: SimpleTableData = useMemo(
-    () => HungerAlertOperations.getHungerAlertData(countryFcsData, countryMapData),
+    () => HungerAlertOperations.getHungerAlertData(countryFcsData),
     [countryFcsData]
   );
   const displayedRows = useMemo(() => {
